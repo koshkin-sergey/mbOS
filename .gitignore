@@ -1,0 +1,24 @@
+*.o
+*.d
+*.launch
+*.axf
+*.bin
+*.elf
+Debug/
+
+# MDK-ARM Project Files
+*.uvguix.*
+*.scvd
+DebugConfig/
+Listings/
+Objects/
+Packs*.htm
+
+# IAR Project Files
+settings/
+*.dep
+*.ewt
+
+# SW4STM32 Project Files
+.settings/
+*.cfg

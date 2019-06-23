@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?fileVersion 4.0.0?><cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
+	<storageModule moduleId="org.eclipse.cdt.core.settings">
+		<cconfiguration id="com.arm.toolchain.baremetal.base.var.arm_compiler_5-5.68404591">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="com.arm.toolchain.baremetal.base.var.arm_compiler_5-5.68404591" moduleId="org.eclipse.cdt.core.settings" name="Default">
+				<externalSettings/>
+				<extensions>
+					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
+					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="com.arm.eclipse.builder.armcc.error" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
+				</extensions>
+			</storageModule>
+			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+				<configuration artifactName="${ProjName}" buildProperties="" description="" id="com.arm.toolchain.baremetal.base.var.arm_compiler_5-5.68404591" name="Default" parent="org.eclipse.cdt.build.core.emptycfg">
+					<folderInfo id="com.arm.toolchain.baremetal.base.var.arm_compiler_5-5.68404591.1132082961" name="/" resourcePath="">
+						<toolChain id="com.arm.toolchain.baremetal.base.var.arm_compiler_5-5.204221641" name="ARM Compiler 5" superClass="com.arm.toolchain.baremetal.base.var.arm_compiler_5-5">
+							<targetPlatform binaryParser="org.eclipse.cdt.core.ELF" id="com.arm.toolchain.baremetal.base.var.arm_compiler_5-5.68404591.390961128" name=""/>
+							<builder id="com.arm.toolchain.baremetal.builder.1381860262" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" superClass="com.arm.toolchain.baremetal.builder"/>
+							<tool id="com.arm.tool.c.compiler.base.var.arm_compiler_5-5.1918706647" name="ARM C Compiler 5" superClass="com.arm.tool.c.compiler.base.var.arm_compiler_5-5">
+								<inputType id="com.arm.tool.c.compiler.input.262127984" superClass="com.arm.tool.c.compiler.input"/>
+								<inputType id="com.arm.tool.cpp.compiler.input.1092284343" superClass="com.arm.tool.cpp.compiler.input"/>
+							</tool>
+							<tool id="com.arm.tool.cpp.compiler.base.var.arm_compiler_5-5.1805559165" name="ARM C++ Compiler 5" superClass="com.arm.tool.cpp.compiler.base.var.arm_compiler_5-5"/>
+							<tool id="com.arm.tool.assembler.base.var.arm_compiler_5-5.70609371" name="ARM Assembler 5" superClass="com.arm.tool.assembler.base.var.arm_compiler_5-5"/>
+							<tool id="com.arm.tool.c.linker.base.var.arm_compiler_5-5.28839261" name="ARM Linker 5" superClass="com.arm.tool.c.linker.base.var.arm_compiler_5-5"/>
+							<tool id="com.arm.tool.librarian.base.var.arm_compiler_5-5.1786329328" name="ARM Librarian 5" superClass="com.arm.tool.librarian.base.var.arm_compiler_5-5"/>
+						</toolChain>
+					</folderInfo>
+					<sourceEntries>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+					</sourceEntries>
+				</configuration>
+			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+		</cconfiguration>
+	</storageModule>
+	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+		<project id="tn_eval_aducm320_blink.null.1274957243" name="tn_eval_aducm320_blink"/>
+	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
+	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets">
+		<buildTargets>
+			<target name="Build project" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+				<buildCommand>make</buildCommand>
+				<buildArguments/>
+				<buildTarget>all</buildTarget>
+				<stopOnError>true</stopOnError>
+				<useDefaultCommand>true</useDefaultCommand>
+				<runAllBuilders>true</runAllBuilders>
+			</target>
+			<target name="Clean project" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+				<buildCommand>make</buildCommand>
+				<buildArguments/>
+				<buildTarget>clean</buildTarget>
+				<stopOnError>true</stopOnError>
+				<useDefaultCommand>true</useDefaultCommand>
+				<runAllBuilders>true</runAllBuilders>
+			</target>
+		</buildTargets>
+	</storageModule>
+	<storageModule moduleId="refreshScope"/>
+	<storageModule moduleId="scannerConfiguration">
+		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		<scannerConfigBuildInfo instanceId="com.arm.toolchain.baremetal.base.var.arm_compiler_5-5.68404591;com.arm.toolchain.baremetal.base.var.arm_compiler_5-5.68404591.1132082961;com.arm.tool.c.compiler.base.var.arm_compiler_5-5.1918706647;com.arm.tool.c.compiler.input.262127984">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.arm.eclipse.builder.armcc.ARMCompilerDiscoveryProfile"/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="com.arm.toolchain.baremetal.base.var.arm_compiler_5-5.68404591;com.arm.toolchain.baremetal.base.var.arm_compiler_5-5.68404591.1132082961;com.arm.tool.c.compiler.base.var.arm_compiler_5-5.1918706647;com.arm.tool.cpp.compiler.input.1092284343">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.arm.eclipse.builder.armcc.ARMCompilerDiscoveryProfile"/>
+		</scannerConfigBuildInfo>
+	</storageModule>
+</cproject>
