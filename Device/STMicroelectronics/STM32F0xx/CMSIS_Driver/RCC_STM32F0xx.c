@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2017-2019 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -136,13 +136,16 @@ void RCC_ClkInit(void)
  */
 uint32_t RCC_GetFreq(RCC_FREQ_t type)
 {
-  switch (type) {
-    case RCC_FREQ_HSI:
-      return RTE_HSI;
-    case RCC_FREQ_HSI14:
-      return RTE_HSI14;
-    case RCC_FREQ_HSI48:
-      return RTE_HSI48;
+  if (type == RCC_FREQ_HSI) {
+    return (RTE_HSI);
+  }
+
+  if (type == RCC_FREQ_HSI14) {
+    return (RTE_HSI14);
+  }
+
+  if (type == RCC_FREQ_HSI48) {
+    return (RTE_HSI48);
   }
 
   uint32_t pllmull = 0, predivfactor = 0;
@@ -195,19 +198,21 @@ uint32_t RCC_GetFreq(RCC_FREQ_t type)
       break;
   }
 
-  if (type == RCC_FREQ_SYSCLK)
-    return sysclk;
+  if (type == RCC_FREQ_SYSCLK) {
+    return (sysclk);
+  }
 
   /* Compute HCLK clock frequency --------------------------------------------*/
   uint32_t hclk = (sysclk >> AHBPrescTable[((rcc_cfgr & RCC_CFGR_HPRE) >> 4)]);
 
-  if (type == RCC_FREQ_HCLK)
-    return hclk;
+  if (type == RCC_FREQ_HCLK) {
+    return (hclk);
+  }
 
   /* Compute PCLK clock frequency --------------------------------------------*/
   uint32_t pclk = (hclk >> APBPrescTable[((rcc_cfgr & RCC_CFGR_PPRE) >> 8)]);
 
-  return pclk;
+  return (pclk);
 }
 
 /* ----------------------------- End of file ---------------------------------*/
