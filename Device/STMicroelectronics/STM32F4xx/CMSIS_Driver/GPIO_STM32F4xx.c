@@ -46,7 +46,7 @@
  *  global variable definitions (scope: module-local)
  ******************************************************************************/
 
-static GPIO_TypeDef* ports[] = {
+static GPIO_TypeDef* const ports[] = {
     GPIOA,
     GPIOB,
     GPIOC,
@@ -81,7 +81,7 @@ static GPIO_TypeDef* ports[] = {
 #endif
 };
 
-static RCC_Periph_t periph_ports[] = {
+static const RCC_Periph_t periph_ports[] = {
     RCC_PERIPH_GPIOA,
     RCC_PERIPH_GPIOB,
     RCC_PERIPH_GPIOC,
