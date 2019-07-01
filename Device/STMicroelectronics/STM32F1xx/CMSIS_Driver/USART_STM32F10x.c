@@ -856,7 +856,7 @@ int32_t USART_PowerControl(ARM_POWER_STATE state, const USART_RESOURCES *usart)
 
       /* Clear and Enable USART IRQ */
       NVIC_ClearPendingIRQ(usart->irq_num);
-      NVIC_SetPriority(usart->irq_num, RTE_SPI_INT_PRIORITY);
+      NVIC_SetPriority(usart->irq_num, RTE_USART_INT_PRIORITY);
       NVIC_EnableIRQ(usart->irq_num);
 
 #ifdef __USART_DMA
