@@ -32,6 +32,7 @@
  *  defines and macros
  ******************************************************************************/
 
+#if 0
 #define RCC_AHBENR_ID     (0x00000000UL)
 #define RCC_APB1ENR_ID    (0x00008000UL)
 #define RCC_APB2ENR_ID    (0x80000000UL)
@@ -165,6 +166,11 @@
 #define RCC_PERIPH_TIM16      (RCC_APB2ENR_ID | RCC_APB2ENR_TIM16EN)
 #define RCC_PERIPH_TIM17      (RCC_APB2ENR_ID | RCC_APB2ENR_TIM17EN)
 #define RCC_PERIPH_DBGMCU     (RCC_APB2ENR_ID | RCC_APB2ENR_DBGMCUEN)
+#endif
+
+#define RCC_PERIPH_AHB_MASK             (0xFE81FFA8)
+#define RCC_PERIPH_APB1_MASK            (0x8501B6CC)
+#define RCC_PERIPH_APB2_MASK            (0xFFB8A51E)
 
 /*******************************************************************************
  *  typedefs and structures
@@ -178,6 +184,24 @@ typedef enum {
   RCC_FREQ_HCLK,
   RCC_FREQ_PCLK,
 } RCC_FREQ_t;
+
+typedef enum {
+  /* AHB */
+  RCC_PERIPH_GPIOA = (int32_t)(RCC_AHBENR_GPIOAEN | RCC_PERIPH_AHB_MASK),
+  RCC_PERIPH_GPIOB = (int32_t)(RCC_AHBENR_GPIOBEN | RCC_PERIPH_AHB_MASK),
+  RCC_PERIPH_GPIOC = (int32_t)(RCC_AHBENR_GPIOCEN | RCC_PERIPH_AHB_MASK),
+#if defined(STM32F030x6) || defined(STM32F030x8) || defined(STM32F030xC) || \
+    defined(STM32F051x8) || defined(STM32F058xx) || \
+    defined(STM32F070x6) || defined(STM32F070xB) || defined(STM32F071xB) || defined(STM32F072xB) || defined(STM32F078xx) || \
+    defined(STM32F091xC) || defined(STM32F098xx)
+  RCC_PERIPH_GPIOD = (int32_t)(RCC_AHBENR_GPIODEN | RCC_PERIPH_AHB_MASK),
+#endif
+#if defined(STM32F071xB) || defined(STM32F072xB) || defined(STM32F078xx) || \
+    defined(STM32F091xC) || defined(STM32F098xx)
+  RCC_PERIPH_GPIOE = (int32_t)(RCC_AHBENR_GPIOEEN | RCC_PERIPH_AHB_MASK),
+#endif
+  RCC_PERIPH_GPIOF = (int32_t)(RCC_AHBENR_GPIOFEN | RCC_PERIPH_AHB_MASK),
+} RCC_Periph_t;
 
 /*******************************************************************************
  *  exported variables
@@ -203,6 +227,30 @@ void RCC_ClkInit(void);
  */
 extern
 uint32_t RCC_GetFreq(RCC_FREQ_t type);
+
+/**
+ * @fn          void RCC_EnablePeriph(RCC_Periph_t periph)
+ * @param[in]   periph
+ */
+void RCC_EnablePeriph(RCC_Periph_t periph);
+
+/**
+ * @fn          void RCC_DisablePeriph(RCC_Periph_t periph)
+ * @param[in]   periph
+ */
+void RCC_DisablePeriph(RCC_Periph_t periph);
+
+/**
+ * @fn          uint32_t RCC_GetStatePeriph(RCC_Periph_t periph)
+ * @param[in]   periph
+ */
+uint32_t RCC_GetStatePeriph(RCC_Periph_t periph);
+
+/**
+ * @fn          void RCC_ResetPeriph(RCC_Periph_t periph)
+ * @param[in]   periph
+ */
+void RCC_ResetPeriph(RCC_Periph_t periph);
 
 #endif /* RCC_STM32F0XX_H_ */
 
