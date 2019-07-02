@@ -170,6 +170,10 @@ uint32_t RCC_GetFreq(RCC_FREQ_t type)
     return (RTE_HSI48);
   }
 
+  if (type == RCC_FREQ_HSE) {
+    return (RTE_HSE);
+  }
+
   uint32_t pllmull = 0, predivfactor = 0;
   uint32_t sysclk;
   uint32_t rcc_cfgr = RCC->CFGR;
@@ -227,7 +231,7 @@ uint32_t RCC_GetFreq(RCC_FREQ_t type)
   /* Compute HCLK clock frequency --------------------------------------------*/
   uint32_t hclk = (sysclk >> AHBPrescTable[((rcc_cfgr & RCC_CFGR_HPRE) >> 4)]);
 
-  if (type == RCC_FREQ_HCLK) {
+  if (type == RCC_FREQ_AHB) {
     return (hclk);
   }
 
@@ -235,6 +239,29 @@ uint32_t RCC_GetFreq(RCC_FREQ_t type)
   uint32_t pclk = (hclk >> APBPrescTable[((rcc_cfgr & RCC_CFGR_PPRE) >> 8)]);
 
   return (pclk);
+}
+
+/**
+ * @fn        uint32_t RCC_GetPeriphFreq(RCC_Periph_t periph)
+ * @brief     Get Periph Clock Frequency
+ * @param[in] type  @ref RCC_Periph_t
+ * @return    Returns Perith clock frequency in Hz
+ */
+uint32_t RCC_GetPeriphFreq(RCC_Periph_t periph)
+{
+  RCC_FREQ_t type;
+
+  if (((periph & RCC_PERIPH_APB1_MASK) == RCC_PERIPH_APB1_MASK)) {
+    type = RCC_FREQ_APB1;
+  }
+  else if (((periph & RCC_PERIPH_APB2_MASK) == RCC_PERIPH_APB2_MASK)) {
+    type = RCC_FREQ_APB2;
+  }
+  else {
+    type = RCC_FREQ_AHB;
+  }
+
+  return RCC_GetFreq(type);
 }
 
 /**

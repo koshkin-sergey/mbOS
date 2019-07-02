@@ -61,236 +61,39 @@
   #endif
 
   #if (RTE_USART1_TX == 1)
-    #define USE_USART1_TX_Pin         1U
-    #define USART1_TX_GPIOx           RTE_USART1_TX_PORT
-    #define USART1_TX_GPIO_Pin        RTE_USART1_TX_BIT
+    #define USE_USART1_TX_Pin       1
+    #define USART1_TX_GPIO_PORT     RTE_USART1_TX_PORT
+    #define USART1_TX_GPIO_PIN      RTE_USART1_TX_PIN
+    #define USART1_TX_GPIO_FUNC     RTE_USART1_TX_FUNC
   #endif
 
   #if (RTE_USART1_RX == 1)
-    #define USE_USART1_RX_Pin         1U
-    #define USART1_RX_GPIOx           RTE_USART1_RX_PORT
-    #define USART1_RX_GPIO_Pin        RTE_USART1_RX_BIT
+    #define USE_USART1_RX_Pin       1
+    #define USART1_RX_GPIO_PORT     RTE_USART1_RX_PORT
+    #define USART1_RX_GPIO_PIN      RTE_USART1_RX_PIN
+    #define USART1_RX_GPIO_FUNC     RTE_USART1_RX_FUNC
   #endif
 
   #if (RTE_USART1_CK == 1)
-    #define USE_USART1_CK_Pin         1U
-    #define USART1_CK_GPIOx           RTE_USART1_CK_PORT
-    #define USART1_CK_GPIO_Pin        RTE_USART1_CK_BIT
+    #define USE_USART1_CK_Pin       1
+    #define USART1_CK_GPIO_PORT     RTE_USART1_CK_PORT
+    #define USART1_CK_GPIO_PIN      RTE_USART1_CK_PIN
+    #define USART1_CK_GPIO_FUNC     RTE_USART1_CK_FUNC
   #endif
 
   #if (RTE_USART1_RTS == 1)
-    #define USE_USART1_RTS_Pin        1U
-    #define USART1_RTS_GPIOx          RTE_USART1_RTS_PORT
-    #define USART1_RTS_GPIO_Pin       RTE_USART1_RTS_BIT
+    #define USE_USART1_RTS_Pin      1
+    #define USART1_RTS_GPIO_PORT    RTE_USART1_RTS_PORT
+    #define USART1_RTS_GPIO_PIN     RTE_USART1_RTS_PIN
+    #define USART1_RTS_GPIO_FUNC    RTE_USART1_RTS_FUNC
   #endif
 
   #if (RTE_USART1_CTS == 1)
-    #define USE_USART1_CTS_Pin        1U
-    #define USART1_CTS_GPIOx          RTE_USART1_CTS_PORT
-    #define USART1_CTS_GPIO_Pin       RTE_USART1_CTS_BIT
+    #define USE_USART1_CTS_Pin      1
+    #define USART1_CTS_GPIO_PORT    RTE_USART1_CTS_PORT
+    #define USART1_CTS_GPIO_PIN     RTE_USART1_CTS_PIN
+    #define USART1_CTS_GPIO_FUNC    RTE_USART1_CTS_FUNC
   #endif
-
-  #define USART1_REMAP_DEF            AFIO_USART1_NO_REMAP
-  #define USART1_REMAP                RTE_USART1_AF_REMAP
-#endif
-
-/* USART2 configuration definitions */
-#if (RTE_USART2 == 1)
-  #define USE_USART2
-
-  #if (RTE_USART2_RX_DMA == 1)
-    #define USART2_RX_DMA_Instance    DMAx_CHANNELy(RTE_USART2_RX_DMA_NUMBER, RTE_USART2_RX_DMA_CHANNEL)
-    #define USART2_RX_DMA_IRQn        DMAx_CHANNELy_IRQn(RTE_USART2_RX_DMA_NUMBER, RTE_USART2_RX_DMA_CHANNEL)
-    #define USART2_RX_DMA_Channel     RTE_USART2_RX_DMA_CHANNEL
-    #define USART2_RX_DMA_Priority    RTE_USART2_RX_DMA_PRIORITY
-
-    #define USART2_RX_DMA_Handler     DMAx_CHANNELy_EVENT(RTE_USART2_RX_DMA_NUMBER, RTE_USART2_RX_DMA_CHANNEL)
-  #endif
-  #if (RTE_USART2_TX_DMA == 1)
-    #define USART2_TX_DMA_Instance    DMAx_CHANNELy(RTE_USART2_TX_DMA_NUMBER, RTE_USART2_TX_DMA_CHANNEL)
-    #define USART2_TX_DMA_IRQn        DMAx_CHANNELy_IRQn(RTE_USART2_TX_DMA_NUMBER, RTE_USART2_TX_DMA_CHANNEL)
-    #define USART2_TX_DMA_Channel     RTE_USART2_TX_DMA_CHANNEL
-    #define USART2_TX_DMA_Priority    RTE_USART2_TX_DMA_PRIORITY
-
-    #define USART2_TX_DMA_Handler     DMAx_CHANNELy_EVENT(RTE_USART2_TX_DMA_NUMBER, RTE_USART2_TX_DMA_CHANNEL)
-  #endif
-
-  #if (RTE_USART2_TX == 1)
-    #define USE_USART2_TX_Pin         1U
-    #define USART2_TX_GPIOx           RTE_USART2_TX_PORT
-    #define USART2_TX_GPIO_Pin        RTE_USART2_TX_BIT
-  #endif
-
-  #if (RTE_USART2_RX == 1)
-    #define USE_USART2_RX_Pin         1U
-    #define USART2_RX_GPIOx           RTE_USART2_RX_PORT
-    #define USART2_RX_GPIO_Pin        RTE_USART2_RX_BIT
-  #endif
-
-  #if (RTE_USART2_CK == 1)
-    #define USE_USART2_CK_Pin         1U
-    #define USART2_CK_GPIOx           RTE_USART2_CK_PORT
-    #define USART2_CK_GPIO_Pin        RTE_USART2_CK_BIT
-  #endif
-
-  #if (RTE_USART2_RTS == 1)
-    #define USE_USART2_RTS_Pin        1U
-    #define USART2_RTS_GPIOx          RTE_USART2_RTS_PORT
-    #define USART2_RTS_GPIO_Pin       RTE_USART2_RTS_BIT
-  #endif
-
-  #if (RTE_USART2_CTS == 1)
-    #define USE_USART2_CTS_Pin        1U
-    #define USART2_CTS_GPIOx          RTE_USART2_CTS_PORT
-    #define USART2_CTS_GPIO_Pin       RTE_USART2_CTS_BIT
-  #endif
-
-  #define USART2_REMAP_DEF            AFIO_USART2_NO_REMAP
-  #define USART2_REMAP                RTE_USART2_AF_REMAP
-#endif
-
-/* USART3 configuration definitions */
-#if (RTE_USART3 == 1)
-
-  #if defined(STM32F101x6) || defined(STM32F102x6) || defined(STM32F103x6)
-    #error "USART3 is not available for selected device!"
-  #endif
-
-  #define USE_USART3
-
-  #if (RTE_USART3_RX_DMA == 1)
-    #define USART3_RX_DMA_Instance    DMAx_CHANNELy(RTE_USART3_RX_DMA_NUMBER, RTE_USART3_RX_DMA_CHANNEL)
-    #define USART3_RX_DMA_IRQn        DMAx_CHANNELy_IRQn(RTE_USART3_RX_DMA_NUMBER, RTE_USART3_RX_DMA_CHANNEL)
-    #define USART3_RX_DMA_Channel     RTE_USART3_RX_DMA_CHANNEL
-    #define USART3_RX_DMA_Priority    RTE_USART3_RX_DMA_PRIORITY
-
-    #define USART3_RX_DMA_Handler     DMAx_CHANNELy_EVENT(RTE_USART3_RX_DMA_NUMBER, RTE_USART3_RX_DMA_CHANNEL)
-  #endif
-  #if (RTE_USART3_TX_DMA == 1)
-    #define USART3_TX_DMA_Instance    DMAx_CHANNELy(RTE_USART3_TX_DMA_NUMBER, RTE_USART3_TX_DMA_CHANNEL)
-    #define USART3_TX_DMA_IRQn        DMAx_CHANNELy_IRQn(RTE_USART3_TX_DMA_NUMBER, RTE_USART3_TX_DMA_CHANNEL)
-    #define USART3_TX_DMA_Channel     RTE_USART3_TX_DMA_CHANNEL
-    #define USART3_TX_DMA_Priority    RTE_USART3_TX_DMA_PRIORITY
-
-    #define USART3_TX_DMA_Handler     DMAx_CHANNELy_EVENT(RTE_USART3_TX_DMA_NUMBER, RTE_USART3_TX_DMA_CHANNEL)
-  #endif
-
-  #if (RTE_USART3_TX == 1)
-    #define USE_USART3_TX_Pin         1U
-    #define USART3_TX_GPIOx           RTE_USART3_TX_PORT
-    #define USART3_TX_GPIO_Pin        RTE_USART3_TX_BIT
-  #endif
-
-  #if (RTE_USART3_RX == 1)
-    #define USE_USART3_RX_Pin         1U
-    #define USART3_RX_GPIOx           RTE_USART3_RX_PORT
-    #define USART3_RX_GPIO_Pin        RTE_USART3_RX_BIT
-  #endif
-
-  #if (RTE_USART3_CK == 1)
-    #define USE_USART3_CK_Pin         1U
-    #define USART3_CK_GPIOx           RTE_USART3_CK_PORT
-    #define USART3_CK_GPIO_Pin        RTE_USART3_CK_BIT
-  #endif
-
-  #if (RTE_USART3_RTS == 1)
-    #define USE_USART3_RTS_Pin        1U
-    #define USART3_RTS_GPIOx          RTE_USART3_RTS_PORT
-    #define USART3_RTS_GPIO_Pin       RTE_USART3_RTS_BIT
-  #endif
-
-  #if (RTE_USART3_CTS == 1)
-    #define USE_USART3_CTS_Pin        1U
-    #define USART3_CTS_GPIOx          RTE_USART3_CTS_PORT
-    #define USART3_CTS_GPIO_Pin       RTE_USART3_CTS_BIT
-  #endif
-
-  #define USART3_REMAP_DEF            AFIO_USART3_NO_REMAP
-  #define USART3_REMAP                RTE_USART3_AF_REMAP
-#endif
-
-/* UART4 configuration definitions */
-#if (RTE_UART4 == 1)
-
-  #if !defined(STM32F100xE) && !defined(STM32F101xE) && !defined(STM32F101xG) && !defined(STM32F103xE) && !defined(STM32F103xG) && !defined(STM32F105xC) && !defined(STM32F107xC)
-    #error "UART4 is not available for selected device!"
-  #endif
-
-  #define USE_UART4
-
-  #if (RTE_UART4_RX_DMA == 1)
-    #define UART4_RX_DMA_Instance     DMAx_CHANNELy(RTE_UART4_RX_DMA_NUMBER, RTE_UART4_RX_DMA_CHANNEL)
-    #define UART4_RX_DMA_IRQn         DMAx_CHANNELy_IRQn(RTE_UART4_RX_DMA_NUMBER, RTE_UART4_RX_DMA_CHANNEL)
-    #define UART4_RX_DMA_Channel      RTE_UART4_RX_DMA_CHANNEL
-    #define UART4_RX_DMA_Priority     RTE_UART4_RX_DMA_PRIORITY
-
-    #define UART4_RX_DMA_Handler      DMAx_CHANNELy_EVENT(RTE_UART4_RX_DMA_NUMBER, RTE_UART4_RX_DMA_CHANNEL)
-  #endif
-  #if (RTE_UART4_TX_DMA == 1)
-    #define UART4_TX_DMA_Instance     DMAx_CHANNELy(RTE_UART4_TX_DMA_NUMBER, RTE_UART4_TX_DMA_CHANNEL)
-    #define UART4_TX_DMA_IRQn         DMAx_CHANNELy_IRQn(RTE_UART4_TX_DMA_NUMBER, RTE_UART4_TX_DMA_CHANNEL)
-    #define UART4_TX_DMA_Channel      RTE_UART4_TX_DMA_CHANNEL
-    #define UART4_TX_DMA_Priority     RTE_UART4_TX_DMA_PRIORITY
-
-    #define UART4_TX_DMA_Handler      DMAx_CHANNELy_EVENT(RTE_UART4_TX_DMA_NUMBER, RTE_UART4_TX_DMA_CHANNEL)
-  #endif
-
-  #if (RTE_UART4_TX == 1)
-    #define USE_UART4_TX_Pin          1U
-    #define UART4_TX_GPIOx            RTE_UART4_TX_PORT
-    #define UART4_TX_GPIO_Pin         RTE_UART4_TX_BIT
-  #endif
-
-  #if (RTE_UART4_RX == 1)
-    #define USE_UART4_RX_Pin          1U
-    #define UART4_RX_GPIOx            RTE_UART4_RX_PORT
-    #define UART4_RX_GPIO_Pin         RTE_UART4_RX_BIT
-  #endif
-
-  #define UART4_REMAP_DEF             AFIO_UNAVAILABLE_REMAP
-  #define UART4_REMAP                 AFIO_UNAVAILABLE_REMAP
-#endif
-
-/* UART5 configuration definitions */
-#if (RTE_UART5 == 1)
-
-  #if !defined(STM32F100xE) && !defined(STM32F101xE) && !defined(STM32F101xG) && !defined(STM32F103xE) && !defined(STM32F103xG) && !defined(STM32F105xC) && !defined(STM32F107xC)
-    #error "UART5 is not available for selected device!"
-  #endif
-
-  #define USE_UART5
-
-  #if (RTE_UART5_RX_DMA == 1)
-    #define UART5_RX_DMA_Instance     DMAx_CHANNELy(RTE_UART5_RX_DMA_NUMBER, RTE_UART5_RX_DMA_CHANNEL)
-    #define UART5_RX_DMA_IRQn         DMAx_CHANNELy_IRQn(RTE_UART5_RX_DMA_NUMBER, RTE_UART5_RX_DMA_CHANNEL)
-    #define UART5_RX_DMA_Channel      RTE_UART5_RX_DMA_CHANNEL
-    #define UART5_RX_DMA_Priority     RTE_UART5_RX_DMA_PRIORITY
-
-    #define UART5_RX_DMA_Handler      DMAx_CHANNELy_EVENT(RTE_UART5_RX_DMA_NUMBER, RTE_UART5_RX_DMA_CHANNEL)
-  #endif
-  #if (RTE_UART5_TX_DMA == 1)
-    #define UART5_TX_DMA_Instance     DMAx_CHANNELy(RTE_UART5_TX_DMA_NUMBER, RTE_UART5_TX_DMA_CHANNEL)
-    #define UART5_TX_DMA_IRQn         DMAx_CHANNELy_IRQn(RTE_UART5_TX_DMA_NUMBER, RTE_UART5_TX_DMA_CHANNEL)
-    #define UART5_TX_DMA_Channel      RTE_UART5_TX_DMA_CHANNEL
-    #define UART5_TX_DMA_Priority     RTE_UART5_TX_DMA_PRIORITY
-
-    #define UART5_TX_DMA_Handler      DMAx_CHANNELy_EVENT(RTE_UART5_TX_DMA_NUMBER, RTE_UART5_TX_DMA_CHANNEL)
-  #endif
-
-  #if (RTE_UART5_TX == 1)
-    #define USE_UART5_TX_Pin          1U
-    #define UART5_TX_GPIOx            RTE_UART5_TX_PORT
-    #define UART5_TX_GPIO_Pin         RTE_UART5_TX_BIT
-  #endif
-
-  #if (RTE_UART5_RX == 1)
-    #define USE_UART5_RX_Pin          1U
-    #define UART5_RX_GPIOx            RTE_UART5_RX_PORT
-    #define UART5_RX_GPIO_Pin         RTE_UART5_RX_BIT
-  #endif
-
-  #define UART5_REMAP_DEF             AFIO_UNAVAILABLE_REMAP
-  #define UART5_REMAP                 AFIO_UNAVAILABLE_REMAP
 #endif
 
 #ifdef USE_USART1
@@ -300,50 +103,6 @@
 #endif
 #ifndef USART1_TX_DMA_Instance
   #error "USART1 using DMA requires Rx and Tx DMA channel enabled in RTE_Device.h or Device.h!"
-#endif
-#endif
-#endif
-
-#ifdef USE_USART2
-#if (defined(USART2_RX_DMA_Instance) || defined(USART2_TX_DMA_Instance))
-#ifndef USART2_RX_DMA_Instance
-  #error "USART2 using DMA requires Rx and Tx DMA channel enabled in RTE_Device.h or Device.h!"
-#endif
-#ifndef USART2_TX_DMA_Instance
-  #error "USART2 using DMA requires Rx and Tx DMA channel enabled in RTE_Device.h or Device.h!"
-#endif
-#endif
-#endif
-
-#ifdef USE_USART3
-#if (defined(USART3_RX_DMA_Instance) || defined(USART3_TX_DMA_Instance))
-#ifndef USART3_RX_DMA_Instance
-  #error "USART3 using DMA requires Rx and Tx DMA channel enabled in RTE_Device.h or Device.h!"
-#endif
-#ifndef USART3_TX_DMA_Instance
-  #error "USART3 using DMA requires Rx and Tx DMA channel enabled in RTE_Device.h or Device.h!"
-#endif
-#endif
-#endif
-
-#ifdef USE_UART4
-#if (defined(UART4_RX_DMA_Instance) || defined(UART4_TX_DMA_Instance))
-#ifndef UART4_RX_DMA_Instance
-  #error "UART4 using DMA requires Rx and Tx DMA channel enabled in RTE_Device.h or Device.h!"
-#endif
-#ifndef UART4_TX_DMA_Instance
-  #error "UART4 using DMA requires Rx and Tx DMA channel enabled in RTE_Device.h or Device.h!"
-#endif
-#endif
-#endif
-
-#ifdef USE_UART5
-#if (defined(UART5_RX_DMA_Instance) || defined(UART5_TX_DMA_Instance))
-#ifndef UART5_RX_DMA_Instance
-  #error "UART5 using DMA requires Rx and Tx DMA channel enabled in RTE_Device.h or Device.h!"
-#endif
-#ifndef UART5_TX_DMA_Instance
-  #error "UART5 using DMA requires Rx and Tx DMA channel enabled in RTE_Device.h or Device.h!"
 #endif
 #endif
 #endif
@@ -366,11 +125,7 @@
 #define __USART_DMA
 #endif
 
-// USART BRR macro
-#define USART_DIVIDER(_PCLK_, _BAUD_)           (((_PCLK_)*25)/(4*(_BAUD_)))
-#define USART_DIVIDER_MANTISA(_PCLK_, _BAUD_)     (USART_DIVIDER((_PCLK_), (_BAUD_))/100)
-#define USART_DIVIDER_FRACTION(_PCLK_, _BAUD_)  (((USART_DIVIDER((_PCLK_), (_BAUD_)) - (USART_DIVIDER_MANTISA((_PCLK_), (_BAUD_)) * 100)) * 16 + 50) / 100)
-#define USART_BAUDRATE_DIVIDER(_PCLK_, _BAUD_)   ((USART_DIVIDER_MANTISA((_PCLK_), (_BAUD_)) << 4)|(USART_DIVIDER_FRACTION((_PCLK_), (_BAUD_)) & 0x0F))
+#define USART_BAUDRATE_DIVIDER(_PCLK_, _BAUD_)  (((_PCLK_) + ((_BAUD_)/2U)) / (_BAUD_))
 
 /* USART flags */
 #define USART_FLAG_INITIALIZED      ((uint8_t)(1U << 0U))
@@ -388,10 +143,22 @@
  *  typedefs and structures (scope: module-local)
  ******************************************************************************/
 
+/* DMA Information definitions */
+typedef struct _DMA_INFO {
+  DMA_Channel_TypeDef *instance;        /* Channel registry interface */
+  uint8_t              ch_num;          /* Channel number             */
+  uint8_t              priority;        /* Channel priority           */
+  IRQn_Type            irq_num;         /* DMA channel IRQ Number     */
+} DMA_INFO;
+
+/* USART DMA */
+typedef const DMA_INFO USART_DMA;
+
 /* USART pin */
 typedef const struct _USART_PIN {
   GPIO_PORT_t           port;           // Port
   GPIO_PIN_t            pin;            // Pin
+  GPIO_PIN_FUNC_t       func;           // AF pin configuration
 } USART_PIN;
 
 /* USART Input/Output Configuration */
@@ -444,6 +211,8 @@ typedef const struct {
   RCC_Periph_t            periph;              // Peripheral
   USART_IO                io;                  // USART Input/Output pins
   IRQn_Type               irq_num;             // USART IRQ Number
+  USART_DMA               *dma_tx;             // Transmit stream register interface
+  USART_DMA               *dma_rx;             // Receive stream register interface
   USART_INFO              *info;               // Run-Time Information
   USART_TRANSFER_INFO     *xfer;               // USART transfer information
 } USART_RESOURCES;

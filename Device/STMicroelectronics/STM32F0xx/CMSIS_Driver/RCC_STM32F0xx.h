@@ -45,20 +45,6 @@
 #define RCC_PERIPH_SRAM       (RCC_AHBENR_ID | RCC_AHBENR_SRAMEN)
 #define RCC_PERIPH_FLITF      (RCC_AHBENR_ID | RCC_AHBENR_FLITFEN)
 #define RCC_PERIPH_CRC        (RCC_AHBENR_ID | RCC_AHBENR_CRCEN)
-#define RCC_PERIPH_GPIOA      (RCC_AHBENR_ID | RCC_AHBENR_GPIOAEN)
-#define RCC_PERIPH_GPIOB      (RCC_AHBENR_ID | RCC_AHBENR_GPIOBEN)
-#define RCC_PERIPH_GPIOC      (RCC_AHBENR_ID | RCC_AHBENR_GPIOCEN)
-#if defined(STM32F030x6) || defined(STM32F030x8) || defined(STM32F030xC) || \
-    defined(STM32F051x8) || defined(STM32F058xx) || \
-    defined(STM32F070x6) || defined(STM32F070xB) || defined(STM32F071xB) || defined(STM32F072xB) || defined(STM32F078xx) || \
-    defined(STM32F091xC) || defined(STM32F098xx)
-#define RCC_PERIPH_GPIOD      (RCC_AHBENR_ID | RCC_AHBENR_GPIODEN)
-#endif
-#if defined(STM32F071xB) || defined(STM32F072xB) || defined(STM32F078xx) || \
-    defined(STM32F091xC) || defined(STM32F098xx)
-#define RCC_PERIPH_GPIOE      (RCC_AHBENR_ID | RCC_AHBENR_GPIOEEN)
-#endif
-#define RCC_PERIPH_GPIOF      (RCC_AHBENR_ID | RCC_AHBENR_GPIOFEN)
 #if defined(STM32F030x6) || defined(STM32F030x8) || defined(STM32F031x6) || defined(STM32F038xx) || \
     defined(STM32F042x6) || defined(STM32F048xx) || \
     defined(STM32F051x8) || defined(STM32F058xx) || \
@@ -94,23 +80,6 @@
     defined(STM32F091xC) || defined(STM32F098xx)
 #define RCC_PERIPH_SPI2       (RCC_APB1ENR_ID | RCC_APB1ENR_SPI2EN)
 #endif
-#if defined(STM32F030x8) || defined(STM32F030xC) || \
-    defined(STM32F042x6) || defined(STM32F048xx) || \
-    defined(STM32F051x8) || defined(STM32F058xx) || \
-    defined(STM32F070x6) || defined(STM32F070xB) || defined(STM32F071xB) || defined(STM32F072xB) || defined(STM32F078xx) || \
-    defined(STM32F091xC) || defined(STM32F098xx)
-#define RCC_PERIPH_USART2     (RCC_APB1ENR_ID | RCC_APB1ENR_USART2EN)
-#endif
-#if defined(STM32F030xC) || \
-    defined(STM32F070xB) || defined(STM32F071xB) || defined(STM32F072xB) || defined(STM32F078xx) || \
-    defined(STM32F091xC) || defined(STM32F098xx)
-#define RCC_PERIPH_USART3     (RCC_APB1ENR_ID | RCC_APB1ENR_USART3EN)
-#define RCC_PERIPH_USART4     (RCC_APB1ENR_ID | RCC_APB1ENR_USART4EN)
-#endif
-#if defined(STM32F030xC) || \
-    defined(STM32F091xC) || defined(STM32F098xx)
-#define RCC_PERIPH_USART5     (RCC_APB1ENR_ID | RCC_APB1ENR_USART5EN)
-#endif
 #define RCC_PERIPH_I2C1       (RCC_APB1ENR_ID | RCC_APB1ENR_I2C1EN)
 #if defined(STM32F030x8) || defined(STM32F030xC) || \
     defined(STM32F051x8) || defined(STM32F058xx) || \
@@ -145,18 +114,9 @@
 #define RCC_PERIPH_CEC        (RCC_APB1ENR_ID | RCC_APB1ENR_CECEN)
 #endif
 #define RCC_PERIPH_SYSCFGCOMP (RCC_APB2ENR_ID | RCC_APB2ENR_SYSCFGCOMPEN)
-#if defined(STM32F030xC) || \
-    defined(STM32F091xC) || defined(STM32F098xx)
-#define RCC_PERIPH_USART6     (RCC_APB2ENR_ID | RCC_APB2ENR_USART6EN)
-#endif
-#if defined(STM32F091xC) || defined(STM32F098xx)
-#define RCC_PERIPH_USART7     (RCC_APB2ENR_ID | RCC_APB2ENR_USART7EN)
-#define RCC_PERIPH_USART8     (RCC_APB2ENR_ID | RCC_APB2ENR_USART8EN)
-#endif
 #define RCC_PERIPH_ADC        (RCC_APB2ENR_ID | RCC_APB2ENR_ADCEN)
 #define RCC_PERIPH_TIM1       (RCC_APB2ENR_ID | RCC_APB2ENR_TIM1EN)
 #define RCC_PERIPH_SPI1       (RCC_APB2ENR_ID | RCC_APB2ENR_SPI1EN)
-#define RCC_PERIPH_USART1     (RCC_APB2ENR_ID | RCC_APB2ENR_USART1EN)
 #if defined(STM32F030x8) || defined(STM32F030xC) || \
     defined(STM32F051x8) || defined(STM32F058xx) || \
     defined(STM32F070xB) || defined(STM32F071xB) || defined(STM32F072xB) || defined(STM32F078xx) || \
@@ -180,9 +140,12 @@ typedef enum {
   RCC_FREQ_HSI,
   RCC_FREQ_HSI14,
   RCC_FREQ_HSI48,
+  RCC_FREQ_HSE,
   RCC_FREQ_SYSCLK,
-  RCC_FREQ_HCLK,
-  RCC_FREQ_PCLK,
+  RCC_FREQ_AHB,
+  RCC_FREQ_APB1,
+  RCC_FREQ_APB2,
+  RCC_FREQ_Reserved = 0x7FFFFFFF
 } RCC_FREQ_t;
 
 typedef enum {
@@ -201,6 +164,34 @@ typedef enum {
   RCC_PERIPH_GPIOE = (int32_t)(RCC_AHBENR_GPIOEEN | RCC_PERIPH_AHB_MASK),
 #endif
   RCC_PERIPH_GPIOF = (int32_t)(RCC_AHBENR_GPIOFEN | RCC_PERIPH_AHB_MASK),
+
+  /* APB1 */
+#if defined(STM32F030x8) || defined(STM32F030xC) || \
+    defined(STM32F042x6) || defined(STM32F048xx) || \
+    defined(STM32F051x8) || defined(STM32F058xx) || \
+    defined(STM32F070x6) || defined(STM32F070xB) || defined(STM32F071xB) || defined(STM32F072xB) || defined(STM32F078xx) || \
+    defined(STM32F091xC) || defined(STM32F098xx)
+  RCC_PERIPH_USART2 = (int32_t)(RCC_APB1ENR_USART2EN | RCC_PERIPH_APB1_MASK),
+#endif
+#if defined(STM32F030xC) || \
+    defined(STM32F070xB) || defined(STM32F071xB) || defined(STM32F072xB) || defined(STM32F078xx) || \
+    defined(STM32F091xC) || defined(STM32F098xx)
+  RCC_PERIPH_USART3 = (int32_t)(RCC_APB1ENR_USART3EN | RCC_PERIPH_APB1_MASK),
+  RCC_PERIPH_USART4 = (int32_t)(RCC_APB1ENR_USART4EN | RCC_PERIPH_APB1_MASK),
+#endif
+#if defined(STM32F091xC) || defined(STM32F098xx) || defined(STM32F030xC)
+  RCC_PERIPH_USART5 = (int32_t)(RCC_APB1ENR_USART5EN | RCC_PERIPH_APB1_MASK),
+#endif
+
+  /* APB2 */
+  RCC_PERIPH_USART1 = (int32_t)(RCC_APB2ENR_USART1EN | RCC_PERIPH_APB2_MASK),
+#if defined(STM32F091xC) || defined(STM32F098xx) || defined(STM32F030xC)
+  RCC_PERIPH_USART6 = (int32_t)(RCC_APB2ENR_USART6EN | RCC_PERIPH_APB2_MASK),
+#endif
+#if defined(STM32F091xC) || defined(STM32F098xx)
+  RCC_PERIPH_USART7 = (int32_t)(RCC_APB2ENR_USART7EN | RCC_PERIPH_APB2_MASK),
+  RCC_PERIPH_USART8 = (int32_t)(RCC_APB2ENR_USART8EN | RCC_PERIPH_APB2_MASK),
+#endif
 } RCC_Periph_t;
 
 /*******************************************************************************
@@ -216,7 +207,6 @@ typedef enum {
  * @brief   Setup the microcontroller system. Initialize the default HSI clock
  *          source and the PLL configuration is reset.
  */
-extern
 void RCC_ClkInit(void);
 
 /**
@@ -225,8 +215,15 @@ void RCC_ClkInit(void);
  * @param[in] type  @ref RCC_FREQ_t
  * @return    Returns clock frequency in Hz
  */
-extern
 uint32_t RCC_GetFreq(RCC_FREQ_t type);
+
+/**
+ * @fn        uint32_t RCC_GetPeriphFreq(RCC_Periph_t periph)
+ * @brief     Get Periph Clock Frequency
+ * @param[in] type  @ref RCC_Periph_t
+ * @return    Returns Perith clock frequency in Hz
+ */
+uint32_t RCC_GetPeriphFreq(RCC_Periph_t periph);
 
 /**
  * @fn          void RCC_EnablePeriph(RCC_Periph_t periph)
