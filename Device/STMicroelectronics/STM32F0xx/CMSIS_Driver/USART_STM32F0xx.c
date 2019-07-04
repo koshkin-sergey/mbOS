@@ -746,6 +746,10 @@ int32_t USART_Control(uint32_t control, uint32_t arg, const USART_RESOURCES *usa
   cr3 = 0U;
 
   switch (control & ARM_USART_CONTROL_Msk) {
+    // Control break
+    case ARM_USART_CONTROL_BREAK:
+      return ARM_DRIVER_ERROR;
+
     /* Abort Send */
     case ARM_USART_ABORT_SEND:
       /* Disable TX and TC interrupt */
@@ -882,7 +886,7 @@ int32_t USART_Control(uint32_t control, uint32_t arg, const USART_RESOURCES *usa
       return (ARM_DRIVER_OK);
 
     default:
-      return ARM_DRIVER_ERROR_UNSUPPORTED;
+      break;
   }
 
   /* Check if busy */
@@ -1365,8 +1369,8 @@ void USART_IRQHandler(const USART_RESOURCES *usart)
 
   /* IDLE line */
   if (sr & USART_ISR_IDLE & reg->CR1) {
-    /* Dummy read to clear IDLE interrupt */
-    reg->RDR;
+    /* Clear IDLE interrupt */
+    reg->ICR = USART_ICR_IDLECF;
     event |= ARM_USART_EVENT_RX_TIMEOUT;
   }
 
