@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Project: uKernel real-time kernel
+ * Project: mbOS real-time kernel
  */
 
 #ifndef _KNL_LIB_H_
@@ -34,7 +34,7 @@
 /// Kernel Information
 #define osVersionAPI         20010003         ///< API version (2.1.3)
 #define osVersionKernel      10000000         ///< Kernel version (1.0.0)
-#define osKernelId           "uKernel V1.0.0" ///< Kernel identification string
+#define osKernelId           "Kernel V1.0.0"  ///< Kernel identification string
 
 /* Object Identifier definitions */
 #define ID_INVALID                  0x00
