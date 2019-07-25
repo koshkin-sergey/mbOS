@@ -18,7 +18,7 @@
  * Title:   uKernel Configuration
  */
 
-#include "ukernel.h"
+#include "kernel.h"
 
 /* OS Idle Thread */
 __WEAK __NO_RETURN

@@ -19,7 +19,7 @@
  */
 
 #include "RCC_STM32F4xx.h"
-#include "ukernel.h"
+#include "kernel.h"
 
 /* OS Idle Thread */
 __NO_RETURN

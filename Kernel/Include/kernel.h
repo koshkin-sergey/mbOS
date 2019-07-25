@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Project: uKernel real-time kernel
+ * Project: mbOS real-time kernel
  */
 
-#ifndef _UKERNEL_H_
-#define _UKERNEL_H_
+#ifndef _KERNEL_H_
+#define _KERNEL_H_
 
 /*******************************************************************************
  *  includes
@@ -1217,6 +1217,6 @@ osStatus_t osMutexDelete(osMutexId_t mutex_id);
 } /* extern "C" */
 #endif
 
-#endif  // _UKERNEL_H_
+#endif  // _KERNEL_H_
 
 /*------------------------------ End of file ---------------------------------*/
