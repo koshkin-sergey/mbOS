@@ -68,9 +68,14 @@ extern "C"
 #define osThreadJoinable              0x00000001U ///< Thread created in joinable mode
 
 /* Mutex attributes */
-#define osMutexPrioInherit            (1UL<<0)  ///< Priority inherit protocol.
-#define osMutexRecursive              (1UL<<1)  ///< Recursive mutex.
-#define osMutexRobust                 (1UL<<2)  ///< Robust mutex.
+#define osMutexPrioInherit            (1UL<<0)    ///< Priority inherit protocol.
+#define osMutexRecursive              (1UL<<1)    ///< Recursive mutex.
+#define osMutexRobust                 (1UL<<2)    ///< Robust mutex.
+
+/* OS Configuration flags */
+#define osConfigPrivilegedMode        (1UL<<0)    ///< Threads in Privileged mode
+#define osConfigStackCheck            (1UL<<1)    ///< Stack overrun checking
+#define osConfigStackWatermark        (1UL<<2)    ///< Stack usage Watermark
 
 /* Timeout value */
 #define osWaitForever                 (0xFFFFFFFF)
@@ -101,6 +106,9 @@ extern "C"
 /// \param         msg_size      maximum message size in bytes.
 #define osMessageQueueMemSize(msg_count, msg_size) \
   (4*(msg_count)*(3+(((msg_size)+3)/4)))
+
+/* Number priority levels */
+#define NUM_PRIORITY                  (32U)
 
 /*******************************************************************************
  *  typedefs and structures (scope: module-local)
@@ -472,6 +480,42 @@ typedef struct {
   void                       *mp_mem;   ///< memory for data storage
   uint32_t                   mp_size;   ///< size of provided memory for data storage
 } osMemoryPoolAttr_t;
+
+/* OS Runtime Information structure */
+typedef struct osInfo_s {
+  struct {
+    struct {
+      osThread_t                         *curr;   /// Task that is running now
+      osThread_t                         *next;   /// Task to be run after switch context
+    } run;
+    osThreadId_t                          idle;
+    osThreadId_t                         timer;
+  } thread;
+  struct {
+    osKernelState_t                      state;   ///< State
+    uint32_t                              tick;
+  } kernel;
+  uint32_t                       base_priority;
+  uint32_t                    ready_to_run_bmp;
+  queue_t             ready_list[NUM_PRIORITY];   ///< all ready to run(RUNNABLE) tasks
+  queue_t                          timer_queue;
+  queue_t                          delay_queue;
+  osSemaphoreId_t              timer_semaphore;
+} osInfo_t;
+
+/* OS Configuration structure */
+typedef struct osConfig_s {
+  uint32_t                             flags;   ///< OS Configuration Flags
+  uint32_t                         tick_freq;   ///< Kernel Tick Frequency
+  uint32_t                     robin_timeout;   ///< Round Robin Timeout Tick
+  uint32_t        max_api_interrupt_priority;
+  const
+  osThreadAttr_t           *idle_thread_attr;   ///< Idle Thread Attributes
+  const
+  osThreadAttr_t          *timer_thread_attr;   ///< Timer Thread Attributes
+  const
+  osSemaphoreAttr_t    *timer_semaphore_attr;   ///< Timer Semaphore Attributes
+} osConfig_t;
 
 /*******************************************************************************
  *  exported variables

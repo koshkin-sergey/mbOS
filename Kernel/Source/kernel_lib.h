@@ -17,8 +17,8 @@
  * Project: mbOS real-time kernel
  */
 
-#ifndef _KNL_LIB_H_
-#define _KNL_LIB_H_
+#ifndef _KERNEL_LIB_H_
+#define _KERNEL_LIB_H_
 
 /*******************************************************************************
  *  includes
@@ -31,7 +31,7 @@
  *  defines and macros (scope: module-local)
  ******************************************************************************/
 
-/// Kernel Information
+/* Kernel Information */
 #define osVersionAPI         20010003         ///< API version (2.1.3)
 #define osVersionKernel      10000000         ///< Kernel version (1.0.0)
 #define osKernelId           "Kernel V1.0.0"  ///< Kernel identification string
@@ -63,53 +63,11 @@
 #define GetTimerByQueue(que)        container_of(que, osTimer_t, timer_que)
 #define GetMessageByQueue(que)      container_of(que, osMessage_t, msg_que)
 
-#define NUM_PRIORITY                (32U)
 #define osThreadWait                (-16)
-
-/* OS Configuration flags */
-#define osConfigPrivilegedMode      (1UL<<0)    ///< Threads in Privileged mode
-#define osConfigStackCheck          (1UL<<1)    ///< Stack overrun checking
-#define osConfigStackWatermark      (1UL<<2)    ///< Stack usage Watermark
 
 /*******************************************************************************
  *  typedefs and structures (scope: module-local)
  ******************************************************************************/
-
-/* OS Runtime Information structure */
-typedef struct osInfo_s {
-  struct {
-    struct {
-      osThread_t                         *curr;   /// Task that is running now
-      osThread_t                         *next;   /// Task to be run after switch context
-    } run;
-    osThreadId_t                          idle;
-    osThreadId_t                         timer;
-  } thread;
-  struct {
-    osKernelState_t                      state;   ///< State
-    uint32_t                              tick;
-  } kernel;
-  uint32_t                       base_priority;
-  uint32_t                    ready_to_run_bmp;
-  queue_t             ready_list[NUM_PRIORITY];   ///< all ready to run(RUNNABLE) tasks
-  queue_t                          timer_queue;
-  queue_t                          delay_queue;
-  osSemaphoreId_t              timer_semaphore;
-} osInfo_t;
-
-/* OS Configuration structure */
-typedef struct osConfig_s {
-  uint32_t                             flags;   ///< OS Configuration Flags
-  uint32_t                         tick_freq;   ///< Kernel Tick Frequency
-  uint32_t                     robin_timeout;   ///< Round Robin Timeout Tick
-  uint32_t        max_api_interrupt_priority;
-  const
-  osThreadAttr_t           *idle_thread_attr;   ///< Idle Thread Attributes
-  const
-  osThreadAttr_t          *timer_thread_attr;   ///< Timer Thread Attributes
-  const
-  osSemaphoreAttr_t    *timer_semaphore_attr;   ///< Timer Semaphore Attributes
-} osConfig_t;
 
 typedef enum {
   DISPATCH_NO  = 0,
@@ -296,4 +254,4 @@ osStatus_t libMemoryPoolFree(osMemoryPoolInfo_t *mp_info, void *block);
 
 extern void osTick_Handler(void);
 
-#endif /* _KNL_LIB_H_ */
+#endif /* _KERNEL_LIB_H_ */
