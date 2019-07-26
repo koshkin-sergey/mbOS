@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Project: uKernel real-time kernel
- * Title:   OS Library Configuration
+ * Project: mbOS real-time kernel
+ * Title:   Kernel Library Configuration
  */
 
-#include "os_lib.h"
+#include "kernel.h"
 #include "RTOS_Config.h"
 
 osInfo_t osInfo;
