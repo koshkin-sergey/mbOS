@@ -32,14 +32,14 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
+			<name>src/Config</name>
+			<type>2</type>
+			<locationURI>PARENT-3-PROJECT_LOC/Common/Config</locationURI>
+		</link>
+		<link>
 			<name>src/Device</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>src/RTOS_Config.c</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/RTOS_Config.c</locationURI>
 		</link>
 		<link>
 			<name>src/stm32f4_example_timers.c</name>
