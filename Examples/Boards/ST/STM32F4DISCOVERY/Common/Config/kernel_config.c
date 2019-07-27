@@ -14,8 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Project: uKernel real-time kernel
- * Title:   uKernel Configuration
+ * Project: mbOS real-time kernel
+ * Title:   Kernel Configuration
  */
 
 #include "RCC_STM32F4xx.h"
