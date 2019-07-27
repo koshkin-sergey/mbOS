@@ -19,7 +19,7 @@
  */
 
 #include "kernel.h"
-#include "RTOS_Config.h"
+#include "kernel_config.h"
 
 osInfo_t osInfo;
 

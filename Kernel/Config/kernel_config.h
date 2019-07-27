@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Project: uKernel real-time kernel
- * Title:   uKernel Configuration definitions
+ * Project: mbOS real-time kernel
+ * Title:   Kernel Configuration definitions
  */
 
-#ifndef _RTOS_CONFIG_H_
-#define _RTOS_CONFIG_H_
+#ifndef _KERNEL_CONFIG_H_
+#define _KERNEL_CONFIG_H_
 
 //-------- <<< Use Configuration Wizard in Context Menu >>> --------------------
 
@@ -136,6 +136,6 @@
 
 //------------- <<< end of configuration section >>> ---------------------------
 
-#endif  /* _RTOS_CONFIG_H_ */
+#endif  /* _KERNEL_CONFIG_H_ */
 
 /* ----------------------------- End of file ---------------------------------*/
