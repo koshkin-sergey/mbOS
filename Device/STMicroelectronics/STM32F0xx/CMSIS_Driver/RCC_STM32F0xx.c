@@ -174,8 +174,8 @@ uint32_t RCC_GetFreq(RCC_FREQ_t type)
     return (RTE_HSE);
   }
 
-  uint32_t pllmull = 0, predivfactor = 0;
-  uint32_t sysclk;
+  uint32_t pllmull  = 0U, predivfactor = 0U;
+  uint32_t sysclk   = 0U;
   uint32_t rcc_cfgr = RCC->CFGR;
 
   /* Get SYSCLK Frequency ----------------------------------------------------*/
@@ -309,8 +309,8 @@ uint32_t RCC_GetStatePeriph(RCC_Periph_t periph)
  */
 void RCC_ResetPeriph(RCC_Periph_t periph)
 {
-  __IO uint32_t *reg;
-  uint32_t mask;
+  __IO uint32_t *reg  = 0U;
+       uint32_t  mask = 0U;
 
   if (((periph & RCC_PERIPH_APB1_MASK) == RCC_PERIPH_APB1_MASK)) {
     reg = &RCC->APB1RSTR;
@@ -325,9 +325,11 @@ void RCC_ResetPeriph(RCC_Periph_t periph)
     mask = (uint32_t)periph & ~RCC_PERIPH_AHB_MASK;
   }
 
-  *reg |= mask;
-  __NOP();__NOP();__NOP();__NOP();
-  *reg &= ~mask;
+  if (reg != 0U) {
+    *reg |= mask;
+    __NOP();__NOP();__NOP();__NOP();
+    *reg &= ~mask;
+  }
 }
 
 /* ----------------------------- End of file ---------------------------------*/
