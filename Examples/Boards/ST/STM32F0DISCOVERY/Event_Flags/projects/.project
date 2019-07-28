@@ -32,14 +32,55 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>src/Drivers</name>
+			<name>src/Config</name>
+			<type>2</type>
+			<locationURI>PARENT-2-PROJECT_LOC/Common/Config</locationURI>
+		</link>
+		<link>
+			<name>src/Device</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>src/Startup</name>
+			<name>src/stm32f0_example_event_flags.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/stm32f0_example_event_flags.c</locationURI>
+		</link>
+		<link>
+			<name>src/Device/Drivers</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
+		<link>
+			<name>src/Device/Startup</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>src/Device/Drivers/GPIO_STM32F0xx.c</name>
+			<type>1</type>
+			<locationURI>MBOS_LOC/Device/STMicroelectronics/STM32F0xx/CMSIS_Driver/GPIO_STM32F0xx.c</locationURI>
+		</link>
+		<link>
+			<name>src/Device/Drivers/RCC_STM32F0xx.c</name>
+			<type>1</type>
+			<locationURI>MBOS_LOC/Device/STMicroelectronics/STM32F0xx/CMSIS_Driver/RCC_STM32F0xx.c</locationURI>
+		</link>
+		<link>
+			<name>src/Device/Startup/startup_stm32f051x8.S</name>
+			<type>1</type>
+			<locationURI>MBOS_LOC/Device/STMicroelectronics/STM32F0xx/Startup/gcc/startup_stm32f051x8.S</locationURI>
+		</link>
+		<link>
+			<name>src/Device/Startup/system_stm32f0xx.c</name>
+			<type>1</type>
+			<locationURI>MBOS_LOC/Device/STMicroelectronics/STM32F0xx/Startup/system_stm32f0xx.c</locationURI>
+		</link>
 	</linkedResources>
+	<variableList>
+		<variable>
+			<name>MBOS_LOC</name>
+			<value>$%7BWORKSPACE_LOC%7D/mbOS</value>
+		</variable>
+	</variableList>
 </projectDescription>
