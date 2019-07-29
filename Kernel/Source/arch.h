@@ -170,7 +170,7 @@ typedef struct
  * @brief       Check if in IRQ Mode
  * @return      true=IRQ, false=thread
  */
-__STATIC_INLINE
+__STATIC_FORCEINLINE
 bool IsIrqMode(void)
 {
   return (__get_IPSR() != 0U);
@@ -181,7 +181,7 @@ bool IsIrqMode(void)
  * @brief       Check if IRQ is Masked
  * @return      true=masked, false=not masked
  */
-__STATIC_INLINE
+__STATIC_FORCEINLINE
 bool IsIrqMasked(void)
 {
 #if   ((defined(__ARM_ARCH_7M__)      && (__ARM_ARCH_7M__      != 0)) || \
@@ -222,7 +222,7 @@ uint32_t SystemIsrInit(void)
 #endif
 }
 
-__STATIC_INLINE
+__STATIC_FORCEINLINE
 void archSwitchContextRequest(void)
 {
   SCB->ICSR = PENDSVSET;
