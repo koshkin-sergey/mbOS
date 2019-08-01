@@ -87,6 +87,7 @@ void EXTI15_10_IRQHandler          (void) __attribute__ ((weak, alias("Default_H
 void RTC_Alarm_IRQHandler          (void) __attribute__ ((weak, alias("Default_Handler")));
 void DMA1_Stream7_IRQHandler       (void) __attribute__ ((weak, alias("Default_Handler")));
 void TIM5_IRQHandler               (void) __attribute__ ((weak, alias("Default_Handler")));
+void TIM6_DAC_IRQHandler           (void) __attribute__ ((weak, alias("Default_Handler")));
 void DMA2_Stream0_IRQHandler       (void) __attribute__ ((weak, alias("Default_Handler")));
 void DMA2_Stream1_IRQHandler       (void) __attribute__ ((weak, alias("Default_Handler")));
 void DMA2_Stream2_IRQHandler       (void) __attribute__ ((weak, alias("Default_Handler")));
