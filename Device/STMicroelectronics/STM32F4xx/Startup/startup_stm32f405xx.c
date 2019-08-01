@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-#include "stm32f407xx.h"
+#include "stm32f405xx.h"
 
 /*----------------------------------------------------------------------------
   Exception / Interrupt Handler Function Prototype
@@ -112,8 +112,6 @@ void DMA2_Stream1_IRQHandler       (void) __attribute__ ((weak, alias("Default_H
 void DMA2_Stream2_IRQHandler       (void) __attribute__ ((weak, alias("Default_Handler")));
 void DMA2_Stream3_IRQHandler       (void) __attribute__ ((weak, alias("Default_Handler")));
 void DMA2_Stream4_IRQHandler       (void) __attribute__ ((weak, alias("Default_Handler")));
-void ETH_IRQHandler                (void) __attribute__ ((weak, alias("Default_Handler")));
-void ETH_WKUP_IRQHandler           (void) __attribute__ ((weak, alias("Default_Handler")));
 void CAN2_TX_IRQHandler            (void) __attribute__ ((weak, alias("Default_Handler")));
 void CAN2_RX0_IRQHandler           (void) __attribute__ ((weak, alias("Default_Handler")));
 void CAN2_RX1_IRQHandler           (void) __attribute__ ((weak, alias("Default_Handler")));
@@ -129,7 +127,6 @@ void OTG_HS_EP1_OUT_IRQHandler     (void) __attribute__ ((weak, alias("Default_H
 void OTG_HS_EP1_IN_IRQHandler      (void) __attribute__ ((weak, alias("Default_Handler")));
 void OTG_HS_WKUP_IRQHandler        (void) __attribute__ ((weak, alias("Default_Handler")));
 void OTG_HS_IRQHandler             (void) __attribute__ ((weak, alias("Default_Handler")));
-void DCMI_IRQHandler               (void) __attribute__ ((weak, alias("Default_Handler")));
 void HASH_RNG_IRQHandler           (void) __attribute__ ((weak, alias("Default_Handler")));
 void FPU_IRQHandler                (void) __attribute__ ((weak, alias("Default_Handler")));
 
@@ -223,8 +220,8 @@ extern const pFunc __VECTOR_TABLE[];
   DMA2_Stream2_IRQHandler,          /* DMA2 Stream 2                          */
   DMA2_Stream3_IRQHandler,          /* DMA2 Stream 3                          */
   DMA2_Stream4_IRQHandler,          /* DMA2 Stream 4                          */
-  ETH_IRQHandler,                   /* Ethernet                               */
-  ETH_WKUP_IRQHandler,              /* Ethernet Wakeup through EXTI line      */
+  0,                                /* Reserved                               */
+  0,                                /* Reserved                               */
   CAN2_TX_IRQHandler,               /* CAN2 TX                                */
   CAN2_RX0_IRQHandler,              /* CAN2 RX0                               */
   CAN2_RX1_IRQHandler,              /* CAN2 RX1                               */
@@ -240,8 +237,8 @@ extern const pFunc __VECTOR_TABLE[];
   OTG_HS_EP1_IN_IRQHandler,         /* USB OTG HS End Point 1 In              */
   OTG_HS_WKUP_IRQHandler,           /* USB OTG HS Wakeup through EXTI         */
   OTG_HS_IRQHandler,                /* USB OTG HS                             */
-  DCMI_IRQHandler,                  /* DCMI                                   */
-  0,                                /* CRYP crypto                            */
+  0,                                /* Reserved                               */
+  0,                                /* Reserved                               */
   HASH_RNG_IRQHandler,              /* Hash and Rng                           */
   FPU_IRQHandler,                   /* FPU                                    */
 };
