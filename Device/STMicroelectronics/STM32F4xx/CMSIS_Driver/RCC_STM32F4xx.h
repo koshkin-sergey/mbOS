@@ -234,8 +234,16 @@ typedef enum {
   RCC_PERIPH_TIM9 = (int32_t)(RCC_APB2ENR_TIM9EN | RCC_PERIPH_APB2_MASK),
   RCC_PERIPH_TIM10 = (int32_t)(RCC_APB2ENR_TIM10EN | RCC_PERIPH_APB2_MASK),
   RCC_PERIPH_TIM11 = (int32_t)(RCC_APB2ENR_TIM11EN | RCC_PERIPH_APB2_MASK),
+#if defined(STM32F410Cx) || defined(STM32F410Rx) || defined(STM32F411xE) || defined(STM32F412Cx) || \
+    defined(STM32F412Zx) || defined(STM32F412Vx) || defined(STM32F412Rx) || defined(STM32F413xx) || \
+    defined(STM32F423xx) || defined(STM32F427xx) || defined(STM32F429xx) || defined(STM32F437xx) || \
+    defined(STM32F439xx) || defined(STM32F469xx) || defined(STM32F479xx)
   RCC_PERIPH_SPI5 = (int32_t)(RCC_APB2ENR_SPI5EN | RCC_PERIPH_APB2_MASK),
+#endif
+#if defined(STM32F427xx) || defined(STM32F429xx) || defined(STM32F437xx) || defined(STM32F439xx) || \
+    defined(STM32F469xx) || defined(STM32F479xx)
   RCC_PERIPH_SPI6 = (int32_t)(RCC_APB2ENR_SPI6EN | RCC_PERIPH_APB2_MASK),
+#endif
 #if defined(STM32F413xx) ||                                                                         \
     defined(STM32F423xx) || defined(STM32F427xx) || defined(STM32F429xx) || defined(STM32F437xx) || \
     defined(STM32F439xx) || defined(STM32F446xx) || defined(STM32F469xx) || defined(STM32F479xx)
