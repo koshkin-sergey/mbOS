@@ -69,6 +69,28 @@
  *  typedefs and structures (scope: module-local)
  ******************************************************************************/
 
+/* Kernel Runtime Information structure */
+typedef struct KernelInfo_s {
+  struct {
+    struct {
+      osThread_t                         *curr;   /// Task that is running now
+      osThread_t                         *next;   /// Task to be run after switch context
+    } run;
+    osThreadId_t                          idle;
+    osThreadId_t                         timer;
+  } thread;
+  struct {
+    osKernelState_t                      state;   ///< State
+    uint32_t                              tick;
+  } kernel;
+  uint32_t                       base_priority;
+  uint32_t                    ready_to_run_bmp;
+  queue_t             ready_list[NUM_PRIORITY];   ///< all ready to run(RUNNABLE) tasks
+  queue_t                          timer_queue;
+  queue_t                          delay_queue;
+  osSemaphoreId_t              timer_semaphore;
+} KernelInfo_t;
+
 typedef enum {
   DISPATCH_NO  = 0,
   DISPATCH_YES = 1,
@@ -78,8 +100,8 @@ typedef enum {
  *  exported variables
  ******************************************************************************/
 
-extern osInfo_t osInfo;                   ///< OS Runtime Information
-extern const osConfig_t osConfig;         ///< OS Configuration
+extern KernelInfo_t osInfo;               ///< Kernel Runtime Information
+extern const osConfig_t osConfig;         ///< Kernel Configuration
 
 /*******************************************************************************
  *  exported function prototypes

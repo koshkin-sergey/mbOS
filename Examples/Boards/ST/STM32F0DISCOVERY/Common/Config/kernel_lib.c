@@ -21,8 +21,6 @@
 #include "kernel.h"
 #include "kernel_config.h"
 
-osInfo_t osInfo;
-
 /* Idle Thread Control Block */
 static osThread_t os_idle_thread_cb __attribute__((section(".bss.os.thread.cb")));
 

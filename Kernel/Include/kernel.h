@@ -481,28 +481,6 @@ typedef struct {
   uint32_t                   mp_size;   ///< size of provided memory for data storage
 } osMemoryPoolAttr_t;
 
-/* OS Runtime Information structure */
-typedef struct osInfo_s {
-  struct {
-    struct {
-      osThread_t                         *curr;   /// Task that is running now
-      osThread_t                         *next;   /// Task to be run after switch context
-    } run;
-    osThreadId_t                          idle;
-    osThreadId_t                         timer;
-  } thread;
-  struct {
-    osKernelState_t                      state;   ///< State
-    uint32_t                              tick;
-  } kernel;
-  uint32_t                       base_priority;
-  uint32_t                    ready_to_run_bmp;
-  queue_t             ready_list[NUM_PRIORITY];   ///< all ready to run(RUNNABLE) tasks
-  queue_t                          timer_queue;
-  queue_t                          delay_queue;
-  osSemaphoreId_t              timer_semaphore;
-} osInfo_t;
-
 /* OS Configuration structure */
 typedef struct osConfig_s {
   uint32_t                             flags;   ///< OS Configuration Flags
