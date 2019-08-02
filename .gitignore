@@ -22,3 +22,4 @@ settings/
 # SW4STM32 Project Files
 .settings/
 *.cfg
+*.xml
