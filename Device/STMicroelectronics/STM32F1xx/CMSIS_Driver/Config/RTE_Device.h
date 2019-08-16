@@ -36,6 +36,7 @@
 #define RTE_SPI_INT_PRIORITY            (1U)
 #define RTE_DMA_INT_PRIORITY            (1U)
 #define RTE_EXTI_INT_PRIORITY           (1U)
+#define RTE_DAC_INT_PRIORITY            (1U)
 
 // <e> USART1 (Universal synchronous asynchronous receiver transmitter)
 // <i> Configuration settings for Driver_USART1 in component ::CMSIS Driver:USART
@@ -447,10 +448,10 @@
 
 //   <e> USART3 Partial Pin Remap
 //   <i> Enable USART3 Partial Pin Remapping
-#define RTE_USART3_REMAP_PARTIAL        0
+#define RTE_USART3_REMAP_PARTIAL        1
 
 //     <o> USART3_TX Pin <0=>Not Used <1=>PC10
-#define RTE_USART3_TX_PORT_ID_PARTIAL   0
+#define RTE_USART3_TX_PORT_ID_PARTIAL   1
 #if    (RTE_USART3_TX_PORT_ID_PARTIAL == 0)
 #define RTE_USART3_TX_PARTIAL           0
 #elif  (RTE_USART3_TX_PORT_ID_PARTIAL == 1)
@@ -462,7 +463,7 @@
 #endif
 
 //     <o> USART3_RX Pin <0=>Not Used <1=>PC11
-#define RTE_USART3_RX_PORT_ID_PARTIAL   0
+#define RTE_USART3_RX_PORT_ID_PARTIAL   1
 #if    (RTE_USART3_RX_PORT_ID_PARTIAL == 0)
 #define RTE_USART3_RX_PARTIAL           0
 #elif  (RTE_USART3_RX_PORT_ID_PARTIAL == 1)
@@ -1291,6 +1292,663 @@
 
 // </e>
 
+// <e> DAC1 (Digital to Analog Converter 1) [Driver_DAC1]
+// <i> Configuration settings for Driver_DAC1
+#define RTE_DAC1                        0
+
+//   <o> CH1_OUT Pin <0=>Not Used <1=>PA4
+#define RTE_DAC1_CH1_OUT_PORT_ID_DEF    1
+#if    (RTE_DAC1_CH1_OUT_PORT_ID_DEF == 0)
+#define RTE_DAC1_CH1_OUT                0
+#elif  (RTE_DAC1_CH1_OUT_PORT_ID_DEF == 1)
+#define RTE_DAC1_CH1_OUT                1
+#define RTE_DAC1_CH1_OUT_PORT           GPIO_PORT_A
+#define RTE_DAC1_CH1_OUT_BIT            GPIO_PIN_4
+#else
+#error "Invalid CH1_OUT Pin Configuration!"
+#endif
+
+//   <o> CH2_OUT Pin <0=>Not Used <1=>PA5
+#define RTE_DAC1_CH2_OUT_PORT_ID_DEF    1
+#if    (RTE_DAC1_CH2_OUT_PORT_ID_DEF == 0)
+#define RTE_DAC1_CH2_OUT                0
+#elif  (RTE_DAC1_CH2_OUT_PORT_ID_DEF == 1)
+#define RTE_DAC1_CH2_OUT                1
+#define RTE_DAC1_CH2_OUT_PORT           GPIO_PORT_A
+#define RTE_DAC1_CH2_OUT_BIT            GPIO_PIN_5
+#else
+#error "Invalid CH2_OUT Pin Configuration!"
+#endif
+
+//   <o> Trigger <0=>Not Used <1=>Timer 6 <2=>Timer 7
+#define RTE_DAC1_TRIGGER_SELECTION_DEF    0
+#if    (RTE_DAC1_TRIGGER_SELECTION_DEF == 0)
+#define RTE_DAC1_TRIGGER_HARDWARE         0
+#elif  (RTE_DAC1_TRIGGER_SELECTION_DEF == 1)
+#define RTE_DAC1_TRIGGER_HARDWARE         1
+#define RTE_DAC1_TRIGGER_SELECT           6
+#elif  (RTE_DAC1_TRIGGER_SELECTION_DEF == 2)
+#define RTE_DAC1_TRIGGER_HARDWARE         1
+#define RTE_DAC1_TRIGGER_SELECT           7
+#else
+#error "Invalid RTE_DAC1_TRIGGER_SELECTION_DEF Configuration!"
+#endif
+
+//   <e> DMA DAC1_CH1
+//     <o1> Number <1=>1 <2=>2
+//     <i>  Selects DMA Number
+//     <o2> Channel <3=>3
+//     <i>  Selects DMA Channel (only Channel 3 can be used)
+//     <o3> Priority <0=>Low <1=>Medium <2=>High <3=>Very High
+//     <i>  Selects DMA Priority
+//   </e>
+#define RTE_DAC1_CH1_DMA                 0
+#define RTE_DAC1_CH1_DMA_NUMBER          2
+#define RTE_DAC1_CH1_DMA_CHANNEL         3
+#define RTE_DAC1_CH1_DMA_PRIORITY        0
+
+//   <e> DMA DAC1_CH2
+//     <o1> Number <1=>1 <2=>2
+//     <i>  Selects DMA Number
+//     <o2> Channel <4=>4
+//     <i>  Selects DMA Channel (only Channel 4 can be used)
+//     <o3> Priority <0=>Low <1=>Medium <2=>High <3=>Very High
+//     <i>  Selects DMA Priority
+//   </e>
+#define RTE_DAC1_CH2_DMA                 0
+#define RTE_DAC1_CH2_DMA_NUMBER          2
+#define RTE_DAC1_CH2_DMA_CHANNEL         4
+#define RTE_DAC1_CH2_DMA_PRIORITY        0
+
+// </e>
+
+
+// <e> ADC1 (Analog to Digital Converter 1) [Driver_ADC1]
+// <i> Configuration settings for Driver_ADC1
+#define RTE_ADC1                        0
+
+//   <o> IN0 Pin <0=>Not Used <1=>PA0
+#define RTE_ADC1_IN0_PORT_ID            1
+#if    (RTE_ADC1_IN0_PORT_ID == 0)
+#define RTE_ADC1_IN0                    0
+#elif  (RTE_ADC1_IN0_PORT_ID == 1)
+#define RTE_ADC1_IN0                    1
+#define RTE_ADC123_IN0_PORT             GPIO_PORT_A
+#define RTE_ADC123_IN0_BIT              GPIO_PIN_0
+#else
+#error "Invalid IN0 Pin Configuration!"
+#endif
+
+//   <o> IN1 Pin <0=>Not Used <1=>PA1
+#define RTE_ADC1_IN1_PORT_ID            0
+#if    (RTE_ADC1_IN1_PORT_ID == 0)
+#define RTE_ADC1_IN1                    0
+#elif  (RTE_ADC1_IN1_PORT_ID == 1)
+#define RTE_ADC1_IN1                    1
+#define RTE_ADC123_IN1_PORT             GPIO_PORT_A
+#define RTE_ADC123_IN1_BIT              GPIO_PIN_1
+#else
+#error "Invalid IN1 Pin Configuration!"
+#endif
+
+//   <o> IN2 Pin <0=>Not Used <1=>PA2
+#define RTE_ADC1_IN2_PORT_ID            0
+#if    (RTE_ADC1_IN2_PORT_ID == 0)
+#define RTE_ADC1_IN2                    0
+#elif  (RTE_ADC1_IN2_PORT_ID == 1)
+#define RTE_ADC1_IN2                    1
+#define RTE_ADC123_IN2_PORT             GPIO_PORT_A
+#define RTE_ADC123_IN2_BIT              GPIO_PIN_2
+#else
+#error "Invalid IN2 Pin Configuration!"
+#endif
+
+//   <o> IN3 Pin <0=>Not Used <1=>PA3
+#define RTE_ADC1_IN3_PORT_ID            0
+#if    (RTE_ADC1_IN3_PORT_ID == 0)
+#define RTE_ADC1_IN3                    0
+#elif  (RTE_ADC1_IN3_PORT_ID == 1)
+#define RTE_ADC1_IN3                    1
+#define RTE_ADC123_IN3_PORT             GPIO_PORT_A
+#define RTE_ADC123_IN3_BIT              GPIO_PIN_3
+#else
+#error "Invalid IN3 Pin Configuration!"
+#endif
+
+//   <o> IN4 Pin <0=>Not Used <1=>PA4
+#define RTE_ADC1_IN4_PORT_ID            0
+#if    (RTE_ADC1_IN4_PORT_ID == 0)
+#define RTE_ADC1_IN4                    0
+#elif  (RTE_ADC1_IN4_PORT_ID == 1)
+#define RTE_ADC1_IN4                    1
+#define RTE_ADC12_IN4_PORT              GPIO_PORT_A
+#define RTE_ADC12_IN4_BIT               GPIO_PIN_4
+#else
+#error "Invalid IN4 Pin Configuration!"
+#endif
+
+//   <o> IN5 Pin <0=>Not Used <1=>PA5
+#define RTE_ADC1_IN5_PORT_ID            0
+#if    (RTE_ADC1_IN5_PORT_ID == 0)
+#define RTE_ADC1_IN5                    0
+#elif  (RTE_ADC1_IN5_PORT_ID == 1)
+#define RTE_ADC1_IN5                    1
+#define RTE_ADC12_IN5_PORT              GPIO_PORT_A
+#define RTE_ADC12_IN5_BIT               GPIO_PIN_5
+#else
+#error "Invalid IN5 Pin Configuration!"
+#endif
+
+//   <o> IN6 Pin <0=>Not Used <1=>PA6
+#define RTE_ADC1_IN6_PORT_ID            0
+#if    (RTE_ADC1_IN6_PORT_ID == 0)
+#define RTE_ADC1_IN6                    0
+#elif  (RTE_ADC1_IN6_PORT_ID == 1)
+#define RTE_ADC1_IN6                    1
+#define RTE_ADC12_IN6_PORT              GPIO_PORT_A
+#define RTE_ADC12_IN6_BIT               GPIO_PIN_6
+#else
+#error "Invalid IN6 Pin Configuration!"
+#endif
+
+//   <o> IN7 Pin <0=>Not Used <1=>PA7
+#define RTE_ADC1_IN7_PORT_ID            0
+#if    (RTE_ADC1_IN7_PORT_ID == 0)
+#define RTE_ADC1_IN7                    0
+#elif  (RTE_ADC1_IN7_PORT_ID == 1)
+#define RTE_ADC1_IN7                    1
+#define RTE_ADC12_IN7_PORT              GPIO_PORT_A
+#define RTE_ADC12_IN7_BIT               GPIO_PIN_7
+#else
+#error "Invalid IN7 Pin Configuration!"
+#endif
+
+//   <o> IN8 Pin <0=>Not Used <1=>PB0
+#define RTE_ADC1_IN8_PORT_ID            0
+#if    (RTE_ADC1_IN8_PORT_ID == 0)
+#define RTE_ADC1_IN8                    0
+#elif  (RTE_ADC1_IN8_PORT_ID == 1)
+#define RTE_ADC1_IN8                    1
+#define RTE_ADC12_IN8_PORT              GPIO_PORT_B
+#define RTE_ADC12_IN8_BIT               GPIO_PIN_0
+#else
+#error "Invalid IN8 Pin Configuration!"
+#endif
+
+//   <o> IN9 Pin <0=>Not Used <1=>PB1
+#define RTE_ADC1_IN9_PORT_ID            0
+#if    (RTE_ADC1_IN9_PORT_ID == 0)
+#define RTE_ADC1_IN9                    0
+#elif  (RTE_ADC1_IN9_PORT_ID == 1)
+#define RTE_ADC1_IN9                    1
+#define RTE_ADC12_IN9_PORT              GPIO_PORT_B
+#define RTE_ADC12_IN9_BIT               GPIO_PIN_1
+#else
+#error "Invalid IN9 Pin Configuration!"
+#endif
+
+//   <o> IN10 Pin <0=>Not Used <1=>PC0
+#define RTE_ADC1_IN10_PORT_ID           0
+#if    (RTE_ADC1_IN10_PORT_ID == 0)
+#define RTE_ADC1_IN10                   0
+#elif  (RTE_ADC1_IN10_PORT_ID == 1)
+#define RTE_ADC1_IN10                   1
+#define RTE_ADC123_IN10_PORT            GPIO_PORT_C
+#define RTE_ADC123_IN10_BIT             GPIO_PIN_0
+#else
+#error "Invalid IN10 Pin Configuration!"
+#endif
+
+//   <o> IN11 Pin <0=>Not Used <1=>PC1
+#define RTE_ADC1_IN11_PORT_ID           0
+#if    (RTE_ADC1_IN11_PORT_ID == 0)
+#define RTE_ADC1_IN11                   0
+#elif  (RTE_ADC1_IN11_PORT_ID == 1)
+#define RTE_ADC1_IN11                   1
+#define RTE_ADC123_IN11_PORT            GPIO_PORT_C
+#define RTE_ADC123_IN11_BIT             GPIO_PIN_1
+#else
+#error "Invalid IN11 Pin Configuration!"
+#endif
+
+//   <o> IN12 Pin <0=>Not Used <1=>PC2
+#define RTE_ADC1_IN12_PORT_ID           1
+#if    (RTE_ADC1_IN12_PORT_ID == 0)
+#define RTE_ADC1_IN12                   0
+#elif  (RTE_ADC1_IN12_PORT_ID == 1)
+#define RTE_ADC1_IN12                   1
+#define RTE_ADC123_IN12_PORT            GPIO_PORT_C
+#define RTE_ADC123_IN12_BIT             GPIO_PIN_2
+#else
+#error "Invalid IN12 Pin Configuration!"
+#endif
+
+//   <o> IN13 Pin <0=>Not Used <1=>PC3
+#define RTE_ADC1_IN13_PORT_ID           1
+#if    (RTE_ADC1_IN13_PORT_ID == 0)
+#define RTE_ADC1_IN13                   0
+#elif  (RTE_ADC1_IN13_PORT_ID == 1)
+#define RTE_ADC1_IN13                   1
+#define RTE_ADC123_IN13_PORT            GPIO_PORT_C
+#define RTE_ADC123_IN13_BIT             GPIO_PIN_3
+#else
+#error "Invalid IN13 Pin Configuration!"
+#endif
+
+//   <o> IN14 Pin <0=>Not Used <1=>PC4
+#define RTE_ADC1_IN14_PORT_ID           0
+#if    (RTE_ADC1_IN14_PORT_ID == 0)
+#define RTE_ADC1_IN14                   0
+#elif  (RTE_ADC1_IN14_PORT_ID == 1)
+#define RTE_ADC1_IN14                   1
+#define RTE_ADC12_IN14_PORT             GPIO_PORT_C
+#define RTE_ADC12_IN14_BIT              GPIO_PIN_4
+#else
+#error "Invalid IN14 Pin Configuration!"
+#endif
+
+//   <o> IN15 Pin <0=>Not Used <1=>PC5
+#define RTE_ADC1_IN15_PORT_ID           0
+#if    (RTE_ADC1_IN15_PORT_ID == 0)
+#define RTE_ADC1_IN15                   0
+#elif  (RTE_ADC1_IN15_PORT_ID == 1)
+#define RTE_ADC1_IN15                   1
+#define RTE_ADC12_IN15_PORT             GPIO_PORT_C
+#define RTE_ADC12_IN15_BIT              GPIO_PIN_5
+#else
+#error "Invalid IN15 Pin Configuration!"
+#endif
+
+//   <e> DMA
+//     <o1> Number <1=>1
+//     <i>  Selects DMA Number (only DMA1 can be used)
+//     <o2> Channel <1=>1
+//     <i>  Selects DMA Channel (only Channel 1 can be used)
+//     <o3> Priority <0=>Low <1=>Medium <2=>High <3=>Very High
+//     <i>  Selects DMA Priority
+//   </e>
+#define RTE_ADC1_DMA                    1
+#define RTE_ADC1_DMA_NUMBER             1
+#define RTE_ADC1_DMA_CHANNEL            1
+#define RTE_ADC1_DMA_PRIORITY           0
+
+// </e>
+
+
+// <e> ADC2 (Analog to Digital Converter 2) [Driver_ADC2]
+// <i> Configuration settings for Driver_ADC2
+#define RTE_ADC2                        0
+
+//   <o> IN0 Pin <0=>Not Used <1=>PA0
+#define RTE_ADC2_IN0_PORT_ID            1
+#if    (RTE_ADC2_IN0_PORT_ID == 0)
+#define RTE_ADC2_IN0                    0
+#elif  (RTE_ADC2_IN0_PORT_ID == 1)
+#define RTE_ADC2_IN0                    1
+#define RTE_ADC123_IN0_PORT             GPIO_PORT_A
+#define RTE_ADC123_IN0_BIT              GPIO_PIN_0
+#else
+#error "Invalid IN0 Pin Configuration!"
+#endif
+
+//   <o> IN1 Pin <0=>Not Used <1=>PA1
+#define RTE_ADC2_IN1_PORT_ID            0
+#if    (RTE_ADC2_IN1_PORT_ID == 0)
+#define RTE_ADC2_IN1                    0
+#elif  (RTE_ADC2_IN1_PORT_ID == 1)
+#define RTE_ADC2_IN1                    1
+#define RTE_ADC123_IN1_PORT             GPIO_PORT_A
+#define RTE_ADC123_IN1_BIT              GPIO_PIN_1
+#else
+#error "Invalid IN1 Pin Configuration!"
+#endif
+
+//   <o> IN2 Pin <0=>Not Used <1=>PA2
+#define RTE_ADC2_IN2_PORT_ID            0
+#if    (RTE_ADC2_IN2_PORT_ID == 0)
+#define RTE_ADC2_IN2                    0
+#elif  (RTE_ADC2_IN2_PORT_ID == 1)
+#define RTE_ADC2_IN2                    1
+#define RTE_ADC123_IN2_PORT             GPIO_PORT_A
+#define RTE_ADC123_IN2_BIT              GPIO_PIN_2
+#else
+#error "Invalid IN2 Pin Configuration!"
+#endif
+
+//   <o> IN3 Pin <0=>Not Used <1=>PA3
+#define RTE_ADC2_IN3_PORT_ID            0
+#if    (RTE_ADC2_IN3_PORT_ID == 0)
+#define RTE_ADC2_IN3                    0
+#elif  (RTE_ADC2_IN3_PORT_ID == 1)
+#define RTE_ADC2_IN3                    1
+#define RTE_ADC123_IN3_PORT             GPIO_PORT_A
+#define RTE_ADC123_IN3_BIT              GPIO_PIN_3
+#else
+#error "Invalid IN3 Pin Configuration!"
+#endif
+
+//   <o> IN4 Pin <0=>Not Used <1=>PA4
+#define RTE_ADC2_IN4_PORT_ID            0
+#if    (RTE_ADC2_IN4_PORT_ID == 0)
+#define RTE_ADC2_IN4                    0
+#elif  (RTE_ADC2_IN4_PORT_ID == 1)
+#define RTE_ADC2_IN4                    1
+#define RTE_ADC12_IN4_PORT              GPIO_PORT_A
+#define RTE_ADC12_IN4_BIT               GPIO_PIN_4
+#else
+#error "Invalid IN4 Pin Configuration!"
+#endif
+
+//   <o> IN5 Pin <0=>Not Used <1=>PA5
+#define RTE_ADC2_IN5_PORT_ID            0
+#if    (RTE_ADC2_IN5_PORT_ID == 0)
+#define RTE_ADC2_IN5                    0
+#elif  (RTE_ADC2_IN5_PORT_ID == 1)
+#define RTE_ADC2_IN5                    1
+#define RTE_ADC12_IN5_PORT              GPIO_PORT_A
+#define RTE_ADC12_IN5_BIT               GPIO_PIN_5
+#else
+#error "Invalid IN5 Pin Configuration!"
+#endif
+
+//   <o> IN6 Pin <0=>Not Used <1=>PA6
+#define RTE_ADC2_IN6_PORT_ID            0
+#if    (RTE_ADC2_IN6_PORT_ID == 0)
+#define RTE_ADC2_IN6                    0
+#elif  (RTE_ADC2_IN6_PORT_ID == 1)
+#define RTE_ADC2_IN6                    1
+#define RTE_ADC12_IN6_PORT              GPIO_PORT_A
+#define RTE_ADC12_IN6_BIT               GPIO_PIN_6
+#else
+#error "Invalid IN6 Pin Configuration!"
+#endif
+
+//   <o> IN7 Pin <0=>Not Used <1=>PA7
+#define RTE_ADC2_IN7_PORT_ID            0
+#if    (RTE_ADC2_IN7_PORT_ID == 0)
+#define RTE_ADC2_IN7                    0
+#elif  (RTE_ADC2_IN7_PORT_ID == 1)
+#define RTE_ADC2_IN7                    1
+#define RTE_ADC12_IN7_PORT              GPIO_PORT_A
+#define RTE_ADC12_IN7_BIT               GPIO_PIN_7
+#else
+#error "Invalid IN7 Pin Configuration!"
+#endif
+
+//   <o> IN8 Pin <0=>Not Used <1=>PB0
+#define RTE_ADC2_IN8_PORT_ID            0
+#if    (RTE_ADC2_IN8_PORT_ID == 0)
+#define RTE_ADC2_IN8                    0
+#elif  (RTE_ADC2_IN8_PORT_ID == 1)
+#define RTE_ADC2_IN8                    1
+#define RTE_ADC12_IN8_PORT              GPIO_PORT_B
+#define RTE_ADC12_IN8_BIT               GPIO_PIN_0
+#else
+#error "Invalid IN8 Pin Configuration!"
+#endif
+
+//   <o> IN9 Pin <0=>Not Used <1=>PB1
+#define RTE_ADC2_IN9_PORT_ID            0
+#if    (RTE_ADC2_IN9_PORT_ID == 0)
+#define RTE_ADC2_IN9                    0
+#elif  (RTE_ADC2_IN9_PORT_ID == 1)
+#define RTE_ADC2_IN9                    1
+#define RTE_ADC12_IN9_PORT              GPIO_PORT_B
+#define RTE_ADC12_IN9_BIT               GPIO_PIN_1
+#else
+#error "Invalid IN9 Pin Configuration!"
+#endif
+
+//   <o> IN10 Pin <0=>Not Used <1=>PC0
+#define RTE_ADC2_IN10_PORT_ID           0
+#if    (RTE_ADC2_IN10_PORT_ID == 0)
+#define RTE_ADC2_IN10                   0
+#elif  (RTE_ADC2_IN10_PORT_ID == 1)
+#define RTE_ADC2_IN10                   1
+#define RTE_ADC123_IN10_PORT            GPIO_PORT_C
+#define RTE_ADC123_IN10_BIT             GPIO_PIN_0
+#else
+#error "Invalid IN10 Pin Configuration!"
+#endif
+
+//   <o> IN11 Pin <0=>Not Used <1=>PC1
+#define RTE_ADC2_IN11_PORT_ID           0
+#if    (RTE_ADC2_IN11_PORT_ID == 0)
+#define RTE_ADC2_IN11                   0
+#elif  (RTE_ADC2_IN11_PORT_ID == 1)
+#define RTE_ADC2_IN11                   1
+#define RTE_ADC123_IN11_PORT            GPIO_PORT_C
+#define RTE_ADC123_IN11_BIT             GPIO_PIN_1
+#else
+#error "Invalid IN11 Pin Configuration!"
+#endif
+
+//   <o> IN12 Pin <0=>Not Used <1=>PC2
+#define RTE_ADC2_IN12_PORT_ID           0
+#if    (RTE_ADC2_IN12_PORT_ID == 0)
+#define RTE_ADC2_IN12                   0
+#elif  (RTE_ADC2_IN12_PORT_ID == 1)
+#define RTE_ADC2_IN12                   1
+#define RTE_ADC123_IN12_PORT            GPIO_PORT_C
+#define RTE_ADC123_IN12_BIT             GPIO_PIN_2
+#else
+#error "Invalid IN12 Pin Configuration!"
+#endif
+
+//   <o> IN13 Pin <0=>Not Used <1=>PC3
+#define RTE_ADC2_IN13_PORT_ID           0
+#if    (RTE_ADC2_IN13_PORT_ID == 0)
+#define RTE_ADC2_IN13                   0
+#elif  (RTE_ADC2_IN13_PORT_ID == 1)
+#define RTE_ADC2_IN13                   1
+#define RTE_ADC123_IN13_PORT            GPIO_PORT_C
+#define RTE_ADC123_IN13_BIT             GPIO_PIN_3
+#else
+#error "Invalid IN13 Pin Configuration!"
+#endif
+
+//   <o> IN14 Pin <0=>Not Used <1=>PC4
+#define RTE_ADC2_IN14_PORT_ID           0
+#if    (RTE_ADC2_IN14_PORT_ID == 0)
+#define RTE_ADC2_IN14                   0
+#elif  (RTE_ADC2_IN14_PORT_ID == 1)
+#define RTE_ADC2_IN14                   1
+#define RTE_ADC12_IN14_PORT             GPIO_PORT_C
+#define RTE_ADC12_IN14_BIT              GPIO_PIN_4
+#else
+#error "Invalid IN14 Pin Configuration!"
+#endif
+
+//   <o> IN15 Pin <0=>Not Used <1=>PC5
+#define RTE_ADC2_IN15_PORT_ID           0
+#if    (RTE_ADC2_IN15_PORT_ID == 0)
+#define RTE_ADC2_IN15                   0
+#elif  (RTE_ADC2_IN15_PORT_ID == 1)
+#define RTE_ADC2_IN15                   1
+#define RTE_ADC12_IN15_PORT             GPIO_PORT_C
+#define RTE_ADC12_IN15_BIT              GPIO_PIN_5
+#else
+#error "Invalid IN15 Pin Configuration!"
+#endif
+
+// </e>
+
+
+// <e> ADC3 (Analog to Digital Converter 3) [Driver_ADC3]
+// <i> Configuration settings for Driver_ADC3
+#define RTE_ADC3                        0
+
+//   <o> IN0 Pin <0=>Not Used <1=>PA0
+#define RTE_ADC3_IN0_PORT_ID            0
+#if    (RTE_ADC3_IN0_PORT_ID == 0)
+#define RTE_ADC3_IN0                    0
+#elif  (RTE_ADC3_IN0_PORT_ID == 1)
+#define RTE_ADC3_IN0                    1
+#define RTE_ADC123_IN0_PORT             GPIO_PORT_A
+#define RTE_ADC123_IN0_BIT              GPIO_PIN_0
+#else
+#error "Invalid IN0 Pin Configuration!"
+#endif
+
+//   <o> IN1 Pin <0=>Not Used <1=>PA1
+#define RTE_ADC3_IN1_PORT_ID            0
+#if    (RTE_ADC3_IN1_PORT_ID == 0)
+#define RTE_ADC3_IN1                    0
+#elif  (RTE_ADC3_IN1_PORT_ID == 1)
+#define RTE_ADC3_IN1                    1
+#define RTE_ADC123_IN1_PORT             GPIO_PORT_A
+#define RTE_ADC123_IN1_BIT              GPIO_PIN_1
+#else
+#error "Invalid IN1 Pin Configuration!"
+#endif
+
+//   <o> IN2 Pin <0=>Not Used <1=>PA2
+#define RTE_ADC3_IN2_PORT_ID            0
+#if    (RTE_ADC3_IN2_PORT_ID == 0)
+#define RTE_ADC3_IN2                    0
+#elif  (RTE_ADC3_IN2_PORT_ID == 1)
+#define RTE_ADC3_IN2                    1
+#define RTE_ADC123_IN2_PORT             GPIO_PORT_A
+#define RTE_ADC123_IN2_BIT              GPIO_PIN_2
+#else
+#error "Invalid IN2 Pin Configuration!"
+#endif
+
+//   <o> IN3 Pin <0=>Not Used <1=>PA3
+#define RTE_ADC3_IN3_PORT_ID            0
+#if    (RTE_ADC3_IN3_PORT_ID == 0)
+#define RTE_ADC3_IN3                    0
+#elif  (RTE_ADC3_IN3_PORT_ID == 1)
+#define RTE_ADC3_IN3                    1
+#define RTE_ADC123_IN3_PORT             GPIO_PORT_A
+#define RTE_ADC123_IN3_BIT              GPIO_PIN_3
+#else
+#error "Invalid IN3 Pin Configuration!"
+#endif
+
+//   <o> IN4 Pin <0=>Not Used <1=>PF6
+#define RTE_ADC3_IN4_PORT_ID            0
+#if    (RTE_ADC3_IN4_PORT_ID == 0)
+#define RTE_ADC3_IN4                    0
+#elif  (RTE_ADC3_IN4_PORT_ID == 1)
+#define RTE_ADC3_IN4                    1
+#define RTE_ADC3_IN4_PORT               GPIO_PORT_F
+#define RTE_ADC3_IN4_BIT                GPIO_PIN_6
+#else
+#error "Invalid IN4 Pin Configuration!"
+#endif
+
+//   <o> IN5 Pin <0=>Not Used <1=>PF7
+#define RTE_ADC3_IN5_PORT_ID            0
+#if    (RTE_ADC3_IN5_PORT_ID == 0)
+#define RTE_ADC3_IN5                    0
+#elif  (RTE_ADC3_IN5_PORT_ID == 1)
+#define RTE_ADC3_IN5                    1
+#define RTE_ADC3_IN5_PORT               GPIO_PORT_F
+#define RTE_ADC3_IN5_BIT                GPIO_PIN_7
+#else
+#error "Invalid IN5 Pin Configuration!"
+#endif
+
+//   <o> IN6 Pin <0=>Not Used <1=>PF8
+#define RTE_ADC3_IN6_PORT_ID            0
+#if    (RTE_ADC3_IN6_PORT_ID == 0)
+#define RTE_ADC3_IN6                    0
+#elif  (RTE_ADC3_IN6_PORT_ID == 1)
+#define RTE_ADC3_IN6                    1
+#define RTE_ADC3_IN6_PORT               GPIO_PORT_F
+#define RTE_ADC3_IN6_BIT                GPIO_PIN_8
+#else
+#error "Invalid IN6 Pin Configuration!"
+#endif
+
+//   <o> IN7 Pin <0=>Not Used <1=>PF9
+#define RTE_ADC3_IN7_PORT_ID            0
+#if    (RTE_ADC3_IN7_PORT_ID == 0)
+#define RTE_ADC3_IN7                    0
+#elif  (RTE_ADC3_IN7_PORT_ID == 1)
+#define RTE_ADC3_IN7                    1
+#define RTE_ADC3_IN7_PORT               GPIO_PORT_F
+#define RTE_ADC3_IN7_BIT                GPIO_PIN_9
+#else
+#error "Invalid IN7 Pin Configuration!"
+#endif
+
+//   <o> IN8 Pin <0=>Not Used <1=>PF10
+#define RTE_ADC3_IN8_PORT_ID            0
+#if    (RTE_ADC3_IN8_PORT_ID == 0)
+#define RTE_ADC3_IN8                    0
+#elif  (RTE_ADC3_IN8_PORT_ID == 1)
+#define RTE_ADC3_IN8                    1
+#define RTE_ADC3_IN8_PORT               GPIO_PORT_F
+#define RTE_ADC3_IN8_BIT                GPIO_PIN_10
+#else
+#error "Invalid IN8 Pin Configuration!"
+#endif
+
+//   <o> IN10 Pin <0=>Not Used <1=>PC0
+#define RTE_ADC3_IN10_PORT_ID           0
+#if    (RTE_ADC3_IN10_PORT_ID == 0)
+#define RTE_ADC3_IN10                   0
+#elif  (RTE_ADC3_IN10_PORT_ID == 1)
+#define RTE_ADC3_IN10                   1
+#define RTE_ADC123_IN10_PORT            GPIO_PORT_C
+#define RTE_ADC123_IN10_BIT             GPIO_PIN_0
+#else
+#error "Invalid IN10 Pin Configuration!"
+#endif
+
+//   <o> IN11 Pin <0=>Not Used <1=>PC1
+#define RTE_ADC3_IN11_PORT_ID           0
+#if    (RTE_ADC3_IN11_PORT_ID == 0)
+#define RTE_ADC3_IN11                   0
+#elif  (RTE_ADC3_IN11_PORT_ID == 1)
+#define RTE_ADC3_IN11                   1
+#define RTE_ADC123_IN11_PORT            GPIO_PORT_C
+#define RTE_ADC123_IN11_BIT             GPIO_PIN_1
+#else
+#error "Invalid IN11 Pin Configuration!"
+#endif
+
+//   <o> IN12 Pin <0=>Not Used <1=>PC2
+#define RTE_ADC3_IN12_PORT_ID           0
+#if    (RTE_ADC3_IN12_PORT_ID == 0)
+#define RTE_ADC3_IN12                   0
+#elif  (RTE_ADC3_IN12_PORT_ID == 1)
+#define RTE_ADC3_IN12                   1
+#define RTE_ADC123_IN12_PORT            GPIO_PORT_C
+#define RTE_ADC123_IN12_BIT             GPIO_PIN_2
+#else
+#error "Invalid IN12 Pin Configuration!"
+#endif
+
+//   <o> IN13 Pin <0=>Not Used <1=>PC3
+#define RTE_ADC3_IN13_PORT_ID           0
+#if    (RTE_ADC3_IN13_PORT_ID == 0)
+#define RTE_ADC3_IN13                   0
+#elif  (RTE_ADC3_IN13_PORT_ID == 1)
+#define RTE_ADC3_IN13                   1
+#define RTE_ADC123_IN13_PORT            GPIO_PORT_C
+#define RTE_ADC123_IN13_BIT             GPIO_PIN_3
+#else
+#error "Invalid IN13 Pin Configuration!"
+#endif
+
+//   <e> DMA
+//     <o1> Number <2=>2
+//     <i>  Selects DMA Number (only DMA2 can be used)
+//     <o2> Channel <5=>5
+//     <i>  Selects DMA Channel (only Channel 5 can be used)
+//     <o3> Priority <0=>Low <1=>Medium <2=>High <3=>Very High
+//     <i>  Selects DMA Priority
+//   </e>
+#define RTE_ADC3_DMA                    1
+#define RTE_ADC3_DMA_NUMBER             2
+#define RTE_ADC3_DMA_CHANNEL            5
+#define RTE_ADC3_DMA_PRIORITY           0
+
+// </e>
+
 
 // <e> SDIO (Secure Digital Input/Output) [Driver_MCI0]
 // <i> Configuration settings for Driver_MCI0 in component ::CMSIS Driver:MCI
@@ -1795,72 +2453,6 @@
 #endif
 // </e>
 
-
-// <e> USB Device Full-speed
-// <i> Configuration settings for Driver_USBD0 in component ::Drivers:USB Device
-#define RTE_USB_DEVICE                  0
-
-//     <e> CON On/Off Pin
-//     <i> Configure Pin for driving D+ pull-up
-//     <i> GPIO Pxy (x = A..G, y = 0..15)
-//       <o1> Active State <0=>Low <1=>High
-//       <i>  Selects Active State Logical Level
-//       <o2> Port <0=>GPIOA <1=>GPIOB <2=>GPIOC <3=>GPIOD
-//                 <4=>GPIOE <5=>GPIOF <6=>GPIOG
-//       <i>  Selects Port Name
-//       <o3> Bit <0-15>
-//       <i>  Selects Port Bit
-//     </e>
-#define RTE_USB_DEVICE_CON_PIN          1
-#define RTE_USB_DEVICE_CON_ACTIVE       0
-#define RTE_USB_DEVICE_CON_PORT         GPIO_PORT(1)
-#define RTE_USB_DEVICE_CON_BIT          GPIO_PIN_14
-
-//   </e>
-
-
-// <e> USB OTG Full-speed
-#define RTE_USB_OTG_FS                  0
-
-//   <e> Host [Driver_USBH0]
-//   <i> Configuration settings for Driver_USBH0 in component ::Drivers:USB Host
-
-#define RTE_USB_OTG_FS_HOST             0
-
-//     <e> VBUS Power On/Off Pin
-//     <i> Configure Pin for driving VBUS
-//     <i> GPIO Pxy (x = A..G, y = 0..15)
-//       <o1> Active State <0=>Low <1=>High
-//       <i>  Selects Active State Logical Level
-//       <o2> Port <0=>GPIOA <1=>GPIOB <2=>GPIOC <3=>GPIOD
-//                 <4=>GPIOE <5=>GPIOF <6=>GPIOG
-//       <i>  Selects Port Name
-//       <o3> Bit <0-15>
-//       <i>  Selects Port Bit
-//     </e>
-#define RTE_OTG_FS_VBUS_PIN             1
-#define RTE_OTG_FS_VBUS_ACTIVE          0
-#define RTE_OTG_FS_VBUS_PORT            GPIO_PORT(2)
-#define RTE_OTG_FS_VBUS_BIT             GPIO_PIN_9
-
-//     <e> Overcurrent Detection Pin
-//     <i> Configure Pin for overcurrent detection
-//     <i> GPIO Pxy (x = A..G, y = 0..15)
-//       <o1> Active State <0=>Low <1=>High
-//       <i>  Selects Active State Logical Level
-//       <o2> Port <0=>GPIOA <1=>GPIOB <2=>GPIOC <3=>GPIOD
-//                 <4=>GPIOE <5=>GPIOF <6=>GPIOG
-//       <i>  Selects Port Name
-//       <o3> Bit <0-15>
-//       <i>  Selects Port Bit
-//     </e>
-#define RTE_OTG_FS_OC_PIN               1
-#define RTE_OTG_FS_OC_ACTIVE            0
-#define RTE_OTG_FS_OC_PORT              GPIO_PORT(4)
-#define RTE_OTG_FS_OC_BIT               GPIO_PIN_1
-//   </e>
-
-// </e>
-
-
 #endif  /* __RTE_DEVICE_H */
+
+/* ----------------------------- End of file ---------------------------------*/
