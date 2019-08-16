@@ -1,5 +1,7 @@
 /*
- * Copyright (c) 2009-2019 Arm Limited. All rights reserved.
+ * Copyright (c) 2009-2019 Arm Limited.
+ * Copyright (C) 2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -16,40 +18,40 @@
  * limitations under the License.
  */
 
-/*
- *-------- <<< Use Configuration Wizard in Context Menu >>> -------------------
- */
+/*-----------------------------------------------------------------------------
+//             <<< Use Configuration Wizard in Context Menu >>>
+ -----------------------------------------------------------------------------*/
 
 /*---------------------- Flash Configuration ----------------------------------
-  <h> Flash Configuration
-    <o0> Flash Base Address <0x0-0xFFFFFFFF:8>
-    <o1> Flash Size (in Bytes) <0x0-0xFFFFFFFF:8>
-  </h>
-  -----------------------------------------------------------------------------*/
+//  <h> Flash Configuration
+//    <o0> Flash Base Address <0x0-0xFFFFFFFF:8>
+//    <o1> Flash Size (in Bytes) <0x0-0xFFFFFFFF:8>
+//  </h>
+ -----------------------------------------------------------------------------*/
 __ROM_BASE = 0x08000000;
 __ROM_SIZE = 0x00040000;
 
 /*--------------------- Embedded RAM Configuration ----------------------------
-  <h> RAM Configuration
-    <o0> RAM Base Address    <0x0-0xFFFFFFFF:8>
-    <o1> RAM Size (in Bytes) <0x0-0xFFFFFFFF:8>
-  </h>
+//  <h> RAM Configuration
+//    <o0> RAM Base Address    <0x0-0xFFFFFFFF:8>
+//    <o1> RAM Size (in Bytes) <0x0-0xFFFFFFFF:8>
+//  </h>
  -----------------------------------------------------------------------------*/
 __RAM_BASE = 0x20000000;
 __RAM_SIZE = 0x00020000;
 
 /*--------------------- Stack / Heap Configuration ----------------------------
-  <h> Stack / Heap Configuration
-    <o0> Stack Size (in Bytes) <0x0-0xFFFFFFFF:8>
-    <o1> Heap Size (in Bytes) <0x0-0xFFFFFFFF:8>
-  </h>
-  -----------------------------------------------------------------------------*/
+//  <h> Stack / Heap Configuration
+//    <o0> Stack Size (in Bytes) <0x0-0xFFFFFFFF:8>
+//    <o1> Heap Size (in Bytes) <0x0-0xFFFFFFFF:8>
+//  </h>
+ -----------------------------------------------------------------------------*/
 __STACK_SIZE = 0x00000400;
 __HEAP_SIZE  = 0x00000000;
 
-/*
- *-------------------- <<< end of configuration section >>> -------------------
- */
+/*-----------------------------------------------------------------------------
+//                   <<< end of configuration section >>>                    
+ -----------------------------------------------------------------------------*/
 
 MEMORY
 {
