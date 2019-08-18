@@ -39,7 +39,7 @@
 
 typedef struct {
   __IO uint32_t *reg;
-  uint32_t mask;
+       uint32_t  mask;
 } Reg_Mask_t;
 
 /*******************************************************************************
@@ -64,33 +64,11 @@ uint8_t APBPrescTable[8] = {0, 0, 0, 0, 1, 2, 3, 4};
  *  function implementations (scope: module-local)
  ******************************************************************************/
 
-static
-void GetPeriphReg(RCC_Periph_t periph, Reg_Mask_t *param)
+__STATIC_INLINE
+void GetClockEnableReg(RCC_Periph_t periph, Reg_Mask_t *param)
 {
-  if (((periph & RCC_PERIPH_APB1_MASK) == RCC_PERIPH_APB1_MASK)) {
-    param->reg  = &RCC->APB1ENR;
-    param->mask = (uint32_t)periph & ~RCC_PERIPH_APB1_MASK;
-  }
-  else if (((periph & RCC_PERIPH_APB2_MASK) == RCC_PERIPH_APB2_MASK)) {
-    param->reg  = &RCC->APB2ENR;
-    param->mask = (uint32_t)periph & ~RCC_PERIPH_APB2_MASK;
-  }
-  else if (((periph & RCC_PERIPH_AHB1_MASK) == RCC_PERIPH_AHB1_MASK)) {
-    param->reg  = &RCC->AHB1ENR;
-    param->mask = (uint32_t)periph & ~RCC_PERIPH_AHB1_MASK;
-  }
-  else if (((periph & RCC_PERIPH_AHB2_MASK) == RCC_PERIPH_AHB2_MASK)) {
-    param->reg  = &RCC->AHB2ENR;
-    param->mask = (uint32_t)periph & ~RCC_PERIPH_AHB2_MASK;
-  }
-  else if (((periph & RCC_PERIPH_AHB3_MASK) == RCC_PERIPH_AHB3_MASK)) {
-    param->reg  = &RCC->AHB3ENR;
-    param->mask = (uint32_t)periph & ~RCC_PERIPH_AHB3_MASK;
-  }
-  else {
-    param->reg  = NULL;
-    param->mask = 0U;
-  }
+  param->reg  = (uint32_t *)(uint32_t)(periph >> 32U);
+  param->mask = (uint32_t)periph;
 }
 
 /*******************************************************************************
@@ -386,11 +364,9 @@ void RCC_EnablePeriph(RCC_Periph_t periph)
 {
   Reg_Mask_t tmp;
 
-  GetPeriphReg(periph, &tmp);
+  GetClockEnableReg(periph, &tmp);
 
-  if (tmp.reg != NULL) {
-    *tmp.reg |= tmp.mask;
-  }
+  *tmp.reg |= tmp.mask;
 }
 
 /**
@@ -401,11 +377,9 @@ void RCC_DisablePeriph(RCC_Periph_t periph)
 {
   Reg_Mask_t tmp;
 
-  GetPeriphReg(periph, &tmp);
+  GetClockEnableReg(periph, &tmp);
 
-  if (tmp.reg != NULL) {
-    *tmp.reg &= ~tmp.mask;
-  }
+  *tmp.reg &= ~tmp.mask;
 }
 
 /**
@@ -415,15 +389,10 @@ void RCC_DisablePeriph(RCC_Periph_t periph)
 uint32_t RCC_GetStatePeriph(RCC_Periph_t periph)
 {
   Reg_Mask_t tmp;
-  uint32_t value = 0U;
 
-  GetPeriphReg(periph, &tmp);
+  GetClockEnableReg(periph, &tmp);
 
-  if (tmp.reg != NULL) {
-    value = *tmp.reg & tmp.mask;
-  }
-
-  return (value);
+  return (uint32_t)(*tmp.reg & tmp.mask);
 }
 
 /**
@@ -434,13 +403,13 @@ void RCC_ResetPeriph(RCC_Periph_t periph)
 {
   Reg_Mask_t tmp;
 
-  GetPeriphReg(periph, &tmp);
+  GetClockEnableReg(periph, &tmp);
 
-  if (tmp.reg != NULL) {
-    *tmp.reg |= tmp.mask;
-    __NOP();__NOP();__NOP();__NOP();
-    *tmp.reg &= ~tmp.mask;
-  }
+  tmp.reg -= 8U;
+
+  *tmp.reg |= tmp.mask;
+  __NOP();__NOP();__NOP();__NOP();
+  *tmp.reg &= ~tmp.mask;
 }
 
 /* ----------------------------- End of file ---------------------------------*/
