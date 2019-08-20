@@ -62,7 +62,7 @@
  *  typedefs and structures
  ******************************************************************************/
 
-typedef void (*DMA_Callback_t)(uint32_t event);
+typedef void (*DMA_Callback_t)(uint32_t event, const void *param);
 
 /* DMA States */
 typedef enum {
@@ -145,7 +145,7 @@ typedef enum {
   DMA_FIFO_THRESHOLD_HALFFULL      = DMA_SxFCR_FTH_0, /*!< FIFO threshold half full configuration     */
   DMA_FIFO_THRESHOLD_3QUARTERSFULL = DMA_SxFCR_FTH_1, /*!< FIFO threshold 3 quarts full configuration */
   DMA_FIFO_THRESHOLD_FULL          = DMA_SxFCR_FTH,   /*!< FIFO threshold full configuration          */
-  DMA_FIFO_THRESHOLD_Reserved
+  DMA_FIFO_THRESHOLD_Reserved      = 0x7FFFFFFF
 } DMA_FIFOThrhld_t;
 
 typedef enum {
@@ -165,40 +165,40 @@ typedef enum {
 } DMA_PerBurst_t;
 
 typedef struct DMA_StreamConfig_s {
-  DMA_Dir_t Direction;              /*!< Specifies the data transfer direction.                                           */
-  DMA_PerInc_t PerInc;              /*!< Specifies whether the Peripheral address register should be incremented or not.  */
-  DMA_MemInc_t MemInc;              /*!< Specifies whether the memory address register should be incremented or not.      */
+  DMA_Dir_t             Direction;  /*!< Specifies the data transfer direction.                                           */
+  DMA_PerInc_t             PerInc;  /*!< Specifies whether the Peripheral address register should be incremented or not.  */
+  DMA_MemInc_t             MemInc;  /*!< Specifies whether the memory address register should be incremented or not.      */
   DMA_PerDataAlign_t PerDataAlign;  /*!< Specifies the Peripheral data width.                                             */
   DMA_MemDataAlign_t MemDataAlign;  /*!< Specifies the Memory data width.                                                 */
-  DMA_Mode_t Mode;                  /*!< Specifies the operation mode.                                                    */
-  DMA_FIFOMode_t FIFOMode;          /*!< Specifies if the FIFO mode or Direct mode will be used for the specified stream. */
-  DMA_FIFOThrhld_t FIFOThreshold;   /*!< Specifies the FIFO threshold level.                                              */
-  DMA_MemBurst_t MemBurst;          /*!< Specifies the Burst transfer configuration for the memory transfers.             */
-  DMA_PerBurst_t PerBurst;          /*!< Specifies the Burst transfer configuration for the peripheral transfers.         */
+  DMA_Mode_t                 Mode;  /*!< Specifies the operation mode.                                                    */
+  DMA_FIFOMode_t         FIFOMode;  /*!< Specifies if the FIFO mode or Direct mode will be used for the specified stream. */
+  DMA_FIFOThrhld_t  FIFOThreshold;  /*!< Specifies the FIFO threshold level.                                              */
+  DMA_MemBurst_t         MemBurst;  /*!< Specifies the Burst transfer configuration for the memory transfers.             */
+  DMA_PerBurst_t         PerBurst;  /*!< Specifies the Burst transfer configuration for the peripheral transfers.         */
 } DMA_StreamConfig_t;
 
 typedef struct DMA_Base_Reg_s {
-  __IO uint32_t ISR;   /* DMA interrupt status register */
-  __IO uint32_t Reserved;
-  __IO uint32_t IFCR;  /* DMA interrupt flag clear register */
+  __IO uint32_t               ISR;  /*!< DMA interrupt status register        */
+  __IO uint32_t          Reserved;
+  __IO uint32_t              IFCR;  /*!< DMA interrupt flag clear register    */
 } DMA_Base_Reg_t;
 
 typedef struct DMA_Handle_s {
-  uint32_t bit_offset;
-  DMA_Base_Reg_t *dma_reg;
-  DMA_STATE_t state;
-  DMA_StreamConfig_t config;
+  uint32_t             bit_offset;
+  DMA_Base_Reg_t         *dma_reg;
+  DMA_STATE_t               state;
+  DMA_StreamConfig_t       config;
 } DMA_Handle_t;
 
 typedef const struct DMA_Resources_s {
-  DMA_Handle_t         *handle;             // DMA Handle
-  DMA_Stream_TypeDef   *stream;             // DMA Stream
-  DMA_Channel_t         channel;            // DMA channel
-  DMA_Priority_t        priority;           // DMA stream priority
-  DMA_Callback_t        cb_event;           // Callback event
-  uint32_t              cb_priority;        // Callback event priority
-  IRQn_Type             irq_num;            // DMA stream IRQ Number
-  uint8_t               reserved[3];        // Reserved
+  DMA_Handle_t            *handle;  /*!< DMA Handle                           */
+  DMA_Stream_TypeDef      *stream;  /*!< DMA Stream                           */
+  DMA_Channel_t           channel;  /*!< DMA channel                          */
+  DMA_Priority_t         priority;  /*!< DMA stream priority                  */
+  DMA_Callback_t         cb_event;  /*!< Callback event                       */
+  uint32_t            cb_priority;  /*!< Callback event priority              */
+  IRQn_Type               irq_num;  /*!< DMA stream IRQ Number                */
+  uint8_t             reserved[3];  /*!< Reserved                             */
 } DMA_Resources_t;
 
 /*******************************************************************************
@@ -248,11 +248,12 @@ void DMA_StreamEnable(DMA_Resources_t *res, uint32_t per_addr, uint32_t mem_addr
 void DMA_StreamDisable(DMA_Resources_t *res);
 
 /**
- * @fn          void DMA_IRQ_Handle(DMA_Resources_t *res)
+ * @fn          void DMA_IRQ_Handle(DMA_Resources_t *res, const void *param)
  * @brief       DMA Interrupt Handle
- * @param[in]   res   Pointer to DMA resources
+ * @param[in]   res    Pointer to DMA resources
+ * @param[in]   param  Pointer to Information structure
  */
-void DMA_IRQ_Handle(DMA_Resources_t *res);
+void DMA_IRQ_Handle(DMA_Resources_t *res, const void *param);
 
 #endif /* DMA_STM32F7XX_H_ */
 

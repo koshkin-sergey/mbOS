@@ -50,6 +50,14 @@ int32_t USART_Send(const void *data, uint32_t num, const USART_RESOURCES *usart)
 static
 int32_t USART_Receive(void *data, uint32_t num, const USART_RESOURCES *usart);
 
+#ifdef __USART_TX_DMA
+static void USART_TX_DMA_Complete(uint32_t event, const void *param);
+#endif
+
+#ifdef __USART_RX_DMA
+static void USART_RX_DMA_Complete(uint32_t event, const void *param);
+#endif
+
 /*******************************************************************************
  *  global variable definitions (scope: module-local)
  ******************************************************************************/
@@ -363,6 +371,32 @@ static const USART_RESOURCES USART2_Resources = {
 static USART_INFO          USART3_Info         = {0};
 static USART_TRANSFER_INFO USART3_TransferInfo = {0};
 
+#ifdef USART3_TX_DMA_Stream
+static DMA_Handle_t USART3_TX_DMA_Handle;
+static const DMA_Resources_t USART3_TX_DMA = {
+  &USART3_TX_DMA_Handle,
+  USART3_TX_DMA_Stream,
+  USART3_TX_DMA_Channel,
+  USART3_TX_DMA_Priority,
+  USART_TX_DMA_Complete,
+  DEV_USART_DMA_INT_PRIORITY,
+  USART3_TX_DMA_IRQn,
+};
+#endif
+
+#ifdef USART3_RX_DMA_Stream
+static DMA_Handle_t USART3_RX_DMA_Handle;
+static const DMA_Resources_t USART3_RX_DMA = {
+  &USART3_RX_DMA_Handle,
+  USART3_RX_DMA_Stream,
+  USART3_RX_DMA_Channel,
+  USART3_RX_DMA_Priority,
+  USART_RX_DMA_Complete,
+  DEV_USART_DMA_INT_PRIORITY,
+  USART3_RX_DMA_IRQn,
+};
+#endif
+
 #ifdef USE_USART3_TX_Pin
 static USART_PIN USART3_tx = {
     USART3_TX_GPIO_PORT,
@@ -483,13 +517,13 @@ static const USART_RESOURCES USART3_Resources = {
 #endif
   },
   USART3_IRQn,
-#ifdef USART3_TX_DMA_Instance
-  &USART3_DMA_Tx,
+#ifdef USART3_TX_DMA_Stream
+  &USART3_TX_DMA,
 #else
   NULL,
 #endif
-#ifdef USART3_RX_DMA_Instance
-  &USART3_DMA_Rx,
+#ifdef USART3_RX_DMA_Stream
+  &USART3_RX_DMA,
 #else
   NULL,
 #endif
@@ -632,10 +666,15 @@ int32_t USART_PowerControl(ARM_POWER_STATE state, const USART_RESOURCES *usart)
       /* Disable IRQ */
       NVIC_DisableIRQ(usart->irq_num);
 
+      /* Uninitialize DMA */
 #ifdef __USART_DMA
-      /* Deinitialize DMA */
-      DMA_ChannelUninitialize((DMA_INFO *)usart->dma_rx);
-      DMA_ChannelUninitialize((DMA_INFO *)usart->dma_tx);
+      if (usart->dma_tx != NULL) {
+        DMA_Uninitialize(usart->dma_tx);
+      }
+
+      if (usart->dma_rx != NULL) {
+        DMA_Uninitialize(usart->dma_rx);
+      }
 #endif
 
       /* Disable USART clock */
@@ -689,10 +728,33 @@ int32_t USART_PowerControl(ARM_POWER_STATE state, const USART_RESOURCES *usart)
       NVIC_SetPriority(usart->irq_num, DEV_USART_INT_PRIORITY);
       NVIC_EnableIRQ(usart->irq_num);
 
-#ifdef __USART_DMA
       /* Initialize DMA */
-      DMA_ChannelInitialize((DMA_INFO *)usart->dma_rx);
-      DMA_ChannelInitialize((DMA_INFO *)usart->dma_tx);
+#ifdef __USART_DMA
+      if (usart->dma_tx != NULL) {
+        DMA_StreamConfig_t *cfg = &usart->dma_tx->handle->config;
+
+        cfg->Direction    = DMA_DIR_MEM_TO_PER;
+        cfg->PerInc       = DMA_PINC_DISABLE;
+        cfg->Mode         = DMA_MODE_NORMAL;
+        cfg->FIFOMode     = DMA_FIFOMODE_DISABLE;
+        cfg->MemBurst     = DMA_MBURST_SINGLE;
+        cfg->PerBurst     = DMA_PBURST_SINGLE;
+
+        DMA_Initialize(usart->dma_tx);
+      }
+
+      if (usart->dma_rx != NULL) {
+        DMA_StreamConfig_t *cfg = &usart->dma_rx->handle->config;
+
+        cfg->Direction    = DMA_DIR_PER_TO_MEM;
+        cfg->PerInc       = DMA_PINC_DISABLE;
+        cfg->Mode         = DMA_MODE_NORMAL;
+        cfg->FIFOMode     = DMA_FIFOMODE_DISABLE;
+        cfg->MemBurst     = DMA_MBURST_SINGLE;
+        cfg->PerBurst     = DMA_PBURST_SINGLE;
+
+        DMA_Initialize(usart->dma_rx);
+      }
 #endif
 
       /* Peripheral reset */
@@ -723,8 +785,8 @@ int32_t USART_Send(const void *data, uint32_t num, const USART_RESOURCES *usart)
   USART_TypeDef       *reg  = usart->reg;
   uint32_t             cr1;
 
-#ifdef __USART_DMA_TX
-  uint32_t cfg;
+#ifdef __USART_TX_DMA
+  uint32_t mem_inc = DMA_MINC_ENABLE;
 #endif
 
   if ((data == NULL) || (num == 0U)) {
@@ -752,10 +814,6 @@ int32_t USART_Send(const void *data, uint32_t num, const USART_RESOURCES *usart)
   xfer->tx_num = num;
   xfer->tx_cnt = 0U;
 
-#ifdef __USART_DMA_TX
-  cfg = DMA_MEMORY_INCREMENT;
-#endif
-
   /* Synchronous mode */
   if (info->mode == ARM_USART_MODE_SYNCHRONOUS_MASTER) {
     if (xfer->sync_mode == 0U) {
@@ -766,30 +824,38 @@ int32_t USART_Send(const void *data, uint32_t num, const USART_RESOURCES *usart)
         return (ARM_DRIVER_ERROR_BUSY);
       }
 
-#ifdef __USART_DMA_TX
+#ifdef __USART_TX_DMA
     }
     else {
       if (xfer->sync_mode == USART_SYNC_MODE_RX) {
         /* Dummy DMA writes (do not increment source address) */
-        cfg = 0;
+        mem_inc = DMA_MINC_DISABLE;
       }
 #endif
     }
   }
 
-#ifdef __USART_DMA_TX
+#ifdef __USART_TX_DMA
   /* DMA mode */
   if (usart->dma_tx) {
+    DMA_StreamConfig_t *cfg = &usart->dma_tx->handle->config;
+
     /* Configure and enable tx DMA channel */
-    cfg |= (DMA_PRIORITY(usart->dma_tx->priority) | DMA_MEMORY_TO_PERIPHERAL | DMA_TRANSFER_COMPLETE_INTERRUPT);
+    cfg->MemInc = mem_inc;
 
     if (((cr1 & USART_CR1_M) != 0U) && ((cr1 & USART_CR1_PCE) == 0U)) {
       // 9-bit data frame, no parity
-      cfg |= DMA_PERIPHERAL_DATA_16BIT | DMA_MEMORY_DATA_16BIT;
+      cfg->MemDataAlign = DMA_MDATAALIGN_HALFWORD;
+      cfg->PerDataAlign = DMA_PDATAALIGN_HALFWORD;
+    }
+    else {
+      // 8-bit data frame
+      cfg->MemDataAlign = DMA_MDATAALIGN_BYTE;
+      cfg->PerDataAlign = DMA_PDATAALIGN_BYTE;
     }
 
-    DMA_ChannelConfigure(usart->dma_tx->instance, cfg, (uint32_t)(&reg->DR), (uint32_t)data, num);
-    DMA_ChannelEnable(usart->dma_tx->instance);
+    DMA_StreamConfig(usart->dma_tx);
+    DMA_StreamEnable(usart->dma_tx, (uint32_t)(&reg->TDR), (uint32_t)data, num);
 
     /* DMA Enable transmitter */
     reg->CR3 |= USART_CR3_DMAT;
@@ -821,8 +887,8 @@ int32_t USART_Receive(void *data, uint32_t num, const USART_RESOURCES *usart)
   USART_TypeDef       *reg = usart->reg;
   uint32_t             cr1;
 
-#ifdef __USART_DMA_RX
-  uint32_t cfg;
+#ifdef __USART_RX_DMA
+  uint32_t mem_inc = DMA_MINC_ENABLE;
 #endif
 
   if ((data == NULL) || (num == 0U)) {
@@ -861,30 +927,36 @@ int32_t USART_Receive(void *data, uint32_t num, const USART_RESOURCES *usart)
 
   cr1 = reg->CR1;
 
-#ifdef __USART_DMA_RX
-
-  cfg = DMA_MEMORY_INCREMENT;
+#ifdef __USART_RX_DMA
 
   /* Synchronous mode */
   if (info->mode == ARM_USART_MODE_SYNCHRONOUS_MASTER) {
     if (xfer->sync_mode == USART_SYNC_MODE_TX) {
       /* Dummy DMA reads (do not increment destination address) */
-      cfg = 0U;
+      mem_inc = DMA_MINC_DISABLE;
     }
   }
 
   /* DMA mode */
   if (usart->dma_rx) {
+    DMA_StreamConfig_t *cfg = &usart->dma_tx->handle->config;
+
     /* Configure and enable rx DMA channel */
-    cfg |= DMA_PRIORITY(usart->dma_rx->priority) | DMA_PERIPHERAL_TO_MEMORY | DMA_TRANSFER_COMPLETE_INTERRUPT;
+    cfg->MemInc = mem_inc;
 
     if (((cr1 & USART_CR1_M) != 0U) && ((cr1 & USART_CR1_PCE) == 0U)) {
-      /* 9-bit data frame, no parity */
-      cfg |= DMA_PERIPHERAL_DATA_16BIT | DMA_MEMORY_DATA_16BIT;
+      // 9-bit data frame, no parity
+      cfg->MemDataAlign = DMA_MDATAALIGN_HALFWORD;
+      cfg->PerDataAlign = DMA_PDATAALIGN_HALFWORD;
+    }
+    else {
+      // 8-bit data frame
+      cfg->MemDataAlign = DMA_MDATAALIGN_BYTE;
+      cfg->PerDataAlign = DMA_PDATAALIGN_BYTE;
     }
 
-    DMA_ChannelConfigure(usart->dma_rx->instance, cfg, (uint32_t)(&reg->DR), (uint32_t)data, num);
-    DMA_ChannelEnable(usart->dma_rx->instance);
+    DMA_StreamConfig(usart->dma_rx);
+    DMA_StreamEnable(usart->dma_rx, (uint32_t)(&reg->RDR), (uint32_t)data, num);
 
     reg->CR3 |= USART_CR3_DMAR;
     /* Enable IDLE interrupt */
@@ -1754,16 +1826,17 @@ void USART_IRQHandler(const USART_RESOURCES *usart)
   }
 }
 
-#ifdef __USART_DMA_TX
-void USART_TX_DMA_Complete(const USART_RESOURCES *usart)
+#ifdef __USART_TX_DMA
+static void USART_TX_DMA_Complete(uint32_t event, const void *param)
 {
+  const USART_RESOURCES *usart = param;
   USART_INFO *info = usart->info;
   USART_TRANSFER_INFO *xfer = usart->xfer;
 
-  if ((DMA_ChannelTransferItemCount(usart->dma_tx->instance) != 0U) && (xfer->tx_num != 0U)) {
-    /* TX DMA Complete caused by send/transfer abort */
-    return;
-  }
+//  if ((DMA_ChannelTransferItemCount(usart->dma_tx->instance) != 0U) && (xfer->tx_num != 0U)) {
+//    /* TX DMA Complete caused by send/transfer abort */
+//    return;
+//  }
 
   xfer->tx_cnt = xfer->tx_num;
   /* Clear TX busy flag */
@@ -1781,42 +1854,43 @@ void USART_TX_DMA_Complete(const USART_RESOURCES *usart)
 }
 #endif
 
-#ifdef __USART_DMA_RX
-void USART_RX_DMA_Complete(const USART_RESOURCES *usart)
+#ifdef __USART_RX_DMA
+static void USART_RX_DMA_Complete(uint32_t event, const void *param)
 {
+  const USART_RESOURCES *usart = param;
   USART_INFO *info = usart->info;
   USART_TRANSFER_INFO *xfer = usart->xfer;
-  uint32_t val, event;
+  uint32_t val, cb_event;
 
-  if ((DMA_ChannelTransferItemCount(usart->dma_rx->instance) != 0U) && (xfer->rx_num != 0U)) {
-    /* RX DMA Complete caused by receive/transfer abort */
-    return;
-  }
+//  if ((DMA_ChannelTransferItemCount(usart->dma_rx->instance) != 0U) && (xfer->rx_num != 0U)) {
+//    /* RX DMA Complete caused by receive/transfer abort */
+//    return;
+//  }
 
   /* Disable IDLE interrupt */
   usart->reg->CR1 &= ~USART_CR1_IDLEIE;
 
-  event = 0U;
+  cb_event = 0U;
 
   if (info->mode == ARM_USART_MODE_SYNCHRONOUS_MASTER) {
     val = xfer->sync_mode;
     xfer->sync_mode = 0U;
     switch (val) {
       case USART_SYNC_MODE_TX:
-        event = ARM_USART_EVENT_SEND_COMPLETE;
+        cb_event = ARM_USART_EVENT_SEND_COMPLETE;
         break;
       case USART_SYNC_MODE_RX:
-        event = ARM_USART_EVENT_RECEIVE_COMPLETE;
+        cb_event = ARM_USART_EVENT_RECEIVE_COMPLETE;
         break;
       case USART_SYNC_MODE_TX_RX:
-        event = ARM_USART_EVENT_TRANSFER_COMPLETE;
+        cb_event = ARM_USART_EVENT_TRANSFER_COMPLETE;
         break;
       default:
         break;
     }
   }
   else {
-    event = ARM_USART_EVENT_RECEIVE_COMPLETE;
+    cb_event = ARM_USART_EVENT_RECEIVE_COMPLETE;
   }
 
   xfer->rx_cnt = xfer->rx_num;
@@ -1825,8 +1899,8 @@ void USART_RX_DMA_Complete(const USART_RESOURCES *usart)
   /* Enable RXNE interrupt to detect RX overrun */
   usart->reg->CR1 |= USART_CR1_RXNEIE;
 
-  if (info->cb_event && event) {
-    info->cb_event(event);
+  if (info->cb_event && cb_event) {
+    info->cb_event(cb_event);
   }
 }
 #endif
@@ -1934,11 +2008,11 @@ static int32_t                 USART3_SetModemControl (ARM_USART_MODEM_CONTROL c
 static ARM_USART_MODEM_STATUS  USART3_GetModemStatus  (void)                                                { return USART_GetModemStatus (&USART3_Resources); }
        void                    USART3_IRQHandler      (void)                                                {        USART_IRQHandler (&USART3_Resources); }
 
-#ifdef USART3_TX_DMA_Instance
-       void                    USART3_TX_DMA_Handler  (uint32_t events)                                     {        USART_TX_DMA_Complete(&USART3_Resources); }
+#ifdef USART3_TX_DMA_Stream
+       void                    USART3_TX_DMA_Handler  (uint32_t events)                                     {        DMA_IRQ_Handle(&USART3_TX_DMA, &USART3_Resources); }
 #endif
-#ifdef USART3_RX_DMA_Instance
-       void                    USART3_RX_DMA_Handler  (uint32_t events)                                     {        USART_RX_DMA_Complete(&USART3_Resources); }
+#ifdef USART3_RX_DMA_Stream
+       void                    USART3_RX_DMA_Handler  (uint32_t events)                                     {        DMA_IRQ_Handle(&USART3_RX_DMA, &USART3_Resources); }
 #endif
 
 /* USART3 Driver Control Block */

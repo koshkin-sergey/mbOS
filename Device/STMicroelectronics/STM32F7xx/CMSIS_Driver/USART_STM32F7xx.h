@@ -40,24 +40,27 @@
  ******************************************************************************/
 
 /* USART1 configuration definitions */
-#if (DEV_USART1 == 1)
+#if defined(DEV_USART1) && (DEV_USART1 == 1)
   #define USE_USART1
 
-  #if (DEV_USART1_RX_DMA == 1)
-    #define USART1_RX_DMA_Instance    DMAx_CHANNELy(DEV_USART1_RX_DMA_NUMBER, DEV_USART1_RX_DMA_CHANNEL)
-    #define USART1_RX_DMA_IRQn        DMAx_CHANNELy_IRQn(DEV_USART1_RX_DMA_NUMBER, DEV_USART1_RX_DMA_CHANNEL)
-    #define USART1_RX_DMA_Channel     DEV_USART1_RX_DMA_CHANNEL
-    #define USART1_RX_DMA_Priority    DEV_USART1_RX_DMA_PRIORITY
+  #if !defined(USART1)
+    #error "USART1 not available for selected device!"
+    #undef USE_USART1
+  #endif
 
-    #define USART1_RX_DMA_Handler     DMAx_CHANNELy_EVENT(DEV_USART1_RX_DMA_NUMBER, DEV_USART1_RX_DMA_CHANNEL)
+  #if (DEV_USART1_RX_DMA == 1)
+    #define USART1_RX_DMA_Stream      DMAx_STREAMy(DEV_USART1_RX_DMA_NUMBER, DEV_USART1_RX_DMA_STREAM)
+    #define USART1_RX_DMA_IRQn        DMAx_STREAMy_IRQn(DEV_USART1_RX_DMA_NUMBER, DEV_USART1_RX_DMA_STREAM)
+    #define USART1_RX_DMA_Channel     DMA_CHANNEL_x(DEV_USART1_RX_DMA_CHANNEL)
+    #define USART1_RX_DMA_Priority    DMA_PRIORITY(DEV_USART1_RX_DMA_PRIORITY)
+    #define USART1_RX_DMA_Handler     DMAx_STREAMy_IRQ(DEV_USART1_RX_DMA_NUMBER, DEV_USART1_RX_DMA_STREAM)
   #endif
   #if (DEV_USART1_TX_DMA == 1)
-    #define USART1_TX_DMA_Instance    DMAx_CHANNELy(DEV_USART1_TX_DMA_NUMBER, DEV_USART1_TX_DMA_CHANNEL)
-    #define USART1_TX_DMA_IRQn        DMAx_CHANNELy_IRQn(DEV_USART1_TX_DMA_NUMBER, DEV_USART1_TX_DMA_CHANNEL)
-    #define USART1_TX_DMA_Channel     DEV_USART1_TX_DMA_CHANNEL
-    #define USART1_TX_DMA_Priority    DEV_USART1_TX_DMA_PRIORITY
-
-    #define USART1_TX_DMA_Handler     DMAx_CHANNELy_EVENT(DEV_USART1_TX_DMA_NUMBER, DEV_USART1_TX_DMA_CHANNEL)
+    #define USART1_TX_DMA_Stream      DMAx_STREAMy(DEV_USART1_TX_DMA_NUMBER, DEV_USART1_TX_DMA_STREAM)
+    #define USART1_TX_DMA_IRQn        DMAx_STREAMy_IRQn(DEV_USART1_TX_DMA_NUMBER, DEV_USART1_TX_DMA_STREAM)
+    #define USART1_TX_DMA_Channel     DMA_CHANNEL_x(DEV_USART1_TX_DMA_CHANNEL)
+    #define USART1_TX_DMA_Priority    DMA_PRIORITY(DEV_USART1_TX_DMA_PRIORITY)
+    #define USART1_TX_DMA_Handler     DMAx_STREAMy_IRQ(DEV_USART1_TX_DMA_NUMBER, DEV_USART1_TX_DMA_STREAM)
   #endif
 
   #if (DEV_USART1_TX == 1)
@@ -97,24 +100,27 @@
 #endif
 
 /* USART2 configuration definitions */
-#if (DEV_USART2 == 1)
+#if defined(DEV_USART2) && (DEV_USART2 == 1)
   #define USE_USART2
 
-  #if (DEV_USART2_RX_DMA == 1)
-    #define USART2_RX_DMA_Instance    DMAx_CHANNELy(DEV_USART2_RX_DMA_NUMBER, DEV_USART2_RX_DMA_CHANNEL)
-    #define USART2_RX_DMA_IRQn        DMAx_CHANNELy_IRQn(DEV_USART2_RX_DMA_NUMBER, DEV_USART2_RX_DMA_CHANNEL)
-    #define USART2_RX_DMA_Channel     DEV_USART2_RX_DMA_CHANNEL
-    #define USART2_RX_DMA_Priority    DEV_USART2_RX_DMA_PRIORITY
+  #if !defined(USART2)
+    #error "USART2 not available for selected device!"
+    #undef USE_USART2
+  #endif
 
-    #define USART2_RX_DMA_Handler     DMAx_CHANNELy_EVENT(DEV_USART2_RX_DMA_NUMBER, DEV_USART2_RX_DMA_CHANNEL)
+  #if (DEV_USART2_RX_DMA == 1)
+    #define USART2_RX_DMA_Stream      DMAx_STREAMy(DEV_USART2_RX_DMA_NUMBER, DEV_USART2_RX_DMA_STREAM)
+    #define USART2_RX_DMA_IRQn        DMAx_STREAMy_IRQn(DEV_USART2_RX_DMA_NUMBER, DEV_USART2_RX_DMA_STREAM)
+    #define USART2_RX_DMA_Channel     DMA_CHANNEL_x(DEV_USART2_RX_DMA_CHANNEL)
+    #define USART2_RX_DMA_Priority    DMA_PRIORITY(DEV_USART2_RX_DMA_PRIORITY)
+    #define USART2_RX_DMA_Handler     DMAx_STREAMy_IRQ(DEV_USART2_RX_DMA_NUMBER, DEV_USART2_RX_DMA_STREAM)
   #endif
   #if (DEV_USART2_TX_DMA == 1)
-    #define USART2_TX_DMA_Instance    DMAx_CHANNELy(DEV_USART2_TX_DMA_NUMBER, DEV_USART2_TX_DMA_CHANNEL)
-    #define USART2_TX_DMA_IRQn        DMAx_CHANNELy_IRQn(DEV_USART2_TX_DMA_NUMBER, DEV_USART2_TX_DMA_CHANNEL)
-    #define USART2_TX_DMA_Channel     DEV_USART2_TX_DMA_CHANNEL
-    #define USART2_TX_DMA_Priority    DEV_USART2_TX_DMA_PRIORITY
-
-    #define USART2_TX_DMA_Handler     DMAx_CHANNELy_EVENT(DEV_USART2_TX_DMA_NUMBER, DEV_USART2_TX_DMA_CHANNEL)
+    #define USART2_TX_DMA_Stream      DMAx_STREAMy(DEV_USART2_TX_DMA_NUMBER, DEV_USART2_TX_DMA_STREAM)
+    #define USART2_TX_DMA_IRQn        DMAx_STREAMy_IRQn(DEV_USART2_TX_DMA_NUMBER, DEV_USART2_TX_DMA_STREAM)
+    #define USART2_TX_DMA_Channel     DMA_CHANNEL_x(DEV_USART2_TX_DMA_CHANNEL)
+    #define USART2_TX_DMA_Priority    DMA_PRIORITY(DEV_USART2_TX_DMA_PRIORITY)
+    #define USART2_TX_DMA_Handler     DMAx_STREAMy_IRQ(DEV_USART2_TX_DMA_NUMBER, DEV_USART2_TX_DMA_STREAM)
   #endif
 
   #if (DEV_USART2_TX == 1)
@@ -154,24 +160,27 @@
 #endif
 
 /* USART3 configuration definitions */
-#if (DEV_USART3 == 1)
+#if defined(DEV_USART3) && (DEV_USART3 == 1)
   #define USE_USART3
 
-  #if (DEV_USART3_RX_DMA == 1)
-    #define USART3_RX_DMA_Instance    DMAx_CHANNELy(DEV_USART3_RX_DMA_NUMBER, DEV_USART3_RX_DMA_CHANNEL)
-    #define USART3_RX_DMA_IRQn        DMAx_CHANNELy_IRQn(DEV_USART3_RX_DMA_NUMBER, DEV_USART3_RX_DMA_CHANNEL)
-    #define USART3_RX_DMA_Channel     DEV_USART3_RX_DMA_CHANNEL
-    #define USART3_RX_DMA_Priority    DEV_USART3_RX_DMA_PRIORITY
+  #if !defined(USART3)
+    #error "USART3 not available for selected device!"
+    #undef USE_USART3
+  #endif
 
-    #define USART3_RX_DMA_Handler     DMAx_CHANNELy_EVENT(DEV_USART3_RX_DMA_NUMBER, DEV_USART3_RX_DMA_CHANNEL)
+  #if (DEV_USART3_RX_DMA == 1)
+    #define USART3_RX_DMA_Stream      DMAx_STREAMy(DEV_USART3_RX_DMA_NUMBER, DEV_USART3_RX_DMA_STREAM)
+    #define USART3_RX_DMA_IRQn        DMAx_STREAMy_IRQn(DEV_USART3_RX_DMA_NUMBER, DEV_USART3_RX_DMA_STREAM)
+    #define USART3_RX_DMA_Channel     DMA_CHANNEL_x(DEV_USART3_RX_DMA_CHANNEL)
+    #define USART3_RX_DMA_Priority    DMA_PRIORITY(DEV_USART3_RX_DMA_PRIORITY)
+    #define USART3_RX_DMA_Handler     DMAx_STREAMy_IRQ(DEV_USART3_RX_DMA_NUMBER, DEV_USART3_RX_DMA_STREAM)
   #endif
   #if (DEV_USART3_TX_DMA == 1)
-    #define USART3_TX_DMA_Instance    DMAx_CHANNELy(DEV_USART3_TX_DMA_NUMBER, DEV_USART3_TX_DMA_CHANNEL)
-    #define USART3_TX_DMA_IRQn        DMAx_CHANNELy_IRQn(DEV_USART3_TX_DMA_NUMBER, DEV_USART3_TX_DMA_CHANNEL)
-    #define USART3_TX_DMA_Channel     DEV_USART3_TX_DMA_CHANNEL
-    #define USART3_TX_DMA_Priority    DEV_USART3_TX_DMA_PRIORITY
-
-    #define USART3_TX_DMA_Handler     DMAx_CHANNELy_EVENT(DEV_USART3_TX_DMA_NUMBER, DEV_USART3_TX_DMA_CHANNEL)
+    #define USART3_TX_DMA_Stream      DMAx_STREAMy(DEV_USART3_TX_DMA_NUMBER, DEV_USART3_TX_DMA_STREAM)
+    #define USART3_TX_DMA_IRQn        DMAx_STREAMy_IRQn(DEV_USART3_TX_DMA_NUMBER, DEV_USART3_TX_DMA_STREAM)
+    #define USART3_TX_DMA_Channel     DMA_CHANNEL_x(DEV_USART3_TX_DMA_CHANNEL)
+    #define USART3_TX_DMA_Priority    DMA_PRIORITY(DEV_USART3_TX_DMA_PRIORITY)
+    #define USART3_TX_DMA_Handler     DMAx_STREAMy_IRQ(DEV_USART3_TX_DMA_NUMBER, DEV_USART3_TX_DMA_STREAM)
   #endif
 
   #if (DEV_USART3_TX == 1)
@@ -210,21 +219,21 @@
   #endif
 #endif
 
-#if (defined(USART1_RX_DMA_Instance) || \
-     defined(USART2_RX_DMA_Instance) || \
-     defined(USART3_RX_DMA_Instance) || \
-     defined(UART4_RX_DMA_Instance ) || \
-     defined(UART5_RX_DMA_Instance ))
-#define __USART_DMA_RX
+#if (defined(USART1_RX_DMA_Stream) || \
+     defined(USART2_RX_DMA_Stream) || \
+     defined(USART3_RX_DMA_Stream) || \
+     defined( UART4_RX_DMA_Stream) || \
+     defined( UART5_RX_DMA_Stream))
+#define __USART_RX_DMA
 #endif
-#if (defined(USART1_TX_DMA_Instance) || \
-     defined(USART2_TX_DMA_Instance) || \
-     defined(USART3_TX_DMA_Instance) || \
-     defined(UART4_TX_DMA_Instance ) || \
-     defined(UART5_TX_DMA_Instance ))
-#define __USART_DMA_TX
+#if (defined(USART1_TX_DMA_Stream) || \
+     defined(USART2_TX_DMA_Stream) || \
+     defined(USART3_TX_DMA_Stream) || \
+     defined( UART4_TX_DMA_Stream) || \
+     defined( UART5_TX_DMA_Stream))
+#define __USART_TX_DMA
 #endif
-#if (defined(__USART_DMA_RX) && defined(__USART_DMA_TX))
+#if (defined(__USART_RX_DMA) && defined(__USART_TX_DMA))
 #define __USART_DMA
 #endif
 

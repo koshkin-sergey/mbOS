@@ -241,11 +241,12 @@ void DMA_StreamDisable(DMA_Resources_t *res)
 }
 
 /**
- * @fn          void DMA_IRQ_Handle(DMA_Resources_t *res)
+ * @fn          void DMA_IRQ_Handle(DMA_Resources_t *res, const void *param)
  * @brief       DMA Interrupt Handle
- * @param[in]   res   Pointer to DMA resources
+ * @param[in]   res    Pointer to DMA resources
+ * @param[in]   param  Pointer to Information structure
  */
-void DMA_IRQ_Handle(DMA_Resources_t *res)
+void DMA_IRQ_Handle(DMA_Resources_t *res, const void *param)
 {
   uint32_t event = 0U, isr, cr;
   DMA_Handle_t *handle = res->handle;
@@ -317,8 +318,9 @@ void DMA_IRQ_Handle(DMA_Resources_t *res)
     }
   }
 
-  if (res->cb_event)
-    res->cb_event(event);
+  if (res->cb_event) {
+    res->cb_event(event, param);
+  }
 }
 
 /* ----------------------------- End of file ---------------------------------*/
