@@ -50,12 +50,12 @@ int32_t USART_Send(const void *data, uint32_t num, const USART_RESOURCES *usart)
 static
 int32_t USART_Receive(void *data, uint32_t num, const USART_RESOURCES *usart);
 
-#ifdef __USART_TX_DMA
-static void USART_TX_DMA_Complete(uint32_t event, const void *param);
+#ifdef __USART_DMA_TX
+static void USART_TX_DMA_Callback(uint32_t event, const void *param);
 #endif
 
-#ifdef __USART_RX_DMA
-static void USART_RX_DMA_Complete(uint32_t event, const void *param);
+#ifdef __USART_DMA_RX
+static void USART_RX_DMA_Callback(uint32_t event, const void *param);
 #endif
 
 /*******************************************************************************
@@ -86,6 +86,32 @@ static const GPIO_PIN_CFG_t USART_pin_cfg_out_pp = {
 /* USART1 Run-Time Information */
 static USART_INFO          USART1_Info         = {0};
 static USART_TRANSFER_INFO USART1_TransferInfo = {0};
+
+#ifdef USART1_TX_DMA_Stream
+static DMA_Handle_t USART1_TX_DMA_Handle;
+static const DMA_Resources_t USART1_TX_DMA = {
+  &USART1_TX_DMA_Handle,
+  USART1_TX_DMA_Stream,
+  USART1_TX_DMA_Channel,
+  USART1_TX_DMA_Priority,
+  USART_TX_DMA_Callback,
+  DEV_USART_DMA_INT_PRIORITY,
+  USART1_TX_DMA_IRQn,
+};
+#endif
+
+#ifdef USART1_RX_DMA_Stream
+static DMA_Handle_t USART1_RX_DMA_Handle;
+static const DMA_Resources_t USART1_RX_DMA = {
+  &USART1_RX_DMA_Handle,
+  USART1_RX_DMA_Stream,
+  USART1_RX_DMA_Channel,
+  USART1_RX_DMA_Priority,
+  USART_RX_DMA_Callback,
+  DEV_USART_DMA_INT_PRIORITY,
+  USART1_RX_DMA_IRQn,
+};
+#endif
 
 #ifdef USE_USART1_TX_Pin
 static USART_PIN USART1_tx = {
@@ -138,8 +164,8 @@ static const USART_RESOURCES USART1_Resources = {
 #endif
     0,  // supports Synchronous Slave mode
     1,  // supports UART Single-wire mode
-    0,  // supports UART IrDA mode
-    0,  // supports UART Smart Card mode
+    1,  // supports UART IrDA mode
+    1,  // supports UART Smart Card mode
     0,  // Smart Card Clock generator
 #ifdef USE_USART1_RTS_Pin
     1,  // RTS Flow Control available
@@ -207,13 +233,13 @@ static const USART_RESOURCES USART1_Resources = {
 #endif
   },
   USART1_IRQn,
-#ifdef USART1_TX_DMA_Instance
-  &USART1_DMA_Tx,
+#ifdef USART1_TX_DMA_Stream
+  &USART1_TX_DMA,
 #else
   NULL,
 #endif
-#ifdef USART1_RX_DMA_Instance
-  &USART1_DMA_Rx,
+#ifdef USART1_RX_DMA_Stream
+  &USART1_RX_DMA,
 #else
   NULL,
 #endif
@@ -228,6 +254,32 @@ static const USART_RESOURCES USART1_Resources = {
 /* USART2 Run-Time Information */
 static USART_INFO          USART2_Info         = {0};
 static USART_TRANSFER_INFO USART2_TransferInfo = {0};
+
+#ifdef USART2_TX_DMA_Stream
+static DMA_Handle_t USART2_TX_DMA_Handle;
+static const DMA_Resources_t USART2_TX_DMA = {
+  &USART2_TX_DMA_Handle,
+  USART2_TX_DMA_Stream,
+  USART2_TX_DMA_Channel,
+  USART2_TX_DMA_Priority,
+  USART_TX_DMA_Callback,
+  DEV_USART_DMA_INT_PRIORITY,
+  USART2_TX_DMA_IRQn,
+};
+#endif
+
+#ifdef USART2_RX_DMA_Stream
+static DMA_Handle_t USART2_RX_DMA_Handle;
+static const DMA_Resources_t USART2_RX_DMA = {
+  &USART2_RX_DMA_Handle,
+  USART2_RX_DMA_Stream,
+  USART2_RX_DMA_Channel,
+  USART2_RX_DMA_Priority,
+  USART_RX_DMA_Callback,
+  DEV_USART_DMA_INT_PRIORITY,
+  USART2_RX_DMA_IRQn,
+};
+#endif
 
 #ifdef USE_USART2_TX_Pin
 static USART_PIN USART2_tx = {
@@ -280,8 +332,8 @@ static const USART_RESOURCES USART2_Resources = {
 #endif
     0,  // supports Synchronous Slave mode
     1,  // supports UART Single-wire mode
-    0,  // supports UART IrDA mode
-    0,  // supports UART Smart Card mode
+    1,  // supports UART IrDA mode
+    1,  // supports UART Smart Card mode
     0,  // Smart Card Clock generator
 #ifdef USE_USART2_RTS_Pin
     1,  // RTS Flow Control available
@@ -349,13 +401,13 @@ static const USART_RESOURCES USART2_Resources = {
 #endif
   },
   USART2_IRQn,
-#ifdef USART2_TX_DMA_Instance
-  &USART2_DMA_Tx,
+#ifdef USART2_TX_DMA_Stream
+  &USART2_TX_DMA,
 #else
   NULL,
 #endif
-#ifdef USART2_RX_DMA_Instance
-  &USART2_DMA_Rx,
+#ifdef USART2_RX_DMA_Stream
+  &USART2_RX_DMA,
 #else
   NULL,
 #endif
@@ -378,7 +430,7 @@ static const DMA_Resources_t USART3_TX_DMA = {
   USART3_TX_DMA_Stream,
   USART3_TX_DMA_Channel,
   USART3_TX_DMA_Priority,
-  USART_TX_DMA_Complete,
+  USART_TX_DMA_Callback,
   DEV_USART_DMA_INT_PRIORITY,
   USART3_TX_DMA_IRQn,
 };
@@ -391,7 +443,7 @@ static const DMA_Resources_t USART3_RX_DMA = {
   USART3_RX_DMA_Stream,
   USART3_RX_DMA_Channel,
   USART3_RX_DMA_Priority,
-  USART_RX_DMA_Complete,
+  USART_RX_DMA_Callback,
   DEV_USART_DMA_INT_PRIORITY,
   USART3_RX_DMA_IRQn,
 };
@@ -448,8 +500,8 @@ static const USART_RESOURCES USART3_Resources = {
 #endif
     0,  // supports Synchronous Slave mode
     1,  // supports UART Single-wire mode
-    0,  // supports UART IrDA mode
-    0,  // supports UART Smart Card mode
+    1,  // supports UART IrDA mode
+    1,  // supports UART Smart Card mode
     0,  // Smart Card Clock generator
 #ifdef USE_USART3_RTS_Pin
     1,  // RTS Flow Control available
@@ -785,7 +837,7 @@ int32_t USART_Send(const void *data, uint32_t num, const USART_RESOURCES *usart)
   USART_TypeDef       *reg  = usart->reg;
   uint32_t             cr1;
 
-#ifdef __USART_TX_DMA
+#ifdef __USART_DMA_TX
   uint32_t mem_inc = DMA_MINC_ENABLE;
 #endif
 
@@ -824,7 +876,7 @@ int32_t USART_Send(const void *data, uint32_t num, const USART_RESOURCES *usart)
         return (ARM_DRIVER_ERROR_BUSY);
       }
 
-#ifdef __USART_TX_DMA
+#ifdef __USART_DMA_TX
     }
     else {
       if (xfer->sync_mode == USART_SYNC_MODE_RX) {
@@ -835,7 +887,7 @@ int32_t USART_Send(const void *data, uint32_t num, const USART_RESOURCES *usart)
     }
   }
 
-#ifdef __USART_TX_DMA
+#ifdef __USART_DMA_TX
   /* DMA mode */
   if (usart->dma_tx) {
     DMA_StreamConfig_t *cfg = &usart->dma_tx->handle->config;
@@ -854,8 +906,8 @@ int32_t USART_Send(const void *data, uint32_t num, const USART_RESOURCES *usart)
       cfg->PerDataAlign = DMA_PDATAALIGN_BYTE;
     }
 
-    DMA_StreamConfig(usart->dma_tx);
-    DMA_StreamEnable(usart->dma_tx, (uint32_t)(&reg->TDR), (uint32_t)data, num);
+    DMA_Config(usart->dma_tx);
+    DMA_Start(usart->dma_tx, (uint32_t)(&reg->TDR), (uint32_t)data, num);
 
     /* DMA Enable transmitter */
     reg->CR3 |= USART_CR3_DMAT;
@@ -887,7 +939,7 @@ int32_t USART_Receive(void *data, uint32_t num, const USART_RESOURCES *usart)
   USART_TypeDef       *reg = usart->reg;
   uint32_t             cr1;
 
-#ifdef __USART_RX_DMA
+#ifdef __USART_DMA_RX
   uint32_t mem_inc = DMA_MINC_ENABLE;
 #endif
 
@@ -927,7 +979,7 @@ int32_t USART_Receive(void *data, uint32_t num, const USART_RESOURCES *usart)
 
   cr1 = reg->CR1;
 
-#ifdef __USART_RX_DMA
+#ifdef __USART_DMA_RX
 
   /* Synchronous mode */
   if (info->mode == ARM_USART_MODE_SYNCHRONOUS_MASTER) {
@@ -955,8 +1007,8 @@ int32_t USART_Receive(void *data, uint32_t num, const USART_RESOURCES *usart)
       cfg->PerDataAlign = DMA_PDATAALIGN_BYTE;
     }
 
-    DMA_StreamConfig(usart->dma_rx);
-    DMA_StreamEnable(usart->dma_rx, (uint32_t)(&reg->RDR), (uint32_t)data, num);
+    DMA_Config(usart->dma_rx);
+    DMA_Start(usart->dma_rx, (uint32_t)(&reg->RDR), (uint32_t)data, num);
 
     reg->CR3 |= USART_CR3_DMAR;
     /* Enable IDLE interrupt */
@@ -1046,7 +1098,7 @@ uint32_t USART_GetTxCount(const USART_RESOURCES *usart)
 {
 #ifdef __USART_DMA_TX
   if (usart->dma_tx) {
-    return (usart->xfer->tx_num - DMA_ChannelTransferItemCount(usart->dma_tx->instance));
+    return (usart->xfer->tx_num - DMA_GET_COUNTER(usart->dma_tx));
   }
   else
 #endif
@@ -1066,7 +1118,7 @@ uint32_t USART_GetRxCount(const USART_RESOURCES *usart)
 {
 #ifdef __USART_DMA_RX
   if (usart->dma_rx) {
-    return (usart->xfer->rx_num - DMA_ChannelTransferItemCount(usart->dma_rx->instance));
+    return (usart->xfer->rx_num - DMA_GET_COUNTER(usart->dma_rx));
   }
   else
 #endif
@@ -1086,7 +1138,7 @@ uint32_t USART_GetRxCount(const USART_RESOURCES *usart)
 static
 int32_t USART_Control(uint32_t control, uint32_t arg, const USART_RESOURCES *usart)
 {
-  uint32_t             mode, flow_control;
+  uint32_t             val, mode, flow_control;
   uint32_t             cr1, cr2, cr3;
   USART_INFO          *info = usart->info;
   USART_TRANSFER_INFO *xfer = usart->xfer;
@@ -1102,23 +1154,46 @@ int32_t USART_Control(uint32_t control, uint32_t arg, const USART_RESOURCES *usa
   cr3 = 0U;
 
   switch (control & ARM_USART_CONTROL_Msk) {
-    // Control break
+    /* Control break */
     case ARM_USART_CONTROL_BREAK:
-      return ARM_DRIVER_ERROR;
+      if (arg) {
+        if (usart->xfer->send_active != 0U) { return ARM_DRIVER_ERROR_BUSY; }
+
+        /* Set Send active and Break flag */
+        usart->xfer->send_active = 1U;
+        usart->xfer->break_flag  = 1U;
+
+        /* Send break and enable TX interrupt */
+        usart->reg->CR1 |= USART_CR1_TXEIE;
+        usart->reg->RQR |= USART_RQR_SBKRQ;
+      } else {
+        if (usart->xfer->break_flag) {
+          /* Disable TX interrupt */
+          usart->reg->CR1 &= ~USART_CR1_TXEIE;
+
+          /* Clear break and Send Active flag */
+          usart->xfer->break_flag  = 0U;
+          usart->xfer->send_active = 0U;
+        }
+      }
+      return ARM_DRIVER_OK;
 
     /* Abort Send */
     case ARM_USART_ABORT_SEND:
       /* Disable TX and TC interrupt */
       reg->CR1 &= ~(USART_CR1_TXEIE | USART_CR1_TCIE);
 
+#ifdef __USART_DMA_TX
       /* If DMA mode - disable DMA channel */
       if ((usart->dma_tx != NULL) && (xfer->send_active != 0)) {
         /* DMA disable transmitter */
         reg->CR3 &= ~USART_CR3_DMAT;
 
         /* Abort TX DMA transfer */
-//        DMA_ChannelDisable(usart->dma_tx->instance);
+        DMA_Abort(usart->dma_tx);
+        DMA_WaitAbort(usart->dma_tx);
       }
+#endif
 
       /* Clear break flag */
       xfer->break_flag = 0U;
@@ -1131,14 +1206,17 @@ int32_t USART_Control(uint32_t control, uint32_t arg, const USART_RESOURCES *usa
       /* Disable RX interrupt */
       reg->CR1 &= ~USART_CR1_RXNEIE;
 
+#ifdef __USART_DMA_RX
       /* If DMA mode - disable DMA channel */
       if ((usart->dma_rx != NULL) && (info->status.rx_busy != 0)) {
         /* DMA disable Receiver */
         reg->CR3 &= ~USART_CR3_DMAR;
 
         /* Abort RX DMA transfer */
-//        DMA_ChannelDisable(usart->dma_rx->instance);
+        DMA_Abort(usart->dma_rx);
+        DMA_WaitAbort(usart->dma_rx);
       }
+#endif
 
       /* Clear RX busy status */
       info->status.rx_busy = 0U;
@@ -1155,7 +1233,7 @@ int32_t USART_Control(uint32_t control, uint32_t arg, const USART_RESOURCES *usa
         reg->CR3 &= ~USART_CR3_DMAT;
 
         /* Abort TX DMA transfer */
-//        DMA_ChannelDisable(usart->dma_tx->instance);
+        DMA_Abort(usart->dma_tx);
       }
 
       /* If DMA mode - disable DMA channel */
@@ -1164,7 +1242,7 @@ int32_t USART_Control(uint32_t control, uint32_t arg, const USART_RESOURCES *usa
         reg->CR3 &= ~USART_CR3_DMAR;
 
         /* Abort RX DMA transfer */
-//        DMA_ChannelDisable(usart->dma_rx->instance);
+        DMA_Abort(usart->dma_rx);
       }
 
       /* Clear busy statuses */
@@ -1280,15 +1358,110 @@ int32_t USART_Control(uint32_t control, uint32_t arg, const USART_RESOURCES *usa
       break;
 
     case ARM_USART_MODE_IRDA:
-      return (ARM_USART_ERROR_MODE);
+      /* Enable IrDA mode */
+      cr3 |= USART_CR3_IREN;
+      mode = ARM_USART_MODE_IRDA;
+      break;
 
     case ARM_USART_MODE_SMART_CARD:
-      return (ARM_USART_ERROR_MODE);
+      if (usart->capabilities.smart_card) {
+        /* Enable Smart card mode */
+        cr3 |= USART_CR3_SCEN;
+      }
+      else {
+        return ARM_USART_ERROR_MODE;
+      }
+      mode = ARM_USART_MODE_SMART_CARD;
+      break;
 
     /* Default TX value */
     case ARM_USART_SET_DEFAULT_TX_VALUE:
       xfer->def_val = (uint16_t)arg;
       return (ARM_DRIVER_OK);
+
+    /* IrDA pulse */
+    case ARM_USART_SET_IRDA_PULSE:
+      if (usart->info->mode == ARM_USART_MODE_IRDA) {
+        if (arg != 0U) {
+          uint32_t i;
+
+          /* IrDa low-power */
+          usart->reg->CR3 |= USART_CR3_IRLP;
+
+          /* Get clock */
+          val = RCC_GetPeriphFreq(usart->periph);
+
+          /* Calculate period in ns */
+          val = 1000000000U / val;
+          for (i = 1U; i < 256U; i++) {
+            if ((val * i) > arg) {
+              break;
+            }
+          }
+          if (i == 256U) {
+            return ARM_DRIVER_ERROR;
+          }
+          usart->reg->GTPR = (usart->reg->GTPR & ~USART_GTPR_PSC) | i;
+        }
+      }
+      else {
+        return ARM_DRIVER_ERROR;
+      }
+      return ARM_DRIVER_OK;
+
+    /* SmartCard guard time */
+    case ARM_USART_SET_SMART_CARD_GUARD_TIME:
+      if (usart->info->mode == ARM_USART_MODE_SMART_CARD) {
+        if (arg > 255U)
+          return ARM_DRIVER_ERROR;
+
+        usart->reg->GTPR = (usart->reg->GTPR & ~USART_GTPR_GT) | arg;
+      }
+      else {
+        return ARM_DRIVER_ERROR;
+      }
+      return ARM_DRIVER_OK;
+
+    /* SmartCard clock */
+    case ARM_USART_SET_SMART_CARD_CLOCK:
+      if (usart->info->mode == ARM_USART_MODE_SMART_CARD) {
+        uint32_t i;
+
+        /* Get clock */
+        val = RCC_GetPeriphFreq(usart->periph);
+
+        /* Calculate period in ns */
+        val = 1000000000U / val;
+        for (i = 1U; i < 64U; i++) {
+          // if in +-2% tolerance
+          if (((val * i * 2U * 100U) < (arg * 102U))
+              && ((val * i * 2U * 100U) > (arg * 98U))) {
+            break;
+          }
+        }
+        if (i == 64U) {
+          return ARM_DRIVER_ERROR;
+        }
+
+        usart->reg->GTPR = (usart->reg->GTPR & ~USART_GTPR_PSC) | i;
+      }
+      else {
+        return ARM_DRIVER_ERROR;
+      }
+      return ARM_DRIVER_OK;
+
+    /* SmartCard NACK */
+    case ARM_USART_CONTROL_SMART_CARD_NACK:
+      if (usart->info->mode == ARM_USART_MODE_SMART_CARD) {
+        /* SmartCard NACK Enable */
+        if (arg != 0U) {
+          usart->reg->CR3 |= USART_CR3_NACK;
+        }
+      }
+      else {
+        return ARM_DRIVER_ERROR;
+      }
+      return ARM_DRIVER_OK;
 
     /* Unsupported command */
     default:
@@ -1426,10 +1599,10 @@ int32_t USART_Control(uint32_t control, uint32_t arg, const USART_RESOURCES *usa
   }
 
   /* USART Baudrate */
-  uint32_t freq      = RCC_GetPeriphFreq(usart->periph);
-  uint32_t usart_div = (uint32_t)USART_BAUDRATE_DIVIDER(freq, arg);
+  val = RCC_GetPeriphFreq(usart->periph);
+  uint32_t usart_div = (uint32_t)USART_BAUDRATE_DIVIDER(val, arg);
 
-  uint32_t baudrate  = (freq / (usart_div & 0xFFFFU));
+  uint32_t baudrate  = (val / (usart_div & 0xFFFFU));
   /* If inside +/- 2% tolerance, baud rate configured correctly */
   if (!(((baudrate * 100U) < (arg * 102U)) && ((baudrate * 100U) > (arg * 98U)))) {
     return (ARM_USART_ERROR_BAUDRATE);
@@ -1732,45 +1905,52 @@ void USART_IRQHandler(const USART_RESOURCES *usart)
 
   /* Transmit data register empty */
   if (sr & USART_ISR_TXE & reg->CR1) {
-    if (xfer->tx_num != xfer->tx_cnt) {
-      if ((info->mode == ARM_USART_MODE_SYNCHRONOUS_MASTER) && (xfer->sync_mode == USART_SYNC_MODE_RX)) {
-        /* Dummy write in synchronous receive only mode */
-        data = xfer->def_val;
-      }
-      else {
-        /* Write data to TX FIFO */
-        data = *(xfer->tx_buf++);
+    /* Break handling */
+    if (xfer->break_flag) {
+      /* Send break */
+      reg->RQR |= USART_RQR_SBKRQ;
+    }
+    else {
+      if (xfer->tx_num != xfer->tx_cnt) {
+        if ((info->mode == ARM_USART_MODE_SYNCHRONOUS_MASTER) && (xfer->sync_mode == USART_SYNC_MODE_RX)) {
+          /* Dummy write in synchronous receive only mode */
+          data = xfer->def_val;
+        }
+        else {
+          /* Write data to TX FIFO */
+          data = *(xfer->tx_buf++);
 
-        /* If nine bit data, no parity */
-        val = reg->CR1;
-        if (((val & USART_CR1_PCE) == 0U) && ((val & USART_CR1_M) != 0U)) {
-          data |= *(xfer->tx_buf++) << 8U;
+          /* If nine bit data, no parity */
+          val = reg->CR1;
+          if (((val & USART_CR1_PCE) == 0U) && ((val & USART_CR1_M) != 0U)) {
+            data |= *(xfer->tx_buf++) << 8U;
+          }
         }
       }
-    }
-    xfer->tx_cnt++;
+      xfer->tx_cnt++;
 
-    /* Write to data register */
-    reg->TDR = data;
+      /* Write to data register */
+      reg->TDR = data;
 
-    /* Check if all data is transmitted */
-    if (xfer->tx_num == xfer->tx_cnt) {
-      /* Disable TXE interrupt */
-      reg->CR1 &= ~USART_CR1_TXEIE;
+      /* Check if all data is transmitted */
+      if (xfer->tx_num == xfer->tx_cnt) {
+        /* Disable TXE interrupt */
+        reg->CR1 &= ~USART_CR1_TXEIE;
 
-      /* Enable TC interrupt */
-      reg->CR1 |= USART_CR1_TCIE;
+        /* Enable TC interrupt */
+        reg->CR1 |= USART_CR1_TCIE;
 
-      xfer->send_active = 0U;
+        xfer->send_active = 0U;
 
-      /* Set send complete event */
-      if (info->mode == ARM_USART_MODE_SYNCHRONOUS_MASTER) {
-        if ((xfer->sync_mode == USART_SYNC_MODE_TX) && ((info->flags & USART_FLAG_RX_ENABLED) == 0U)) {
+        /* Set send complete event */
+        if (info->mode == ARM_USART_MODE_SYNCHRONOUS_MASTER) {
+          if ((xfer->sync_mode == USART_SYNC_MODE_TX) && ((info->flags & USART_FLAG_RX_ENABLED) == 0U)) {
+            event |= ARM_USART_EVENT_SEND_COMPLETE;
+          }
+        }
+        else {
           event |= ARM_USART_EVENT_SEND_COMPLETE;
         }
-      }
-      else {
-        event |= ARM_USART_EVENT_SEND_COMPLETE;
       }
     }
   }
@@ -1813,6 +1993,14 @@ void USART_IRQHandler(const USART_RESOURCES *usart)
     reg->ICR = USART_ICR_NCF;
   }
 
+  /* Break Detection */
+  if ((sr & USART_ISR_LBDF) != 0U) {
+    /* Clear Break detection flag */
+    reg->ICR = USART_ICR_LBDCF;
+    info->status.rx_break = 1U;
+    event |= ARM_USART_EVENT_RX_BREAK;
+  }
+
   /* CTS changed */
   if ((sr & USART_ISR_CTSIF) != 0U) {
     /* Clear CTS flag */
@@ -1826,81 +2014,75 @@ void USART_IRQHandler(const USART_RESOURCES *usart)
   }
 }
 
-#ifdef __USART_TX_DMA
-static void USART_TX_DMA_Complete(uint32_t event, const void *param)
+#ifdef __USART_DMA_TX
+static void USART_TX_DMA_Callback(uint32_t event, const void *param)
 {
   const USART_RESOURCES *usart = param;
   USART_INFO *info = usart->info;
   USART_TRANSFER_INFO *xfer = usart->xfer;
 
-//  if ((DMA_ChannelTransferItemCount(usart->dma_tx->instance) != 0U) && (xfer->tx_num != 0U)) {
-//    /* TX DMA Complete caused by send/transfer abort */
-//    return;
-//  }
+  if (event & DMA_EVENT_TRANSFER_COMPLETE) {
+    xfer->tx_cnt = xfer->tx_num;
+    /* Clear TX busy flag */
+    xfer->send_active = 0U;
 
-  xfer->tx_cnt = xfer->tx_num;
-  /* Clear TX busy flag */
-  xfer->send_active = 0U;
+    /* TC interrupt enable */
+    usart->reg->CR1 |= USART_CR1_TCIE;
 
-  /* TC interrupt enable */
-  usart->reg->CR1 |= USART_CR1_TCIE;
-
-  /* Set Send Complete event for asynchronous transfers */
-  if (info->mode != ARM_USART_MODE_SYNCHRONOUS_MASTER) {
-    if (info->cb_event) {
-      info->cb_event(ARM_USART_EVENT_SEND_COMPLETE);
+    /* Set Send Complete event for asynchronous transfers */
+    if (info->mode != ARM_USART_MODE_SYNCHRONOUS_MASTER) {
+      if (info->cb_event) {
+        info->cb_event(ARM_USART_EVENT_SEND_COMPLETE);
+      }
     }
   }
 }
 #endif
 
-#ifdef __USART_RX_DMA
-static void USART_RX_DMA_Complete(uint32_t event, const void *param)
+#ifdef __USART_DMA_RX
+static void USART_RX_DMA_Callback(uint32_t event, const void *param)
 {
   const USART_RESOURCES *usart = param;
   USART_INFO *info = usart->info;
   USART_TRANSFER_INFO *xfer = usart->xfer;
   uint32_t val, cb_event;
 
-//  if ((DMA_ChannelTransferItemCount(usart->dma_rx->instance) != 0U) && (xfer->rx_num != 0U)) {
-//    /* RX DMA Complete caused by receive/transfer abort */
-//    return;
-//  }
+  if (event & DMA_EVENT_TRANSFER_COMPLETE) {
+    /* Disable IDLE interrupt */
+    usart->reg->CR1 &= ~USART_CR1_IDLEIE;
 
-  /* Disable IDLE interrupt */
-  usart->reg->CR1 &= ~USART_CR1_IDLEIE;
+    cb_event = 0U;
 
-  cb_event = 0U;
-
-  if (info->mode == ARM_USART_MODE_SYNCHRONOUS_MASTER) {
-    val = xfer->sync_mode;
-    xfer->sync_mode = 0U;
-    switch (val) {
-      case USART_SYNC_MODE_TX:
-        cb_event = ARM_USART_EVENT_SEND_COMPLETE;
-        break;
-      case USART_SYNC_MODE_RX:
-        cb_event = ARM_USART_EVENT_RECEIVE_COMPLETE;
-        break;
-      case USART_SYNC_MODE_TX_RX:
-        cb_event = ARM_USART_EVENT_TRANSFER_COMPLETE;
-        break;
-      default:
-        break;
+    if (info->mode == ARM_USART_MODE_SYNCHRONOUS_MASTER) {
+      val = xfer->sync_mode;
+      xfer->sync_mode = 0U;
+      switch (val) {
+        case USART_SYNC_MODE_TX:
+          cb_event = ARM_USART_EVENT_SEND_COMPLETE;
+          break;
+        case USART_SYNC_MODE_RX:
+          cb_event = ARM_USART_EVENT_RECEIVE_COMPLETE;
+          break;
+        case USART_SYNC_MODE_TX_RX:
+          cb_event = ARM_USART_EVENT_TRANSFER_COMPLETE;
+          break;
+        default:
+          break;
+      }
     }
-  }
-  else {
-    cb_event = ARM_USART_EVENT_RECEIVE_COMPLETE;
-  }
+    else {
+      cb_event = ARM_USART_EVENT_RECEIVE_COMPLETE;
+    }
 
-  xfer->rx_cnt = xfer->rx_num;
-  info->status.rx_busy = 0U;
+    xfer->rx_cnt = xfer->rx_num;
+    info->status.rx_busy = 0U;
 
-  /* Enable RXNE interrupt to detect RX overrun */
-  usart->reg->CR1 |= USART_CR1_RXNEIE;
+    /* Enable RXNE interrupt to detect RX overrun */
+    usart->reg->CR1 |= USART_CR1_RXNEIE;
 
-  if (info->cb_event && cb_event) {
-    info->cb_event(cb_event);
+    if (info->cb_event && cb_event) {
+      info->cb_event(cb_event);
+    }
   }
 }
 #endif
@@ -1923,10 +2105,10 @@ static ARM_USART_MODEM_STATUS  USART1_GetModemStatus  (void)                    
        void                    USART1_IRQHandler      (void)                                                {        USART_IRQHandler (&USART1_Resources); }
 
 #ifdef USART1_TX_DMA_Instance
-       void                    USART1_TX_DMA_Handler  (uint32_t events)                                     {        USART_TX_DMA_Complete(&USART1_Resources); }
+       void                    USART1_TX_DMA_Handler  (uint32_t events)                                     {        DMA_IRQ_Handle(&USART1_TX_DMA, &USART1_Resources); }
 #endif
 #ifdef USART1_RX_DMA_Instance
-       void                    USART1_RX_DMA_Handler  (uint32_t events)                                     {        USART_RX_DMA_Complete(&USART1_Resources); }
+       void                    USART1_RX_DMA_Handler  (uint32_t events)                                     {        DMA_IRQ_Handle(&USART1_RX_DMA, &USART1_Resources); }
 #endif
 
 /* USART1 Driver Control Block */
@@ -1966,10 +2148,10 @@ static ARM_USART_MODEM_STATUS  USART2_GetModemStatus  (void)                    
        void                    USART2_IRQHandler      (void)                                                {        USART_IRQHandler (&USART2_Resources); }
 
 #ifdef USART2_TX_DMA_Instance
-       void                    USART2_TX_DMA_Handler  (uint32_t events)                                     {        USART_TX_DMA_Complete(&USART2_Resources); }
+       void                    USART2_TX_DMA_Handler  (uint32_t events)                                     {        DMA_IRQ_Handle(&USART2_TX_DMA, &USART2_Resources); }
 #endif
 #ifdef USART2_RX_DMA_Instance
-       void                    USART2_RX_DMA_Handler  (uint32_t events)                                     {        USART_RX_DMA_Complete(&USART2_Resources); }
+       void                    USART2_RX_DMA_Handler  (uint32_t events)                                     {        DMA_IRQ_Handle(&USART2_RX_DMA, &USART2_Resources); }
 #endif
 
 /* USART2 Driver Control Block */
@@ -2052,10 +2234,10 @@ static ARM_USART_MODEM_STATUS  USART4_GetModemStatus  (void)                    
        void                    UART4_IRQHandler       (void)                                                {        USART_IRQHandler (&USART4_Resources); }
 
 #ifdef UART4_TX_DMA_Instance
-       void                    UART4_TX_DMA_Handler   (uint32_t events)                                     {        USART_TX_DMA_Complete(&USART4_Resources); }
+       void                    UART4_TX_DMA_Handler   (uint32_t events)                                     {        USART_TX_DMA_Callback(&USART4_Resources); }
 #endif
 #ifdef UART4_RX_DMA_Instance
-       void                    UART4_RX_DMA_Handler   (uint32_t events)                                     {        USART_RX_DMA_Complete(&USART4_Resources); }
+       void                    UART4_RX_DMA_Handler   (uint32_t events)                                     {        USART_RX_DMA_Callback(&USART4_Resources); }
 #endif
 
 /* USART4 Driver Control Block */
@@ -2095,10 +2277,10 @@ static ARM_USART_MODEM_STATUS  USART5_GetModemStatus  (void)                    
        void                    UART5_IRQHandler       (void)                                                {        USART_IRQHandler (&USART5_Resources); }
 
 #ifdef UART5_TX_DMA_Instance
-       void                    UART5_TX_DMA_Handler   (uint32_t events)                                     {        USART_TX_DMA_Complete(&USART5_Resources); }
+       void                    UART5_TX_DMA_Handler   (uint32_t events)                                     {        USART_TX_DMA_Callback(&USART5_Resources); }
 #endif
 #ifdef UART5_RX_DMA_Instance
-       void                    UART5_RX_DMA_Handler   (uint32_t events)                                     {        USART_RX_DMA_Complete(&USART5_Resources); }
+       void                    UART5_RX_DMA_Handler   (uint32_t events)                                     {        USART_RX_DMA_Callback(&USART5_Resources); }
 #endif
 
 /* USART5 Driver Control Block */

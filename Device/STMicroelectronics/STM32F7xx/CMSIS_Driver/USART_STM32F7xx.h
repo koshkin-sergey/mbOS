@@ -224,16 +224,16 @@
      defined(USART3_RX_DMA_Stream) || \
      defined( UART4_RX_DMA_Stream) || \
      defined( UART5_RX_DMA_Stream))
-#define __USART_RX_DMA
+#define __USART_DMA_RX
 #endif
 #if (defined(USART1_TX_DMA_Stream) || \
      defined(USART2_TX_DMA_Stream) || \
      defined(USART3_TX_DMA_Stream) || \
      defined( UART4_TX_DMA_Stream) || \
      defined( UART5_TX_DMA_Stream))
-#define __USART_TX_DMA
+#define __USART_DMA_TX
 #endif
-#if (defined(__USART_RX_DMA) && defined(__USART_TX_DMA))
+#if (defined(__USART_DMA_RX) && defined(__USART_DMA_TX))
 #define __USART_DMA
 #endif
 
@@ -260,65 +260,65 @@ typedef const DMA_Resources_t USART_DMA;
 
 /* USART pin */
 typedef const struct _USART_PIN {
-  GPIO_PORT_t           port;           // Port
-  GPIO_PIN_t            pin;            // Pin
-  GPIO_PIN_FUNC_t       func;           // AF pin configuration
+  GPIO_PORT_t                  port;    // Port
+  GPIO_PIN_t                    pin;    // Pin
+  GPIO_PIN_FUNC_t              func;    // AF pin configuration
 } USART_PIN;
 
 /* USART Input/Output Configuration */
 typedef const struct _USART_IO {
-  USART_PIN            *tx;             // TX  Pin identifier
-  USART_PIN            *rx;             // RX  Pin identifier
-  USART_PIN            *ck;             // CLK Pin identifier
-  USART_PIN            *rts;            // RTS Pin identifier
-  USART_PIN            *cts;            // CTS Pin identifier
+  USART_PIN                     *tx;    // TX  Pin identifier
+  USART_PIN                     *rx;    // RX  Pin identifier
+  USART_PIN                     *ck;    // CLK Pin identifier
+  USART_PIN                    *rts;    // RTS Pin identifier
+  USART_PIN                    *cts;    // CTS Pin identifier
 } USART_IO;
 
 // USART Transfer Information (Run-Time)
 typedef struct _USART_TRANSFER_INFO {
-  uint32_t              rx_num;         // Total number of receive data
-  uint32_t              tx_num;         // Total number of transmit data
-  uint8_t              *rx_buf;         // Pointer to in data buffer
-  uint8_t              *tx_buf;         // Pointer to out data buffer
-  uint32_t              rx_cnt;         // Number of data received
-  uint32_t              tx_cnt;         // Number of data sent
-  uint16_t              dump_val;       // Variable for dumping DMA data
-  uint16_t              def_val;        // Default transfer value
-  uint32_t              sync_mode;      // Synchronous mode flag
-  uint8_t               break_flag;     // Transmit break flag
+  uint32_t                   rx_num;    // Total number of receive data
+  uint32_t                   tx_num;    // Total number of transmit data
+  uint8_t                   *rx_buf;    // Pointer to in data buffer
+  const uint8_t             *tx_buf;    // Pointer to out data buffer
+  uint32_t                   rx_cnt;    // Number of data received
+  uint32_t                   tx_cnt;    // Number of data sent
+  uint16_t                 dump_val;    // Variable for dumping DMA data
+  uint16_t                  def_val;    // Default transfer value
+  uint32_t                sync_mode;    // Synchronous mode flag
+  uint8_t                break_flag;    // Transmit break flag
   uint8_t               send_active;    // Send active flag
 } USART_TRANSFER_INFO;
 
 typedef struct _USART_STATUS {
-  uint8_t tx_busy;                      // Transmitter busy flag
-  uint8_t rx_busy;                      // Receiver busy flag
-  uint8_t tx_underflow;                 // Transmit data underflow detected (cleared on start of next send operation)
-  uint8_t rx_overflow;                  // Receive data overflow detected (cleared on start of next receive operation)
-  uint8_t rx_break;                     // Break detected on receive (cleared on start of next receive operation)
-  uint8_t rx_framing_error;             // Framing error detected on receive (cleared on start of next receive operation)
-  uint8_t rx_parity_error;              // Parity error detected on receive (cleared on start of next receive operation)
+  uint8_t                   tx_busy;    // Transmitter busy flag
+  uint8_t                   rx_busy;    // Receiver busy flag
+  uint8_t              tx_underflow;    // Transmit data underflow detected (cleared on start of next send operation)
+  uint8_t               rx_overflow;    // Receive data overflow detected (cleared on start of next receive operation)
+  uint8_t                  rx_break;    // Break detected on receive (cleared on start of next receive operation)
+  uint8_t          rx_framing_error;    // Framing error detected on receive (cleared on start of next receive operation)
+  uint8_t           rx_parity_error;    // Parity error detected on receive (cleared on start of next receive operation)
 } USART_STATUS;
 
 // USART Information (Run-time)
 typedef struct _USART_INFO {
-  ARM_USART_SignalEvent_t cb_event;            // Event Callback
-  USART_STATUS            status;              // Status flags
-  uint8_t                 flags;               // Current USART flags
-  uint32_t                mode;                // Current USART mode
-  uint32_t                flow_control;        // Flow control
+  ARM_USART_SignalEvent_t     cb_event; // Event Callback
+  USART_STATUS                  status; // Status flags
+  uint8_t                        flags; // Current USART flags
+  uint32_t                        mode; // Current USART mode
+  uint32_t                flow_control; // Flow control
 } USART_INFO;
 
 // USART Resources definition
 typedef const struct {
-  ARM_USART_CAPABILITIES  capabilities;        // Capabilities
-  USART_TypeDef          *reg;                 // USART peripheral pointer
-  RCC_Periph_t            periph;              // Peripheral
-  USART_IO                io;                  // USART Input/Output pins
-  IRQn_Type               irq_num;             // USART IRQ Number
-  USART_DMA               *dma_tx;             // Transmit stream register interface
-  USART_DMA               *dma_rx;             // Receive stream register interface
-  USART_INFO              *info;               // Run-Time Information
-  USART_TRANSFER_INFO     *xfer;               // USART transfer information
+  ARM_USART_CAPABILITIES  capabilities; // Capabilities
+  USART_TypeDef                   *reg; // USART peripheral pointer
+  RCC_Periph_t                  periph; // Peripheral
+  USART_IO                          io; // USART Input/Output pins
+  IRQn_Type                    irq_num; // USART IRQ Number
+  USART_DMA                    *dma_tx; // Transmit stream register interface
+  USART_DMA                    *dma_rx; // Receive stream register interface
+  USART_INFO                     *info; // Run-Time Information
+  USART_TRANSFER_INFO            *xfer; // USART transfer information
 } USART_RESOURCES;
 
 #endif /* USART_STM32F7XX_H_ */
