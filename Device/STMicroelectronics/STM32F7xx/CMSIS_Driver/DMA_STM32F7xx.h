@@ -58,6 +58,13 @@
 #define DMA_EVENT_FIFO_ERROR              (1U << 4) ///< DMA FIFO underrun/overrun condition is detected
 #define DMA_EVENT_DIRECT_MODE_ERROR       (1U << 5) ///< DMA direct mode error
 
+/**
+ * @brief       Returns the number of remaining data units in the current DMA Stream transfer.
+ * @param       res  DMA Resource
+ * @retval      The number of remaining data units in the current DMA Stream transfer.
+ */
+#define DMA_GET_COUNTER(res)        ((res)->stream->NDTR)
+
 /*******************************************************************************
  *  typedefs and structures
  ******************************************************************************/
@@ -224,28 +231,35 @@ void DMA_Initialize(DMA_Resources_t *res);
 void DMA_Uninitialize(DMA_Resources_t *res);
 
 /**
- * @fn          void DMA_StreamConfig(const DMA_Resources_t *res)
+ * @fn          void DMA_Config(const DMA_Resources_t *res)
  * @brief       Configure the DMA Stream
  * @param[in]   res  Pointer to DMA resources
  */
-void DMA_StreamConfig(const DMA_Resources_t *res);
+void DMA_Config(const DMA_Resources_t *res);
 
 /**
- * @fn          void DMA_StreamEnable(DMA_Resources_t *res, uint32_t per_addr, uint32_t mem_addr, uint32_t num)
+ * @fn          void DMA_Start(DMA_Resources_t *res, uint32_t per_addr, uint32_t mem_addr, uint32_t num)
  * @brief       Enable stream and/or start memory to memory transfer
  * @param[in]   res  Pointer to DMA resources
  * @param[in]   per_addr
  * @param[in]   mem_addr
  * @param[in]   num
  */
-void DMA_StreamEnable(DMA_Resources_t *res, uint32_t per_addr, uint32_t mem_addr, uint32_t num);
+void DMA_Start(DMA_Resources_t *res, uint32_t per_addr, uint32_t mem_addr, uint32_t num);
 
 /**
- * @fn          void DMA_StreamDisable(DMA_Resources_t *res)
+ * @fn          void DMA_Abort(DMA_Resources_t *res)
  * @brief       Disable stream and/or stop memory to memory transfer
  * @param[in]   res   Pointer to DMA resources
  */
-void DMA_StreamDisable(DMA_Resources_t *res);
+void DMA_Abort(DMA_Resources_t *res);
+
+/**
+ * @fn          void DMA_WaitAbort(DMA_Resources_t *res)
+ * @brief       Waiting for stream transfer to complete
+ * @param[in]   res   Pointer to DMA resources
+ */
+void DMA_WaitAbort(DMA_Resources_t *res);
 
 /**
  * @fn          void DMA_IRQ_Handle(DMA_Resources_t *res, const void *param)

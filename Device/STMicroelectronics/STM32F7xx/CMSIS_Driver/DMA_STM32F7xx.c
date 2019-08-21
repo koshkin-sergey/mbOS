@@ -136,11 +136,11 @@ void DMA_Uninitialize(DMA_Resources_t *res)
 }
 
 /**
- * @fn          void DMA_StreamConfig(const DMA_Resources_t *res)
+ * @fn          void DMA_Config(const DMA_Resources_t *res)
  * @brief       Configure the DMA Stream
  * @param[in]   res  Pointer to DMA resources
  */
-void DMA_StreamConfig(const DMA_Resources_t *res)
+void DMA_Config(const DMA_Resources_t *res)
 {
   if (res == NULL)
     return;
@@ -194,14 +194,14 @@ void DMA_StreamConfig(const DMA_Resources_t *res)
 }
 
 /**
- * @fn          void DMA_StreamEnable(DMA_Resources_t *res, uint32_t per_addr, uint32_t mem_addr, uint32_t num)
+ * @fn          void DMA_Start(DMA_Resources_t *res, uint32_t per_addr, uint32_t mem_addr, uint32_t num)
  * @brief       Enable stream and/or start memory to memory transfer
  * @param[in]   res  Pointer to DMA resources
  * @param[in]   per_addr
  * @param[in]   mem_addr
  * @param[in]   num
  */
-void DMA_StreamEnable(DMA_Resources_t *res, uint32_t per_addr, uint32_t mem_addr, uint32_t num)
+void DMA_Start(DMA_Resources_t *res, uint32_t per_addr, uint32_t mem_addr, uint32_t num)
 {
   if ((res == NULL) || (per_addr == 0U) || (mem_addr == 0U) || (num == 0U))
     return;
@@ -225,11 +225,11 @@ void DMA_StreamEnable(DMA_Resources_t *res, uint32_t per_addr, uint32_t mem_addr
 }
 
 /**
- * @fn          void DMA_StreamDisable(DMA_Resources_t *res)
+ * @fn          void DMA_Abort(DMA_Resources_t *res)
  * @brief       Disable stream and/or stop memory to memory transfer
  * @param[in]   res   Pointer to DMA resources
  */
-void DMA_StreamDisable(DMA_Resources_t *res)
+void DMA_Abort(DMA_Resources_t *res)
 {
   if ((res == NULL) || (res->handle->state != DMA_STATE_BUSY))
     return;
@@ -238,6 +238,18 @@ void DMA_StreamDisable(DMA_Resources_t *res)
 
   /* Disable the peripheral */
   res->stream->CR &= ~DMA_SxCR_EN;
+}
+
+/**
+ * @fn          void DMA_WaitAbort(DMA_Resources_t *res)
+ * @brief       Waiting for stream transfer to complete
+ * @param[in]   res   Pointer to DMA resources
+ */
+void DMA_WaitAbort(DMA_Resources_t *res)
+{
+  while (res->handle->state == DMA_STATE_ABORT) {
+    __NOP();
+  }
 }
 
 /**
