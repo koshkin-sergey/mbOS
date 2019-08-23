@@ -24,8 +24,8 @@
 #include "USART_STM32F7xx.h"
 
 #if defined(USE_USART1) || defined(USE_USART2) || defined(USE_USART3) || \
-    defined(USE_USART4) || defined(USE_USART5) || defined(USE_USART6) || \
-    defined(USE_USART7) || defined(USE_USART8)
+    defined(USE_UART4)  || defined(USE_UART5)  || defined(USE_USART6) || \
+    defined(USE_UART7)  || defined(USE_UART8)
 
 /*******************************************************************************
  *  external declarations
@@ -581,6 +581,830 @@ static const USART_RESOURCES USART3_Resources = {
 #endif
   &USART3_Info,
   &USART3_TransferInfo
+};
+#endif
+
+/* UART4 */
+#ifdef USE_UART4
+
+/* UART4 Run-Time Information */
+static USART_INFO          UART4_Info         = {0};
+static USART_TRANSFER_INFO UART4_TransferInfo = {0};
+
+#ifdef UART4_TX_DMA_Stream
+static DMA_Handle_t UART4_TX_DMA_Handle;
+static const DMA_Resources_t UART4_TX_DMA = {
+  &UART4_TX_DMA_Handle,
+  UART4_TX_DMA_Stream,
+  UART4_TX_DMA_Channel,
+  UART4_TX_DMA_Priority,
+  USART_TX_DMA_Callback,
+  DEV_USART_DMA_INT_PRIORITY,
+  UART4_TX_DMA_IRQn,
+};
+#endif
+
+#ifdef UART4_RX_DMA_Stream
+static DMA_Handle_t UART4_RX_DMA_Handle;
+static const DMA_Resources_t UART4_RX_DMA = {
+  &UART4_RX_DMA_Handle,
+  UART4_RX_DMA_Stream,
+  UART4_RX_DMA_Channel,
+  UART4_RX_DMA_Priority,
+  USART_RX_DMA_Callback,
+  DEV_USART_DMA_INT_PRIORITY,
+  UART4_RX_DMA_IRQn,
+};
+#endif
+
+#ifdef USE_UART4_TX_Pin
+static USART_PIN UART4_tx = {
+    UART4_TX_GPIO_PORT,
+    UART4_TX_GPIO_PIN,
+    UART4_TX_GPIO_FUNC
+};
+#endif
+
+#ifdef USE_UART4_RX_Pin
+static USART_PIN UART4_rx = {
+    UART4_RX_GPIO_PORT,
+    UART4_RX_GPIO_PIN,
+    UART4_RX_GPIO_FUNC
+};
+#endif
+
+#ifdef USE_UART4_CK_Pin
+static USART_PIN UART4_ck = {
+    UART4_CK_GPIO_PORT,
+    UART4_CK_GPIO_PIN,
+    UART4_CK_GPIO_FUNC
+};
+#endif
+
+#ifdef USE_UART4_RTS_Pin
+static USART_PIN UART4_rts = {
+    UART4_RTS_GPIO_PORT,
+    UART4_RTS_GPIO_PIN,
+    UART4_RTS_GPIO_FUNC
+};
+#endif
+
+#ifdef USE_UART4_CTS_Pin
+static USART_PIN UART4_cts = {
+    UART4_CTS_GPIO_PORT,
+    UART4_CTS_GPIO_PIN,
+    UART4_CTS_GPIO_FUNC
+};
+#endif
+
+/* UART4 Resources */
+static const USART_RESOURCES UART4_Resources = {
+  {     // Capabilities
+    1,  // supports UART (Asynchronous) mode
+    0,  // supports Synchronous Master mode
+    0,  // supports Synchronous Slave mode
+    1,  // supports UART Single-wire mode
+    1,  // supports UART IrDA mode
+    0,  // supports UART Smart Card mode
+    0,  // Smart Card Clock generator
+#ifdef USE_UART4_RTS_Pin
+    1,  // RTS Flow Control available
+#else
+    0,  // RTS Flow Control available
+#endif
+#ifdef USE_UART4_CTS_Pin
+    1,  // CTS Flow Control available
+#else
+    0,  // CTS Flow Control available
+#endif
+    1,  // Transmit completed event: \ref ARM_USART_EVENT_TX_COMPLETE
+    1,  // Signal receive character timeout event: \ref ARM_USART_EVENT_RX_TIMEOUT
+#ifdef USE_UART4_RTS_Pin
+    1,  // RTS Line: 0=not available, 1=available
+#else
+    0,  // RTS Line: 0=not available, 1=available
+#endif
+#ifdef USE_UART4_CTS_Pin
+    1,  // CTS Line: 0=not available, 1=available
+#else
+    0,  // CTS Line: 0=not available, 1=available
+#endif
+    0,  // DTR Line: 0=not available, 1=available
+    0,  // DSR Line: 0=not available, 1=available
+    0,  // DCD Line: 0=not available, 1=available
+    0,  // RI Line: 0=not available, 1=available
+#ifdef USE_UART4_CTS_Pin
+    1,  // Signal CTS change event: \ref ARM_USART_EVENT_CTS
+#else
+    0,  // Signal CTS change event: \ref ARM_USART_EVENT_CTS
+#endif
+    0,  // Signal DSR change event: \ref ARM_USART_EVENT_DSR
+    0,  // Signal DCD change event: \ref ARM_USART_EVENT_DCD
+    0,  // Signal RI change event: \ref ARM_USART_EVENT_RI
+  },
+  UART4,
+  RCC_PERIPH_UART4,
+  // PINS
+  {
+#ifdef USE_UART4_TX_Pin
+    &UART4_tx,
+#else
+    NULL,
+#endif
+#ifdef USE_UART4_RX_Pin
+    &UART4_rx,
+#else
+    NULL,
+#endif
+#ifdef USE_UART4_CK_Pin
+    &UART4_ck,
+#else
+    NULL,
+#endif
+#ifdef USE_UART4_RTS_Pin
+    &UART4_rts,
+#else
+    NULL,
+#endif
+#ifdef USE_UART4_CTS_Pin
+    &UART4_cts,
+#else
+    NULL,
+#endif
+  },
+  UART4_IRQn,
+#ifdef UART4_TX_DMA_Stream
+  &UART4_TX_DMA,
+#else
+  NULL,
+#endif
+#ifdef UART4_RX_DMA_Stream
+  &UART4_RX_DMA,
+#else
+  NULL,
+#endif
+  &UART4_Info,
+  &UART4_TransferInfo
+};
+#endif
+
+/* UART5 */
+#ifdef USE_UART5
+
+/* UART5 Run-Time Information */
+static USART_INFO          UART5_Info         = {0};
+static USART_TRANSFER_INFO UART5_TransferInfo = {0};
+
+#ifdef UART5_TX_DMA_Stream
+static DMA_Handle_t UART5_TX_DMA_Handle;
+static const DMA_Resources_t UART5_TX_DMA = {
+  &UART5_TX_DMA_Handle,
+  UART5_TX_DMA_Stream,
+  UART5_TX_DMA_Channel,
+  UART5_TX_DMA_Priority,
+  USART_TX_DMA_Callback,
+  DEV_USART_DMA_INT_PRIORITY,
+  UART5_TX_DMA_IRQn,
+};
+#endif
+
+#ifdef UART5_RX_DMA_Stream
+static DMA_Handle_t UART5_RX_DMA_Handle;
+static const DMA_Resources_t UART5_RX_DMA = {
+  &UART5_RX_DMA_Handle,
+  UART5_RX_DMA_Stream,
+  UART5_RX_DMA_Channel,
+  UART5_RX_DMA_Priority,
+  USART_RX_DMA_Callback,
+  DEV_USART_DMA_INT_PRIORITY,
+  UART5_RX_DMA_IRQn,
+};
+#endif
+
+#ifdef USE_UART5_TX_Pin
+static USART_PIN UART5_tx = {
+    UART5_TX_GPIO_PORT,
+    UART5_TX_GPIO_PIN,
+    UART5_TX_GPIO_FUNC
+};
+#endif
+
+#ifdef USE_UART5_RX_Pin
+static USART_PIN UART5_rx = {
+    UART5_RX_GPIO_PORT,
+    UART5_RX_GPIO_PIN,
+    UART5_RX_GPIO_FUNC
+};
+#endif
+
+#ifdef USE_UART5_CK_Pin
+static USART_PIN UART5_ck = {
+    UART5_CK_GPIO_PORT,
+    UART5_CK_GPIO_PIN,
+    UART5_CK_GPIO_FUNC
+};
+#endif
+
+#ifdef USE_UART5_RTS_Pin
+static USART_PIN UART5_rts = {
+    UART5_RTS_GPIO_PORT,
+    UART5_RTS_GPIO_PIN,
+    UART5_RTS_GPIO_FUNC
+};
+#endif
+
+#ifdef USE_UART5_CTS_Pin
+static USART_PIN UART5_cts = {
+    UART5_CTS_GPIO_PORT,
+    UART5_CTS_GPIO_PIN,
+    UART5_CTS_GPIO_FUNC
+};
+#endif
+
+/* UART5 Resources */
+static const USART_RESOURCES UART5_Resources = {
+  {     // Capabilities
+    1,  // supports UART (Asynchronous) mode
+    0,  // supports Synchronous Master mode
+    0,  // supports Synchronous Slave mode
+    1,  // supports UART Single-wire mode
+    1,  // supports UART IrDA mode
+    0,  // supports UART Smart Card mode
+    0,  // Smart Card Clock generator
+#ifdef USE_UART5_RTS_Pin
+    1,  // RTS Flow Control available
+#else
+    0,  // RTS Flow Control available
+#endif
+#ifdef USE_UART5_CTS_Pin
+    1,  // CTS Flow Control available
+#else
+    0,  // CTS Flow Control available
+#endif
+    1,  // Transmit completed event: \ref ARM_USART_EVENT_TX_COMPLETE
+    1,  // Signal receive character timeout event: \ref ARM_USART_EVENT_RX_TIMEOUT
+#ifdef USE_UART5_RTS_Pin
+    1,  // RTS Line: 0=not available, 1=available
+#else
+    0,  // RTS Line: 0=not available, 1=available
+#endif
+#ifdef USE_UART5_CTS_Pin
+    1,  // CTS Line: 0=not available, 1=available
+#else
+    0,  // CTS Line: 0=not available, 1=available
+#endif
+    0,  // DTR Line: 0=not available, 1=available
+    0,  // DSR Line: 0=not available, 1=available
+    0,  // DCD Line: 0=not available, 1=available
+    0,  // RI Line: 0=not available, 1=available
+#ifdef USE_UART5_CTS_Pin
+    1,  // Signal CTS change event: \ref ARM_USART_EVENT_CTS
+#else
+    0,  // Signal CTS change event: \ref ARM_USART_EVENT_CTS
+#endif
+    0,  // Signal DSR change event: \ref ARM_USART_EVENT_DSR
+    0,  // Signal DCD change event: \ref ARM_USART_EVENT_DCD
+    0,  // Signal RI change event: \ref ARM_USART_EVENT_RI
+  },
+  UART5,
+  RCC_PERIPH_UART5,
+  // PINS
+  {
+#ifdef USE_UART5_TX_Pin
+    &UART5_tx,
+#else
+    NULL,
+#endif
+#ifdef USE_UART5_RX_Pin
+    &UART5_rx,
+#else
+    NULL,
+#endif
+#ifdef USE_UART5_CK_Pin
+    &UART5_ck,
+#else
+    NULL,
+#endif
+#ifdef USE_UART5_RTS_Pin
+    &UART5_rts,
+#else
+    NULL,
+#endif
+#ifdef USE_UART5_CTS_Pin
+    &UART5_cts,
+#else
+    NULL,
+#endif
+  },
+  UART5_IRQn,
+#ifdef UART5_TX_DMA_Stream
+  &UART5_TX_DMA,
+#else
+  NULL,
+#endif
+#ifdef UART5_RX_DMA_Stream
+  &UART5_RX_DMA,
+#else
+  NULL,
+#endif
+  &UART5_Info,
+  &UART5_TransferInfo
+};
+#endif
+
+/* USART6 */
+#ifdef USE_USART6
+
+/* USART6 Run-Time Information */
+static USART_INFO          USART6_Info         = {0};
+static USART_TRANSFER_INFO USART6_TransferInfo = {0};
+
+#ifdef USART6_TX_DMA_Stream
+static DMA_Handle_t USART6_TX_DMA_Handle;
+static const DMA_Resources_t USART6_TX_DMA = {
+  &USART6_TX_DMA_Handle,
+  USART6_TX_DMA_Stream,
+  USART6_TX_DMA_Channel,
+  USART6_TX_DMA_Priority,
+  USART_TX_DMA_Callback,
+  DEV_USART_DMA_INT_PRIORITY,
+  USART6_TX_DMA_IRQn,
+};
+#endif
+
+#ifdef USART6_RX_DMA_Stream
+static DMA_Handle_t USART6_RX_DMA_Handle;
+static const DMA_Resources_t USART6_RX_DMA = {
+  &USART6_RX_DMA_Handle,
+  USART6_RX_DMA_Stream,
+  USART6_RX_DMA_Channel,
+  USART6_RX_DMA_Priority,
+  USART_RX_DMA_Callback,
+  DEV_USART_DMA_INT_PRIORITY,
+  USART6_RX_DMA_IRQn,
+};
+#endif
+
+#ifdef USE_USART6_TX_Pin
+static USART_PIN USART6_tx = {
+    USART6_TX_GPIO_PORT,
+    USART6_TX_GPIO_PIN,
+    USART6_TX_GPIO_FUNC
+};
+#endif
+
+#ifdef USE_USART6_RX_Pin
+static USART_PIN USART6_rx = {
+    USART6_RX_GPIO_PORT,
+    USART6_RX_GPIO_PIN,
+    USART6_RX_GPIO_FUNC
+};
+#endif
+
+#ifdef USE_USART6_CK_Pin
+static USART_PIN USART6_ck = {
+    USART6_CK_GPIO_PORT,
+    USART6_CK_GPIO_PIN,
+    USART6_CK_GPIO_FUNC
+};
+#endif
+
+#ifdef USE_USART6_RTS_Pin
+static USART_PIN USART6_rts = {
+    USART6_RTS_GPIO_PORT,
+    USART6_RTS_GPIO_PIN,
+    USART6_RTS_GPIO_FUNC
+};
+#endif
+
+#ifdef USE_USART6_CTS_Pin
+static USART_PIN USART6_cts = {
+    USART6_CTS_GPIO_PORT,
+    USART6_CTS_GPIO_PIN,
+    USART6_CTS_GPIO_FUNC
+};
+#endif
+
+/* USART6 Resources */
+static const USART_RESOURCES USART6_Resources = {
+  {     // Capabilities
+    1,  // supports UART (Asynchronous) mode
+#ifdef USE_USART6_CK_Pin
+    1,  // supports Synchronous Master mode
+#else
+    0,  // supports Synchronous Master mode
+#endif
+    0,  // supports Synchronous Slave mode
+    1,  // supports UART Single-wire mode
+    1,  // supports UART IrDA mode
+    1,  // supports UART Smart Card mode
+    0,  // Smart Card Clock generator
+#ifdef USE_USART6_RTS_Pin
+    1,  // RTS Flow Control available
+#else
+    0,  // RTS Flow Control available
+#endif
+#ifdef USE_USART6_CTS_Pin
+    1,  // CTS Flow Control available
+#else
+    0,  // CTS Flow Control available
+#endif
+    1,  // Transmit completed event: \ref ARM_USART_EVENT_TX_COMPLETE
+    1,  // Signal receive character timeout event: \ref ARM_USART_EVENT_RX_TIMEOUT
+#ifdef USE_USART6_RTS_Pin
+    1,  // RTS Line: 0=not available, 1=available
+#else
+    0,  // RTS Line: 0=not available, 1=available
+#endif
+#ifdef USE_USART6_CTS_Pin
+    1,  // CTS Line: 0=not available, 1=available
+#else
+    0,  // CTS Line: 0=not available, 1=available
+#endif
+    0,  // DTR Line: 0=not available, 1=available
+    0,  // DSR Line: 0=not available, 1=available
+    0,  // DCD Line: 0=not available, 1=available
+    0,  // RI Line: 0=not available, 1=available
+#ifdef USE_USART6_CTS_Pin
+    1,  // Signal CTS change event: \ref ARM_USART_EVENT_CTS
+#else
+    0,  // Signal CTS change event: \ref ARM_USART_EVENT_CTS
+#endif
+    0,  // Signal DSR change event: \ref ARM_USART_EVENT_DSR
+    0,  // Signal DCD change event: \ref ARM_USART_EVENT_DCD
+    0,  // Signal RI change event: \ref ARM_USART_EVENT_RI
+  },
+  USART6,
+  RCC_PERIPH_USART6,
+  // PINS
+  {
+#ifdef USE_USART6_TX_Pin
+    &USART6_tx,
+#else
+    NULL,
+#endif
+#ifdef USE_USART6_RX_Pin
+    &USART6_rx,
+#else
+    NULL,
+#endif
+#ifdef USE_USART6_CK_Pin
+    &USART6_ck,
+#else
+    NULL,
+#endif
+#ifdef USE_USART6_RTS_Pin
+    &USART6_rts,
+#else
+    NULL,
+#endif
+#ifdef USE_USART6_CTS_Pin
+    &USART6_cts,
+#else
+    NULL,
+#endif
+  },
+  USART6_IRQn,
+#ifdef USART6_TX_DMA_Stream
+  &USART6_TX_DMA,
+#else
+  NULL,
+#endif
+#ifdef USART6_RX_DMA_Stream
+  &USART6_RX_DMA,
+#else
+  NULL,
+#endif
+  &USART6_Info,
+  &USART6_TransferInfo
+};
+#endif
+
+/* UART7 */
+#ifdef USE_UART7
+
+/* UART7 Run-Time Information */
+static USART_INFO          UART7_Info         = {0};
+static USART_TRANSFER_INFO UART7_TransferInfo = {0};
+
+#ifdef UART7_TX_DMA_Stream
+static DMA_Handle_t UART7_TX_DMA_Handle;
+static const DMA_Resources_t UART7_TX_DMA = {
+  &UART7_TX_DMA_Handle,
+  UART7_TX_DMA_Stream,
+  UART7_TX_DMA_Channel,
+  UART7_TX_DMA_Priority,
+  USART_TX_DMA_Callback,
+  DEV_USART_DMA_INT_PRIORITY,
+  UART7_TX_DMA_IRQn,
+};
+#endif
+
+#ifdef UART7_RX_DMA_Stream
+static DMA_Handle_t UART7_RX_DMA_Handle;
+static const DMA_Resources_t UART7_RX_DMA = {
+  &UART7_RX_DMA_Handle,
+  UART7_RX_DMA_Stream,
+  UART7_RX_DMA_Channel,
+  UART7_RX_DMA_Priority,
+  USART_RX_DMA_Callback,
+  DEV_USART_DMA_INT_PRIORITY,
+  UART7_RX_DMA_IRQn,
+};
+#endif
+
+#ifdef USE_UART7_TX_Pin
+static USART_PIN UART7_tx = {
+    UART7_TX_GPIO_PORT,
+    UART7_TX_GPIO_PIN,
+    UART7_TX_GPIO_FUNC
+};
+#endif
+
+#ifdef USE_UART7_RX_Pin
+static USART_PIN UART7_rx = {
+    UART7_RX_GPIO_PORT,
+    UART7_RX_GPIO_PIN,
+    UART7_RX_GPIO_FUNC
+};
+#endif
+
+#ifdef USE_UART7_CK_Pin
+static USART_PIN UART7_ck = {
+    UART7_CK_GPIO_PORT,
+    UART7_CK_GPIO_PIN,
+    UART7_CK_GPIO_FUNC
+};
+#endif
+
+#ifdef USE_UART7_RTS_Pin
+static USART_PIN UART7_rts = {
+    UART7_RTS_GPIO_PORT,
+    UART7_RTS_GPIO_PIN,
+    UART7_RTS_GPIO_FUNC
+};
+#endif
+
+#ifdef USE_UART7_CTS_Pin
+static USART_PIN UART7_cts = {
+    UART7_CTS_GPIO_PORT,
+    UART7_CTS_GPIO_PIN,
+    UART7_CTS_GPIO_FUNC
+};
+#endif
+
+/* UART7 Resources */
+static const USART_RESOURCES UART7_Resources = {
+  {     // Capabilities
+    1,  // supports UART (Asynchronous) mode
+    0,  // supports Synchronous Master mode
+    0,  // supports Synchronous Slave mode
+    1,  // supports UART Single-wire mode
+    1,  // supports UART IrDA mode
+    0,  // supports UART Smart Card mode
+    0,  // Smart Card Clock generator
+#ifdef USE_UART7_RTS_Pin
+    1,  // RTS Flow Control available
+#else
+    0,  // RTS Flow Control available
+#endif
+#ifdef USE_UART7_CTS_Pin
+    1,  // CTS Flow Control available
+#else
+    0,  // CTS Flow Control available
+#endif
+    1,  // Transmit completed event: \ref ARM_USART_EVENT_TX_COMPLETE
+    1,  // Signal receive character timeout event: \ref ARM_USART_EVENT_RX_TIMEOUT
+#ifdef USE_UART7_RTS_Pin
+    1,  // RTS Line: 0=not available, 1=available
+#else
+    0,  // RTS Line: 0=not available, 1=available
+#endif
+#ifdef USE_UART7_CTS_Pin
+    1,  // CTS Line: 0=not available, 1=available
+#else
+    0,  // CTS Line: 0=not available, 1=available
+#endif
+    0,  // DTR Line: 0=not available, 1=available
+    0,  // DSR Line: 0=not available, 1=available
+    0,  // DCD Line: 0=not available, 1=available
+    0,  // RI Line: 0=not available, 1=available
+#ifdef USE_UART7_CTS_Pin
+    1,  // Signal CTS change event: \ref ARM_USART_EVENT_CTS
+#else
+    0,  // Signal CTS change event: \ref ARM_USART_EVENT_CTS
+#endif
+    0,  // Signal DSR change event: \ref ARM_USART_EVENT_DSR
+    0,  // Signal DCD change event: \ref ARM_USART_EVENT_DCD
+    0,  // Signal RI change event: \ref ARM_USART_EVENT_RI
+  },
+  UART7,
+  RCC_PERIPH_UART7,
+  // PINS
+  {
+#ifdef USE_UART7_TX_Pin
+    &UART7_tx,
+#else
+    NULL,
+#endif
+#ifdef USE_UART7_RX_Pin
+    &UART7_rx,
+#else
+    NULL,
+#endif
+#ifdef USE_UART7_CK_Pin
+    &UART7_ck,
+#else
+    NULL,
+#endif
+#ifdef USE_UART7_RTS_Pin
+    &UART7_rts,
+#else
+    NULL,
+#endif
+#ifdef USE_UART7_CTS_Pin
+    &UART7_cts,
+#else
+    NULL,
+#endif
+  },
+  UART7_IRQn,
+#ifdef UART7_TX_DMA_Stream
+  &UART7_TX_DMA,
+#else
+  NULL,
+#endif
+#ifdef UART7_RX_DMA_Stream
+  &UART7_RX_DMA,
+#else
+  NULL,
+#endif
+  &UART7_Info,
+  &UART7_TransferInfo
+};
+#endif
+
+/* UART8 */
+#ifdef USE_UART8
+
+/* UART8 Run-Time Information */
+static USART_INFO          UART8_Info         = {0};
+static USART_TRANSFER_INFO UART8_TransferInfo = {0};
+
+#ifdef UART8_TX_DMA_Stream
+static DMA_Handle_t UART8_TX_DMA_Handle;
+static const DMA_Resources_t UART8_TX_DMA = {
+  &UART8_TX_DMA_Handle,
+  UART8_TX_DMA_Stream,
+  UART8_TX_DMA_Channel,
+  UART8_TX_DMA_Priority,
+  USART_TX_DMA_Callback,
+  DEV_USART_DMA_INT_PRIORITY,
+  UART8_TX_DMA_IRQn,
+};
+#endif
+
+#ifdef UART8_RX_DMA_Stream
+static DMA_Handle_t UART8_RX_DMA_Handle;
+static const DMA_Resources_t UART8_RX_DMA = {
+  &UART8_RX_DMA_Handle,
+  UART8_RX_DMA_Stream,
+  UART8_RX_DMA_Channel,
+  UART8_RX_DMA_Priority,
+  USART_RX_DMA_Callback,
+  DEV_USART_DMA_INT_PRIORITY,
+  UART8_RX_DMA_IRQn,
+};
+#endif
+
+#ifdef USE_UART8_TX_Pin
+static USART_PIN UART8_tx = {
+    UART8_TX_GPIO_PORT,
+    UART8_TX_GPIO_PIN,
+    UART8_TX_GPIO_FUNC
+};
+#endif
+
+#ifdef USE_UART8_RX_Pin
+static USART_PIN UART8_rx = {
+    UART8_RX_GPIO_PORT,
+    UART8_RX_GPIO_PIN,
+    UART8_RX_GPIO_FUNC
+};
+#endif
+
+#ifdef USE_UART8_CK_Pin
+static USART_PIN UART8_ck = {
+    UART8_CK_GPIO_PORT,
+    UART8_CK_GPIO_PIN,
+    UART8_CK_GPIO_FUNC
+};
+#endif
+
+#ifdef USE_UART8_RTS_Pin
+static USART_PIN UART8_rts = {
+    UART8_RTS_GPIO_PORT,
+    UART8_RTS_GPIO_PIN,
+    UART8_RTS_GPIO_FUNC
+};
+#endif
+
+#ifdef USE_UART8_CTS_Pin
+static USART_PIN UART8_cts = {
+    UART8_CTS_GPIO_PORT,
+    UART8_CTS_GPIO_PIN,
+    UART8_CTS_GPIO_FUNC
+};
+#endif
+
+/* UART8 Resources */
+static const USART_RESOURCES UART8_Resources = {
+  {     // Capabilities
+    1,  // supports UART (Asynchronous) mode
+    0,  // supports Synchronous Master mode
+    0,  // supports Synchronous Slave mode
+    1,  // supports UART Single-wire mode
+    1,  // supports UART IrDA mode
+    0,  // supports UART Smart Card mode
+    0,  // Smart Card Clock generator
+#ifdef USE_UART8_RTS_Pin
+    1,  // RTS Flow Control available
+#else
+    0,  // RTS Flow Control available
+#endif
+#ifdef USE_UART8_CTS_Pin
+    1,  // CTS Flow Control available
+#else
+    0,  // CTS Flow Control available
+#endif
+    1,  // Transmit completed event: \ref ARM_USART_EVENT_TX_COMPLETE
+    1,  // Signal receive character timeout event: \ref ARM_USART_EVENT_RX_TIMEOUT
+#ifdef USE_UART8_RTS_Pin
+    1,  // RTS Line: 0=not available, 1=available
+#else
+    0,  // RTS Line: 0=not available, 1=available
+#endif
+#ifdef USE_UART8_CTS_Pin
+    1,  // CTS Line: 0=not available, 1=available
+#else
+    0,  // CTS Line: 0=not available, 1=available
+#endif
+    0,  // DTR Line: 0=not available, 1=available
+    0,  // DSR Line: 0=not available, 1=available
+    0,  // DCD Line: 0=not available, 1=available
+    0,  // RI Line: 0=not available, 1=available
+#ifdef USE_UART8_CTS_Pin
+    1,  // Signal CTS change event: \ref ARM_USART_EVENT_CTS
+#else
+    0,  // Signal CTS change event: \ref ARM_USART_EVENT_CTS
+#endif
+    0,  // Signal DSR change event: \ref ARM_USART_EVENT_DSR
+    0,  // Signal DCD change event: \ref ARM_USART_EVENT_DCD
+    0,  // Signal RI change event: \ref ARM_USART_EVENT_RI
+  },
+  UART8,
+  RCC_PERIPH_UART8,
+  // PINS
+  {
+#ifdef USE_UART8_TX_Pin
+    &UART8_tx,
+#else
+    NULL,
+#endif
+#ifdef USE_UART8_RX_Pin
+    &UART8_rx,
+#else
+    NULL,
+#endif
+#ifdef USE_UART8_CK_Pin
+    &UART8_ck,
+#else
+    NULL,
+#endif
+#ifdef USE_UART8_RTS_Pin
+    &UART8_rts,
+#else
+    NULL,
+#endif
+#ifdef USE_UART8_CTS_Pin
+    &UART8_cts,
+#else
+    NULL,
+#endif
+  },
+  UART8_IRQn,
+#ifdef UART8_TX_DMA_Stream
+  &UART8_TX_DMA,
+#else
+  NULL,
+#endif
+#ifdef UART8_RX_DMA_Stream
+  &UART8_RX_DMA,
+#else
+  NULL,
+#endif
+  &UART8_Info,
+  &UART8_TransferInfo
 };
 #endif
 
@@ -2218,26 +3042,26 @@ ARM_DRIVER_USART Driver_USART3 = {
 
 #ifdef USE_UART4
 /* USART4 Driver Wrapper functions */
-static ARM_USART_CAPABILITIES  USART4_GetCapabilities (void)                                                { return USART_GetCapabilities (&USART4_Resources); }
-static int32_t                 USART4_Initialize      (ARM_USART_SignalEvent_t cb_event)                    { return USART_Initialize (cb_event, &USART4_Resources); }
-static int32_t                 USART4_Uninitialize    (void)                                                { return USART_Uninitialize (&USART4_Resources); }
-static int32_t                 USART4_PowerControl    (ARM_POWER_STATE state)                               { return USART_PowerControl (state, &USART4_Resources); }
-static int32_t                 USART4_Send            (const void *data, uint32_t num)                      { return USART_Send (data, num, &USART4_Resources); }
-static int32_t                 USART4_Receive         (void *data, uint32_t num)                            { return USART_Receive (data, num, &USART4_Resources); }
-static int32_t                 USART4_Transfer        (const void *data_out, void *data_in, uint32_t num)   { return USART_Transfer (data_out, data_in, num, &USART4_Resources); }
-static uint32_t                USART4_GetTxCount      (void)                                                { return USART_GetTxCount (&USART4_Resources); }
-static uint32_t                USART4_GetRxCount      (void)                                                { return USART_GetRxCount (&USART4_Resources); }
-static int32_t                 USART4_Control         (uint32_t control, uint32_t arg)                      { return USART_Control (control, arg, &USART4_Resources); }
-static ARM_USART_STATUS        USART4_GetStatus       (void)                                                { return USART_GetStatus (&USART4_Resources); }
-static int32_t                 USART4_SetModemControl (ARM_USART_MODEM_CONTROL control)                     { return USART_SetModemControl (control, &USART4_Resources); }
-static ARM_USART_MODEM_STATUS  USART4_GetModemStatus  (void)                                                { return USART_GetModemStatus (&USART4_Resources); }
-       void                    UART4_IRQHandler       (void)                                                {        USART_IRQHandler (&USART4_Resources); }
+static ARM_USART_CAPABILITIES  USART4_GetCapabilities (void)                                                { return USART_GetCapabilities (&UART4_Resources); }
+static int32_t                 USART4_Initialize      (ARM_USART_SignalEvent_t cb_event)                    { return USART_Initialize (cb_event, &UART4_Resources); }
+static int32_t                 USART4_Uninitialize    (void)                                                { return USART_Uninitialize (&UART4_Resources); }
+static int32_t                 USART4_PowerControl    (ARM_POWER_STATE state)                               { return USART_PowerControl (state, &UART4_Resources); }
+static int32_t                 USART4_Send            (const void *data, uint32_t num)                      { return USART_Send (data, num, &UART4_Resources); }
+static int32_t                 USART4_Receive         (void *data, uint32_t num)                            { return USART_Receive (data, num, &UART4_Resources); }
+static int32_t                 USART4_Transfer        (const void *data_out, void *data_in, uint32_t num)   { return USART_Transfer (data_out, data_in, num, &UART4_Resources); }
+static uint32_t                USART4_GetTxCount      (void)                                                { return USART_GetTxCount (&UART4_Resources); }
+static uint32_t                USART4_GetRxCount      (void)                                                { return USART_GetRxCount (&UART4_Resources); }
+static int32_t                 USART4_Control         (uint32_t control, uint32_t arg)                      { return USART_Control (control, arg, &UART4_Resources); }
+static ARM_USART_STATUS        USART4_GetStatus       (void)                                                { return USART_GetStatus (&UART4_Resources); }
+static int32_t                 USART4_SetModemControl (ARM_USART_MODEM_CONTROL control)                     { return USART_SetModemControl (control, &UART4_Resources); }
+static ARM_USART_MODEM_STATUS  USART4_GetModemStatus  (void)                                                { return USART_GetModemStatus (&UART4_Resources); }
+       void                    UART4_IRQHandler       (void)                                                {        USART_IRQHandler (&UART4_Resources); }
 
-#ifdef UART4_TX_DMA_Instance
-       void                    UART4_TX_DMA_Handler   (uint32_t events)                                     {        USART_TX_DMA_Callback(&USART4_Resources); }
+#ifdef UART4_TX_DMA_Stream
+       void                    UART4_TX_DMA_Handler   (uint32_t events)                                     {        DMA_IRQ_Handle(&UART4_TX_DMA, &UART4_Resources); }
 #endif
-#ifdef UART4_RX_DMA_Instance
-       void                    UART4_RX_DMA_Handler   (uint32_t events)                                     {        USART_RX_DMA_Callback(&USART4_Resources); }
+#ifdef UART4_RX_DMA_Stream
+       void                    UART4_RX_DMA_Handler   (uint32_t events)                                     {        DMA_IRQ_Handle(&UART4_RX_DMA, &UART4_Resources); }
 #endif
 
 /* USART4 Driver Control Block */
@@ -2261,26 +3085,26 @@ ARM_DRIVER_USART Driver_USART4 = {
 
 #ifdef USE_UART5
 /* USART5 Driver Wrapper functions */
-static ARM_USART_CAPABILITIES  USART5_GetCapabilities (void)                                                { return USART_GetCapabilities (&USART5_Resources); }
-static int32_t                 USART5_Initialize      (ARM_USART_SignalEvent_t cb_event)                    { return USART_Initialize (cb_event, &USART5_Resources); }
-static int32_t                 USART5_Uninitialize    (void)                                                { return USART_Uninitialize (&USART5_Resources); }
-static int32_t                 USART5_PowerControl    (ARM_POWER_STATE state)                               { return USART_PowerControl (state, &USART5_Resources); }
-static int32_t                 USART5_Send            (const void *data, uint32_t num)                      { return USART_Send (data, num, &USART5_Resources); }
-static int32_t                 USART5_Receive         (void *data, uint32_t num)                            { return USART_Receive (data, num, &USART5_Resources); }
-static int32_t                 USART5_Transfer        (const void *data_out, void *data_in, uint32_t num)   { return USART_Transfer (data_out, data_in, num, &USART5_Resources); }
-static uint32_t                USART5_GetTxCount      (void)                                                { return USART_GetTxCount (&USART5_Resources); }
-static uint32_t                USART5_GetRxCount      (void)                                                { return USART_GetRxCount (&USART5_Resources); }
-static int32_t                 USART5_Control         (uint32_t control, uint32_t arg)                      { return USART_Control (control, arg, &USART5_Resources); }
-static ARM_USART_STATUS        USART5_GetStatus       (void)                                                { return USART_GetStatus (&USART5_Resources); }
-static int32_t                 USART5_SetModemControl (ARM_USART_MODEM_CONTROL control)                     { return USART_SetModemControl (control, &USART5_Resources); }
-static ARM_USART_MODEM_STATUS  USART5_GetModemStatus  (void)                                                { return USART_GetModemStatus (&USART5_Resources); }
-       void                    UART5_IRQHandler       (void)                                                {        USART_IRQHandler (&USART5_Resources); }
+static ARM_USART_CAPABILITIES  USART5_GetCapabilities (void)                                                { return USART_GetCapabilities (&UART5_Resources); }
+static int32_t                 USART5_Initialize      (ARM_USART_SignalEvent_t cb_event)                    { return USART_Initialize (cb_event, &UART5_Resources); }
+static int32_t                 USART5_Uninitialize    (void)                                                { return USART_Uninitialize (&UART5_Resources); }
+static int32_t                 USART5_PowerControl    (ARM_POWER_STATE state)                               { return USART_PowerControl (state, &UART5_Resources); }
+static int32_t                 USART5_Send            (const void *data, uint32_t num)                      { return USART_Send (data, num, &UART5_Resources); }
+static int32_t                 USART5_Receive         (void *data, uint32_t num)                            { return USART_Receive (data, num, &UART5_Resources); }
+static int32_t                 USART5_Transfer        (const void *data_out, void *data_in, uint32_t num)   { return USART_Transfer (data_out, data_in, num, &UART5_Resources); }
+static uint32_t                USART5_GetTxCount      (void)                                                { return USART_GetTxCount (&UART5_Resources); }
+static uint32_t                USART5_GetRxCount      (void)                                                { return USART_GetRxCount (&UART5_Resources); }
+static int32_t                 USART5_Control         (uint32_t control, uint32_t arg)                      { return USART_Control (control, arg, &UART5_Resources); }
+static ARM_USART_STATUS        USART5_GetStatus       (void)                                                { return USART_GetStatus (&UART5_Resources); }
+static int32_t                 USART5_SetModemControl (ARM_USART_MODEM_CONTROL control)                     { return USART_SetModemControl (control, &UART5_Resources); }
+static ARM_USART_MODEM_STATUS  USART5_GetModemStatus  (void)                                                { return USART_GetModemStatus (&UART5_Resources); }
+       void                    UART5_IRQHandler       (void)                                                {        USART_IRQHandler (&UART5_Resources); }
 
-#ifdef UART5_TX_DMA_Instance
-       void                    UART5_TX_DMA_Handler   (uint32_t events)                                     {        USART_TX_DMA_Callback(&USART5_Resources); }
+#ifdef UART5_TX_DMA_Stream
+       void                    UART5_TX_DMA_Handler   (uint32_t events)                                     {        DMA_IRQ_Handle(&UART5_TX_DMA, &UART5_Resources); }
 #endif
-#ifdef UART5_RX_DMA_Instance
-       void                    UART5_RX_DMA_Handler   (uint32_t events)                                     {        USART_RX_DMA_Callback(&USART5_Resources); }
+#ifdef UART5_RX_DMA_Stream
+       void                    UART5_RX_DMA_Handler   (uint32_t events)                                     {        DMA_IRQ_Handle(&UART5_RX_DMA, &UART5_Resources); }
 #endif
 
 /* USART5 Driver Control Block */
@@ -2301,6 +3125,135 @@ ARM_DRIVER_USART Driver_USART5 = {
     USART5_GetModemStatus
 };
 #endif  /* USE_UART5 */
+
+#ifdef USE_USART6
+/* USART6 Driver Wrapper functions */
+static ARM_USART_CAPABILITIES  USART6_GetCapabilities (void)                                                { return USART_GetCapabilities (&USART6_Resources); }
+static int32_t                 USART6_Initialize      (ARM_USART_SignalEvent_t cb_event)                    { return USART_Initialize (cb_event, &USART6_Resources); }
+static int32_t                 USART6_Uninitialize    (void)                                                { return USART_Uninitialize (&USART6_Resources); }
+static int32_t                 USART6_PowerControl    (ARM_POWER_STATE state)                               { return USART_PowerControl (state, &USART6_Resources); }
+static int32_t                 USART6_Send            (const void *data, uint32_t num)                      { return USART_Send (data, num, &USART6_Resources); }
+static int32_t                 USART6_Receive         (void *data, uint32_t num)                            { return USART_Receive (data, num, &USART6_Resources); }
+static int32_t                 USART6_Transfer        (const void *data_out, void *data_in, uint32_t num)   { return USART_Transfer (data_out, data_in, num, &USART6_Resources); }
+static uint32_t                USART6_GetTxCount      (void)                                                { return USART_GetTxCount (&USART6_Resources); }
+static uint32_t                USART6_GetRxCount      (void)                                                { return USART_GetRxCount (&USART6_Resources); }
+static int32_t                 USART6_Control         (uint32_t control, uint32_t arg)                      { return USART_Control (control, arg, &USART6_Resources); }
+static ARM_USART_STATUS        USART6_GetStatus       (void)                                                { return USART_GetStatus (&USART6_Resources); }
+static int32_t                 USART6_SetModemControl (ARM_USART_MODEM_CONTROL control)                     { return USART_SetModemControl (control, &USART6_Resources); }
+static ARM_USART_MODEM_STATUS  USART6_GetModemStatus  (void)                                                { return USART_GetModemStatus (&USART6_Resources); }
+       void                    USART6_IRQHandler      (void)                                                {        USART_IRQHandler (&USART6_Resources); }
+
+#ifdef USART6_TX_DMA_Stream
+       void                    USART6_TX_DMA_Handler  (uint32_t events)                                     {        DMA_IRQ_Handle(&USART6_TX_DMA, &USART6_Resources); }
+#endif
+#ifdef USART6_RX_DMA_Stream
+       void                    USART6_RX_DMA_Handler  (uint32_t events)                                     {        DMA_IRQ_Handle(&USART6_RX_DMA, &USART6_Resources); }
+#endif
+
+/* USART6 Driver Control Block */
+ARM_DRIVER_USART Driver_USART6 = {
+    USARTx_GetVersion,
+    USART6_GetCapabilities,
+    USART6_Initialize,
+    USART6_Uninitialize,
+    USART6_PowerControl,
+    USART6_Send,
+    USART6_Receive,
+    USART6_Transfer,
+    USART6_GetTxCount,
+    USART6_GetRxCount,
+    USART6_Control,
+    USART6_GetStatus,
+    USART6_SetModemControl,
+    USART6_GetModemStatus
+};
+#endif  /* USE_USART6 */
+
+#ifdef USE_UART7
+/* USART7 Driver Wrapper functions */
+static ARM_USART_CAPABILITIES  USART7_GetCapabilities (void)                                                { return USART_GetCapabilities (&UART7_Resources); }
+static int32_t                 USART7_Initialize      (ARM_USART_SignalEvent_t cb_event)                    { return USART_Initialize (cb_event, &UART7_Resources); }
+static int32_t                 USART7_Uninitialize    (void)                                                { return USART_Uninitialize (&UART7_Resources); }
+static int32_t                 USART7_PowerControl    (ARM_POWER_STATE state)                               { return USART_PowerControl (state, &UART7_Resources); }
+static int32_t                 USART7_Send            (const void *data, uint32_t num)                      { return USART_Send (data, num, &UART7_Resources); }
+static int32_t                 USART7_Receive         (void *data, uint32_t num)                            { return USART_Receive (data, num, &UART7_Resources); }
+static int32_t                 USART7_Transfer        (const void *data_out, void *data_in, uint32_t num)   { return USART_Transfer (data_out, data_in, num, &UART7_Resources); }
+static uint32_t                USART7_GetTxCount      (void)                                                { return USART_GetTxCount (&UART7_Resources); }
+static uint32_t                USART7_GetRxCount      (void)                                                { return USART_GetRxCount (&UART7_Resources); }
+static int32_t                 USART7_Control         (uint32_t control, uint32_t arg)                      { return USART_Control (control, arg, &UART7_Resources); }
+static ARM_USART_STATUS        USART7_GetStatus       (void)                                                { return USART_GetStatus (&UART7_Resources); }
+static int32_t                 USART7_SetModemControl (ARM_USART_MODEM_CONTROL control)                     { return USART_SetModemControl (control, &UART7_Resources); }
+static ARM_USART_MODEM_STATUS  USART7_GetModemStatus  (void)                                                { return USART_GetModemStatus (&UART7_Resources); }
+       void                    UART7_IRQHandler       (void)                                                {        USART_IRQHandler (&UART7_Resources); }
+
+#ifdef UART7_TX_DMA_Stream
+       void                    UART7_TX_DMA_Handler   (uint32_t events)                                     {        DMA_IRQ_Handle(&UART7_TX_DMA, &UART7_Resources); }
+#endif
+#ifdef UART7_RX_DMA_Stream
+       void                    UART7_RX_DMA_Handler   (uint32_t events)                                     {        DMA_IRQ_Handle(&UART7_RX_DMA, &UART7_Resources); }
+#endif
+
+/* USART7 Driver Control Block */
+ARM_DRIVER_USART Driver_USART7 = {
+    USARTx_GetVersion,
+    USART7_GetCapabilities,
+    USART7_Initialize,
+    USART7_Uninitialize,
+    USART7_PowerControl,
+    USART7_Send,
+    USART7_Receive,
+    USART7_Transfer,
+    USART7_GetTxCount,
+    USART7_GetRxCount,
+    USART7_Control,
+    USART7_GetStatus,
+    USART7_SetModemControl,
+    USART7_GetModemStatus
+};
+#endif  /* USE_UART7 */
+
+#ifdef USE_UART8
+/* USART8 Driver Wrapper functions */
+static ARM_USART_CAPABILITIES  USART8_GetCapabilities (void)                                                { return USART_GetCapabilities (&UART8_Resources); }
+static int32_t                 USART8_Initialize      (ARM_USART_SignalEvent_t cb_event)                    { return USART_Initialize (cb_event, &UART8_Resources); }
+static int32_t                 USART8_Uninitialize    (void)                                                { return USART_Uninitialize (&UART8_Resources); }
+static int32_t                 USART8_PowerControl    (ARM_POWER_STATE state)                               { return USART_PowerControl (state, &UART8_Resources); }
+static int32_t                 USART8_Send            (const void *data, uint32_t num)                      { return USART_Send (data, num, &UART8_Resources); }
+static int32_t                 USART8_Receive         (void *data, uint32_t num)                            { return USART_Receive (data, num, &UART8_Resources); }
+static int32_t                 USART8_Transfer        (const void *data_out, void *data_in, uint32_t num)   { return USART_Transfer (data_out, data_in, num, &UART8_Resources); }
+static uint32_t                USART8_GetTxCount      (void)                                                { return USART_GetTxCount (&UART8_Resources); }
+static uint32_t                USART8_GetRxCount      (void)                                                { return USART_GetRxCount (&UART8_Resources); }
+static int32_t                 USART8_Control         (uint32_t control, uint32_t arg)                      { return USART_Control (control, arg, &UART8_Resources); }
+static ARM_USART_STATUS        USART8_GetStatus       (void)                                                { return USART_GetStatus (&UART8_Resources); }
+static int32_t                 USART8_SetModemControl (ARM_USART_MODEM_CONTROL control)                     { return USART_SetModemControl (control, &UART8_Resources); }
+static ARM_USART_MODEM_STATUS  USART8_GetModemStatus  (void)                                                { return USART_GetModemStatus (&UART8_Resources); }
+       void                    UART8_IRQHandler       (void)                                                {        USART_IRQHandler (&UART8_Resources); }
+
+#ifdef UART8_TX_DMA_Stream
+       void                    UART8_TX_DMA_Handler   (uint32_t events)                                     {        DMA_IRQ_Handle(&UART8_TX_DMA, &UART8_Resources); }
+#endif
+#ifdef UART8_RX_DMA_Stream
+       void                    UART8_RX_DMA_Handler   (uint32_t events)                                     {        DMA_IRQ_Handle(&UART8_RX_DMA, &UART8_Resources); }
+#endif
+
+/* USART8 Driver Control Block */
+ARM_DRIVER_USART Driver_USART8 = {
+    USARTx_GetVersion,
+    USART8_GetCapabilities,
+    USART8_Initialize,
+    USART8_Uninitialize,
+    USART8_PowerControl,
+    USART8_Send,
+    USART8_Receive,
+    USART8_Transfer,
+    USART8_GetTxCount,
+    USART8_GetRxCount,
+    USART8_Control,
+    USART8_GetStatus,
+    USART8_SetModemControl,
+    USART8_GetModemStatus
+};
+#endif  /* USE_UART8 */
 
 #endif
 

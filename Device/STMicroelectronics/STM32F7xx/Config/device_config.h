@@ -581,6 +581,474 @@
 
 // </e> UART4 (Universal asynchronous receiver transmitter) [Driver_USART4]
 
+// <e> UART5 (Universal asynchronous receiver transmitter) [Driver_USART5]
+// <i> Configuration settings for Driver_USART5 in component ::CMSIS Driver:USART
+#define DEV_UART5                      0
+
+//   <o> UART5_TX Pin <0=>Not Used <1=>PB6 <2=>PB9 <3=>PB13 <4=>PC12
+#define   DEV_UART5_TX_ID              0
+#if      (DEV_UART5_TX_ID == 0)
+  #define DEV_UART5_TX                 0
+#elif    (DEV_UART5_TX_ID == 1)
+  #define DEV_UART5_TX                 1
+  #define DEV_UART5_TX_PORT            GPIO_PORT_B
+  #define DEV_UART5_TX_PIN             GPIO_PIN_6
+  #define DEV_UART5_TX_FUNC            GPIO_PIN_FUNC_1
+#elif    (DEV_UART5_TX_ID == 2)
+  #define DEV_UART5_TX                 1
+  #define DEV_UART5_TX_PORT            GPIO_PORT_B
+  #define DEV_UART5_TX_PIN             GPIO_PIN_9
+  #define DEV_UART5_TX_FUNC            GPIO_PIN_FUNC_7
+#elif    (DEV_UART5_TX_ID == 3)
+  #define DEV_UART5_TX                 1
+  #define DEV_UART5_TX_PORT            GPIO_PORT_B
+  #define DEV_UART5_TX_PIN             GPIO_PIN_13
+  #define DEV_UART5_TX_FUNC            GPIO_PIN_FUNC_8
+#elif    (DEV_UART5_TX_ID == 4)
+  #define DEV_UART5_TX                 1
+  #define DEV_UART5_TX_PORT            GPIO_PORT_C
+  #define DEV_UART5_TX_PIN             GPIO_PIN_12
+  #define DEV_UART5_TX_FUNC            GPIO_PIN_FUNC_8
+#else
+  #error "Invalid UART5_TX Pin Configuration!"
+#endif
+
+//   <o> UART5_RX Pin <0=>Not Used <1=>PB5 <2=>PB8 <3=>PB12 <4=>PD2
+#define   DEV_UART5_RX_ID              0
+#if      (DEV_UART5_RX_ID == 0)
+  #define DEV_UART5_RX                 0
+#elif    (DEV_UART5_RX_ID == 1)
+  #define DEV_UART5_RX                 1
+  #define DEV_UART5_RX_PORT            GPIO_PORT_B
+  #define DEV_UART5_RX_PIN             GPIO_PIN_5
+  #define DEV_UART5_RX_FUNC            GPIO_PIN_FUNC_1
+#elif    (DEV_UART5_RX_ID == 2)
+  #define DEV_UART5_RX                 1
+  #define DEV_UART5_RX_PORT            GPIO_PORT_B
+  #define DEV_UART5_RX_PIN             GPIO_PIN_8
+  #define DEV_UART5_RX_FUNC            GPIO_PIN_FUNC_7
+#elif    (DEV_UART5_RX_ID == 3)
+  #define DEV_UART5_RX                 1
+  #define DEV_UART5_RX_PORT            GPIO_PORT_B
+  #define DEV_UART5_RX_PIN             GPIO_PIN_12
+  #define DEV_UART5_RX_FUNC            GPIO_PIN_FUNC_8
+#elif    (DEV_UART5_RX_ID == 4)
+  #define DEV_UART5_RX                 1
+  #define DEV_UART5_RX_PORT            GPIO_PORT_D
+  #define DEV_UART5_RX_PIN             GPIO_PIN_2
+  #define DEV_UART5_RX_FUNC            GPIO_PIN_FUNC_8
+#else
+  #error "Invalid UART5_RX Pin Configuration!"
+#endif
+
+//   <o> UART5_CTS Pin <0=>Not Used <1=>PC9
+#define   DEV_UART5_CTS_ID             0
+#if      (DEV_UART5_CTS_ID == 0)
+  #define DEV_UART5_CTS                0
+#elif    (DEV_UART5_CTS_ID == 1)
+  #define DEV_UART5_CTS                1
+  #define DEV_UART5_CTS_PORT           GPIO_PORT_C
+  #define DEV_UART5_CTS_PIN            GPIO_PIN_9
+  #define DEV_UART5_CTS_FUNC           GPIO_PIN_FUNC_7
+#else
+  #error "Invalid UART5_CTS Pin Configuration!"
+#endif
+
+//   <o> UART5_RTS Pin <0=>Not Used <1=>PC8
+#define   DEV_UART5_RTS_ID             0
+#if      (DEV_UART5_RTS_ID == 0)
+  #define DEV_UART5_RTS                0
+#elif    (DEV_UART5_RTS_ID == 1)
+  #define DEV_UART5_RTS                1
+  #define DEV_UART5_RTS_PORT           GPIO_PORT_C
+  #define DEV_UART5_RTS_PIN            GPIO_PIN_8
+  #define DEV_UART5_RTS_FUNC           GPIO_PIN_FUNC_7
+#else
+  #error "Invalid UART5_RTS Pin Configuration!"
+#endif
+
+//   <e> DMA Rx
+//     <o1> Number <1=>1
+//     <i>  Selects DMA Number (only DMA1 can be used)
+//     <o2> Stream <0=>0
+//     <i>  Selects DMA Stream (only Stream 0 can be used)
+//     <o3> Channel <4=>4
+//     <i>  Selects DMA Channel (only Channel 4 can be used)
+//     <o4> Priority <0=>Low <1=>Medium <2=>High <3=>Very High
+//     <i>  Selects DMA Priority
+//   </e>
+#define DEV_UART5_RX_DMA               0
+#define DEV_UART5_RX_DMA_NUMBER        1
+#define DEV_UART5_RX_DMA_STREAM        0
+#define DEV_UART5_RX_DMA_CHANNEL       4
+#define DEV_UART5_RX_DMA_PRIORITY      0
+
+//   <e> DMA Tx
+//     <o1> Number <1=>1
+//     <i>  Selects DMA Number (only DMA1 can be used)
+//     <o2> Stream <7=>7
+//     <i>  Selects DMA Stream (only Stream 7 can be used)
+//     <o3> Channel <4=>4
+//     <i>  Selects DMA Channel (only Channel 4 can be used)
+//     <o4> Priority <0=>Low <1=>Medium <2=>High <3=>Very High
+//     <i>  Selects DMA Priority
+//   </e>
+#define DEV_UART5_TX_DMA               0
+#define DEV_UART5_TX_DMA_NUMBER        1
+#define DEV_UART5_TX_DMA_STREAM        7
+#define DEV_UART5_TX_DMA_CHANNEL       4
+#define DEV_UART5_TX_DMA_PRIORITY      0
+
+// </e> UART5 (Universal asynchronous receiver transmitter) [Driver_USART5]
+
+// <e> USART6 (Universal synchronous asynchronous receiver transmitter) [Driver_USART6]
+// <i> Configuration settings for Driver_USART6 in component ::CMSIS Driver:USART
+#define DEV_USART6                      0
+
+//   <o> USART6_TX Pin <0=>Not Used <1=>PC6 <2=>PG14
+#define   DEV_USART6_TX_ID              0
+#if      (DEV_USART6_TX_ID == 0)
+  #define DEV_USART6_TX                 0
+#elif    (DEV_USART6_TX_ID == 1)
+  #define DEV_USART6_TX                 1
+  #define DEV_USART6_TX_PORT            GPIO_PORT_C
+  #define DEV_USART6_TX_PIN             GPIO_PIN_6
+  #define DEV_USART6_TX_FUNC            GPIO_PIN_FUNC_8
+#elif    (DEV_USART6_TX_ID == 2)
+  #define DEV_USART6_TX                 1
+  #define DEV_USART6_TX_PORT            GPIO_PORT_G
+  #define DEV_USART6_TX_PIN             GPIO_PIN_14
+  #define DEV_USART6_TX_FUNC            GPIO_PIN_FUNC_8
+#else
+  #error "Invalid USART6_TX Pin Configuration!"
+#endif
+
+//   <o> USART6_RX Pin <0=>Not Used <1=>PC7 <2=>PG9
+#define   DEV_USART6_RX_ID              0
+#if      (DEV_USART6_RX_ID == 0)
+  #define DEV_USART6_RX                 0
+#elif    (DEV_USART6_RX_ID == 1)
+  #define DEV_USART6_RX                 1
+  #define DEV_USART6_RX_PORT            GPIO_PORT_C
+  #define DEV_USART6_RX_PIN             GPIO_PIN_7
+  #define DEV_USART6_RX_FUNC            GPIO_PIN_FUNC_8
+#elif    (DEV_USART6_RX_ID == 2)
+  #define DEV_USART6_RX                 1
+  #define DEV_USART6_RX_PORT            GPIO_PORT_G
+  #define DEV_USART6_RX_PIN             GPIO_PIN_9
+  #define DEV_USART6_RX_FUNC            GPIO_PIN_FUNC_8
+#else
+  #error "Invalid USART6_RX Pin Configuration!"
+#endif
+
+//   <o> USART6_CK Pin <0=>Not Used <1=>PC8 <2=>PG7
+#define   DEV_USART6_CK_ID              0
+#if      (DEV_USART6_CK_ID == 0)
+  #define DEV_USART6_CK                 0
+#elif    (DEV_USART6_CK_ID == 1)
+  #define DEV_USART6_CK                 1
+  #define DEV_USART6_CK_PORT            GPIO_PORT_C
+  #define DEV_USART6_CK_PIN             GPIO_PIN_8
+  #define DEV_USART6_CK_FUNC            GPIO_PIN_FUNC_8
+#elif    (DEV_USART6_CK_ID == 2)
+  #define DEV_USART6_CK                 1
+  #define DEV_USART6_CK_PORT            GPIO_PORT_G
+  #define DEV_USART6_CK_PIN             GPIO_PIN_7
+  #define DEV_USART6_CK_FUNC            GPIO_PIN_FUNC_8
+#else
+  #error "Invalid USART6_CK Pin Configuration!"
+#endif
+
+//   <o> USART6_CTS Pin <0=>Not Used <1=>PG13 <2=>PG15
+#define   DEV_USART6_CTS_ID             0
+#if      (DEV_USART6_CTS_ID == 0)
+  #define DEV_USART6_CTS                0
+#elif    (DEV_USART6_CTS_ID == 1)
+  #define DEV_USART6_CTS                1
+  #define DEV_USART6_CTS_PORT           GPIO_PORT_G
+  #define DEV_USART6_CTS_PIN            GPIO_PIN_13
+  #define DEV_USART6_CTS_FUNC           GPIO_PIN_FUNC_8
+#elif    (DEV_USART6_CTS_ID == 2)
+  #define DEV_USART6_CTS                1
+  #define DEV_USART6_CTS_PORT           GPIO_PORT_G
+  #define DEV_USART6_CTS_PIN            GPIO_PIN_15
+  #define DEV_USART6_CTS_FUNC           GPIO_PIN_FUNC_8
+#else
+  #error "Invalid USART6_CTS Pin Configuration!"
+#endif
+
+//   <o> USART6_RTS Pin <0=>Not Used <1=>PG8 <2=>PG12
+#define   DEV_USART6_RTS_ID             0
+#if      (DEV_USART6_RTS_ID == 0)
+  #define DEV_USART6_RTS                0
+#elif    (DEV_USART6_RTS_ID == 1)
+  #define DEV_USART6_RTS                1
+  #define DEV_USART6_RTS_PORT           GPIO_PORT_G
+  #define DEV_USART6_RTS_PIN            GPIO_PIN_8
+  #define DEV_USART6_RTS_FUNC           GPIO_PIN_FUNC_8
+#elif    (DEV_USART6_RTS_ID == 2)
+  #define DEV_USART6_RTS                1
+  #define DEV_USART6_RTS_PORT           GPIO_PORT_G
+  #define DEV_USART6_RTS_PIN            GPIO_PIN_12
+  #define DEV_USART6_RTS_FUNC           GPIO_PIN_FUNC_8
+#else
+  #error "Invalid USART6_RTS Pin Configuration!"
+#endif
+
+//   <e> DMA Rx
+//     <o1> Number <2=>2
+//     <i>  Selects DMA Number (only DMA2 can be used)
+//     <o2> Stream <1=>1 <2=>2
+//     <i>  Selects DMA Stream (only Stream 1 or 2 can be used)
+//     <o3> Channel <5=>5
+//     <i>  Selects DMA Channel (only Channel 5 can be used)
+//     <o4> Priority <0=>Low <1=>Medium <2=>High <3=>Very High
+//     <i>  Selects DMA Priority
+//   </e>
+#define DEV_USART6_RX_DMA               0
+#define DEV_USART6_RX_DMA_NUMBER        2
+#define DEV_USART6_RX_DMA_STREAM        1
+#define DEV_USART6_RX_DMA_CHANNEL       5
+#define DEV_USART6_RX_DMA_PRIORITY      0
+
+//   <e> DMA Tx
+//     <o1> Number <2=>2
+//     <i>  Selects DMA Number (only DMA2 can be used)
+//     <o2> Stream <6=>6 <7=>7
+//     <i>  Selects DMA Stream (only Stream 6 or 7 can be used)
+//     <o3> Channel <5=>5
+//     <i>  Selects DMA Channel (only Channel 5 can be used)
+//     <o4> Priority <0=>Low <1=>Medium <2=>High <3=>Very High
+//     <i>  Selects DMA Priority
+//   </e>
+#define DEV_USART6_TX_DMA               0
+#define DEV_USART6_TX_DMA_NUMBER        2
+#define DEV_USART6_TX_DMA_STREAM        6
+#define DEV_USART6_TX_DMA_CHANNEL       5
+#define DEV_USART6_TX_DMA_PRIORITY      0
+
+// </e> USART6 (Universal synchronous asynchronous receiver transmitter) [Driver_USART6]
+
+// <e> UART7 (Universal asynchronous receiver transmitter) [Driver_USART7]
+// <i> Configuration settings for Driver_USART7 in component ::CMSIS Driver:USART
+#define DEV_UART7                      0
+
+//   <o> UART7_TX Pin <0=>Not Used <1=>PA15 <2=>PB4 <3=>PE8 <4=>PF7
+#define   DEV_UART7_TX_ID              0
+#if      (DEV_UART7_TX_ID == 0)
+  #define DEV_UART7_TX                 0
+#elif    (DEV_UART7_TX_ID == 1)
+  #define DEV_UART7_TX                 1
+  #define DEV_UART7_TX_PORT            GPIO_PORT_A
+  #define DEV_UART7_TX_PIN             GPIO_PIN_15
+  #define DEV_UART7_TX_FUNC            GPIO_PIN_FUNC_8
+#elif    (DEV_UART7_TX_ID == 2)
+  #define DEV_UART7_TX                 1
+  #define DEV_UART7_TX_PORT            GPIO_PORT_B
+  #define DEV_UART7_TX_PIN             GPIO_PIN_4
+  #define DEV_UART7_TX_FUNC            GPIO_PIN_FUNC_8
+#elif    (DEV_UART7_TX_ID == 3)
+  #define DEV_UART7_TX                 1
+  #define DEV_UART7_TX_PORT            GPIO_PORT_E
+  #define DEV_UART7_TX_PIN             GPIO_PIN_8
+  #define DEV_UART7_TX_FUNC            GPIO_PIN_FUNC_8
+#elif    (DEV_UART7_TX_ID == 4)
+  #define DEV_UART7_TX                 1
+  #define DEV_UART7_TX_PORT            GPIO_PORT_F
+  #define DEV_UART7_TX_PIN             GPIO_PIN_7
+  #define DEV_UART7_TX_FUNC            GPIO_PIN_FUNC_8
+#else
+  #error "Invalid UART7_TX Pin Configuration!"
+#endif
+
+//   <o> UART7_RX Pin <0=>Not Used <1=>PA8 <2=>PB3 <3=>PE7 <4=>PF6
+#define   DEV_UART7_RX_ID              0
+#if      (DEV_UART7_RX_ID == 0)
+  #define DEV_UART7_RX                 0
+#elif    (DEV_UART7_RX_ID == 1)
+  #define DEV_UART7_RX                 1
+  #define DEV_UART7_RX_PORT            GPIO_PORT_A
+  #define DEV_UART7_RX_PIN             GPIO_PIN_8
+  #define DEV_UART7_RX_FUNC            GPIO_PIN_FUNC_8
+#elif    (DEV_UART7_RX_ID == 2)
+  #define DEV_UART7_RX                 1
+  #define DEV_UART7_RX_PORT            GPIO_PORT_B
+  #define DEV_UART7_RX_PIN             GPIO_PIN_3
+  #define DEV_UART7_RX_FUNC            GPIO_PIN_FUNC_8
+#elif    (DEV_UART7_RX_ID == 3)
+  #define DEV_UART7_RX                 1
+  #define DEV_UART7_RX_PORT            GPIO_PORT_E
+  #define DEV_UART7_RX_PIN             GPIO_PIN_7
+  #define DEV_UART7_RX_FUNC            GPIO_PIN_FUNC_8
+#elif    (DEV_UART7_RX_ID == 4)
+  #define DEV_UART7_RX                 1
+  #define DEV_UART7_RX_PORT            GPIO_PORT_F
+  #define DEV_UART7_RX_PIN             GPIO_PIN_6
+  #define DEV_UART7_RX_FUNC            GPIO_PIN_FUNC_8
+#else
+  #error "Invalid UART7_RX Pin Configuration!"
+#endif
+
+//   <o> UART7_CTS Pin <0=>Not Used <1=>PE10 <2=>PF9
+#define   DEV_UART7_CTS_ID             0
+#if      (DEV_UART7_CTS_ID == 0)
+  #define DEV_UART7_CTS                0
+#elif    (DEV_UART7_CTS_ID == 1)
+  #define DEV_UART7_CTS                1
+  #define DEV_UART7_CTS_PORT           GPIO_PORT_E
+  #define DEV_UART7_CTS_PIN            GPIO_PIN_10
+  #define DEV_UART7_CTS_FUNC           GPIO_PIN_FUNC_8
+#elif    (DEV_UART7_CTS_ID == 2)
+  #define DEV_UART7_CTS                1
+  #define DEV_UART7_CTS_PORT           GPIO_PORT_F
+  #define DEV_UART7_CTS_PIN            GPIO_PIN_9
+  #define DEV_UART7_CTS_FUNC           GPIO_PIN_FUNC_8
+#else
+  #error "Invalid UART7_CTS Pin Configuration!"
+#endif
+
+//   <o> UART7_RTS Pin <0=>Not Used <1=>PE9 <2=>PF8
+#define   DEV_UART7_RTS_ID             0
+#if      (DEV_UART7_RTS_ID == 0)
+  #define DEV_UART7_RTS                0
+#elif    (DEV_UART7_RTS_ID == 1)
+  #define DEV_UART7_RTS                1
+  #define DEV_UART7_RTS_PORT           GPIO_PORT_E
+  #define DEV_UART7_RTS_PIN            GPIO_PIN_9
+  #define DEV_UART7_RTS_FUNC           GPIO_PIN_FUNC_8
+#elif    (DEV_UART7_RTS_ID == 2)
+  #define DEV_UART7_RTS                1
+  #define DEV_UART7_RTS_PORT           GPIO_PORT_F
+  #define DEV_UART7_RTS_PIN            GPIO_PIN_8
+  #define DEV_UART7_RTS_FUNC           GPIO_PIN_FUNC_8
+#else
+  #error "Invalid UART7_RTS Pin Configuration!"
+#endif
+
+//   <e> DMA Rx
+//     <o1> Number <1=>1
+//     <i>  Selects DMA Number (only DMA1 can be used)
+//     <o2> Stream <3=>3
+//     <i>  Selects DMA Stream (only Stream 3 can be used)
+//     <o3> Channel <5=>5
+//     <i>  Selects DMA Channel (only Channel 5 can be used)
+//     <o4> Priority <0=>Low <1=>Medium <2=>High <3=>Very High
+//     <i>  Selects DMA Priority
+//   </e>
+#define DEV_UART7_RX_DMA               0
+#define DEV_UART7_RX_DMA_NUMBER        1
+#define DEV_UART7_RX_DMA_STREAM        3
+#define DEV_UART7_RX_DMA_CHANNEL       5
+#define DEV_UART7_RX_DMA_PRIORITY      0
+
+//   <e> DMA Tx
+//     <o1> Number <1=>1
+//     <i>  Selects DMA Number (only DMA1 can be used)
+//     <o2> Stream <1=>1
+//     <i>  Selects DMA Stream (only Stream 1 can be used)
+//     <o3> Channel <5=>5
+//     <i>  Selects DMA Channel (only Channel 5 can be used)
+//     <o4> Priority <0=>Low <1=>Medium <2=>High <3=>Very High
+//     <i>  Selects DMA Priority
+//   </e>
+#define DEV_UART7_TX_DMA               0
+#define DEV_UART7_TX_DMA_NUMBER        1
+#define DEV_UART7_TX_DMA_STREAM        1
+#define DEV_UART7_TX_DMA_CHANNEL       5
+#define DEV_UART7_TX_DMA_PRIORITY      0
+
+// </e> UART7 (Universal asynchronous receiver transmitter) [Driver_USART7]
+
+// <e> UART8 (Universal asynchronous receiver transmitter) [Driver_USART8]
+// <i> Configuration settings for Driver_USART8 in component ::CMSIS Driver:USART
+#define DEV_UART8                      0
+
+//   <o> UART8_TX Pin <0=>Not Used <1=>PE1
+#define   DEV_UART8_TX_ID              0
+#if      (DEV_UART8_TX_ID == 0)
+  #define DEV_UART8_TX                 0
+#elif    (DEV_UART8_TX_ID == 1)
+  #define DEV_UART8_TX                 1
+  #define DEV_UART8_TX_PORT            GPIO_PORT_E
+  #define DEV_UART8_TX_PIN             GPIO_PIN_1
+  #define DEV_UART8_TX_FUNC            GPIO_PIN_FUNC_8
+#else
+  #error "Invalid UART8_TX Pin Configuration!"
+#endif
+
+//   <o> UART8_RX Pin <0=>Not Used <1=>PE0
+#define   DEV_UART8_RX_ID              0
+#if      (DEV_UART8_RX_ID == 0)
+  #define DEV_UART8_RX                 0
+#elif    (DEV_UART8_RX_ID == 1)
+  #define DEV_UART8_RX                 1
+  #define DEV_UART8_RX_PORT            GPIO_PORT_E
+  #define DEV_UART8_RX_PIN             GPIO_PIN_0
+  #define DEV_UART8_RX_FUNC            GPIO_PIN_FUNC_8
+#else
+  #error "Invalid UART8_RX Pin Configuration!"
+#endif
+
+//   <o> UART8_CTS Pin <0=>Not Used <1=>PD14
+#define   DEV_UART8_CTS_ID             0
+#if      (DEV_UART8_CTS_ID == 0)
+  #define DEV_UART8_CTS                0
+#elif    (DEV_UART8_CTS_ID == 1)
+  #define DEV_UART8_CTS                1
+  #define DEV_UART8_CTS_PORT           GPIO_PORT_D
+  #define DEV_UART8_CTS_PIN            GPIO_PIN_14
+  #define DEV_UART8_CTS_FUNC           GPIO_PIN_FUNC_8
+#else
+  #error "Invalid UART8_CTS Pin Configuration!"
+#endif
+
+//   <o> UART8_RTS Pin <0=>Not Used <1=>PD15
+#define   DEV_UART8_RTS_ID             0
+#if      (DEV_UART8_RTS_ID == 0)
+  #define DEV_UART8_RTS                0
+#elif    (DEV_UART8_RTS_ID == 1)
+  #define DEV_UART8_RTS                1
+  #define DEV_UART8_RTS_PORT           GPIO_PORT_D
+  #define DEV_UART8_RTS_PIN            GPIO_PIN_15
+  #define DEV_UART8_RTS_FUNC           GPIO_PIN_FUNC_8
+#else
+  #error "Invalid UART8_RTS Pin Configuration!"
+#endif
+
+//   <e> DMA Rx
+//     <o1> Number <1=>1
+//     <i>  Selects DMA Number (only DMA1 can be used)
+//     <o2> Stream <6=>6
+//     <i>  Selects DMA Stream (only Stream 6 can be used)
+//     <o3> Channel <5=>5
+//     <i>  Selects DMA Channel (only Channel 5 can be used)
+//     <o4> Priority <0=>Low <1=>Medium <2=>High <3=>Very High
+//     <i>  Selects DMA Priority
+//   </e>
+#define DEV_UART8_RX_DMA               0
+#define DEV_UART8_RX_DMA_NUMBER        1
+#define DEV_UART8_RX_DMA_STREAM        6
+#define DEV_UART8_RX_DMA_CHANNEL       5
+#define DEV_UART8_RX_DMA_PRIORITY      0
+
+//   <e> DMA Tx
+//     <o1> Number <1=>1
+//     <i>  Selects DMA Number (only DMA1 can be used)
+//     <o2> Stream <0=>0
+//     <i>  Selects DMA Stream (only Stream 0 can be used)
+//     <o3> Channel <5=>5
+//     <i>  Selects DMA Channel (only Channel 5 can be used)
+//     <o4> Priority <0=>Low <1=>Medium <2=>High <3=>Very High
+//     <i>  Selects DMA Priority
+//   </e>
+#define DEV_UART8_TX_DMA               0
+#define DEV_UART8_TX_DMA_NUMBER        1
+#define DEV_UART8_TX_DMA_STREAM        0
+#define DEV_UART8_TX_DMA_CHANNEL       5
+#define DEV_UART8_TX_DMA_PRIORITY      0
+
+// </e> UART8 (Universal asynchronous receiver transmitter) [Driver_USART8]
+
 #endif  /* __DEVICE_CONFIG_H */
 
 /* ----------------------------- End of file ---------------------------------*/

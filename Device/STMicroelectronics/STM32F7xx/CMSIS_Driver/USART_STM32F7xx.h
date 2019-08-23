@@ -184,38 +184,310 @@
   #endif
 
   #if (DEV_USART3_TX == 1)
-    #define USE_USART3_TX_Pin       1
-    #define USART3_TX_GPIO_PORT     DEV_USART3_TX_PORT
-    #define USART3_TX_GPIO_PIN      DEV_USART3_TX_PIN
-    #define USART3_TX_GPIO_FUNC     DEV_USART3_TX_FUNC
+    #define USE_USART3_TX_Pin         1
+    #define USART3_TX_GPIO_PORT       DEV_USART3_TX_PORT
+    #define USART3_TX_GPIO_PIN        DEV_USART3_TX_PIN
+    #define USART3_TX_GPIO_FUNC       DEV_USART3_TX_FUNC
   #endif
 
   #if (DEV_USART3_RX == 1)
-    #define USE_USART3_RX_Pin       1
-    #define USART3_RX_GPIO_PORT     DEV_USART3_RX_PORT
-    #define USART3_RX_GPIO_PIN      DEV_USART3_RX_PIN
-    #define USART3_RX_GPIO_FUNC     DEV_USART3_RX_FUNC
+    #define USE_USART3_RX_Pin         1
+    #define USART3_RX_GPIO_PORT       DEV_USART3_RX_PORT
+    #define USART3_RX_GPIO_PIN        DEV_USART3_RX_PIN
+    #define USART3_RX_GPIO_FUNC       DEV_USART3_RX_FUNC
   #endif
 
   #if (DEV_USART3_CK == 1)
-    #define USE_USART3_CK_Pin       1
-    #define USART3_CK_GPIO_PORT     DEV_USART3_CK_PORT
-    #define USART3_CK_GPIO_PIN      DEV_USART3_CK_PIN
-    #define USART3_CK_GPIO_FUNC     DEV_USART3_CK_FUNC
+    #define USE_USART3_CK_Pin         1
+    #define USART3_CK_GPIO_PORT       DEV_USART3_CK_PORT
+    #define USART3_CK_GPIO_PIN        DEV_USART3_CK_PIN
+    #define USART3_CK_GPIO_FUNC       DEV_USART3_CK_FUNC
   #endif
 
   #if (DEV_USART3_RTS == 1)
-    #define USE_USART3_RTS_Pin      1
-    #define USART3_RTS_GPIO_PORT    DEV_USART3_RTS_PORT
-    #define USART3_RTS_GPIO_PIN     DEV_USART3_RTS_PIN
-    #define USART3_RTS_GPIO_FUNC    DEV_USART3_RTS_FUNC
+    #define USE_USART3_RTS_Pin        1
+    #define USART3_RTS_GPIO_PORT      DEV_USART3_RTS_PORT
+    #define USART3_RTS_GPIO_PIN       DEV_USART3_RTS_PIN
+    #define USART3_RTS_GPIO_FUNC      DEV_USART3_RTS_FUNC
   #endif
 
   #if (DEV_USART3_CTS == 1)
-    #define USE_USART3_CTS_Pin      1
-    #define USART3_CTS_GPIO_PORT    DEV_USART3_CTS_PORT
-    #define USART3_CTS_GPIO_PIN     DEV_USART3_CTS_PIN
-    #define USART3_CTS_GPIO_FUNC    DEV_USART3_CTS_FUNC
+    #define USE_USART3_CTS_Pin        1
+    #define USART3_CTS_GPIO_PORT      DEV_USART3_CTS_PORT
+    #define USART3_CTS_GPIO_PIN       DEV_USART3_CTS_PIN
+    #define USART3_CTS_GPIO_FUNC      DEV_USART3_CTS_FUNC
+  #endif
+#endif
+
+/* UART4 configuration definitions */
+#if defined(DEV_UART4) && (DEV_UART4 == 1)
+  #define USE_UART4
+
+  #if !defined(UART4)
+    #error "UART4 not available for selected device!"
+    #undef USE_UART4
+  #endif
+
+  #if (DEV_UART4_RX_DMA == 1)
+    #define UART4_RX_DMA_Stream      DMAx_STREAMy(DEV_UART4_RX_DMA_NUMBER, DEV_UART4_RX_DMA_STREAM)
+    #define UART4_RX_DMA_IRQn        DMAx_STREAMy_IRQn(DEV_UART4_RX_DMA_NUMBER, DEV_UART4_RX_DMA_STREAM)
+    #define UART4_RX_DMA_Channel     DMA_CHANNEL_x(DEV_UART4_RX_DMA_CHANNEL)
+    #define UART4_RX_DMA_Priority    DMA_PRIORITY(DEV_UART4_RX_DMA_PRIORITY)
+    #define UART4_RX_DMA_Handler     DMAx_STREAMy_IRQ(DEV_UART4_RX_DMA_NUMBER, DEV_UART4_RX_DMA_STREAM)
+  #endif
+  #if (DEV_UART4_TX_DMA == 1)
+    #define UART4_TX_DMA_Stream      DMAx_STREAMy(DEV_UART4_TX_DMA_NUMBER, DEV_UART4_TX_DMA_STREAM)
+    #define UART4_TX_DMA_IRQn        DMAx_STREAMy_IRQn(DEV_UART4_TX_DMA_NUMBER, DEV_UART4_TX_DMA_STREAM)
+    #define UART4_TX_DMA_Channel     DMA_CHANNEL_x(DEV_UART4_TX_DMA_CHANNEL)
+    #define UART4_TX_DMA_Priority    DMA_PRIORITY(DEV_UART4_TX_DMA_PRIORITY)
+    #define UART4_TX_DMA_Handler     DMAx_STREAMy_IRQ(DEV_UART4_TX_DMA_NUMBER, DEV_UART4_TX_DMA_STREAM)
+  #endif
+
+  #if (DEV_UART4_TX == 1)
+    #define USE_UART4_TX_Pin         1
+    #define UART4_TX_GPIO_PORT       DEV_UART4_TX_PORT
+    #define UART4_TX_GPIO_PIN        DEV_UART4_TX_PIN
+    #define UART4_TX_GPIO_FUNC       DEV_UART4_TX_FUNC
+  #endif
+
+  #if (DEV_UART4_RX == 1)
+    #define USE_UART4_RX_Pin         1
+    #define UART4_RX_GPIO_PORT       DEV_UART4_RX_PORT
+    #define UART4_RX_GPIO_PIN        DEV_UART4_RX_PIN
+    #define UART4_RX_GPIO_FUNC       DEV_UART4_RX_FUNC
+  #endif
+
+  #if (DEV_UART4_RTS == 1)
+    #define USE_UART4_RTS_Pin        1
+    #define UART4_RTS_GPIO_PORT      DEV_UART4_RTS_PORT
+    #define UART4_RTS_GPIO_PIN       DEV_UART4_RTS_PIN
+    #define UART4_RTS_GPIO_FUNC      DEV_UART4_RTS_FUNC
+  #endif
+
+  #if (DEV_UART4_CTS == 1)
+    #define USE_UART4_CTS_Pin        1
+    #define UART4_CTS_GPIO_PORT      DEV_UART4_CTS_PORT
+    #define UART4_CTS_GPIO_PIN       DEV_UART4_CTS_PIN
+    #define UART4_CTS_GPIO_FUNC      DEV_UART4_CTS_FUNC
+  #endif
+#endif
+
+/* UART5 configuration definitions */
+#if defined(DEV_UART5) && (DEV_UART5 == 1)
+  #define USE_UART5
+
+  #if !defined(UART5)
+    #error "UART5 not available for selected device!"
+    #undef USE_UART5
+  #endif
+
+  #if (DEV_UART5_RX_DMA == 1)
+    #define UART5_RX_DMA_Stream      DMAx_STREAMy(DEV_UART5_RX_DMA_NUMBER, DEV_UART5_RX_DMA_STREAM)
+    #define UART5_RX_DMA_IRQn        DMAx_STREAMy_IRQn(DEV_UART5_RX_DMA_NUMBER, DEV_UART5_RX_DMA_STREAM)
+    #define UART5_RX_DMA_Channel     DMA_CHANNEL_x(DEV_UART5_RX_DMA_CHANNEL)
+    #define UART5_RX_DMA_Priority    DMA_PRIORITY(DEV_UART5_RX_DMA_PRIORITY)
+    #define UART5_RX_DMA_Handler     DMAx_STREAMy_IRQ(DEV_UART5_RX_DMA_NUMBER, DEV_UART5_RX_DMA_STREAM)
+  #endif
+  #if (DEV_UART5_TX_DMA == 1)
+    #define UART5_TX_DMA_Stream      DMAx_STREAMy(DEV_UART5_TX_DMA_NUMBER, DEV_UART5_TX_DMA_STREAM)
+    #define UART5_TX_DMA_IRQn        DMAx_STREAMy_IRQn(DEV_UART5_TX_DMA_NUMBER, DEV_UART5_TX_DMA_STREAM)
+    #define UART5_TX_DMA_Channel     DMA_CHANNEL_x(DEV_UART5_TX_DMA_CHANNEL)
+    #define UART5_TX_DMA_Priority    DMA_PRIORITY(DEV_UART5_TX_DMA_PRIORITY)
+    #define UART5_TX_DMA_Handler     DMAx_STREAMy_IRQ(DEV_UART5_TX_DMA_NUMBER, DEV_UART5_TX_DMA_STREAM)
+  #endif
+
+  #if (DEV_UART5_TX == 1)
+    #define USE_UART5_TX_Pin         1
+    #define UART5_TX_GPIO_PORT       DEV_UART5_TX_PORT
+    #define UART5_TX_GPIO_PIN        DEV_UART5_TX_PIN
+    #define UART5_TX_GPIO_FUNC       DEV_UART5_TX_FUNC
+  #endif
+
+  #if (DEV_UART5_RX == 1)
+    #define USE_UART5_RX_Pin         1
+    #define UART5_RX_GPIO_PORT       DEV_UART5_RX_PORT
+    #define UART5_RX_GPIO_PIN        DEV_UART5_RX_PIN
+    #define UART5_RX_GPIO_FUNC       DEV_UART5_RX_FUNC
+  #endif
+
+  #if (DEV_UART5_RTS == 1)
+    #define USE_UART5_RTS_Pin        1
+    #define UART5_RTS_GPIO_PORT      DEV_UART5_RTS_PORT
+    #define UART5_RTS_GPIO_PIN       DEV_UART5_RTS_PIN
+    #define UART5_RTS_GPIO_FUNC      DEV_UART5_RTS_FUNC
+  #endif
+
+  #if (DEV_UART5_CTS == 1)
+    #define USE_UART5_CTS_Pin        1
+    #define UART5_CTS_GPIO_PORT      DEV_UART5_CTS_PORT
+    #define UART5_CTS_GPIO_PIN       DEV_UART5_CTS_PIN
+    #define UART5_CTS_GPIO_FUNC      DEV_UART5_CTS_FUNC
+  #endif
+#endif
+
+/* USART6 configuration definitions */
+#if defined(DEV_USART6) && (DEV_USART6 == 1)
+  #define USE_USART6
+
+  #if !defined(USART6)
+    #error "USART6 not available for selected device!"
+    #undef USE_USART6
+  #endif
+
+  #if (DEV_USART6_RX_DMA == 1)
+    #define USART6_RX_DMA_Stream      DMAx_STREAMy(DEV_USART6_RX_DMA_NUMBER, DEV_USART6_RX_DMA_STREAM)
+    #define USART6_RX_DMA_IRQn        DMAx_STREAMy_IRQn(DEV_USART6_RX_DMA_NUMBER, DEV_USART6_RX_DMA_STREAM)
+    #define USART6_RX_DMA_Channel     DMA_CHANNEL_x(DEV_USART6_RX_DMA_CHANNEL)
+    #define USART6_RX_DMA_Priority    DMA_PRIORITY(DEV_USART6_RX_DMA_PRIORITY)
+    #define USART6_RX_DMA_Handler     DMAx_STREAMy_IRQ(DEV_USART6_RX_DMA_NUMBER, DEV_USART6_RX_DMA_STREAM)
+  #endif
+  #if (DEV_USART6_TX_DMA == 1)
+    #define USART6_TX_DMA_Stream      DMAx_STREAMy(DEV_USART6_TX_DMA_NUMBER, DEV_USART6_TX_DMA_STREAM)
+    #define USART6_TX_DMA_IRQn        DMAx_STREAMy_IRQn(DEV_USART6_TX_DMA_NUMBER, DEV_USART6_TX_DMA_STREAM)
+    #define USART6_TX_DMA_Channel     DMA_CHANNEL_x(DEV_USART6_TX_DMA_CHANNEL)
+    #define USART6_TX_DMA_Priority    DMA_PRIORITY(DEV_USART6_TX_DMA_PRIORITY)
+    #define USART6_TX_DMA_Handler     DMAx_STREAMy_IRQ(DEV_USART6_TX_DMA_NUMBER, DEV_USART6_TX_DMA_STREAM)
+  #endif
+
+  #if (DEV_USART6_TX == 1)
+    #define USE_USART6_TX_Pin         1
+    #define USART6_TX_GPIO_PORT       DEV_USART6_TX_PORT
+    #define USART6_TX_GPIO_PIN        DEV_USART6_TX_PIN
+    #define USART6_TX_GPIO_FUNC       DEV_USART6_TX_FUNC
+  #endif
+
+  #if (DEV_USART6_RX == 1)
+    #define USE_USART6_RX_Pin         1
+    #define USART6_RX_GPIO_PORT       DEV_USART6_RX_PORT
+    #define USART6_RX_GPIO_PIN        DEV_USART6_RX_PIN
+    #define USART6_RX_GPIO_FUNC       DEV_USART6_RX_FUNC
+  #endif
+
+  #if (DEV_USART6_CK == 1)
+    #define USE_USART6_CK_Pin         1
+    #define USART6_CK_GPIO_PORT       DEV_USART6_CK_PORT
+    #define USART6_CK_GPIO_PIN        DEV_USART6_CK_PIN
+    #define USART6_CK_GPIO_FUNC       DEV_USART6_CK_FUNC
+  #endif
+
+  #if (DEV_USART6_RTS == 1)
+    #define USE_USART6_RTS_Pin        1
+    #define USART6_RTS_GPIO_PORT      DEV_USART6_RTS_PORT
+    #define USART6_RTS_GPIO_PIN       DEV_USART6_RTS_PIN
+    #define USART6_RTS_GPIO_FUNC      DEV_USART6_RTS_FUNC
+  #endif
+
+  #if (DEV_USART6_CTS == 1)
+    #define USE_USART6_CTS_Pin        1
+    #define USART6_CTS_GPIO_PORT      DEV_USART6_CTS_PORT
+    #define USART6_CTS_GPIO_PIN       DEV_USART6_CTS_PIN
+    #define USART6_CTS_GPIO_FUNC      DEV_USART6_CTS_FUNC
+  #endif
+#endif
+
+/* UART7 configuration definitions */
+#if defined(DEV_UART7) && (DEV_UART7 == 1)
+  #define USE_UART7
+
+  #if !defined(UART7)
+    #error "UART7 not available for selected device!"
+    #undef USE_UART7
+  #endif
+
+  #if (DEV_UART7_RX_DMA == 1)
+    #define UART7_RX_DMA_Stream      DMAx_STREAMy(DEV_UART7_RX_DMA_NUMBER, DEV_UART7_RX_DMA_STREAM)
+    #define UART7_RX_DMA_IRQn        DMAx_STREAMy_IRQn(DEV_UART7_RX_DMA_NUMBER, DEV_UART7_RX_DMA_STREAM)
+    #define UART7_RX_DMA_Channel     DMA_CHANNEL_x(DEV_UART7_RX_DMA_CHANNEL)
+    #define UART7_RX_DMA_Priority    DMA_PRIORITY(DEV_UART7_RX_DMA_PRIORITY)
+    #define UART7_RX_DMA_Handler     DMAx_STREAMy_IRQ(DEV_UART7_RX_DMA_NUMBER, DEV_UART7_RX_DMA_STREAM)
+  #endif
+  #if (DEV_UART7_TX_DMA == 1)
+    #define UART7_TX_DMA_Stream      DMAx_STREAMy(DEV_UART7_TX_DMA_NUMBER, DEV_UART7_TX_DMA_STREAM)
+    #define UART7_TX_DMA_IRQn        DMAx_STREAMy_IRQn(DEV_UART7_TX_DMA_NUMBER, DEV_UART7_TX_DMA_STREAM)
+    #define UART7_TX_DMA_Channel     DMA_CHANNEL_x(DEV_UART7_TX_DMA_CHANNEL)
+    #define UART7_TX_DMA_Priority    DMA_PRIORITY(DEV_UART7_TX_DMA_PRIORITY)
+    #define UART7_TX_DMA_Handler     DMAx_STREAMy_IRQ(DEV_UART7_TX_DMA_NUMBER, DEV_UART7_TX_DMA_STREAM)
+  #endif
+
+  #if (DEV_UART7_TX == 1)
+    #define USE_UART7_TX_Pin         1
+    #define UART7_TX_GPIO_PORT       DEV_UART7_TX_PORT
+    #define UART7_TX_GPIO_PIN        DEV_UART7_TX_PIN
+    #define UART7_TX_GPIO_FUNC       DEV_UART7_TX_FUNC
+  #endif
+
+  #if (DEV_UART7_RX == 1)
+    #define USE_UART7_RX_Pin         1
+    #define UART7_RX_GPIO_PORT       DEV_UART7_RX_PORT
+    #define UART7_RX_GPIO_PIN        DEV_UART7_RX_PIN
+    #define UART7_RX_GPIO_FUNC       DEV_UART7_RX_FUNC
+  #endif
+
+  #if (DEV_UART7_RTS == 1)
+    #define USE_UART7_RTS_Pin        1
+    #define UART7_RTS_GPIO_PORT      DEV_UART7_RTS_PORT
+    #define UART7_RTS_GPIO_PIN       DEV_UART7_RTS_PIN
+    #define UART7_RTS_GPIO_FUNC      DEV_UART7_RTS_FUNC
+  #endif
+
+  #if (DEV_UART7_CTS == 1)
+    #define USE_UART7_CTS_Pin        1
+    #define UART7_CTS_GPIO_PORT      DEV_UART7_CTS_PORT
+    #define UART7_CTS_GPIO_PIN       DEV_UART7_CTS_PIN
+    #define UART7_CTS_GPIO_FUNC      DEV_UART7_CTS_FUNC
+  #endif
+#endif
+
+/* UART8 configuration definitions */
+#if defined(DEV_UART8) && (DEV_UART8 == 1)
+  #define USE_UART8
+
+  #if !defined(UART8)
+    #error "UART8 not available for selected device!"
+    #undef USE_UART8
+  #endif
+
+  #if (DEV_UART8_RX_DMA == 1)
+    #define UART8_RX_DMA_Stream      DMAx_STREAMy(DEV_UART8_RX_DMA_NUMBER, DEV_UART8_RX_DMA_STREAM)
+    #define UART8_RX_DMA_IRQn        DMAx_STREAMy_IRQn(DEV_UART8_RX_DMA_NUMBER, DEV_UART8_RX_DMA_STREAM)
+    #define UART8_RX_DMA_Channel     DMA_CHANNEL_x(DEV_UART8_RX_DMA_CHANNEL)
+    #define UART8_RX_DMA_Priority    DMA_PRIORITY(DEV_UART8_RX_DMA_PRIORITY)
+    #define UART8_RX_DMA_Handler     DMAx_STREAMy_IRQ(DEV_UART8_RX_DMA_NUMBER, DEV_UART8_RX_DMA_STREAM)
+  #endif
+  #if (DEV_UART8_TX_DMA == 1)
+    #define UART8_TX_DMA_Stream      DMAx_STREAMy(DEV_UART8_TX_DMA_NUMBER, DEV_UART8_TX_DMA_STREAM)
+    #define UART8_TX_DMA_IRQn        DMAx_STREAMy_IRQn(DEV_UART8_TX_DMA_NUMBER, DEV_UART8_TX_DMA_STREAM)
+    #define UART8_TX_DMA_Channel     DMA_CHANNEL_x(DEV_UART8_TX_DMA_CHANNEL)
+    #define UART8_TX_DMA_Priority    DMA_PRIORITY(DEV_UART8_TX_DMA_PRIORITY)
+    #define UART8_TX_DMA_Handler     DMAx_STREAMy_IRQ(DEV_UART8_TX_DMA_NUMBER, DEV_UART8_TX_DMA_STREAM)
+  #endif
+
+  #if (DEV_UART8_TX == 1)
+    #define USE_UART8_TX_Pin         1
+    #define UART8_TX_GPIO_PORT       DEV_UART8_TX_PORT
+    #define UART8_TX_GPIO_PIN        DEV_UART8_TX_PIN
+    #define UART8_TX_GPIO_FUNC       DEV_UART8_TX_FUNC
+  #endif
+
+  #if (DEV_UART8_RX == 1)
+    #define USE_UART8_RX_Pin         1
+    #define UART8_RX_GPIO_PORT       DEV_UART8_RX_PORT
+    #define UART8_RX_GPIO_PIN        DEV_UART8_RX_PIN
+    #define UART8_RX_GPIO_FUNC       DEV_UART8_RX_FUNC
+  #endif
+
+  #if (DEV_UART8_RTS == 1)
+    #define USE_UART8_RTS_Pin        1
+    #define UART8_RTS_GPIO_PORT      DEV_UART8_RTS_PORT
+    #define UART8_RTS_GPIO_PIN       DEV_UART8_RTS_PIN
+    #define UART8_RTS_GPIO_FUNC      DEV_UART8_RTS_FUNC
+  #endif
+
+  #if (DEV_UART8_CTS == 1)
+    #define USE_UART8_CTS_Pin        1
+    #define UART8_CTS_GPIO_PORT      DEV_UART8_CTS_PORT
+    #define UART8_CTS_GPIO_PIN       DEV_UART8_CTS_PIN
+    #define UART8_CTS_GPIO_FUNC      DEV_UART8_CTS_FUNC
   #endif
 #endif
 
@@ -223,14 +495,20 @@
      defined(USART2_RX_DMA_Stream) || \
      defined(USART3_RX_DMA_Stream) || \
      defined( UART4_RX_DMA_Stream) || \
-     defined( UART5_RX_DMA_Stream))
+     defined( UART5_RX_DMA_Stream) || \
+     defined(USART6_RX_DMA_Stream) || \
+     defined( UART7_TX_DMA_Stream) || \
+     defined( UART8_TX_DMA_Stream))
 #define __USART_DMA_RX
 #endif
 #if (defined(USART1_TX_DMA_Stream) || \
      defined(USART2_TX_DMA_Stream) || \
      defined(USART3_TX_DMA_Stream) || \
      defined( UART4_TX_DMA_Stream) || \
-     defined( UART5_TX_DMA_Stream))
+     defined( UART5_TX_DMA_Stream) || \
+     defined(USART6_RX_DMA_Stream) || \
+     defined( UART7_TX_DMA_Stream) || \
+     defined( UART8_TX_DMA_Stream))
 #define __USART_DMA_TX
 #endif
 #if (defined(__USART_DMA_RX) && defined(__USART_DMA_TX))
