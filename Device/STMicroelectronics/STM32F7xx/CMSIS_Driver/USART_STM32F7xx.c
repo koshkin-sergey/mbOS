@@ -2912,347 +2912,92 @@ static void USART_RX_DMA_Callback(uint32_t event, const void *param)
 #endif
 
 #ifdef USE_USART1
-/* USART1 Driver Wrapper functions */
-static ARM_USART_CAPABILITIES  USART1_GetCapabilities (void)                                                { return USART_GetCapabilities (&USART1_Resources); }
-static int32_t                 USART1_Initialize      (ARM_USART_SignalEvent_t cb_event)                    { return USART_Initialize (cb_event, &USART1_Resources); }
-static int32_t                 USART1_Uninitialize    (void)                                                { return USART_Uninitialize (&USART1_Resources); }
-static int32_t                 USART1_PowerControl    (ARM_POWER_STATE state)                               { return USART_PowerControl (state, &USART1_Resources); }
-static int32_t                 USART1_Send            (const void *data, uint32_t num)                      { return USART_Send (data, num, &USART1_Resources); }
-static int32_t                 USART1_Receive         (void *data, uint32_t num)                            { return USART_Receive (data, num, &USART1_Resources); }
-static int32_t                 USART1_Transfer        (const void *data_out, void *data_in, uint32_t num)   { return USART_Transfer (data_out, data_in, num, &USART1_Resources); }
-static uint32_t                USART1_GetTxCount      (void)                                                { return USART_GetTxCount (&USART1_Resources); }
-static uint32_t                USART1_GetRxCount      (void)                                                { return USART_GetRxCount (&USART1_Resources); }
-static int32_t                 USART1_Control         (uint32_t control, uint32_t arg)                      { return USART_Control (control, arg, &USART1_Resources); }
-static ARM_USART_STATUS        USART1_GetStatus       (void)                                                { return USART_GetStatus (&USART1_Resources); }
-static int32_t                 USART1_SetModemControl (ARM_USART_MODEM_CONTROL control)                     { return USART_SetModemControl (control, &USART1_Resources); }
-static ARM_USART_MODEM_STATUS  USART1_GetModemStatus  (void)                                                { return USART_GetModemStatus (&USART1_Resources); }
-       void                    USART1_IRQHandler      (void)                                                {        USART_IRQHandler (&USART1_Resources); }
+  USARTx_EXPORT_DRIVER(1);
 
-#ifdef USART1_TX_DMA_Instance
-       void                    USART1_TX_DMA_Handler  (uint32_t events)                                     {        DMA_IRQ_Handle(&USART1_TX_DMA, &USART1_Resources); }
-#endif
-#ifdef USART1_RX_DMA_Instance
-       void                    USART1_RX_DMA_Handler  (uint32_t events)                                     {        DMA_IRQ_Handle(&USART1_RX_DMA, &USART1_Resources); }
-#endif
-
-/* USART1 Driver Control Block */
-ARM_DRIVER_USART Driver_USART1 = {
-    USARTx_GetVersion,
-    USART1_GetCapabilities,
-    USART1_Initialize,
-    USART1_Uninitialize,
-    USART1_PowerControl,
-    USART1_Send,
-    USART1_Receive,
-    USART1_Transfer,
-    USART1_GetTxCount,
-    USART1_GetRxCount,
-    USART1_Control,
-    USART1_GetStatus,
-    USART1_SetModemControl,
-    USART1_GetModemStatus
-};
+  #ifdef USART1_TX_DMA_Stream
+    USARTx_TX_DMA_ALLOC(1);
+  #endif
+  #ifdef USART1_RX_DMA_Stream
+    USARTx_RX_DMA_ALLOC(1);
+  #endif
 #endif  /* USE_USART1 */
 
 #ifdef USE_USART2
-/* USART2 Driver Wrapper functions */
-static ARM_USART_CAPABILITIES  USART2_GetCapabilities (void)                                                { return USART_GetCapabilities (&USART2_Resources); }
-static int32_t                 USART2_Initialize      (ARM_USART_SignalEvent_t cb_event)                    { return USART_Initialize (cb_event, &USART2_Resources); }
-static int32_t                 USART2_Uninitialize    (void)                                                { return USART_Uninitialize (&USART2_Resources); }
-static int32_t                 USART2_PowerControl    (ARM_POWER_STATE state)                               { return USART_PowerControl (state, &USART2_Resources); }
-static int32_t                 USART2_Send            (const void *data, uint32_t num)                      { return USART_Send (data, num, &USART2_Resources); }
-static int32_t                 USART2_Receive         (void *data, uint32_t num)                            { return USART_Receive (data, num, &USART2_Resources); }
-static int32_t                 USART2_Transfer        (const void *data_out, void *data_in, uint32_t num)   { return USART_Transfer (data_out, data_in, num, &USART2_Resources); }
-static uint32_t                USART2_GetTxCount      (void)                                                { return USART_GetTxCount (&USART2_Resources); }
-static uint32_t                USART2_GetRxCount      (void)                                                { return USART_GetRxCount (&USART2_Resources); }
-static int32_t                 USART2_Control         (uint32_t control, uint32_t arg)                      { return USART_Control (control, arg, &USART2_Resources); }
-static ARM_USART_STATUS        USART2_GetStatus       (void)                                                { return USART_GetStatus (&USART2_Resources); }
-static int32_t                 USART2_SetModemControl (ARM_USART_MODEM_CONTROL control)                     { return USART_SetModemControl (control, &USART2_Resources); }
-static ARM_USART_MODEM_STATUS  USART2_GetModemStatus  (void)                                                { return USART_GetModemStatus (&USART2_Resources); }
-       void                    USART2_IRQHandler      (void)                                                {        USART_IRQHandler (&USART2_Resources); }
+  USARTx_EXPORT_DRIVER(2);
 
-#ifdef USART2_TX_DMA_Instance
-       void                    USART2_TX_DMA_Handler  (uint32_t events)                                     {        DMA_IRQ_Handle(&USART2_TX_DMA, &USART2_Resources); }
-#endif
-#ifdef USART2_RX_DMA_Instance
-       void                    USART2_RX_DMA_Handler  (uint32_t events)                                     {        DMA_IRQ_Handle(&USART2_RX_DMA, &USART2_Resources); }
-#endif
-
-/* USART2 Driver Control Block */
-ARM_DRIVER_USART Driver_USART2 = {
-    USARTx_GetVersion,
-    USART2_GetCapabilities,
-    USART2_Initialize,
-    USART2_Uninitialize,
-    USART2_PowerControl,
-    USART2_Send,
-    USART2_Receive,
-    USART2_Transfer,
-    USART2_GetTxCount,
-    USART2_GetRxCount,
-    USART2_Control,
-    USART2_GetStatus,
-    USART2_SetModemControl,
-    USART2_GetModemStatus
-};
+  #ifdef USART2_TX_DMA_Stream
+    USARTx_TX_DMA_ALLOC(2);
+  #endif
+  #ifdef USART2_RX_DMA_Stream
+    USARTx_RX_DMA_ALLOC(2);
+  #endif
 #endif  /* USE_USART2 */
 
 #ifdef USE_USART3
-/* USART3 Driver Wrapper functions */
-static ARM_USART_CAPABILITIES  USART3_GetCapabilities (void)                                                { return USART_GetCapabilities (&USART3_Resources); }
-static int32_t                 USART3_Initialize      (ARM_USART_SignalEvent_t cb_event)                    { return USART_Initialize (cb_event, &USART3_Resources); }
-static int32_t                 USART3_Uninitialize    (void)                                                { return USART_Uninitialize (&USART3_Resources); }
-static int32_t                 USART3_PowerControl    (ARM_POWER_STATE state)                               { return USART_PowerControl (state, &USART3_Resources); }
-static int32_t                 USART3_Send            (const void *data, uint32_t num)                      { return USART_Send (data, num, &USART3_Resources); }
-static int32_t                 USART3_Receive         (void *data, uint32_t num)                            { return USART_Receive (data, num, &USART3_Resources); }
-static int32_t                 USART3_Transfer        (const void *data_out, void *data_in, uint32_t num)   { return USART_Transfer (data_out, data_in, num, &USART3_Resources); }
-static uint32_t                USART3_GetTxCount      (void)                                                { return USART_GetTxCount (&USART3_Resources); }
-static uint32_t                USART3_GetRxCount      (void)                                                { return USART_GetRxCount (&USART3_Resources); }
-static int32_t                 USART3_Control         (uint32_t control, uint32_t arg)                      { return USART_Control (control, arg, &USART3_Resources); }
-static ARM_USART_STATUS        USART3_GetStatus       (void)                                                { return USART_GetStatus (&USART3_Resources); }
-static int32_t                 USART3_SetModemControl (ARM_USART_MODEM_CONTROL control)                     { return USART_SetModemControl (control, &USART3_Resources); }
-static ARM_USART_MODEM_STATUS  USART3_GetModemStatus  (void)                                                { return USART_GetModemStatus (&USART3_Resources); }
-       void                    USART3_IRQHandler      (void)                                                {        USART_IRQHandler (&USART3_Resources); }
+  USARTx_EXPORT_DRIVER(3);
 
-#ifdef USART3_TX_DMA_Stream
-       void                    USART3_TX_DMA_Handler  (uint32_t events)                                     {        DMA_IRQ_Handle(&USART3_TX_DMA, &USART3_Resources); }
-#endif
-#ifdef USART3_RX_DMA_Stream
-       void                    USART3_RX_DMA_Handler  (uint32_t events)                                     {        DMA_IRQ_Handle(&USART3_RX_DMA, &USART3_Resources); }
-#endif
-
-/* USART3 Driver Control Block */
-ARM_DRIVER_USART Driver_USART3 = {
-    USARTx_GetVersion,
-    USART3_GetCapabilities,
-    USART3_Initialize,
-    USART3_Uninitialize,
-    USART3_PowerControl,
-    USART3_Send,
-    USART3_Receive,
-    USART3_Transfer,
-    USART3_GetTxCount,
-    USART3_GetRxCount,
-    USART3_Control,
-    USART3_GetStatus,
-    USART3_SetModemControl,
-    USART3_GetModemStatus
-};
+  #ifdef USART3_TX_DMA_Stream
+    USARTx_TX_DMA_ALLOC(3);
+  #endif
+  #ifdef USART3_RX_DMA_Stream
+    USARTx_RX_DMA_ALLOC(3);
+  #endif
 #endif  /* USE_USART3 */
 
 #ifdef USE_UART4
-/* USART4 Driver Wrapper functions */
-static ARM_USART_CAPABILITIES  USART4_GetCapabilities (void)                                                { return USART_GetCapabilities (&UART4_Resources); }
-static int32_t                 USART4_Initialize      (ARM_USART_SignalEvent_t cb_event)                    { return USART_Initialize (cb_event, &UART4_Resources); }
-static int32_t                 USART4_Uninitialize    (void)                                                { return USART_Uninitialize (&UART4_Resources); }
-static int32_t                 USART4_PowerControl    (ARM_POWER_STATE state)                               { return USART_PowerControl (state, &UART4_Resources); }
-static int32_t                 USART4_Send            (const void *data, uint32_t num)                      { return USART_Send (data, num, &UART4_Resources); }
-static int32_t                 USART4_Receive         (void *data, uint32_t num)                            { return USART_Receive (data, num, &UART4_Resources); }
-static int32_t                 USART4_Transfer        (const void *data_out, void *data_in, uint32_t num)   { return USART_Transfer (data_out, data_in, num, &UART4_Resources); }
-static uint32_t                USART4_GetTxCount      (void)                                                { return USART_GetTxCount (&UART4_Resources); }
-static uint32_t                USART4_GetRxCount      (void)                                                { return USART_GetRxCount (&UART4_Resources); }
-static int32_t                 USART4_Control         (uint32_t control, uint32_t arg)                      { return USART_Control (control, arg, &UART4_Resources); }
-static ARM_USART_STATUS        USART4_GetStatus       (void)                                                { return USART_GetStatus (&UART4_Resources); }
-static int32_t                 USART4_SetModemControl (ARM_USART_MODEM_CONTROL control)                     { return USART_SetModemControl (control, &UART4_Resources); }
-static ARM_USART_MODEM_STATUS  USART4_GetModemStatus  (void)                                                { return USART_GetModemStatus (&UART4_Resources); }
-       void                    UART4_IRQHandler       (void)                                                {        USART_IRQHandler (&UART4_Resources); }
+  UARTx_EXPORT_DRIVER(4);
 
-#ifdef UART4_TX_DMA_Stream
-       void                    UART4_TX_DMA_Handler   (uint32_t events)                                     {        DMA_IRQ_Handle(&UART4_TX_DMA, &UART4_Resources); }
-#endif
-#ifdef UART4_RX_DMA_Stream
-       void                    UART4_RX_DMA_Handler   (uint32_t events)                                     {        DMA_IRQ_Handle(&UART4_RX_DMA, &UART4_Resources); }
-#endif
-
-/* USART4 Driver Control Block */
-ARM_DRIVER_USART Driver_USART4 = {
-    USARTx_GetVersion,
-    USART4_GetCapabilities,
-    USART4_Initialize,
-    USART4_Uninitialize,
-    USART4_PowerControl,
-    USART4_Send,
-    USART4_Receive,
-    USART4_Transfer,
-    USART4_GetTxCount,
-    USART4_GetRxCount,
-    USART4_Control,
-    USART4_GetStatus,
-    USART4_SetModemControl,
-    USART4_GetModemStatus
-};
+  #ifdef UART4_TX_DMA_Stream
+    UARTx_TX_DMA_ALLOC(4);
+  #endif
+  #ifdef UART4_RX_DMA_Stream
+    UARTx_RX_DMA_ALLOC(4);
+  #endif
 #endif  /* USE_UART4 */
 
 #ifdef USE_UART5
-/* USART5 Driver Wrapper functions */
-static ARM_USART_CAPABILITIES  USART5_GetCapabilities (void)                                                { return USART_GetCapabilities (&UART5_Resources); }
-static int32_t                 USART5_Initialize      (ARM_USART_SignalEvent_t cb_event)                    { return USART_Initialize (cb_event, &UART5_Resources); }
-static int32_t                 USART5_Uninitialize    (void)                                                { return USART_Uninitialize (&UART5_Resources); }
-static int32_t                 USART5_PowerControl    (ARM_POWER_STATE state)                               { return USART_PowerControl (state, &UART5_Resources); }
-static int32_t                 USART5_Send            (const void *data, uint32_t num)                      { return USART_Send (data, num, &UART5_Resources); }
-static int32_t                 USART5_Receive         (void *data, uint32_t num)                            { return USART_Receive (data, num, &UART5_Resources); }
-static int32_t                 USART5_Transfer        (const void *data_out, void *data_in, uint32_t num)   { return USART_Transfer (data_out, data_in, num, &UART5_Resources); }
-static uint32_t                USART5_GetTxCount      (void)                                                { return USART_GetTxCount (&UART5_Resources); }
-static uint32_t                USART5_GetRxCount      (void)                                                { return USART_GetRxCount (&UART5_Resources); }
-static int32_t                 USART5_Control         (uint32_t control, uint32_t arg)                      { return USART_Control (control, arg, &UART5_Resources); }
-static ARM_USART_STATUS        USART5_GetStatus       (void)                                                { return USART_GetStatus (&UART5_Resources); }
-static int32_t                 USART5_SetModemControl (ARM_USART_MODEM_CONTROL control)                     { return USART_SetModemControl (control, &UART5_Resources); }
-static ARM_USART_MODEM_STATUS  USART5_GetModemStatus  (void)                                                { return USART_GetModemStatus (&UART5_Resources); }
-       void                    UART5_IRQHandler       (void)                                                {        USART_IRQHandler (&UART5_Resources); }
+  UARTx_EXPORT_DRIVER(5);
 
-#ifdef UART5_TX_DMA_Stream
-       void                    UART5_TX_DMA_Handler   (uint32_t events)                                     {        DMA_IRQ_Handle(&UART5_TX_DMA, &UART5_Resources); }
-#endif
-#ifdef UART5_RX_DMA_Stream
-       void                    UART5_RX_DMA_Handler   (uint32_t events)                                     {        DMA_IRQ_Handle(&UART5_RX_DMA, &UART5_Resources); }
-#endif
-
-/* USART5 Driver Control Block */
-ARM_DRIVER_USART Driver_USART5 = {
-    USARTx_GetVersion,
-    USART5_GetCapabilities,
-    USART5_Initialize,
-    USART5_Uninitialize,
-    USART5_PowerControl,
-    USART5_Send,
-    USART5_Receive,
-    USART5_Transfer,
-    USART5_GetTxCount,
-    USART5_GetRxCount,
-    USART5_Control,
-    USART5_GetStatus,
-    USART5_SetModemControl,
-    USART5_GetModemStatus
-};
+  #ifdef UART5_TX_DMA_Stream
+    UARTx_TX_DMA_ALLOC(5);
+  #endif
+  #ifdef UART5_RX_DMA_Stream
+    UARTx_RX_DMA_ALLOC(5);
+  #endif
 #endif  /* USE_UART5 */
 
+
 #ifdef USE_USART6
-/* USART6 Driver Wrapper functions */
-static ARM_USART_CAPABILITIES  USART6_GetCapabilities (void)                                                { return USART_GetCapabilities (&USART6_Resources); }
-static int32_t                 USART6_Initialize      (ARM_USART_SignalEvent_t cb_event)                    { return USART_Initialize (cb_event, &USART6_Resources); }
-static int32_t                 USART6_Uninitialize    (void)                                                { return USART_Uninitialize (&USART6_Resources); }
-static int32_t                 USART6_PowerControl    (ARM_POWER_STATE state)                               { return USART_PowerControl (state, &USART6_Resources); }
-static int32_t                 USART6_Send            (const void *data, uint32_t num)                      { return USART_Send (data, num, &USART6_Resources); }
-static int32_t                 USART6_Receive         (void *data, uint32_t num)                            { return USART_Receive (data, num, &USART6_Resources); }
-static int32_t                 USART6_Transfer        (const void *data_out, void *data_in, uint32_t num)   { return USART_Transfer (data_out, data_in, num, &USART6_Resources); }
-static uint32_t                USART6_GetTxCount      (void)                                                { return USART_GetTxCount (&USART6_Resources); }
-static uint32_t                USART6_GetRxCount      (void)                                                { return USART_GetRxCount (&USART6_Resources); }
-static int32_t                 USART6_Control         (uint32_t control, uint32_t arg)                      { return USART_Control (control, arg, &USART6_Resources); }
-static ARM_USART_STATUS        USART6_GetStatus       (void)                                                { return USART_GetStatus (&USART6_Resources); }
-static int32_t                 USART6_SetModemControl (ARM_USART_MODEM_CONTROL control)                     { return USART_SetModemControl (control, &USART6_Resources); }
-static ARM_USART_MODEM_STATUS  USART6_GetModemStatus  (void)                                                { return USART_GetModemStatus (&USART6_Resources); }
-       void                    USART6_IRQHandler      (void)                                                {        USART_IRQHandler (&USART6_Resources); }
+  USARTx_EXPORT_DRIVER(6);
 
-#ifdef USART6_TX_DMA_Stream
-       void                    USART6_TX_DMA_Handler  (uint32_t events)                                     {        DMA_IRQ_Handle(&USART6_TX_DMA, &USART6_Resources); }
-#endif
-#ifdef USART6_RX_DMA_Stream
-       void                    USART6_RX_DMA_Handler  (uint32_t events)                                     {        DMA_IRQ_Handle(&USART6_RX_DMA, &USART6_Resources); }
-#endif
-
-/* USART6 Driver Control Block */
-ARM_DRIVER_USART Driver_USART6 = {
-    USARTx_GetVersion,
-    USART6_GetCapabilities,
-    USART6_Initialize,
-    USART6_Uninitialize,
-    USART6_PowerControl,
-    USART6_Send,
-    USART6_Receive,
-    USART6_Transfer,
-    USART6_GetTxCount,
-    USART6_GetRxCount,
-    USART6_Control,
-    USART6_GetStatus,
-    USART6_SetModemControl,
-    USART6_GetModemStatus
-};
+  #ifdef USART6_TX_DMA_Stream
+    USARTx_TX_DMA_ALLOC(6);
+  #endif
+  #ifdef USART6_RX_DMA_Stream
+    USARTx_RX_DMA_ALLOC(6);
+  #endif
 #endif  /* USE_USART6 */
 
 #ifdef USE_UART7
-/* USART7 Driver Wrapper functions */
-static ARM_USART_CAPABILITIES  USART7_GetCapabilities (void)                                                { return USART_GetCapabilities (&UART7_Resources); }
-static int32_t                 USART7_Initialize      (ARM_USART_SignalEvent_t cb_event)                    { return USART_Initialize (cb_event, &UART7_Resources); }
-static int32_t                 USART7_Uninitialize    (void)                                                { return USART_Uninitialize (&UART7_Resources); }
-static int32_t                 USART7_PowerControl    (ARM_POWER_STATE state)                               { return USART_PowerControl (state, &UART7_Resources); }
-static int32_t                 USART7_Send            (const void *data, uint32_t num)                      { return USART_Send (data, num, &UART7_Resources); }
-static int32_t                 USART7_Receive         (void *data, uint32_t num)                            { return USART_Receive (data, num, &UART7_Resources); }
-static int32_t                 USART7_Transfer        (const void *data_out, void *data_in, uint32_t num)   { return USART_Transfer (data_out, data_in, num, &UART7_Resources); }
-static uint32_t                USART7_GetTxCount      (void)                                                { return USART_GetTxCount (&UART7_Resources); }
-static uint32_t                USART7_GetRxCount      (void)                                                { return USART_GetRxCount (&UART7_Resources); }
-static int32_t                 USART7_Control         (uint32_t control, uint32_t arg)                      { return USART_Control (control, arg, &UART7_Resources); }
-static ARM_USART_STATUS        USART7_GetStatus       (void)                                                { return USART_GetStatus (&UART7_Resources); }
-static int32_t                 USART7_SetModemControl (ARM_USART_MODEM_CONTROL control)                     { return USART_SetModemControl (control, &UART7_Resources); }
-static ARM_USART_MODEM_STATUS  USART7_GetModemStatus  (void)                                                { return USART_GetModemStatus (&UART7_Resources); }
-       void                    UART7_IRQHandler       (void)                                                {        USART_IRQHandler (&UART7_Resources); }
+  UARTx_EXPORT_DRIVER(7);
 
-#ifdef UART7_TX_DMA_Stream
-       void                    UART7_TX_DMA_Handler   (uint32_t events)                                     {        DMA_IRQ_Handle(&UART7_TX_DMA, &UART7_Resources); }
-#endif
-#ifdef UART7_RX_DMA_Stream
-       void                    UART7_RX_DMA_Handler   (uint32_t events)                                     {        DMA_IRQ_Handle(&UART7_RX_DMA, &UART7_Resources); }
-#endif
-
-/* USART7 Driver Control Block */
-ARM_DRIVER_USART Driver_USART7 = {
-    USARTx_GetVersion,
-    USART7_GetCapabilities,
-    USART7_Initialize,
-    USART7_Uninitialize,
-    USART7_PowerControl,
-    USART7_Send,
-    USART7_Receive,
-    USART7_Transfer,
-    USART7_GetTxCount,
-    USART7_GetRxCount,
-    USART7_Control,
-    USART7_GetStatus,
-    USART7_SetModemControl,
-    USART7_GetModemStatus
-};
+  #ifdef UART7_TX_DMA_Stream
+    UARTx_TX_DMA_ALLOC(7);
+  #endif
+  #ifdef UART7_RX_DMA_Stream
+    UARTx_RX_DMA_ALLOC(7);
+  #endif
 #endif  /* USE_UART7 */
 
 #ifdef USE_UART8
-/* USART8 Driver Wrapper functions */
-static ARM_USART_CAPABILITIES  USART8_GetCapabilities (void)                                                { return USART_GetCapabilities (&UART8_Resources); }
-static int32_t                 USART8_Initialize      (ARM_USART_SignalEvent_t cb_event)                    { return USART_Initialize (cb_event, &UART8_Resources); }
-static int32_t                 USART8_Uninitialize    (void)                                                { return USART_Uninitialize (&UART8_Resources); }
-static int32_t                 USART8_PowerControl    (ARM_POWER_STATE state)                               { return USART_PowerControl (state, &UART8_Resources); }
-static int32_t                 USART8_Send            (const void *data, uint32_t num)                      { return USART_Send (data, num, &UART8_Resources); }
-static int32_t                 USART8_Receive         (void *data, uint32_t num)                            { return USART_Receive (data, num, &UART8_Resources); }
-static int32_t                 USART8_Transfer        (const void *data_out, void *data_in, uint32_t num)   { return USART_Transfer (data_out, data_in, num, &UART8_Resources); }
-static uint32_t                USART8_GetTxCount      (void)                                                { return USART_GetTxCount (&UART8_Resources); }
-static uint32_t                USART8_GetRxCount      (void)                                                { return USART_GetRxCount (&UART8_Resources); }
-static int32_t                 USART8_Control         (uint32_t control, uint32_t arg)                      { return USART_Control (control, arg, &UART8_Resources); }
-static ARM_USART_STATUS        USART8_GetStatus       (void)                                                { return USART_GetStatus (&UART8_Resources); }
-static int32_t                 USART8_SetModemControl (ARM_USART_MODEM_CONTROL control)                     { return USART_SetModemControl (control, &UART8_Resources); }
-static ARM_USART_MODEM_STATUS  USART8_GetModemStatus  (void)                                                { return USART_GetModemStatus (&UART8_Resources); }
-       void                    UART8_IRQHandler       (void)                                                {        USART_IRQHandler (&UART8_Resources); }
+  UARTx_EXPORT_DRIVER(8);
 
-#ifdef UART8_TX_DMA_Stream
-       void                    UART8_TX_DMA_Handler   (uint32_t events)                                     {        DMA_IRQ_Handle(&UART8_TX_DMA, &UART8_Resources); }
-#endif
-#ifdef UART8_RX_DMA_Stream
-       void                    UART8_RX_DMA_Handler   (uint32_t events)                                     {        DMA_IRQ_Handle(&UART8_RX_DMA, &UART8_Resources); }
-#endif
-
-/* USART8 Driver Control Block */
-ARM_DRIVER_USART Driver_USART8 = {
-    USARTx_GetVersion,
-    USART8_GetCapabilities,
-    USART8_Initialize,
-    USART8_Uninitialize,
-    USART8_PowerControl,
-    USART8_Send,
-    USART8_Receive,
-    USART8_Transfer,
-    USART8_GetTxCount,
-    USART8_GetRxCount,
-    USART8_Control,
-    USART8_GetStatus,
-    USART8_SetModemControl,
-    USART8_GetModemStatus
-};
+  #ifdef UART8_TX_DMA_Stream
+    UARTx_TX_DMA_ALLOC(8);
+  #endif
+  #ifdef UART8_RX_DMA_Stream
+    UARTx_RX_DMA_ALLOC(8);
+  #endif
 #endif  /* USE_UART8 */
 
 #endif
