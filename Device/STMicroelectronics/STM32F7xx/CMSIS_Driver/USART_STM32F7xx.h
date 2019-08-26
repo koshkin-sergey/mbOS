@@ -583,16 +583,16 @@ ARM_DRIVER_USART Driver_USART##x = {                                            
 
 
 #define USARTx_TX_DMA_ALLOC(x)                                                                                                                                                             \
-       void                    USART##x##_TX_DMA_Handler  (uint32_t events)                                     {        DMA_IRQ_Handle(&USART##x##_TX_DMA, &USART##x##_Resources);      }
+       void                    USART##x##_TX_DMA_Handler  (void)                                                {        DMA_IRQ_Handle(&USART##x##_TX_DMA, &USART##x##_Resources);      }
 
 #define USARTx_RX_DMA_ALLOC(x)                                                                                                                                                             \
-       void                    USART##x##_RX_DMA_Handler  (uint32_t events)                                     {        DMA_IRQ_Handle(&USART##x##_RX_DMA, &USART##x##_Resources);      }
+       void                    USART##x##_RX_DMA_Handler  (void)                                                {        DMA_IRQ_Handle(&USART##x##_RX_DMA, &USART##x##_Resources);      }
 
 #define UARTx_TX_DMA_ALLOC(x)                                                                                                                                                              \
-       void                    UART##x##_TX_DMA_Handler   (uint32_t events)                                     {        DMA_IRQ_Handle(&UART##x##_TX_DMA, &UART##x##_Resources);        }
+       void                    UART##x##_TX_DMA_Handler   (void)                                                {        DMA_IRQ_Handle(&UART##x##_TX_DMA, &UART##x##_Resources);        }
 
 #define UARTx_RX_DMA_ALLOC(x)                                                                                                                                                              \
-       void                    UART##x##_RX_DMA_Handler   (uint32_t events)                                     {        DMA_IRQ_Handle(&UART##x##_RX_DMA, &UART##x##_Resources);        }
+       void                    UART##x##_RX_DMA_Handler   (void)                                                {        DMA_IRQ_Handle(&UART##x##_RX_DMA, &UART##x##_Resources);        }
 
 
 #define USART_BAUDRATE_DIVIDER(_PCLK_, _BAUD_)  (((_PCLK_) + ((_BAUD_)/2U)) / (_BAUD_))
