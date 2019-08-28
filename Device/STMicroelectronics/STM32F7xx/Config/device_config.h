@@ -1049,6 +1049,132 @@
 
 // </e> UART8 (Universal asynchronous receiver transmitter) [Driver_USART8]
 
+
+// <e> SPI1 (Serial Peripheral Interface 1) [Driver_SPI1]
+// <i> Configuration settings for Driver_SPI1 in component ::CMSIS Driver:SPI
+#define DEV_SPI1                        0
+
+//   <o> SPI1_MISO Pin <0=>Not Used <1=>PA6 <2=>PB4 <3=>PG9
+#define DEV_SPI1_MISO_PORT_ID           0
+#if    (DEV_SPI1_MISO_PORT_ID == 0)
+  #define DEV_SPI1_MISO                 0
+#elif  (DEV_SPI1_MISO_PORT_ID == 1)
+  #define DEV_SPI1_MISO                 1
+  #define DEV_SPI1_MISO_PORT            GPIO_PORT_A
+  #define DEV_SPI1_MISO_PIN             GPIO_PIN_6
+  #define DEV_SPI1_MISO_FUNC            GPIO_PIN_FUNC_5
+#elif  (DEV_SPI1_MISO_PORT_ID == 2)
+  #define DEV_SPI1_MISO                 1
+  #define DEV_SPI1_MISO_PORT            GPIO_PORT_B
+  #define DEV_SPI1_MISO_PIN             GPIO_PIN_4
+  #define DEV_SPI1_MISO_FUNC            GPIO_PIN_FUNC_5
+#elif  (DEV_SPI1_MISO_PORT_ID == 3)
+  #define DEV_SPI1_MISO                 1
+  #define DEV_SPI1_MISO_PORT            GPIO_PORT_G
+  #define DEV_SPI1_MISO_PIN             GPIO_PIN_9
+  #define DEV_SPI1_MISO_FUNC            GPIO_PIN_FUNC_5
+#else
+  #error "Invalid SPI1_MISO Pin Configuration!"
+#endif
+
+//   <o> SPI1_MOSI Pin <0=>Not Used <1=>PA7 <2=>PB5 <3=>PD7
+#define DEV_SPI1_MOSI_PORT_ID           0
+#if    (DEV_SPI1_MOSI_PORT_ID == 0)
+  #define DEV_SPI1_MOSI                 0
+#elif  (DEV_SPI1_MOSI_PORT_ID == 1)
+  #define DEV_SPI1_MOSI                 1
+  #define DEV_SPI1_MOSI_PORT            GPIO_PORT_A
+  #define DEV_SPI1_MOSI_PIN             GPIO_PIN_7
+  #define DEV_SPI1_MOSI_FUNC            GPIO_PIN_FUNC_5
+#elif  (DEV_SPI1_MOSI_PORT_ID == 2)
+  #define DEV_SPI1_MOSI                 1
+  #define DEV_SPI1_MOSI_PORT            GPIO_PORT_B
+  #define DEV_SPI1_MOSI_PIN             GPIO_PIN_5
+  #define DEV_SPI1_MOSI_FUNC            GPIO_PIN_FUNC_5
+#elif  (DEV_SPI1_MOSI_PORT_ID == 3)
+  #define DEV_SPI1_MOSI                 1
+  #define DEV_SPI1_MOSI_PORT            GPIO_PORT_D
+  #define DEV_SPI1_MOSI_PIN             GPIO_PIN_7
+  #define DEV_SPI1_MOSI_FUNC            GPIO_PIN_FUNC_5
+#else
+  #error "Invalid SPI1_MOSI Pin Configuration!"
+#endif
+
+//   <o> SPI1_SCK Pin <0=>PA5 <1=>PB3 <2=>PG11
+#define DEV_SPI1_SCK_PORT_ID            0
+#if    (DEV_SPI1_SCK_PORT_ID == 0)
+  #define DEV_SPI1_SCK_PORT             GPIO_PORT_A
+  #define DEV_SPI1_SCK_PIN              GPIO_PIN_5
+  #define DEV_SPI1_SCK_FUNC             GPIO_PIN_FUNC_5
+#elif  (DEV_SPI1_SCK_PORT_ID == 1)
+  #define DEV_SPI1_SCK_PORT             GPIO_PORT_B
+  #define DEV_SPI1_SCK_PIN              GPIO_PIN_3
+  #define DEV_SPI1_SCK_FUNC             GPIO_PIN_FUNC_5
+#elif  (DEV_SPI1_SCK_PORT_ID == 2)
+  #define DEV_SPI1_SCK_PORT             GPIO_PORT_G
+  #define DEV_SPI1_SCK_PIN              GPIO_PIN_11
+  #define DEV_SPI1_SCK_FUNC             GPIO_PIN_FUNC_5
+#else
+  #error "Invalid SPI1_SCK Pin Configuration!"
+#endif
+
+//   <o> SPI1_NSS Pin <0=>Not Used <1=>PA4 <2=>PA15 <3=>PG10
+#define DEV_SPI1_NSS_PORT_ID            0
+#if    (DEV_SPI1_NSS_PORT_ID == 0)
+  #define DEV_SPI1_NSS                  0
+#elif  (DEV_SPI1_NSS_PORT_ID == 1)
+  #define DEV_SPI1_NSS                  1
+  #define DEV_SPI1_NSS_PORT             GPIO_PORT_A
+  #define DEV_SPI1_NSS_PIN              GPIO_PIN_4
+  #define DEV_SPI1_NSS_FUNC             GPIO_PIN_FUNC_5
+#elif  (DEV_SPI1_NSS_PORT_ID == 2)
+  #define DEV_SPI1_NSS                  1
+  #define DEV_SPI1_NSS_PORT             GPIO_PORT_A
+  #define DEV_SPI1_NSS_PIN              GPIO_PIN_15
+  #define DEV_SPI1_NSS_FUNC             GPIO_PIN_FUNC_5
+#elif  (DEV_SPI1_NSS_PORT_ID == 3)
+  #define DEV_SPI1_NSS                  1
+  #define DEV_SPI1_NSS_PORT             GPIO_PORT_G
+  #define DEV_SPI1_NSS_PIN              GPIO_PIN_10
+  #define DEV_SPI1_NSS_FUNC             GPIO_PIN_FUNC_5
+#else
+  #error "Invalid SPI1_NSS Pin Configuration!"
+#endif
+
+//   <e> DMA Rx
+//     <o1> Number <2=>2
+//     <i>  Selects DMA Number (only DMA2 can be used)
+//     <o2> Stream <0=>0 <2=>2
+//     <i>  Selects DMA Stream (only Stream 0 or 2 can be used)
+//     <o3> Channel <3=>3
+//     <i>  Selects DMA Channel (only Channel 3 can be used)
+//     <o4> Priority <0=>Low <1=>Medium <2=>High <3=>Very High
+//     <i>  Selects DMA Priority
+//   </e>
+#define DEV_SPI1_RX_DMA                 0
+#define DEV_SPI1_RX_DMA_NUMBER          2
+#define DEV_SPI1_RX_DMA_STREAM          0
+#define DEV_SPI1_RX_DMA_CHANNEL         3
+#define DEV_SPI1_RX_DMA_PRIORITY        0
+
+//   <e> DMA Tx
+//     <o1> Number <2=>2
+//     <i>  Selects DMA Number (only DMA2 can be used)
+//     <o2> Stream <3=>3 <5=>5
+//     <i>  Selects DMA Stream (only Stream 3 or 5 can be used)
+//     <o3> Channel <3=>3
+//     <i>  Selects DMA Channel (only Channel 3 can be used)
+//     <o4> Priority <0=>Low <1=>Medium <2=>High <3=>Very High
+//     <i>  Selects DMA Priority
+//   </e>
+#define DEV_SPI1_TX_DMA                 0
+#define DEV_SPI1_TX_DMA_NUMBER          2
+#define DEV_SPI1_TX_DMA_STREAM          5
+#define DEV_SPI1_TX_DMA_CHANNEL         3
+#define DEV_SPI1_TX_DMA_PRIORITY        0
+
+// </e>
+
 #endif  /* __DEVICE_CONFIG_H */
 
 /* ----------------------------- End of file ---------------------------------*/
