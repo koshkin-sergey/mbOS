@@ -1637,17 +1637,17 @@ void SPI_IRQHandler(SPI_RESOURCES *spi)
     }
 
     if ((sr & SPI_SR_MODF) != 0U) {
-      // Mode fault flag is set
+      /* Mode fault flag is set */
       info->status.mode_fault = 1U;
 
-      // Write CR1 register to clear MODF flag
+      /* Write CR1 register to clear MODF flag */
       reg->CR1 = cr1;
       event |= ARM_SPI_EVENT_MODE_FAULT;
     }
   }
 
   if (((sr & SPI_SR_RXNE) != 0U) && ((cr2 & SPI_CR2_RXNEIE) != 0U)) {
-    // Receive Buffer Not Empty
+    /* Receive Buffer Not Empty */
     if (xfer->rx_cnt < xfer->num) {
       value = reg->DR;
 
@@ -1671,7 +1671,7 @@ void SPI_IRQHandler(SPI_RESOURCES *spi)
       }
     }
     else {
-      // Unexpected transfer, data lost
+      /* Unexpected transfer, data lost */
       event |= ARM_SPI_EVENT_DATA_LOST;
     }
   }
@@ -1713,20 +1713,23 @@ void SPI_IRQHandler(SPI_RESOURCES *spi)
 
 #ifdef SPI_DMA_TX
 static
-void SPIx_TX_DMA_Callback(uint32_t event, SPI_RESOURCES *spi)
+void SPIx_TX_DMA_Callback(uint32_t event, const void *param)
 {
+  SPI_RESOURCES *spi = param;
+
   if (event & DMA_EVENT_TRANSFER_COMPLETE) {
     /* TX buffer DMA disable */
     spi->reg->CR2 &= ~SPI_CR2_TXDMAEN;
     spi->xfer->tx_cnt = spi->xfer->num;
   }
 }
-#endif  // SPI_DMA_TX
+#endif  /* SPI_DMA_TX */
 
 #ifdef SPI_DMA_RX
 static
-void SPIx_RX_DMA_Callback(uint32_t event, SPI_RESOURCES *spi)
+void SPIx_RX_DMA_Callback(uint32_t event, const void *param)
 {
+  SPI_RESOURCES *spi = param;
   SPI_INFO *info = spi->info;
 
   if (event & DMA_EVENT_TRANSFER_COMPLETE) {
@@ -1740,7 +1743,7 @@ void SPIx_RX_DMA_Callback(uint32_t event, SPI_RESOURCES *spi)
       info->cb_event(ARM_SPI_EVENT_TRANSFER_COMPLETE);
   }
 }
-#endif  // SPI_DMA_RX
+#endif  /* SPI_DMA_RX */
 
 #if defined(USE_SPI1)
   SPIx_EXPORT_DRIVER(1);
