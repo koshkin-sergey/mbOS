@@ -93,11 +93,12 @@
 
 /* SPI2 configuration definitions */
 #if (DEV_SPI2 == 1)
-  #ifndef SPI2
-    #error "SPI2 not available for selected device!"
-  #endif
-
   #define USE_SPI2
+
+  #if !defined(SPI2)
+    #error "SPI2 not available for selected device!"
+    #undef USE_SPI2
+  #endif
 
   #if (DEV_SPI2_RX_DMA == 1)
     #define SPI2_RX_DMA_Stream      DMAx_STREAMy(DEV_SPI2_RX_DMA_NUMBER, DEV_SPI2_RX_DMA_STREAM)
@@ -115,28 +116,6 @@
   #endif
 
   #if (DEV_SPI2_MISO == 1)
-    #if defined(STM32F401xC) || defined(STM32F401xE) || defined(STM32F411xE) || defined(STM32F446xx)
-      // PI2 as SPI2 MISO not available on STM32F401xx, STM32F411xx and STM32F446xx
-      #if (DEV_SPI2_MISO_PORT_ID == 3)
-        #error "PI2 can not be configured as SPI2 MISO on selected device!"
-      #endif
-    #elif defined (STM32F410Cx)
-      // SPI2 MISO available on pin: PB14
-      #if (DEV_SPI2_MISO_PORT_ID != 1)
-        #error "Only PB14 can be configured as SPI2 MISO on selected device!"
-      #endif
-    #elif defined (STM32F410Rx)
-      // SPI2 MISO available on pins: PB14, PC2
-      #if ((DEV_SPI2_MISO_PORT_ID != 1) && (DEV_SPI2_MISO_PORT_ID != 2))
-        #error "Only PB14 and PC2 can be configured as SPI2 MISO on selected device!"
-      #endif
-    #elif defined (STM32F413xx) || defined (STM32F423xx)
-      // SPI2 MISO available on pins: PB14, PC2, PA12
-      #if ((DEV_SPI2_MISO_PORT_ID != 1) && (DEV_SPI2_MISO_PORT_ID != 2) && (DEV_SPI2_MISO_PORT_ID != 4))
-        #error "Only PB14, PC2, PA12 can be configured as SPI2 MISO on selected device!"
-      #endif
-    #endif
-
     #define USE_SPI2_MISO_Pin       1U
     #define SPI2_MISO_GPIO_PORT     DEV_SPI2_MISO_PORT
     #define SPI2_MISO_GPIO_PIN      DEV_SPI2_MISO_PIN
@@ -144,64 +123,10 @@
   #endif
 
   #if (DEV_SPI2_MOSI == 1)
-    #if defined(STM32F401xC) || defined(STM32F401xE) || defined(STM32F411xE) || defined(STM32F446xx)
-      // PI3 as SPI2 MOSI not available on STM32F401xx, STM32F411xx and STM32F446xx
-      #if (DEV_SPI2_MOSI_PORT_ID == 3)
-        #error "PI3 can not be configured as SPI2 MOSI on selected device!"
-      #endif
-    #elif defined (STM32F410Cx)
-      // SPI2 MOSI available on pin: PB15
-      #if (DEV_SPI2_MOSI_PORT_ID != 1)
-        #error "Only PB15 can be configured as SPI2 MOSI on selected device!"
-      #endif
-    #elif defined (STM32F410Rx)
-      // SPI2 MOSI available on pins: PB15, PC3
-      #if ((DEV_SPI2_MOSI_PORT_ID != 1) && (DEV_SPI2_MOSI_PORT_ID != 2))
-        #error "Only PB15 and PC3 can be configured as SPI2 MOSI on selected device!"
-      #endif
-    #elif defined (STM32F413xx) || defined (STM32F423xx)
-      // SPI2 MOSI available on pins: PB15, PC3, PA10
-      #if ((DEV_SPI2_MOSI_PORT_ID != 1) && (DEV_SPI2_MOSI_PORT_ID != 2) && (DEV_SPI2_MOSI_PORT_ID != 4))
-        #error "Only PB15, PC3, PA10 can be configured as SPI2 MOSI on selected device!"
-      #endif
-    #endif
-
     #define USE_SPI2_MOSI_Pin       1U
     #define SPI2_MOSI_GPIO_PORT     DEV_SPI2_MOSI_PORT
     #define SPI2_MOSI_GPIO_PIN      DEV_SPI2_MOSI_PIN
     #define SPI2_MOSI_GPIO_FUNC     DEV_SPI2_MOSI_FUNC
-  #endif
-
-  #if defined (STM32F410Cx)
-    // SPI2 SCK available on pins: PB10, PB13
-    #if (DEV_SPI2_SCK_PORT_ID > 1)
-      #error "Only PB10 and PB13 can be configured as SPI2 SCK on selected device!"
-    #endif
-  #elif defined (STM32F410Rx)
-    // SPI2 SCK available on pins: PB10, PB13, PC7
-    #if (DEV_SPI2_SCK_PORT_ID > 2)
-      #error "Only PB10, PB13 and PC7 can be configured as SPI2 SCK on selected device!"
-    #endif
-  #elif !defined(STM32F411xE) && !defined(STM32F446xx)
-    // PC7 as SPI2 SCK only available on STM32F411xx and STM32F446xx
-    #if (DEV_SPI2_SCK_PORT_ID == 2)
-      #error "PC7 can not be configured as SPI2 SCK on selected device!"
-    #endif
-  #elif defined(STM32F405xx) || defined(STM32F407xx) || defined(STM32F415xx) || defined(STM32F417xx)
-    // PD3 as SPI2 SCK not available on STM32F405xx, STM32F407xx, STM32F415xx and STM32F417xx
-    #if (DEV_SPI2_SCK_PORT_ID == 3)
-      #error "PD3 can not be configured as SPI2 SCK on selected device!"
-    #endif
-  #elif defined(STM32F446xx)
-    // PI1 as SPI2 SCK not available on STM32F446xx
-    #if (DEV_SPI2_SCK_PORT_ID == 1)
-      #error "PI1 can not be configured as SPI2 SCK on selected device!"
-    #endif
-  #elif defined (STM32F413xx) || defined (STM32F423xx)
-    // PI1 as SPI2 SCK not available on STM32F413xx, STM32F423xx
-    #if (DEV_SPI2_SCK_PORT_ID == 4)
-      #error "PI1 can not be configured as SPI2 SCK on selected device!"
-    #endif
   #endif
 
   #define USE_SPI2_SCK_Pin          1U
@@ -210,38 +135,21 @@
   #define SPI2_SCK_GPIO_FUNC        DEV_SPI2_SCK_FUNC
 
   #if (DEV_SPI2_NSS == 1)
-    #if defined(STM32F401xC) || defined(STM32F401xE) || defined(STM32F411xE) || defined(STM32F446xx)
-      // PI0 as SPI2 NSS not available on STM32F401xx, STM32F411xx and STM32F446xx
-      #if (DEV_SPI2_NSS_PORT_ID == 3)
-        #error "PI0 can not be configured as SPI2 NSS on selected device!"
-      #endif
-    #elif defined (STM32F410Cx) || defined (STM32F410Rx)
-      // SPI2 NSS available on pins: PB9, PB12
-      #if (DEV_SPI2_NSS_PORT_ID > 2)
-        #error "Only PB9 and PB12 can be configured as SPI2 NSS on selected device!"
-      #endif
-    #elif defined (STM32F413xx) || defined (STM32F423xx)
-      // PI0 as SPI2 NSS not available on STM32F413xx, STM32F423xx
-      #if (DEV_SPI2_NSS_PORT_ID == 3)
-        #error "PI0 can not be configured as SPI2 NSS on selected device!"
-      #endif
-    #endif
-
     #define USE_SPI2_NSS_Pin        1U
     #define SPI2_NSS_GPIO_PORT      DEV_SPI2_NSS_PORT
     #define SPI2_NSS_GPIO_PIN       DEV_SPI2_NSS_PIN
     #define SPI2_NSS_GPIO_FUNC      DEV_SPI2_NSS_FUNC
   #endif
-
 #endif
 
 /* SPI3 configuration definitions */
 #if (DEV_SPI3 == 1)
-  #ifndef SPI3
-    #error "SPI3 not available for selected device!"
-  #endif
-
   #define USE_SPI3
+
+  #if !defined(SPI3)
+    #error "SPI3 not available for selected device!"
+    #undef USE_SPI3
+  #endif
 
   #if (DEV_SPI3_RX_DMA == 1)
     #define SPI3_RX_DMA_Stream      DMAx_STREAMy(DEV_SPI3_RX_DMA_NUMBER, DEV_SPI3_RX_DMA_STREAM)
@@ -266,25 +174,10 @@
   #endif
 
   #if (DEV_SPI3_MOSI == 1)
-    #if defined(STM32F405xx) || defined(STM32F407xx) || \
-        defined(STM32F415xx) || defined(STM32F417xx)
-      // PD6 as SPI3 MOSI not available on STM32F405xx, STM32F407xx, STM32F415xx and STM32F417xx
-      #if (DEV_SPI3_MOSI_PORT_ID == 3)
-        #error "PD6 can not be configured as SPI3 MOSI on selected device!"
-      #endif
-    #endif
-
     #define USE_SPI3_MOSI_Pin       1U
     #define SPI3_MOSI_GPIO_PORT     DEV_SPI3_MOSI_PORT
     #define SPI3_MOSI_GPIO_PIN      DEV_SPI3_MOSI_PIN
     #define SPI3_MOSI_GPIO_FUNC     DEV_SPI3_MOSI_FUNC
-  #endif
-
-  #ifndef STM32F411xE
-    // PB12 as SPI3 SCK only available on STM32F411xx
-    #if (DEV_SPI3_SCK_PORT_ID == 1)
-      #error "PB12 can not be configured as SPI3 SCK on selected device!"
-    #endif
   #endif
 
   #define USE_SPI3_SCK_Pin          1U
@@ -298,16 +191,16 @@
     #define SPI3_NSS_GPIO_PIN       DEV_SPI3_NSS_PIN
     #define SPI3_NSS_GPIO_FUNC      DEV_SPI3_NSS_FUNC
   #endif
-
 #endif
 
 /* SPI4 configuration definitions */
 #if (DEV_SPI4 == 1)
-  #ifndef SPI4
-    #error "SPI4 not available for selected device!"
-  #endif
-
   #define USE_SPI4
+
+  #if !defined(SPI4)
+    #error "SPI4 not available for selected device!"
+    #undef USE_SPI4
+  #endif
 
   #if (DEV_SPI4_RX_DMA == 1)
     #define SPI4_RX_DMA_Stream      DMAx_STREAMy(DEV_SPI4_RX_DMA_NUMBER, DEV_SPI4_RX_DMA_STREAM)
@@ -325,13 +218,6 @@
   #endif
 
   #if (DEV_SPI4_MISO == 1)
-    #ifndef STM32F411xE
-      // PA11 as SPI4 MISO only available on STM32F411xx
-      #if (DEV_SPI4_MISO_PORT_ID == 1)
-        #error "PA11 can not be configured as SPI4 MISO on selected device!"
-      #endif
-    #endif
-
     #define USE_SPI4_MISO_Pin       1U
     #define SPI4_MISO_GPIO_PORT     DEV_SPI4_MISO_PORT
     #define SPI4_MISO_GPIO_PIN      DEV_SPI4_MISO_PIN
@@ -339,24 +225,10 @@
   #endif
 
   #if (DEV_SPI4_MOSI == 1)
-    #ifndef STM32F411xE
-      // PA1 as SPI4 MOSI only available on STM32F411xx
-      #if (DEV_SPI4_MOSI_PORT_ID == 1)
-        #error "PA1 can not be configured as SPI4 MOSI on selected device!"
-      #endif
-    #endif
-
     #define USE_SPI4_MOSI_Pin       1U
     #define SPI4_MOSI_GPIO_PORT     DEV_SPI4_MOSI_PORT
     #define SPI4_MOSI_GPIO_PIN      DEV_SPI4_MOSI_PIN
     #define SPI4_MOSI_GPIO_FUNC     DEV_SPI4_MOSI_FUNC
-  #endif
-
-  #ifndef STM32F411xE
-    // PB13 as SPI4 SCK only available on STM32F411xx
-    #if (DEV_SPI4_SCK_PORT_ID == 0)
-      #error "PB13 can not be configured as SPI4 SCK on selected device!"
-    #endif
   #endif
 
   #define USE_SPI4_SCK_Pin          1U
@@ -365,28 +237,21 @@
   #define SPI4_SCK_GPIO_FUNC        DEV_SPI4_SCK_FUNC
 
   #if (DEV_SPI4_NSS == 1)
-    #ifndef STM32F411xE
-      // PB12 as SPI4 NSS only available on STM32F411xx
-      #if (DEV_SPI4_NSS_PORT_ID == 1)
-        #error "PB12 can not be configured as SPI4 NSS on selected device!"
-      #endif
-    #endif
-
     #define USE_SPI4_NSS_Pin        1U
     #define SPI4_NSS_GPIO_PORT      DEV_SPI4_NSS_PORT
     #define SPI4_NSS_GPIO_PIN       DEV_SPI4_NSS_PIN
     #define SPI4_NSS_GPIO_FUNC      DEV_SPI4_NSS_FUNC
   #endif
-
 #endif
 
 /* SPI5 configuration definitions */
 #if (DEV_SPI5 == 1)
-  #ifndef SPI5
-    #error "SPI5 not available for selected device!"
-  #endif
-
   #define USE_SPI5
+
+  #if !defined(SPI5)
+    #error "SPI5 not available for selected device!"
+    #undef USE_SPI5
+  #endif
 
   #if (DEV_SPI5_RX_DMA == 1)
     #define SPI5_RX_DMA_Stream      DMAx_STREAMy(DEV_SPI5_RX_DMA_NUMBER, DEV_SPI5_RX_DMA_STREAM)
@@ -404,38 +269,6 @@
   #endif
 
   #if (DEV_SPI5_MISO == 1)
-    #if defined (STM32F410Cx) || defined (STM32F410Rx)
-      // SPI5 MISO available on pin: PA12
-      #if (DEV_SPI5_MISO_PORT_ID != 1)
-        #error "Only PA12 can be configured as SPI5 MISO on selected device!"
-      #endif
-    #elif !defined (STM32F411xE)
-      // PA12 as SPI5 MISO only available on STM32F411xx
-      #if (DEV_SPI5_MISO_PORT_ID == 1)
-        #error "PA12 can not be configured as SPI5 MISO on selected device!"
-      #endif
-
-      // PE5 as SPI5 MISO only available on STM32F411xx
-      #if (DEV_SPI5_MISO_PORT_ID == 2)
-        #error "PE5 can not be configured as SPI5 MISO on selected device!"
-      #endif
-
-      // PE13 as SPI5 MISO only available on STM32F411xx
-      #if (DEV_SPI5_MISO_PORT_ID == 3)
-        #error "PE13 can not be configured as SPI5 MISO on selected device!"
-      #endif
-    #else
-      // PF8 as SPI5 MISO only available on STM32F427xx, STM32F429xx, STM32F437xx and STM32F439xx
-      #if (DEV_SPI5_MISO_PORT_ID == 4)
-        #error "PF8 can not be configured as SPI5 MISO on selected device!"
-      #endif
-
-      // PH7 as SPI5 MISO only available on STM32F427xx, STM32F429xx, STM32F437xx and STM32F439xx
-      #if (DEV_SPI5_MISO_PORT_ID == 5)
-        #error "PH7 can not be configured as SPI5 MISO on selected device!"
-      #endif
-    #endif
-
     #define USE_SPI5_MISO_Pin       1U
     #define SPI5_MISO_GPIO_PORT     DEV_SPI5_MISO_PORT
     #define SPI5_MISO_GPIO_PIN      DEV_SPI5_MISO_PIN
@@ -443,79 +276,10 @@
   #endif
 
   #if (DEV_SPI5_MOSI == 1)
-    #if defined (STM32F410Cx) || defined (STM32F410Rx)
-      // SPI5 MOSI available on pins: PA10, PB8
-      #if ((DEV_SPI5_MOSI_PORT_ID != 1) && (DEV_SPI5_MOSI_PORT_ID != 2))
-        #error "Only PA10 and PB8 can be configured as SPI5 MOSI on selected device!"
-      #endif
-    #elif !defined (STM32F411xE)
-      // PA10 as SPI5 MOSI only available on STM32F411xx
-      #if (DEV_SPI5_MOSI_PORT_ID == 1)
-        #error "PA10 can not be configured as SPI5 MOSI on selected device!"
-      #endif
-
-      // PB8 as SPI5 MOSI only available on STM32F411xx
-      #if (DEV_SPI5_MOSI_PORT_ID == 2)
-        #error "PB8 can not be configured as SPI5 MOSI on selected device!"
-      #endif
-
-      // PE6 as SPI5 MOSI only available on STM32F411xx
-      #if (DEV_SPI5_MOSI_PORT_ID == 3)
-        #error "PE6 can not be configured as SPI5 MOSI on selected device!"
-      #endif
-
-      // PE14 as SPI5 MOSI only available on STM32F411xx
-      #if (DEV_SPI5_MOSI_PORT_ID == 4)
-        #error "PE14 can not be configured as SPI5 MOSI on selected device!"
-      #endif
-    #else
-      // PF9 as SPI5 MOSI only available on STM32F427xx, STM32F429xx, STM32F437xx and STM32F439xx
-      #if (DEV_SPI5_MOSI_PORT_ID == 5)
-        #error "PF9 can not be configured as SPI5 MOSI on selected device!"
-      #endif
-
-      // PF11 as SPI5 MOSI only available on STM32F427xx, STM32F429xx, STM32F437xx and STM32F439xx
-      #if (DEV_SPI5_MOSI_PORT_ID == 6)
-        #error "PF11 can not be configured as SPI5 MOSI on selected device!"
-      #endif
-    #endif
-
     #define USE_SPI5_MOSI_Pin       1U
     #define SPI5_MOSI_GPIO_PORT     DEV_SPI5_MOSI_PORT
     #define SPI5_MOSI_GPIO_PIN      DEV_SPI5_MOSI_PIN
     #define SPI5_MOSI_GPIO_FUNC     DEV_SPI5_MOSI_FUNC
-  #endif
-
-  #if defined (STM32F410Cx) || defined (STM32F410Rx)
-    // SPI5 SCK available on pin: PB0
-    #if (DEV_SPI5_SCK_PORT_ID != 0)
-      #error "Only PB0 can be configured as SPI5 SCK on selected device!"
-    #endif
-  #elif !defined (STM32F411xE)
-    // PB0 as SPI5 SCK only available on STM32F411xx
-    #if (DEV_SPI5_SCK_PORT_ID == 0)
-      #error "PB0 can not be configured as SPI5 SCK on selected device!"
-    #endif
-
-    // PE2 as SPI5 SCK only available on STM32F411xx
-    #if (DEV_SPI5_SCK_PORT_ID == 1)
-      #error "PE2 can not be configured as SPI5 SCK on selected device!"
-    #endif
-
-    // PE12 as SPI5 SCK only available on STM32F411xx
-    #if (DEV_SPI5_SCK_PORT_ID == 2)
-      #error "PE12 can not be configured as SPI5 SCK on selected device!"
-    #endif
-  #else
-    // PF7 as SPI5 SCK only available on STM32F427xx, STM32F429xx, STM32F437xx and STM32F439xx
-    #if (DEV_SPI5_SCK_PORT_ID == 3)
-      #error "PF7 can not be configured as SPI5 SCK on selected device!"
-    #endif
-
-    // PH6 as SPI5 SCK only available on STM32F427xx, STM32F429xx, STM32F437xx and STM32F439xx
-    #if (DEV_SPI5_SCK_PORT_ID == 4)
-      #error "PH6 can not be configured as SPI5 SCK on selected device!"
-    #endif
   #endif
 
   #define USE_SPI5_SCK_Pin          1U
@@ -524,58 +288,21 @@
   #define SPI5_SCK_GPIO_FUNC        DEV_SPI5_SCK_FUNC
 
   #if (DEV_SPI5_NSS == 1)
-    #if defined (STM32F410Cx) || defined (STM32F410Rx)
-      // SPI5 NSS available on pin: PB1
-      #if ((DEV_SPI5_NSS_PORT_ID != 0) && (DEV_SPI5_NSS_PORT_ID != 1))
-        #error "Only PB1 can be configured as SPI5 NSS on selected device!"
-      #endif
-    #elif !defined (STM32F411xE)
-      // PB1 as SPI5 NSS only available on STM32F411xx
-      #if (DEV_SPI5_NSS_PORT_ID == 0)
-        #error "PB1 can not be configured as SPI5 NSS on selected device!"
-      #endif
-
-      // PE4 as SPI5 NSS only available on STM32F411xx
-      #if (DEV_SPI5_NSS_PORT_ID == 1)
-        #error "PE4 can not be configured as SPI5 NSS on selected device!"
-      #endif
-
-      // PE11 as SPI5 NSS only available on STM32F411xx
-      #if (DEV_SPI5_NSS_PORT_ID == 2)
-        #error "PE11 can not be configured as SPI5 NSS on selected device!"
-      #endif
-    #else
-      // PF6 as SPI5 NSS only available on STM32F427xx, STM32F429xx, STM32F437xx and STM32F439xx
-      #if (DEV_SPI5_NSS_PORT_ID == 3)
-        #error "PF6 can not be configured as SPI5 NSS on selected device!"
-      #endif
-
-      // PH5 as SPI5 NSS only available on STM32F427xx, STM32F429xx, STM32F437xx and STM32F439xx
-      #if (DEV_SPI5_NSS_PORT_ID == 4)
-        #error "PH5 can not be configured as SPI5 NSS on selected device!"
-      #endif
-    #endif
-
     #define USE_SPI5_NSS_Pin        1U
     #define SPI5_NSS_GPIO_PORT      DEV_SPI5_NSS_PORT
     #define SPI5_NSS_GPIO_PIN       DEV_SPI5_NSS_PIN
     #define SPI5_NSS_GPIO_FUNC      DEV_SPI5_NSS_FUNC
   #endif
-
 #endif
 
 /* SPI6 configuration definitions */
-#if (defined (STM32F413xx) && defined (STM32F423xx)) && defined (SPI6)
-  // SPI6 not available
-  #undef SPI6
-#endif
-
 #if (DEV_SPI6 == 1)
-  #ifndef SPI6
-    #error "SPI6 not available for selected device!"
-  #endif
-
   #define USE_SPI6
+
+  #if !defined(SPI6)
+    #error "SPI6 not available for selected device!"
+    #undef USE_SPI6
+  #endif
 
   #if (DEV_SPI6_RX_DMA == 1)
     #define SPI6_RX_DMA_Stream      DMAx_STREAMy(DEV_SPI6_RX_DMA_NUMBER, DEV_SPI6_RX_DMA_STREAM)
@@ -617,7 +344,6 @@
     #define SPI6_NSS_GPIO_PIN       DEV_SPI6_NSS_PIN
     #define SPI6_NSS_GPIO_FUNC      DEV_SPI6_NSS_FUNC
   #endif
-
 #endif
 
 #if ((defined(USE_SPI1) && defined(SPI1_RX_DMA_Handler)) || \
