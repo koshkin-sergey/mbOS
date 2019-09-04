@@ -77,45 +77,104 @@ static const GPIO_PIN_CFG_t QSPI_pin_cfg_analog = {
 static QSPI_INFO          QSPI0_Info;
 static QSPI_TRANSFER_INFO QSPI0_TransferInfo;
 
-#ifdef USE_SPI1_MISO_Pin
-  static SPI_PIN SPI1_miso = {SPI1_MISO_GPIO_PORT, SPI1_MISO_GPIO_PIN, SPI1_MISO_GPIO_FUNC};
+#ifdef USE_QSPI0_BK1_IO0_Pin
+  static QSPI_PIN QSPI0_bk1_io0_pin = {
+      QSPI0_BK1_IO0_GPIO_PORT,
+      QSPI0_BK1_IO0_GPIO_PIN,
+      QSPI0_BK1_IO0_GPIO_FUNC,
+  };
 #endif
 
-#ifdef USE_SPI1_MOSI_Pin
-  static SPI_PIN SPI1_mosi = {SPI1_MOSI_GPIO_PORT, SPI1_MOSI_GPIO_PIN, SPI1_MOSI_GPIO_FUNC};
+#ifdef USE_QSPI0_BK1_IO1_Pin
+  static QSPI_PIN QSPI0_bk1_io1_pin = {
+      QSPI0_BK1_IO1_GPIO_PORT,
+      QSPI0_BK1_IO1_GPIO_PIN,
+      QSPI0_BK1_IO1_GPIO_FUNC,
+  };
 #endif
 
-#ifdef USE_SPI1_SCK_Pin
-  static SPI_PIN SPI1_sck = {SPI1_SCK_GPIO_PORT, SPI1_SCK_GPIO_PIN, SPI1_SCK_GPIO_FUNC};
+#ifdef USE_QSPI0_BK1_IO2_Pin
+  static QSPI_PIN QSPI0_bk1_io2_pin = {
+      QSPI0_BK1_IO2_GPIO_PORT,
+      QSPI0_BK1_IO2_GPIO_PIN,
+      QSPI0_BK1_IO2_GPIO_FUNC,
+  };
 #endif
 
-#ifdef USE_SPI1_NSS_Pin
-  static SPI_PIN SPI1_nss = {SPI1_NSS_GPIO_PORT, SPI1_NSS_GPIO_PIN, SPI1_NSS_GPIO_FUNC};
+#ifdef USE_QSPI0_BK1_IO3_Pin
+  static QSPI_PIN QSPI0_bk1_io3_pin = {
+      QSPI0_BK1_IO3_GPIO_PORT,
+      QSPI0_BK1_IO3_GPIO_PIN,
+      QSPI0_BK1_IO3_GPIO_FUNC,
+  };
 #endif
 
-#ifdef SPI1_TX_DMA_Stream
-static DMA_Handle_t SPI1_TX_DMA_Handle;
-static const DMA_Resources_t SPI1_TX_DMA = {
-  &SPI1_TX_DMA_Handle,
-  SPI1_TX_DMA_Stream,
-  SPI1_TX_DMA_Channel,
-  SPI1_TX_DMA_Priority,
-  SPIx_TX_DMA_Callback,
-  DEV_SPI_DMA_INT_PRIORITY,
-  SPI1_TX_DMA_IRQn,
-};
+#ifdef USE_QSPI0_BK1_NCS_Pin
+  static QSPI_PIN QSPI0_bk1_ncs_pin = {
+      QSPI0_BK1_NCS_GPIO_PORT,
+      QSPI0_BK1_NCS_GPIO_PIN,
+      QSPI0_BK1_NCS_GPIO_FUNC,
+  };
 #endif
 
-#ifdef SPI1_RX_DMA_Stream
-static DMA_Handle_t SPI1_RX_DMA_Handle;
-static const DMA_Resources_t SPI1_RX_DMA = {
-  &SPI1_RX_DMA_Handle,
-  SPI1_RX_DMA_Stream,
-  SPI1_RX_DMA_Channel,
-  SPI1_RX_DMA_Priority,
-  SPIx_RX_DMA_Callback,
-  DEV_SPI_DMA_INT_PRIORITY,
-  SPI1_RX_DMA_IRQn,
+#ifdef USE_QSPI0_BK2_IO0_Pin
+  static QSPI_PIN QSPI0_bk2_io0_pin = {
+      QSPI0_BK2_IO0_GPIO_PORT,
+      QSPI0_BK2_IO0_GPIO_PIN,
+      QSPI0_BK2_IO0_GPIO_FUNC,
+  };
+#endif
+
+#ifdef USE_QSPI0_BK2_IO1_Pin
+  static QSPI_PIN QSPI0_bk2_io1_pin = {
+      QSPI0_BK2_IO1_GPIO_PORT,
+      QSPI0_BK2_IO1_GPIO_PIN,
+      QSPI0_BK2_IO1_GPIO_FUNC,
+  };
+#endif
+
+#ifdef USE_QSPI0_BK2_IO2_Pin
+  static QSPI_PIN QSPI0_bk2_io2_pin = {
+      QSPI0_BK2_IO2_GPIO_PORT,
+      QSPI0_BK2_IO2_GPIO_PIN,
+      QSPI0_BK2_IO2_GPIO_FUNC,
+  };
+#endif
+
+#ifdef USE_QSPI0_BK2_IO3_Pin
+  static QSPI_PIN QSPI0_bk2_io3_pin = {
+      QSPI0_BK2_IO3_GPIO_PORT,
+      QSPI0_BK2_IO3_GPIO_PIN,
+      QSPI0_BK2_IO3_GPIO_FUNC,
+  };
+#endif
+
+#ifdef USE_QSPI0_BK2_NCS_Pin
+  static QSPI_PIN QSPI0_bk2_ncs_pin = {
+      QSPI0_BK2_NCS_GPIO_PORT,
+      QSPI0_BK2_NCS_GPIO_PIN,
+      QSPI0_BK2_NCS_GPIO_FUNC,
+  };
+#endif
+
+#ifdef USE_QSPI0_CLK_Pin
+  static QSPI_PIN QSPI0_clk_pin = {
+      QSPI0_CLK_GPIO_PORT,
+      QSPI0_CLK_GPIO_PIN,
+      QSPI0_CLK_GPIO_FUNC,
+  };
+#endif
+
+#ifdef QSPI0_DMA_Stream
+static DMA_Handle_t QSPI0_DMA_Handle;
+static const DMA_Resources_t QSPI0_DMA = {
+  &QSPI0_DMA_Handle,
+  QSPI0_DMA_Stream,
+  QSPI0_DMA_Channel,
+  QSPI0_DMA_Priority,
+  QSPIx_DMA_Callback,
+  DEV_QSPI_DMA_INT_PRIORITY,
+  QSPI0_DMA_IRQn,
 };
 #endif
 
@@ -123,8 +182,8 @@ static const DMA_Resources_t SPI1_RX_DMA = {
 static QSPI_RESOURCES QSPI0_Resources = {
   QUADSPI,
   {
-#ifdef USE_SPI1_MISO_Pin
-      &SPI1_miso,
+#ifdef USE_QSPI0_BK1_IO0_Pin
+      &QSPI0_bk1_io0_pin,
 #else
       NULL,
 #endif
@@ -145,19 +204,14 @@ static QSPI_RESOURCES QSPI0_Resources = {
 #endif
   },
   RCC_PERIPH_QSPI,
-#ifdef SPI1_TX_DMA_Stream
-  &SPI1_TX_DMA,
+  QUADSPI_IRQn,
+#ifdef QSPI0_DMA_Stream
+  &QSPI0_DMA,
 #else
   NULL,
 #endif
-#ifdef SPI1_RX_DMA_Stream
-  &SPI1_RX_DMA,
-#else
-  NULL,
-#endif
-  &SPI1_Info,
-  &SPI1_TransferInfo,
-  SPI1_IRQn
+  &QSPI0_Info,
+  &QSPI0_TransferInfo,
 };
 
 #endif /* USE_SPI1 */

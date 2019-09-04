@@ -168,7 +168,6 @@ DRIVER_QSPI Driver_QSPI##x = {                                                  
 #define QSPI_POWERED              ((uint8_t)(1U << 1))     // QSPI powered on
 #define QSPI_CONFIGURED           ((uint8_t)(1U << 2))     // QSPI configured
 #define QSPI_DATA_LOST            ((uint8_t)(1U << 3))     // QSPI data lost occurred
-#define QSPI_MODE_FAULT           ((uint8_t)(1U << 4))     // QSPI mode fault occurred
 
 /*******************************************************************************
  *  typedefs and structures (scope: module-local)
@@ -176,9 +175,9 @@ DRIVER_QSPI Driver_QSPI##x = {                                                  
 
 /* QSPI Pin */
 typedef const struct _QSPI_PIN {
-  GPIO_PORT_t           port;               // IO port
-  GPIO_PIN_t            pin;                // IO pin
-  GPIO_PIN_FUNC_t       func;               // AF pin configuration
+  GPIO_PORT_t               port;           // IO port
+  GPIO_PIN_t                 pin;           // IO pin
+  GPIO_PIN_FUNC_t           func;           // AF pin configuration
 } QSPI_PIN;
 
 /* QSPI Input/Output Configuration */
@@ -196,44 +195,36 @@ typedef const struct _SPI_IO {
   QSPI_PIN                  *clk;           // Pointer to NSS pin configuration
 } QSPI_IO;
 
-typedef struct _SPI_STATUS {
-  uint8_t               busy;               // Transmitter/Receiver busy flag
-  uint8_t               data_lost;          // Data lost: Receive overflow / Transmit underflow (cleared on start of transfer operation)
-  uint8_t               mode_fault;         // Mode fault detected; optional (cleared on start of transfer operation)
-} SPI_STATUS;
+typedef struct _QSPI_STATUS {
+  uint8_t                   busy;           // Transmitter/Receiver busy flag
+  uint8_t              data_lost;           // Data lost: Receive overflow / Transmit underflow (cleared on start of transfer operation)
+} QSPI_STATUS;
 
-/* SPI Information (Run-Time) */
-typedef struct _SPI_INFO {
-  ARM_SPI_SignalEvent_t cb_event;           // Event Callback
-  SPI_STATUS            status;             // Status flags
-  uint8_t               state;              // Current SPI state
-  uint32_t              mode;               // Current SPI mode
-} SPI_INFO;
+/* QSPI Information (Run-Time) */
+typedef struct _QSPI_INFO {
+  QSPI_SignalEvent_t    cb_event;           // Event Callback
+  QSPI_STATUS             status;           // Status flags
+  uint8_t                  state;           // Current QSPI state
+  uint32_t                  mode;           // Current QSPI mode
+} QSPI_INFO;
 
-/* SPI Transfer Information (Run-Time) */
-typedef struct _SPI_TRANSFER_INFO {
-  uint32_t              num;                // Total number of transfers
-  uint8_t              *rx_buf;             // Pointer to in data buffer
-  uint8_t              *tx_buf;             // Pointer to out data buffer
-  uint32_t              rx_cnt;             // Number of data received
-  uint32_t              tx_cnt;             // Number of data sent
-  uint32_t              dump_val;           // Variable for dumping DMA data
-  uint16_t              def_val;            // Default transfer value
-  uint16_t              reserved;           // Reserved
-} SPI_TRANSFER_INFO;
+/* QSPI Transfer Information (Run-Time) */
+typedef struct _QSPI_TRANSFER_INFO {
+  uint32_t                   num;           // Total number of transfers
+  uint32_t                   cnt;           // Number of data transfered
+  uint8_t                   *buf;           // Pointer to data buffer
+} QSPI_TRANSFER_INFO;
 
-/* SPI Resource Configuration */
-typedef struct _SPI_RESOURSES {
-  SPI_TypeDef          *reg;                // SPI peripheral register interface
-  SPI_IO                io;                 // SPI Input/Output pins
-  RCC_Periph_t          rcc;                // RCC registers
-  DMA_Resources_t      *tx_dma;             // Transmit stream register interface
-  DMA_Resources_t      *rx_dma;             // Receive stream register interface
-  SPI_INFO             *info;               // Run-Time information
-  SPI_TRANSFER_INFO    *xfer;               // SPI transfer information
-  IRQn_Type             irq_num;            // SPI IRQ Number
-  uint8_t               reserved[3];        // Reserved
-} const SPI_RESOURCES;
+/* QSPI Resource Configuration */
+typedef struct _QSPI_RESOURSES {
+  QUADSPI_TypeDef           *reg;           // QSPI peripheral register interface
+  QSPI_IO                     io;           // QSPI Input/Output pins
+  RCC_Periph_t               rcc;           // RCC registers
+  IRQn_Type              irq_num;           // QSPI IRQ Number
+  DMA_Resources_t           *dma;           // Transmit stream register interface
+  QSPI_INFO                *info;           // Run-Time information
+  QSPI_TRANSFER_INFO       *xfer;           // QSPI transfer information
+} const QSPI_RESOURCES;
 
 #endif /* QSPI_STM32F7XX_H_ */
 
