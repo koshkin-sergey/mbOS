@@ -1781,212 +1781,212 @@
 
 // </e>
 
-// <e> QUADSPI0 (Quad Serial Peripheral Interface 0) [Driver_QUADSPI0]
-// <i> Configuration settings for Driver_QUADSPI0 in component ::CMSIS Driver:QUADSPI
-#define DEV_QUADSPI0                      0
+// <e> QSPI0 (Quad Serial Peripheral Interface 0) [Driver_QSPI0]
+// <i> Configuration settings for Driver_QSPI0 in component ::CMSIS Driver:QSPI
+#define DEV_QSPI0                      0
 
-//   <o> QUADSPI0_BK1_IO0 Pin <0=>Not Used <1=>PC9 <2=>PD11 <3=>PF8
-#define   DEV_QUADSPI0_BK1_IO0_PORT_ID    0
-#if      (DEV_QUADSPI0_BK1_IO0_PORT_ID == 0)
-  #define DEV_QUADSPI0_BK1_IO0            0
-#elif    (DEV_QUADSPI0_BK1_IO0_PORT_ID == 1)
-  #define DEV_QUADSPI0_BK1_IO0            1
-  #define DEV_QUADSPI0_BK1_IO0_PORT       GPIO_PORT_C
-  #define DEV_QUADSPI0_BK1_IO0_PIN        GPIO_PIN_9
-  #define DEV_QUADSPI0_BK1_IO0_FUNC       GPIO_PIN_FUNC_9
-#elif    (DEV_QUADSPI0_BK1_IO0_PORT_ID == 2)
-  #define DEV_QUADSPI0_BK1_IO0            1
-  #define DEV_QUADSPI0_BK1_IO0_PORT       GPIO_PORT_D
-  #define DEV_QUADSPI0_BK1_IO0_PIN        GPIO_PIN_11
-  #define DEV_QUADSPI0_BK1_IO0_FUNC       GPIO_PIN_FUNC_9
-#elif    (DEV_QUADSPI0_BK1_IO0_PORT_ID == 3)
-  #define DEV_QUADSPI0_BK1_IO0            1
-  #define DEV_QUADSPI0_BK1_IO0_PORT       GPIO_PORT_F
-  #define DEV_QUADSPI0_BK1_IO0_PIN        GPIO_PIN_8
-  #define DEV_QUADSPI0_BK1_IO0_FUNC       GPIO_PIN_FUNC_10
+//   <o> QSPI0_BK1_IO0 Pin <0=>Not Used <1=>PC9 <2=>PD11 <3=>PF8
+#define   DEV_QSPI0_BK1_IO0_PORT_ID    0
+#if      (DEV_QSPI0_BK1_IO0_PORT_ID == 0)
+  #define DEV_QSPI0_BK1_IO0            0
+#elif    (DEV_QSPI0_BK1_IO0_PORT_ID == 1)
+  #define DEV_QSPI0_BK1_IO0            1
+  #define DEV_QSPI0_BK1_IO0_PORT       GPIO_PORT_C
+  #define DEV_QSPI0_BK1_IO0_PIN        GPIO_PIN_9
+  #define DEV_QSPI0_BK1_IO0_FUNC       GPIO_PIN_FUNC_9
+#elif    (DEV_QSPI0_BK1_IO0_PORT_ID == 2)
+  #define DEV_QSPI0_BK1_IO0            1
+  #define DEV_QSPI0_BK1_IO0_PORT       GPIO_PORT_D
+  #define DEV_QSPI0_BK1_IO0_PIN        GPIO_PIN_11
+  #define DEV_QSPI0_BK1_IO0_FUNC       GPIO_PIN_FUNC_9
+#elif    (DEV_QSPI0_BK1_IO0_PORT_ID == 3)
+  #define DEV_QSPI0_BK1_IO0            1
+  #define DEV_QSPI0_BK1_IO0_PORT       GPIO_PORT_F
+  #define DEV_QSPI0_BK1_IO0_PIN        GPIO_PIN_8
+  #define DEV_QSPI0_BK1_IO0_FUNC       GPIO_PIN_FUNC_10
 #else
-  #error "Invalid QUADSPI0_BK1_IO0 Pin Configuration!"
+  #error "Invalid QSPI0_BK1_IO0 Pin Configuration!"
 #endif
 
-//   <o> QUADSPI0_BK1_IO1 Pin <0=>Not Used <1=>PC10 <2=>PD12 <3=>PF9
-#define   DEV_QUADSPI0_BK1_IO1_PORT_ID    0
-#if      (DEV_QUADSPI0_BK1_IO1_PORT_ID == 0)
-  #define DEV_QUADSPI0_BK1_IO1            0
-#elif    (DEV_QUADSPI0_BK1_IO1_PORT_ID == 1)
-  #define DEV_QUADSPI0_BK1_IO1            1
-  #define DEV_QUADSPI0_BK1_IO1_PORT       GPIO_PORT_C
-  #define DEV_QUADSPI0_BK1_IO1_PIN        GPIO_PIN_10
-  #define DEV_QUADSPI0_BK1_IO1_FUNC       GPIO_PIN_FUNC_9
-#elif    (DEV_QUADSPI0_BK1_IO1_PORT_ID == 2)
-  #define DEV_QUADSPI0_BK1_IO1            1
-  #define DEV_QUADSPI0_BK1_IO1_PORT       GPIO_PORT_D
-  #define DEV_QUADSPI0_BK1_IO1_PIN        GPIO_PIN_12
-  #define DEV_QUADSPI0_BK1_IO1_FUNC       GPIO_PIN_FUNC_9
-#elif    (DEV_QUADSPI0_BK1_IO1_PORT_ID == 3)
-  #define DEV_QUADSPI0_BK1_IO1            1
-  #define DEV_QUADSPI0_BK1_IO1_PORT       GPIO_PORT_F
-  #define DEV_QUADSPI0_BK1_IO1_PIN        GPIO_PIN_9
-  #define DEV_QUADSPI0_BK1_IO1_FUNC       GPIO_PIN_FUNC_10
+//   <o> QSPI0_BK1_IO1 Pin <0=>Not Used <1=>PC10 <2=>PD12 <3=>PF9
+#define   DEV_QSPI0_BK1_IO1_PORT_ID    0
+#if      (DEV_QSPI0_BK1_IO1_PORT_ID == 0)
+  #define DEV_QSPI0_BK1_IO1            0
+#elif    (DEV_QSPI0_BK1_IO1_PORT_ID == 1)
+  #define DEV_QSPI0_BK1_IO1            1
+  #define DEV_QSPI0_BK1_IO1_PORT       GPIO_PORT_C
+  #define DEV_QSPI0_BK1_IO1_PIN        GPIO_PIN_10
+  #define DEV_QSPI0_BK1_IO1_FUNC       GPIO_PIN_FUNC_9
+#elif    (DEV_QSPI0_BK1_IO1_PORT_ID == 2)
+  #define DEV_QSPI0_BK1_IO1            1
+  #define DEV_QSPI0_BK1_IO1_PORT       GPIO_PORT_D
+  #define DEV_QSPI0_BK1_IO1_PIN        GPIO_PIN_12
+  #define DEV_QSPI0_BK1_IO1_FUNC       GPIO_PIN_FUNC_9
+#elif    (DEV_QSPI0_BK1_IO1_PORT_ID == 3)
+  #define DEV_QSPI0_BK1_IO1            1
+  #define DEV_QSPI0_BK1_IO1_PORT       GPIO_PORT_F
+  #define DEV_QSPI0_BK1_IO1_PIN        GPIO_PIN_9
+  #define DEV_QSPI0_BK1_IO1_FUNC       GPIO_PIN_FUNC_10
 #else
-  #error "Invalid QUADSPI0_BK1_IO1 Pin Configuration!"
+  #error "Invalid QSPI0_BK1_IO1 Pin Configuration!"
 #endif
 
-//   <o> QUADSPI0_BK1_IO2 Pin <0=>Not Used <1=>PE2 <2=>PF7
-#define   DEV_QUADSPI0_BK1_IO2_PORT_ID    0
-#if      (DEV_QUADSPI0_BK1_IO2_PORT_ID == 0)
-  #define DEV_QUADSPI0_BK1_IO2            0
-#elif    (DEV_QUADSPI0_BK1_IO2_PORT_ID == 1)
-  #define DEV_QUADSPI0_BK1_IO2            1
-  #define DEV_QUADSPI0_BK1_IO2_PORT       GPIO_PORT_E
-  #define DEV_QUADSPI0_BK1_IO2_PIN        GPIO_PIN_2
-  #define DEV_QUADSPI0_BK1_IO2_FUNC       GPIO_PIN_FUNC_9
-#elif    (DEV_QUADSPI0_BK1_IO2_PORT_ID == 2)
-  #define DEV_QUADSPI0_BK1_IO2            1
-  #define DEV_QUADSPI0_BK1_IO2_PORT       GPIO_PORT_F
-  #define DEV_QUADSPI0_BK1_IO2_PIN        GPIO_PIN_7
-  #define DEV_QUADSPI0_BK1_IO2_FUNC       GPIO_PIN_FUNC_9
+//   <o> QSPI0_BK1_IO2 Pin <0=>Not Used <1=>PE2 <2=>PF7
+#define   DEV_QSPI0_BK1_IO2_PORT_ID    0
+#if      (DEV_QSPI0_BK1_IO2_PORT_ID == 0)
+  #define DEV_QSPI0_BK1_IO2            0
+#elif    (DEV_QSPI0_BK1_IO2_PORT_ID == 1)
+  #define DEV_QSPI0_BK1_IO2            1
+  #define DEV_QSPI0_BK1_IO2_PORT       GPIO_PORT_E
+  #define DEV_QSPI0_BK1_IO2_PIN        GPIO_PIN_2
+  #define DEV_QSPI0_BK1_IO2_FUNC       GPIO_PIN_FUNC_9
+#elif    (DEV_QSPI0_BK1_IO2_PORT_ID == 2)
+  #define DEV_QSPI0_BK1_IO2            1
+  #define DEV_QSPI0_BK1_IO2_PORT       GPIO_PORT_F
+  #define DEV_QSPI0_BK1_IO2_PIN        GPIO_PIN_7
+  #define DEV_QSPI0_BK1_IO2_FUNC       GPIO_PIN_FUNC_9
 #else
-  #error "Invalid QUADSPI0_BK1_IO2 Pin Configuration!"
+  #error "Invalid QSPI0_BK1_IO2 Pin Configuration!"
 #endif
 
-//   <o> QUADSPI0_BK1_IO3 Pin <0=>Not Used <1=>PA1 <2=>PD13 <3=>PF6
-#define   DEV_QUADSPI0_BK1_IO3_PORT_ID    0
-#if      (DEV_QUADSPI0_BK1_IO3_PORT_ID == 0)
-  #define DEV_QUADSPI0_BK1_IO3            0
-#elif    (DEV_QUADSPI0_BK1_IO3_PORT_ID == 1)
-  #define DEV_QUADSPI0_BK1_IO3            1
-  #define DEV_QUADSPI0_BK1_IO3_PORT       GPIO_PORT_A
-  #define DEV_QUADSPI0_BK1_IO3_PIN        GPIO_PIN_1
-  #define DEV_QUADSPI0_BK1_IO3_FUNC       GPIO_PIN_FUNC_9
-#elif    (DEV_QUADSPI0_BK1_IO3_PORT_ID == 2)
-  #define DEV_QUADSPI0_BK1_IO3            1
-  #define DEV_QUADSPI0_BK1_IO3_PORT       GPIO_PORT_D
-  #define DEV_QUADSPI0_BK1_IO3_PIN        GPIO_PIN_13
-  #define DEV_QUADSPI0_BK1_IO3_FUNC       GPIO_PIN_FUNC_9
-#elif    (DEV_QUADSPI0_BK1_IO3_PORT_ID == 3)
-  #define DEV_QUADSPI0_BK1_IO3            1
-  #define DEV_QUADSPI0_BK1_IO3_PORT       GPIO_PORT_F
-  #define DEV_QUADSPI0_BK1_IO3_PIN        GPIO_PIN_6
-  #define DEV_QUADSPI0_BK1_IO3_FUNC       GPIO_PIN_FUNC_9
+//   <o> QSPI0_BK1_IO3 Pin <0=>Not Used <1=>PA1 <2=>PD13 <3=>PF6
+#define   DEV_QSPI0_BK1_IO3_PORT_ID    0
+#if      (DEV_QSPI0_BK1_IO3_PORT_ID == 0)
+  #define DEV_QSPI0_BK1_IO3            0
+#elif    (DEV_QSPI0_BK1_IO3_PORT_ID == 1)
+  #define DEV_QSPI0_BK1_IO3            1
+  #define DEV_QSPI0_BK1_IO3_PORT       GPIO_PORT_A
+  #define DEV_QSPI0_BK1_IO3_PIN        GPIO_PIN_1
+  #define DEV_QSPI0_BK1_IO3_FUNC       GPIO_PIN_FUNC_9
+#elif    (DEV_QSPI0_BK1_IO3_PORT_ID == 2)
+  #define DEV_QSPI0_BK1_IO3            1
+  #define DEV_QSPI0_BK1_IO3_PORT       GPIO_PORT_D
+  #define DEV_QSPI0_BK1_IO3_PIN        GPIO_PIN_13
+  #define DEV_QSPI0_BK1_IO3_FUNC       GPIO_PIN_FUNC_9
+#elif    (DEV_QSPI0_BK1_IO3_PORT_ID == 3)
+  #define DEV_QSPI0_BK1_IO3            1
+  #define DEV_QSPI0_BK1_IO3_PORT       GPIO_PORT_F
+  #define DEV_QSPI0_BK1_IO3_PIN        GPIO_PIN_6
+  #define DEV_QSPI0_BK1_IO3_FUNC       GPIO_PIN_FUNC_9
 #else
-  #error "Invalid QUADSPI0_BK1_IO3 Pin Configuration!"
+  #error "Invalid QSPI0_BK1_IO3 Pin Configuration!"
 #endif
 
-//   <o> QUADSPI0_BK1_NCS Pin <0=>Not Used <1=>PB6 <2=>PB10
-#define   DEV_QUADSPI0_BK1_NCS_PORT_ID    0
-#if      (DEV_QUADSPI0_BK1_NCS_PORT_ID == 0)
-  #define DEV_QUADSPI0_BK1_NCS            0
-#elif    (DEV_QUADSPI0_BK1_NCS_PORT_ID == 1)
-  #define DEV_QUADSPI0_BK1_NCS            1
-  #define DEV_QUADSPI0_BK1_NCS_PORT       GPIO_PORT_B
-  #define DEV_QUADSPI0_BK1_NCS_PIN        GPIO_PIN_6
-  #define DEV_QUADSPI0_BK1_NCS_FUNC       GPIO_PIN_FUNC_10
-#elif    (DEV_QUADSPI0_BK1_NCS_PORT_ID == 2)
-  #define DEV_QUADSPI0_BK1_NCS            1
-  #define DEV_QUADSPI0_BK1_NCS_PORT       GPIO_PORT_B
-  #define DEV_QUADSPI0_BK1_NCS_PIN        GPIO_PIN_10
-  #define DEV_QUADSPI0_BK1_NCS_FUNC       GPIO_PIN_FUNC_9
+//   <o> QSPI0_BK1_NCS Pin <0=>Not Used <1=>PB6 <2=>PB10
+#define   DEV_QSPI0_BK1_NCS_PORT_ID    0
+#if      (DEV_QSPI0_BK1_NCS_PORT_ID == 0)
+  #define DEV_QSPI0_BK1_NCS            0
+#elif    (DEV_QSPI0_BK1_NCS_PORT_ID == 1)
+  #define DEV_QSPI0_BK1_NCS            1
+  #define DEV_QSPI0_BK1_NCS_PORT       GPIO_PORT_B
+  #define DEV_QSPI0_BK1_NCS_PIN        GPIO_PIN_6
+  #define DEV_QSPI0_BK1_NCS_FUNC       GPIO_PIN_FUNC_10
+#elif    (DEV_QSPI0_BK1_NCS_PORT_ID == 2)
+  #define DEV_QSPI0_BK1_NCS            1
+  #define DEV_QSPI0_BK1_NCS_PORT       GPIO_PORT_B
+  #define DEV_QSPI0_BK1_NCS_PIN        GPIO_PIN_10
+  #define DEV_QSPI0_BK1_NCS_FUNC       GPIO_PIN_FUNC_9
 #else
-  #error "Invalid QUADSPI0_BK1_NCS Pin Configuration!"
+  #error "Invalid QSPI0_BK1_NCS Pin Configuration!"
 #endif
 
-//   <o> QUADSPI0_BK2_IO0 Pin <0=>Not Used <1=>PE7 <2=>PH2
-#define   DEV_QUADSPI0_BK2_IO0_PORT_ID    0
-#if      (DEV_QUADSPI0_BK2_IO0_PORT_ID == 0)
-  #define DEV_QUADSPI0_BK2_IO0            0
-#elif    (DEV_QUADSPI0_BK2_IO0_PORT_ID == 1)
-  #define DEV_QUADSPI0_BK2_IO0            1
-  #define DEV_QUADSPI0_BK2_IO0_PORT       GPIO_PORT_E
-  #define DEV_QUADSPI0_BK2_IO0_PIN        GPIO_PIN_7
-  #define DEV_QUADSPI0_BK2_IO0_FUNC       GPIO_PIN_FUNC_10
-#elif    (DEV_QUADSPI0_BK2_IO0_PORT_ID == 2)
-  #define DEV_QUADSPI0_BK2_IO0            1
-  #define DEV_QUADSPI0_BK2_IO0_PORT       GPIO_PORT_H
-  #define DEV_QUADSPI0_BK2_IO0_PIN        GPIO_PIN_2
-  #define DEV_QUADSPI0_BK2_IO0_FUNC       GPIO_PIN_FUNC_9
+//   <o> QSPI0_BK2_IO0 Pin <0=>Not Used <1=>PE7 <2=>PH2
+#define   DEV_QSPI0_BK2_IO0_PORT_ID    0
+#if      (DEV_QSPI0_BK2_IO0_PORT_ID == 0)
+  #define DEV_QSPI0_BK2_IO0            0
+#elif    (DEV_QSPI0_BK2_IO0_PORT_ID == 1)
+  #define DEV_QSPI0_BK2_IO0            1
+  #define DEV_QSPI0_BK2_IO0_PORT       GPIO_PORT_E
+  #define DEV_QSPI0_BK2_IO0_PIN        GPIO_PIN_7
+  #define DEV_QSPI0_BK2_IO0_FUNC       GPIO_PIN_FUNC_10
+#elif    (DEV_QSPI0_BK2_IO0_PORT_ID == 2)
+  #define DEV_QSPI0_BK2_IO0            1
+  #define DEV_QSPI0_BK2_IO0_PORT       GPIO_PORT_H
+  #define DEV_QSPI0_BK2_IO0_PIN        GPIO_PIN_2
+  #define DEV_QSPI0_BK2_IO0_FUNC       GPIO_PIN_FUNC_9
 #else
-  #error "Invalid QUADSPI0_BK2_IO0 Pin Configuration!"
+  #error "Invalid QSPI0_BK2_IO0 Pin Configuration!"
 #endif
 
-//   <o> QUADSPI0_BK2_IO1 Pin <0=>Not Used <1=>PE8 <2=>PH3
-#define   DEV_QUADSPI0_BK2_IO1_PORT_ID    0
-#if      (DEV_QUADSPI0_BK2_IO1_PORT_ID == 0)
-  #define DEV_QUADSPI0_BK2_IO1            0
-#elif    (DEV_QUADSPI0_BK2_IO1_PORT_ID == 1)
-  #define DEV_QUADSPI0_BK2_IO1            1
-  #define DEV_QUADSPI0_BK2_IO1_PORT       GPIO_PORT_E
-  #define DEV_QUADSPI0_BK2_IO1_PIN        GPIO_PIN_8
-  #define DEV_QUADSPI0_BK2_IO1_FUNC       GPIO_PIN_FUNC_10
-#elif    (DEV_QUADSPI0_BK2_IO1_PORT_ID == 2)
-  #define DEV_QUADSPI0_BK2_IO1            1
-  #define DEV_QUADSPI0_BK2_IO1_PORT       GPIO_PORT_H
-  #define DEV_QUADSPI0_BK2_IO1_PIN        GPIO_PIN_3
-  #define DEV_QUADSPI0_BK2_IO1_FUNC       GPIO_PIN_FUNC_9
+//   <o> QSPI0_BK2_IO1 Pin <0=>Not Used <1=>PE8 <2=>PH3
+#define   DEV_QSPI0_BK2_IO1_PORT_ID    0
+#if      (DEV_QSPI0_BK2_IO1_PORT_ID == 0)
+  #define DEV_QSPI0_BK2_IO1            0
+#elif    (DEV_QSPI0_BK2_IO1_PORT_ID == 1)
+  #define DEV_QSPI0_BK2_IO1            1
+  #define DEV_QSPI0_BK2_IO1_PORT       GPIO_PORT_E
+  #define DEV_QSPI0_BK2_IO1_PIN        GPIO_PIN_8
+  #define DEV_QSPI0_BK2_IO1_FUNC       GPIO_PIN_FUNC_10
+#elif    (DEV_QSPI0_BK2_IO1_PORT_ID == 2)
+  #define DEV_QSPI0_BK2_IO1            1
+  #define DEV_QSPI0_BK2_IO1_PORT       GPIO_PORT_H
+  #define DEV_QSPI0_BK2_IO1_PIN        GPIO_PIN_3
+  #define DEV_QSPI0_BK2_IO1_FUNC       GPIO_PIN_FUNC_9
 #else
-  #error "Invalid QUADSPI0_BK2_IO1 Pin Configuration!"
+  #error "Invalid QSPI0_BK2_IO1 Pin Configuration!"
 #endif
 
-//   <o> QUADSPI0_BK2_IO2 Pin <0=>Not Used <1=>PE9 <2=>PG9
-#define   DEV_QUADSPI0_BK2_IO2_PORT_ID    0
-#if      (DEV_QUADSPI0_BK2_IO2_PORT_ID == 0)
-  #define DEV_QUADSPI0_BK2_IO2            0
-#elif    (DEV_QUADSPI0_BK2_IO2_PORT_ID == 1)
-  #define DEV_QUADSPI0_BK2_IO2            1
-  #define DEV_QUADSPI0_BK2_IO2_PORT       GPIO_PORT_E
-  #define DEV_QUADSPI0_BK2_IO2_PIN        GPIO_PIN_9
-  #define DEV_QUADSPI0_BK2_IO2_FUNC       GPIO_PIN_FUNC_10
-#elif    (DEV_QUADSPI0_BK2_IO2_PORT_ID == 2)
-  #define DEV_QUADSPI0_BK2_IO2            1
-  #define DEV_QUADSPI0_BK2_IO2_PORT       GPIO_PORT_G
-  #define DEV_QUADSPI0_BK2_IO2_PIN        GPIO_PIN_9
-  #define DEV_QUADSPI0_BK2_IO2_FUNC       GPIO_PIN_FUNC_9
+//   <o> QSPI0_BK2_IO2 Pin <0=>Not Used <1=>PE9 <2=>PG9
+#define   DEV_QSPI0_BK2_IO2_PORT_ID    0
+#if      (DEV_QSPI0_BK2_IO2_PORT_ID == 0)
+  #define DEV_QSPI0_BK2_IO2            0
+#elif    (DEV_QSPI0_BK2_IO2_PORT_ID == 1)
+  #define DEV_QSPI0_BK2_IO2            1
+  #define DEV_QSPI0_BK2_IO2_PORT       GPIO_PORT_E
+  #define DEV_QSPI0_BK2_IO2_PIN        GPIO_PIN_9
+  #define DEV_QSPI0_BK2_IO2_FUNC       GPIO_PIN_FUNC_10
+#elif    (DEV_QSPI0_BK2_IO2_PORT_ID == 2)
+  #define DEV_QSPI0_BK2_IO2            1
+  #define DEV_QSPI0_BK2_IO2_PORT       GPIO_PORT_G
+  #define DEV_QSPI0_BK2_IO2_PIN        GPIO_PIN_9
+  #define DEV_QSPI0_BK2_IO2_FUNC       GPIO_PIN_FUNC_9
 #else
-  #error "Invalid QUADSPI0_BK2_IO2 Pin Configuration!"
+  #error "Invalid QSPI0_BK2_IO2 Pin Configuration!"
 #endif
 
-//   <o> QUADSPI0_BK2_IO3 Pin <0=>Not Used <1=>PE10 <2=>PG14
-#define   DEV_QUADSPI0_BK2_IO3_PORT_ID    0
-#if      (DEV_QUADSPI0_BK2_IO3_PORT_ID == 0)
-  #define DEV_QUADSPI0_BK2_IO3            0
-#elif    (DEV_QUADSPI0_BK2_IO3_PORT_ID == 1)
-  #define DEV_QUADSPI0_BK2_IO3            1
-  #define DEV_QUADSPI0_BK2_IO3_PORT       GPIO_PORT_E
-  #define DEV_QUADSPI0_BK2_IO3_PIN        GPIO_PIN_10
-  #define DEV_QUADSPI0_BK2_IO3_FUNC       GPIO_PIN_FUNC_10
-#elif    (DEV_QUADSPI0_BK2_IO3_PORT_ID == 2)
-  #define DEV_QUADSPI0_BK2_IO3            1
-  #define DEV_QUADSPI0_BK2_IO3_PORT       GPIO_PORT_G
-  #define DEV_QUADSPI0_BK2_IO3_PIN        GPIO_PIN_14
-  #define DEV_QUADSPI0_BK2_IO3_FUNC       GPIO_PIN_FUNC_9
+//   <o> QSPI0_BK2_IO3 Pin <0=>Not Used <1=>PE10 <2=>PG14
+#define   DEV_QSPI0_BK2_IO3_PORT_ID    0
+#if      (DEV_QSPI0_BK2_IO3_PORT_ID == 0)
+  #define DEV_QSPI0_BK2_IO3            0
+#elif    (DEV_QSPI0_BK2_IO3_PORT_ID == 1)
+  #define DEV_QSPI0_BK2_IO3            1
+  #define DEV_QSPI0_BK2_IO3_PORT       GPIO_PORT_E
+  #define DEV_QSPI0_BK2_IO3_PIN        GPIO_PIN_10
+  #define DEV_QSPI0_BK2_IO3_FUNC       GPIO_PIN_FUNC_10
+#elif    (DEV_QSPI0_BK2_IO3_PORT_ID == 2)
+  #define DEV_QSPI0_BK2_IO3            1
+  #define DEV_QSPI0_BK2_IO3_PORT       GPIO_PORT_G
+  #define DEV_QSPI0_BK2_IO3_PIN        GPIO_PIN_14
+  #define DEV_QSPI0_BK2_IO3_FUNC       GPIO_PIN_FUNC_9
 #else
-  #error "Invalid QUADSPI0_BK2_IO3 Pin Configuration!"
+  #error "Invalid QSPI0_BK2_IO3 Pin Configuration!"
 #endif
 
-//   <o> QUADSPI0_BK2_NCS Pin <0=>Not Used <1=>PC11
-#define   DEV_QUADSPI0_BK2_NCS_PORT_ID    0
-#if      (DEV_QUADSPI0_BK2_NCS_PORT_ID == 0)
-  #define DEV_QUADSPI0_BK2_NCS            0
-#elif    (DEV_QUADSPI0_BK2_NCS_PORT_ID == 1)
-  #define DEV_QUADSPI0_BK2_NCS            1
-  #define DEV_QUADSPI0_BK2_NCS_PORT       GPIO_PORT_C
-  #define DEV_QUADSPI0_BK2_NCS_PIN        GPIO_PIN_11
-  #define DEV_QUADSPI0_BK2_NCS_FUNC       GPIO_PIN_FUNC_9
+//   <o> QSPI0_BK2_NCS Pin <0=>Not Used <1=>PC11
+#define   DEV_QSPI0_BK2_NCS_PORT_ID    0
+#if      (DEV_QSPI0_BK2_NCS_PORT_ID == 0)
+  #define DEV_QSPI0_BK2_NCS            0
+#elif    (DEV_QSPI0_BK2_NCS_PORT_ID == 1)
+  #define DEV_QSPI0_BK2_NCS            1
+  #define DEV_QSPI0_BK2_NCS_PORT       GPIO_PORT_C
+  #define DEV_QSPI0_BK2_NCS_PIN        GPIO_PIN_11
+  #define DEV_QSPI0_BK2_NCS_FUNC       GPIO_PIN_FUNC_9
 #else
-  #error "Invalid QUADSPI0_BK2_NCS Pin Configuration!"
+  #error "Invalid QSPI0_BK2_NCS Pin Configuration!"
 #endif
 
-//   <o> QUADSPI0_CLK Pin <0=>PB2 <1=>PF10
-#define   DEV_QUADSPI0_CLK_PORT_ID        0
-#if      (DEV_QUADSPI0_CLK_PORT_ID == 0)
-  #define DEV_QUADSPI0_CLK_PORT           GPIO_PORT_B
-  #define DEV_QUADSPI0_CLK_PIN            GPIO_PIN_2
-  #define DEV_QUADSPI0_CLK_FUNC           GPIO_PIN_FUNC_9
-#elif    (DEV_QUADSPI0_CLK_PORT_ID == 1)
-  #define DEV_QUADSPI0_CLK_PORT           GPIO_PORT_F
-  #define DEV_QUADSPI0_CLK_PIN            GPIO_PIN_10
-  #define DEV_QUADSPI0_CLK_FUNC           GPIO_PIN_FUNC_9
+//   <o> QSPI0_CLK Pin <0=>PB2 <1=>PF10
+#define   DEV_QSPI0_CLK_PORT_ID        0
+#if      (DEV_QSPI0_CLK_PORT_ID == 0)
+  #define DEV_QSPI0_CLK_PORT           GPIO_PORT_B
+  #define DEV_QSPI0_CLK_PIN            GPIO_PIN_2
+  #define DEV_QSPI0_CLK_FUNC           GPIO_PIN_FUNC_9
+#elif    (DEV_QSPI0_CLK_PORT_ID == 1)
+  #define DEV_QSPI0_CLK_PORT           GPIO_PORT_F
+  #define DEV_QSPI0_CLK_PIN            GPIO_PIN_10
+  #define DEV_QSPI0_CLK_FUNC           GPIO_PIN_FUNC_9
 #else
-  #error "Invalid QUADSPI0_CLK Pin Configuration!"
+  #error "Invalid QSPI0_CLK Pin Configuration!"
 #endif
 
 //   <e> DMA
@@ -1999,11 +1999,11 @@
 //     <o4> Priority <0=>Low <1=>Medium <2=>High <3=>Very High
 //     <i>  Selects DMA Priority
 //   </e>
-#define DEV_QUADSPI0_DMA                  0
-#define DEV_QUADSPI0_DMA_NUMBER           2
-#define DEV_QUADSPI0_DMA_STREAM           7
-#define DEV_QUADSPI0_DMA_CHANNEL          3
-#define DEV_QUADSPI0_DMA_PRIORITY         0
+#define DEV_QSPI0_DMA                  0
+#define DEV_QSPI0_DMA_NUMBER           2
+#define DEV_QSPI0_DMA_STREAM           7
+#define DEV_QSPI0_DMA_CHANNEL          3
+#define DEV_QSPI0_DMA_PRIORITY         0
 
 // </e>
 
