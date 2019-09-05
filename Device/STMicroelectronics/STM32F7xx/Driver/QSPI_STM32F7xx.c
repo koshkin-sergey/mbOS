@@ -21,6 +21,7 @@
  *  includes
  ******************************************************************************/
 
+#include <string.h>
 #include "QSPI_STM32F7xx.h"
 
 #if defined(USE_QSPI0)
@@ -74,11 +75,11 @@ static const GPIO_PIN_CFG_t QSPI_pin_cfg_analog = {
 #if defined(USE_QSPI0)
 
 /* QSPI0 Information (Run-Time) */
-static QSPI_INFO          QSPI0_Info;
-static QSPI_TRANSFER_INFO QSPI0_TransferInfo;
+static QSPI_INFO_t          QSPI0_Info;
+static QSPI_TRANSFER_INFO_t QSPI0_TransferInfo;
 
 #ifdef USE_QSPI0_BK1_IO0_Pin
-  static QSPI_PIN QSPI0_bk1_io0_pin = {
+  static QSPI_PIN_t QSPI0_bk1_io0_pin = {
       QSPI0_BK1_IO0_GPIO_PORT,
       QSPI0_BK1_IO0_GPIO_PIN,
       QSPI0_BK1_IO0_GPIO_FUNC,
@@ -86,7 +87,7 @@ static QSPI_TRANSFER_INFO QSPI0_TransferInfo;
 #endif
 
 #ifdef USE_QSPI0_BK1_IO1_Pin
-  static QSPI_PIN QSPI0_bk1_io1_pin = {
+  static QSPI_PIN_t QSPI0_bk1_io1_pin = {
       QSPI0_BK1_IO1_GPIO_PORT,
       QSPI0_BK1_IO1_GPIO_PIN,
       QSPI0_BK1_IO1_GPIO_FUNC,
@@ -94,7 +95,7 @@ static QSPI_TRANSFER_INFO QSPI0_TransferInfo;
 #endif
 
 #ifdef USE_QSPI0_BK1_IO2_Pin
-  static QSPI_PIN QSPI0_bk1_io2_pin = {
+  static QSPI_PIN_t QSPI0_bk1_io2_pin = {
       QSPI0_BK1_IO2_GPIO_PORT,
       QSPI0_BK1_IO2_GPIO_PIN,
       QSPI0_BK1_IO2_GPIO_FUNC,
@@ -102,7 +103,7 @@ static QSPI_TRANSFER_INFO QSPI0_TransferInfo;
 #endif
 
 #ifdef USE_QSPI0_BK1_IO3_Pin
-  static QSPI_PIN QSPI0_bk1_io3_pin = {
+  static QSPI_PIN_t QSPI0_bk1_io3_pin = {
       QSPI0_BK1_IO3_GPIO_PORT,
       QSPI0_BK1_IO3_GPIO_PIN,
       QSPI0_BK1_IO3_GPIO_FUNC,
@@ -110,7 +111,7 @@ static QSPI_TRANSFER_INFO QSPI0_TransferInfo;
 #endif
 
 #ifdef USE_QSPI0_BK1_NCS_Pin
-  static QSPI_PIN QSPI0_bk1_ncs_pin = {
+  static QSPI_PIN_t QSPI0_bk1_ncs_pin = {
       QSPI0_BK1_NCS_GPIO_PORT,
       QSPI0_BK1_NCS_GPIO_PIN,
       QSPI0_BK1_NCS_GPIO_FUNC,
@@ -118,7 +119,7 @@ static QSPI_TRANSFER_INFO QSPI0_TransferInfo;
 #endif
 
 #ifdef USE_QSPI0_BK2_IO0_Pin
-  static QSPI_PIN QSPI0_bk2_io0_pin = {
+  static QSPI_PIN_t QSPI0_bk2_io0_pin = {
       QSPI0_BK2_IO0_GPIO_PORT,
       QSPI0_BK2_IO0_GPIO_PIN,
       QSPI0_BK2_IO0_GPIO_FUNC,
@@ -126,7 +127,7 @@ static QSPI_TRANSFER_INFO QSPI0_TransferInfo;
 #endif
 
 #ifdef USE_QSPI0_BK2_IO1_Pin
-  static QSPI_PIN QSPI0_bk2_io1_pin = {
+  static QSPI_PIN_t QSPI0_bk2_io1_pin = {
       QSPI0_BK2_IO1_GPIO_PORT,
       QSPI0_BK2_IO1_GPIO_PIN,
       QSPI0_BK2_IO1_GPIO_FUNC,
@@ -134,7 +135,7 @@ static QSPI_TRANSFER_INFO QSPI0_TransferInfo;
 #endif
 
 #ifdef USE_QSPI0_BK2_IO2_Pin
-  static QSPI_PIN QSPI0_bk2_io2_pin = {
+  static QSPI_PIN_t QSPI0_bk2_io2_pin = {
       QSPI0_BK2_IO2_GPIO_PORT,
       QSPI0_BK2_IO2_GPIO_PIN,
       QSPI0_BK2_IO2_GPIO_FUNC,
@@ -142,7 +143,7 @@ static QSPI_TRANSFER_INFO QSPI0_TransferInfo;
 #endif
 
 #ifdef USE_QSPI0_BK2_IO3_Pin
-  static QSPI_PIN QSPI0_bk2_io3_pin = {
+  static QSPI_PIN_t QSPI0_bk2_io3_pin = {
       QSPI0_BK2_IO3_GPIO_PORT,
       QSPI0_BK2_IO3_GPIO_PIN,
       QSPI0_BK2_IO3_GPIO_FUNC,
@@ -150,7 +151,7 @@ static QSPI_TRANSFER_INFO QSPI0_TransferInfo;
 #endif
 
 #ifdef USE_QSPI0_BK2_NCS_Pin
-  static QSPI_PIN QSPI0_bk2_ncs_pin = {
+  static QSPI_PIN_t QSPI0_bk2_ncs_pin = {
       QSPI0_BK2_NCS_GPIO_PORT,
       QSPI0_BK2_NCS_GPIO_PIN,
       QSPI0_BK2_NCS_GPIO_FUNC,
@@ -158,7 +159,7 @@ static QSPI_TRANSFER_INFO QSPI0_TransferInfo;
 #endif
 
 #ifdef USE_QSPI0_CLK_Pin
-  static QSPI_PIN QSPI0_clk_pin = {
+  static QSPI_PIN_t QSPI0_clk_pin = {
       QSPI0_CLK_GPIO_PORT,
       QSPI0_CLK_GPIO_PIN,
       QSPI0_CLK_GPIO_FUNC,
@@ -179,7 +180,7 @@ static const DMA_Resources_t QSPI0_DMA = {
 #endif
 
 /* QSPI0 Resources */
-static QSPI_RESOURCES QSPI0_Resources = {
+static QSPI_RESOURCES_t QSPI0_Resources = {
   QUADSPI,
   {
 #ifdef USE_QSPI0_BK1_IO0_Pin
@@ -187,18 +188,53 @@ static QSPI_RESOURCES QSPI0_Resources = {
 #else
       NULL,
 #endif
-#ifdef USE_SPI1_MOSI_Pin
-      &SPI1_mosi,
+#ifdef USE_QSPI0_BK1_IO1_Pin
+      &QSPI0_bk1_io1_pin,
 #else
       NULL,
 #endif
-#ifdef USE_SPI1_SCK_Pin
-      &SPI1_sck,
+#ifdef USE_QSPI0_BK1_IO2_Pin
+      &QSPI0_bk1_io2_pin,
 #else
       NULL,
 #endif
-#ifdef USE_SPI1_NSS_Pin
-      &SPI1_nss,
+#ifdef USE_QSPI0_BK1_IO3_Pin
+      &QSPI0_bk1_io3_pin,
+#else
+      NULL,
+#endif
+#ifdef USE_QSPI0_BK1_NCS_Pin
+      &QSPI0_bk1_ncs_pin,
+#else
+      NULL,
+#endif
+#ifdef USE_QSPI0_BK2_IO0_Pin
+      &QSPI0_bk2_io0_pin,
+#else
+      NULL,
+#endif
+#ifdef USE_QSPI0_BK2_IO1_Pin
+      &QSPI0_bk2_io1_pin,
+#else
+      NULL,
+#endif
+#ifdef USE_QSPI0_BK2_IO2_Pin
+      &QSPI0_bk2_io2_pin,
+#else
+      NULL,
+#endif
+#ifdef USE_QSPI0_BK2_IO3_Pin
+      &QSPI0_bk2_io3_pin,
+#else
+      NULL,
+#endif
+#ifdef USE_QSPI0_BK2_NCS_Pin
+      &QSPI0_bk2_ncs_pin,
+#else
+      NULL,
+#endif
+#ifdef USE_QSPI0_CLK_Pin
+      &QSPI0_clk_pin,
 #else
       NULL,
 #endif
@@ -214,20 +250,20 @@ static QSPI_RESOURCES QSPI0_Resources = {
   &QSPI0_TransferInfo,
 };
 
-#endif /* USE_SPI1 */
+#endif /* USE_QSPI0 */
 
 /*******************************************************************************
  *  function implementations (scope: module-local)
  ******************************************************************************/
 
 /**
- * @fn          void PinConfig(const SPI_PIN *io, const GPIO_PIN_CFG_t *pin_cfg)
+ * @fn          void PinConfig(const QSPI_PIN *io, const GPIO_PIN_CFG_t *pin_cfg)
  * @brief       Configure Pin
- * @param[in]   io       Pointer to SPI_PIN
+ * @param[in]   io       Pointer to QSPI_PIN
  * @param[in]   pin_cfg  Pointer to GPIO_PIN_CFG_t
  */
 static
-void PinConfig(const SPI_PIN *io, const GPIO_PIN_CFG_t *pin_cfg)
+void PinConfig(const QSPI_PIN_t *io, const GPIO_PIN_CFG_t *pin_cfg)
 {
   if ((io == NULL) || (pin_cfg == NULL))
     return;
@@ -245,11 +281,11 @@ void PinConfig(const SPI_PIN *io, const GPIO_PIN_CFG_t *pin_cfg)
  *
  * @return
  */
-int32_t CalcPrescalerValue(SPI_RESOURCES *spi, uint32_t freq)
+int32_t CalcPrescalerValue(QSPI_RESOURCES_t *qspi, uint32_t freq)
 {
   int32_t val;
 
-  uint32_t pclk = RCC_GetPeriphFreq(spi->rcc);
+  uint32_t pclk = RCC_GetPeriphFreq(qspi->rcc);
   for (val = 0; val < 8; val++) {
     if (freq >= (pclk >> (val + 1)))
       break;
@@ -264,1033 +300,330 @@ int32_t CalcPrescalerValue(SPI_RESOURCES *spi, uint32_t freq)
 }
 
 /**
- * @fn          ARM_DRIVER_VERSION SPIx_GetVersion(void)
+ * @fn          ARM_DRIVER_VERSION QSPIx_GetVersion(void)
  * @brief       Get driver version.
  * @return      \ref ARM_DRIVER_VERSION
  */
 static
-ARM_DRIVER_VERSION SPIx_GetVersion(void)
+ARM_DRIVER_VERSION QSPIx_GetVersion(void)
 {
-  return DriverVersion;
+  return (DriverVersion);
 }
 
 /**
- * @fn          ARM_SPI_CAPABILITIES SPIx_GetCapabilities(void)
+ * @fn          QSPI_CAPABILITIES QSPIx_GetCapabilities(void)
  * @brief       Get driver capabilities.
- * @return      \ref ARM_SPI_CAPABILITIES
+ * @return      QSPI_CAPABILITIES
  */
 static
-ARM_SPI_CAPABILITIES SPIx_GetCapabilities(void)
+QSPI_CAPABILITIES QSPIx_GetCapabilities(void)
 {
-  return DriverCapabilities;
+  return (DriverCapabilities);
 }
 
 /**
- * @fn          int32_t SPI_Initialize(ARM_SPI_SignalEvent_t cb_event, SPI_RESOURCES *spi)
- * @brief       Initialize SPI Interface.
- * @param[in]   cb_event  Pointer to \ref ARM_SPI_SignalEvent
- * @param[in]   spi       Pointer to SPI resources
+ * @fn          int32_t QSPI_Initialize(QSPI_SignalEvent_t cb_event, QSPI_RESOURCES *qspi)
+ * @brief       Initialize QSPI Interface.
+ * @param[in]   cb_event  Pointer to \ref QSPI_SignalEvent
+ * @param[in]   qspi       Pointer to QSPI resources
  * @return      \ref execution_status
  */
 static
-int32_t SPI_Initialize(ARM_SPI_SignalEvent_t cb_event, SPI_RESOURCES *spi)
+int32_t QSPI_Initialize(QSPI_SignalEvent_t cb_event, QSPI_RESOURCES_t *qspi)
 {
-  SPI_INFO *info = spi->info;
+  QSPI_INFO_t *info = qspi->info;
 
-  if (info->state & SPI_INITIALIZED)
-    return ARM_DRIVER_OK;
+  if (info->state & QSPI_INITIALIZED) {
+    return (ARM_DRIVER_OK);
+  }
 
-  /* Initialize SPI Run-Time Resources */
+  /* Initialize QSPI Run-Time Resources */
   info->cb_event          = cb_event;
   info->status.busy       = 0U;
   info->status.data_lost  = 0U;
-  info->status.mode_fault = 0U;
   info->mode              = 0U;
 
   /* Clear transfer information */
-  memset((void *)spi->xfer, 0, sizeof(SPI_TRANSFER_INFO));
+  memset((void *)qspi->xfer, 0, sizeof(QSPI_TRANSFER_INFO_t));
 
-  SPI_IO *io = &spi->io;
-  const GPIO_PIN_CFG_t *pin_cfg = &SPI_pin_cfg_af;
+  QSPI_IO_t *io = &qspi->io;
+  const GPIO_PIN_CFG_t *pin_cfg = &QSPI_pin_cfg_af;
 
-  /* Configure MISO Pin */
-  PinConfig(io->miso, pin_cfg);
-  /* Configure MOSI Pin */
-  PinConfig(io->mosi, pin_cfg);
-  /* Configure SCK Pin */
-  PinConfig(io->sck, pin_cfg);
-  /* Configure NSS Pin */
-  PinConfig(io->nss, pin_cfg);
+  /* Configure QSPI Pins */
+  PinConfig(io->bk1_io0, pin_cfg);
+  PinConfig(io->bk1_io1, pin_cfg);
+  PinConfig(io->bk1_io2, pin_cfg);
+  PinConfig(io->bk1_io3, pin_cfg);
+  PinConfig(io->bk1_ncs, pin_cfg);
+  PinConfig(io->bk2_io0, pin_cfg);
+  PinConfig(io->bk2_io1, pin_cfg);
+  PinConfig(io->bk2_io2, pin_cfg);
+  PinConfig(io->bk2_io3, pin_cfg);
+  PinConfig(io->bk2_ncs, pin_cfg);
+  PinConfig(io->clk,     pin_cfg);
 
-  info->state = SPI_INITIALIZED;
+  info->state = QSPI_INITIALIZED;
 
-  return ARM_DRIVER_OK;
+  return (ARM_DRIVER_OK);
 }
 
 /**
- * @fn          int32_t SPI_Uninitialize(SPI_RESOURCES *spi)
- * @brief       De-initialize SPI Interface.
- * @param[in]   spi  Pointer to SPI resources
+ * @fn          int32_t QSPI_Uninitialize(QSPI_RESOURCES *qspi)
+ * @brief       De-initialize QSPI Interface.
+ * @param[in]   qspi  Pointer to QSPI resources
  * @return      \ref execution_status
  */
 static
-int32_t SPI_Uninitialize(SPI_RESOURCES *spi)
+int32_t QSPI_Uninitialize(QSPI_RESOURCES_t *qspi)
 {
-  SPI_IO *io = &spi->io;
-  const GPIO_PIN_CFG_t *pin_cfg = &SPI_pin_cfg_analog;
+  QSPI_IO_t *io = &qspi->io;
+  const GPIO_PIN_CFG_t *pin_cfg = &QSPI_pin_cfg_analog;
 
-  /* Unconfigure MISO Pin */
-  PinConfig(io->miso, pin_cfg);
-  /* Unconfigure MOSI Pin */
-  PinConfig(io->mosi, pin_cfg);
-  /* Unconfigure SCK Pin */
-  PinConfig(io->sck, pin_cfg);
-  /* Unconfigure NSS Pin */
-  PinConfig(io->nss, pin_cfg);
+  /* Unconfigure QSPI Pins */
+  PinConfig(io->bk1_io0, pin_cfg);
+  PinConfig(io->bk1_io1, pin_cfg);
+  PinConfig(io->bk1_io2, pin_cfg);
+  PinConfig(io->bk1_io3, pin_cfg);
+  PinConfig(io->bk1_ncs, pin_cfg);
+  PinConfig(io->bk2_io0, pin_cfg);
+  PinConfig(io->bk2_io1, pin_cfg);
+  PinConfig(io->bk2_io2, pin_cfg);
+  PinConfig(io->bk2_io3, pin_cfg);
+  PinConfig(io->bk2_ncs, pin_cfg);
+  PinConfig(io->clk,     pin_cfg);
 
-  /* Clear SPI state */
-  spi->info->state = 0U;
+  /* Clear QSPI state */
+  qspi->info->state = 0U;
 
-  return ARM_DRIVER_OK;
+  return (ARM_DRIVER_OK);
 }
 
 /**
- * @fn          int32_t SPI_PowerControl(ARM_POWER_STATE state, SPI_RESOURCES *spi)
- * @brief       Control SPI Interface Power.
+ * @fn          int32_t QSPI_PowerControl(ARM_POWER_STATE state, QSPI_RESOURCES *qspi)
+ * @brief       Control QSPI Interface Power.
  * @param[in]   state  Power state
- * @param[in]   spi    Pointer to SPI resources
+ * @param[in]   qspi   Pointer to QSPI resources
  * @return      \ref  execution_status
  */
 static
-int32_t SPI_PowerControl(ARM_POWER_STATE state, SPI_RESOURCES *spi)
+int32_t QSPI_PowerControl(ARM_POWER_STATE state, QSPI_RESOURCES_t *qspi)
 {
-  SPI_INFO *info = spi->info;
+  QSPI_INFO_t *info = qspi->info;
 
   switch (state) {
     case ARM_POWER_OFF:
-      /* SPI peripheral reset */
-      RCC_ResetPeriph(spi->rcc);
-      /* Disable SPI IRQ */
-      NVIC_DisableIRQ(spi->irq_num);
+      /* QSPI peripheral reset */
+      RCC_ResetPeriph(qspi->rcc);
+      /* Disable QSPI IRQ */
+      NVIC_DisableIRQ(qspi->irq_num);
 
       /* Uninitialize DMA */
-#ifdef SPI_DMA
-      if (spi->tx_dma != NULL)
-        DMA_Uninitialize(spi->tx_dma);
-
-      if (spi->rx_dma != NULL)
-        DMA_Uninitialize(spi->rx_dma);
+#ifdef QSPI_DMA
+      if (qspi->dma != NULL) {
+        DMA_Uninitialize(qspi->dma);
+      }
 #endif
 
       /* Disable peripheral clock */
-      RCC_DisablePeriph(spi->rcc);
+      RCC_DisablePeriph(qspi->rcc);
 
       /* Clear status flags */
       info->status.busy       = 0U;
       info->status.data_lost  = 0U;
-      info->status.mode_fault = 0U;
 
       /* Clear powered flag */
-      info->state &= ~SPI_POWERED;
+      info->state &= ~QSPI_POWERED;
       break;
 
     case ARM_POWER_FULL:
-      if ((info->state & SPI_INITIALIZED) == 0U)
-        return ARM_DRIVER_ERROR;
+      if ((info->state & QSPI_INITIALIZED) == 0U) {
+        return (ARM_DRIVER_ERROR);
+      }
 
-      if ((info->state & SPI_POWERED) != 0U)
-        return ARM_DRIVER_OK;
+      if ((info->state & QSPI_POWERED) != 0U) {
+        return (ARM_DRIVER_OK);
+      }
 
       /* Clear status flags */
       info->status.busy       = 0U;
       info->status.data_lost  = 0U;
-      info->status.mode_fault = 0U;
-
-      spi->xfer->def_val      = 0U;
 
       /* Ready for operation - set powered flag */
-      info->state |= SPI_POWERED;
+      info->state |= QSPI_POWERED;
 
       /* Enable the peripheral clock */
-      RCC_EnablePeriph(spi->rcc);
+      RCC_EnablePeriph(qspi->rcc);
 
-      /* Clear and Enable SPI IRQ */
-      NVIC_ClearPendingIRQ(spi->irq_num);
-      NVIC_SetPriority(spi->irq_num, DEV_SPI_INT_PRIORITY);
-      NVIC_EnableIRQ(spi->irq_num);
+      /* Clear and Enable QSPI IRQ */
+      NVIC_ClearPendingIRQ(qspi->irq_num);
+      NVIC_SetPriority(qspi->irq_num, DEV_QSPI_INT_PRIORITY);
+      NVIC_EnableIRQ(qspi->irq_num);
 
       /* Initialize DMA */
-#ifdef SPI_DMA
-      if (spi->tx_dma != NULL) {
-        DMA_StreamConfig_t *cfg = &spi->tx_dma->handle->config;
+#ifdef QSPI_DMA
+      if (qspi->dma != NULL) {
+        DMA_StreamConfig_t *cfg = &qspi->dma->handle->config;
 
-        cfg->Direction = DMA_DIR_MEM_TO_PER;
         cfg->Mode      = DMA_MODE_NORMAL;
         cfg->FIFOMode  = DMA_FIFOMODE_DISABLE;
         cfg->MemBurst  = DMA_MBURST_SINGLE;
         cfg->PerBurst  = DMA_PBURST_SINGLE;
 
-        DMA_Initialize(spi->tx_dma);
-      }
-
-      if (spi->rx_dma != NULL) {
-        DMA_StreamConfig_t *cfg = &spi->rx_dma->handle->config;
-
-        cfg->Direction = DMA_DIR_PER_TO_MEM;
-        cfg->Mode      = DMA_MODE_NORMAL;
-        cfg->FIFOMode  = DMA_FIFOMODE_DISABLE;
-        cfg->MemBurst  = DMA_MBURST_SINGLE;
-        cfg->PerBurst  = DMA_PBURST_SINGLE;
-
-        DMA_Initialize(spi->rx_dma);
+        DMA_Initialize(qspi->dma);
       }
 #endif
 
       /* Reset the peripheral */
-      RCC_ResetPeriph(spi->rcc);
+      RCC_ResetPeriph(qspi->rcc);
       break;
 
     default:
       return ARM_DRIVER_ERROR_UNSUPPORTED;
   }
 
-  return ARM_DRIVER_OK;
+  return (ARM_DRIVER_OK);
 }
 
 /**
- * @fn          int32_t SPI_Send(const void *data, uint32_t num, SPI_RESOURCES *spi)
- * @brief       Start sending data to SPI transmitter.
- * @param[in]   data  Pointer to buffer with data to send to SPI transmitter
+ * @fn          int32_t QSPI_Send(const void *data, uint32_t num, QSPI_RESOURCES_t *qspi)
+ * @brief       Start sending data to QSPI transmitter.
+ * @param[in]   data  Pointer to buffer with data to send to QSPI transmitter
  * @param[in]   num   Number of data items to send
- * @param[in]   spi   Pointer to SPI resources
+ * @param[in]   qspi  Pointer to QSPI resources
  * @return      \ref  execution_status
  */
 static
-int32_t SPI_Send(const void *data, uint32_t num, SPI_RESOURCES *spi)
+int32_t QSPI_Send(const void *data, uint32_t num, QSPI_RESOURCES_t *qspi)
 {
-  SPI_INFO *info = spi->info;
-  SPI_TRANSFER_INFO *xfer = spi->xfer;
-  SPI_TypeDef *reg = spi->reg;
-  uint32_t cr2;
-  bool access_16bit;
-  uint32_t value;
+  QSPI_INFO_t          *info = qspi->info;
+  QSPI_TRANSFER_INFO_t *xfer = qspi->xfer;
+  QUADSPI_TypeDef       *reg = qspi->reg;
 
-  if ((data == NULL) || (num == 0U))
-    return ARM_DRIVER_ERROR_PARAMETER;
-
-  if ((info->state & SPI_CONFIGURED) == 0U)
-    return ARM_DRIVER_ERROR;
-
-  if (info->status.busy)
-    return ARM_DRIVER_ERROR_BUSY;
-
-  cr2 = reg->CR2;
-  access_16bit = ((cr2 & SPI_CR2_DS) >> SPI_CR2_DS_Pos) > 7U;
-
-  /* Update SPI statuses */
-  info->status.busy       = 1U;
-  info->status.data_lost  = 0U;
-  info->status.mode_fault = 0U;
-
-  /* Save transfer info */
-  xfer->rx_buf = NULL;
-  xfer->tx_buf = (uint8_t *)((uint32_t)data);
-  xfer->num    = num;
-  xfer->rx_cnt = 0U;
-  xfer->tx_cnt = 0U;
-
-#ifdef SPI_DMA_RX
-  /* DMA mode */
-  if (spi->rx_dma != NULL) {
-    /* Prepare DMA to receive dummy RX data */
-    DMA_StreamConfig_t *cfg = &spi->rx_dma->handle->config;
-
-    cfg->MemInc = DMA_MINC_DISABLE;
-    cfg->PerInc = DMA_PINC_DISABLE;
-
-    if (access_16bit) {
-      /* 16 - bit data frame */
-      cfg->MemDataAlign = DMA_MDATAALIGN_HALFWORD;
-      cfg->PerDataAlign = DMA_PDATAALIGN_HALFWORD;
-    }
-    else {
-      /* 8 - bit data frame */
-      cfg->MemDataAlign = DMA_MDATAALIGN_BYTE;
-      cfg->PerDataAlign = DMA_PDATAALIGN_BYTE;
-    }
-
-    /* Initialize and start DMA Stream */
-    DMA_Config(spi->rx_dma);
-    DMA_Start(spi->rx_dma, (uint32_t)&reg->DR, (uint32_t)&xfer->dump_val, num);
-    /* RX Buffer DMA enable */
-    cr2 |= SPI_CR2_RXDMAEN;
-  }
-  else
-#endif
-  {
-    /* Interrupt mode */
-    /* RX Buffer not empty interrupt enable */
-    cr2 |= SPI_CR2_RXNEIE;
+  if ((data == NULL) || (num == 0U)) {
+    return (ARM_DRIVER_ERROR_PARAMETER);
   }
 
-#ifdef SPI_DMA_TX
-  /* DMA mode */
-  if (spi->tx_dma != NULL) {
-    /* Prepare DMA to send TX data */
-    DMA_StreamConfig_t *cfg = &spi->tx_dma->handle->config;
-
-    cfg->MemInc = DMA_MINC_ENABLE;
-    cfg->PerInc = DMA_PINC_DISABLE;
-
-    if (access_16bit) {
-      /* 16 - bit data frame */
-      cfg->MemDataAlign = DMA_MDATAALIGN_HALFWORD;
-      cfg->PerDataAlign = DMA_PDATAALIGN_HALFWORD;
-    }
-    else {
-      /* 8 - bit data frame */
-      cfg->MemDataAlign = DMA_MDATAALIGN_BYTE;
-      cfg->PerDataAlign = DMA_PDATAALIGN_BYTE;
-    }
-
-    /* Initialize and start DMA Stream */
-    DMA_Config(spi->tx_dma);
-    DMA_Start(spi->tx_dma, (uint32_t)&reg->DR, (uint32_t)data, num);
-    /* TX Buffer DMA enable */
-    cr2 |= SPI_CR2_TXDMAEN;
-  }
-  else
-#endif
-  {
-    /* Interrupt mode */
-    value = (uint32_t)(*xfer->tx_buf++);
-
-    if (access_16bit) {
-      value |= (uint32_t)(*xfer->tx_buf++ << 8U);
-    }
-
-    /* Write data to data register */
-    reg->DR = value;
-
-    if (++xfer->tx_cnt < xfer->num) {
-      /* TX Buffer empty interrupt enable */
-      cr2 |= SPI_CR2_TXEIE;
-    }
+  if ((info->state & QSPI_CONFIGURED) == 0U) {
+    return (ARM_DRIVER_ERROR);
   }
 
-  reg->CR2 = cr2;
-
-  return ARM_DRIVER_OK;
-}
-
-/**
- * @fn          int32_t SPI_Receive(void *data, uint32_t num, SPI_RESOURCES *spi)
- * @brief       Start receiving data from SPI receiver.
- * @param[out]  data  Pointer to buffer for data to receive from SPI receiver
- * @param[in]   num   Number of data items to receive
- * @param[in]   spi   Pointer to SPI resources
- * @return      \ref  execution_status
- */
-static
-int32_t SPI_Receive(void *data, uint32_t num, SPI_RESOURCES *spi)
-{
-  SPI_INFO *info = spi->info;
-  SPI_TRANSFER_INFO *xfer = spi->xfer;
-  SPI_TypeDef *reg = spi->reg;
-  uint32_t cr2;
-  bool access_16bit;
-
-  if ((data == NULL) || (num == 0U))
-    return ARM_DRIVER_ERROR_PARAMETER;
-
-  if ((info->state & SPI_CONFIGURED) == 0U)
-    return ARM_DRIVER_ERROR;
-
-  if (info->status.busy)
-    return ARM_DRIVER_ERROR_BUSY;
-
-  cr2 = reg->CR2;
-  access_16bit = ((cr2 & SPI_CR2_DS) >> SPI_CR2_DS_Pos) > 7U;
-
-  // Update SPI statuses
-  info->status.busy       = 1U;
-  info->status.data_lost  = 0U;
-  info->status.mode_fault = 0U;
-
-  // Save transfer info
-  xfer->rx_buf = (uint8_t *)data;
-  xfer->tx_buf = NULL;
-  xfer->num    = num;
-  xfer->rx_cnt = 0U;
-  xfer->tx_cnt = 0U;
-
-#ifdef SPI_DMA_RX
-  /* DMA mode */
-  if (spi->rx_dma != NULL) {
-    /* Prepare DMA to receive RX data */
-    DMA_StreamConfig_t *cfg = &spi->rx_dma->handle->config;
-
-    cfg->MemInc = DMA_MINC_ENABLE;
-    cfg->PerInc = DMA_PINC_DISABLE;
-
-    if (access_16bit) {
-      /* 16 - bit data frame */
-      cfg->MemDataAlign = DMA_MDATAALIGN_HALFWORD;
-      cfg->PerDataAlign = DMA_PDATAALIGN_HALFWORD;
-    }
-    else {
-      /* 8 - bit data frame */
-      cfg->MemDataAlign = DMA_MDATAALIGN_BYTE;
-      cfg->PerDataAlign = DMA_PDATAALIGN_BYTE;
-    }
-
-    /* Initialize and start DMA Stream */
-    DMA_Config(spi->rx_dma);
-    DMA_Start(spi->rx_dma, (uint32_t)&reg->DR, (uint32_t)data, num);
-    /* RX Buffer DMA enable */
-    cr2 |= SPI_CR2_RXDMAEN;
-  }
-  else
-#endif
-  {
-    /* Interrupt mode */
-    /* RX Buffer not empty interrupt enable */
-    cr2 |= SPI_CR2_RXNEIE;
-  }
-
-#ifdef SPI_DMA_TX
-  /* DMA mode */
-  if (spi->tx_dma != NULL) {
-    /* Prepare DMA to send TX data */
-    DMA_StreamConfig_t *cfg = &spi->tx_dma->handle->config;
-
-    cfg->MemInc = DMA_MINC_DISABLE;
-    cfg->PerInc = DMA_PINC_DISABLE;
-
-    if (access_16bit) {
-      /* 16 - bit data frame */
-      cfg->MemDataAlign = DMA_MDATAALIGN_HALFWORD;
-      cfg->PerDataAlign = DMA_PDATAALIGN_HALFWORD;
-    }
-    else {
-      /* 8 - bit data frame */
-      cfg->MemDataAlign = DMA_MDATAALIGN_BYTE;
-      cfg->PerDataAlign = DMA_PDATAALIGN_BYTE;
-    }
-
-    /* Initialize and start DMA Stream */
-    DMA_Config(spi->tx_dma);
-    DMA_Start(spi->tx_dma, (uint32_t)&reg->DR, (uint32_t)&xfer->def_val, num);
-    /* TX Buffer DMA enable */
-    cr2 |= SPI_CR2_TXDMAEN;
-  }
-  else
-#endif
-  {
-    /* Interrupt mode */
-    /* Write data to data register */
-    reg->DR = (uint32_t)xfer->def_val;
-
-    if (++xfer->tx_cnt < xfer->num) {
-      /* TX Buffer empty interrupt enable */
-      cr2 |= SPI_CR2_TXEIE;
-    }
-  }
-
-  reg->CR2 = cr2;
-
-  return ARM_DRIVER_OK;
-}
-
-/**
- * @fn          int32_t SPI_Transfer(const void *data_out, void *data_in, uint32_t num, SPI_RESOURCES *spi)
- * @brief       Start sending/receiving data to/from SPI transmitter/receiver.
- * @param[in]   data_out  Pointer to buffer with data to send to SPI transmitter
- * @param[out]  data_in   Pointer to buffer for data to receive from SPI receiver
- * @param[in]   num       Number of data items to transfer
- * @param[in]   spi       Pointer to SPI resources
- * @return      \ref execution_status
- */
-static
-int32_t SPI_Transfer(const void *data_out, void *data_in, uint32_t num, SPI_RESOURCES *spi)
-{
-  SPI_INFO *info = spi->info;
-  SPI_TRANSFER_INFO *xfer = spi->xfer;
-  SPI_TypeDef *reg = spi->reg;
-  uint32_t cr2;
-  bool access_16bit;
-  uint32_t value;
-
-  if ((data_out == NULL) || (data_in == NULL) || (num == 0U))
-    return ARM_DRIVER_ERROR_PARAMETER;
-
-  if ((info->state & SPI_CONFIGURED) == 0U)
-    return ARM_DRIVER_ERROR;
-
-  if (info->status.busy)
-    return ARM_DRIVER_ERROR_BUSY;
-
-  cr2 = reg->CR2;
-  access_16bit = ((cr2 & SPI_CR2_DS) >> SPI_CR2_DS_Pos) > 7U;
-
-  // Update SPI statuses
-  info->status.busy       = 1U;
-  info->status.data_lost  = 0U;
-  info->status.mode_fault = 0U;
-
-  // Save transfer info
-  xfer->rx_buf = (uint8_t *)((uint32_t)data_in);
-  xfer->tx_buf = (uint8_t *)((uint32_t)data_out);
-  xfer->num    = num;
-  xfer->rx_cnt = 0U;
-  xfer->tx_cnt = 0U;
-
-#ifdef SPI_DMA
-  if ((spi->rx_dma != NULL) || (spi->tx_dma != NULL)) {
-    /* DMA mode */
-    if (spi->rx_dma != NULL) {
-      /* Prepare DMA to receive dummy RX data */
-      DMA_StreamConfig_t *cfg = &spi->rx_dma->handle->config;
-
-      cfg->MemInc = DMA_MINC_ENABLE;
-      cfg->PerInc = DMA_PINC_DISABLE;
-
-      if (access_16bit) {
-        /* 16 - bit data frame */
-        cfg->MemDataAlign = DMA_MDATAALIGN_HALFWORD;
-        cfg->PerDataAlign = DMA_PDATAALIGN_HALFWORD;
-      }
-      else {
-        /* 8 - bit data frame */
-        cfg->MemDataAlign = DMA_MDATAALIGN_BYTE;
-        cfg->PerDataAlign = DMA_PDATAALIGN_BYTE;
-      }
-
-      /* Initialize and start DMA Stream */
-      DMA_Config(spi->rx_dma);
-      DMA_Start(spi->rx_dma, (uint32_t)&reg->DR, (uint32_t)data_in, num);
-      /* RX Buffer DMA enable */
-      cr2 |= SPI_CR2_RXDMAEN;
-    }
-
-    if (spi->tx_dma != NULL) {
-      /* Prepare DMA to send TX data */
-      DMA_StreamConfig_t *cfg = &spi->tx_dma->handle->config;
-
-      cfg->MemInc = DMA_MINC_ENABLE;
-      cfg->PerInc = DMA_PINC_DISABLE;
-
-      if (access_16bit) {
-        /* 16 - bit data frame */
-        cfg->MemDataAlign = DMA_MDATAALIGN_HALFWORD;
-        cfg->PerDataAlign = DMA_PDATAALIGN_HALFWORD;
-      }
-      else {
-        /* 8 - bit data frame */
-        cfg->MemDataAlign = DMA_MDATAALIGN_BYTE;
-        cfg->PerDataAlign = DMA_PDATAALIGN_BYTE;
-      }
-
-      /* Initialize and start DMA Stream */
-      DMA_Config(spi->tx_dma);
-      DMA_Start(spi->tx_dma, (uint32_t)&reg->DR, (uint32_t)data_out, num);
-      /* TX Buffer DMA enable */
-      cr2 |= SPI_CR2_TXDMAEN;
-    }
-  }
-  else
-#endif
-  {
-    /* Interrupt mode */
-    /* RX Buffer not empty interrupt enable */
-    cr2 |= SPI_CR2_RXNEIE;
-
-    value = (uint32_t)(*xfer->tx_buf++);
-
-    if (access_16bit) {
-      value |= (uint32_t)(*xfer->tx_buf++ << 8U);
-    }
-
-    /* Write data to data register */
-    reg->DR = value;
-
-    if (++xfer->tx_cnt < xfer->num) {
-      /* TX Buffer empty interrupt enable */
-      cr2 |= SPI_CR2_TXEIE;
-    }
-  }
-
-  reg->CR2 = cr2;
-
-  return ARM_DRIVER_OK;
-}
-
-/**
- * @fn          uint32_t SPI_GetDataCount(SPI_RESOURCES *spi)
- * @brief       Get transferred data count.
- * @param[in]   spi  Pointer to SPI resources
- * @return      Number of data items transferred
- */
-static
-uint32_t SPI_GetDataCount(SPI_RESOURCES *spi)
-{
-  return (spi->xfer->rx_cnt);
-}
-
-/**
- * @fn          int32_t SPI_Control(uint32_t control, uint32_t arg, SPI_RESOURCES *spi)
- * @brief       Control SPI Interface.
- * @param[in]   control  Operation
- * @param[in]   arg      Argument of operation (optional)
- * @param[in]   spi      Pointer to SPI resources
- * @return      \ref execution_status
- */
-static
-int32_t SPI_Control(uint32_t control, uint32_t arg, SPI_RESOURCES *spi)
-{
-  int32_t br;
-  uint32_t mode, val;
-  uint32_t cr1, cr2;
-  SPI_INFO *info = spi->info;
-  SPI_TypeDef *reg = spi->reg;
-
-  mode  = 0U;
-  val   = 0U;
-  cr1   = 0U;
-  cr2   = 0U;
-
-  if ((info->state & SPI_POWERED) == 0U)
-    return ARM_DRIVER_ERROR;
-
-  if ((control & ARM_SPI_CONTROL_Msk) == ARM_SPI_ABORT_TRANSFER) {
-    cr2 = reg->CR2;
-
-    /* Send abort */
-#ifdef SPI_DMA_TX
-    if (spi->tx_dma != NULL) {
-      /* DMA mode */
-      /* TX buffer DMA disable */
-      cr2 &= ~SPI_CR2_TXDMAEN;
-
-      /* Abort TX DMA transfer */
-      DMA_Abort(spi->tx_dma);
-      DMA_WaitAbort(spi->tx_dma);
-    }
-    else
-#endif
-    {
-      /* Interrupt mode */
-      /* Disable TX buffer empty interrupt */
-      cr2 &= ~SPI_CR2_TXEIE;
-    }
-
-    /* Receive abort */
-#ifdef SPI_DMA_RX
-    if (spi->rx_dma != NULL) {
-      /* DMA mode */
-      /* RX buffer DMA disable */
-      cr2 &= ~SPI_CR2_RXDMAEN;
-
-      /* Abort RX DMA transfer */
-      DMA_Abort(spi->rx_dma);
-      DMA_WaitAbort(spi->rx_dma);
-    }
-    else
-#endif
-    {
-      /* Interrupt mode */
-      /* Disable RX buffer not empty interrupt */
-      cr2 &= ~SPI_CR2_RXNEIE;
-    }
-
-    reg->CR2 = cr2;
-
-    memset((void *)spi->xfer, 0, sizeof(SPI_TRANSFER_INFO));
-    info->status.busy = 0U;
-
-    return ARM_DRIVER_OK;
-  }
-
-  /* Check for busy flag */
   if (info->status.busy) {
     return (ARM_DRIVER_ERROR_BUSY);
   }
 
-  switch (control & ARM_SPI_CONTROL_Msk) {
-    case ARM_SPI_MODE_INACTIVE:
-      mode |= ARM_SPI_MODE_INACTIVE;
-      break;
+  /* Update QSPI statuses */
+  info->status.busy       = 1U;
+  info->status.data_lost  = 0U;
 
-    case ARM_SPI_MODE_MASTER:
-      mode |= ARM_SPI_MODE_MASTER;
+  /* Save transfer info */
+  xfer->buf = (uint8_t *)((uint32_t)data);
+  xfer->num = num;
+  xfer->cnt = 0U;
 
-      /* Master enabled */
-      cr1 |= SPI_CR1_MSTR;
-      break;
-
-    case ARM_SPI_MODE_SLAVE:
-      mode |= ARM_SPI_MODE_SLAVE;
-      break;
-
-    case ARM_SPI_MODE_MASTER_SIMPLEX:
-    case ARM_SPI_MODE_SLAVE_SIMPLEX:
-      return (ARM_SPI_ERROR_MODE);
-
-    case ARM_SPI_SET_BUS_SPEED:
-      /* Set SPI Bus Speed */
-      br = CalcPrescalerValue(spi, arg);
-      if (br < 0) {
-        return (ARM_DRIVER_ERROR);
-      }
-
-      /* Disable SPI, update prescaler and enable SPI */
-      reg->CR1 &= ~SPI_CR1_SPE;
-      reg->CR1 = (reg->CR1 & ~SPI_CR1_BR_Msk) | (br << SPI_CR1_BR_Pos);
-      reg->CR1 |= SPI_CR1_SPE;
-      return (ARM_DRIVER_OK);
-
-    case ARM_SPI_GET_BUS_SPEED:
-      /* Return current bus speed */
-      return (int32_t)(RCC_GetPeriphFreq(spi->rcc) >> (((reg->CR1 & SPI_CR1_BR_Msk) >> SPI_CR1_BR_Pos) + 1U));
-
-    case ARM_SPI_SET_DEFAULT_TX_VALUE:
-      spi->xfer->def_val = (uint16_t)(arg & 0xFFFFU);
-      return ARM_DRIVER_OK;
-
-    case ARM_SPI_CONTROL_SS:
-      val = (info->mode & ARM_SPI_CONTROL_Msk);
-      /* Master modes */
-      if (val == ARM_SPI_MODE_MASTER) {
-        val = info->mode & ARM_SPI_SS_MASTER_MODE_Msk;
-        /* Check if NSS pin is available and */
-        /* software slave select master is selected */
-        if ((spi->io.nss != NULL) && (val == ARM_SPI_SS_MASTER_SW)) {
-          SPI_PIN *io = spi->io.nss;
-          /* Set/Clear NSS pin */
-          if (arg == ARM_SPI_SS_INACTIVE)
-            GPIO_PinWrite(io->port, io->pin, GPIO_PIN_OUT_HIGH);
-          else
-            GPIO_PinWrite(io->port, io->pin, GPIO_PIN_OUT_LOW);
-        }
-        else {
-          return ARM_DRIVER_ERROR;
-        }
-
-        return ARM_DRIVER_OK;
-      }
-      /* Slave modes */
-      else if (val == ARM_SPI_MODE_SLAVE) {
-        val = info->mode & ARM_SPI_SS_SLAVE_MODE_Msk;
-        /* Check if slave select slave mode is selected */
-        if (val == ARM_SPI_SS_SLAVE_SW) {
-          if (arg == ARM_SPI_SS_ACTIVE) {
-            reg->CR1 |= SPI_CR1_SSI;
-          }
-          else {
-            reg->CR1 &= ~SPI_CR1_SSI;
-          }
-          return ARM_DRIVER_OK;
-        }
-        else {
-          return ARM_DRIVER_ERROR;
-        }
-      }
-      else {
-        return ARM_DRIVER_ERROR;
-      }
-
-    default:
-      return ARM_DRIVER_ERROR_UNSUPPORTED;
-  }
-
-  /* Frame format */
-  switch (control & ARM_SPI_FRAME_FORMAT_Msk) {
-    case ARM_SPI_CPOL0_CPHA0:
-      break;
-    case ARM_SPI_CPOL0_CPHA1:
-      cr1 |= SPI_CR1_CPHA;
-      break;
-    case ARM_SPI_CPOL1_CPHA0:
-      cr1 |= SPI_CR1_CPOL;
-      break;
-    case ARM_SPI_CPOL1_CPHA1:
-      cr1 |= SPI_CR1_CPHA | SPI_CR1_CPOL;
-      break;
-    case ARM_SPI_TI_SSI:
-      cr1 |= SPI_CR2_FRF;
-      break;
-    default:
-      return ARM_SPI_ERROR_FRAME_FORMAT;
-  }
-
-  /* Data Bits */
-  val = (control & ARM_SPI_DATA_BITS_Msk) >> ARM_SPI_DATA_BITS_Pos;
-  if ((val < 4U) || (val > 16)) {
-    return (ARM_SPI_ERROR_DATA_BITS);
-  }
-  if (val <= 8U) {
-    cr2 |= SPI_CR2_FRXTH;
-  }
-  cr2 |= (val - 1U) << SPI_CR2_DS_Pos;
-
-  /* Bit order */
-  if ((control & ARM_SPI_BIT_ORDER_Msk) == ARM_SPI_LSB_MSB) {
-    cr1 |= SPI_CR1_LSBFIRST;
-  }
-
-  /* Slave select master modes */
-  if ((mode & ARM_SPI_CONTROL_Msk) == ARM_SPI_MODE_MASTER) {
-    switch (control & ARM_SPI_SS_MASTER_MODE_Msk) {
-      case ARM_SPI_SS_MASTER_UNUSED:
-        if (spi->io.nss != NULL) {
-          /* Unconfigure NSS pin */
-          PinConfig(spi->io.nss, &SPI_pin_cfg_analog);
-        }
-        /* Software slave management */
-        /* Internal NSS always active, IO value is ignored */
-        cr1 |= SPI_CR1_SSM | SPI_CR1_SSI;
-        mode |= ARM_SPI_SS_MASTER_UNUSED;
-        break;
-
-      case ARM_SPI_SS_MASTER_HW_INPUT:
-        if (spi->io.nss != NULL) {
-          /* Configure NSS pin */
-          PinConfig(spi->io.nss, &SPI_pin_cfg_af);
-        }
-        else {
-          /* NSS pin is not available */
-          return ARM_SPI_ERROR_SS_MODE;
-        }
-
-        mode |= ARM_SPI_SS_MASTER_HW_INPUT;
-        break;
-
-      case ARM_SPI_SS_MASTER_SW:
-        if (spi->io.nss != NULL) {
-          /* Configure NSS pin as GPIO output */
-          PinConfig(spi->io.nss, &SPI_pin_cfg_out_pp);
-
-          /* Software slave management */
-          cr1 |= SPI_CR1_SSM | SPI_CR1_SSI;
-
-          mode |= ARM_SPI_SS_MASTER_SW;
-        }
-        else {
-          /* NSS pin is not available */
-          return ARM_SPI_ERROR_SS_MODE;
-        }
-        break;
-
-      case ARM_SPI_SS_MASTER_HW_OUTPUT:
-        if (spi->io.nss != NULL) {
-          /* Configure NSS pin - SPI NSS alternative function */
-          PinConfig(spi->io.nss, &SPI_pin_cfg_af);
-
-          /* Slave select output enable */
-          cr2 |= SPI_CR2_SSOE;
-
-          mode |= ARM_SPI_SS_MASTER_HW_OUTPUT;
-        }
-        else {
-          /* NSS pin is not available */
-          return ARM_SPI_ERROR_SS_MODE;
-        }
-        break;
-      default:
-        return ARM_SPI_ERROR_SS_MODE;
-    }
-  }
-  /* Slave select slave modes */
-  else if ((mode & ARM_SPI_CONTROL_Msk) == ARM_SPI_MODE_SLAVE) {
-    switch (control & ARM_SPI_SS_SLAVE_MODE_Msk) {
-      case ARM_SPI_SS_SLAVE_HW:
-        if (spi->io.nss != NULL) {
-          /* Configure NSS pin - SPI NSS alternative function */
-          PinConfig(spi->io.nss, &SPI_pin_cfg_af);
-
-          mode |= ARM_SPI_SS_SLAVE_HW;
-        }
-        else {
-          /* NSS pin is not available */
-          return ARM_SPI_ERROR_SS_MODE;
-        }
-        break;
-
-      case ARM_SPI_SS_SLAVE_SW:
-        if (spi->io.nss != NULL) {
-          /* Unconfigure NSS pin */
-          PinConfig(spi->io.nss, &SPI_pin_cfg_analog);
-        }
-        /* Enable software slave management */
-        cr1 |= SPI_CR1_SSM;
-        mode |= ARM_SPI_SS_SLAVE_SW;
-        break;
-      default:
-        return ARM_SPI_ERROR_SS_MODE;
-    }
-  }
-
-  /* Set SPI Bus Speed */
-  if ((mode & ARM_SPI_CONTROL_Msk) == ARM_SPI_MODE_MASTER) {
-    br = CalcPrescalerValue(spi, arg);
-    if (br < 0) {
-      return ARM_DRIVER_ERROR;
-    }
-    /* Save prescaler value */
-    cr1 |= (br << SPI_CR1_BR_Pos);
-  }
-
-  info->mode = mode;
-
-  /* Configure registers */
-  reg->CR1 &= ~SPI_CR1_SPE;
-  reg->CR2 = cr2 | SPI_CR2_ERRIE;
-  reg->CR1 = cr1;
-
-  if ((mode & ARM_SPI_CONTROL_Msk) == ARM_SPI_MODE_INACTIVE) {
-    info->state &= ~SPI_CONFIGURED;
-  }
-  else {
-    info->state |= SPI_CONFIGURED;
-  }
-
-  /* Enable SPI */
-  reg->CR1 |= SPI_CR1_SPE;
-
-  return ARM_DRIVER_OK;
+  return (ARM_DRIVER_OK);
 }
 
 /**
- * @fn          ARM_SPI_STATUS SPI_GetStatus(SPI_RESOURCES *spi)
- * @brief       Get SPI status.
- * @param[in]   spi  Pointer to SPI resources
- * @return      SPI status \ref ARM_SPI_STATUS
+ * @fn          int32_t QSPI_Receive(void *data, uint32_t num, QSPI_RESOURCES_t *qspi)
+ * @brief       Start receiving data from QSPI receiver.
+ * @param[out]  data  Pointer to buffer for data to receive from QSPI receiver
+ * @param[in]   num   Number of data items to receive
+ * @param[in]   qspi  Pointer to QSPI resources
+ * @return      \ref  execution_status
  */
 static
-ARM_SPI_STATUS SPI_GetStatus(SPI_RESOURCES *spi)
+int32_t QSPI_Receive(void *data, uint32_t num, QSPI_RESOURCES_t *qspi)
 {
-  ARM_SPI_STATUS status;
+  QSPI_INFO_t          *info = qspi->info;
+  QSPI_TRANSFER_INFO_t *xfer = qspi->xfer;
+  QUADSPI_TypeDef       *reg = qspi->reg;
 
-  status.busy       = spi->info->status.busy;
-  status.data_lost  = spi->info->status.data_lost;
-  status.mode_fault = spi->info->status.mode_fault;
+  if ((data == NULL) || (num == 0U)) {
+    return (ARM_DRIVER_ERROR_PARAMETER);
+  }
 
-  return status;
+  if ((info->state & QSPI_CONFIGURED) == 0U) {
+    return (ARM_DRIVER_ERROR);
+  }
+
+  if (info->status.busy) {
+    return (ARM_DRIVER_ERROR_BUSY);
+  }
+
+  /* Update SPI statuses */
+  info->status.busy       = 1U;
+  info->status.data_lost  = 0U;
+
+  /* Save transfer info */
+  xfer->buf = (uint8_t *)data;
+  xfer->num = num;
+  xfer->cnt = 0U;
+
+  return (ARM_DRIVER_OK);
 }
 
 /**
- * @fn          void SPI_IRQHandler(SPI_RESOURCES *spi)
- * @brief       SPI Interrupt handler.
- * @param[in]   spi  Pointer to SPI resources
+ * @fn          uint32_t QSPI_GetDataCount(QSPI_RESOURCES *qspi)
+ * @brief       Get transferred data count.
+ * @param[in]   qspi  Pointer to QSPI resources
+ * @return      Number of data items transferred
  */
-void SPI_IRQHandler(SPI_RESOURCES *spi)
+static
+uint32_t QSPI_GetDataCount(QSPI_RESOURCES_t *qspi)
 {
-  uint32_t value;
-  uint32_t event;
-  register uint32_t sr, cr1, cr2;
-  bool access_16bit;
+  return (qspi->xfer->cnt);
+}
 
-  SPI_INFO *info = spi->info;
-  SPI_TRANSFER_INFO *xfer = spi->xfer;
-  SPI_TypeDef *reg = spi->reg;
+/**
+ * @fn          int32_t QSPI_Control(uint32_t control, uint32_t arg, QSPI_RESOURCES *qspi)
+ * @brief       Control QSPI Interface.
+ * @param[in]   control  Operation
+ * @param[in]   arg      Argument of operation (optional)
+ * @param[in]   qspi     Pointer to QSPI resources
+ * @return      \ref execution_status
+ */
+static
+int32_t QSPI_Control(uint32_t control, uint32_t arg, QSPI_RESOURCES_t *qspi)
+{
+  QSPI_INFO_t     *info = qspi->info;
+  QUADSPI_TypeDef *reg  = qspi->reg;
 
-  event = 0U;
-
-  /* Save control register 1 */
-  cr1 = reg->CR1;
-  /* Save control register 2 */
-  cr2 = reg->CR2;
-  /* Save status register */
-  sr = reg->SR;
-
-  access_16bit = ((cr2 & SPI_CR2_DS) >> SPI_CR2_DS_Pos) > 7U;
-
-  if ((sr & (SPI_SR_OVR | SPI_SR_MODF)) != 0U) {
-    if ((sr & SPI_SR_OVR) != 0U) {
-      value = reg->DR;
-
-      if ((xfer->rx_cnt < xfer->num) && (xfer->rx_buf != NULL)) {
-        *xfer->rx_buf++ = (uint8_t)value;
-
-        if (access_16bit) {
-          *xfer->rx_buf++ = (uint8_t)(value >> 8U);
-        }
-      }
-      xfer->rx_cnt++;
-      sr = reg->SR;
-
-      info->status.data_lost = 1U;
-      event |= ARM_SPI_EVENT_DATA_LOST;
-    }
-
-    if ((sr & SPI_SR_MODF) != 0U) {
-      /* Mode fault flag is set */
-      info->status.mode_fault = 1U;
-
-      /* Write CR1 register to clear MODF flag */
-      reg->CR1 = cr1;
-      event |= ARM_SPI_EVENT_MODE_FAULT;
-    }
+  if ((info->state & QSPI_POWERED) == 0U) {
+    return (ARM_DRIVER_ERROR);
   }
 
-  if (((sr & SPI_SR_RXNE) != 0U) && ((cr2 & SPI_CR2_RXNEIE) != 0U)) {
-    /* Receive Buffer Not Empty */
-    if (xfer->rx_cnt < xfer->num) {
-      value = reg->DR;
+  return (ARM_DRIVER_OK);
+}
 
-      if (xfer->rx_buf != NULL) {
-        *xfer->rx_buf++ = (uint8_t)value;
+/**
+ * @fn          QSPI_STATUS QSPI_GetStatus(QSPI_RESOURCES_t *qspi)
+ * @brief       Get QSPI status.
+ * @param[in]   qspi  Pointer to QSPI resources
+ * @return      QSPI status \ref QSPI_STATUS
+ */
+static
+QSPI_STATUS QSPI_GetStatus(QSPI_RESOURCES_t *qspi)
+{
+  QSPI_STATUS status;
 
-        if (access_16bit) {
-          *xfer->rx_buf++ = (uint8_t)(value >> 8U);
-        }
-      }
+  status.busy      = qspi->info->status.busy;
+  status.data_lost = qspi->info->status.data_lost;
 
-      xfer->rx_cnt++;
+  return (status);
+}
 
-      if (xfer->rx_cnt == xfer->num) {
-        /* Disable RX Buffer Not Empty Interrupt */
-        cr2 &= ~SPI_CR2_RXNEIE;
-        /* Clear busy flag */
-        info->status.busy = 0U;
-        /* Transfer completed */
-        event |= ARM_SPI_EVENT_TRANSFER_COMPLETE;
-      }
-    }
-    else {
-      /* Unexpected transfer, data lost */
-      event |= ARM_SPI_EVENT_DATA_LOST;
-    }
-  }
+/**
+ * @fn          void QSPI_IRQHandler(QSPI_RESOURCES_t *qspi)
+ * @brief       QSPI Interrupt handler.
+ * @param[in]   qspi  Pointer to QSPI resources
+ */
+void QSPI_IRQHandler(QSPI_RESOURCES_t *qspi)
+{
+  QSPI_INFO_t          *info = qspi->info;
+  QSPI_TRANSFER_INFO_t *xfer = qspi->xfer;
+  QUADSPI_TypeDef      *reg  = qspi->reg;
 
-  if (((sr & SPI_SR_TXE) != 0U) && ((cr2 & SPI_CR2_TXEIE) != 0U)) {
-    if (xfer->tx_cnt < xfer->num) {
-      if (xfer->tx_buf != NULL) {
-        value = (uint32_t)(*xfer->tx_buf++);
-
-        if (access_16bit) {
-          value |= (uint32_t)(*xfer->tx_buf++ << 8U);
-        }
-      }
-      else {
-        value = (uint32_t)xfer->def_val;
-      }
-
-      /* Write data to data register */
-      reg->DR = value;
-
-      if (++xfer->tx_cnt == xfer->num) {
-        /* All data sent, disable TX Buffer Empty Interrupt */
-        cr2 &= ~SPI_CR2_TXEIE;
-      }
-    }
-    else {
-      /* Unexpected transfer, data lost */
-      event |= ARM_SPI_EVENT_DATA_LOST;
-    }
-  }
-
-  reg->CR2 = cr2;
+  uint32_t event = 0U;
 
   /* Send event */
   if ((event != 0U) && ((info->cb_event != NULL))) {
@@ -1298,14 +631,26 @@ void SPI_IRQHandler(SPI_RESOURCES *spi)
   }
 }
 
+#ifdef QSPI_DMA
+static
+void QSPIx_DMA_Callback(uint32_t event, const void *param)
+{
+  QSPI_RESOURCES_t *qspi = param;
+
+  if (event & DMA_EVENT_TRANSFER_COMPLETE) {
+
+  }
+}
+#endif  /* QSPI_DMA */
+
 #if defined(USE_QSPI0)
   QSPIx_EXPORT_DRIVER(0);
 
   #ifdef QSPI0_DMA_Stream
     QSPIx_DMA_ALLOC(0);
-  #endif // QSPI0_DMA_Stream
+  #endif
 #endif  /* USE_QSPI0 */
 
-#endif /* defined(USE_QSPI0)
+#endif /* defined(USE_QSPI0) */
 
 /* ----------------------------- End of file ---------------------------------*/

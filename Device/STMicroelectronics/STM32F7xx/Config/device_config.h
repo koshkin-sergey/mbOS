@@ -40,6 +40,8 @@
 #define DEV_USART_DMA_INT_PRIORITY     (1U)
 #define DEV_SPI_INT_PRIORITY           (1U)
 #define DEV_SPI_DMA_INT_PRIORITY       (1U)
+#define DEV_QSPI_INT_PRIORITY          (1U)
+#define DEV_QSPI_DMA_INT_PRIORITY      (1U)
 #define DEV_EXTI_INT_PRIORITY          (1U)
 #define DEV_DAC_INT_PRIORITY           (1U)
 

@@ -178,53 +178,53 @@ typedef const struct _QSPI_PIN {
   GPIO_PORT_t               port;           // IO port
   GPIO_PIN_t                 pin;           // IO pin
   GPIO_PIN_FUNC_t           func;           // AF pin configuration
-} QSPI_PIN;
+} QSPI_PIN_t;
 
 /* QSPI Input/Output Configuration */
 typedef const struct _SPI_IO {
-  QSPI_PIN              *bk1_io0;           // Pointer to MISO pin configuration
-  QSPI_PIN              *bk1_io1;           // Pointer to MOSI pin configuration
-  QSPI_PIN              *bk1_io2;           // Pointer to SCK pin configuration
-  QSPI_PIN              *bk1_io3;           // Pointer to SCK pin configuration
-  QSPI_PIN              *bk1_ncs;           // Pointer to NSS pin configuration
-  QSPI_PIN              *bk2_io0;           // Pointer to MISO pin configuration
-  QSPI_PIN              *bk2_io1;           // Pointer to MOSI pin configuration
-  QSPI_PIN              *bk2_io2;           // Pointer to SCK pin configuration
-  QSPI_PIN              *bk2_io3;           // Pointer to SCK pin configuration
-  QSPI_PIN              *bk2_ncs;           // Pointer to NSS pin configuration
-  QSPI_PIN                  *clk;           // Pointer to NSS pin configuration
-} QSPI_IO;
+  QSPI_PIN_t            *bk1_io0;           // Pointer to MISO pin configuration
+  QSPI_PIN_t            *bk1_io1;           // Pointer to MOSI pin configuration
+  QSPI_PIN_t            *bk1_io2;           // Pointer to SCK pin configuration
+  QSPI_PIN_t            *bk1_io3;           // Pointer to SCK pin configuration
+  QSPI_PIN_t            *bk1_ncs;           // Pointer to NSS pin configuration
+  QSPI_PIN_t            *bk2_io0;           // Pointer to MISO pin configuration
+  QSPI_PIN_t            *bk2_io1;           // Pointer to MOSI pin configuration
+  QSPI_PIN_t            *bk2_io2;           // Pointer to SCK pin configuration
+  QSPI_PIN_t            *bk2_io3;           // Pointer to SCK pin configuration
+  QSPI_PIN_t            *bk2_ncs;           // Pointer to NSS pin configuration
+  QSPI_PIN_t                *clk;           // Pointer to NSS pin configuration
+} QSPI_IO_t;
 
-typedef struct _QSPI_STATUS {
+typedef struct QSPI_STATUS_s {
   uint8_t                   busy;           // Transmitter/Receiver busy flag
   uint8_t              data_lost;           // Data lost: Receive overflow / Transmit underflow (cleared on start of transfer operation)
-} QSPI_STATUS;
+} QSPI_STATUS_t;
 
 /* QSPI Information (Run-Time) */
 typedef struct _QSPI_INFO {
   QSPI_SignalEvent_t    cb_event;           // Event Callback
-  QSPI_STATUS             status;           // Status flags
+  QSPI_STATUS_t           status;           // Status flags
   uint8_t                  state;           // Current QSPI state
   uint32_t                  mode;           // Current QSPI mode
-} QSPI_INFO;
+} QSPI_INFO_t;
 
 /* QSPI Transfer Information (Run-Time) */
 typedef struct _QSPI_TRANSFER_INFO {
   uint32_t                   num;           // Total number of transfers
   uint32_t                   cnt;           // Number of data transfered
   uint8_t                   *buf;           // Pointer to data buffer
-} QSPI_TRANSFER_INFO;
+} QSPI_TRANSFER_INFO_t;
 
 /* QSPI Resource Configuration */
 typedef struct _QSPI_RESOURSES {
   QUADSPI_TypeDef           *reg;           // QSPI peripheral register interface
-  QSPI_IO                     io;           // QSPI Input/Output pins
+  QSPI_IO_t                   io;           // QSPI Input/Output pins
   RCC_Periph_t               rcc;           // RCC registers
   IRQn_Type              irq_num;           // QSPI IRQ Number
   DMA_Resources_t           *dma;           // Transmit stream register interface
-  QSPI_INFO                *info;           // Run-Time information
-  QSPI_TRANSFER_INFO       *xfer;           // QSPI transfer information
-} const QSPI_RESOURCES;
+  QSPI_INFO_t              *info;           // Run-Time information
+  QSPI_TRANSFER_INFO_t     *xfer;           // QSPI transfer information
+} const QSPI_RESOURCES_t;
 
 #endif /* QSPI_STM32F7XX_H_ */
 
