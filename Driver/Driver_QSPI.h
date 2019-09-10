@@ -169,9 +169,11 @@ typedef void (*QSPI_SignalEvent_t)(uint32_t event);  ///< Pointer to QSPI_Signal
 \brief QSPI Driver Capabilities.
 */
 typedef struct _QSPI_CAPABILITIES {
-  uint32_t ddr_mode         : 1;        ///< supports DDR Mode
-  uint32_t dual_flash       : 1;        ///< supports Dual-flash Mode
-  uint32_t reserved         : 30;       ///< Reserved (must be zero)
+  uint32_t indirect_mode      : 1;      ///< all the operations are performed using the QSPI registers
+  uint32_t memory_mapped_mode : 1;      ///< the external Flash memory is mapped to the address space
+  uint32_t ddr_mode           : 1;      ///< supports DDR Mode
+  uint32_t dual_flash         : 1;      ///< supports Dual-flash Mode
+  uint32_t reserved           : 28;     ///< Reserved (must be zero)
 } QSPI_CAPABILITIES;
 
 

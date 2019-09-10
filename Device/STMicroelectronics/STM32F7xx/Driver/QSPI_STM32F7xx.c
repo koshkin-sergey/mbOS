@@ -60,6 +60,8 @@ static const ARM_DRIVER_VERSION DriverVersion = {
 
 /* Driver Capabilities */
 static const QSPI_CAPABILITIES DriverCapabilities = {
+  1,  /* all the operations are performed using the QSPI registers */
+  1,  /* the external Flash memory is mapped to the address space */
   1,  /* supports DDR Mode */
   1,  /* supports Dual-flash Mode */
 };
