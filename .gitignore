@@ -4,7 +4,6 @@
 *.axf
 *.bin
 *.elf
-Debug/
 
 # MDK-ARM Project Files
 *.uvguix.*
