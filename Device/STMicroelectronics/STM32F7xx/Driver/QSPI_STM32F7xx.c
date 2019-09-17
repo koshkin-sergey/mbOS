@@ -79,6 +79,7 @@ static const GPIO_PIN_CFG_t QSPI_pin_cfg_analog = {
 /* QSPI0 Information (Run-Time) */
 static QSPI_INFO_t          QSPI0_Info;
 static QSPI_TRANSFER_INFO_t QSPI0_TransferInfo;
+static QSPI_RESOURCES_t     QSPI0_Resources;
 
 #ifdef USE_QSPI0_BK1_IO0_Pin
   static QSPI_PIN_t QSPI0_bk1_io0_pin = {
@@ -176,6 +177,7 @@ static const DMA_Resources_t QSPI0_DMA = {
   QSPI0_DMA_Channel,
   QSPI0_DMA_Priority,
   QSPIx_DMA_Callback,
+  &QSPI0_Resources,
   DEV_QSPI_DMA_INT_PRIORITY,
   QSPI0_DMA_IRQn,
 };
@@ -647,10 +649,6 @@ void QSPIx_DMA_Callback(uint32_t event, const void *param)
 
 #if defined(USE_QSPI0)
   QSPIx_EXPORT_DRIVER(0);
-
-  #ifdef QSPI0_DMA_Stream
-    QSPIx_DMA_ALLOC(0);
-  #endif
 #endif  /* USE_QSPI0 */
 
 #endif /* defined(USE_QSPI0) */

@@ -51,7 +51,6 @@
     #define QSPI0_DMA_IRQn          DMAx_STREAMy_IRQn(DEV_QSPI0_DMA_NUMBER, DEV_QSPI0_DMA_STREAM)
     #define QSPI0_DMA_Channel       DMA_CHANNEL_x(DEV_QSPI0_DMA_CHANNEL)
     #define QSPI0_DMA_Priority      DMA_PRIORITY(DEV_QSPI0_DMA_PRIORITY)
-    #define QSPI0_DMA_Handler       DMAx_STREAMy_IRQ(DEV_QSPI0_DMA_NUMBER, DEV_QSPI0_DMA_STREAM)
   #endif
 
   #if (DEV_QSPI0_BK1_IO0 == 1)
@@ -131,7 +130,7 @@
 #endif
 
 
-#if (defined(USE_QSPI0) && defined(QSPI0_DMA_Handler))
+#if (defined(USE_QSPI0) && defined(QSPI0_DMA_Stream))
   #define QSPI_DMA
 #endif
 
@@ -158,10 +157,6 @@ DRIVER_QSPI Driver_QSPI##x = {                                                  
   QSPI##x##_Control,                                                                                                                         \
   QSPI##x##_GetStatus                                                                                                                        \
 }
-
-#define QSPIx_DMA_ALLOC(x) \
-  void QSPI##x##_DMA_Handler(void) { DMA_IRQ_Handle(&QSPI##x##_DMA, &QSPI##x##_Resources); }
-
 
 /* Current driver status flag definition */
 #define QSPI_INITIALIZED          ((uint8_t)(1U))          // QSPI initialized
