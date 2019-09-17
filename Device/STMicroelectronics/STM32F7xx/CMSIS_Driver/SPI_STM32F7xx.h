@@ -54,14 +54,12 @@
     #define SPI1_RX_DMA_IRQn        DMAx_STREAMy_IRQn(DEV_SPI1_RX_DMA_NUMBER, DEV_SPI1_RX_DMA_STREAM)
     #define SPI1_RX_DMA_Channel     DMA_CHANNEL_x(DEV_SPI1_RX_DMA_CHANNEL)
     #define SPI1_RX_DMA_Priority    DMA_PRIORITY(DEV_SPI1_RX_DMA_PRIORITY)
-    #define SPI1_RX_DMA_Handler     DMAx_STREAMy_IRQ(DEV_SPI1_RX_DMA_NUMBER, DEV_SPI1_RX_DMA_STREAM)
   #endif
   #if (DEV_SPI1_TX_DMA == 1)
     #define SPI1_TX_DMA_Stream      DMAx_STREAMy(DEV_SPI1_TX_DMA_NUMBER, DEV_SPI1_TX_DMA_STREAM)
     #define SPI1_TX_DMA_IRQn        DMAx_STREAMy_IRQn(DEV_SPI1_TX_DMA_NUMBER, DEV_SPI1_TX_DMA_STREAM)
     #define SPI1_TX_DMA_Channel     DMA_CHANNEL_x(DEV_SPI1_TX_DMA_CHANNEL)
     #define SPI1_TX_DMA_Priority    DMA_PRIORITY(DEV_SPI1_TX_DMA_PRIORITY)
-    #define SPI1_TX_DMA_Handler     DMAx_STREAMy_IRQ(DEV_SPI1_TX_DMA_NUMBER, DEV_SPI1_TX_DMA_STREAM)
   #endif
 
   #if (DEV_SPI1_MISO == 1)
@@ -105,14 +103,12 @@
     #define SPI2_RX_DMA_IRQn        DMAx_STREAMy_IRQn(DEV_SPI2_RX_DMA_NUMBER, DEV_SPI2_RX_DMA_STREAM)
     #define SPI2_RX_DMA_Channel     DMA_CHANNEL_x(DEV_SPI2_RX_DMA_CHANNEL)
     #define SPI2_RX_DMA_Priority    DMA_PRIORITY(DEV_SPI2_RX_DMA_PRIORITY)
-    #define SPI2_RX_DMA_Handler     DMAx_STREAMy_IRQ(DEV_SPI2_RX_DMA_NUMBER, DEV_SPI2_RX_DMA_STREAM)
   #endif
   #if (DEV_SPI2_TX_DMA == 1)
     #define SPI2_TX_DMA_Stream      DMAx_STREAMy(DEV_SPI2_TX_DMA_NUMBER, DEV_SPI2_TX_DMA_STREAM)
     #define SPI2_TX_DMA_IRQn        DMAx_STREAMy_IRQn(DEV_SPI2_TX_DMA_NUMBER, DEV_SPI2_TX_DMA_STREAM)
     #define SPI2_TX_DMA_Channel     DMA_CHANNEL_x(DEV_SPI2_TX_DMA_CHANNEL)
     #define SPI2_TX_DMA_Priority    DMA_PRIORITY(DEV_SPI2_TX_DMA_PRIORITY)
-    #define SPI2_TX_DMA_Handler     DMAx_STREAMy_IRQ(DEV_SPI2_TX_DMA_NUMBER, DEV_SPI2_TX_DMA_STREAM)
   #endif
 
   #if (DEV_SPI2_MISO == 1)
@@ -156,14 +152,12 @@
     #define SPI3_RX_DMA_IRQn        DMAx_STREAMy_IRQn(DEV_SPI3_RX_DMA_NUMBER, DEV_SPI3_RX_DMA_STREAM)
     #define SPI3_RX_DMA_Channel     DMA_CHANNEL_x(DEV_SPI3_RX_DMA_CHANNEL)
     #define SPI3_RX_DMA_Priority    DMA_PRIORITY(DEV_SPI3_RX_DMA_PRIORITY)
-    #define SPI3_RX_DMA_Handler     DMAx_STREAMy_IRQ(DEV_SPI3_RX_DMA_NUMBER, DEV_SPI3_RX_DMA_STREAM)
   #endif
   #if (DEV_SPI3_TX_DMA == 1)
     #define SPI3_TX_DMA_Stream      DMAx_STREAMy(DEV_SPI3_TX_DMA_NUMBER, DEV_SPI3_TX_DMA_STREAM)
     #define SPI3_TX_DMA_IRQn        DMAx_STREAMy_IRQn(DEV_SPI3_TX_DMA_NUMBER, DEV_SPI3_TX_DMA_STREAM)
     #define SPI3_TX_DMA_Channel     DMA_CHANNEL_x(DEV_SPI3_TX_DMA_CHANNEL)
     #define SPI3_TX_DMA_Priority    DMA_PRIORITY(DEV_SPI3_TX_DMA_PRIORITY)
-    #define SPI3_TX_DMA_Handler     DMAx_STREAMy_IRQ(DEV_SPI3_TX_DMA_NUMBER, DEV_SPI3_TX_DMA_STREAM)
   #endif
 
   #if (DEV_SPI3_MISO == 1)
@@ -207,14 +201,12 @@
     #define SPI4_RX_DMA_IRQn        DMAx_STREAMy_IRQn(DEV_SPI4_RX_DMA_NUMBER, DEV_SPI4_RX_DMA_STREAM)
     #define SPI4_RX_DMA_Channel     DMA_CHANNEL_x(DEV_SPI4_RX_DMA_CHANNEL)
     #define SPI4_RX_DMA_Priority    DMA_PRIORITY(DEV_SPI4_RX_DMA_PRIORITY)
-    #define SPI4_RX_DMA_Handler     DMAx_STREAMy_IRQ(DEV_SPI4_RX_DMA_NUMBER, DEV_SPI4_RX_DMA_STREAM)
   #endif
   #if (DEV_SPI4_TX_DMA == 1)
     #define SPI4_TX_DMA_Stream      DMAx_STREAMy(DEV_SPI4_TX_DMA_NUMBER, DEV_SPI4_TX_DMA_STREAM)
     #define SPI4_TX_DMA_IRQn        DMAx_STREAMy_IRQn(DEV_SPI4_TX_DMA_NUMBER, DEV_SPI4_TX_DMA_STREAM)
     #define SPI4_TX_DMA_Channel     DMA_CHANNEL_x(DEV_SPI4_TX_DMA_CHANNEL)
     #define SPI4_TX_DMA_Priority    DMA_PRIORITY(DEV_SPI4_TX_DMA_PRIORITY)
-    #define SPI4_TX_DMA_Handler     DMAx_STREAMy_IRQ(DEV_SPI4_TX_DMA_NUMBER, DEV_SPI4_TX_DMA_STREAM)
   #endif
 
   #if (DEV_SPI4_MISO == 1)
@@ -258,14 +250,12 @@
     #define SPI5_RX_DMA_IRQn        DMAx_STREAMy_IRQn(DEV_SPI5_RX_DMA_NUMBER, DEV_SPI5_RX_DMA_STREAM)
     #define SPI5_RX_DMA_Channel     DMA_CHANNEL_x(DEV_SPI5_RX_DMA_CHANNEL)
     #define SPI5_RX_DMA_Priority    DMA_PRIORITY(DEV_SPI5_RX_DMA_PRIORITY)
-    #define SPI5_RX_DMA_Handler     DMAx_STREAMy_IRQ(DEV_SPI5_RX_DMA_NUMBER, DEV_SPI5_RX_DMA_STREAM)
   #endif
   #if (DEV_SPI5_TX_DMA == 1)
     #define SPI5_TX_DMA_Stream      DMAx_STREAMy(DEV_SPI5_TX_DMA_NUMBER, DEV_SPI5_TX_DMA_STREAM)
     #define SPI5_TX_DMA_IRQn        DMAx_STREAMy_IRQn(DEV_SPI5_TX_DMA_NUMBER, DEV_SPI5_TX_DMA_STREAM)
     #define SPI5_TX_DMA_Channel     DMA_CHANNEL_x(DEV_SPI5_TX_DMA_CHANNEL)
     #define SPI5_TX_DMA_Priority    DMA_PRIORITY(DEV_SPI5_TX_DMA_PRIORITY)
-    #define SPI5_TX_DMA_Handler     DMAx_STREAMy_IRQ(DEV_SPI5_TX_DMA_NUMBER, DEV_SPI5_TX_DMA_STREAM)
   #endif
 
   #if (DEV_SPI5_MISO == 1)
@@ -309,14 +299,12 @@
     #define SPI6_RX_DMA_IRQn        DMAx_STREAMy_IRQn(DEV_SPI6_RX_DMA_NUMBER, DEV_SPI6_RX_DMA_STREAM)
     #define SPI6_RX_DMA_Channel     DMA_CHANNEL_x(DEV_SPI6_RX_DMA_CHANNEL)
     #define SPI6_RX_DMA_Priority    DMA_PRIORITY(DEV_SPI6_RX_DMA_PRIORITY)
-    #define SPI6_RX_DMA_Handler     DMAx_STREAMy_IRQ(DEV_SPI6_RX_DMA_NUMBER, DEV_SPI6_RX_DMA_STREAM)
   #endif
   #if (DEV_SPI6_TX_DMA == 1)
     #define SPI6_TX_DMA_Stream      DMAx_STREAMy(DEV_SPI6_TX_DMA_NUMBER, DEV_SPI6_TX_DMA_STREAM)
     #define SPI6_TX_DMA_IRQn        DMAx_STREAMy_IRQn(DEV_SPI6_TX_DMA_NUMBER, DEV_SPI6_TX_DMA_STREAM)
     #define SPI6_TX_DMA_Channel     DMA_CHANNEL_x(DEV_SPI6_TX_DMA_CHANNEL)
     #define SPI6_TX_DMA_Priority    DMA_PRIORITY(DEV_SPI6_TX_DMA_PRIORITY)
-    #define SPI6_TX_DMA_Handler     DMAx_STREAMy_IRQ(DEV_SPI6_TX_DMA_NUMBER, DEV_SPI6_TX_DMA_STREAM)
   #endif
 
   #if (DEV_SPI6_MISO == 1)
@@ -346,21 +334,21 @@
   #endif
 #endif
 
-#if ((defined(USE_SPI1) && defined(SPI1_RX_DMA_Handler)) || \
-     (defined(USE_SPI2) && defined(SPI2_RX_DMA_Handler)) || \
-     (defined(USE_SPI3) && defined(SPI3_RX_DMA_Handler)) || \
-     (defined(USE_SPI4) && defined(SPI4_RX_DMA_Handler)) || \
-     (defined(USE_SPI5) && defined(SPI5_RX_DMA_Handler)) || \
-     (defined(USE_SPI6) && defined(SPI6_RX_DMA_Handler)))
+#if ((defined(USE_SPI1) && defined(SPI1_RX_DMA_Stream)) || \
+     (defined(USE_SPI2) && defined(SPI2_RX_DMA_Stream)) || \
+     (defined(USE_SPI3) && defined(SPI3_RX_DMA_Stream)) || \
+     (defined(USE_SPI4) && defined(SPI4_RX_DMA_Stream)) || \
+     (defined(USE_SPI5) && defined(SPI5_RX_DMA_Stream)) || \
+     (defined(USE_SPI6) && defined(SPI6_RX_DMA_Stream)))
   #define SPI_DMA_RX
 #endif
 
-#if ((defined(USE_SPI1) && defined(SPI1_TX_DMA_Handler)) || \
-     (defined(USE_SPI2) && defined(SPI2_TX_DMA_Handler)) || \
-     (defined(USE_SPI3) && defined(SPI3_TX_DMA_Handler)) || \
-     (defined(USE_SPI4) && defined(SPI4_TX_DMA_Handler)) || \
-     (defined(USE_SPI5) && defined(SPI5_TX_DMA_Handler)) || \
-     (defined(USE_SPI6) && defined(SPI6_TX_DMA_Handler)))
+#if ((defined(USE_SPI1) && defined(SPI1_TX_DMA_Stream)) || \
+     (defined(USE_SPI2) && defined(SPI2_TX_DMA_Stream)) || \
+     (defined(USE_SPI3) && defined(SPI3_TX_DMA_Stream)) || \
+     (defined(USE_SPI4) && defined(SPI4_TX_DMA_Stream)) || \
+     (defined(USE_SPI5) && defined(SPI5_TX_DMA_Stream)) || \
+     (defined(USE_SPI6) && defined(SPI6_TX_DMA_Stream)))
   #define SPI_DMA_TX
 #endif
 
@@ -393,12 +381,6 @@ ARM_DRIVER_SPI Driver_SPI##x = {                                                
   SPI##x##_Control,                                                                                                                                                       \
   SPI##x##_GetStatus                                                                                                                                                      \
 }
-
-#define SPIx_TX_DMA_ALLOC(x) \
-  void SPI##x##_TX_DMA_Handler(void) { DMA_IRQ_Handle(&SPI##x##_TX_DMA, &SPI##x##_Resources); }
-
-#define SPIx_RX_DMA_ALLOC(x) \
-  void SPI##x##_RX_DMA_Handler(void) { DMA_IRQ_Handle(&SPI##x##_RX_DMA, &SPI##x##_Resources); }
 
 /* Current driver status flag definition */
 #define SPI_INITIALIZED           ((uint8_t)(1U))          // SPI initialized

@@ -88,6 +88,7 @@ static const GPIO_PIN_CFG_t SPI_pin_cfg_out_pp = {
 /* SPI1 Information (Run-Time) */
 static SPI_INFO          SPI1_Info;
 static SPI_TRANSFER_INFO SPI1_TransferInfo;
+static SPI_RESOURCES     SPI1_Resources;
 
 #ifdef USE_SPI1_MISO_Pin
   static SPI_PIN SPI1_miso = {SPI1_MISO_GPIO_PORT, SPI1_MISO_GPIO_PIN, SPI1_MISO_GPIO_FUNC};
@@ -113,6 +114,7 @@ static const DMA_Resources_t SPI1_TX_DMA = {
   SPI1_TX_DMA_Channel,
   SPI1_TX_DMA_Priority,
   SPIx_TX_DMA_Callback,
+  &SPI1_Resources,
   DEV_SPI_DMA_INT_PRIORITY,
   SPI1_TX_DMA_IRQn,
 };
@@ -126,6 +128,7 @@ static const DMA_Resources_t SPI1_RX_DMA = {
   SPI1_RX_DMA_Channel,
   SPI1_RX_DMA_Priority,
   SPIx_RX_DMA_Callback,
+  &SPI1_Resources,
   DEV_SPI_DMA_INT_PRIORITY,
   SPI1_RX_DMA_IRQn,
 };
@@ -179,6 +182,7 @@ static SPI_RESOURCES SPI1_Resources = {
 /* SPI2 Information (Run-Time) */
 static SPI_INFO          SPI2_Info;
 static SPI_TRANSFER_INFO SPI2_TransferInfo;
+static SPI_RESOURCES     SPI2_Resources;
 
 #ifdef USE_SPI2_MISO_Pin
   static SPI_PIN SPI2_miso = {SPI2_MISO_GPIO_PORT, SPI2_MISO_GPIO_PIN, SPI2_MISO_GPIO_FUNC};
@@ -204,6 +208,7 @@ static DMA_Resources_t SPI2_TX_DMA = {
   SPI2_TX_DMA_Channel,
   SPI2_TX_DMA_Priority,
   SPIx_TX_DMA_Callback,
+  &SPI2_Resources,
   DEV_SPI_DMA_INT_PRIORITY,
   SPI2_TX_DMA_IRQn,
 };
@@ -217,6 +222,7 @@ static DMA_Resources_t SPI2_RX_DMA = {
   SPI2_RX_DMA_Channel,
   SPI2_RX_DMA_Priority,
   SPIx_RX_DMA_Callback,
+  &SPI2_Resources,
   DEV_SPI_DMA_INT_PRIORITY,
   SPI2_RX_DMA_IRQn,
 };
@@ -270,6 +276,7 @@ static SPI_RESOURCES SPI2_Resources = {
 /* SPI3 Information (Run-Time) */
 static SPI_INFO          SPI3_Info;
 static SPI_TRANSFER_INFO SPI3_TransferInfo;
+static SPI_RESOURCES     SPI3_Resources;
 
 #ifdef USE_SPI3_MISO_Pin
   static SPI_PIN SPI3_miso = {SPI3_MISO_GPIO_PORT, SPI3_MISO_GPIO_PIN, SPI3_MISO_GPIO_FUNC};
@@ -295,6 +302,7 @@ static DMA_Resources_t SPI3_TX_DMA = {
   SPI3_TX_DMA_Channel,
   SPI3_TX_DMA_Priority,
   SPIx_TX_DMA_Callback,
+  &SPI3_Resources,
   DEV_SPI_DMA_INT_PRIORITY,
   SPI3_TX_DMA_IRQn,
 };
@@ -308,6 +316,7 @@ static DMA_Resources_t SPI3_RX_DMA = {
   SPI3_RX_DMA_Channel,
   SPI3_RX_DMA_Priority,
   SPIx_RX_DMA_Callback,
+  &SPI3_Resources,
   DEV_SPI_DMA_INT_PRIORITY,
   SPI3_RX_DMA_IRQn,
 };
@@ -361,6 +370,7 @@ static SPI_RESOURCES SPI3_Resources = {
 /* SPI4 Information (Run-Time) */
 static SPI_INFO          SPI4_Info;
 static SPI_TRANSFER_INFO SPI4_TransferInfo;
+static SPI_RESOURCES     SPI4_Resources;
 
 #ifdef USE_SPI4_MISO_Pin
   static SPI_PIN SPI4_miso = {SPI4_MISO_GPIO_PORT, SPI4_MISO_GPIO_PIN, SPI4_MISO_GPIO_FUNC};
@@ -386,6 +396,7 @@ static DMA_Resources_t SPI4_TX_DMA = {
   SPI4_TX_DMA_Channel,
   SPI4_TX_DMA_Priority,
   SPIx_TX_DMA_Callback,
+  &SPI4_Resources,
   DEV_SPI_DMA_INT_PRIORITY,
   SPI4_TX_DMA_IRQn,
 };
@@ -399,6 +410,7 @@ static DMA_Resources_t SPI4_RX_DMA = {
   SPI4_RX_DMA_Channel,
   SPI4_RX_DMA_Priority,
   SPIx_RX_DMA_Callback,
+  &SPI4_Resources,
   DEV_SPI_DMA_INT_PRIORITY,
   SPI4_RX_DMA_IRQn,
 };
@@ -452,6 +464,7 @@ static SPI_RESOURCES SPI4_Resources = {
 /* SPI5 Information (Run-Time) */
 static SPI_INFO          SPI5_Info;
 static SPI_TRANSFER_INFO SPI5_TransferInfo;
+static SPI_RESOURCES     SPI5_Resources;
 
 #ifdef USE_SPI5_MISO_Pin
   static SPI_PIN SPI5_miso = {SPI5_MISO_GPIO_PORT, SPI5_MISO_GPIO_PIN, SPI5_MISO_GPIO_FUNC};
@@ -477,6 +490,7 @@ static DMA_Resources_t SPI5_TX_DMA = {
   SPI5_TX_DMA_Channel,
   SPI5_TX_DMA_Priority,
   SPIx_TX_DMA_Callback,
+  &SPI5_Resources,
   DEV_SPI_DMA_INT_PRIORITY,
   SPI5_TX_DMA_IRQn,
 };
@@ -490,6 +504,7 @@ static DMA_Resources_t SPI5_RX_DMA = {
   SPI5_RX_DMA_Channel,
   SPI5_RX_DMA_Priority,
   SPIx_RX_DMA_Callback,
+  &SPI5_Resources,
   DEV_SPI_DMA_INT_PRIORITY,
   SPI5_RX_DMA_IRQn,
 };
@@ -543,6 +558,7 @@ static SPI_RESOURCES SPI5_Resources = {
 /* SPI6 Information (Run-Time) */
 static SPI_INFO          SPI6_Info;
 static SPI_TRANSFER_INFO SPI6_TransferInfo;
+static SPI_RESOURCES     SPI6_Resources;
 
 #ifdef USE_SPI6_MISO_Pin
   static SPI_PIN SPI6_miso = {SPI6_MISO_GPIO_PORT, SPI6_MISO_GPIO_PIN, SPI6_MISO_GPIO_FUNC};
@@ -568,6 +584,7 @@ static DMA_Resources_t SPI6_TX_DMA = {
   SPI6_TX_DMA_Channel,
   SPI6_TX_DMA_Priority,
   SPIx_TX_DMA_Callback,
+  &SPI6_Resources,
   DEV_SPI_DMA_INT_PRIORITY,
   SPI6_TX_DMA_IRQn,
 };
@@ -581,6 +598,7 @@ static DMA_Resources_t SPI6_RX_DMA = {
   SPI6_RX_DMA_Channel,
   SPI6_RX_DMA_Priority,
   SPIx_RX_DMA_Callback,
+  &SPI6_Resources,
   DEV_SPI_DMA_INT_PRIORITY,
   SPI6_RX_DMA_IRQn,
 };
@@ -1747,74 +1765,26 @@ void SPIx_RX_DMA_Callback(uint32_t event, const void *param)
 
 #if defined(USE_SPI1)
   SPIx_EXPORT_DRIVER(1);
-
-  #ifdef SPI1_TX_DMA_Stream
-    SPIx_TX_DMA_ALLOC(1);
-  #endif // SPI1_TX_DMA_Stream
-
-  #ifdef SPI1_RX_DMA_Stream
-    SPIx_RX_DMA_ALLOC(1);
-  #endif // SPI1_RX_DMA_Stream
 #endif  /* USE_SPI1 */
 
 #if defined(USE_SPI2)
   SPIx_EXPORT_DRIVER(2);
-
-  #ifdef SPI2_TX_DMA_Stream
-    SPIx_TX_DMA_ALLOC(2);
-  #endif
-
-  #ifdef SPI2_RX_DMA_Stream
-    SPIx_RX_DMA_ALLOC(2);
-  #endif
 #endif  /* USE_SPI2 */
 
 #if defined(USE_SPI3)
   SPIx_EXPORT_DRIVER(3);
-
-  #ifdef SPI3_TX_DMA_Stream
-    SPIx_TX_DMA_ALLOC(3);
-  #endif
-
-  #ifdef SPI3_RX_DMA_Stream
-    SPIx_RX_DMA_ALLOC(3);
-  #endif
 #endif  /* USE_SPI3 */
 
 #if defined(USE_SPI4)
   SPIx_EXPORT_DRIVER(4);
-
-  #ifdef SPI4_TX_DMA_Stream
-    SPIx_TX_DMA_ALLOC(4);
-  #endif
-
-  #ifdef SPI4_RX_DMA_Stream
-    SPIx_RX_DMA_ALLOC(4);
-  #endif
 #endif  /* USE_SPI4 */
 
 #if defined(USE_SPI5)
   SPIx_EXPORT_DRIVER(5);
-
-  #ifdef SPI5_TX_DMA_Stream
-    SPIx_TX_DMA_ALLOC(5);
-  #endif
-
-  #ifdef SPI5_RX_DMA_Stream
-    SPIx_RX_DMA_ALLOC(5);
-  #endif
 #endif  /* USE_SPI5 */
 
 #if defined(USE_SPI6)
   SPIx_EXPORT_DRIVER(6);
-
-  #ifdef SPI6_TX_DMA_Stream
-    SPIx_TX_DMA_ALLOC(6);
-  #endif
-
-  #ifdef SPI6_RX_DMA_Stream
-    SPIx_RX_DMA_ALLOC(6);
-  #endif
 #endif  /* USE_SPI6 */
 
 #endif /* defined(USE_SPI1) || defined(USE_SPI2) || defined(USE_SPI3) ...     */
