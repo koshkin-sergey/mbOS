@@ -84,8 +84,9 @@ static const GPIO_PIN_CFG_t USART_pin_cfg_out_pp = {
 #ifdef USE_USART1
 
 /* USART1 Run-Time Information */
-static USART_INFO          USART1_Info         = {0};
-static USART_TRANSFER_INFO USART1_TransferInfo = {0};
+static USART_INFO            USART1_Info         = {0};
+static USART_TRANSFER_INFO   USART1_TransferInfo = {0};
+static const USART_RESOURCES USART1_Resources;
 
 #ifdef USART1_TX_DMA_Stream
 static DMA_Handle_t USART1_TX_DMA_Handle;
@@ -95,6 +96,7 @@ static const DMA_Resources_t USART1_TX_DMA = {
   USART1_TX_DMA_Channel,
   USART1_TX_DMA_Priority,
   USART_TX_DMA_Callback,
+  &USART1_Resources,
   DEV_USART_DMA_INT_PRIORITY,
   USART1_TX_DMA_IRQn,
 };
@@ -108,6 +110,7 @@ static const DMA_Resources_t USART1_RX_DMA = {
   USART1_RX_DMA_Channel,
   USART1_RX_DMA_Priority,
   USART_RX_DMA_Callback,
+  &USART1_Resources,
   DEV_USART_DMA_INT_PRIORITY,
   USART1_RX_DMA_IRQn,
 };
@@ -252,8 +255,9 @@ static const USART_RESOURCES USART1_Resources = {
 #ifdef USE_USART2
 
 /* USART2 Run-Time Information */
-static USART_INFO          USART2_Info         = {0};
-static USART_TRANSFER_INFO USART2_TransferInfo = {0};
+static USART_INFO            USART2_Info         = {0};
+static USART_TRANSFER_INFO   USART2_TransferInfo = {0};
+static const USART_RESOURCES USART2_Resources;
 
 #ifdef USART2_TX_DMA_Stream
 static DMA_Handle_t USART2_TX_DMA_Handle;
@@ -263,6 +267,7 @@ static const DMA_Resources_t USART2_TX_DMA = {
   USART2_TX_DMA_Channel,
   USART2_TX_DMA_Priority,
   USART_TX_DMA_Callback,
+  &USART2_Resources,
   DEV_USART_DMA_INT_PRIORITY,
   USART2_TX_DMA_IRQn,
 };
@@ -276,6 +281,7 @@ static const DMA_Resources_t USART2_RX_DMA = {
   USART2_RX_DMA_Channel,
   USART2_RX_DMA_Priority,
   USART_RX_DMA_Callback,
+  &USART2_Resources,
   DEV_USART_DMA_INT_PRIORITY,
   USART2_RX_DMA_IRQn,
 };
@@ -420,8 +426,9 @@ static const USART_RESOURCES USART2_Resources = {
 #ifdef USE_USART3
 
 /* USART3 Run-Time Information */
-static USART_INFO          USART3_Info         = {0};
-static USART_TRANSFER_INFO USART3_TransferInfo = {0};
+static USART_INFO            USART3_Info         = {0};
+static USART_TRANSFER_INFO   USART3_TransferInfo = {0};
+static const USART_RESOURCES USART3_Resources;
 
 #ifdef USART3_TX_DMA_Stream
 static DMA_Handle_t USART3_TX_DMA_Handle;
@@ -431,6 +438,7 @@ static const DMA_Resources_t USART3_TX_DMA = {
   USART3_TX_DMA_Channel,
   USART3_TX_DMA_Priority,
   USART_TX_DMA_Callback,
+  &USART3_Resources,
   DEV_USART_DMA_INT_PRIORITY,
   USART3_TX_DMA_IRQn,
 };
@@ -444,6 +452,7 @@ static const DMA_Resources_t USART3_RX_DMA = {
   USART3_RX_DMA_Channel,
   USART3_RX_DMA_Priority,
   USART_RX_DMA_Callback,
+  &USART3_Resources,
   DEV_USART_DMA_INT_PRIORITY,
   USART3_RX_DMA_IRQn,
 };
@@ -588,8 +597,9 @@ static const USART_RESOURCES USART3_Resources = {
 #ifdef USE_UART4
 
 /* UART4 Run-Time Information */
-static USART_INFO          UART4_Info         = {0};
-static USART_TRANSFER_INFO UART4_TransferInfo = {0};
+static USART_INFO            UART4_Info         = {0};
+static USART_TRANSFER_INFO   UART4_TransferInfo = {0};
+static const USART_RESOURCES UART4_Resources;
 
 #ifdef UART4_TX_DMA_Stream
 static DMA_Handle_t UART4_TX_DMA_Handle;
@@ -599,6 +609,7 @@ static const DMA_Resources_t UART4_TX_DMA = {
   UART4_TX_DMA_Channel,
   UART4_TX_DMA_Priority,
   USART_TX_DMA_Callback,
+  &UART4_Resources,
   DEV_USART_DMA_INT_PRIORITY,
   UART4_TX_DMA_IRQn,
 };
@@ -612,6 +623,7 @@ static const DMA_Resources_t UART4_RX_DMA = {
   UART4_RX_DMA_Channel,
   UART4_RX_DMA_Priority,
   USART_RX_DMA_Callback,
+  &UART4_Resources,
   DEV_USART_DMA_INT_PRIORITY,
   UART4_RX_DMA_IRQn,
 };
@@ -752,8 +764,9 @@ static const USART_RESOURCES UART4_Resources = {
 #ifdef USE_UART5
 
 /* UART5 Run-Time Information */
-static USART_INFO          UART5_Info         = {0};
-static USART_TRANSFER_INFO UART5_TransferInfo = {0};
+static USART_INFO            UART5_Info         = {0};
+static USART_TRANSFER_INFO   UART5_TransferInfo = {0};
+static const USART_RESOURCES UART5_Resources;
 
 #ifdef UART5_TX_DMA_Stream
 static DMA_Handle_t UART5_TX_DMA_Handle;
@@ -763,6 +776,7 @@ static const DMA_Resources_t UART5_TX_DMA = {
   UART5_TX_DMA_Channel,
   UART5_TX_DMA_Priority,
   USART_TX_DMA_Callback,
+  &UART5_Resources,
   DEV_USART_DMA_INT_PRIORITY,
   UART5_TX_DMA_IRQn,
 };
@@ -776,6 +790,7 @@ static const DMA_Resources_t UART5_RX_DMA = {
   UART5_RX_DMA_Channel,
   UART5_RX_DMA_Priority,
   USART_RX_DMA_Callback,
+  &UART5_Resources,
   DEV_USART_DMA_INT_PRIORITY,
   UART5_RX_DMA_IRQn,
 };
@@ -916,8 +931,9 @@ static const USART_RESOURCES UART5_Resources = {
 #ifdef USE_USART6
 
 /* USART6 Run-Time Information */
-static USART_INFO          USART6_Info         = {0};
-static USART_TRANSFER_INFO USART6_TransferInfo = {0};
+static USART_INFO            USART6_Info         = {0};
+static USART_TRANSFER_INFO   USART6_TransferInfo = {0};
+static const USART_RESOURCES USART6_Resources;
 
 #ifdef USART6_TX_DMA_Stream
 static DMA_Handle_t USART6_TX_DMA_Handle;
@@ -927,6 +943,7 @@ static const DMA_Resources_t USART6_TX_DMA = {
   USART6_TX_DMA_Channel,
   USART6_TX_DMA_Priority,
   USART_TX_DMA_Callback,
+  &USART6_Resources,
   DEV_USART_DMA_INT_PRIORITY,
   USART6_TX_DMA_IRQn,
 };
@@ -940,6 +957,7 @@ static const DMA_Resources_t USART6_RX_DMA = {
   USART6_RX_DMA_Channel,
   USART6_RX_DMA_Priority,
   USART_RX_DMA_Callback,
+  &USART6_Resources,
   DEV_USART_DMA_INT_PRIORITY,
   USART6_RX_DMA_IRQn,
 };
@@ -1084,8 +1102,9 @@ static const USART_RESOURCES USART6_Resources = {
 #ifdef USE_UART7
 
 /* UART7 Run-Time Information */
-static USART_INFO          UART7_Info         = {0};
-static USART_TRANSFER_INFO UART7_TransferInfo = {0};
+static USART_INFO            UART7_Info         = {0};
+static USART_TRANSFER_INFO   UART7_TransferInfo = {0};
+static const USART_RESOURCES UART7_Resources;
 
 #ifdef UART7_TX_DMA_Stream
 static DMA_Handle_t UART7_TX_DMA_Handle;
@@ -1095,6 +1114,7 @@ static const DMA_Resources_t UART7_TX_DMA = {
   UART7_TX_DMA_Channel,
   UART7_TX_DMA_Priority,
   USART_TX_DMA_Callback,
+  &UART7_Resources,
   DEV_USART_DMA_INT_PRIORITY,
   UART7_TX_DMA_IRQn,
 };
@@ -1108,6 +1128,7 @@ static const DMA_Resources_t UART7_RX_DMA = {
   UART7_RX_DMA_Channel,
   UART7_RX_DMA_Priority,
   USART_RX_DMA_Callback,
+  &UART7_Resources,
   DEV_USART_DMA_INT_PRIORITY,
   UART7_RX_DMA_IRQn,
 };
@@ -1248,8 +1269,9 @@ static const USART_RESOURCES UART7_Resources = {
 #ifdef USE_UART8
 
 /* UART8 Run-Time Information */
-static USART_INFO          UART8_Info         = {0};
-static USART_TRANSFER_INFO UART8_TransferInfo = {0};
+static USART_INFO            UART8_Info         = {0};
+static USART_TRANSFER_INFO   UART8_TransferInfo = {0};
+static const USART_RESOURCES UART8_Resources;
 
 #ifdef UART8_TX_DMA_Stream
 static DMA_Handle_t UART8_TX_DMA_Handle;
@@ -1259,6 +1281,7 @@ static const DMA_Resources_t UART8_TX_DMA = {
   UART8_TX_DMA_Channel,
   UART8_TX_DMA_Priority,
   USART_TX_DMA_Callback,
+  &UART8_Resources,
   DEV_USART_DMA_INT_PRIORITY,
   UART8_TX_DMA_IRQn,
 };
@@ -1272,6 +1295,7 @@ static const DMA_Resources_t UART8_RX_DMA = {
   UART8_RX_DMA_Channel,
   UART8_RX_DMA_Priority,
   USART_RX_DMA_Callback,
+  &UART8_Resources,
   DEV_USART_DMA_INT_PRIORITY,
   UART8_RX_DMA_IRQn,
 };
@@ -2957,13 +2981,6 @@ static void USART_RX_DMA_Callback(uint32_t event, const void *param)
 
 #ifdef USE_UART5
   UARTx_EXPORT_DRIVER(5);
-
-  #ifdef UART5_TX_DMA_Stream
-    UARTx_TX_DMA_ALLOC(5);
-  #endif
-  #ifdef UART5_RX_DMA_Stream
-    UARTx_RX_DMA_ALLOC(5);
-  #endif
 #endif  /* USE_UART5 */
 
 

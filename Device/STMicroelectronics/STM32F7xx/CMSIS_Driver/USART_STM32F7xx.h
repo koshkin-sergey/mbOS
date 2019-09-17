@@ -53,14 +53,12 @@
     #define USART1_RX_DMA_IRQn        DMAx_STREAMy_IRQn(DEV_USART1_RX_DMA_NUMBER, DEV_USART1_RX_DMA_STREAM)
     #define USART1_RX_DMA_Channel     DMA_CHANNEL_x(DEV_USART1_RX_DMA_CHANNEL)
     #define USART1_RX_DMA_Priority    DMA_PRIORITY(DEV_USART1_RX_DMA_PRIORITY)
-    #define USART1_RX_DMA_Handler     DMAx_STREAMy_IRQ(DEV_USART1_RX_DMA_NUMBER, DEV_USART1_RX_DMA_STREAM)
   #endif
   #if (DEV_USART1_TX_DMA == 1)
     #define USART1_TX_DMA_Stream      DMAx_STREAMy(DEV_USART1_TX_DMA_NUMBER, DEV_USART1_TX_DMA_STREAM)
     #define USART1_TX_DMA_IRQn        DMAx_STREAMy_IRQn(DEV_USART1_TX_DMA_NUMBER, DEV_USART1_TX_DMA_STREAM)
     #define USART1_TX_DMA_Channel     DMA_CHANNEL_x(DEV_USART1_TX_DMA_CHANNEL)
     #define USART1_TX_DMA_Priority    DMA_PRIORITY(DEV_USART1_TX_DMA_PRIORITY)
-    #define USART1_TX_DMA_Handler     DMAx_STREAMy_IRQ(DEV_USART1_TX_DMA_NUMBER, DEV_USART1_TX_DMA_STREAM)
   #endif
 
   #if (DEV_USART1_TX == 1)
@@ -113,14 +111,12 @@
     #define USART2_RX_DMA_IRQn        DMAx_STREAMy_IRQn(DEV_USART2_RX_DMA_NUMBER, DEV_USART2_RX_DMA_STREAM)
     #define USART2_RX_DMA_Channel     DMA_CHANNEL_x(DEV_USART2_RX_DMA_CHANNEL)
     #define USART2_RX_DMA_Priority    DMA_PRIORITY(DEV_USART2_RX_DMA_PRIORITY)
-    #define USART2_RX_DMA_Handler     DMAx_STREAMy_IRQ(DEV_USART2_RX_DMA_NUMBER, DEV_USART2_RX_DMA_STREAM)
   #endif
   #if (DEV_USART2_TX_DMA == 1)
     #define USART2_TX_DMA_Stream      DMAx_STREAMy(DEV_USART2_TX_DMA_NUMBER, DEV_USART2_TX_DMA_STREAM)
     #define USART2_TX_DMA_IRQn        DMAx_STREAMy_IRQn(DEV_USART2_TX_DMA_NUMBER, DEV_USART2_TX_DMA_STREAM)
     #define USART2_TX_DMA_Channel     DMA_CHANNEL_x(DEV_USART2_TX_DMA_CHANNEL)
     #define USART2_TX_DMA_Priority    DMA_PRIORITY(DEV_USART2_TX_DMA_PRIORITY)
-    #define USART2_TX_DMA_Handler     DMAx_STREAMy_IRQ(DEV_USART2_TX_DMA_NUMBER, DEV_USART2_TX_DMA_STREAM)
   #endif
 
   #if (DEV_USART2_TX == 1)
@@ -173,14 +169,12 @@
     #define USART3_RX_DMA_IRQn        DMAx_STREAMy_IRQn(DEV_USART3_RX_DMA_NUMBER, DEV_USART3_RX_DMA_STREAM)
     #define USART3_RX_DMA_Channel     DMA_CHANNEL_x(DEV_USART3_RX_DMA_CHANNEL)
     #define USART3_RX_DMA_Priority    DMA_PRIORITY(DEV_USART3_RX_DMA_PRIORITY)
-    #define USART3_RX_DMA_Handler     DMAx_STREAMy_IRQ(DEV_USART3_RX_DMA_NUMBER, DEV_USART3_RX_DMA_STREAM)
   #endif
   #if (DEV_USART3_TX_DMA == 1)
     #define USART3_TX_DMA_Stream      DMAx_STREAMy(DEV_USART3_TX_DMA_NUMBER, DEV_USART3_TX_DMA_STREAM)
     #define USART3_TX_DMA_IRQn        DMAx_STREAMy_IRQn(DEV_USART3_TX_DMA_NUMBER, DEV_USART3_TX_DMA_STREAM)
     #define USART3_TX_DMA_Channel     DMA_CHANNEL_x(DEV_USART3_TX_DMA_CHANNEL)
     #define USART3_TX_DMA_Priority    DMA_PRIORITY(DEV_USART3_TX_DMA_PRIORITY)
-    #define USART3_TX_DMA_Handler     DMAx_STREAMy_IRQ(DEV_USART3_TX_DMA_NUMBER, DEV_USART3_TX_DMA_STREAM)
   #endif
 
   #if (DEV_USART3_TX == 1)
@@ -233,14 +227,12 @@
     #define UART4_RX_DMA_IRQn        DMAx_STREAMy_IRQn(DEV_UART4_RX_DMA_NUMBER, DEV_UART4_RX_DMA_STREAM)
     #define UART4_RX_DMA_Channel     DMA_CHANNEL_x(DEV_UART4_RX_DMA_CHANNEL)
     #define UART4_RX_DMA_Priority    DMA_PRIORITY(DEV_UART4_RX_DMA_PRIORITY)
-    #define UART4_RX_DMA_Handler     DMAx_STREAMy_IRQ(DEV_UART4_RX_DMA_NUMBER, DEV_UART4_RX_DMA_STREAM)
   #endif
   #if (DEV_UART4_TX_DMA == 1)
     #define UART4_TX_DMA_Stream      DMAx_STREAMy(DEV_UART4_TX_DMA_NUMBER, DEV_UART4_TX_DMA_STREAM)
     #define UART4_TX_DMA_IRQn        DMAx_STREAMy_IRQn(DEV_UART4_TX_DMA_NUMBER, DEV_UART4_TX_DMA_STREAM)
     #define UART4_TX_DMA_Channel     DMA_CHANNEL_x(DEV_UART4_TX_DMA_CHANNEL)
     #define UART4_TX_DMA_Priority    DMA_PRIORITY(DEV_UART4_TX_DMA_PRIORITY)
-    #define UART4_TX_DMA_Handler     DMAx_STREAMy_IRQ(DEV_UART4_TX_DMA_NUMBER, DEV_UART4_TX_DMA_STREAM)
   #endif
 
   #if (DEV_UART4_TX == 1)
@@ -286,14 +278,12 @@
     #define UART5_RX_DMA_IRQn        DMAx_STREAMy_IRQn(DEV_UART5_RX_DMA_NUMBER, DEV_UART5_RX_DMA_STREAM)
     #define UART5_RX_DMA_Channel     DMA_CHANNEL_x(DEV_UART5_RX_DMA_CHANNEL)
     #define UART5_RX_DMA_Priority    DMA_PRIORITY(DEV_UART5_RX_DMA_PRIORITY)
-    #define UART5_RX_DMA_Handler     DMAx_STREAMy_IRQ(DEV_UART5_RX_DMA_NUMBER, DEV_UART5_RX_DMA_STREAM)
   #endif
   #if (DEV_UART5_TX_DMA == 1)
     #define UART5_TX_DMA_Stream      DMAx_STREAMy(DEV_UART5_TX_DMA_NUMBER, DEV_UART5_TX_DMA_STREAM)
     #define UART5_TX_DMA_IRQn        DMAx_STREAMy_IRQn(DEV_UART5_TX_DMA_NUMBER, DEV_UART5_TX_DMA_STREAM)
     #define UART5_TX_DMA_Channel     DMA_CHANNEL_x(DEV_UART5_TX_DMA_CHANNEL)
     #define UART5_TX_DMA_Priority    DMA_PRIORITY(DEV_UART5_TX_DMA_PRIORITY)
-    #define UART5_TX_DMA_Handler     DMAx_STREAMy_IRQ(DEV_UART5_TX_DMA_NUMBER, DEV_UART5_TX_DMA_STREAM)
   #endif
 
   #if (DEV_UART5_TX == 1)
@@ -339,14 +329,12 @@
     #define USART6_RX_DMA_IRQn        DMAx_STREAMy_IRQn(DEV_USART6_RX_DMA_NUMBER, DEV_USART6_RX_DMA_STREAM)
     #define USART6_RX_DMA_Channel     DMA_CHANNEL_x(DEV_USART6_RX_DMA_CHANNEL)
     #define USART6_RX_DMA_Priority    DMA_PRIORITY(DEV_USART6_RX_DMA_PRIORITY)
-    #define USART6_RX_DMA_Handler     DMAx_STREAMy_IRQ(DEV_USART6_RX_DMA_NUMBER, DEV_USART6_RX_DMA_STREAM)
   #endif
   #if (DEV_USART6_TX_DMA == 1)
     #define USART6_TX_DMA_Stream      DMAx_STREAMy(DEV_USART6_TX_DMA_NUMBER, DEV_USART6_TX_DMA_STREAM)
     #define USART6_TX_DMA_IRQn        DMAx_STREAMy_IRQn(DEV_USART6_TX_DMA_NUMBER, DEV_USART6_TX_DMA_STREAM)
     #define USART6_TX_DMA_Channel     DMA_CHANNEL_x(DEV_USART6_TX_DMA_CHANNEL)
     #define USART6_TX_DMA_Priority    DMA_PRIORITY(DEV_USART6_TX_DMA_PRIORITY)
-    #define USART6_TX_DMA_Handler     DMAx_STREAMy_IRQ(DEV_USART6_TX_DMA_NUMBER, DEV_USART6_TX_DMA_STREAM)
   #endif
 
   #if (DEV_USART6_TX == 1)
@@ -399,14 +387,12 @@
     #define UART7_RX_DMA_IRQn        DMAx_STREAMy_IRQn(DEV_UART7_RX_DMA_NUMBER, DEV_UART7_RX_DMA_STREAM)
     #define UART7_RX_DMA_Channel     DMA_CHANNEL_x(DEV_UART7_RX_DMA_CHANNEL)
     #define UART7_RX_DMA_Priority    DMA_PRIORITY(DEV_UART7_RX_DMA_PRIORITY)
-    #define UART7_RX_DMA_Handler     DMAx_STREAMy_IRQ(DEV_UART7_RX_DMA_NUMBER, DEV_UART7_RX_DMA_STREAM)
   #endif
   #if (DEV_UART7_TX_DMA == 1)
     #define UART7_TX_DMA_Stream      DMAx_STREAMy(DEV_UART7_TX_DMA_NUMBER, DEV_UART7_TX_DMA_STREAM)
     #define UART7_TX_DMA_IRQn        DMAx_STREAMy_IRQn(DEV_UART7_TX_DMA_NUMBER, DEV_UART7_TX_DMA_STREAM)
     #define UART7_TX_DMA_Channel     DMA_CHANNEL_x(DEV_UART7_TX_DMA_CHANNEL)
     #define UART7_TX_DMA_Priority    DMA_PRIORITY(DEV_UART7_TX_DMA_PRIORITY)
-    #define UART7_TX_DMA_Handler     DMAx_STREAMy_IRQ(DEV_UART7_TX_DMA_NUMBER, DEV_UART7_TX_DMA_STREAM)
   #endif
 
   #if (DEV_UART7_TX == 1)
@@ -452,14 +438,12 @@
     #define UART8_RX_DMA_IRQn        DMAx_STREAMy_IRQn(DEV_UART8_RX_DMA_NUMBER, DEV_UART8_RX_DMA_STREAM)
     #define UART8_RX_DMA_Channel     DMA_CHANNEL_x(DEV_UART8_RX_DMA_CHANNEL)
     #define UART8_RX_DMA_Priority    DMA_PRIORITY(DEV_UART8_RX_DMA_PRIORITY)
-    #define UART8_RX_DMA_Handler     DMAx_STREAMy_IRQ(DEV_UART8_RX_DMA_NUMBER, DEV_UART8_RX_DMA_STREAM)
   #endif
   #if (DEV_UART8_TX_DMA == 1)
     #define UART8_TX_DMA_Stream      DMAx_STREAMy(DEV_UART8_TX_DMA_NUMBER, DEV_UART8_TX_DMA_STREAM)
     #define UART8_TX_DMA_IRQn        DMAx_STREAMy_IRQn(DEV_UART8_TX_DMA_NUMBER, DEV_UART8_TX_DMA_STREAM)
     #define UART8_TX_DMA_Channel     DMA_CHANNEL_x(DEV_UART8_TX_DMA_CHANNEL)
     #define UART8_TX_DMA_Priority    DMA_PRIORITY(DEV_UART8_TX_DMA_PRIORITY)
-    #define UART8_TX_DMA_Handler     DMAx_STREAMy_IRQ(DEV_UART8_TX_DMA_NUMBER, DEV_UART8_TX_DMA_STREAM)
   #endif
 
   #if (DEV_UART8_TX == 1)
@@ -580,20 +564,6 @@ ARM_DRIVER_USART Driver_USART##x = {                                            
     USART##x##_SetModemControl,                                                                                                                                                            \
     USART##x##_GetModemStatus                                                                                                                                                              \
 }
-
-
-#define USARTx_TX_DMA_ALLOC(x)                                                                                                                                                             \
-       void                    USART##x##_TX_DMA_Handler  (void)                                                {        DMA_IRQ_Handle(&USART##x##_TX_DMA, &USART##x##_Resources);      }
-
-#define USARTx_RX_DMA_ALLOC(x)                                                                                                                                                             \
-       void                    USART##x##_RX_DMA_Handler  (void)                                                {        DMA_IRQ_Handle(&USART##x##_RX_DMA, &USART##x##_Resources);      }
-
-#define UARTx_TX_DMA_ALLOC(x)                                                                                                                                                              \
-       void                    UART##x##_TX_DMA_Handler   (void)                                                {        DMA_IRQ_Handle(&UART##x##_TX_DMA, &UART##x##_Resources);        }
-
-#define UARTx_RX_DMA_ALLOC(x)                                                                                                                                                              \
-       void                    UART##x##_RX_DMA_Handler   (void)                                                {        DMA_IRQ_Handle(&UART##x##_RX_DMA, &UART##x##_Resources);        }
-
 
 #define USART_BAUDRATE_DIVIDER(_PCLK_, _BAUD_)  (((_PCLK_) + ((_BAUD_)/2U)) / (_BAUD_))
 
