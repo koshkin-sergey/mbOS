@@ -53,6 +53,8 @@
 /* lookup table for necessary bitshift of flags within status registers */
 static const uint8_t flag_offset[] = {0U, 6U, 16U, 22U};
 
+static DMA_Resources_t* dma_res[16];
+
 /*******************************************************************************
  *  function prototypes (scope: module-local)
  ******************************************************************************/
@@ -78,16 +80,21 @@ void DMA_Initialize(DMA_Resources_t *res)
   uint32_t stream_number = (((uint32_t)res->stream & 0xFFU) - 16U) / 24U;
   uint32_t dma_reg_addr = ((uint32_t)res->stream & (uint32_t)(~0x3FF));
 
-  if (dma_reg_addr == DMA1_BASE)
+  if (dma_reg_addr == DMA1_BASE) {
     RCC->AHB1ENR |= RCC_AHB1ENR_DMA1EN;
-  else
+    res->handle->stream_number = stream_number;
+  }
+  else {
     RCC->AHB1ENR |= RCC_AHB1ENR_DMA2EN;
+    res->handle->stream_number = stream_number + 8U;
+  }
 
-  if (stream_number & 4U)
+  if (stream_number & 4U) {
     dma_reg_addr += 4U;
+  }
 
-  res->handle->bit_offset = flag_offset[stream_number & 3U];
-  res->handle->dma_reg = (DMA_Base_Reg_t *)dma_reg_addr;
+  res->handle->bit_offset    = flag_offset[stream_number & 3U];
+  res->handle->dma_reg       = (DMA_Base_Reg_t *)dma_reg_addr;
 
   /* Disable the peripheral */
   res->stream->CR &= ~DMA_SxCR_EN;
@@ -203,14 +210,16 @@ void DMA_Config(const DMA_Resources_t *res)
  */
 void DMA_Start(DMA_Resources_t *res, uint32_t per_addr, uint32_t mem_addr, uint32_t num)
 {
-  if ((res == NULL) || (per_addr == 0U) || (mem_addr == 0U) || (num == 0U))
+  if ((res == NULL) || (per_addr == 0U) || (mem_addr == 0U) || (num == 0U)) {
     return;
+  }
 
   DMA_Stream_TypeDef *stream = res->stream;
+  DMA_Handle_t *handle = res->handle;
 
-  if (res->handle->state == DMA_STATE_READY) {
+  if (handle->state == DMA_STATE_READY) {
     /* Change DMA peripheral state */
-    res->handle->state = DMA_STATE_BUSY;
+    handle->state = DMA_STATE_BUSY;
 
     stream->NDTR = num;
     stream->PAR  = per_addr;
@@ -218,7 +227,8 @@ void DMA_Start(DMA_Resources_t *res, uint32_t per_addr, uint32_t mem_addr, uint3
     stream->M1AR = 0U;
 
     /* Clear all interrupt flags */
-    res->handle->dma_reg->IFCR = 0x3D << res->handle->bit_offset;
+    handle->dma_reg->IFCR = 0x3D << handle->bit_offset;
+    dma_res[handle->stream_number] = res;
 
     stream->CR |= (DMA_SxCR_TCIE | DMA_SxCR_EN);
   }
@@ -256,9 +266,8 @@ void DMA_WaitAbort(DMA_Resources_t *res)
  * @fn          void DMA_IRQ_Handle(DMA_Resources_t *res, const void *param)
  * @brief       DMA Interrupt Handle
  * @param[in]   res    Pointer to DMA resources
- * @param[in]   param  Pointer to Information structure
  */
-void DMA_IRQ_Handle(DMA_Resources_t *res, const void *param)
+static void DMA_IRQ_Handle(DMA_Resources_t *res)
 {
   uint32_t event = 0U, isr, cr;
   DMA_Handle_t *handle = res->handle;
@@ -331,8 +340,88 @@ void DMA_IRQ_Handle(DMA_Resources_t *res, const void *param)
   }
 
   if (res->cb_event) {
-    res->cb_event(event, param);
+    res->cb_event(event, res->cb_param);
   }
+}
+
+void DMA1_Stream0_IRQHandler(void)
+{
+  DMA_IRQ_Handle(dma_res[0]);
+}
+
+void DMA1_Stream1_IRQHandler(void)
+{
+  DMA_IRQ_Handle(dma_res[1]);
+}
+
+void DMA1_Stream2_IRQHandler(void)
+{
+  DMA_IRQ_Handle(dma_res[2]);
+}
+
+void DMA1_Stream3_IRQHandler(void)
+{
+  DMA_IRQ_Handle(dma_res[3]);
+}
+
+void DMA1_Stream4_IRQHandler(void)
+{
+  DMA_IRQ_Handle(dma_res[4]);
+}
+
+void DMA1_Stream5_IRQHandler(void)
+{
+  DMA_IRQ_Handle(dma_res[5]);
+}
+
+void DMA1_Stream6_IRQHandler(void)
+{
+  DMA_IRQ_Handle(dma_res[6]);
+}
+
+void DMA1_Stream7_IRQHandler(void)
+{
+  DMA_IRQ_Handle(dma_res[7]);
+}
+
+void DMA2_Stream0_IRQHandler(void)
+{
+  DMA_IRQ_Handle(dma_res[8]);
+}
+
+void DMA2_Stream1_IRQHandler(void)
+{
+  DMA_IRQ_Handle(dma_res[9]);
+}
+
+void DMA2_Stream2_IRQHandler(void)
+{
+  DMA_IRQ_Handle(dma_res[10]);
+}
+
+void DMA2_Stream3_IRQHandler(void)
+{
+  DMA_IRQ_Handle(dma_res[11]);
+}
+
+void DMA2_Stream4_IRQHandler(void)
+{
+  DMA_IRQ_Handle(dma_res[12]);
+}
+
+void DMA2_Stream5_IRQHandler(void)
+{
+  DMA_IRQ_Handle(dma_res[13]);
+}
+
+void DMA2_Stream6_IRQHandler(void)
+{
+  DMA_IRQ_Handle(dma_res[14]);
+}
+
+void DMA2_Stream7_IRQHandler(void)
+{
+  DMA_IRQ_Handle(dma_res[15]);
 }
 
 /* ----------------------------- End of file ---------------------------------*/

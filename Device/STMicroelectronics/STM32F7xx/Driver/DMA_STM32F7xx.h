@@ -44,9 +44,6 @@
 #define _DMAx_STREAMy(x, y)             DMA##x##_Stream##y
 #define  DMAx_STREAMy(x, y)            _DMAx_STREAMy(x, y)
 
-#define _DMAx_STREAMy_IRQ(x, y)         DMA##x##_Stream##y##_IRQHandler
-#define  DMAx_STREAMy_IRQ(x, y)        _DMAx_STREAMy_IRQ(x, y)
-
 #define _DMAx_STREAMy_IRQn(x, y)        DMA##x##_Stream##y##_IRQn
 #define  DMAx_STREAMy_IRQn(x, y)       _DMAx_STREAMy_IRQn(x, y)
 
@@ -193,6 +190,7 @@ typedef struct DMA_Base_Reg_s {
 typedef struct DMA_Handle_s {
   uint32_t             bit_offset;
   DMA_Base_Reg_t         *dma_reg;
+  uint32_t          stream_number;
   DMA_STATE_t               state;
   DMA_StreamConfig_t       config;
 } DMA_Handle_t;
@@ -203,6 +201,7 @@ typedef const struct DMA_Resources_s {
   DMA_Channel_t           channel;  /*!< DMA channel                          */
   DMA_Priority_t         priority;  /*!< DMA stream priority                  */
   DMA_Callback_t         cb_event;  /*!< Callback event                       */
+  const void            *cb_param;  /*!< Callback event param                 */
   uint32_t            cb_priority;  /*!< Callback event priority              */
   IRQn_Type               irq_num;  /*!< DMA stream IRQ Number                */
   uint8_t             reserved[3];  /*!< Reserved                             */
@@ -260,14 +259,6 @@ void DMA_Abort(DMA_Resources_t *res);
  * @param[in]   res   Pointer to DMA resources
  */
 void DMA_WaitAbort(DMA_Resources_t *res);
-
-/**
- * @fn          void DMA_IRQ_Handle(DMA_Resources_t *res, const void *param)
- * @brief       DMA Interrupt Handle
- * @param[in]   res    Pointer to DMA resources
- * @param[in]   param  Pointer to Information structure
- */
-void DMA_IRQ_Handle(DMA_Resources_t *res, const void *param);
 
 #endif /* DMA_STM32F7XX_H_ */
 
