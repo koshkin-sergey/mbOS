@@ -26,16 +26,25 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include "device_config.h"
+
+#if (DEV_EXTI == 1)
 
 /*******************************************************************************
  *  defines and macros (scope: module-local)
  ******************************************************************************/
 
+/* Return codes */
+#define EXTI_DRIVER_OK                0     ///< Operation succeeded
+#define EXTI_DRIVER_ERROR            -1     ///< Unspecified error
+#define EXTI_DRIVER_ERROR_PARAMETER  -2     ///< Parameter error
+
+/* Current driver status flag definition */
+#define EXTI_INITIALIZED             (1UL)  ///< EXTI initialized
+
 /*******************************************************************************
  *  typedefs and structures (scope: module-local)
  ******************************************************************************/
-
-typedef void (*EXTI_SignalEvent_t)(void);
 
 typedef enum {
   EXTI_LINE_0             = 0,
@@ -67,17 +76,18 @@ typedef enum {
 } EXTI_Line_t;
 
 typedef enum {
-  EXTI_PORT_A = 0,
-  EXTI_PORT_B = 1,
-  EXTI_PORT_C = 2,
-  EXTI_PORT_D = 3,
-  EXTI_PORT_E = 4,
-  EXTI_PORT_F = 5,
-  EXTI_PORT_G = 6,
-  EXTI_PORT_H = 7,
-  EXTI_PORT_I = 8,
-  EXTI_PORT_J = 9,
-  EXTI_PORT_K = 10,
+  EXTI_PORT_A        = 0,
+  EXTI_PORT_B        = 1,
+  EXTI_PORT_C        = 2,
+  EXTI_PORT_D        = 3,
+  EXTI_PORT_E        = 4,
+  EXTI_PORT_F        = 5,
+  EXTI_PORT_G        = 6,
+  EXTI_PORT_H        = 7,
+  EXTI_PORT_I        = 8,
+  EXTI_PORT_J        = 9,
+  EXTI_PORT_K        = 10,
+  EXTI_PORT_INTERNAL = 11,
 } EXTI_Port_t;
 
 typedef enum {
@@ -92,6 +102,8 @@ typedef enum {
   EXTI_TRIGGER_RISING_FALLING,
 } EXTI_trigger_t;
 
+typedef void (*EXTI_SignalEvent_t)(EXTI_Line_t line);
+
 /*******************************************************************************
  *  exported variables
  ******************************************************************************/
@@ -101,36 +113,48 @@ typedef enum {
  ******************************************************************************/
 
 /**
- * @fn          void EXTI_Initialize(EXTI_Line_t line, EXTI_Mode_t mode, EXTI_trigger_t trigger, EXTI_SignalEvent_t cb)
- * @brief
- * @param[in]   line
- * @param[in]   mode
- * @param[in]   trigger
- * @param[in]   cb
+ * @fn          int32_t EXTI_Initialize(EXTI_SignalEvent_t cb_event)
+ * @brief       Initialize EXTI Interface.
+ * @param[in]   cb_event  Pointer to EXTI_SignalEvent_t
+ * @return      Execution status
  */
-void EXTI_Initialize(EXTI_Line_t line, EXTI_Mode_t mode, EXTI_trigger_t trigger, EXTI_SignalEvent_t cb);
+int32_t EXTI_Initialize(EXTI_SignalEvent_t cb_event);
 
 /**
- * @fn          void EXTI_Uninitialize(EXTI_Line_t line)
- * @brief
- * @param[in]   line
+ * @fn          int32_t EXTI_Uninitialize(void)
+ * @brief       De-initialize EXTI Interface.
+ * @return      Execution status
  */
-void EXTI_Uninitialize(EXTI_Line_t line);
+int32_t EXTI_Uninitialize(void);
 
 /**
- * @fn          void EXTI_LineMapping(EXTI_Line_t line, EXTI_Port_t port)
+ * @fn          int32_t EXTI_SetConfigLine(EXTI_Line_t line, EXTI_Port_t port, EXTI_Mode_t mode, EXTI_trigger_t trigger)
  * @brief
  * @param[in]   line
  * @param[in]   port
+ * @param[in]   mode
+ * @param[in]   trigger
+ * @return      Execution status
  */
-void EXTI_LineMapping(EXTI_Line_t line, EXTI_Port_t port);
+int32_t EXTI_SetConfigLine(EXTI_Line_t line, EXTI_Port_t port, EXTI_Mode_t mode, EXTI_trigger_t trigger);
 
 /**
- * @fn          void EXTI_SoftwareRequest(EXTI_Line_t line)
+ * @fn          int32_t EXTI_ClearConfigLine(EXTI_Line_t line)
  * @brief
  * @param[in]   line
+ * @return      Execution status
  */
-void EXTI_SoftwareRequest(EXTI_Line_t line);
+int32_t EXTI_ClearConfigLine(EXTI_Line_t line);
+
+/**
+ * @fn          int32_t EXTI_SoftwareRequest(EXTI_Line_t line)
+ * @brief
+ * @param[in]   line
+ * @return      Execution status
+ */
+int32_t EXTI_SoftwareRequest(EXTI_Line_t line);
+
+#endif
 
 #endif /* EXTI_STM32F7XX_H_ */
 

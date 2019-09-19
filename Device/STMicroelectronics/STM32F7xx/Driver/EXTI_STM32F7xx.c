@@ -27,7 +27,8 @@
 
 #include "stm32f7xx.h"
 #include "RCC_STM32F7xx.h"
-#include "device_config.h"
+
+#if (DEV_EXTI == 1)
 
 /*******************************************************************************
  *  external declarations
@@ -42,7 +43,8 @@
  ******************************************************************************/
 
 typedef struct {
-  EXTI_SignalEvent_t callback[EXTI_LINE_NUMBER];
+  EXTI_SignalEvent_t cb_event;
+  uint32_t              state;
 } EXTI_Info_t;
 
 typedef struct {
@@ -85,6 +87,8 @@ static EXTI_Resources_t exti = {
         OTG_HS_WKUP_IRQn,
         TAMP_STAMP_IRQn,
         RTC_WKUP_IRQn,
+        (IRQn_Type)-128,
+        (IRQn_Type)-128,
     },
     &EXTI_Info
 };
@@ -100,12 +104,12 @@ static EXTI_Resources_t exti = {
 static
 void EXTI_IRQHandler(EXTI_Line_t line)
 {
-  EXTI_SignalEvent_t callback = exti.info->callback[line];
+  EXTI_SignalEvent_t cb_event = exti.info->cb_event;
 
   EXTI->PR = (1UL << line);
 
-  if (callback != NULL) {
-    callback();
+  if (cb_event != NULL) {
+    cb_event(line);
   }
 }
 
@@ -114,17 +118,78 @@ void EXTI_IRQHandler(EXTI_Line_t line)
  ******************************************************************************/
 
 /**
- * @fn          void EXTI_Initialize(EXTI_Line_t line, EXTI_Mode_t mode, EXTI_trigger_t trigger, EXTI_SignalEvent_t cb)
+ * @fn          int32_t EXTI_Initialize(EXTI_SignalEvent_t cb_event)
+ * @brief       Initialize EXTI Interface.
+ * @param[in]   cb_event  Pointer to EXTI_SignalEvent_t
+ * @return      Execution status
+ */
+int32_t EXTI_Initialize(EXTI_SignalEvent_t cb_event)
+{
+  EXTI_Info_t *info = exti.info;
+
+  if (info->state == EXTI_INITIALIZED) {
+    return (EXTI_DRIVER_OK);
+  }
+
+  /* Initialize EXTI Run-Time Resources */
+  info->cb_event = cb_event;
+  info->state    = EXTI_INITIALIZED;
+  /* Enable System configuration controller */
+  RCC_EnablePeriph(RCC_PERIPH_SYSCFG);
+  /* Initialize EXTI Hardware Resources */
+  EXTI->IMR  = 0x00000000U;
+  EXTI->EMR  = 0x00000000U;
+  EXTI->RTSR = 0x00000000U;
+  EXTI->FTSR = 0x00000000U;
+  EXTI->PR   = 0x01FFFFFFU;
+
+  return (EXTI_DRIVER_OK);
+}
+
+/**
+ * @fn          int32_t EXTI_Uninitialize(void)
+ * @brief       De-initialize EXTI Interface.
+ * @return      Execution status
+ */
+int32_t EXTI_Uninitialize(void)
+{
+  EXTI_Info_t *info = exti.info;
+
+  /* Initialize EXTI Hardware Resources */
+  EXTI->IMR  = 0x00000000U;
+  EXTI->EMR  = 0x00000000U;
+  EXTI->RTSR = 0x00000000U;
+  EXTI->FTSR = 0x00000000U;
+  EXTI->PR   = 0x01FFFFFFU;
+  /* Uninitialize EXTI Run-Time Resources */
+  info->cb_event = NULL;
+  info->state    = EXTI_INITIALIZED;
+
+  return (EXTI_DRIVER_OK);
+}
+
+/**
+ * @fn          int32_t EXTI_SetConfigLine(EXTI_Line_t line, EXTI_Port_t port, EXTI_Mode_t mode, EXTI_trigger_t trigger)
  * @brief
  * @param[in]   line
+ * @param[in]   port
  * @param[in]   mode
  * @param[in]   trigger
- * @param[in]   cb
+ * @return      Execution status
  */
-void EXTI_Initialize(EXTI_Line_t line, EXTI_Mode_t mode, EXTI_trigger_t trigger, EXTI_SignalEvent_t cb)
+int32_t EXTI_SetConfigLine(EXTI_Line_t line, EXTI_Port_t port, EXTI_Mode_t mode, EXTI_trigger_t trigger)
 {
   uint32_t exti_imr, exti_emr, exti_rtsr, exti_ftsr, mask;
+  uint32_t value, reg_num, offset;
   IRQn_Type irq_num;
+
+  if (line >= EXTI_LINE_NUMBER) {
+    return (EXTI_DRIVER_ERROR_PARAMETER);
+  }
+
+  if (exti.info->state != EXTI_INITIALIZED) {
+    return (EXTI_DRIVER_ERROR);
+  }
 
   exti_imr = EXTI->IMR;
   exti_emr = EXTI->EMR;
@@ -135,19 +200,22 @@ void EXTI_Initialize(EXTI_Line_t line, EXTI_Mode_t mode, EXTI_trigger_t trigger,
 
   switch (mode) {
     case EXTI_MODE_INTERRUPT:
-      exti_imr |= mask;
       exti_emr &= ~mask;
+      exti_imr |= mask;
       break;
 
     case EXTI_MODE_EVENT:
-      exti_emr |= mask;
       exti_imr &= ~mask;
+      exti_emr |= mask;
       break;
 
     case EXTI_MODE_INTERRUPT_EVENT:
       exti_imr |= mask;
       exti_emr |= mask;
       break;
+
+    default:
+      return (EXTI_DRIVER_ERROR_PARAMETER);
   }
 
   switch (trigger) {
@@ -165,79 +233,102 @@ void EXTI_Initialize(EXTI_Line_t line, EXTI_Mode_t mode, EXTI_trigger_t trigger,
       exti_rtsr |= mask;
       exti_ftsr |= mask;
       break;
+
+    default:
+      return (EXTI_DRIVER_ERROR_PARAMETER);
   }
 
-  exti.info->callback[line] = cb;
+  if (line <= EXTI_LINE_15) {
+    if (port >= EXTI_PORT_INTERNAL) {
+      return (EXTI_DRIVER_ERROR_PARAMETER);
+    }
+
+    reg_num = line >> 2U;
+    offset = ((uint32_t)line & 3U) << 2U;
+    /* Configure external line mapping */
+    value = SYSCFG->EXTICR[reg_num] & ~(0x0F << offset);
+    SYSCFG->EXTICR[reg_num] = value | (port << offset);
+  }
 
   EXTI->IMR = exti_imr;
   EXTI->EMR = exti_emr;
   EXTI->RTSR = exti_rtsr;
   EXTI->FTSR = exti_ftsr;
 
-  if (mode == EXTI_MODE_INTERRUPT || mode == EXTI_MODE_INTERRUPT_EVENT) {
-    irq_num = exti.irq_num[line];
-
-    /* Clear and Enable EXTI IRQ */
-    NVIC_ClearPendingIRQ(irq_num);
-    NVIC_SetPriority(irq_num, DEV_EXTI_INT_PRIORITY);
-    NVIC_EnableIRQ(irq_num);
+  irq_num = exti.irq_num[line];
+  if (!(irq_num < 0)) {
+    if (mode == EXTI_MODE_EVENT) {
+      /* Clear and Disable EXTI IRQ */
+      NVIC_DisableIRQ(irq_num);
+      NVIC_ClearPendingIRQ(irq_num);
+    }
+    else {
+      /* Clear and Enable EXTI IRQ */
+      NVIC_ClearPendingIRQ(irq_num);
+      NVIC_SetPriority(irq_num, DEV_EXTI_INT_PRIORITY);
+      NVIC_EnableIRQ(irq_num);
+    }
   }
+
+  return (EXTI_DRIVER_OK);
 }
 
 /**
- * @fn          void EXTI_Uninitialize(EXTI_Line_t line)
+ * @fn          int32_t EXTI_ClearConfigLine(EXTI_Line_t line)
  * @brief
  * @param[in]   line
+ * @return      Execution status
  */
-void EXTI_Uninitialize(EXTI_Line_t line)
+int32_t EXTI_ClearConfigLine(EXTI_Line_t line)
 {
-  uint32_t mask = (1UL << (uint32_t)line);
+  uint32_t  mask;
+  IRQn_Type irq_num;
 
-  /* Mask interrupt request */
-  EXTI->IMR &= ~mask;
-  /* Mask event request */
-  EXTI->EMR &= ~mask;
-  /* Disable rising trigger */
+  if (exti.info->state != EXTI_INITIALIZED) {
+    return (EXTI_DRIVER_ERROR);
+  }
+
+  if (line >= EXTI_LINE_NUMBER) {
+    return (EXTI_DRIVER_ERROR_PARAMETER);
+  }
+
+  mask    = (1UL << (uint32_t)line);
+
+  EXTI->IMR  &= ~mask;
+  EXTI->EMR  &= ~mask;
   EXTI->RTSR &= ~mask;
-  /* Disable falling trigger */
   EXTI->FTSR &= ~mask;
-  /* Clear pending bit */
-  EXTI->PR = mask;
+  EXTI->PR    =  mask;
 
-  exti.info->callback[line] = NULL;
-}
-
-/**
- * @fn          void EXTI_LineMapping(EXTI_Line_t line, EXTI_Port_t port)
- * @brief
- * @param[in]   line
- * @param[in]   port
- */
-void EXTI_LineMapping(EXTI_Line_t line, EXTI_Port_t port)
-{
-  uint32_t value, reg_num, offset;
-
-  if (line <= EXTI_LINE_15) {
-    /* Enable SYSCFG clock */
-    RCC_EnablePeriph(RCC_PERIPH_SYSCFG);
-
-    reg_num = line >> 2U;
-    offset = ((uint32_t)line & 3U) << 2U;
-
-    /* Configure external line mapping */
-    value = SYSCFG->EXTICR[reg_num] & ~(0x0F << offset);
-    SYSCFG->EXTICR[reg_num] = value | (port << offset);
+  irq_num = exti.irq_num[line];
+  if (!(irq_num < 0)) {
+    /* Clear and Disable EXTI IRQ */
+    NVIC_DisableIRQ(irq_num);
+    NVIC_ClearPendingIRQ(irq_num);
   }
+
+  return (EXTI_DRIVER_OK);
 }
 
 /**
- * @fn          void EXTI_SoftwareRequest(EXTI_Line_t line)
+ * @fn          int32_t EXTI_SoftwareRequest(EXTI_Line_t line)
  * @brief
  * @param[in]   line
+ * @return      Execution status
  */
-void EXTI_SoftwareRequest(EXTI_Line_t line)
+int32_t EXTI_SoftwareRequest(EXTI_Line_t line)
 {
+  if (exti.info->state != EXTI_INITIALIZED) {
+    return (EXTI_DRIVER_ERROR);
+  }
+
+  if (line >= EXTI_LINE_NUMBER) {
+    return (EXTI_DRIVER_ERROR_PARAMETER);
+  }
+
   EXTI->SWIER |= (1UL << (uint32_t)line);
+
+  return (EXTI_DRIVER_OK);
 }
 
 /*******************************************************************************
@@ -358,16 +449,8 @@ void EXTI4_IRQHandler(void)
  */
 void EXTI9_5_IRQHandler(void)
 {
-  EXTI_Line_t line = EXTI_LINE_5;
-  uint32_t pr = (EXTI->PR & (EXTI_PR_PR5 | EXTI_PR_PR6 | EXTI_PR_PR7 | EXTI_PR_PR8 | EXTI_PR_PR9)) >> line;
-
-  while (pr != 0U) {
-    if (pr & 1U) {
-      EXTI_IRQHandler(line);
-    }
-    ++line;
-    pr >>= 1U;
-  }
+  EXTI_Line_t line = (EXTI_Line_t) __CLZ(__RBIT(EXTI->PR));
+  EXTI_IRQHandler(line);
 }
 
 /**
@@ -376,16 +459,10 @@ void EXTI9_5_IRQHandler(void)
  */
 void EXTI15_10_IRQHandler(void)
 {
-  EXTI_Line_t line = EXTI_LINE_10;
-  uint32_t pr = (EXTI->PR & (EXTI_PR_PR10 | EXTI_PR_PR11 | EXTI_PR_PR12 | EXTI_PR_PR13 | EXTI_PR_PR14 | EXTI_PR_PR15)) >> line;
-
-  while (pr != 0U) {
-    if (pr & 1U) {
-      EXTI_IRQHandler(line);
-    }
-    ++line;
-    pr >>= 1U;
-  }
+  EXTI_Line_t line = (EXTI_Line_t) __CLZ(__RBIT(EXTI->PR));
+  EXTI_IRQHandler(line);
 }
+
+#endif
 
 /* ----------------------------- End of file ---------------------------------*/

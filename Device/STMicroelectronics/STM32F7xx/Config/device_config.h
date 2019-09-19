@@ -2009,6 +2009,11 @@
 
 // </e>
 
+// <e> EXTI (Extended interrupts and events controller)
+// <i> Configuration settings for EXTI
+#define DEV_EXTI                       0
+// </e>
+
 #endif  /* __DEVICE_CONFIG_H */
 
 /* ----------------------------- End of file ---------------------------------*/
