@@ -35,7 +35,9 @@
 
 /* Interrupt Priority */
 #define DEV_I2C_INT_PRIORITY           (1U)
+#define DEV_I2C_DMA_INT_PRIORITY       (1U)
 #define DEV_I2S_INT_PRIORITY           (1U)
+#define DEV_I2S_DMA_INT_PRIORITY       (1U)
 #define DEV_USART_INT_PRIORITY         (1U)
 #define DEV_USART_DMA_INT_PRIORITY     (1U)
 #define DEV_SPI_INT_PRIORITY           (1U)
@@ -1053,7 +1055,7 @@
 // </e> UART8 (Universal asynchronous receiver transmitter) [Driver_USART8]
 
 
-// <e> SPI1 (Serial Peripheral Interface 1) [Driver_SPI1]
+// <e> SPI1 (Serial Peripheral Interface) [Driver_SPI1]
 // <i> Configuration settings for Driver_SPI1 in component ::CMSIS Driver:SPI
 #define DEV_SPI1                        0
 
@@ -1178,7 +1180,7 @@
 
 // </e>
 
-// <e> SPI2 (Serial Peripheral Interface 1) [Driver_SPI2]
+// <e> SPI2 (Serial Peripheral Interface) [Driver_SPI2]
 // <i> Configuration settings for Driver_SPI2 in component ::CMSIS Driver:SPI
 #define DEV_SPI2                        0
 
@@ -1330,7 +1332,7 @@
 
 // </e>
 
-// <e> SPI3 (Serial Peripheral Interface 1) [Driver_SPI3]
+// <e> SPI3 (Serial Peripheral Interface) [Driver_SPI3]
 // <i> Configuration settings for Driver_SPI3 in component ::CMSIS Driver:SPI
 #define DEV_SPI3                        0
 
@@ -1446,7 +1448,7 @@
 
 // </e>
 
-// <e> SPI4 (Serial Peripheral Interface 1) [Driver_SPI4]
+// <e> SPI4 (Serial Peripheral Interface) [Driver_SPI4]
 // <i> Configuration settings for Driver_SPI4 in component ::CMSIS Driver:SPI
 #define DEV_SPI4                        0
 
@@ -1552,7 +1554,7 @@
 
 // </e>
 
-// <e> SPI5 (Serial Peripheral Interface 1) [Driver_SPI5]
+// <e> SPI5 (Serial Peripheral Interface) [Driver_SPI5]
 // <i> Configuration settings for Driver_SPI5 in component ::CMSIS Driver:SPI
 #define DEV_SPI5                        0
 
@@ -1658,7 +1660,7 @@
 
 // </e>
 
-// <e> SPI6 (Serial Peripheral Interface 1) [Driver_SPI6]
+// <e> SPI6 (Serial Peripheral Interface) [Driver_SPI6]
 // <i> Configuration settings for Driver_SPI6 in component ::CMSIS Driver:SPI
 #define DEV_SPI6                        0
 
@@ -1783,7 +1785,7 @@
 
 // </e>
 
-// <e> QSPI0 (Quad Serial Peripheral Interface 0) [Driver_QSPI0]
+// <e> QSPI0 (Quad Serial Peripheral Interface) [Driver_QSPI0]
 // <i> Configuration settings for Driver_QSPI0 in component ::CMSIS Driver:QSPI
 #define DEV_QSPI0                      0
 
@@ -2006,6 +2008,302 @@
 #define DEV_QSPI0_DMA_STREAM           7
 #define DEV_QSPI0_DMA_CHANNEL          3
 #define DEV_QSPI0_DMA_PRIORITY         0
+
+// </e>
+
+// <e> I2C1 (Inter-integrated Circuit Interface) [Driver_I2C1]
+// <i> Configuration settings for Driver_I2C1 in component ::CMSIS Driver:I2C
+#define DEV_I2C1                        0
+
+//   <o> I2C1_SCL Pin <0=>PB6 <1=>PB8
+#define   DEV_I2C1_SCL_PORT_ID         0
+#if      (DEV_I2C1_SCL_PORT_ID == 0)
+  #define DEV_I2C1_SCL_PORT            GPIO_PORT_B
+  #define DEV_I2C1_SCL_PIN             GPIO_PIN_6
+  #define DEV_I2C1_SCL_FUNC            GPIO_PIN_FUNC_4
+#elif    (DEV_I2C1_SCL_PORT_ID == 1)
+  #define DEV_I2C1_SCL_PORT            GPIO_PORT_B
+  #define DEV_I2C1_SCL_PIN             GPIO_PIN_8
+  #define DEV_I2C1_SCL_FUNC            GPIO_PIN_FUNC_4
+#else
+  #error "Invalid I2C1_SCL Pin Configuration!"
+#endif
+
+//   <o> I2C1_SDA Pin <0=>PB7 <1=>PB9
+#define   DEV_I2C1_SDA_PORT_ID         0
+#if      (DEV_I2C1_SDA_PORT_ID == 0)
+  #define DEV_I2C1_SDA_PORT            GPIO_PORT_B
+  #define DEV_I2C1_SDA_PIN             GPIO_PIN_7
+  #define DEV_I2C1_SDA_FUNC            GPIO_PIN_FUNC_4
+#elif    (DEV_I2C1_SDA_PORT_ID == 1)
+  #define DEV_I2C1_SDA_PORT            GPIO_PORT_B
+  #define DEV_I2C1_SDA_PIN             GPIO_PIN_9
+  #define DEV_I2C1_SDA_FUNC            GPIO_PIN_FUNC_4
+#else
+  #error "Invalid I2C1_SDA Pin Configuration!"
+#endif
+
+//   <e> DMA Rx
+//     <o1> Number <1=>1
+//     <i>  Selects DMA Number (only DMA1 can be used)
+//     <o2> Stream <0=>0 <5=>5
+//     <i>  Selects DMA Stream (only Stream 0 or 5 can be used)
+//     <o3> Channel <1=>1
+//     <i>  Selects DMA Channel (only Channel 1 can be used)
+//     <o4> Priority <0=>Low <1=>Medium <2=>High <3=>Very High
+//     <i>  Selects DMA Priority
+//   </e>
+#define DEV_I2C1_RX_DMA                 0
+#define DEV_I2C1_RX_DMA_NUMBER          1
+#define DEV_I2C1_RX_DMA_STREAM          0
+#define DEV_I2C1_RX_DMA_CHANNEL         1
+#define DEV_I2C1_RX_DMA_PRIORITY        0
+
+//   <e> DMA Tx
+//     <o1> Number <1=>1
+//     <i>  Selects DMA Number (only DMA1 can be used)
+//     <o2> Stream <6=>6 <7=>7
+//     <i>  Selects DMA Stream (only Stream 6 or 7 can be used)
+//     <o3> Channel <1=>1
+//     <i>  Selects DMA Channel (only Channel 1 can be used)
+//     <o4> Priority <0=>Low <1=>Medium <2=>High <3=>Very High
+//     <i>  Selects DMA Priority
+//   </e>
+#define DEV_I2C1_TX_DMA                 0
+#define DEV_I2C1_TX_DMA_NUMBER          1
+#define DEV_I2C1_TX_DMA_STREAM          6
+#define DEV_I2C1_TX_DMA_CHANNEL         1
+#define DEV_I2C1_TX_DMA_PRIORITY        0
+
+// </e>
+
+// <e> I2C2 (Inter-integrated Circuit Interface) [Driver_I2C2]
+// <i> Configuration settings for Driver_I2C2 in component ::CMSIS Driver:I2C
+#define DEV_I2C2                        0
+
+//   <o> I2C2_SCL Pin <0=>PF1 <1=>PH4 <2=>PB10
+#define   DEV_I2C2_SCL_PORT_ID         0
+#if      (DEV_I2C2_SCL_PORT_ID == 0)
+  #define DEV_I2C2_SCL_PORT            GPIO_PORT_F
+  #define DEV_I2C2_SCL_PIN             GPIO_PIN_1
+  #define DEV_I2C2_SCL_FUNC            GPIO_PIN_FUNC_4
+#elif    (DEV_I2C2_SCL_PORT_ID == 1)
+  #define DEV_I2C2_SCL_PORT            GPIO_PORT_H
+  #define DEV_I2C2_SCL_PIN             GPIO_PIN_4
+  #define DEV_I2C2_SCL_FUNC            GPIO_PIN_FUNC_4
+#elif    (DEV_I2C2_SCL_PORT_ID == 2)
+  #define DEV_I2C2_SCL_PORT            GPIO_PORT_B
+  #define DEV_I2C2_SCL_PIN             GPIO_PIN_10
+  #define DEV_I2C2_SCL_FUNC            GPIO_PIN_FUNC_4
+#else
+  #error "Invalid I2C2_SCL Pin Configuration!"
+#endif
+
+//   <o> I2C2_SDA Pin <0=>PF0 <1=>PH5 <2=>PB11
+#define   DEV_I2C2_SDA_PORT_ID         0
+#if      (DEV_I2C2_SDA_PORT_ID == 0)
+  #define DEV_I2C2_SDA_PORT            GPIO_PORT_F
+  #define DEV_I2C2_SDA_PIN             GPIO_PIN_0
+  #define DEV_I2C2_SDA_FUNC            GPIO_PIN_FUNC_4
+#elif    (DEV_I2C2_SDA_PORT_ID == 1)
+  #define DEV_I2C2_SDA_PORT            GPIO_PORT_H
+  #define DEV_I2C2_SDA_PIN             GPIO_PIN_5
+  #define DEV_I2C2_SDA_FUNC            GPIO_PIN_FUNC_4
+#elif    (DEV_I2C2_SDA_PORT_ID == 2)
+  #define DEV_I2C2_SDA_PORT            GPIO_PORT_B
+  #define DEV_I2C2_SDA_PIN             GPIO_PIN_11
+  #define DEV_I2C2_SDA_FUNC            GPIO_PIN_FUNC_4
+#else
+  #error "Invalid I2C2_SDA Pin Configuration!"
+#endif
+
+//   <e> DMA Rx
+//     <o1> Number <1=>1
+//     <i>  Selects DMA Number (only DMA1 can be used)
+//     <o2> Stream <2=>2 <3=>3
+//     <i>  Selects DMA Stream (only Stream 2 or 3 can be used)
+//     <o3> Channel <7=>7
+//     <i>  Selects DMA Channel (only Channel 7 can be used)
+//     <o4> Priority <0=>Low <1=>Medium <2=>High <3=>Very High
+//     <i>  Selects DMA Priority
+//   </e>
+#define DEV_I2C2_RX_DMA                 0
+#define DEV_I2C2_RX_DMA_NUMBER          1
+#define DEV_I2C2_RX_DMA_STREAM          2
+#define DEV_I2C2_RX_DMA_CHANNEL         7
+#define DEV_I2C2_RX_DMA_PRIORITY        0
+
+//   <e> DMA Tx
+//     <o1> Number <1=>1
+//     <i>  Selects DMA Number (only DMA1 can be used)
+//     <o2> Stream <7=>7
+//     <i>  Selects DMA Stream (only Stream 7 can be used)
+//     <o3> Channel <7=>7
+//     <i>  Selects DMA Channel (only Channel 7 can be used)
+//     <o4> Priority <0=>Low <1=>Medium <2=>High <3=>Very High
+//     <i>  Selects DMA Priority
+//   </e>
+#define DEV_I2C2_TX_DMA                 0
+#define DEV_I2C2_TX_DMA_NUMBER          1
+#define DEV_I2C2_TX_DMA_STREAM          7
+#define DEV_I2C2_TX_DMA_CHANNEL         7
+#define DEV_I2C2_TX_DMA_PRIORITY        0
+
+// </e>
+
+// <e> I2C3 (Inter-integrated Circuit Interface) [Driver_I2C3]
+// <i> Configuration settings for Driver_I2C3 in component ::CMSIS Driver:I2C
+#define DEV_I2C3                        0
+
+//   <o> I2C3_SCL Pin <0=>PH7 <1=>PA8
+#define   DEV_I2C3_SCL_PORT_ID         0
+#if      (DEV_I2C3_SCL_PORT_ID == 0)
+  #define DEV_I2C3_SCL_PORT            GPIO_PORT_H
+  #define DEV_I2C3_SCL_PIN             GPIO_PIN_7
+  #define DEV_I2C3_SCL_FUNC            GPIO_PIN_FUNC_4
+#elif    (DEV_I2C3_SCL_PORT_ID == 1)
+  #define DEV_I2C3_SCL_PORT            GPIO_PORT_A
+  #define DEV_I2C3_SCL_PIN             GPIO_PIN_8
+  #define DEV_I2C3_SCL_FUNC            GPIO_PIN_FUNC_4
+#else
+  #error "Invalid I2C3_SCL Pin Configuration!"
+#endif
+
+//   <o> I2C3_SDA Pin <0=>PH8 <1=>PC9
+#define   DEV_I2C3_SDA_PORT_ID         0
+#if      (DEV_I2C3_SDA_PORT_ID == 0)
+  #define DEV_I2C3_SDA_PORT            GPIO_PORT_H
+  #define DEV_I2C3_SDA_PIN             GPIO_PIN_8
+  #define DEV_I2C3_SDA_FUNC            GPIO_PIN_FUNC_4
+#elif    (DEV_I2C3_SDA_PORT_ID == 1)
+  #define DEV_I2C3_SDA_PORT            GPIO_PORT_C
+  #define DEV_I2C3_SDA_PIN             GPIO_PIN_9
+  #define DEV_I2C3_SDA_FUNC            GPIO_PIN_FUNC_4
+#else
+  #error "Invalid I2C3_SDA Pin Configuration!"
+#endif
+
+//   <e> DMA Rx
+//     <o1> Number <1=>1
+//     <i>  Selects DMA Number (only DMA1 can be used)
+//     <o2> Stream <1=>1 <2=>2
+//     <i>  Selects DMA Stream (only Stream 1 or 2 can be used)
+//     <o3> Channel <1=>1 <3=>3
+//     <i>  Selects DMA Channel (only Channel 1 or 3 can be used)
+//     <o4> Priority <0=>Low <1=>Medium <2=>High <3=>Very High
+//     <i>  Selects DMA Priority
+//   </e>
+#define DEV_I2C3_RX_DMA                 0
+#define DEV_I2C3_RX_DMA_NUMBER          1
+#define DEV_I2C3_RX_DMA_STREAM          1
+#define DEV_I2C3_RX_DMA_CHANNEL         1
+#define DEV_I2C3_RX_DMA_PRIORITY        0
+
+//   <e> DMA Tx
+//     <o1> Number <1=>1
+//     <i>  Selects DMA Number (only DMA1 can be used)
+//     <o2> Stream <4=>4
+//     <i>  Selects DMA Stream (only Stream 4 can be used)
+//     <o3> Channel <3=>3
+//     <i>  Selects DMA Channel (only Channel 3 can be used)
+//     <o4> Priority <0=>Low <1=>Medium <2=>High <3=>Very High
+//     <i>  Selects DMA Priority
+//   </e>
+#define DEV_I2C3_TX_DMA                 0
+#define DEV_I2C3_TX_DMA_NUMBER          1
+#define DEV_I2C3_TX_DMA_STREAM          4
+#define DEV_I2C3_TX_DMA_CHANNEL         3
+#define DEV_I2C3_TX_DMA_PRIORITY        0
+
+// </e>
+
+// <e> I2C4 (Inter-integrated Circuit Interface) [Driver_I2C4]
+// <i> Configuration settings for Driver_I2C4 in component ::CMSIS Driver:I2C
+#define DEV_I2C4                        0
+
+//   <o> I2C4_SCL Pin <0=>PD12 <1=>PF14 <2=>PH11 <3=>PB6 <4=>PB8
+#define   DEV_I2C4_SCL_PORT_ID         0
+#if      (DEV_I2C4_SCL_PORT_ID == 0)
+  #define DEV_I2C4_SCL_PORT            GPIO_PORT_D
+  #define DEV_I2C4_SCL_PIN             GPIO_PIN_12
+  #define DEV_I2C4_SCL_FUNC            GPIO_PIN_FUNC_4
+#elif    (DEV_I2C4_SCL_PORT_ID == 1)
+  #define DEV_I2C4_SCL_PORT            GPIO_PORT_F
+  #define DEV_I2C4_SCL_PIN             GPIO_PIN_14
+  #define DEV_I2C4_SCL_FUNC            GPIO_PIN_FUNC_4
+#elif    (DEV_I2C4_SCL_PORT_ID == 2)
+  #define DEV_I2C4_SCL_PORT            GPIO_PORT_H
+  #define DEV_I2C4_SCL_PIN             GPIO_PIN_11
+  #define DEV_I2C4_SCL_FUNC            GPIO_PIN_FUNC_4
+#elif    (DEV_I2C4_SCL_PORT_ID == 3)
+  #define DEV_I2C4_SCL_PORT            GPIO_PORT_B
+  #define DEV_I2C4_SCL_PIN             GPIO_PIN_6
+  #define DEV_I2C4_SCL_FUNC            GPIO_PIN_FUNC_11
+#elif    (DEV_I2C4_SCL_PORT_ID == 4)
+  #define DEV_I2C4_SCL_PORT            GPIO_PORT_B
+  #define DEV_I2C4_SCL_PIN             GPIO_PIN_8
+  #define DEV_I2C4_SCL_FUNC            GPIO_PIN_FUNC_1
+#else
+  #error "Invalid I2C4_SCL Pin Configuration!"
+#endif
+
+//   <o> I2C4_SDA Pin <0=>PD13 <1=>PF15 <2=>PH12 <3=>PB7 <4=>PB9
+#define   DEV_I2C4_SDA_PORT_ID         0
+#if      (DEV_I2C4_SDA_PORT_ID == 0)
+  #define DEV_I2C4_SDA_PORT            GPIO_PORT_D
+  #define DEV_I2C4_SDA_PIN             GPIO_PIN_13
+  #define DEV_I2C4_SDA_FUNC            GPIO_PIN_FUNC_4
+#elif    (DEV_I2C4_SDA_PORT_ID == 1)
+  #define DEV_I2C4_SDA_PORT            GPIO_PORT_F
+  #define DEV_I2C4_SDA_PIN             GPIO_PIN_15
+  #define DEV_I2C4_SDA_FUNC            GPIO_PIN_FUNC_4
+#elif    (DEV_I2C4_SDA_PORT_ID == 2)
+  #define DEV_I2C4_SDA_PORT            GPIO_PORT_H
+  #define DEV_I2C4_SDA_PIN             GPIO_PIN_12
+  #define DEV_I2C4_SDA_FUNC            GPIO_PIN_FUNC_4
+#elif    (DEV_I2C4_SDA_PORT_ID == 3)
+  #define DEV_I2C4_SDA_PORT            GPIO_PORT_B
+  #define DEV_I2C4_SDA_PIN             GPIO_PIN_7
+  #define DEV_I2C4_SDA_FUNC            GPIO_PIN_FUNC_11
+#elif    (DEV_I2C4_SDA_PORT_ID == 4)
+  #define DEV_I2C4_SDA_PORT            GPIO_PORT_B
+  #define DEV_I2C4_SDA_PIN             GPIO_PIN_9
+  #define DEV_I2C4_SDA_FUNC            GPIO_PIN_FUNC_1
+#else
+  #error "Invalid I2C4_SDA Pin Configuration!"
+#endif
+
+//   <e> DMA Rx
+//     <o1> Number <1=>1
+//     <i>  Selects DMA Number (only DMA1 can be used)
+//     <o2> Stream <2=>2
+//     <i>  Selects DMA Stream (only Stream 2 can be used)
+//     <o3> Channel <2=>2
+//     <i>  Selects DMA Channel (only Channel 2 can be used)
+//     <o4> Priority <0=>Low <1=>Medium <2=>High <3=>Very High
+//     <i>  Selects DMA Priority
+//   </e>
+#define DEV_I2C4_RX_DMA                 0
+#define DEV_I2C4_RX_DMA_NUMBER          1
+#define DEV_I2C4_RX_DMA_STREAM          2
+#define DEV_I2C4_RX_DMA_CHANNEL         2
+#define DEV_I2C4_RX_DMA_PRIORITY        0
+
+//   <e> DMA Tx
+//     <o1> Number <1=>1
+//     <i>  Selects DMA Number (only DMA1 can be used)
+//     <o2> Stream <5=>5
+//     <i>  Selects DMA Stream (only Stream 5 can be used)
+//     <o3> Channel <2=>2
+//     <i>  Selects DMA Channel (only Channel 2 can be used)
+//     <o4> Priority <0=>Low <1=>Medium <2=>High <3=>Very High
+//     <i>  Selects DMA Priority
+//   </e>
+#define DEV_I2C4_TX_DMA                 0
+#define DEV_I2C4_TX_DMA_NUMBER          1
+#define DEV_I2C4_TX_DMA_STREAM          5
+#define DEV_I2C4_TX_DMA_CHANNEL         2
+#define DEV_I2C4_TX_DMA_PRIORITY        0
 
 // </e>
 
