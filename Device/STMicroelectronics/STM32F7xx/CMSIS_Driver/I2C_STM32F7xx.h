@@ -192,7 +192,8 @@ static int32_t        I2C##x##_SlaveReceive   (                     uint8_t *dat
 static int32_t        I2C##x##_GetDataCount   (void)                                                                { return I2C_GetDataCount  (&I2C##x##_Resources);                                } \
 static int32_t        I2C##x##_Control        (uint32_t control, uint32_t arg)                                      { return I2C_Control       (control, arg, &I2C##x##_Resources);                  } \
 static ARM_I2C_STATUS I2C##x##_GetStatus      (void)                                                                { return I2C_GetStatus     (&I2C##x##_Resources);                                } \
-       void           I2C##x##_IRQHandler     (void)                                                                {        I2C_IRQHandler    (&I2C##x##_Resources);                                } \
+       void           I2C##x##_EV_IRQHandler  (void)                                                                {        I2C_EV_IRQHandler (&I2C##x##_Resources);                                } \
+       void           I2C##x##_ER_IRQHandler  (void)                                                                {        I2C_ER_IRQHandler (&I2C##x##_Resources);                                } \
                                                                                                                                                                                                        \
 ARM_DRIVER_I2C Driver_I2C##x = { \
   I2Cx_GetVersion,               \
