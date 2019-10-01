@@ -55,7 +55,7 @@
 #define ThreadStateBlocked          ((uint8_t)osThreadBlocked)
 #define ThreadStateTerminated       ((uint8_t)osThreadTerminated)
 
-#define container_of(ptr, type, member) ((type *)((uint8_t *)(ptr) - offsetof(type, member)))
+#define container_of(ptr, type, member) ((type *)(void *)((uint8_t *)(ptr) - offsetof(type, member)))
 
 #define GetThreadByQueue(que)       container_of(que, osThread_t, thread_que)
 #define GetThreadByDelayQueue(que)  container_of(que, osThread_t, delay_que)
