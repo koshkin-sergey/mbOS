@@ -341,7 +341,7 @@ osMutexId_t osMutexNew(const osMutexAttr_t *attr)
     mutex_id = NULL;
   }
   else {
-    mutex_id = (osMutexId_t)svc_1((uint32_t)attr, (uint32_t)MutexNew);
+    mutex_id = (osMutexId_t)SVC_1(attr, MutexNew);
   }
 
   return (mutex_id);
@@ -361,7 +361,7 @@ const char *osMutexGetName(osMutexId_t mutex_id)
     name = NULL;
   }
   else {
-    name = (const char *)svc_1((uint32_t)mutex_id, (uint32_t)MutexGetName);
+    name = (const char *)SVC_1(mutex_id, MutexGetName);
   }
 
   return (name);
@@ -382,7 +382,7 @@ osStatus_t osMutexAcquire(osMutexId_t mutex_id, uint32_t timeout)
     status = osErrorISR;
   }
   else {
-    status = (osStatus_t)svc_2((uint32_t)mutex_id, timeout, (uint32_t)MutexAcquire);
+    status = (osStatus_t)SVC_2(mutex_id, timeout, MutexAcquire);
     if (status == osThreadWait) {
       status = (osStatus_t)ThreadGetRunning()->winfo.ret_val;
     }
@@ -405,7 +405,7 @@ osStatus_t osMutexRelease(osMutexId_t mutex_id)
     status = osErrorISR;
   }
   else {
-    status = (osStatus_t)svc_1((uint32_t)mutex_id, (uint32_t)MutexRelease);
+    status = (osStatus_t)SVC_1(mutex_id, MutexRelease);
   }
 
   return (status);
@@ -425,7 +425,7 @@ osThreadId_t osMutexGetOwner(osMutexId_t mutex_id)
     thread = NULL;
   }
   else {
-    thread = (osThreadId_t)svc_1((uint32_t)mutex_id, (uint32_t)MutexGetOwner);
+    thread = (osThreadId_t)SVC_1(mutex_id, MutexGetOwner);
   }
 
   return (thread);
@@ -445,7 +445,7 @@ osStatus_t osMutexDelete(osMutexId_t mutex_id)
     status = osErrorISR;
   }
   else {
-    status = (osStatus_t)svc_1((uint32_t)mutex_id, (uint32_t)MutexDelete);
+    status = (osStatus_t)SVC_1(mutex_id, MutexDelete);
   }
 
   return (status);

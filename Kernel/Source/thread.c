@@ -671,7 +671,7 @@ osThreadId_t osThreadNew(osThreadFunc_t func, void *argument, const osThreadAttr
     thread_id = NULL;
   }
   else {
-    thread_id = (osThreadId_t)svc_3((uint32_t)func, (uint32_t)argument, (uint32_t)attr, (uint32_t)ThreadNew);
+    thread_id = (osThreadId_t)SVC_3(func, argument, attr, ThreadNew);
   }
 
   return (thread_id);
@@ -691,7 +691,7 @@ const char *osThreadGetName(osThreadId_t thread_id)
     name = NULL;
   }
   else {
-    name = (const char *)svc_1((uint32_t)thread_id, (uint32_t)ThreadGetName);
+    name = (const char *)SVC_1(thread_id, ThreadGetName);
   }
 
   return (name);
@@ -710,7 +710,7 @@ osThreadId_t osThreadGetId(void)
     thread_id = ThreadGetId();
   }
   else {
-    thread_id = (osThreadId_t)svc_0((uint32_t)ThreadGetId);
+    thread_id = (osThreadId_t)SVC_0(ThreadGetId);
   }
 
   return (thread_id);
@@ -730,7 +730,7 @@ osThreadState_t osThreadGetState(osThreadId_t thread_id)
     state = osThreadError;
   }
   else {
-    state = (osThreadState_t)svc_1((uint32_t)thread_id, (uint32_t)ThreadGetState);
+    state = (osThreadState_t)SVC_1(thread_id, ThreadGetState);
   }
 
   return (state);
@@ -750,7 +750,7 @@ uint32_t osThreadGetStackSize(osThreadId_t thread_id)
     stack_size = 0U;
   }
   else {
-    stack_size = svc_1((uint32_t)thread_id, (uint32_t)ThreadGetStackSize);
+    stack_size = SVC_1(thread_id, ThreadGetStackSize);
   }
 
   return (stack_size);
@@ -770,7 +770,7 @@ uint32_t osThreadGetStackSpace(osThreadId_t thread_id)
     stack_space = 0U;
   }
   else {
-    stack_space = svc_1((uint32_t)thread_id, (uint32_t)ThreadGetStackSpace);
+    stack_space = SVC_1(thread_id, ThreadGetStackSpace);
   }
 
   return (stack_space);
@@ -791,7 +791,7 @@ osStatus_t osThreadSetPriority(osThreadId_t thread_id, osPriority_t priority)
     status = osErrorISR;
   }
   else {
-    status = (osStatus_t)svc_2((uint32_t)thread_id, (uint32_t)priority, (uint32_t)ThreadSetPriority);
+    status = (osStatus_t)SVC_2(thread_id, priority, ThreadSetPriority);
   }
 
   return (status);
@@ -811,7 +811,7 @@ osPriority_t osThreadGetPriority(osThreadId_t thread_id)
     priority = osPriorityError;
   }
   else {
-    priority = (osPriority_t)svc_1((uint32_t)thread_id, (uint32_t)ThreadGetPriority);
+    priority = (osPriority_t)SVC_1(thread_id, ThreadGetPriority);
   }
 
   return (priority);
@@ -830,7 +830,7 @@ osStatus_t osThreadYield(void)
     status = osErrorISR;
   }
   else {
-    status = (osStatus_t)svc_0((uint32_t)ThreadYield);
+    status = (osStatus_t)SVC_0(ThreadYield);
   }
 
   return (status);
@@ -850,7 +850,7 @@ osStatus_t osThreadSuspend(osThreadId_t thread_id)
     status = osErrorISR;
   }
   else {
-    status = (osStatus_t)svc_1((uint32_t)thread_id, (uint32_t)ThreadSuspend);
+    status = (osStatus_t)SVC_1(thread_id, ThreadSuspend);
   }
 
   return (status);
@@ -870,7 +870,7 @@ osStatus_t osThreadResume(osThreadId_t thread_id)
     status = osErrorISR;
   }
   else {
-    status = (osStatus_t)svc_1((uint32_t)thread_id, (uint32_t)ThreadResume);
+    status = (osStatus_t)SVC_1(thread_id, ThreadResume);
   }
 
   return (status);
@@ -883,7 +883,7 @@ osStatus_t osThreadResume(osThreadId_t thread_id)
 __NO_RETURN
 void osThreadExit(void)
 {
-  svc_0((uint32_t)ThreadExit);
+  SVC_0(ThreadExit);
   for (;;);
 }
 
@@ -901,7 +901,7 @@ osStatus_t osThreadTerminate(osThreadId_t thread_id)
     status = osErrorISR;
   }
   else {
-    status = (osStatus_t)svc_1((uint32_t)thread_id, (uint32_t)ThreadTerminate);
+    status = (osStatus_t)SVC_1(thread_id, ThreadTerminate);
   }
 
   return (status);
@@ -920,7 +920,7 @@ uint32_t osThreadGetCount(void)
     count = 0U;
   }
   else {
-    count = svc_0((uint32_t)ThreadGetCount);
+    count = SVC_0(ThreadGetCount);
   }
 
   return (count);
@@ -941,7 +941,7 @@ uint32_t osThreadEnumerate(osThreadId_t *thread_array, uint32_t array_items)
     count = 0U;
   }
   else {
-    count = svc_2((uint32_t)thread_array, array_items, (uint32_t)ThreadEnumerate);
+    count = SVC_2(thread_array, array_items, ThreadEnumerate);
   }
 
   return (count);

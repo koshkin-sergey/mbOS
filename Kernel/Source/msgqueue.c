@@ -409,7 +409,7 @@ osMessageQueueId_t osMessageQueueNew(uint32_t msg_count, uint32_t msg_size, cons
     mq_id = NULL;
   }
   else {
-    mq_id = (osMessageQueueId_t)svc_3(msg_count, msg_size, (uint32_t)attr, (uint32_t)MessageQueueNew);
+    mq_id = (osMessageQueueId_t)SVC_3(msg_count, msg_size, attr, MessageQueueNew);
   }
 
   return (mq_id);
@@ -429,7 +429,7 @@ const char *osMessageQueueGetName(osMessageQueueId_t mq_id)
     name = NULL;
   }
   else {
-    name = (const char *)svc_1((uint32_t)mq_id, (uint32_t)MessageQueueGetName);
+    name = (const char *)SVC_1(mq_id, MessageQueueGetName);
   }
 
   return (name);
@@ -457,7 +457,7 @@ osStatus_t osMessageQueuePut(osMessageQueueId_t mq_id, const void *msg_ptr, uint
     }
   }
   else {
-    status = (osStatus_t)svc_4((uint32_t)mq_id, (uint32_t)msg_ptr, msg_prio, timeout, (uint32_t)MessageQueuePut);
+    status = (osStatus_t)SVC_4(mq_id, msg_ptr, msg_prio, timeout, MessageQueuePut);
     if (status == osThreadWait) {
       status = (osStatus_t)ThreadGetRunning()->winfo.ret_val;
     }
@@ -488,7 +488,7 @@ osStatus_t osMessageQueueGet(osMessageQueueId_t mq_id, void *msg_ptr, uint8_t *m
     }
   }
   else {
-    status = (osStatus_t)svc_4((uint32_t)mq_id, (uint32_t)msg_ptr, (uint32_t)msg_prio, timeout, (uint32_t)MessageQueueGet);
+    status = (osStatus_t)SVC_4(mq_id, msg_ptr, msg_prio, timeout, MessageQueueGet);
     if (status == osThreadWait) {
       status = (osStatus_t)ThreadGetRunning()->winfo.ret_val;
     }
@@ -511,7 +511,7 @@ uint32_t osMessageQueueGetCapacity(osMessageQueueId_t mq_id)
     capacity = MessageQueueGetCapacity(mq_id);
   }
   else {
-    capacity = svc_1((uint32_t)mq_id, (uint32_t)MessageQueueGetCapacity);
+    capacity = SVC_1(mq_id, MessageQueueGetCapacity);
   }
 
   return (capacity);
@@ -531,7 +531,7 @@ uint32_t osMessageQueueGetMsgSize(osMessageQueueId_t mq_id)
     msg_size = MessageQueueGetMsgSize(mq_id);
   }
   else {
-    msg_size = svc_1((uint32_t)mq_id, (uint32_t)MessageQueueGetMsgSize);
+    msg_size = SVC_1(mq_id, MessageQueueGetMsgSize);
   }
 
   return (msg_size);
@@ -551,7 +551,7 @@ uint32_t osMessageQueueGetCount(osMessageQueueId_t mq_id)
     count = MessageQueueGetCount(mq_id);
   }
   else {
-    count = svc_1((uint32_t)mq_id, (uint32_t)MessageQueueGetCount);
+    count = SVC_1(mq_id, MessageQueueGetCount);
   }
 
   return (count);
@@ -571,7 +571,7 @@ uint32_t osMessageQueueGetSpace(osMessageQueueId_t mq_id)
     space = MessageQueueGetSpace(mq_id);
   }
   else {
-    space = svc_1((uint32_t)mq_id, (uint32_t)MessageQueueGetSpace);
+    space = SVC_1(mq_id, MessageQueueGetSpace);
   }
 
   return (space);
@@ -591,7 +591,7 @@ osStatus_t osMessageQueueReset(osMessageQueueId_t mq_id)
     status = osErrorISR;
   }
   else {
-    status = (osStatus_t)svc_1((uint32_t)mq_id, (uint32_t)MessageQueueReset);
+    status = (osStatus_t)SVC_1(mq_id, MessageQueueReset);
   }
 
   return (status);
@@ -611,7 +611,7 @@ osStatus_t osMessageQueueDelete(osMessageQueueId_t mq_id)
     status = osErrorISR;
   }
   else {
-    status = (osStatus_t)svc_1((uint32_t)mq_id, (uint32_t)MessageQueueDelete);
+    status = (osStatus_t)SVC_1(mq_id, MessageQueueDelete);
   }
 
   return (status);

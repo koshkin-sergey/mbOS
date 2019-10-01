@@ -293,7 +293,7 @@ osEventFlagsId_t osEventFlagsNew(const osEventFlagsAttr_t *attr)
     ef_id = NULL;
   }
   else {
-    ef_id = (osEventFlagsId_t)svc_1((uint32_t)attr, (uint32_t)EventFlagsNew);
+    ef_id = (osEventFlagsId_t)SVC_1(attr, EventFlagsNew);
   }
 
   return ef_id;
@@ -313,7 +313,7 @@ const char *osEventFlagsGetName(osEventFlagsId_t ef_id)
     name = NULL;
   }
   else {
-    name = (const char *)svc_1((uint32_t)ef_id, (uint32_t)EventFlagsGetName);
+    name = (const char *)SVC_1(ef_id, EventFlagsGetName);
   }
 
   return (name);
@@ -334,7 +334,7 @@ uint32_t osEventFlagsSet(osEventFlagsId_t ef_id, uint32_t flags)
     event_flags = EventFlagsSet(ef_id, flags);
   }
   else {
-    event_flags = svc_2((uint32_t)ef_id, flags, (uint32_t)EventFlagsSet);
+    event_flags = SVC_2(ef_id, flags, EventFlagsSet);
   }
 
   return (event_flags);
@@ -355,7 +355,7 @@ uint32_t osEventFlagsClear(osEventFlagsId_t ef_id, uint32_t flags)
     event_flags = EventFlagsClear(ef_id, flags);
   }
   else {
-    event_flags = svc_2((uint32_t)ef_id, flags, (uint32_t)EventFlagsClear);
+    event_flags = SVC_2(ef_id, flags, EventFlagsClear);
   }
 
   return (event_flags);
@@ -375,7 +375,7 @@ uint32_t osEventFlagsGet(osEventFlagsId_t ef_id)
     event_flags = EventFlagsGet(ef_id);
   }
   else {
-    event_flags = svc_1((uint32_t)ef_id, (uint32_t)EventFlagsGet);
+    event_flags = SVC_1(ef_id, EventFlagsGet);
   }
 
   return (event_flags);
@@ -403,7 +403,7 @@ uint32_t osEventFlagsWait(osEventFlagsId_t ef_id, uint32_t flags, uint32_t optio
     }
   }
   else {
-    event_flags = svc_4((uint32_t)ef_id, flags, options, timeout, (uint32_t)EventFlagsWait);
+    event_flags = SVC_4(ef_id, flags, options, timeout, EventFlagsWait);
     if ((int32_t)event_flags == osThreadWait) {
       event_flags = ThreadGetRunning()->winfo.ret_val;
     }
@@ -426,7 +426,7 @@ osStatus_t osEventFlagsDelete(osEventFlagsId_t ef_id)
     status = osErrorISR;
   }
   else {
-    status = (osStatus_t)svc_1((uint32_t)ef_id, (uint32_t)EventFlagsDelete);
+    status = (osStatus_t)SVC_1(ef_id, EventFlagsDelete);
   }
 
   return (status);

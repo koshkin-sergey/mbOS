@@ -370,7 +370,7 @@ osDataQueueId_t osDataQueueNew(uint32_t data_count, uint32_t data_size, const os
     dq_id = NULL;
   }
   else {
-    dq_id = (osDataQueueId_t)svc_3(data_count, data_size, (uint32_t)attr, (uint32_t)DataQueueNew);
+    dq_id = (osDataQueueId_t)SVC_3(data_count, data_size, attr, DataQueueNew);
   }
 
   return (dq_id);
@@ -390,7 +390,7 @@ const char *osDataQueueGetName(osDataQueueId_t dq_id)
     name = NULL;
   }
   else {
-    name = (const char *)svc_1((uint32_t)dq_id, (uint32_t)DataQueueGetName);
+    name = (const char *)SVC_1(dq_id, DataQueueGetName);
   }
 
   return (name);
@@ -417,7 +417,7 @@ osStatus_t osDataQueuePut(osDataQueueId_t dq_id, const void *data_ptr, uint32_t 
     }
   }
   else {
-    status = (osStatus_t)svc_3((uint32_t)dq_id, (uint32_t)data_ptr, timeout, (uint32_t)DataQueuePut);
+    status = (osStatus_t)SVC_3(dq_id, data_ptr, timeout, DataQueuePut);
     if (status == osThreadWait) {
       status = (osStatus_t)ThreadGetRunning()->winfo.ret_val;
     }
@@ -447,7 +447,7 @@ osStatus_t osDataQueueGet(osDataQueueId_t dq_id, void *data_ptr, uint32_t timeou
     }
   }
   else {
-    status = (osStatus_t)svc_3((uint32_t)dq_id, (uint32_t)data_ptr, timeout, (uint32_t)DataQueueGet);
+    status = (osStatus_t)SVC_3(dq_id, data_ptr, timeout, DataQueueGet);
     if (status == osThreadWait) {
       status = (osStatus_t)ThreadGetRunning()->winfo.ret_val;
     }
@@ -470,7 +470,7 @@ uint32_t osDataQueueGetCapacity(osDataQueueId_t dq_id)
     capacity = DataQueueGetCapacity(dq_id);
   }
   else {
-    capacity = svc_1((uint32_t)dq_id, (uint32_t)DataQueueGetCapacity);
+    capacity = SVC_1(dq_id, DataQueueGetCapacity);
   }
 
   return (capacity);
@@ -490,7 +490,7 @@ uint32_t osDataQueueGetDataSize(osDataQueueId_t dq_id)
     data_size = DataQueueGetMsgSize(dq_id);
   }
   else {
-    data_size = svc_1((uint32_t)dq_id, (uint32_t)DataQueueGetMsgSize);
+    data_size = SVC_1(dq_id, DataQueueGetMsgSize);
   }
 
   return (data_size);
@@ -510,7 +510,7 @@ uint32_t osDataQueueGetCount(osDataQueueId_t dq_id)
     count = DataQueueGetCount(dq_id);
   }
   else {
-    count = svc_1((uint32_t)dq_id, (uint32_t)DataQueueGetCount);
+    count = SVC_1(dq_id, DataQueueGetCount);
   }
 
   return (count);
@@ -530,7 +530,7 @@ uint32_t osDataQueueGetSpace(osDataQueueId_t dq_id)
     space = DataQueueGetSpace(dq_id);
   }
   else {
-    space = svc_1((uint32_t)dq_id, (uint32_t)DataQueueGetSpace);
+    space = SVC_1(dq_id, DataQueueGetSpace);
   }
 
   return (space);
@@ -550,7 +550,7 @@ osStatus_t osDataQueueReset(osDataQueueId_t dq_id)
     status = osErrorISR;
   }
   else {
-    status = (osStatus_t)svc_1((uint32_t)dq_id, (uint32_t)DataQueueReset);
+    status = (osStatus_t)SVC_1(dq_id, DataQueueReset);
   }
 
   return (status);
@@ -570,7 +570,7 @@ osStatus_t osDataQueueDelete(osDataQueueId_t dq_id)
     status = osErrorISR;
   }
   else {
-    status = (osStatus_t)svc_1((uint32_t)dq_id, (uint32_t)DataQueueDelete);
+    status = (osStatus_t)SVC_1(dq_id, DataQueueDelete);
   }
 
   return (status);

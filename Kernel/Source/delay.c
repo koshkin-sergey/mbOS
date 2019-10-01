@@ -104,7 +104,7 @@ osStatus_t osDelay(uint32_t ticks)
     status = osErrorISR;
   }
   else {
-    status = (osStatus_t)svc_1(ticks, (uint32_t)Delay);
+    status = (osStatus_t)SVC_1(ticks, Delay);
   }
 
   return status;
@@ -124,7 +124,7 @@ osStatus_t osDelayUntil(uint32_t ticks)
     status = osErrorISR;
   }
   else {
-    status = (osStatus_t)svc_1(ticks, (uint32_t)DelayUntil);
+    status = (osStatus_t)SVC_1(ticks, DelayUntil);
   }
 
   return status;

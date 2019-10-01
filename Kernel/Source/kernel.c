@@ -280,7 +280,7 @@ osStatus_t osKernelInitialize(void)
     status = osErrorISR;
   }
   else {
-    status = (osStatus_t)svc_0((uint32_t)KernelInitialize);
+    status = (osStatus_t)SVC_0(KernelInitialize);
   }
 
   return (status);
@@ -302,7 +302,7 @@ osStatus_t osKernelGetInfo(osVersion_t *version, char *id_buf, uint32_t id_size)
     status = KernelGetInfo(version, id_buf, id_size);
   }
   else {
-    status = (osStatus_t)svc_3((uint32_t)version, (uint32_t)id_buf, id_size, (uint32_t)KernelGetInfo);
+    status = (osStatus_t)SVC_3(version, id_buf, id_size, KernelGetInfo);
   }
 
   return (status);
@@ -321,7 +321,7 @@ osKernelState_t osKernelGetState(void)
     state = KernelGetState();
   }
   else {
-    state = (osKernelState_t)svc_0((uint32_t)KernelGetState);
+    state = (osKernelState_t)SVC_0(KernelGetState);
   }
 
   return (state);
@@ -340,7 +340,7 @@ osStatus_t osKernelStart(void)
     status = osErrorISR;
   }
   else {
-    status = (osStatus_t)svc_0((uint32_t)KernelStart);
+    status = (osStatus_t)SVC_0(KernelStart);
   }
 
   return (status);
@@ -359,7 +359,7 @@ int32_t osKernelLock(void)
     lock = (int32_t)osErrorISR;
   }
   else {
-    lock = svc_0((uint32_t)KernelLock);
+    lock = (int32_t)SVC_0(KernelLock);
   }
 
   return (lock);
@@ -378,7 +378,7 @@ int32_t osKernelUnlock(void)
     lock = (int32_t)osErrorISR;
   }
   else {
-    lock = svc_0((uint32_t)KernelUnlock);
+    lock = (int32_t)SVC_0(KernelUnlock);
   }
 
   return (lock);
@@ -398,7 +398,7 @@ int32_t osKernelRestoreLock(int32_t lock)
     lock_new = (int32_t)osErrorISR;
   }
   else {
-    lock_new = svc_1((uint32_t)lock, (uint32_t)KernelRestoreLock);
+    lock_new = (int32_t)SVC_1(lock, KernelRestoreLock);
   }
 
   return (lock_new);
@@ -417,7 +417,7 @@ uint32_t osKernelGetTickCount(void)
     count = KernelGetTickCount();
   }
   else {
-    count =  svc_0((uint32_t)KernelGetTickCount);
+    count = SVC_0(KernelGetTickCount);
   }
 
   return (count);
@@ -436,7 +436,7 @@ uint32_t osKernelGetTickFreq(void)
     freq = KernelGetTickFreq();
   }
   else {
-    freq = svc_0((uint32_t)KernelGetTickFreq);
+    freq = SVC_0(KernelGetTickFreq);
   }
 
   return (freq);

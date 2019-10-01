@@ -304,7 +304,7 @@ osMemoryPoolId_t osMemoryPoolNew(uint32_t block_count, uint32_t block_size, cons
     mp_id = NULL;
   }
   else {
-    mp_id = (osMemoryPoolId_t)svc_3(block_count, block_size, (uint32_t)attr, (uint32_t)MemoryPoolNew);
+    mp_id = (osMemoryPoolId_t)SVC_3(block_count, block_size, attr, MemoryPoolNew);
   }
 
   return (mp_id);
@@ -324,7 +324,7 @@ const char *osMemoryPoolGetName(osMemoryPoolId_t mp_id)
     name = NULL;
   }
   else {
-    name = (const char *)svc_1((uint32_t)mp_id, (uint32_t)MemoryPoolGetName);
+    name = (const char *)SVC_1(mp_id, MemoryPoolGetName);
   }
 
   return (name);
@@ -350,7 +350,7 @@ void *osMemoryPoolAlloc(osMemoryPoolId_t mp_id, uint32_t timeout)
     }
   }
   else {
-    memory = (void *)svc_2((uint32_t)mp_id, timeout, (uint32_t)MemoryPoolAlloc);
+    memory = (void *)SVC_2(mp_id, timeout, MemoryPoolAlloc);
     if ((int32_t)memory == osThreadWait) {
       memory = (void *)ThreadGetRunning()->winfo.ret_val;
       if ((osStatus_t)memory == osErrorTimeout) {
@@ -377,7 +377,7 @@ osStatus_t osMemoryPoolFree(osMemoryPoolId_t mp_id, void *block)
     status = MemoryPoolFree(mp_id, block);
   }
   else {
-    status = (osStatus_t)svc_2((uint32_t)mp_id, (uint32_t)block, (uint32_t)MemoryPoolFree);
+    status = (osStatus_t)SVC_2(mp_id, block, MemoryPoolFree);
   }
 
   return (status);
@@ -397,7 +397,7 @@ uint32_t osMemoryPoolGetCapacity(osMemoryPoolId_t mp_id)
     capacity = MemoryPoolGetCapacity(mp_id);
   }
   else {
-    capacity = svc_1((uint32_t)mp_id, (uint32_t)MemoryPoolGetCapacity);
+    capacity = SVC_1(mp_id, MemoryPoolGetCapacity);
   }
 
   return (capacity);
@@ -417,7 +417,7 @@ uint32_t osMemoryPoolGetBlockSize(osMemoryPoolId_t mp_id)
     block_size = MemoryPoolGetBlockSize(mp_id);
   }
   else {
-    block_size = svc_1((uint32_t)mp_id, (uint32_t)MemoryPoolGetBlockSize);
+    block_size = SVC_1(mp_id, MemoryPoolGetBlockSize);
   }
 
   return (block_size);
@@ -437,7 +437,7 @@ uint32_t osMemoryPoolGetCount(osMemoryPoolId_t mp_id)
     count = MemoryPoolGetCount(mp_id);
   }
   else {
-    count = svc_1((uint32_t)mp_id, (uint32_t)MemoryPoolGetCount);
+    count = SVC_1(mp_id, MemoryPoolGetCount);
   }
 
   return (count);
@@ -457,7 +457,7 @@ uint32_t osMemoryPoolGetSpace(osMemoryPoolId_t mp_id)
     space = MemoryPoolGetSpace(mp_id);
   }
   else {
-    space = svc_1((uint32_t)mp_id, (uint32_t)MemoryPoolGetSpace);
+    space = SVC_1(mp_id, MemoryPoolGetSpace);
   }
 
   return (space);
@@ -477,7 +477,7 @@ osStatus_t osMemoryPoolDelete(osMemoryPoolId_t mp_id)
     status = osErrorISR;
   }
   else {
-    status = (osStatus_t)svc_1((uint32_t)mp_id, (uint32_t)MemoryPoolDelete);
+    status = (osStatus_t)SVC_1(mp_id, MemoryPoolDelete);
   }
 
   return (status);

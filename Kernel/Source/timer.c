@@ -244,7 +244,7 @@ void libTimerThread(void *argument)
   for (;;) {
     osSemaphoreAcquire(osInfo.timer_semaphore, osWaitForever);
 
-    while ((timer_finfo = (osTimerFinfo_t *)svc_0((uint32_t)TimerGetFinfo)) != NULL) {
+    while ((timer_finfo = (osTimerFinfo_t *)SVC_0(TimerGetFinfo)) != NULL) {
       (timer_finfo->func)(timer_finfo->arg);
     }
   }
@@ -271,7 +271,7 @@ osTimerId_t osTimerNew(osTimerFunc_t func, osTimerType_t type, void *argument, c
     timer_id = NULL;
   }
   else {
-    timer_id = (osTimerId_t)svc_4((uint32_t)func, (uint32_t)type, (uint32_t)argument, (uint32_t)attr, (uint32_t)TimerNew);
+    timer_id = (osTimerId_t)SVC_4(func, type, argument, attr, TimerNew);
   }
 
   return (timer_id);
@@ -291,7 +291,7 @@ const char *osTimerGetName(osTimerId_t timer_id)
     name = NULL;
   }
   else {
-    name = (const char *)svc_1((uint32_t)timer_id, (uint32_t)TimerGetName);
+    name = (const char *)SVC_1(timer_id, TimerGetName);
   }
 
   return (name);
@@ -312,7 +312,7 @@ osStatus_t osTimerStart(osTimerId_t timer_id, uint32_t ticks)
     status = osErrorISR;
   }
   else {
-    status = (osStatus_t)svc_2((uint32_t)timer_id, ticks, (uint32_t)TimerStart);
+    status = (osStatus_t)SVC_2(timer_id, ticks, TimerStart);
   }
 
   return (status);
@@ -332,7 +332,7 @@ osStatus_t osTimerStop(osTimerId_t timer_id)
     status = osErrorISR;
   }
   else {
-    status = (osStatus_t)svc_1((uint32_t)timer_id, (uint32_t)TimerStop);
+    status = (osStatus_t)SVC_1(timer_id, TimerStop);
   }
 
   return (status);
@@ -352,7 +352,7 @@ uint32_t osTimerIsRunning(osTimerId_t timer_id)
     is_running = 0U;
   }
   else {
-    is_running = svc_1((uint32_t)timer_id, (uint32_t)TimerIsRunning);
+    is_running = SVC_1(timer_id, TimerIsRunning);
   }
 
   return (is_running);
@@ -372,7 +372,7 @@ osStatus_t osTimerDelete(osTimerId_t timer_id)
     status = osErrorISR;
   }
   else {
-    status = (osStatus_t)svc_1((uint32_t)timer_id, (uint32_t)TimerDelete);
+    status = (osStatus_t)SVC_1(timer_id, TimerDelete);
   }
 
   return (status);

@@ -224,7 +224,7 @@ osSemaphoreId_t osSemaphoreNew(uint32_t max_count, uint32_t initial_count, const
     semaphore_id = NULL;
   }
   else {
-    semaphore_id = (osSemaphoreId_t)svc_3(max_count, initial_count, (uint32_t)attr, (uint32_t)SemaphoreNew);
+    semaphore_id = (osSemaphoreId_t)SVC_3(max_count, initial_count, attr, SemaphoreNew);
   }
 
   return (semaphore_id);
@@ -244,7 +244,7 @@ const char *osSemaphoreGetName(osSemaphoreId_t semaphore_id)
     name = NULL;
   }
   else {
-    name = (const char *)svc_1((uint32_t)semaphore_id, (uint32_t)SemaphoreGetName);
+    name = (const char *)SVC_1(semaphore_id, SemaphoreGetName);
   }
 
   return (name);
@@ -270,7 +270,7 @@ osStatus_t osSemaphoreAcquire(osSemaphoreId_t semaphore_id, uint32_t timeout)
     }
   }
   else {
-    status = (osStatus_t)svc_2((uint32_t)semaphore_id, timeout, (uint32_t)SemaphoreAcquire);
+    status = (osStatus_t)SVC_2(semaphore_id, timeout, SemaphoreAcquire);
     if (status == osThreadWait) {
       status = (osStatus_t)ThreadGetRunning()->winfo.ret_val;
     }
@@ -293,7 +293,7 @@ osStatus_t osSemaphoreRelease(osSemaphoreId_t semaphore_id)
     status = SemaphoreRelease(semaphore_id);
   }
   else {
-    status = (osStatus_t)svc_1((uint32_t)semaphore_id, (uint32_t)SemaphoreRelease);
+    status = (osStatus_t)SVC_1(semaphore_id, SemaphoreRelease);
   }
 
   return (status);
@@ -313,7 +313,7 @@ uint32_t osSemaphoreGetCount(osSemaphoreId_t semaphore_id)
     count = SemaphoreGetCount(semaphore_id);
   }
   else {
-    count = svc_1((uint32_t)semaphore_id, (uint32_t)SemaphoreGetCount);
+    count = SVC_1(semaphore_id, SemaphoreGetCount);
   }
 
   return (count);
@@ -333,7 +333,7 @@ osStatus_t osSemaphoreDelete(osSemaphoreId_t semaphore_id)
     status = osErrorISR;
   }
   else {
-    status = (osStatus_t)svc_1((uint32_t)semaphore_id, (uint32_t)SemaphoreDelete);
+    status = (osStatus_t)SVC_1(semaphore_id, SemaphoreDelete);
   }
 
   return (status);

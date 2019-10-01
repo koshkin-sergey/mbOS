@@ -102,6 +102,12 @@
   #define END_CRITICAL_SECTION
 #endif
 
+#define SVC_0(func)                                   (uint32_t)svc_0((uint32_t)(func))
+#define SVC_1(param1, func)                           (uint32_t)svc_1((uint32_t)(param1), (uint32_t)(func))
+#define SVC_2(param1, param2, func)                   (uint32_t)svc_2((uint32_t)(param1), (uint32_t)(param2), (uint32_t)(func))
+#define SVC_3(param1, param2, param3, func)           (uint32_t)svc_3((uint32_t)(param1), (uint32_t)(param2), (uint32_t)(param3), (uint32_t)(func))
+#define SVC_4(param1, param2, param3, param4, func)   (uint32_t)svc_4((uint32_t)(param1), (uint32_t)(param2), (uint32_t)(param3), (uint32_t)(param4), (uint32_t)(func))
+
 /*******************************************************************************
  *  typedefs and structures (scope: module-local)
  ******************************************************************************/
