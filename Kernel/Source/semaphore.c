@@ -82,8 +82,8 @@ static osSemaphoreId_t SemaphoreNew(uint32_t max_count, uint32_t initial_count, 
   sem->id         = ID_SEMAPHORE;
   sem->flags      = 0U;
   sem->name       = attr->name;
-  sem->count      = initial_count;
-  sem->max_count  = max_count;
+  sem->count      = (uint16_t)initial_count;
+  sem->max_count  = (uint16_t)max_count;
 
   QueueReset(&sem->wait_queue);
 

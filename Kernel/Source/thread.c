@@ -64,7 +64,7 @@ static void ThreadStackInit(uint32_t func_addr, void *func_param, osThread_t *th
  */
 static void ThreadReadyAdd(osThread_t *thread)
 {
-  int8_t priority = thread->priority - 1U;
+  int8_t priority = thread->priority - 1;
 
   /* Remove the thread from any queue */
   QueueRemoveEntry(&thread->thread_que);
@@ -81,7 +81,7 @@ static void ThreadReadyAdd(osThread_t *thread)
  */
 static void ThreadReadyDel(osThread_t *thread)
 {
-  int8_t priority = thread->priority - 1U;
+  int8_t priority = thread->priority - 1;
 
   /* Remove the thread from ready queue */
   QueueRemoveEntry(&thread->thread_que);
@@ -276,7 +276,7 @@ static osStatus_t ThreadYield(void)
 
   if (osInfo.kernel.state == osKernelRunning) {
     thread_running = ThreadGetRunning();
-    que = &osInfo.ready_list[thread_running->priority - 1U];
+    que = &osInfo.ready_list[thread_running->priority - 1];
 
     /* Remove the running thread from ready queue */
     QueueRemoveEntry(&thread_running->thread_que);
@@ -614,7 +614,7 @@ osThread_t *libThreadHighestPrioGet(void)
     return (NULL);
   }
 
-  priority = (NUM_PRIORITY - 1U) - __CLZ(osInfo.ready_to_run_bmp);
+  priority = (int8_t)((NUM_PRIORITY - 1U) - __CLZ(osInfo.ready_to_run_bmp));
   thread = GetThreadByQueue(osInfo.ready_list[priority].next);
 
   return (thread);

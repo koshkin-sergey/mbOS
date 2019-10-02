@@ -177,6 +177,11 @@ static osStatus_t KernelStart(void)
   return (osOK);
 }
 
+#if defined ( __GNUC__ )
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wswitch-enum"
+#endif
+
 static int32_t KernelLock(void)
 {
   int32_t lock;
@@ -252,6 +257,10 @@ static int32_t KernelRestoreLock(int32_t lock)
 
   return (lock_new);
 }
+
+#if defined ( __GNUC__ )
+#pragma GCC diagnostic pop
+#endif
 
 static uint32_t KernelGetTickCount(void)
 {
