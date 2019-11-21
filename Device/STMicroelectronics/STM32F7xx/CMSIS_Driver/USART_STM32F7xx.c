@@ -2937,84 +2937,34 @@ static void USART_RX_DMA_Callback(uint32_t event, const void *param)
 
 #ifdef USE_USART1
   USARTx_EXPORT_DRIVER(1);
-
-  #ifdef USART1_TX_DMA_Stream
-    USARTx_TX_DMA_ALLOC(1);
-  #endif
-  #ifdef USART1_RX_DMA_Stream
-    USARTx_RX_DMA_ALLOC(1);
-  #endif
 #endif  /* USE_USART1 */
 
 #ifdef USE_USART2
   USARTx_EXPORT_DRIVER(2);
-
-  #ifdef USART2_TX_DMA_Stream
-    USARTx_TX_DMA_ALLOC(2);
-  #endif
-  #ifdef USART2_RX_DMA_Stream
-    USARTx_RX_DMA_ALLOC(2);
-  #endif
 #endif  /* USE_USART2 */
 
 #ifdef USE_USART3
   USARTx_EXPORT_DRIVER(3);
-
-  #ifdef USART3_TX_DMA_Stream
-    USARTx_TX_DMA_ALLOC(3);
-  #endif
-  #ifdef USART3_RX_DMA_Stream
-    USARTx_RX_DMA_ALLOC(3);
-  #endif
 #endif  /* USE_USART3 */
 
 #ifdef USE_UART4
   UARTx_EXPORT_DRIVER(4);
-
-  #ifdef UART4_TX_DMA_Stream
-    UARTx_TX_DMA_ALLOC(4);
-  #endif
-  #ifdef UART4_RX_DMA_Stream
-    UARTx_RX_DMA_ALLOC(4);
-  #endif
 #endif  /* USE_UART4 */
 
 #ifdef USE_UART5
   UARTx_EXPORT_DRIVER(5);
 #endif  /* USE_UART5 */
 
-
 #ifdef USE_USART6
   USARTx_EXPORT_DRIVER(6);
-
-  #ifdef USART6_TX_DMA_Stream
-    USARTx_TX_DMA_ALLOC(6);
-  #endif
-  #ifdef USART6_RX_DMA_Stream
-    USARTx_RX_DMA_ALLOC(6);
-  #endif
 #endif  /* USE_USART6 */
 
 #ifdef USE_UART7
   UARTx_EXPORT_DRIVER(7);
-
-  #ifdef UART7_TX_DMA_Stream
-    UARTx_TX_DMA_ALLOC(7);
-  #endif
-  #ifdef UART7_RX_DMA_Stream
-    UARTx_RX_DMA_ALLOC(7);
-  #endif
 #endif  /* USE_UART7 */
 
 #ifdef USE_UART8
   UARTx_EXPORT_DRIVER(8);
-
-  #ifdef UART8_TX_DMA_Stream
-    UARTx_TX_DMA_ALLOC(8);
-  #endif
-  #ifdef UART8_RX_DMA_Stream
-    UARTx_RX_DMA_ALLOC(8);
-  #endif
 #endif  /* USE_UART8 */
 
 #endif
