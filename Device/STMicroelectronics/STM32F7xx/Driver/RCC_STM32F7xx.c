@@ -329,8 +329,9 @@ uint32_t RCC_GetPeriphFreq(RCC_Periph_t periph)
 {
   uint32_t clk = 0U;
   uint32_t rcc_cfgr = RCC->CFGR;
+  uint64_t periph_mask = periph & RCC_PERIPH_BUS_MASK;
 
-  if (((periph & RCC_PERIPH_APB1_MASK) == RCC_PERIPH_APB1_MASK)) {
+  if (periph_mask == RCC_PERIPH_APB1_MASK) {
     clk = RCC_GetFreq(RCC_FREQ_APB1);
     if (((rcc_cfgr & RCC_CFGR_PPRE1_Msk) != RCC_CFGR_PPRE1_DIV1) &&
         ((periph == RCC_PERIPH_TIM2) || (periph == RCC_PERIPH_TIM3) || (periph == RCC_PERIPH_TIM4) ||
@@ -340,7 +341,7 @@ uint32_t RCC_GetPeriphFreq(RCC_Periph_t periph)
       clk <<= 1U;
     }
   }
-  else if (((periph & RCC_PERIPH_APB2_MASK) == RCC_PERIPH_APB2_MASK)) {
+  else if (periph_mask == RCC_PERIPH_APB2_MASK) {
     clk = RCC_GetFreq(RCC_FREQ_APB2);
     if (((rcc_cfgr & RCC_CFGR_PPRE2_Msk) != RCC_CFGR_PPRE2_DIV1) &&
         ((periph == RCC_PERIPH_TIM1) || (periph == RCC_PERIPH_TIM8) || (periph == RCC_PERIPH_TIM9) ||
