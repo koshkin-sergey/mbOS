@@ -25,7 +25,7 @@
  ******************************************************************************/
 
 #include <stdbool.h>
-#include "cmsis_compiler.h"
+#include "CMSIS/Core/cmsis_compiler.h"
 
 /*******************************************************************************
  *  defines and macros (scope: module-local)
