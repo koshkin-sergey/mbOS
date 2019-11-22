@@ -18,7 +18,7 @@
  * Title:   Kernel Configuration
  */
 
-#include "kernel.h"
+#include "Kernel/kernel.h"
 
 /* OS Idle Thread */
 __WEAK __NO_RETURN

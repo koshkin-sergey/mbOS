@@ -9,7 +9,7 @@
   *          This file contains:
   *           - Data structures and the address mapping for all peripherals
   *           - Peripheral's registers declarations and bits definition
-  *           - Macros to access peripheral’s registers hardware
+  *           - Macros to access peripheralï¿½s registers hardware
   *  
   ******************************************************************************
   * @attention
@@ -119,7 +119,7 @@ typedef enum
   * @}
   */
 
-#include "core_cm0.h"            /* Cortex-M0 processor and core peripherals */
+#include "CMSIS/Core/core_cm0.h"            /* Cortex-M0 processor and core peripherals */
 #include "system_stm32f0xx.h"    /* STM32F0xx System Header */
 #include <stdint.h>
 

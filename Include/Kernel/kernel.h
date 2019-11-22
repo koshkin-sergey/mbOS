@@ -25,6 +25,7 @@
  ******************************************************************************/
 
 #include <stddef.h>
+#include "CMSIS/Core/cmsis_compiler.h"
 
 #ifdef  __cplusplus
 extern "C"

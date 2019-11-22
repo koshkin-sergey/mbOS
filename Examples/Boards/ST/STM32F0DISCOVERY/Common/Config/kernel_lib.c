@@ -18,7 +18,7 @@
  * Title:   Kernel Library Configuration
  */
 
-#include "kernel.h"
+#include "Kernel/kernel.h"
 #include "kernel_config.h"
 
 /* Idle Thread Control Block */
