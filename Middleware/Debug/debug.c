@@ -173,7 +173,7 @@ static int32_t dprintf(const char *template, ...)
   cnt = vsnprintf(debug_buf, DEBUG_MSG_BUF_SIZE, template, ap);
   va_end(ap);
 
-  if (cnt >= DEBUG_MSG_BUF_SIZE) {
+  if (cnt >= (int32_t)DEBUG_MSG_BUF_SIZE) {
     if (debug_buf[DEBUG_MSG_BUF_SIZE-2] != '\r') {
       debug_buf[DEBUG_MSG_BUF_SIZE-2] = '*';
     }
