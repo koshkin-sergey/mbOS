@@ -59,12 +59,12 @@
 		<link>
 			<name>src/Device/Drivers/GPIO_STM32F4xx.c</name>
 			<type>1</type>
-			<locationURI>DEVICE_LOC/CMSIS_Driver/GPIO_STM32F4xx.c</locationURI>
+			<locationURI>DEVICE_LOC/Driver/GPIO_STM32F4xx.c</locationURI>
 		</link>
 		<link>
 			<name>src/Device/Drivers/RCC_STM32F4xx.c</name>
 			<type>1</type>
-			<locationURI>DEVICE_LOC/CMSIS_Driver/RCC_STM32F4xx.c</locationURI>
+			<locationURI>DEVICE_LOC/Driver/RCC_STM32F4xx.c</locationURI>
 		</link>
 		<link>
 			<name>src/Device/Startup/startup_stm32f407xx.c</name>

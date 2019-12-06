@@ -27,7 +27,7 @@
 
 #include "stm32f4xx.h"
 #include "RCC_STM32F4xx.h"
-#include "Config/RTE_Device.h"
+#include "RTE_Device.h"
 
 /*******************************************************************************
  *  external declarations
