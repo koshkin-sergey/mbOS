@@ -18,7 +18,7 @@
  * Title:   Kernel Configuration
  */
 
-#include "RCC_STM32F4xx.h"
+#include "asm/RCC_STM32F4xx.h"
 #include "Kernel/kernel.h"
 
 /* OS Idle Thread */
