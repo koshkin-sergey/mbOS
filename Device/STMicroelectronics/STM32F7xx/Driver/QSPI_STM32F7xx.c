@@ -22,7 +22,9 @@
  ******************************************************************************/
 
 #include <string.h>
-#include "QSPI_STM32F7xx.h"
+
+#include "asm/stm32f7xx.h"
+#include "asm/QSPI_STM32F7xx.h"
 
 #if defined(USE_QSPI0)
 

@@ -19,7 +19,7 @@
  *  includes
  ******************************************************************************/
 
-#include "system_stm32f7xx.h"
+#include "asm/system_stm32f7xx.h"
 
 /*******************************************************************************
  *  function implementations (scope: module-exported)

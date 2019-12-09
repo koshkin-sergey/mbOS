@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-#include "stm32f746xx.h"
+#include "asm/stm32f746xx.h"
 
 /*----------------------------------------------------------------------------
   Exception / Interrupt Handler Function Prototype

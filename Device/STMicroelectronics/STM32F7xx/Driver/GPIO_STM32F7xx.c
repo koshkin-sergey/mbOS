@@ -23,8 +23,9 @@
 
 #include <stddef.h>
 
-#include "GPIO_STM32F7xx.h"
-#include "RCC_STM32F7xx.h"
+#include "asm/stm32f7xx.h"
+#include "asm/GPIO_STM32F7xx.h"
+#include "asm/RCC_STM32F7xx.h"
 
 /*******************************************************************************
  *  external declarations

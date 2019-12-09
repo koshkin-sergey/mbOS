@@ -27,12 +27,12 @@
 #include <stdbool.h>
 #include <string.h>
 
-#include "stm32f7xx.h"
-#include "RCC_STM32F7xx.h"
-#include "GPIO_STM32F7xx.h"
-#include "DMA_STM32F7xx.h"
+#include "asm/stm32f7xx.h"
+#include "asm/RCC_STM32F7xx.h"
+#include "asm/GPIO_STM32F7xx.h"
+#include "asm/DMA_STM32F7xx.h"
 
-#include "Driver_SPI.h"
+#include "CMSIS/Driver/Driver_SPI.h"
 
 #include "device_config.h"
 
