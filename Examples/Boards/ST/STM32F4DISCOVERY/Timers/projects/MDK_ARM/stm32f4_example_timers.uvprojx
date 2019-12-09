@@ -10,14 +10,14 @@
       <TargetName>Debug</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>5060750::V5.06 update 6 (build 750)::ARMCC</pCCUsed>
-      <uAC6>0</uAC6>
+      <pCCUsed>6120000::V6.12::.\ARMCLANG</pCCUsed>
+      <uAC6>1</uAC6>
       <TargetOption>
         <TargetCommonOption>
           <Device>STM32F407VGTx</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32F4xx_DFP.2.13.0</PackID>
-          <PackURL>http://www.keil.com/pack</PackURL>
+          <PackID>Keil.STM32F4xx_DFP.2.14.0</PackID>
+          <PackURL>http://www.keil.com/pack/</PackURL>
           <Cpu>IRAM(0x20000000,0x00020000) IRAM2(0x10000000,0x00010000) IROM(0x08000000,0x00100000) CPUTYPE("Cortex-M4") FPU2 CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
@@ -183,7 +183,7 @@
             <hadIRAM>1</hadIRAM>
             <hadXRAM>0</hadXRAM>
             <uocXRam>0</uocXRam>
-            <RvdsVP>2</RvdsVP>
+            <RvdsVP>1</RvdsVP>
             <RvdsMve>0</RvdsMve>
             <hadIRAM2>1</hadIRAM2>
             <hadIROM2>0</hadIROM2>
@@ -312,7 +312,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>1</interw>
-            <Optim>1</Optim>
+            <Optim>7</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>1</OneElfS>
@@ -321,14 +321,14 @@
             <PlainCh>0</PlainCh>
             <Ropi>0</Ropi>
             <Rwpi>0</Rwpi>
-            <wLevel>2</wLevel>
+            <wLevel>3</wLevel>
             <uThumb>0</uThumb>
-            <uSurpInc>0</uSurpInc>
+            <uSurpInc>1</uSurpInc>
             <uC99>1</uC99>
             <uGnu>1</uGnu>
             <useXO>0</useXO>
-            <v6Lang>1</v6Lang>
-            <v6LangP>1</v6LangP>
+            <v6Lang>3</v6Lang>
+            <v6LangP>3</v6LangP>
             <vShortEn>1</vShortEn>
             <vShortWch>1</vShortWch>
             <v6Lto>0</v6Lto>
@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F407xx</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\..\..\..\src\CMSIS\Core\Include;..\..\..\..\..\..\src\Config;..\..\..\..\..\..\src\include;..\..\src\include</IncludePath>
+              <IncludePath>..\..\..\..\..\..\..\Include;..\..\..\..\..\..\..\Device\STMicroelectronics\STM32F4xx\Include</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -360,7 +360,7 @@
             </VariousControls>
           </Aads>
           <LDads>
-            <umfTarg>1</umfTarg>
+            <umfTarg>0</umfTarg>
             <Ropi>0</Ropi>
             <Rwpi>0</Rwpi>
             <noStLib>0</noStLib>
@@ -369,7 +369,7 @@
             <TextAddressRange>0x08000000</TextAddressRange>
             <DataAddressRange>0x20000000</DataAddressRange>
             <pXoBase></pXoBase>
-            <ScatterFile></ScatterFile>
+            <ScatterFile>.\stm32f4xx_ac6.sct</ScatterFile>
             <IncludeLibs></IncludeLibs>
             <IncludeLibsPath></IncludeLibsPath>
             <Misc></Misc>
@@ -380,92 +380,57 @@
       </TargetOption>
       <Groups>
         <Group>
-          <GroupName>RTOS</GroupName>
-          <Files>
-            <File>
-              <FileName>RTOS_Config.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\src\Config\RTOS_Config.c</FilePath>
-            </File>
-            <File>
-              <FileName>dataqueue.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\src\kernel\dataqueue.c</FilePath>
-            </File>
-            <File>
-              <FileName>delay.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\src\kernel\delay.c</FilePath>
-            </File>
-            <File>
-              <FileName>event.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\src\kernel\event.c</FilePath>
-            </File>
-            <File>
-              <FileName>kernel.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\src\kernel\kernel.c</FilePath>
-            </File>
-            <File>
-              <FileName>mempool.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\src\kernel\mempool.c</FilePath>
-            </File>
-            <File>
-              <FileName>message_que.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\src\kernel\message_que.c</FilePath>
-            </File>
-            <File>
-              <FileName>mutex.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\src\kernel\mutex.c</FilePath>
-            </File>
-            <File>
-              <FileName>os_lib.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\src\kernel\os_lib.c</FilePath>
-            </File>
-            <File>
-              <FileName>semaphore.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\src\kernel\semaphore.c</FilePath>
-            </File>
-            <File>
-              <FileName>thread.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\src\kernel\thread.c</FilePath>
-            </File>
-            <File>
-              <FileName>timer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\src\kernel\timer.c</FilePath>
-            </File>
-            <File>
-              <FileName>irq_cm3.s</FileName>
-              <FileType>2</FileType>
-              <FilePath>..\..\..\..\..\..\src\kernel\ARM\irq_cm3.s</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>src</GroupName>
           <Files>
             <File>
+              <FileName>startup_stm32f407xx.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Device\STMicroelectronics\STM32F4xx\Startup\startup_stm32f407xx.c</FilePath>
+            </File>
+            <File>
               <FileName>stm32f4_example_timers.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\src\stm32f4_example_timers.c</FilePath>
+              <FilePath>..\..\stm32f4_example_timers.c</FilePath>
             </File>
             <File>
               <FileName>system_stm32f4xx.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\src\Device\system_stm32f4xx.c</FilePath>
+              <FilePath>..\..\..\..\..\..\..\Device\STMicroelectronics\STM32F4xx\Startup\system_stm32f4xx.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>rtos</GroupName>
+          <Files>
+            <File>
+              <FileName>kernel_config.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Common\Config\kernel_config.c</FilePath>
             </File>
             <File>
-              <FileName>startup_stm32f407xx.s</FileName>
-              <FileType>2</FileType>
-              <FilePath>..\..\src\Device\arm\startup_stm32f407xx.s</FilePath>
+              <FileName>kernel_lib.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Common\Config\kernel_lib.c</FilePath>
+            </File>
+            <File>
+              <FileName>..\..\Projects\mbOS\Kernel\Library\ARM\Kernel_CM4.lib</FileName>
+              <FileType>4</FileType>
+              <FilePath>$TC_ROOT$\..\..\Projects\mbOS\Kernel\Library\ARM\Kernel_CM4.lib</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>driver</GroupName>
+          <Files>
+            <File>
+              <FileName>GPIO_STM32F4xx.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Device\STMicroelectronics\STM32F4xx\Driver\GPIO_STM32F4xx.c</FilePath>
+            </File>
+            <File>
+              <FileName>RCC_STM32F4xx.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Device\STMicroelectronics\STM32F4xx\Driver\RCC_STM32F4xx.c</FilePath>
             </File>
           </Files>
         </Group>
