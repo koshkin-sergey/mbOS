@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2018-2019 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -22,6 +22,8 @@
  ******************************************************************************/
 
 #include "I2S_STM32F4xx.h"
+
+#if defined(USE_I2S2) || defined(USE_I2S3)
 
 /*******************************************************************************
  *  external declarations
@@ -1209,5 +1211,7 @@ ARM_DRIVER_SAI Driver_SAI3 = {
 };
 
 #endif  /* USE_I2S3 */
+
+#endif /* defined(USE_I2S2) || defined(USE_I2S3) */
 
 /* ----------------------------- End of file ---------------------------------*/

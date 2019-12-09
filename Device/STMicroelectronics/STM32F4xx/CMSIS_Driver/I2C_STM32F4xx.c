@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2018-2019 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -23,9 +23,7 @@
 
 #include "I2C_STM32F4xx.h"
 
-/*******************************************************************************
- *  external declarations
- ******************************************************************************/
+#if defined(USE_I2C1) || defined(USE_I2C2) || defined(USE_I2C3)
 
 /*******************************************************************************
  *  defines and macros (scope: module-local)
@@ -1354,5 +1352,7 @@ ARM_DRIVER_I2C Driver_I2C3 = {
 };
 
 #endif  /* USE_I2C3 */
+
+#endif /* defined(USE_I2C1) || defined(USE_I2C2) || defined(USE_I2C3)
 
 /* ----------------------------- End of file ---------------------------------*/

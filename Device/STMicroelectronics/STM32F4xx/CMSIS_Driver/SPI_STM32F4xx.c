@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2018-2019 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -23,9 +23,8 @@
 
 #include "SPI_STM32F4xx.h"
 
-/*******************************************************************************
- *  external declarations
- ******************************************************************************/
+#if defined(USE_SPI1) || defined(USE_SPI2) || defined(USE_SPI3) \
+    defined(USE_SPI4) || defined(USE_SPI5) || defined(USE_SPI6)
 
 /*******************************************************************************
  *  defines and macros (scope: module-local)
@@ -1855,5 +1854,7 @@ void SPI_RX_DMA_Complete(uint32_t event, SPI_RESOURCES *spi)
     SPIx_RX_DMA_ALLOC(6);
   #endif
 #endif  /* USE_SPI6 */
+
+#endif /* defined(USE_SPI1) || defined(USE_SPI2) || defined(USE_SPI3)... */
 
 /* ----------------------------- End of file ---------------------------------*/
