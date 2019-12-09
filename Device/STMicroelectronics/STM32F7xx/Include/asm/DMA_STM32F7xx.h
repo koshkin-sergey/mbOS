@@ -79,14 +79,22 @@ typedef enum {
 } DMA_STATE_t;
 
 typedef enum {
-  DMA_CHANNEL_0 = 0x00000000U,          /*!< DMA Channel 0 */
-  DMA_CHANNEL_1 = 0x02000000U,          /*!< DMA Channel 1 */
-  DMA_CHANNEL_2 = 0x04000000U,          /*!< DMA Channel 2 */
-  DMA_CHANNEL_3 = 0x06000000U,          /*!< DMA Channel 3 */
-  DMA_CHANNEL_4 = 0x08000000U,          /*!< DMA Channel 4 */
-  DMA_CHANNEL_5 = 0x0A000000U,          /*!< DMA Channel 5 */
-  DMA_CHANNEL_6 = 0x0C000000U,          /*!< DMA Channel 6 */
-  DMA_CHANNEL_7 = 0x0E000000U,          /*!< DMA Channel 7 */
+  DMA_CHANNEL_0  = 0x00000000U,         /*!< DMA Channel 0  */
+  DMA_CHANNEL_1  = 0x02000000U,         /*!< DMA Channel 1  */
+  DMA_CHANNEL_2  = 0x04000000U,         /*!< DMA Channel 2  */
+  DMA_CHANNEL_3  = 0x06000000U,         /*!< DMA Channel 3  */
+  DMA_CHANNEL_4  = 0x08000000U,         /*!< DMA Channel 4  */
+  DMA_CHANNEL_5  = 0x0A000000U,         /*!< DMA Channel 5  */
+  DMA_CHANNEL_6  = 0x0C000000U,         /*!< DMA Channel 6  */
+  DMA_CHANNEL_7  = 0x0E000000U,         /*!< DMA Channel 7  */
+  DMA_CHANNEL_8  = 0x10000000U,         /*!< DMA Channel 8  */
+  DMA_CHANNEL_9  = 0x12000000U,         /*!< DMA Channel 9  */
+  DMA_CHANNEL_10 = 0x14000000U,         /*!< DMA Channel 10 */
+  DMA_CHANNEL_11 = 0x16000000U,         /*!< DMA Channel 11 */
+  DMA_CHANNEL_12 = 0x18000000U,         /*!< DMA Channel 12 */
+  DMA_CHANNEL_13 = 0x1A000000U,         /*!< DMA Channel 13 */
+  DMA_CHANNEL_14 = 0x1C000000U,         /*!< DMA Channel 14 */
+  DMA_CHANNEL_15 = 0x1E000000U,         /*!< DMA Channel 15 */
   DMA_CHANNEL_Reserved = 0x7FFFFFFFU
 } DMA_Channel_t;
 
