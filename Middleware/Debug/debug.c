@@ -25,9 +25,9 @@
 
 #include <stdarg.h>
 #include <stdio.h>
-#include "debug.h"
-#include "kernel.h"
-#include "Driver_USART.h"
+#include "Debug/debug.h"
+#include "Kernel/kernel.h"
+#include "CMSIS/Driver/Driver_USART.h"
 
 #if defined(DEBUG)
 
