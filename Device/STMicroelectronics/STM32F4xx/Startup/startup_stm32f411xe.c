@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-#include "stm32f401xe.h"
+#include "asm/stm32f401xe.h"
 
 /*----------------------------------------------------------------------------
   Exception / Interrupt Handler Function Prototype

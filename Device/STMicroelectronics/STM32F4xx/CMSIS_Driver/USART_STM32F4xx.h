@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2018-2019 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -27,13 +27,13 @@
 #include <stdbool.h>
 #include <string.h>
 
-#include "stm32f4xx.h"
-#include "RCC_STM32F4xx.h"
-#include "GPIO_STM32F4xx.h"
+#include "asm/stm32f4xx.h"
+#include "asm/RCC_STM32F4xx.h"
+#include "asm/GPIO_STM32F4xx.h"
 
-#include "Driver_USART.h"
+#include "CMSIS/Driver/Driver_USART.h"
 
-#include "Config/RTE_Device.h"
+#include "device_config.h"
 
 /*******************************************************************************
  *  defines and macros (scope: module-local)

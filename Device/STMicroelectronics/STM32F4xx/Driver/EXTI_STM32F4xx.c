@@ -21,13 +21,12 @@
  *  includes
  ******************************************************************************/
 
-#include "EXTI_STM32F4xx.h"
-
 #include <stddef.h>
 
-#include "stm32f4xx.h"
-#include "RCC_STM32F4xx.h"
-#include "RTE_Device.h"
+#include "asm/stm32f4xx.h"
+#include "asm/EXTI_STM32F4xx.h"
+#include "asm/RCC_STM32F4xx.h"
+#include "device_config.h"
 
 /*******************************************************************************
  *  external declarations

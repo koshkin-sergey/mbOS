@@ -180,7 +180,11 @@ typedef enum {
   RCC_PERIPH_OTGFS      = (RCC_AHB2ENR_OTGFSEN | RCC_PERIPH_AHB2_MASK),
 
   /* AHB3 */
+#if defined(STM32F405xx) || defined(STM32F407xx) || defined(STM32F412Rx) ||                         \
+    defined(STM32F412Vx) || defined(STM32F412Zx) || defined(STM32F413xx) ||                         \
+    defined(STM32F415xx) || defined(STM32F417xx) || defined(STM32F423xx)
   RCC_PERIPH_FMC        = (RCC_AHB3ENR_FSMCEN | RCC_PERIPH_AHB3_MASK),
+#endif
 
   /* APB1 */
   RCC_PERIPH_TIM2       = (RCC_APB1ENR_TIM2EN | RCC_PERIPH_APB1_MASK),

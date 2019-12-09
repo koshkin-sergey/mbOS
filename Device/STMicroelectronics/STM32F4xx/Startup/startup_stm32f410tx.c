@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-#include "stm32f410tx.h"
+#include "asm/stm32f410tx.h"
 
 /*----------------------------------------------------------------------------
   Exception / Interrupt Handler Function Prototype

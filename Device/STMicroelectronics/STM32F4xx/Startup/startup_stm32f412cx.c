@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-#include "stm32f412cx.h"
+#include "asm/stm32f412cx.h"
 
 /*----------------------------------------------------------------------------
   Exception / Interrupt Handler Function Prototype
