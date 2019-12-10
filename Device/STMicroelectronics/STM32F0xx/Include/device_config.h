@@ -47,7 +47,7 @@
 
 // <e> USART1 (Universal synchronous asynchronous receiver transmitter) [Driver_USART1]
 // <i> Configuration settings for Driver_USART1 in component ::CMSIS Driver:USART
-#define RTE_USART1                      1
+#define RTE_USART1                      0
 
 //   <o> USART1_TX Pin <0=>Not Used <1=>PA2 <2=>PA9 <3=>PA14 <4=>PB6
 #define   RTE_USART1_TX_ID              1
