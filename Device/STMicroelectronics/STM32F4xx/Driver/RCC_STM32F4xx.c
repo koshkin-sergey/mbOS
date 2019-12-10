@@ -288,14 +288,18 @@ uint32_t RCC_GetPeriphFreq(RCC_Periph_t periph)
 {
   RCC_FREQ_t type;
 
-  if (((periph & RCC_PERIPH_APB1_MASK) == RCC_PERIPH_APB1_MASK)) {
-    type = RCC_FREQ_APB1;
-  }
-  else if (((periph & RCC_PERIPH_APB2_MASK) == RCC_PERIPH_APB2_MASK)) {
-    type = RCC_FREQ_APB2;
-  }
-  else {
-    type = RCC_FREQ_AHB;
+  switch (periph & RCC_PERIPH_BUS_MASK) {
+    case RCC_PERIPH_APB1_MASK:
+      type = RCC_FREQ_APB1;
+      break;
+
+    case RCC_PERIPH_APB2_MASK:
+      type = RCC_FREQ_APB2;
+      break;
+
+    default:
+      type = RCC_FREQ_AHB;
+      break;
   }
 
   return RCC_GetFreq(type);
