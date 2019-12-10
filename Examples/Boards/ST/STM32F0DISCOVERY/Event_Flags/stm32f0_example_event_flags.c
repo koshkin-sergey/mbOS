@@ -10,9 +10,8 @@
  *  includes
  ******************************************************************************/
 
-#include "GPIO_STM32F0xx.h"
+#include "asm/GPIO_STM32F0xx.h"
 #include "Kernel/kernel.h"
-#include "kernel_config.h"
 
 /*******************************************************************************
  *  external declarations
@@ -23,6 +22,8 @@
  ******************************************************************************/
 
 #define TEST_FLAG           (1UL)
+
+#define THREAD_STACK_SIZE             (256U)
 
 #define LED_PORT                      GPIO_PORT_C
 #define LED_BLUE                      GPIO_PIN_8
@@ -42,7 +43,7 @@
 
 static osThreadId_t         threadA;
 static osThread_t           threadA_cb;
-static uint64_t             threadA_stack[OS_STACK_SIZE/8U];
+static uint64_t             threadA_stack[THREAD_STACK_SIZE/8U];
 static const osThreadAttr_t threadA_attr = {
     .name       = NULL,
     .attr_bits  = 0U,
@@ -55,7 +56,7 @@ static const osThreadAttr_t threadA_attr = {
 
 static osThreadId_t         threadB;
 static osThread_t           threadB_cb;
-static uint64_t             threadB_stack[OS_STACK_SIZE/8U];
+static uint64_t             threadB_stack[THREAD_STACK_SIZE/8U];
 static const osThreadAttr_t threadB_attr = {
     .name       = NULL,
     .attr_bits  = 0U,

@@ -34,7 +34,7 @@
 		<link>
 			<name>src/Config</name>
 			<type>2</type>
-			<locationURI>PARENT-2-PROJECT_LOC/Common/Config</locationURI>
+			<locationURI>PARENT-3-PROJECT_LOC/Common/Config</locationURI>
 		</link>
 		<link>
 			<name>src/Device</name>
@@ -44,7 +44,7 @@
 		<link>
 			<name>src/stm32f0_example_event_flags.c</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/stm32f0_example_event_flags.c</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/stm32f0_example_event_flags.c</locationURI>
 		</link>
 		<link>
 			<name>src/Device/Drivers</name>
@@ -59,17 +59,17 @@
 		<link>
 			<name>src/Device/Drivers/GPIO_STM32F0xx.c</name>
 			<type>1</type>
-			<locationURI>MBOS_LOC/Device/STMicroelectronics/STM32F0xx/CMSIS_Driver/GPIO_STM32F0xx.c</locationURI>
+			<locationURI>MBOS_LOC/Device/STMicroelectronics/STM32F0xx/Driver/GPIO_STM32F0xx.c</locationURI>
 		</link>
 		<link>
 			<name>src/Device/Drivers/RCC_STM32F0xx.c</name>
 			<type>1</type>
-			<locationURI>MBOS_LOC/Device/STMicroelectronics/STM32F0xx/CMSIS_Driver/RCC_STM32F0xx.c</locationURI>
+			<locationURI>MBOS_LOC/Device/STMicroelectronics/STM32F0xx/Driver/RCC_STM32F0xx.c</locationURI>
 		</link>
 		<link>
-			<name>src/Device/Startup/startup_stm32f051x8.S</name>
+			<name>src/Device/Startup/startup_stm32f051x8.c</name>
 			<type>1</type>
-			<locationURI>MBOS_LOC/Device/STMicroelectronics/STM32F0xx/Startup/gcc/startup_stm32f051x8.S</locationURI>
+			<locationURI>MBOS_LOC/Device/STMicroelectronics/STM32F0xx/Startup/startup_stm32f051x8.c</locationURI>
 		</link>
 		<link>
 			<name>src/Device/Startup/system_stm32f0xx.c</name>
