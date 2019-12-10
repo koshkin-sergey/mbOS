@@ -28,12 +28,9 @@
 #include <stdbool.h>
 #include <string.h>
 
-#include "stm32f0xx.h"
-#include "GPIO_STM32F0xx.h"
-#include "RCC_STM32F0xx.h"
-#include "Driver_USART.h"
+#include "CMSIS/Driver/Driver_USART.h"
 
-#include "RTE_Device.h"
+#include "device_config.h"
 
 /*******************************************************************************
  *  defines and macros (scope: module-local)

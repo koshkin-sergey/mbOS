@@ -19,8 +19,8 @@
  *  includes
  ******************************************************************************/
 
-#include "system_stm32f0xx.h"
-#include "RCC_STM32F0xx.h"
+#include "asm/system_stm32f0xx.h"
+#include "asm/RCC_STM32F0xx.h"
 
 /*******************************************************************************
  *  function implementations (scope: module-exported)

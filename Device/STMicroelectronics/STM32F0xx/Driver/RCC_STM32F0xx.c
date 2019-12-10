@@ -21,9 +21,9 @@
  *  includes
  ******************************************************************************/
 
-#include "RCC_STM32F0xx.h"
+#include "asm/RCC_STM32F0xx.h"
 
-#include "RTE_Device.h"
+#include "device_config.h"
 
 /*******************************************************************************
  *  external declarations
@@ -251,14 +251,11 @@ uint32_t RCC_GetPeriphFreq(RCC_Periph_t periph)
 {
   RCC_FREQ_t type;
 
-  if (((periph & RCC_PERIPH_APB1_MASK) == RCC_PERIPH_APB1_MASK)) {
-    type = RCC_FREQ_APB1;
-  }
-  else if (((periph & RCC_PERIPH_APB2_MASK) == RCC_PERIPH_APB2_MASK)) {
-    type = RCC_FREQ_APB2;
+  if (((periph & RCC_PERIPH_AHB_MASK) == RCC_PERIPH_AHB_MASK)) {
+    type = RCC_FREQ_AHB;
   }
   else {
-    type = RCC_FREQ_AHB;
+    type = RCC_FREQ_APB;
   }
 
   return RCC_GetFreq(type);

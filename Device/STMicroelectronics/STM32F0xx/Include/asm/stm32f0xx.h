@@ -8,8 +8,8 @@
   *          is using in the C source code, usually in main.c. This file contains:
   *           - Configuration section that allows to select:
   *              - The STM32F0xx device used in the target application
-  *              - To use or not the peripheral’s drivers in application code(i.e. 
-  *                code will be based on direct access to peripheral’s registers 
+  *              - To use or not the peripheralï¿½s drivers in application code(i.e. 
+  *                code will be based on direct access to peripheralï¿½s registers 
   *                rather than drivers API), this option is controlled by 
   *                "#define USE_HAL_DRIVER"
   *  
@@ -130,37 +130,37 @@
   */
 
 #if defined(STM32F030x6)
-  #include "stm32f030x6.h"
+  #include "asm/stm32f030x6.h"
 #elif defined(STM32F030x8)
-  #include "stm32f030x8.h"
+  #include "asm/stm32f030x8.h"
 #elif defined(STM32F031x6)
-  #include "stm32f031x6.h"
+  #include "asm/stm32f031x6.h"
 #elif defined(STM32F038xx)
-  #include "stm32f038xx.h"
+  #include "asm/stm32f038xx.h"
 #elif defined(STM32F042x6)
-  #include "stm32f042x6.h"
+  #include "asm/stm32f042x6.h"
 #elif defined(STM32F048xx)
-  #include "stm32f048xx.h"
+  #include "asm/stm32f048xx.h"
 #elif defined(STM32F051x8)
-  #include "stm32f051x8.h"
+  #include "asm/stm32f051x8.h"
 #elif defined(STM32F058xx)
-  #include "stm32f058xx.h"
+  #include "asm/stm32f058xx.h"
 #elif defined(STM32F070x6)
-  #include "stm32f070x6.h"
+  #include "asm/stm32f070x6.h"
 #elif defined(STM32F070xB)
-  #include "stm32f070xb.h"
+  #include "asm/stm32f070xb.h"
 #elif defined(STM32F071xB)
-  #include "stm32f071xb.h"
+  #include "asm/stm32f071xb.h"
 #elif defined(STM32F072xB)
-  #include "stm32f072xb.h"
+  #include "asm/stm32f072xb.h"
 #elif defined(STM32F078xx)
-  #include "stm32f078xx.h"
+  #include "asm/stm32f078xx.h"
 #elif defined(STM32F091xC)
-  #include "stm32f091xc.h"
+  #include "asm/stm32f091xc.h"
 #elif defined(STM32F098xx)
-  #include "stm32f098xx.h"
+  #include "asm/stm32f098xx.h"
 #elif defined(STM32F030xC)
-  #include "stm32f030xc.h"    
+  #include "asm/stm32f030xc.h"    
 #else
  #error "Please select first the target STM32F0xx device used in your application (in stm32f0xx.h file)"
 #endif

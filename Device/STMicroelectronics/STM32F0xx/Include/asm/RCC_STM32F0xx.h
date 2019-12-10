@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2017-2019 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -143,8 +143,7 @@ typedef enum {
   RCC_FREQ_HSE,
   RCC_FREQ_SYSCLK,
   RCC_FREQ_AHB,
-  RCC_FREQ_APB1,
-  RCC_FREQ_APB2,
+  RCC_FREQ_APB,
   RCC_FREQ_Reserved = 0x7FFFFFFF
 } RCC_FREQ_t;
 

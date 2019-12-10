@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-#include "stm32f042x6.h"
+#include "asm/stm32f042x6.h"
 
 /*----------------------------------------------------------------------------
   Exception / Interrupt Handler Function Prototype

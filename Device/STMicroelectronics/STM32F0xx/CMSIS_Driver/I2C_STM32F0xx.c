@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2017-2019 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -23,7 +23,9 @@
 
 #include <string.h>
 #include "I2C_STM32F0xx.h"
-#include "RCC_STM32F0xx.h"
+#include "asm/stm32f0xx.h"
+#include "asm/GPIO_STM32F0xx.h"
+#include "asm/RCC_STM32F0xx.h"
 
 /*******************************************************************************
  *  external declarations
@@ -134,7 +136,7 @@ static
 uint32_t GetI2CCLK(I2C_RESOURCES *i2c)
 {
   uint32_t clk = 0;
-  RCC_FREQ_t freq_type = RCC_FREQ_PCLK;
+  RCC_FREQ_t freq_type = RCC_FREQ_APB;
 
   if (i2c->reg == I2C1) {
     if ((RCC->CFGR3 & RCC_CFGR3_I2C1SW) != 0)

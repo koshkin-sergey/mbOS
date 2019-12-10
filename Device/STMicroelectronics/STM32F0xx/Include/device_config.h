@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2017-2019 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Project: RTE Device Configuration for STMicroelectronics STM32F0xx
+ * Project: Device Configuration for STMicroelectronics STM32F0xx
  */
 
 //-------- <<< Use Configuration Wizard in Context Menu >>> --------------------
 
-#ifndef RTE_DEVICE_H_
-#define RTE_DEVICE_H_
+#ifndef DEVICE_CONFIG_H_
+#define DEVICE_CONFIG_H_
 
 /*******************************************************************************
  *  defines and macros
@@ -257,6 +257,6 @@
 #endif
 // </e> I2C2 (Inter-integrated Circuit Interface 2) [Driver_I2C2]
 
-#endif /* RTE_DEVICE_H_ */
+#endif /* DEVICE_CONFIG_H_ */
 
 /* ----------------------------- End of file ---------------------------------*/

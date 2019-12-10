@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2017-2019 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -22,9 +22,10 @@
  ******************************************************************************/
 
 #include <stddef.h>
-#include "GPIO_STM32F0xx.h"
-#include "RCC_STM32F0xx.h"
-#include "stm32f0xx.h"
+
+#include "asm/stm32f0xx.h"
+#include "asm/GPIO_STM32F0xx.h"
+#include "asm/RCC_STM32F0xx.h"
 
 /*******************************************************************************
  *  external declarations

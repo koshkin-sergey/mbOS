@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2017-2019 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -26,12 +26,8 @@
 
 #include <stdbool.h>
 
-#include "stm32f0xx.h"
-#include "GPIO_STM32F0xx.h"
-
-#include "Driver_I2C.h"
-
-#include "RTE_Device.h"
+#include "CMSIS/Driver/Driver_I2C.h"
+#include "device_config.h"
 
 /*******************************************************************************
  *  defines and macros (scope: module-local)

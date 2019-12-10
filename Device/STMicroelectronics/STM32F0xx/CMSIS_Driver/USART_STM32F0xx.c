@@ -22,6 +22,9 @@
  ******************************************************************************/
 
 #include "USART_STM32F0xx.h"
+#include "asm/GPIO_STM32F0xx.h"
+#include "asm/RCC_STM32F0xx.h"
+#include "asm/stm32f0xx.h"
 
 #if defined(USE_USART1) || defined(USE_USART2) || defined(USE_USART3) || \
     defined(USE_USART4) || defined(USE_USART5) || defined(USE_USART6) || \

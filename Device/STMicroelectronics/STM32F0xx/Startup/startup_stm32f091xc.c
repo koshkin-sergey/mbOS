@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-#include "stm32f091xc.h"
+#include "asm/stm32f091xc.h"
 
 /*----------------------------------------------------------------------------
   Exception / Interrupt Handler Function Prototype
