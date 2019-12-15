@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2018-2019 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -26,13 +26,13 @@
 
 #include <stdint.h>
 
-#include "stm32f1xx.h"
-#include "Driver_DAC.h"
-#include "RCC_STM32F10x.h"
-#include "GPIO_STM32F10x.h"
-#include "DMA_STM32F10x.h"
+#include "device_config.h"
+#include "asm/stm32f1xx.h"
+#include "asm/RCC_STM32F10x.h"
+#include "asm/GPIO_STM32F10x.h"
+#include "asm/DMA_STM32F10x.h"
+#include "asm/Driver_DAC.h"
 
-#include "Config/RTE_Device.h"
 
 #if defined(STM32F100xB) || defined(STM32F100xE) || \
     defined(STM32F101xE) || defined(STM32F101xG) || \

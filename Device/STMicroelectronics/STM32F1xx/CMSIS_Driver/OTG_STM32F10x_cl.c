@@ -43,8 +43,9 @@
 #include "cmsis_os.h"
 #include "stm32f10x.h"
 
-#include "GPIO_STM32F10x.h"
 #include "OTG_STM32F10x_cl.h"
+
+#include <asm/GPIO_STM32F10x.h>
 
 #include "Driver_USBH.h"
 #include "Driver_USBD.h"

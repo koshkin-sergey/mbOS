@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2018-2019 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -29,7 +29,7 @@ extern "C"
  *  includes
  ******************************************************************************/
 
-#include "Driver_Common.h"
+#include "CMSIS/Driver/Driver_Common.h"
 
 /*******************************************************************************
  *  defines and macros (scope: module-local)

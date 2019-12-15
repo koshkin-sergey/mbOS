@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2018-2019 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -27,13 +27,14 @@
 #include <stdbool.h>
 #include <string.h>
 
-#include "stm32f1xx.h"
-#include "GPIO_STM32F10x.h"
-#include "RCC_STM32F10x.h"
-#include "DMA_STM32F10x.h"
-#include "Driver_SPI.h"
+#include "device_config.h"
+#include "asm/stm32f1xx.h"
+#include "asm/DMA_STM32F10x.h"
+#include "asm/GPIO_STM32F10x.h"
+#include "asm/RCC_STM32F10x.h"
 
-#include "Config/RTE_Device.h"
+#include "CMSIS/Driver/Driver_SPI.h"
+
 
 /*******************************************************************************
  *  defines and macros (scope: module-local)

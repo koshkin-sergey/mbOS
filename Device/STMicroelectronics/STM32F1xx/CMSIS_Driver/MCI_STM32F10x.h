@@ -27,10 +27,10 @@
 #ifndef __MCI_STM32F10X_H
 #define __MCI_STM32F10X_H
 
-#include "stm32f10x.h"
-#include "GPIO_STM32F10x.h"
-#include "DMA_STM32F10x.h"
+#include <asm/DMA_STM32F10x.h>
+#include <asm/GPIO_STM32F10x.h>
 
+#include "stm32f10x.h"
 #include "Driver_MCI.h"
 
 #include "RTE_Components.h"

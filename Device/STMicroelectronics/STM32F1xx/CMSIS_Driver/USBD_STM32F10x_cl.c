@@ -65,6 +65,7 @@
  *    Initial release
  */
 
+#include <asm/GPIO_STM32F10x.h>
 #include <stdint.h>
 #include <string.h>
 #include "cmsis_os.h"
@@ -73,7 +74,6 @@
 
 #include "stm32f10x.h"
 
-#include "GPIO_STM32F10x.h"
 #include "OTG_STM32F10x_cl.h"
 
 #ifndef USBD_MAX_ENDPOINT_NUM

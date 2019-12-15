@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2018-2019 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -21,9 +21,9 @@
  *  includes
  ******************************************************************************/
 
-#include "DMA_STM32F10x.h"
-#include "RCC_STM32F10x.h"
-#include "Config/RTE_Device.h"
+#include "device_config.h"
+#include "asm/DMA_STM32F10x.h"
+#include "asm/RCC_STM32F10x.h"
 
 /*******************************************************************************
  *  external declarations

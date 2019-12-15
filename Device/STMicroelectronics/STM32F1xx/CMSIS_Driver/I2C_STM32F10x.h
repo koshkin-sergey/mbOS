@@ -27,14 +27,13 @@
 #ifndef __I2C_STM32F10X_H
 #define __I2C_STM32F10X_H
 
+#include <asm/DMA_STM32F10x.h>
+#include <asm/GPIO_STM32F10x.h>
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
 
 #include "stm32f10x.h"
-#include "GPIO_STM32F10x.h"
-#include "DMA_STM32F10x.h"
-
 #include "Driver_I2C.h"
 
 #include "RTE_Components.h"

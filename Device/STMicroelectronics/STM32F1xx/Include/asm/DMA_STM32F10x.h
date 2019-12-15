@@ -24,10 +24,10 @@
  *  includes
  ******************************************************************************/
 
+#include <asm/stm32f1xx.h>
 #include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
-#include "stm32f1xx.h"
 
 /*******************************************************************************
  *  defines and macros

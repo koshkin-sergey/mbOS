@@ -61,7 +61,7 @@
 #endif
 
 #include "EMAC_STM32F10x.h"
-#include "GPIO_STM32F10x.h"
+#include <asm/GPIO_STM32F10x.h>
 
 #define ARM_ETH_MAC_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(2,1) /* driver version */
 

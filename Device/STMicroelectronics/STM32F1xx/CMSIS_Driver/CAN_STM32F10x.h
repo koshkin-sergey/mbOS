@@ -29,14 +29,13 @@
 #ifndef __CAN_STM32F1XX_H
 #define __CAN_STM32F1XX_H
 
+#include <asm/GPIO_STM32F10x.h>
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
 
 #include "Driver_CAN.h"
 #include "stm32f10x.h"
-#include "GPIO_STM32F10x.h"
-
 #include "RTE_Components.h"
 #include "RTE_Device.h"
 
