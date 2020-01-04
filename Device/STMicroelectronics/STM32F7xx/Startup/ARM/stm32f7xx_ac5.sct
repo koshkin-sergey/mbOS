@@ -11,8 +11,8 @@
 ;   <o1> Flash Size (in Bytes) <0x0-0xFFFFFFFF:8>
 ; </h>
  *----------------------------------------------------------------------------*/
-#define __ROM_BASE     0x00000000
-#define __ROM_SIZE     0x00080000
+#define __ROM_BASE     0x08000000
+#define __ROM_SIZE     0x00010000
 
 /*--------------------- Embedded RAM Configuration ---------------------------
 ; <h> RAM Configuration
@@ -29,8 +29,8 @@
 ;   <o1> Heap Size (in Bytes) <0x0-0xFFFFFFFF:8>
 ; </h>
  *----------------------------------------------------------------------------*/
-#define __STACK_SIZE       0x00000200
-#define __HEAP_SIZE        0x00000C00
+#define __STACK_SIZE   0x00000400
+#define __HEAP_SIZE    0x00000000
 
 
 /*----------------------------------------------------------------------------
