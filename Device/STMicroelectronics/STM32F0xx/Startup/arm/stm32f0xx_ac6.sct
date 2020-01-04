@@ -12,7 +12,7 @@
 ; </h>
  *----------------------------------------------------------------------------*/
 #define __ROM_BASE      0x08000000
-#define __ROM_SIZE      0x00080000
+#define __ROM_SIZE      0x00004000
 
 /*--------------------- Embedded RAM Configuration ---------------------------
 ; <h> RAM Configuration
@@ -21,7 +21,7 @@
 ; </h>
  *----------------------------------------------------------------------------*/
 #define __RAM_BASE      0x20000000
-#define __RAM_SIZE      0x00040000
+#define __RAM_SIZE      0x00001000
 
 /*--------------------- Stack / Heap Configuration ---------------------------
 ; <h> Stack / Heap Configuration
