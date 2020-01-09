@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Project: SPI Driver Definitions for STMicroelectronics STM32F1xx
+ * Project: USART Driver Definitions for STMicroelectronics STM32F1xx
  */
 
 #ifndef USART_STM32F1XX_H_
