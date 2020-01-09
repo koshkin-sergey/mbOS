@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2018-2020 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -17,8 +17,8 @@
  * Project: SPI Driver Definitions for STMicroelectronics STM32F1xx
  */
 
-#ifndef SPI_STM32F10X_H_
-#define SPI_STM32F10X_H_
+#ifndef SPI_STM32F1XX_H_
+#define SPI_STM32F1XX_H_
 
 /*******************************************************************************
  *  includes
@@ -29,9 +29,9 @@
 
 #include "device_config.h"
 #include "asm/stm32f1xx.h"
-#include "asm/DMA_STM32F10x.h"
-#include "asm/GPIO_STM32F10x.h"
-#include "asm/RCC_STM32F10x.h"
+#include "asm/DMA_STM32F1xx.h"
+#include "asm/GPIO_STM32F1xx.h"
+#include "asm/RCC_STM32F1xx.h"
 
 #include "CMSIS/Driver/Driver_SPI.h"
 
@@ -41,54 +41,54 @@
  ******************************************************************************/
 
 /* SPI1 configuration definitions */
-#if (RTE_SPI1 == 1)
+#if (DEV_SPI1 == 1)
   #define USE_SPI1
 
-  #if (RTE_SPI1_RX_DMA == 1)
-    #define SPI1_RX_DMA_Instance    DMAx_CHANNELy(RTE_SPI1_RX_DMA_NUMBER, RTE_SPI1_RX_DMA_CHANNEL)
-    #define SPI1_RX_DMA_IRQn        DMAx_CHANNELy_IRQn(RTE_SPI1_RX_DMA_NUMBER, RTE_SPI1_RX_DMA_CHANNEL)
-    #define SPI1_RX_DMA_Channel     RTE_SPI1_RX_DMA_CHANNEL
-    #define SPI1_RX_DMA_Priority    RTE_SPI1_RX_DMA_PRIORITY
+  #if (DEV_SPI1_RX_DMA == 1)
+    #define SPI1_RX_DMA_Instance    DMAx_CHANNELy(DEV_SPI1_RX_DMA_NUMBER, DEV_SPI1_RX_DMA_CHANNEL)
+    #define SPI1_RX_DMA_IRQn        DMAx_CHANNELy_IRQn(DEV_SPI1_RX_DMA_NUMBER, DEV_SPI1_RX_DMA_CHANNEL)
+    #define SPI1_RX_DMA_Channel     DEV_SPI1_RX_DMA_CHANNEL
+    #define SPI1_RX_DMA_Priority    DEV_SPI1_RX_DMA_PRIORITY
 
-    #define SPI1_RX_DMA_Handler     DMAx_CHANNELy_EVENT(RTE_SPI1_RX_DMA_NUMBER, RTE_SPI1_RX_DMA_CHANNEL)
+    #define SPI1_RX_DMA_Handler     DMAx_CHANNELy_EVENT(DEV_SPI1_RX_DMA_NUMBER, DEV_SPI1_RX_DMA_CHANNEL)
   #endif
-  #if (RTE_SPI1_TX_DMA == 1)
-    #define SPI1_TX_DMA_Instance    DMAx_CHANNELy(RTE_SPI1_TX_DMA_NUMBER, RTE_SPI1_TX_DMA_CHANNEL)
-    #define SPI1_TX_DMA_IRQn        DMAx_CHANNELy_IRQn(RTE_SPI1_TX_DMA_NUMBER, RTE_SPI1_TX_DMA_CHANNEL)
-    #define SPI1_TX_DMA_Channel     RTE_SPI1_TX_DMA_CHANNEL
-    #define SPI1_TX_DMA_Priority    RTE_SPI1_TX_DMA_PRIORITY
+  #if (DEV_SPI1_TX_DMA == 1)
+    #define SPI1_TX_DMA_Instance    DMAx_CHANNELy(DEV_SPI1_TX_DMA_NUMBER, DEV_SPI1_TX_DMA_CHANNEL)
+    #define SPI1_TX_DMA_IRQn        DMAx_CHANNELy_IRQn(DEV_SPI1_TX_DMA_NUMBER, DEV_SPI1_TX_DMA_CHANNEL)
+    #define SPI1_TX_DMA_Channel     DEV_SPI1_TX_DMA_CHANNEL
+    #define SPI1_TX_DMA_Priority    DEV_SPI1_TX_DMA_PRIORITY
 
-    #define SPI1_TX_DMA_Handler     DMAx_CHANNELy_EVENT(RTE_SPI1_TX_DMA_NUMBER, RTE_SPI1_TX_DMA_CHANNEL)
+    #define SPI1_TX_DMA_Handler     DMAx_CHANNELy_EVENT(DEV_SPI1_TX_DMA_NUMBER, DEV_SPI1_TX_DMA_CHANNEL)
   #endif
 
-  #if (RTE_SPI1_MISO == 1)
+  #if (DEV_SPI1_MISO == 1)
     #define USE_SPI1_MISO_Pin       1U
-    #define SPI1_MISO_GPIOx         RTE_SPI1_MISO_PORT
-    #define SPI1_MISO_GPIO_Pin      RTE_SPI1_MISO_BIT
+    #define SPI1_MISO_GPIOx         DEV_SPI1_MISO_PORT
+    #define SPI1_MISO_GPIO_Pin      DEV_SPI1_MISO_BIT
   #endif
 
-  #if (RTE_SPI1_MOSI == 1)
+  #if (DEV_SPI1_MOSI == 1)
     #define USE_SPI1_MOSI_Pin       1U
-    #define SPI1_MOSI_GPIOx         RTE_SPI1_MOSI_PORT
-    #define SPI1_MOSI_GPIO_Pin      RTE_SPI1_MOSI_BIT
+    #define SPI1_MOSI_GPIOx         DEV_SPI1_MOSI_PORT
+    #define SPI1_MOSI_GPIO_Pin      DEV_SPI1_MOSI_BIT
   #endif
 
   #define USE_SPI1_SCK_Pin          1U
-  #define SPI1_SCK_GPIOx            RTE_SPI1_SCK_PORT
-  #define SPI1_SCK_GPIO_Pin         RTE_SPI1_SCK_BIT
+  #define SPI1_SCK_GPIOx            DEV_SPI1_SCK_PORT
+  #define SPI1_SCK_GPIO_Pin         DEV_SPI1_SCK_BIT
 
-  #if (RTE_SPI1_NSS == 1)
+  #if (DEV_SPI1_NSS == 1)
     #define USE_SPI1_NSS_Pin        1U
-    #define SPI1_NSS_GPIOx          RTE_SPI1_NSS_PORT
-    #define SPI1_NSS_GPIO_Pin       RTE_SPI1_NSS_BIT
+    #define SPI1_NSS_GPIOx          DEV_SPI1_NSS_PORT
+    #define SPI1_NSS_GPIO_Pin       DEV_SPI1_NSS_BIT
   #endif
 
   #define SPI1_REMAP_DEF            AFIO_SPI1_NO_REMAP
-  #define SPI1_REMAP                RTE_SPI1_AF_REMAP
+  #define SPI1_REMAP                DEV_SPI1_AF_REMAP
 #endif
 
 /* SPI2 configuration definitions */
-#if (RTE_SPI2 == 1)
+#if (DEV_SPI2 == 1)
 
   #if defined (STM32F101x6) || defined (STM32F102x6) || defined(STM32F103x6)
     #error "SPI2 not available for selected device!"
@@ -96,43 +96,43 @@
 
   #define USE_SPI2
 
-  #if (RTE_SPI2_RX_DMA == 1)
-    #define SPI2_RX_DMA_Instance    DMAx_CHANNELy(RTE_SPI2_RX_DMA_NUMBER, RTE_SPI2_RX_DMA_CHANNEL)
-    #define SPI2_RX_DMA_IRQn        DMAx_CHANNELy_IRQn(RTE_SPI2_RX_DMA_NUMBER, RTE_SPI2_RX_DMA_CHANNEL)
-    #define SPI2_RX_DMA_Channel     RTE_SPI2_RX_DMA_CHANNEL
-    #define SPI2_RX_DMA_Priority    RTE_SPI2_RX_DMA_PRIORITY
+  #if (DEV_SPI2_RX_DMA == 1)
+    #define SPI2_RX_DMA_Instance    DMAx_CHANNELy(DEV_SPI2_RX_DMA_NUMBER, DEV_SPI2_RX_DMA_CHANNEL)
+    #define SPI2_RX_DMA_IRQn        DMAx_CHANNELy_IRQn(DEV_SPI2_RX_DMA_NUMBER, DEV_SPI2_RX_DMA_CHANNEL)
+    #define SPI2_RX_DMA_Channel     DEV_SPI2_RX_DMA_CHANNEL
+    #define SPI2_RX_DMA_Priority    DEV_SPI2_RX_DMA_PRIORITY
 
-    #define SPI2_RX_DMA_Handler     DMAx_CHANNELy_EVENT(RTE_SPI2_RX_DMA_NUMBER, RTE_SPI2_RX_DMA_CHANNEL)
+    #define SPI2_RX_DMA_Handler     DMAx_CHANNELy_EVENT(DEV_SPI2_RX_DMA_NUMBER, DEV_SPI2_RX_DMA_CHANNEL)
   #endif
-  #if (RTE_SPI2_TX_DMA == 1)
-    #define SPI2_TX_DMA_Instance    DMAx_CHANNELy(RTE_SPI2_TX_DMA_NUMBER, RTE_SPI2_TX_DMA_CHANNEL)
-    #define SPI2_TX_DMA_IRQn        DMAx_CHANNELy_IRQn(RTE_SPI2_TX_DMA_NUMBER, RTE_SPI2_TX_DMA_CHANNEL)
-    #define SPI2_TX_DMA_Channel     RTE_SPI2_TX_DMA_CHANNEL
-    #define SPI2_TX_DMA_Priority    RTE_SPI2_TX_DMA_PRIORITY
+  #if (DEV_SPI2_TX_DMA == 1)
+    #define SPI2_TX_DMA_Instance    DMAx_CHANNELy(DEV_SPI2_TX_DMA_NUMBER, DEV_SPI2_TX_DMA_CHANNEL)
+    #define SPI2_TX_DMA_IRQn        DMAx_CHANNELy_IRQn(DEV_SPI2_TX_DMA_NUMBER, DEV_SPI2_TX_DMA_CHANNEL)
+    #define SPI2_TX_DMA_Channel     DEV_SPI2_TX_DMA_CHANNEL
+    #define SPI2_TX_DMA_Priority    DEV_SPI2_TX_DMA_PRIORITY
 
-    #define SPI2_TX_DMA_Handler     DMAx_CHANNELy_EVENT(RTE_SPI2_TX_DMA_NUMBER, RTE_SPI2_TX_DMA_CHANNEL)
+    #define SPI2_TX_DMA_Handler     DMAx_CHANNELy_EVENT(DEV_SPI2_TX_DMA_NUMBER, DEV_SPI2_TX_DMA_CHANNEL)
   #endif
 
-  #if (RTE_SPI2_MISO == 1)
+  #if (DEV_SPI2_MISO == 1)
     #define USE_SPI2_MISO_Pin       1U
-    #define SPI2_MISO_GPIOx         RTE_SPI2_MISO_PORT
-    #define SPI2_MISO_GPIO_Pin      RTE_SPI2_MISO_BIT
+    #define SPI2_MISO_GPIOx         DEV_SPI2_MISO_PORT
+    #define SPI2_MISO_GPIO_Pin      DEV_SPI2_MISO_BIT
   #endif
 
-  #if (RTE_SPI2_MOSI == 1)
+  #if (DEV_SPI2_MOSI == 1)
     #define USE_SPI2_MOSI_Pin       1U
-    #define SPI2_MOSI_GPIOx         RTE_SPI2_MOSI_PORT
-    #define SPI2_MOSI_GPIO_Pin      RTE_SPI2_MOSI_BIT
+    #define SPI2_MOSI_GPIOx         DEV_SPI2_MOSI_PORT
+    #define SPI2_MOSI_GPIO_Pin      DEV_SPI2_MOSI_BIT
   #endif
 
   #define USE_SPI2_SCK_Pin          1U
-  #define SPI2_SCK_GPIOx            RTE_SPI2_SCK_PORT
-  #define SPI2_SCK_GPIO_Pin         RTE_SPI2_SCK_BIT
+  #define SPI2_SCK_GPIOx            DEV_SPI2_SCK_PORT
+  #define SPI2_SCK_GPIO_Pin         DEV_SPI2_SCK_BIT
 
-  #if (RTE_SPI2_NSS == 1)
+  #if (DEV_SPI2_NSS == 1)
     #define USE_SPI2_NSS_Pin        1U
-    #define SPI2_NSS_GPIOx          RTE_SPI2_NSS_PORT
-    #define SPI2_NSS_GPIO_Pin       RTE_SPI2_NSS_BIT
+    #define SPI2_NSS_GPIOx          DEV_SPI2_NSS_PORT
+    #define SPI2_NSS_GPIO_Pin       DEV_SPI2_NSS_BIT
   #endif
 
   #define SPI2_REMAP_DEF            AFIO_UNAVAILABLE_REMAP
@@ -140,7 +140,7 @@
 #endif
 
 /* SPI3 configuration definitions */
-#if (RTE_SPI3 == 1)
+#if (DEV_SPI3 == 1)
 
   #if defined (STM32F100xB) ||                          \
       defined (STM32F101x6) || defined (STM32F101xB) || \
@@ -151,51 +151,51 @@
 
   #define USE_SPI3
 
-  #if (RTE_SPI3_RX_DMA == 1)
-    #define SPI3_RX_DMA_Instance    DMAx_CHANNELy(RTE_SPI3_RX_DMA_NUMBER, RTE_SPI3_RX_DMA_CHANNEL)
-    #define SPI3_RX_DMA_IRQn        DMAx_CHANNELy_IRQn(RTE_SPI3_RX_DMA_NUMBER, RTE_SPI3_RX_DMA_CHANNEL)
-    #define SPI3_RX_DMA_Channel     RTE_SPI3_RX_DMA_CHANNEL
-    #define SPI3_RX_DMA_Priority    RTE_SPI3_RX_DMA_PRIORITY
+  #if (DEV_SPI3_RX_DMA == 1)
+    #define SPI3_RX_DMA_Instance    DMAx_CHANNELy(DEV_SPI3_RX_DMA_NUMBER, DEV_SPI3_RX_DMA_CHANNEL)
+    #define SPI3_RX_DMA_IRQn        DMAx_CHANNELy_IRQn(DEV_SPI3_RX_DMA_NUMBER, DEV_SPI3_RX_DMA_CHANNEL)
+    #define SPI3_RX_DMA_Channel     DEV_SPI3_RX_DMA_CHANNEL
+    #define SPI3_RX_DMA_Priority    DEV_SPI3_RX_DMA_PRIORITY
 
-    #define SPI3_RX_DMA_Handler     DMAx_CHANNELy_EVENT(RTE_SPI3_RX_DMA_NUMBER, RTE_SPI3_RX_DMA_CHANNEL)
+    #define SPI3_RX_DMA_Handler     DMAx_CHANNELy_EVENT(DEV_SPI3_RX_DMA_NUMBER, DEV_SPI3_RX_DMA_CHANNEL)
   #endif
-  #if (RTE_SPI3_TX_DMA == 1)
-    #define SPI3_TX_DMA_Instance    DMAx_CHANNELy(RTE_SPI3_TX_DMA_NUMBER, RTE_SPI3_TX_DMA_CHANNEL)
-    #define SPI3_TX_DMA_IRQn        DMAx_CHANNELy_IRQn(RTE_SPI3_TX_DMA_NUMBER, RTE_SPI3_TX_DMA_CHANNEL)
-    #define SPI3_TX_DMA_Channel     RTE_SPI3_TX_DMA_CHANNEL
-    #define SPI3_TX_DMA_Priority    RTE_SPI3_TX_DMA_PRIORITY
+  #if (DEV_SPI3_TX_DMA == 1)
+    #define SPI3_TX_DMA_Instance    DMAx_CHANNELy(DEV_SPI3_TX_DMA_NUMBER, DEV_SPI3_TX_DMA_CHANNEL)
+    #define SPI3_TX_DMA_IRQn        DMAx_CHANNELy_IRQn(DEV_SPI3_TX_DMA_NUMBER, DEV_SPI3_TX_DMA_CHANNEL)
+    #define SPI3_TX_DMA_Channel     DEV_SPI3_TX_DMA_CHANNEL
+    #define SPI3_TX_DMA_Priority    DEV_SPI3_TX_DMA_PRIORITY
 
-    #define SPI3_TX_DMA_Handler     DMAx_CHANNELy_EVENT(RTE_SPI3_TX_DMA_NUMBER, RTE_SPI3_TX_DMA_CHANNEL)
+    #define SPI3_TX_DMA_Handler     DMAx_CHANNELy_EVENT(DEV_SPI3_TX_DMA_NUMBER, DEV_SPI3_TX_DMA_CHANNEL)
   #endif
 
-  #if (RTE_SPI3_MISO == 1)
+  #if (DEV_SPI3_MISO == 1)
     #define USE_SPI3_MISO_Pin       1U
-    #define SPI3_MISO_GPIOx         RTE_SPI3_MISO_PORT
-    #define SPI3_MISO_GPIO_Pin      RTE_SPI3_MISO_BIT
+    #define SPI3_MISO_GPIOx         DEV_SPI3_MISO_PORT
+    #define SPI3_MISO_GPIO_Pin      DEV_SPI3_MISO_BIT
   #endif
 
-  #if (RTE_SPI3_MOSI == 1)
+  #if (DEV_SPI3_MOSI == 1)
     #define USE_SPI3_MOSI_Pin       1U
-    #define SPI3_MOSI_GPIOx         RTE_SPI3_MOSI_PORT
-    #define SPI3_MOSI_GPIO_Pin      RTE_SPI3_MOSI_BIT
+    #define SPI3_MOSI_GPIOx         DEV_SPI3_MOSI_PORT
+    #define SPI3_MOSI_GPIO_Pin      DEV_SPI3_MOSI_BIT
   #endif
 
   #define USE_SPI3_SCK_Pin          1U
-  #define SPI3_SCK_GPIOx            RTE_SPI3_SCK_PORT
-  #define SPI3_SCK_GPIO_Pin         RTE_SPI3_SCK_BIT
+  #define SPI3_SCK_GPIOx            DEV_SPI3_SCK_PORT
+  #define SPI3_SCK_GPIO_Pin         DEV_SPI3_SCK_BIT
 
-  #if (RTE_SPI3_NSS == 1)
+  #if (DEV_SPI3_NSS == 1)
     #define USE_SPI3_NSS_Pin        1U
-    #define SPI3_NSS_GPIOx          RTE_SPI3_NSS_PORT
-    #define SPI3_NSS_GPIO_Pin       RTE_SPI3_NSS_BIT
+    #define SPI3_NSS_GPIOx          DEV_SPI3_NSS_PORT
+    #define SPI3_NSS_GPIO_Pin       DEV_SPI3_NSS_BIT
   #endif
 
   #if defined(STM32F105xC) || defined(STM32F107xC)
     /* SPI3 remap is available only in connectivity line devices */
     #define SPI3_REMAP_DEF          AFIO_SPI3_NO_REMAP
-    #define SPI3_REMAP              RTE_SPI3_AF_REMAP
+    #define SPI3_REMAP              DEV_SPI3_AF_REMAP
   #else
-    #if (RTE_SPI3_REMAP != 0)
+    #if (DEV_SPI3_REMAP != 0)
       #error "SPI3 remap is available only in connectivity line devices!"
     #endif
     #define SPI3_REMAP_DEF          AFIO_UNAVAILABLE_REMAP
@@ -206,10 +206,10 @@
 #ifdef USE_SPI1
 #if (defined(SPI1_RX_DMA_Instance) || defined(SPI1_TX_DMA_Instance))
 #ifndef SPI1_RX_DMA_Instance
-  #error "SPI1 using DMA requires Rx and Tx DMA channel enabled in RTE_Device.h or Device.h!"
+  #error "SPI1 using DMA requires Rx and Tx DMA channel enabled in device_config.h!"
 #endif
 #ifndef SPI1_TX_DMA_Instance
-  #error "SPI1 using DMA requires Rx and Tx DMA channel enabled in RTE_Device.h or Device.h!"
+  #error "SPI1 using DMA requires Rx and Tx DMA channel enabled in device_config.h!"
 #endif
 #endif
 #endif
@@ -217,10 +217,10 @@
 #ifdef USE_SPI2
 #if (defined(SPI2_RX_DMA_Instance) || defined(SPI2_TX_DMA_Instance))
 #ifndef SPI2_RX_DMA_Instance
-  #error "SPI2 using DMA requires Rx and Tx DMA channel enabled in RTE_Device.h or Device.h!"
+  #error "SPI2 using DMA requires Rx and Tx DMA channel enabled in device_config.h!"
 #endif
 #ifndef SPI2_TX_DMA_Instance
-  #error "SPI2 using DMA requires Rx and Tx DMA channel enabled in RTE_Device.h or Device.h!"
+  #error "SPI2 using DMA requires Rx and Tx DMA channel enabled in device_config.h!"
 #endif
 #endif
 #endif
@@ -228,10 +228,10 @@
 #ifdef USE_SPI3
 #if (defined(SPI3_RX_DMA_Instance) || defined(SPI3_TX_DMA_Instance))
 #ifndef SPI3_RX_DMA_Instance
-  #error "SPI3 using DMA requires Rx and Tx DMA channel enabled in RTE_Device.h or Device.h!"
+  #error "SPI3 using DMA requires Rx and Tx DMA channel enabled in device_config.h!"
 #endif
 #ifndef SPI3_TX_DMA_Instance
-  #error "SPI3 using DMA requires Rx and Tx DMA channel enabled in RTE_Device.h or Device.h!"
+  #error "SPI3 using DMA requires Rx and Tx DMA channel enabled in device_config.h!"
 #endif
 #endif
 #endif
@@ -320,6 +320,6 @@ typedef struct {
   SPI_TRANSFER_INFO    *xfer;           // SPI transfer information
 } SPI_RESOURCES;
 
-#endif /* SPI_STM32F10X_H_ */
+#endif /* SPI_STM32F1XX_H_ */
 
 /* ----------------------------- End of file ---------------------------------*/

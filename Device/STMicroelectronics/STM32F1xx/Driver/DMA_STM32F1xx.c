@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2018-2020 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -22,8 +22,8 @@
  ******************************************************************************/
 
 #include "device_config.h"
-#include "asm/DMA_STM32F10x.h"
-#include "asm/RCC_STM32F10x.h"
+#include "asm/DMA_STM32F1xx.h"
+#include "asm/RCC_STM32F1xx.h"
 
 /*******************************************************************************
  *  external declarations
@@ -109,7 +109,7 @@ void DMA_ChannelInitialize(DMA_INFO *info)
   dma->IFCR = 0xFU << offset;
   /* Enable IRQ */
   NVIC_ClearPendingIRQ(info->irq_num);
-  NVIC_SetPriority(info->irq_num, RTE_DMA_INT_PRIORITY);
+  NVIC_SetPriority(info->irq_num, DEV_DMA_INT_PRIORITY);
   NVIC_EnableIRQ(info->irq_num);
 }
 

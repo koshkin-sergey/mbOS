@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2018-2020 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -25,8 +25,8 @@
 
 #include "device_config.h"
 #include "asm/stm32f1xx.h"
-#include "asm/EXTI_STM32F10x.h"
-#include "asm/RCC_STM32F10x.h"
+#include "asm/EXTI_STM32F1xx.h"
+#include "asm/RCC_STM32F1xx.h"
 
 /*******************************************************************************
  *  external declarations
@@ -181,7 +181,7 @@ void EXTI_Initialize(EXTI_Line_t line, EXTI_Mode_t mode, EXTI_trigger_t trigger,
 
     /* Clear and Enable EXTI IRQ */
     NVIC_ClearPendingIRQ(irq_num);
-    NVIC_SetPriority(irq_num, RTE_EXTI_INT_PRIORITY);
+    NVIC_SetPriority(irq_num, DEV_EXTI_INT_PRIORITY);
     NVIC_EnableIRQ(irq_num);
   }
 }

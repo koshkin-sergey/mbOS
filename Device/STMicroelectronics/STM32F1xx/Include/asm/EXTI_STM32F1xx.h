@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2018-2020 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -17,8 +17,8 @@
  * Project: EXTI Driver Definitions for STMicroelectronics STM32F1xx
  */
 
-#ifndef EXTI_STM32F10X_H_
-#define EXTI_STM32F10X_H_
+#ifndef EXTI_STM32F1XX_H_
+#define EXTI_STM32F1XX_H_
 
 /*******************************************************************************
  *  includes
@@ -131,6 +131,6 @@ void EXTI_LineMapping(EXTI_Line_t line, EXTI_Port_t port);
  */
 void EXTI_SoftwareRequest(EXTI_Line_t line);
 
-#endif /* EXTI_STM32F10X_H_ */
+#endif /* EXTI_STM32F1XX_H_ */
 
 /* ----------------------------- End of file ---------------------------------*/

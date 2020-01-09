@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2018-2020 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -17,8 +17,8 @@
  * Project: GPIO Driver Definitions for STMicroelectronics STM32F1xx
  */
 
-#ifndef GPIO_STM32F10X_H_
-#define GPIO_STM32F10X_H_
+#ifndef GPIO_STM32F1XX_H_
+#define GPIO_STM32F1XX_H_
 
 /*******************************************************************************
  *  includes
@@ -310,6 +310,6 @@ void GPIO_PinConfig(GPIO_PORT_t port, GPIO_PIN_t pin, const GPIO_PIN_CFG_t *cfg)
 extern
 void GPIO_AFConfig(AFIO_REMAP af_type);
 
-#endif /* GPIO_STM32F10X_H_ */
+#endif /* GPIO_STM32F1XX_H_ */
 
 /* ----------------------------- End of file ---------------------------------*/

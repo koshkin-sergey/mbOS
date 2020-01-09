@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2018-2020 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -17,17 +17,18 @@
  * Project: DMA Driver Definitions for STMicroelectronics STM32F1xx
  */
 
-#ifndef DMA_STM32F10X_H_
-#define DMA_STM32F10X_H_
+#ifndef DMA_STM32F1XX_H_
+#define DMA_STM32F1XX_H_
 
 /*******************************************************************************
  *  includes
  ******************************************************************************/
 
-#include <asm/stm32f1xx.h>
 #include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
+
+#include "asm/stm32f1xx.h"
 
 /*******************************************************************************
  *  defines and macros
@@ -156,6 +157,6 @@ __STATIC_FORCEINLINE uint32_t DMA_ChannelTransferItemCount (DMA_Channel_TypeDef 
   return DMA_Channel->CNDTR;
 }
 
-#endif /* DMA_STM32F10X_H_ */
+#endif /* DMA_STM32F1XX_H_ */
 
 /* ----------------------------- End of file ---------------------------------*/

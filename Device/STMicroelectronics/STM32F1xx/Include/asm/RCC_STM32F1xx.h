@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2018-2020 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -17,8 +17,8 @@
  * Project: RCC Driver Definitions for STMicroelectronics STM32F1xx
  */
 
-#ifndef RCC_STM32F10X_H_
-#define RCC_STM32F10X_H_
+#ifndef RCC_STM32F1XX_H_
+#define RCC_STM32F1XX_H_
 
 /*******************************************************************************
  *  includes
@@ -417,6 +417,6 @@ uint32_t RCC_GetStatePeriph(RCC_Periph_t periph);
  */
 void RCC_ResetPeriph(RCC_Periph_t periph);
 
-#endif /* RCC_STM32F10X_H_ */
+#endif /* RCC_STM32F1XX_H_ */
 
 /* ----------------------------- End of file ---------------------------------*/

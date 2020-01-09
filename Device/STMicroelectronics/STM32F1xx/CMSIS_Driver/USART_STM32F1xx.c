@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2018-2020 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -21,7 +21,7 @@
  *  includes
  ******************************************************************************/
 
-#include "USART_STM32F10x.h"
+#include "USART_STM32F1xx.h"
 
 #if defined(USE_USART1) || defined(USE_USART2) || defined(USE_USART3) || defined(USE_UART4) || defined(USE_UART5)
 
@@ -856,7 +856,7 @@ int32_t USART_PowerControl(ARM_POWER_STATE state, const USART_RESOURCES *usart)
 
       /* Clear and Enable USART IRQ */
       NVIC_ClearPendingIRQ(usart->irq_num);
-      NVIC_SetPriority(usart->irq_num, RTE_USART_INT_PRIORITY);
+      NVIC_SetPriority(usart->irq_num, DEV_USART_INT_PRIORITY);
       NVIC_EnableIRQ(usart->irq_num);
 
 #ifdef __USART_DMA

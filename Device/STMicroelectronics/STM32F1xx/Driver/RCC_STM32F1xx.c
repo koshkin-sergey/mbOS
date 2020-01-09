@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2018-2020 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -23,7 +23,7 @@
 
 #include "device_config.h"
 #include "asm/stm32f1xx.h"
-#include "asm/RCC_STM32F10x.h"
+#include "asm/RCC_STM32F1xx.h"
 
 /*******************************************************************************
  *  external declarations
@@ -277,9 +277,9 @@ uint32_t RCC_GetFreq(RCC_FREQ_t type)
 {
   switch (type) {
     case RCC_FREQ_HSI:
-      return RTE_HSI;
+      return DEV_HSI;
     case RCC_FREQ_HSE:
-      return RTE_HSE;
+      return DEV_HSE;
   }
 
   uint32_t sysclk;
@@ -289,11 +289,11 @@ uint32_t RCC_GetFreq(RCC_FREQ_t type)
   switch (rcc_cfgr & RCC_CFGR_SWS) {
     default: /* HSI used as system clock */
     case RCC_CFGR_SWS_HSI:  /* HSI used as system clock */
-      sysclk = RTE_HSI;
+      sysclk = DEV_HSI;
       break;
 
     case RCC_CFGR_SWS_HSE:  /* HSE used as system clock */
-      sysclk = RTE_HSE;
+      sysclk = DEV_HSE;
       break;
 
     case RCC_CFGR_SWS_PLL:  /* PLL used as system clock */
@@ -304,7 +304,7 @@ uint32_t RCC_GetFreq(RCC_FREQ_t type)
 
       if ((rcc_cfgr & RCC_CFGR_PLLSRC) == 0U) {
         /* HSI used as PLL clock source : PLLCLK = HSI/2 * PLLMUL */
-        sysclk = (RTE_HSI >> 1U) * pllm;
+        sysclk = (DEV_HSI >> 1U) * pllm;
       }
       else {
 #if defined(STM32F105xC) || defined(STM32F107xC)
@@ -314,23 +314,23 @@ uint32_t RCC_GetFreq(RCC_FREQ_t type)
 
         if ((rcc_cfgr2 & RCC_CFGR2_PREDIV1SRC) == 0U) {
           /* HSE used as PLL clock source : PLLCLK = HSE/PREDIV1 * PLLMUL */
-          sysclk = RTE_HSE * pllm / prediv;
+          sysclk = DEV_HSE * pllm / prediv;
         }
         else {
           /* PLL2 selected as Prediv1 source */
           /* PLLCLK = PLL2CLK / PREDIV1 * PLLMUL with PLL2CLK = HSE/PREDIV2 * PLL2MUL */
           uint32_t prediv2 = ((rcc_cfgr2 & RCC_CFGR2_PREDIV2) >> RCC_CFGR2_PREDIV2_Pos) + 1U;
           uint32_t pll2m = pllmul2_tbl[(rcc_cfgr2 & RCC_CFGR2_PLL2MUL) >> RCC_CFGR2_PLL2MUL_Pos];
-          sysclk = (uint32_t)(((uint64_t)RTE_HSE * (uint64_t)pll2m * (uint64_t)pllm) / ((uint64_t)prediv2 * (uint64_t)prediv));
+          sysclk = (uint32_t)(((uint64_t)DEV_HSE * (uint64_t)pll2m * (uint64_t)pllm) / ((uint64_t)prediv2 * (uint64_t)prediv));
         }
 #elif defined(STM32F100xB) || defined(STM32F100xE)
         /* HSE used as PLL clock source : PLLCLK = HSE/PREDIV1 * PLLMUL */
         prediv = ((RCC->CFGR2 & RCC_CFGR2_PREDIV1_Msk) >> RCC_CFGR2_PREDIV1_Pos) + 1U;
-        sysclk = RTE_HSE * pllm / prediv;
+        sysclk = DEV_HSE * pllm / prediv;
 #else
         /* HSE used as PLL clock source : PLLCLK = HSE/PREDIV1 * PLLMUL */
         prediv = ((rcc_cfgr & RCC_CFGR_PLLXTPRE_Msk) >> RCC_CFGR_PLLXTPRE_Pos) +1U;
-        sysclk = RTE_HSE * pllm / prediv;
+        sysclk = DEV_HSE * pllm / prediv;
 #endif
       }
       break;

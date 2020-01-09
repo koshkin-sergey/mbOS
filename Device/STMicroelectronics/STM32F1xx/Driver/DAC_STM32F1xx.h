@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2018-2020 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -17,8 +17,8 @@
  * Project: DAC Driver Definitions for STMicroelectronics STM32F1xx
  */
 
-#ifndef DAC_STM32F10X_H_
-#define DAC_STM32F10X_H_
+#ifndef DAC_STM32F1XX_H_
+#define DAC_STM32F1XX_H_
 
 /*******************************************************************************
  *  includes
@@ -28,9 +28,9 @@
 
 #include "device_config.h"
 #include "asm/stm32f1xx.h"
-#include "asm/RCC_STM32F10x.h"
-#include "asm/GPIO_STM32F10x.h"
-#include "asm/DMA_STM32F10x.h"
+#include "asm/RCC_STM32F1xx.h"
+#include "asm/GPIO_STM32F1xx.h"
+#include "asm/DMA_STM32F1xx.h"
 #include "asm/Driver_DAC.h"
 
 
@@ -57,43 +57,43 @@
 #define DAC_TRIGGER_SOFTWARE          (7UL << DAC_CR_TSEL1_Pos)
 
 /* DAC configuration definitions */
-#if (RTE_DAC1 == 1)
+#if (DEV_DAC1 == 1)
   #define USE_DAC1
 
-  #if (RTE_DAC1_CH1_DMA == 1)
-    #define DAC1_CH1_DMA_Instance    DMAx_CHANNELy(RTE_DAC1_CH1_DMA_NUMBER, RTE_DAC1_CH1_DMA_CHANNEL)
-    #define DAC1_CH1_DMA_IRQn        DMAx_CHANNELy_IRQn(RTE_DAC1_CH1_DMA_NUMBER, RTE_DAC1_CH1_DMA_CHANNEL)
-    #define DAC1_CH1_DMA_Channel     RTE_DAC1_CH1_DMA_CHANNEL
-    #define DAC1_CH1_DMA_Priority    RTE_DAC1_CH1_DMA_PRIORITY
+  #if (DEV_DAC1_CH1_DMA == 1)
+    #define DAC1_CH1_DMA_Instance    DMAx_CHANNELy(DEV_DAC1_CH1_DMA_NUMBER, DEV_DAC1_CH1_DMA_CHANNEL)
+    #define DAC1_CH1_DMA_IRQn        DMAx_CHANNELy_IRQn(DEV_DAC1_CH1_DMA_NUMBER, DEV_DAC1_CH1_DMA_CHANNEL)
+    #define DAC1_CH1_DMA_Channel     DEV_DAC1_CH1_DMA_CHANNEL
+    #define DAC1_CH1_DMA_Priority    DEV_DAC1_CH1_DMA_PRIORITY
 
-    #define DAC1_CH1_DMA_Handler     DMAx_CHANNELy_EVENT(RTE_DAC1_CH1_DMA_NUMBER, RTE_DAC1_CH1_DMA_CHANNEL)
+    #define DAC1_CH1_DMA_Handler     DMAx_CHANNELy_EVENT(DEV_DAC1_CH1_DMA_NUMBER, DEV_DAC1_CH1_DMA_CHANNEL)
   #endif
 
-  #if (RTE_DAC1_CH2_DMA == 1)
-    #define DAC1_CH2_DMA_Instance    DMAx_CHANNELy(RTE_DAC1_CH2_DMA_NUMBER, RTE_DAC1_CH2_DMA_CHANNEL)
-    #define DAC1_CH2_DMA_IRQn        DMAx_CHANNELy_IRQn(RTE_DAC1_CH2_DMA_NUMBER, RTE_DAC1_CH2_DMA_CHANNEL)
-    #define DAC1_CH2_DMA_Channel     RTE_DAC1_CH2_DMA_CHANNEL
-    #define DAC1_CH2_DMA_Priority    RTE_DAC1_CH2_DMA_PRIORITY
+  #if (DEV_DAC1_CH2_DMA == 1)
+    #define DAC1_CH2_DMA_Instance    DMAx_CHANNELy(DEV_DAC1_CH2_DMA_NUMBER, DEV_DAC1_CH2_DMA_CHANNEL)
+    #define DAC1_CH2_DMA_IRQn        DMAx_CHANNELy_IRQn(DEV_DAC1_CH2_DMA_NUMBER, DEV_DAC1_CH2_DMA_CHANNEL)
+    #define DAC1_CH2_DMA_Channel     DEV_DAC1_CH2_DMA_CHANNEL
+    #define DAC1_CH2_DMA_Priority    DEV_DAC1_CH2_DMA_PRIORITY
 
-    #define DAC1_CH2_DMA_Handler     DMAx_CHANNELy_EVENT(RTE_DAC1_CH2_DMA_NUMBER, RTE_DAC1_CH2_DMA_CHANNEL)
+    #define DAC1_CH2_DMA_Handler     DMAx_CHANNELy_EVENT(DEV_DAC1_CH2_DMA_NUMBER, DEV_DAC1_CH2_DMA_CHANNEL)
   #endif
 
-  #if (RTE_DAC1_CH1_OUT == 1)
+  #if (DEV_DAC1_CH1_OUT == 1)
     #define USE_DAC1_CH1_OUT_Pin     1U
-    #define DAC1_CH1_OUT_GPIOx       RTE_DAC1_CH1_OUT_PORT
-    #define DAC1_CH1_OUT_GPIO_Pin    RTE_DAC1_CH1_OUT_BIT
+    #define DAC1_CH1_OUT_GPIOx       DEV_DAC1_CH1_OUT_PORT
+    #define DAC1_CH1_OUT_GPIO_Pin    DEV_DAC1_CH1_OUT_BIT
   #endif
 
-  #if (RTE_DAC1_CH2_OUT == 1)
+  #if (DEV_DAC1_CH2_OUT == 1)
     #define USE_DAC1_CH2_OUT_Pin     1U
-    #define DAC1_CH2_OUT_GPIOx       RTE_DAC1_CH2_OUT_PORT
-    #define DAC1_CH2_OUT_GPIO_Pin    RTE_DAC1_CH2_OUT_BIT
+    #define DAC1_CH2_OUT_GPIOx       DEV_DAC1_CH2_OUT_PORT
+    #define DAC1_CH2_OUT_GPIO_Pin    DEV_DAC1_CH2_OUT_BIT
   #endif
 
-  #if (RTE_DAC1_TRIGGER_HARDWARE == 1)
-    #define DAC1_TRG_TIMER_Instance  TIMx(RTE_DAC1_TRIGGER_SELECT)
-    #define DAC1_TRG_TIMER_Periph    RCC_PERIPH_x(RTE_DAC1_TRIGGER_SELECT)
-    #define DAC1_TRG_TIMER_IRQn      TIMx_IRQn(RTE_DAC1_TRIGGER_SELECT)
+  #if (DEV_DAC1_TRIGGER_HARDWARE == 1)
+    #define DAC1_TRG_TIMER_Instance  TIMx(DEV_DAC1_TRIGGER_SELECT)
+    #define DAC1_TRG_TIMER_Periph    RCC_PERIPH_x(DEV_DAC1_TRIGGER_SELECT)
+    #define DAC1_TRG_TIMER_IRQn      TIMx_IRQn(DEV_DAC1_TRIGGER_SELECT)
   #endif
 #endif
 

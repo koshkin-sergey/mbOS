@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2018-2020 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -21,7 +21,7 @@
  *  includes
  ******************************************************************************/
 
-#include "SPI_STM32F10x.h"
+#include "SPI_STM32F1xx.h"
 
 #if defined(USE_SPI1) || defined(USE_SPI2) || defined(USE_SPI3)
 
@@ -508,7 +508,7 @@ int32_t SPI_PowerControl(ARM_POWER_STATE state, const SPI_RESOURCES *spi)
 
       /* Clear and Enable SPI IRQ */
       NVIC_ClearPendingIRQ(spi->irq_num);
-      NVIC_SetPriority(spi->irq_num, RTE_SPI_INT_PRIORITY);
+      NVIC_SetPriority(spi->irq_num, DEV_SPI_INT_PRIORITY);
       NVIC_EnableIRQ(spi->irq_num);
       break;
 

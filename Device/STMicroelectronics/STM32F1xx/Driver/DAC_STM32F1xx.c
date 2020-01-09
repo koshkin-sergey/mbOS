@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2018-2020 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -23,7 +23,7 @@
 
 #include <string.h>
 
-#include "DAC_STM32F10x.h"
+#include "DAC_STM32F1xx.h"
 
 #if defined(USE_DAC1)
 
@@ -305,7 +305,7 @@ int32_t DAC_PowerControl(ARM_POWER_STATE state, const DAC_RESOURCES *dac)
       RCC_ResetPeriph(dac->trigger->periph);
       /* Clear and Enable Timer IRQ */
       NVIC_ClearPendingIRQ(dac->trigger->irq_num);
-      NVIC_SetPriority(dac->trigger->irq_num, RTE_DAC_INT_PRIORITY);
+      NVIC_SetPriority(dac->trigger->irq_num, DEV_DAC_INT_PRIORITY);
       NVIC_EnableIRQ(dac->trigger->irq_num);
 #endif  /* DAC1_TRG_TIMER_Instance */
 
