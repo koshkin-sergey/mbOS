@@ -2453,6 +2453,28 @@
 #endif
 // </e>
 
+// <e> USB Device Full-speed
+// <i> Configuration settings for Driver_USBD0 in component ::Drivers:USB Device
+#define DEV_USB_DEVICE                  1
+
+//     <e> CON On/Off Pin
+//     <i> Configure Pin for driving D+ pull-up
+//     <i> GPIO Pxy (x = A..G, y = 0..15)
+//       <o1> Active State <0=>Low <1=>High
+//       <i>  Selects Active State Logical Level
+//       <o2> Port <0=>PA <1=>PB <2=>PC <3=>PD <4=>PE <5=>PF <6=>PG
+//       <i>  Selects Port Name
+//       <o3> Pin <0=>0 <1=>1 <2=>2   <3=>3   <4=>4   <5=>5   <6=>6   <7=>7
+//                <8=>8 <9=>9 <10=>10 <11=>11 <12=>12 <13=>13 <14=>14 <15=>15
+//       <i>  Selects Port Pin
+//     </e>
+#define DEV_USB_DEVICE_CON_PIN          1
+#define DEV_USB_DEVICE_CON_ACTIVE       0
+#define DEV_USB_DEVICE_CON_PORT         1
+#define DEV_USB_DEVICE_CON_BIT          14
+
+//   </e>
+
 #endif  /* __DEVICE_CONFIG_H */
 
 /* ----------------------------- End of file ---------------------------------*/
