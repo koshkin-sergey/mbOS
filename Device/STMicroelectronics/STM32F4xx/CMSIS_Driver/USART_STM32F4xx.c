@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2018-2020 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -23,9 +23,9 @@
 
 #include "USART_STM32F4xx.h"
 
-#if defined(USE_USART1) || defined(USE_USART2) || defined(USE_USART3) \
-    defined(USE_UART4)  || defined(USE_UART5)  || defined(USE_USART6) \
-    defined(USE_UART7)  || defined(USE_UART8)  || defined(USE_UART9)  \
+#if defined(USE_USART1) || defined(USE_USART2) || defined(USE_USART3) || \
+    defined(USE_UART4)  || defined(USE_UART5)  || defined(USE_USART6) || \
+    defined(USE_UART7)  || defined(USE_UART8)  || defined(USE_UART9)  || \
     defined(USE_UART10)
 
 /*******************************************************************************
