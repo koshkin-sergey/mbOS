@@ -904,16 +904,18 @@ int32_t SPI_Send(const void *data, uint32_t num, SPI_RESOURCES *spi)
   SPI_TypeDef *reg = spi->reg;
   uint32_t cr2;
   bool access_16bit;
-  uint32_t value;
 
-  if ((data == NULL) || (num == 0U))
-    return ARM_DRIVER_ERROR_PARAMETER;
+  if ((data == NULL) || (num == 0U)) {
+    return (ARM_DRIVER_ERROR_PARAMETER);
+  }
 
-  if ((info->state & SPI_CONFIGURED) == 0U)
-    return ARM_DRIVER_ERROR;
+  if ((info->state & SPI_CONFIGURED) == 0U) {
+    return (ARM_DRIVER_ERROR);
+  }
 
-  if (info->status.busy)
-    return ARM_DRIVER_ERROR_BUSY;
+  if (info->status.busy) {
+    return (ARM_DRIVER_ERROR_BUSY);
+  }
 
   cr2 = reg->CR2;
   access_16bit = ((cr2 & SPI_CR2_DS) >> SPI_CR2_DS_Pos) > 7U;
@@ -994,14 +996,13 @@ int32_t SPI_Send(const void *data, uint32_t num, SPI_RESOURCES *spi)
 #endif
   {
     /* Interrupt mode */
-    value = (uint32_t)(*xfer->tx_buf++);
-
-    if (access_16bit) {
-      value |= (uint32_t)(*xfer->tx_buf++ << 8U);
-    }
-
     /* Write data to data register */
-    reg->DR = value;
+    if (access_16bit) {
+      *(__IO uint16_t *)&reg->DR = *((uint16_t *)xfer->tx_buf)++;
+    }
+    else {
+      *(__IO uint8_t *)&reg->DR = *xfer->tx_buf++;
+    }
 
     if (++xfer->tx_cnt < xfer->num) {
       /* TX Buffer empty interrupt enable */
@@ -1011,7 +1012,7 @@ int32_t SPI_Send(const void *data, uint32_t num, SPI_RESOURCES *spi)
 
   reg->CR2 = cr2;
 
-  return ARM_DRIVER_OK;
+  return (ARM_DRIVER_OK);
 }
 
 /**
