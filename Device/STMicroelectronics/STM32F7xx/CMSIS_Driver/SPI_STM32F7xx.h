@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2019-2020 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -425,8 +425,8 @@ typedef struct _SPI_INFO {
 /* SPI Transfer Information (Run-Time) */
 typedef struct _SPI_TRANSFER_INFO {
   uint32_t              num;                // Total number of transfers
-  uint8_t              *rx_buf;             // Pointer to in data buffer
-  uint8_t              *tx_buf;             // Pointer to out data buffer
+  void                 *rx_buf;             // Pointer to in data buffer
+  const void           *tx_buf;             // Pointer to out data buffer
   uint32_t              rx_cnt;             // Number of data received
   uint32_t              tx_cnt;             // Number of data sent
   uint32_t              dump_val;           // Variable for dumping DMA data

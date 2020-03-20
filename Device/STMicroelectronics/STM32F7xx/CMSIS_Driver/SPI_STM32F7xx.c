@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2019-2020 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -903,7 +903,6 @@ int32_t SPI_Send(const void *data, uint32_t num, SPI_RESOURCES *spi)
   SPI_TRANSFER_INFO *xfer = spi->xfer;
   SPI_TypeDef *reg = spi->reg;
   uint32_t cr2;
-  bool access_16bit;
 
   if ((data == NULL) || (num == 0U)) {
     return (ARM_DRIVER_ERROR_PARAMETER);
@@ -918,7 +917,9 @@ int32_t SPI_Send(const void *data, uint32_t num, SPI_RESOURCES *spi)
   }
 
   cr2 = reg->CR2;
-  access_16bit = ((cr2 & SPI_CR2_DS) >> SPI_CR2_DS_Pos) > 7U;
+#if defined(SPI_DMA_RX) || defined(SPI_DMA_TX)
+  bool access_16bit = ((cr2 & SPI_CR2_DS) >> SPI_CR2_DS_Pos) > 7U;
+#endif
 
   /* Update SPI statuses */
   info->status.busy       = 1U;
@@ -927,7 +928,7 @@ int32_t SPI_Send(const void *data, uint32_t num, SPI_RESOURCES *spi)
 
   /* Save transfer info */
   xfer->rx_buf = NULL;
-  xfer->tx_buf = (uint8_t *)((uint32_t)data);
+  xfer->tx_buf = data;
   xfer->num    = num;
   xfer->rx_cnt = 0U;
   xfer->tx_cnt = 0U;
@@ -996,18 +997,8 @@ int32_t SPI_Send(const void *data, uint32_t num, SPI_RESOURCES *spi)
 #endif
   {
     /* Interrupt mode */
-    /* Write data to data register */
-    if (access_16bit) {
-      *(__IO uint16_t *)&reg->DR = *((uint16_t *)xfer->tx_buf)++;
-    }
-    else {
-      *(__IO uint8_t *)&reg->DR = *xfer->tx_buf++;
-    }
-
-    if (++xfer->tx_cnt < xfer->num) {
-      /* TX Buffer empty interrupt enable */
-      cr2 |= SPI_CR2_TXEIE;
-    }
+    /* TX Buffer empty interrupt enable */
+    cr2 |= SPI_CR2_TXEIE;
   }
 
   reg->CR2 = cr2;
@@ -1030,27 +1021,31 @@ int32_t SPI_Receive(void *data, uint32_t num, SPI_RESOURCES *spi)
   SPI_TRANSFER_INFO *xfer = spi->xfer;
   SPI_TypeDef *reg = spi->reg;
   uint32_t cr2;
-  bool access_16bit;
 
-  if ((data == NULL) || (num == 0U))
-    return ARM_DRIVER_ERROR_PARAMETER;
+  if ((data == NULL) || (num == 0U)) {
+    return (ARM_DRIVER_ERROR_PARAMETER);
+  }
 
-  if ((info->state & SPI_CONFIGURED) == 0U)
-    return ARM_DRIVER_ERROR;
+  if ((info->state & SPI_CONFIGURED) == 0U) {
+    return (ARM_DRIVER_ERROR);
+  }
 
-  if (info->status.busy)
-    return ARM_DRIVER_ERROR_BUSY;
+  if (info->status.busy) {
+    return (ARM_DRIVER_ERROR_BUSY);
+  }
 
   cr2 = reg->CR2;
-  access_16bit = ((cr2 & SPI_CR2_DS) >> SPI_CR2_DS_Pos) > 7U;
+#if defined(SPI_DMA_RX) || defined(SPI_DMA_TX)
+  bool access_16bit = ((cr2 & SPI_CR2_DS) >> SPI_CR2_DS_Pos) > 7U;
+#endif
 
-  // Update SPI statuses
+  /* Update SPI statuses */
   info->status.busy       = 1U;
   info->status.data_lost  = 0U;
   info->status.mode_fault = 0U;
 
-  // Save transfer info
-  xfer->rx_buf = (uint8_t *)data;
+  /* Save transfer info */
+  xfer->rx_buf = data;
   xfer->tx_buf = NULL;
   xfer->num    = num;
   xfer->rx_cnt = 0U;
@@ -1120,18 +1115,13 @@ int32_t SPI_Receive(void *data, uint32_t num, SPI_RESOURCES *spi)
 #endif
   {
     /* Interrupt mode */
-    /* Write data to data register */
-    reg->DR = (uint32_t)xfer->def_val;
-
-    if (++xfer->tx_cnt < xfer->num) {
-      /* TX Buffer empty interrupt enable */
-      cr2 |= SPI_CR2_TXEIE;
-    }
+    /* TX Buffer empty interrupt enable */
+    cr2 |= SPI_CR2_TXEIE;
   }
 
   reg->CR2 = cr2;
 
-  return ARM_DRIVER_OK;
+  return (ARM_DRIVER_OK);
 }
 
 /**
@@ -1150,29 +1140,32 @@ int32_t SPI_Transfer(const void *data_out, void *data_in, uint32_t num, SPI_RESO
   SPI_TRANSFER_INFO *xfer = spi->xfer;
   SPI_TypeDef *reg = spi->reg;
   uint32_t cr2;
-  bool access_16bit;
-  uint32_t value;
 
-  if ((data_out == NULL) || (data_in == NULL) || (num == 0U))
-    return ARM_DRIVER_ERROR_PARAMETER;
+  if ((data_out == NULL) || (data_in == NULL) || (num == 0U)) {
+    return (ARM_DRIVER_ERROR_PARAMETER);
+  }
 
-  if ((info->state & SPI_CONFIGURED) == 0U)
-    return ARM_DRIVER_ERROR;
+  if ((info->state & SPI_CONFIGURED) == 0U) {
+    return (ARM_DRIVER_ERROR);
+  }
 
-  if (info->status.busy)
-    return ARM_DRIVER_ERROR_BUSY;
+  if (info->status.busy) {
+    return (ARM_DRIVER_ERROR_BUSY);
+  }
 
   cr2 = reg->CR2;
-  access_16bit = ((cr2 & SPI_CR2_DS) >> SPI_CR2_DS_Pos) > 7U;
+#ifdef SPI_DMA
+  bool access_16bit = ((cr2 & SPI_CR2_DS) >> SPI_CR2_DS_Pos) > 7U;
+#endif
 
-  // Update SPI statuses
+  /* Update SPI statuses */
   info->status.busy       = 1U;
   info->status.data_lost  = 0U;
   info->status.mode_fault = 0U;
 
-  // Save transfer info
-  xfer->rx_buf = (uint8_t *)((uint32_t)data_in);
-  xfer->tx_buf = (uint8_t *)((uint32_t)data_out);
+  /* Save transfer info */
+  xfer->rx_buf = data_in;
+  xfer->tx_buf = data_out;
   xfer->num    = num;
   xfer->rx_cnt = 0U;
   xfer->tx_cnt = 0U;
@@ -1235,26 +1228,12 @@ int32_t SPI_Transfer(const void *data_out, void *data_in, uint32_t num, SPI_RESO
   {
     /* Interrupt mode */
     /* RX Buffer not empty interrupt enable */
-    cr2 |= SPI_CR2_RXNEIE;
-
-    value = (uint32_t)(*xfer->tx_buf++);
-
-    if (access_16bit) {
-      value |= (uint32_t)(*xfer->tx_buf++ << 8U);
-    }
-
-    /* Write data to data register */
-    reg->DR = value;
-
-    if (++xfer->tx_cnt < xfer->num) {
-      /* TX Buffer empty interrupt enable */
-      cr2 |= SPI_CR2_TXEIE;
-    }
+    cr2 |= SPI_CR2_RXNEIE | SPI_CR2_TXEIE;
   }
 
   reg->CR2 = cr2;
 
-  return ARM_DRIVER_OK;
+  return (ARM_DRIVER_OK);
 }
 
 /**
@@ -1617,10 +1596,10 @@ ARM_SPI_STATUS SPI_GetStatus(SPI_RESOURCES *spi)
  */
 void SPI_IRQHandler(SPI_RESOURCES *spi)
 {
-  uint32_t value;
-  uint32_t event;
   register uint32_t sr, cr1, cr2;
+  uint32_t event;
   bool access_16bit;
+  uint32_t value;
 
   SPI_INFO *info = spi->info;
   SPI_TRANSFER_INFO *xfer = spi->xfer;
@@ -1639,15 +1618,21 @@ void SPI_IRQHandler(SPI_RESOURCES *spi)
 
   if ((sr & (SPI_SR_OVR | SPI_SR_MODF)) != 0U) {
     if ((sr & SPI_SR_OVR) != 0U) {
-      value = reg->DR;
-
-      if ((xfer->rx_cnt < xfer->num) && (xfer->rx_buf != NULL)) {
-        *xfer->rx_buf++ = (uint8_t)value;
-
-        if (access_16bit) {
-          *xfer->rx_buf++ = (uint8_t)(value >> 8U);
+      /* Read data from data register */
+      if (access_16bit) {
+        value = *(__IO uint16_t *)&reg->DR;
+//        value = (uint16_t)reg->DR;
+        if ((xfer->rx_cnt < xfer->num) && (xfer->rx_buf != NULL)) {
+          *((uint16_t *)xfer->rx_buf++) = (uint16_t)value;
         }
       }
+      else {
+        value = *(__IO uint8_t *)&reg->DR;
+        if ((xfer->rx_cnt < xfer->num) && (xfer->rx_buf != NULL)) {
+          *((uint8_t *)xfer->rx_buf++) = (uint8_t)value;
+        }
+      }
+
       xfer->rx_cnt++;
       sr = reg->SR;
 
@@ -1668,19 +1653,21 @@ void SPI_IRQHandler(SPI_RESOURCES *spi)
   if (((sr & SPI_SR_RXNE) != 0U) && ((cr2 & SPI_CR2_RXNEIE) != 0U)) {
     /* Receive Buffer Not Empty */
     if (xfer->rx_cnt < xfer->num) {
-      value = reg->DR;
-
-      if (xfer->rx_buf != NULL) {
-        *xfer->rx_buf++ = (uint8_t)value;
-
-        if (access_16bit) {
-          *xfer->rx_buf++ = (uint8_t)(value >> 8U);
+      /* Read data from data register */
+      if (access_16bit) {
+        value = *(__IO uint16_t *)&reg->DR;
+        if (xfer->rx_buf != NULL) {
+          *((uint16_t *)xfer->rx_buf++) = (uint16_t)value;
+        }
+      }
+      else {
+        value = *(__IO uint8_t *)&reg->DR;
+        if (xfer->rx_buf != NULL) {
+          *((uint8_t *)xfer->rx_buf++) = (uint8_t)value;
         }
       }
 
-      xfer->rx_cnt++;
-
-      if (xfer->rx_cnt == xfer->num) {
+      if (++xfer->rx_cnt == xfer->num) {
         /* Disable RX Buffer Not Empty Interrupt */
         cr2 &= ~SPI_CR2_RXNEIE;
         /* Clear busy flag */
@@ -1697,19 +1684,25 @@ void SPI_IRQHandler(SPI_RESOURCES *spi)
 
   if (((sr & SPI_SR_TXE) != 0U) && ((cr2 & SPI_CR2_TXEIE) != 0U)) {
     if (xfer->tx_cnt < xfer->num) {
-      if (xfer->tx_buf != NULL) {
-        value = (uint32_t)(*xfer->tx_buf++);
-
-        if (access_16bit) {
-          value |= (uint32_t)(*xfer->tx_buf++ << 8U);
+      /* Write data to data register */
+      if (access_16bit) {
+        if (xfer->tx_buf != NULL) {
+          value = *((uint16_t *)xfer->tx_buf++);
         }
+        else {
+          value = xfer->def_val;
+        }
+        *(__IO uint16_t *)&reg->DR = (uint16_t)value;
       }
       else {
-        value = (uint32_t)xfer->def_val;
+        if (xfer->tx_buf != NULL) {
+          value = *((uint8_t *)xfer->tx_buf++);
+        }
+        else {
+          value = xfer->def_val;
+        }
+        *(__IO uint8_t *)&reg->DR = (uint8_t)value;
       }
-
-      /* Write data to data register */
-      reg->DR = value;
 
       if (++xfer->tx_cnt == xfer->num) {
         /* All data sent, disable TX Buffer Empty Interrupt */
