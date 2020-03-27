@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2019-2020 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -21,6 +21,7 @@
  *  includes
  ******************************************************************************/
 
+#include <stdbool.h>
 #include <stddef.h>
 
 #include "asm/stm32f7xx.h"
@@ -37,13 +38,17 @@
  *  defines and macros (scope: module-local)
  ******************************************************************************/
 
+#define NONE_IRQn                   (IRQn_Type)-128
+#define EXTI9_5_MASK                0x000003E0UL
+#define EXTI15_10_MASK              0x0000FC00UL
+
 /*******************************************************************************
  *  typedefs and structures (scope: module-local)
  ******************************************************************************/
 
 typedef struct {
-  EXTI_SignalEvent_t cb_event;
-  uint32_t              state;
+  EXTI_SignalEvent_t  cb_event;
+  uint32_t            state;
 } EXTI_Info_t;
 
 typedef struct {
@@ -86,8 +91,13 @@ static EXTI_Resources_t exti = {
         OTG_HS_WKUP_IRQn,
         TAMP_STAMP_IRQn,
         RTC_WKUP_IRQn,
-        (IRQn_Type)-128,
-        (IRQn_Type)-128,
+        LPTIM1_IRQn,
+#if defined(STM32F765xx) || defined(STM32F767xx) || defined(STM32F769xx) || \
+    defined(STM32F777xx) || defined(STM32F779xx)
+        MDIOS_IRQn,
+#else
+        NONE_IRQn,
+#endif
     },
     &EXTI_Info
 };
@@ -99,6 +109,52 @@ static EXTI_Resources_t exti = {
 /*******************************************************************************
  *  function implementations (scope: module-local)
  ******************************************************************************/
+
+static
+void EnableIRQ(IRQn_Type irq_num)
+{
+  if (irq_num < (IRQn_Type)0) {
+    return;
+  }
+
+  if (NVIC_GetEnableIRQ(irq_num) == 0U) {
+    NVIC_ClearPendingIRQ(irq_num);
+    NVIC_SetPriority(irq_num, DEV_EXTI_INT_PRIORITY);
+    NVIC_EnableIRQ(irq_num);
+  }
+}
+
+static
+void DisableIRQ(IRQn_Type irq_num, uint32_t int_mask)
+{
+  bool disable = false;
+
+  if (irq_num < (IRQn_Type)0) {
+    return;
+  }
+
+  switch (irq_num) {
+    case EXTI9_5_IRQn:
+      if ((int_mask & EXTI9_5_MASK) == 0U) {
+        disable = true;
+      }
+      break;
+
+    case EXTI15_10_IRQn:
+      if ((int_mask & EXTI15_10_MASK) == 0U) {
+        disable = true;
+      }
+      break;
+
+    default:
+      disable = true;
+      break;
+  }
+
+  if (disable) {
+    NVIC_DisableIRQ(irq_num);
+  }
+}
 
 static
 void EXTI_IRQHandler(EXTI_Line_t line)
@@ -162,7 +218,7 @@ int32_t EXTI_Uninitialize(void)
   EXTI->PR   = 0x01FFFFFFU;
   /* Uninitialize EXTI Run-Time Resources */
   info->cb_event = NULL;
-  info->state    = EXTI_INITIALIZED;
+  info->state    = 0U;
 
   return (EXTI_DRIVER_OK);
 }
@@ -180,7 +236,6 @@ int32_t EXTI_SetConfigLine(EXTI_Line_t line, EXTI_Port_t port, EXTI_Mode_t mode,
 {
   uint32_t exti_imr, exti_emr, exti_rtsr, exti_ftsr, mask;
   uint32_t value, reg_num, offset;
-  IRQn_Type irq_num;
 
   if (line >= EXTI_LINE_NUMBER) {
     return (EXTI_DRIVER_ERROR_PARAMETER);
@@ -190,8 +245,8 @@ int32_t EXTI_SetConfigLine(EXTI_Line_t line, EXTI_Port_t port, EXTI_Mode_t mode,
     return (EXTI_DRIVER_ERROR);
   }
 
-  exti_imr = EXTI->IMR;
-  exti_emr = EXTI->EMR;
+  exti_imr  = EXTI->IMR;
+  exti_emr  = EXTI->EMR;
   exti_rtsr = EXTI->RTSR;
   exti_ftsr = EXTI->FTSR;
 
@@ -238,7 +293,7 @@ int32_t EXTI_SetConfigLine(EXTI_Line_t line, EXTI_Port_t port, EXTI_Mode_t mode,
   }
 
   if (line <= EXTI_LINE_15) {
-    if (port >= EXTI_PORT_INTERNAL) {
+    if (port == EXTI_PORT_INTERNAL) {
       return (EXTI_DRIVER_ERROR_PARAMETER);
     }
 
@@ -249,24 +304,18 @@ int32_t EXTI_SetConfigLine(EXTI_Line_t line, EXTI_Port_t port, EXTI_Mode_t mode,
     SYSCFG->EXTICR[reg_num] = value | (port << offset);
   }
 
-  EXTI->IMR = exti_imr;
-  EXTI->EMR = exti_emr;
+  EXTI->IMR  = exti_imr;
+  EXTI->EMR  = exti_emr;
   EXTI->RTSR = exti_rtsr;
   EXTI->FTSR = exti_ftsr;
 
-  irq_num = exti.irq_num[line];
-  if (!(irq_num < 0)) {
-    if (mode == EXTI_MODE_EVENT) {
-      /* Clear and Disable EXTI IRQ */
-      NVIC_DisableIRQ(irq_num);
-      NVIC_ClearPendingIRQ(irq_num);
-    }
-    else {
-      /* Clear and Enable EXTI IRQ */
-      NVIC_ClearPendingIRQ(irq_num);
-      NVIC_SetPriority(irq_num, DEV_EXTI_INT_PRIORITY);
-      NVIC_EnableIRQ(irq_num);
-    }
+  if (mode == EXTI_MODE_EVENT) {
+    /* Disable EXTI IRQ */
+    DisableIRQ(exti.irq_num[line], exti_imr);
+  }
+  else {
+    /* Enable EXTI IRQ */
+    EnableIRQ(exti.irq_num[line]);
   }
 
   return (EXTI_DRIVER_OK);
@@ -280,8 +329,7 @@ int32_t EXTI_SetConfigLine(EXTI_Line_t line, EXTI_Port_t port, EXTI_Mode_t mode,
  */
 int32_t EXTI_ClearConfigLine(EXTI_Line_t line)
 {
-  uint32_t  mask;
-  IRQn_Type irq_num;
+  uint32_t  exti_imr, exti_emr, mask;
 
   if (exti.info->state != EXTI_INITIALIZED) {
     return (EXTI_DRIVER_ERROR);
@@ -291,19 +339,20 @@ int32_t EXTI_ClearConfigLine(EXTI_Line_t line)
     return (EXTI_DRIVER_ERROR_PARAMETER);
   }
 
-  mask    = (1UL << (uint32_t)line);
+  exti_imr = EXTI->IMR;
+  exti_emr = EXTI->EMR;
 
-  EXTI->IMR  &= ~mask;
-  EXTI->EMR  &= ~mask;
-  EXTI->RTSR &= ~mask;
-  EXTI->FTSR &= ~mask;
-  EXTI->PR    =  mask;
+  mask = (1UL << (uint32_t)line);
 
-  irq_num = exti.irq_num[line];
-  if (!(irq_num < 0)) {
-    /* Clear and Disable EXTI IRQ */
-    NVIC_DisableIRQ(irq_num);
-    NVIC_ClearPendingIRQ(irq_num);
+  if (exti_emr & mask) {
+    EXTI->EMR &= ~mask;
+  }
+
+  if (exti_imr & mask) {
+    exti_imr &= ~mask;
+    EXTI->IMR = exti_imr;
+    /* Disable EXTI IRQ */
+    DisableIRQ(exti.irq_num[line], exti_imr);
   }
 
   return (EXTI_DRIVER_OK);
