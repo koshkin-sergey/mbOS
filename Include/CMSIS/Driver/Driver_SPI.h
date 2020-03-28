@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2017 ARM Limited. All rights reserved.
+ * Copyright (c) 2013-2020 ARM Limited. All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -15,13 +15,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * $Date:        2. Feb 2017
- * $Revision:    V2.2
+ * $Date:        27. March 2020
+ * $Revision:    V2.3
  *
  * Project:      SPI (Serial Peripheral Interface) Driver definitions
  */
 
 /* History:
+ *  Version 2.3
+ *    Removed Simplex Mode (deprecated)
+ *    Removed volatile from ARM_SPI_STATUS
  *  Version 2.2
  *    ARM_SPI_STATUS made volatile
  *  Version 2.1
@@ -54,7 +57,7 @@ extern "C"
 
 #include "Driver_Common.h"
 
-#define ARM_SPI_API_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(2,2)  /* API version */
+#define ARM_SPI_API_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(2,3)  /* API version */
 
 
 /****** SPI Control Codes *****/
@@ -66,8 +69,8 @@ extern "C"
 #define ARM_SPI_MODE_INACTIVE           (0x00UL << ARM_SPI_CONTROL_Pos)     ///< SPI Inactive
 #define ARM_SPI_MODE_MASTER             (0x01UL << ARM_SPI_CONTROL_Pos)     ///< SPI Master (Output on MOSI, Input on MISO); arg = Bus Speed in bps
 #define ARM_SPI_MODE_SLAVE              (0x02UL << ARM_SPI_CONTROL_Pos)     ///< SPI Slave  (Output on MISO, Input on MOSI)
-#define ARM_SPI_MODE_MASTER_SIMPLEX     (0x03UL << ARM_SPI_CONTROL_Pos)     ///< SPI Master (Output/Input on MOSI); arg = Bus Speed in bps
-#define ARM_SPI_MODE_SLAVE_SIMPLEX      (0x04UL << ARM_SPI_CONTROL_Pos)     ///< SPI Slave  (Output/Input on MISO)
+#define ARM_SPI_MODE_MASTER_SIMPLEX     (0x03UL << ARM_SPI_CONTROL_Pos)     ///< SPI Master (Output/Input on MOSI); arg = Bus Speed in bps @deprecated Simplex Mode has been removed
+#define ARM_SPI_MODE_SLAVE_SIMPLEX      (0x04UL << ARM_SPI_CONTROL_Pos)     ///< SPI Slave  (Output/Input on MISO) @deprecated Simplex Mode has been removed
 
 /*----- SPI Control Codes: Mode Parameters: Frame Format -----*/
 #define ARM_SPI_FRAME_FORMAT_Pos         8
@@ -82,7 +85,7 @@ extern "C"
 /*----- SPI Control Codes: Mode Parameters: Data Bits -----*/
 #define ARM_SPI_DATA_BITS_Pos            12
 #define ARM_SPI_DATA_BITS_Msk           (0x3FUL << ARM_SPI_DATA_BITS_Pos)
-#define ARM_SPI_DATA_BITS(n)            (((n) & 0x3F) << ARM_SPI_DATA_BITS_Pos) ///< Number of Data bits
+#define ARM_SPI_DATA_BITS(n)            (((n) & 0x3FUL) << ARM_SPI_DATA_BITS_Pos) ///< Number of Data bits
 
 /*----- SPI Control Codes: Mode Parameters: Bit Order -----*/
 #define ARM_SPI_BIT_ORDER_Pos            18
@@ -112,8 +115,8 @@ extern "C"
 
 
 /****** SPI Slave Select Signal definitions *****/
-#define ARM_SPI_SS_INACTIVE              0                                  ///< SPI Slave Select Signal Inactive
-#define ARM_SPI_SS_ACTIVE                1                                  ///< SPI Slave Select Signal Active
+#define ARM_SPI_SS_INACTIVE              0UL                                ///< SPI Slave Select Signal Inactive
+#define ARM_SPI_SS_ACTIVE                1UL                                ///< SPI Slave Select Signal Active
 
 
 /****** SPI specific error codes *****/
@@ -127,7 +130,7 @@ extern "C"
 /**
 \brief SPI Status
 */
-typedef volatile struct _ARM_SPI_STATUS {
+typedef struct _ARM_SPI_STATUS {
   uint32_t busy       : 1;              ///< Transmitter/Receiver busy flag
   uint32_t data_lost  : 1;              ///< Data lost: Receive overflow / Transmit underflow (cleared on start of transfer operation)
   uint32_t mode_fault : 1;              ///< Mode fault detected; optional (cleared on start of transfer operation)
@@ -213,7 +216,7 @@ typedef void (*ARM_SPI_SignalEvent_t) (uint32_t event);  ///< Pointer to \ref AR
 \brief SPI Driver Capabilities.
 */
 typedef struct _ARM_SPI_CAPABILITIES {
-  uint32_t simplex          : 1;        ///< supports Simplex Mode (Master and Slave)
+  uint32_t simplex          : 1;        ///< supports Simplex Mode (Master and Slave) @deprecated Reserved (must be zero)
   uint32_t ti_ssi           : 1;        ///< supports TI Synchronous Serial Interface
   uint32_t microwire        : 1;        ///< supports Microwire Interface
   uint32_t event_mode_fault : 1;        ///< Signal Mode Fault event: \ref ARM_SPI_EVENT_MODE_FAULT
