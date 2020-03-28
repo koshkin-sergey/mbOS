@@ -58,14 +58,14 @@
  * IAR Compiler
  */
 #elif defined ( __ICCARM__ )
-  #include "cmsis_iccarm.h"
+  #include <cmsis_iccarm.h>
 
 
 /*
  * TI Arm Compiler
  */
 #elif defined ( __TI_ARM__ )
-  #include "cmsis_ccs.h"
+  #include <cmsis_ccs.h>
 
   #ifndef   __ASM
     #define __ASM                                  __asm
