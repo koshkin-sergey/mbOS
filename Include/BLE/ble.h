@@ -26,6 +26,8 @@
 #ifndef BLE_H_
 #define BLE_H_
 
+#include <stdint.h>
+
 /* Function documentation */
 /**
   @fn         int32_t IO_Init(void* pConf)
@@ -70,36 +72,45 @@ typedef struct HCI_IO_s {
 } HCI_IO_t;
 
 /**
- * @fn        void HCI_Init(void(*)(void*), void*, HCI_IO_t*)
- * @brief     Initialize the Host Controller Interface.
- *            This function must be called before any data can be received
- *            from BLE controller.
+ * @fn          void (*)(void*)
+ * @brief       This callback is triggered when an user event is received from
+ *              the BLE core device.
  *
- * @param[in] UserEvtRx  ACI events callback function pointer. This callback
- *                       is triggered when an user event is received from
- *                       the BLE core device.
- * @param[in] pConf      Configuration structure pointer
- * @param[in] fops       The HCI IO structure managing the IO BUS
+ * @param[in]   pData
  */
-void HCI_Init(void(* UserEvtRx)(void* pData), const void* pConf, HCI_IO_t* fops);
+typedef void(* UserEvtRx_t)(void* pData);
 
 /**
- * @fn        int32_t HCI_NotifyAsynchEvt(void*)
- * @brief     Interrupt service routine that must be called when the BlueNRG
- *            reports a packet received or an event to the host through the
- *            BlueNRG-MS interrupt line.
+ * @fn          void HCI_Init(UserEvtRx_t, const void*, HCI_IO_t*)
+ * @brief       Initialize the Host Controller Interface.
+ *              This function must be called before any data can be received
+ *              from BLE controller.
  *
- * @param[in] pdata   Packet or event pointer
- * @return    0: packet/event processed
- *            1: no packet/event processed
+ * @param[in]   UserEvtRx  ACI events callback function pointer. This callback
+ *                         is triggered when an user event is received from
+ *                         the BLE core device.
+ * @param[in]   pConf      Configuration structure pointer
+ * @param[in]   fops       The HCI IO structure managing the IO BUS
+ */
+void HCI_Init(UserEvtRx_t UserEvtRx, const void* pConf, HCI_IO_t* fops);
+
+/**
+ * @fn          int32_t HCI_NotifyAsynchEvt(void*)
+ * @brief       Interrupt service routine that must be called when the BlueNRG
+ *              reports a packet received or an event to the host through the
+ *              BlueNRG-MS interrupt line.
+ *
+ * @param[in]   pdata   Packet or event pointer
+ * @return      0: packet/event processed
+ *              1: no packet/event processed
  */
 int32_t HCI_NotifyAsynchEvt(void* pdata);
 
 /**
- * @fn        void HCI_UserEvtProc(void)
- * @brief     Processing function that must be called after an event is received
- *            from HCI interface. It must be called outside ISR.
- *            It will call user_notify() if necessary.
+ * @fn          void HCI_UserEvtProc(void)
+ * @brief       Processing function that must be called after an event is received
+ *              from HCI interface. It must be called outside ISR.
+ *              It will call user_notify() if necessary.
  */
 void HCI_UserEvtProc(void);
 
