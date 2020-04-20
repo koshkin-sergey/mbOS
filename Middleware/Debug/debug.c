@@ -40,10 +40,7 @@
 #endif
 
 /* USART Driver */
-#define _USART_Driver(n)              Driver_USART##n
-#define  USART_Driver(n)              _USART_Driver(n)
-
-extern ARM_DRIVER_USART USART_Driver(DRIVER_USART_DEBUG_NUM);
+extern ARM_DRIVER_USART ARM_Driver_USART_(DRIVER_USART_DEBUG_NUM);
 
 #define EVENT_SEND_COMPLETE           (1U << 0)
 #define DEBUG_MSG_BUF_SIZE            256U
@@ -85,7 +82,7 @@ static const osSemaphoreAttr_t sem_attr = {
 };
 
 static UsartInfo_t usart = {
-    .driver   = &USART_Driver(DRIVER_USART_DEBUG_NUM),
+    .driver   = &ARM_Driver_USART_(DRIVER_USART_DEBUG_NUM),
     .baudrate = DRIVER_USART_DEBUG_BAUDRATE,
     .c_cflag  = ARM_USART_MODE_ASYNCHRONOUS |
                 ARM_USART_DATA_BITS_8       |
