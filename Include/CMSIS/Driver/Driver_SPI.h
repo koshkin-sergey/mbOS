@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * $Date:        27. March 2020
+ * $Date:        31. March 2020
  * $Revision:    V2.3
  *
  * Project:      SPI (Serial Peripheral Interface) Driver definitions
@@ -60,6 +60,10 @@ extern "C"
 #define ARM_SPI_API_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(2,3)  /* API version */
 
 
+#define _ARM_Driver_SPI_(n)      Driver_SPI##n
+#define  ARM_Driver_SPI_(n) _ARM_Driver_SPI_(n)
+
+
 /****** SPI Control Codes *****/
 
 #define ARM_SPI_CONTROL_Pos              0
@@ -80,7 +84,7 @@ extern "C"
 #define ARM_SPI_CPOL1_CPHA0             (2UL << ARM_SPI_FRAME_FORMAT_Pos)   ///< Clock Polarity 1, Clock Phase 0
 #define ARM_SPI_CPOL1_CPHA1             (3UL << ARM_SPI_FRAME_FORMAT_Pos)   ///< Clock Polarity 1, Clock Phase 1
 #define ARM_SPI_TI_SSI                  (4UL << ARM_SPI_FRAME_FORMAT_Pos)   ///< Texas Instruments Frame Format
-#define ARM_SPI_MICROWIRE               (5UL << ARM_SPI_FRAME_FORMAT_Pos)   ///< National Microwire Frame Format
+#define ARM_SPI_MICROWIRE               (5UL << ARM_SPI_FRAME_FORMAT_Pos)   ///< National Semiconductor Microwire Frame Format
 
 /*----- SPI Control Codes: Mode Parameters: Data Bits -----*/
 #define ARM_SPI_DATA_BITS_Pos            12
