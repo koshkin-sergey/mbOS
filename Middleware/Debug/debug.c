@@ -1,5 +1,11 @@
+/******************************************************************************
+ * @file    debug.c
+ * @brief   This file provides Debug interface.
+ * @author  Sergey Koshkin
+ * @version V1.0.0
+ ******************************************************************************/
 /*
- * Copyright (C) 2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2019-2020 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -15,8 +21,6 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
- * Description: This file provides Debug interface.
  */
 
 /*******************************************************************************
@@ -122,6 +126,22 @@ static void unlock(void)
   osSemaphoreRelease(sem);
 }
 
+static int32_t Send(const void *data, uint32_t num)
+{
+  int32_t  cnt = 0;
+  uint32_t event_flags;
+
+  if (usart.driver->Send(data, num) == ARM_DRIVER_OK) {
+    do {
+      event_flags = osEventFlagsWait(ef, EVENT_SEND_COMPLETE, osFlagsWaitAny, osWaitForever);
+    } while(event_flags != EVENT_SEND_COMPLETE);
+
+    cnt = usart.driver->GetTxCount();
+  }
+
+  return (cnt);
+}
+
 static uint32_t Initialize(void)
 {
   ARM_DRIVER_USART *driver;
@@ -170,18 +190,15 @@ static int32_t dprintf(const char *template, ...)
   cnt = vsnprintf(debug_buf, DEBUG_MSG_BUF_SIZE, template, ap);
   va_end(ap);
 
-  if (cnt >= (int32_t)DEBUG_MSG_BUF_SIZE) {
-    if (debug_buf[DEBUG_MSG_BUF_SIZE-2] != '\r') {
-      debug_buf[DEBUG_MSG_BUF_SIZE-2] = '*';
-    }
-    debug_buf[DEBUG_MSG_BUF_SIZE-1] = '\n';
-    cnt = DEBUG_MSG_BUF_SIZE;
-  }
-
   if (cnt > 0) {
-    if (usart.driver->Send(debug_buf, cnt) == ARM_DRIVER_OK) {
-      osEventFlagsWait(ef, EVENT_SEND_COMPLETE, osFlagsWaitAny, osWaitForever);
+    if (cnt >= (int32_t)DEBUG_MSG_BUF_SIZE) {
+      if (debug_buf[DEBUG_MSG_BUF_SIZE-2] != '\r') {
+        debug_buf[DEBUG_MSG_BUF_SIZE-2] = '*';
+      }
+      debug_buf[DEBUG_MSG_BUF_SIZE-1] = '\n';
+      cnt = DEBUG_MSG_BUF_SIZE;
     }
+    cnt = Send(debug_buf, cnt);
   }
 
   unlock();
