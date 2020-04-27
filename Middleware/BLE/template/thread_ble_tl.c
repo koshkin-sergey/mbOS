@@ -28,6 +28,8 @@
  ******************************************************************************/
 
 #include "app.h"
+#include <string.h>
+#include <asm/GPIO_STM32F7xx.h>
 #include <asm/EXTI_STM32F7xx.h>
 #include <CMSIS/Driver/Driver_SPI.h>
 
@@ -41,14 +43,22 @@
 #define BUFFER_SIZE                   128U
 
 /* Event flags */
-#define BLE_EVENT_RECEIVE             (1UL << 0U)
-#define BLE_EVENT_SEND                (1UL << 1U)
-#define BLE_EVENT_TRANSFER_COMPLETE   (1UL << 2U)
-#define BLE_EVENT_DATA_LOST           (1UL << 3U)
+#define FLAG_RECEIVE                  (1UL << 0U)
+#define FLAG_SEND                     (1UL << 1U)
+#define FLAG_TRANSFER_COMPLETE        (1UL << 2U)
+#define FLAG_TX_READY                 (1UL << 3U)
 
-/* Event line */
-#define BLE_EVENT_PORT                EXTI_PORT_C
-#define BLE_EVENT_LINE                EXTI_LINE_4
+/* BlueNRG-MS Event line */
+#define BLE_EXTI_PORT                 EXTI_PORT_C
+#define BLE_EXTI_LINE                 EXTI_LINE_4
+
+/* BlueNRG-MS Event pin */
+#define BLE_EVENT_PORT                GPIO_PORT_C
+#define BLE_EVENT_PIN                 GPIO_PIN_4
+
+/* BlueNRG-MS Reset pin */
+#define BLE_RESET_PORT                GPIO_PORT_C
+#define BLE_RESET_PIN                 GPIO_PIN_5
 
 /* BlueNRG-MS Control byte */
 #define BLE_WRITE_OPER                0x0A
@@ -112,30 +122,47 @@ static ARM_DRIVER_SPI *driver_spi = &ARM_Driver_SPI_(DRIVER_SPI_NUM);
 
 static void SPI_Callback(uint32_t event)
 {
-  uint32_t flag;
-
-  switch (event) {
-    case ARM_SPI_EVENT_TRANSFER_COMPLETE:
-      flag = BLE_EVENT_TRANSFER_COMPLETE;
-      break;
-
-    case ARM_SPI_EVENT_DATA_LOST:
-      flag = BLE_EVENT_DATA_LOST;
-      break;
-
-    default:
-      flag = 0UL;
-      break;
+  if (event & ARM_SPI_EVENT_TRANSFER_COMPLETE) {
+    osEventFlagsSet(ble_evt, FLAG_TRANSFER_COMPLETE);
   }
-
-  osEventFlagsSet(ble_evt, flag);
 }
 
 static void EXTI_Callback(EXTI_Line_t line)
 {
-  if (line == BLE_EVENT_LINE) {
-    osEventFlagsSet(ble_evt, BLE_EVENT_RECEIVE);
+  if (line == BLE_EXTI_LINE) {
+    osEventFlagsSet(ble_evt, FLAG_RECEIVE);
   }
+}
+
+static void ResetPinConfig(void)
+{
+  static const GPIO_PIN_CFG_t reset_pin_cfg = {
+      GPIO_MODE_OUT_PP,
+      GPIO_PULL_DISABLE,
+      GPIO_SPEED_LOW
+  };
+
+  if (!GPIO_GetPortClockState(BLE_RESET_PORT)) {
+    GPIO_PortClock(BLE_RESET_PORT, GPIO_PORT_CLK_ENABLE);
+  }
+
+  GPIO_PinWrite(BLE_RESET_PORT, BLE_RESET_PIN, GPIO_PIN_OUT_HIGH);
+  GPIO_PinConfig(BLE_RESET_PORT, BLE_RESET_PIN, &reset_pin_cfg);
+}
+
+static void EventPinConfig(void)
+{
+  static const GPIO_PIN_CFG_t event_pin_cfg = {
+      GPIO_MODE_INPUT,
+      GPIO_PULL_DOWN,
+      GPIO_SPEED_LOW
+  };
+
+  if (!GPIO_GetPortClockState(BLE_EVENT_PORT)) {
+    GPIO_PortClock(BLE_EVENT_PORT, GPIO_PORT_CLK_ENABLE);
+  }
+
+  GPIO_PinConfig(BLE_EVENT_PORT, BLE_EVENT_PIN, &event_pin_cfg);
 }
 
 int32_t TransferHeader(header_t *hdr)
@@ -143,15 +170,14 @@ int32_t TransferHeader(header_t *hdr)
   int32_t  ret;
   uint32_t flags;
 
-  ret = driver_spi->Transfer(hdr, hdr, sizeof(hdr));
+  ret = driver_spi->Transfer(hdr, hdr, sizeof(header_t));
   if (ret != ARM_DRIVER_OK) {
     return (-1);
   }
 
-  flags = osEventFlagsWait(ble_evt,
-                           BLE_EVENT_TRANSFER_COMPLETE | BLE_EVENT_DATA_LOST,
-                           osFlagsWaitAny, osWaitForever);
-  if (((int32_t)flags < 0) || (flags & BLE_EVENT_DATA_LOST)) {
+  flags = osEventFlagsWait(ble_evt, FLAG_TRANSFER_COMPLETE, osFlagsWaitAny,
+                           osWaitForever);
+  if ((int32_t)flags < 0) {
     return (-2);
   }
 
@@ -169,13 +195,13 @@ static void ReceiveEvent(buffer_t *buf)
   /* Read header */
   ret = TransferHeader(&hdr);
   if ((ret == 0) && (hdr.ctrl == BLE_READY)) {
-    if (hdr.rbuf_size > HEADER_SIZE) {
-      hdr.rbuf_size = HEADER_SIZE;
+    if (hdr.rbuf_size > BUFFER_SIZE) {
+      hdr.rbuf_size = BUFFER_SIZE;
     }
     ret = driver_spi->Receive(&buf->data[0], hdr.rbuf_size);
     if (ret == ARM_DRIVER_OK) {
-      osEventFlagsWait(ble_evt, BLE_EVENT_TRANSFER_COMPLETE | BLE_EVENT_DATA_LOST,
-                       osFlagsWaitAny, osWaitForever);
+      osEventFlagsWait(ble_evt, FLAG_TRANSFER_COMPLETE, osFlagsWaitAny,
+                       osWaitForever);
       buf->size = driver_spi->GetDataCount();
     }
   }
@@ -187,9 +213,11 @@ static void SendData(buffer_t *buf)
 {
   int32_t  ret, result;
   header_t hdr;
+  uint32_t cnt = 0U;
 
   do {
     result = -1;
+    ++cnt;
     hdr.ctrl = BLE_WRITE_OPER;
     /* CS reset */
     driver_spi->Control(ARM_SPI_CONTROL_SS, ARM_SPI_SS_ACTIVE);
@@ -199,15 +227,20 @@ static void SendData(buffer_t *buf)
       if (hdr.wbuf_size >= buf->size) {
         ret = driver_spi->Send(&buf->data[0], buf->size);
         if (ret == ARM_DRIVER_OK) {
-          osEventFlagsWait(ble_evt, BLE_EVENT_TRANSFER_COMPLETE | BLE_EVENT_DATA_LOST,
-              osFlagsWaitAny, osWaitForever);
+          osEventFlagsWait(ble_evt, FLAG_TRANSFER_COMPLETE, osFlagsWaitAny,
+                           osWaitForever);
           result = 0;
         }
       }
     }
     /* Release CS line */
     driver_spi->Control(ARM_SPI_CONTROL_SS, ARM_SPI_SS_INACTIVE);
-  } while(result < 0);
+    if (result != 0) {
+      osDelay(1);
+    }
+  } while((result != 0) && (cnt < 10U));
+
+  osEventFlagsSet(ble_evt, FLAG_TX_READY);
 }
 
 __NO_RETURN static
@@ -233,21 +266,23 @@ void thread_ble_tl(void *param)
   DEBUG_LOG("BLE module SPI interface clock = %d Hz\r\n", ret);
 
   EXTI_Initialize(EXTI_Callback);
-  EXTI_SetConfigLine(BLE_EVENT_LINE, BLE_EVENT_PORT, EXTI_MODE_INTERRUPT,
+  EXTI_SetConfigLine(BLE_EXTI_LINE, BLE_EXTI_PORT, EXTI_MODE_INTERRUPT,
                      EXTI_TRIGGER_RISING);
 
+  osEventFlagsSet(ble_evt, FLAG_TX_READY);
+
   for(;;) {
-    flags = osEventFlagsWait(ble_evt, BLE_EVENT_RECEIVE | BLE_EVENT_SEND,
+    flags = osEventFlagsWait(ble_evt, FLAG_RECEIVE | FLAG_SEND,
                              osFlagsWaitAny, osWaitForever);
     if ((int32_t)flags < 0) {
       DEBUG_LOG("Error of event wait %d", (int32_t)flags);
       continue;
     }
 
-    if (flags & BLE_EVENT_RECEIVE) {
+    if (flags & FLAG_RECEIVE) {
       ReceiveEvent(&buf_rx);
     }
-    else if (flags & BLE_EVENT_SEND) {
+    else if (flags & FLAG_SEND) {
       SendData(&buf_tx);
     }
   }
@@ -258,17 +293,71 @@ void thread_ble_tl(void *param)
  ******************************************************************************/
 
 /**
- * @fn          void CreateThreadBleTransportLayer(const void*)
+ * @fn          int32_t BLE_InitTransportLayer(const void*)
  * @brief       Create BLE transport layer thread.
  *
  * @param[in]   pConf  Pointer to configuration struct
+ * @return      0
  */
-void CreateThreadBleTransportLayer(const void* pConf)
+int32_t BLE_InitTransportLayer(const void* pConf)
 {
+  /* Initialize reset pin */
+  ResetPinConfig();
+  /* Initialize event pin */
+  EventPinConfig();
+  /* Create Event Flag */
   ble_evt = osEventFlagsNew(&ble_evt_attr);
   if (ble_evt != NULL) {
+    /* Create Thread */
     osThreadNew(thread_ble_tl, (void*)pConf, &thread_attr);
   }
+
+  return (0);
+}
+
+/**
+ * @fn          int32_t BLE_Reset(void)
+ * @brief       Reset BlueNRG module.
+ *
+ * @return      0
+ */
+int32_t BLE_Reset(void)
+{
+  GPIO_PinWrite(BLE_RESET_PORT, BLE_RESET_PIN, GPIO_PIN_OUT_LOW);
+  osDelay(100);
+  GPIO_PinWrite(BLE_RESET_PORT, BLE_RESET_PIN, GPIO_PIN_OUT_HIGH);
+  osDelay(5);
+
+  return (0);
+}
+
+/**
+ * @fn          int32_t BLE_Send(const uint8_t*, uint16_t)
+ * @brief       Writes data from local buffer to Bluetooth module.
+ *
+ * @param[in]   buf   Data buffer to be written
+ * @param[in]   size  Size of the data buffer
+ * @return      Number of bytes are written
+ */
+int32_t BLE_Send(const uint8_t* buf, uint16_t size)
+{
+  uint32_t flags;
+
+  if ((buf == NULL) || (size > BUFFER_SIZE)) {
+    return (0);
+  }
+
+  flags = osEventFlagsWait(ble_evt, FLAG_TX_READY, osFlagsWaitAny, 10);
+  if ((int32_t)flags < 0) {
+    return (0);
+  }
+
+  memcpy(&buf_tx.data[0], buf, size);
+  buf_tx.size = size;
+
+  osEventFlagsSet(ble_evt, FLAG_SEND);
+
+  return (size);
 }
 
 /* ----------------------------- End of file ---------------------------------*/

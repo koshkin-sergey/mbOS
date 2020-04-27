@@ -44,6 +44,15 @@
  *  typedefs and structures (scope: module-local)
  ******************************************************************************/
 
+typedef __PACKED_STRUCT hci_command_hdr_s {
+  uint8_t pid;        // HCI packet indicator
+  struct {
+    uint16_t ocf:10;  // OpCode Command Field
+    uint16_t ogf:6;   // OpCode Group Field
+  };
+  uint8_t plen;       // Parameter Total Length
+} hci_command_hdr_t;
+
 /*******************************************************************************
  *  global variable definitions  (scope: module-exported)
  ******************************************************************************/
@@ -77,19 +86,7 @@ static void UserEvent(void* pData)
 
 }
 
-static int32_t Init(const void* pConf)
-{
-  CreateThreadBleTransportLayer(pConf);
-
-  return (0);
-}
-
 static int32_t DeInit(void)
-{
-  return (0);
-}
-
-static int32_t Reset(void)
 {
   return (0);
 }
@@ -99,19 +96,26 @@ static int32_t Receive(uint8_t* buf, uint16_t size)
   return (0);
 }
 
-static int32_t Send(const uint8_t* buf, uint16_t size)
+static void TestSend(void)
 {
-  return (0);
+  hci_command_hdr_t hdr;
+
+  hdr.pid = 0x01;
+  hdr.ogf = 0x03;
+  hdr.ocf = 0x003;
+  hdr.plen = 0x00;
+
+  BLE_Send((uint8_t *)&hdr, sizeof(hdr));
 }
 
 static void BLE_Init(void)
 {
   HCI_IO_t hci_io = {
-    .Init    = Init,
+    .Init    = BLE_InitTransportLayer,
     .DeInit  = DeInit,
-    .Reset   = Reset,
+    .Reset   = BLE_Reset,
     .Receive = Receive,
-    .Send    = Send,
+    .Send    = BLE_Send,
   };
 
   HCI_Init(UserEvent, NULL, &hci_io);
@@ -124,6 +128,7 @@ void thread_ble(void *param)
 
   DEBUG_LOG("Created thread for Bluetooth LE stack\r\n");
   BLE_Init();
+  TestSend();
 
   for(;;) {
     osDelay(500);
