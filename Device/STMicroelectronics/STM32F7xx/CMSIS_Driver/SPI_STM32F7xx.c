@@ -1378,16 +1378,17 @@ int32_t SPI_Control(uint32_t control, uint32_t arg, SPI_RESOURCES *spi)
         if ((spi->io.nss != NULL) && (val == ARM_SPI_SS_MASTER_SW)) {
           SPI_PIN *io = spi->io.nss;
           /* Set/Clear NSS pin */
-          if (arg == ARM_SPI_SS_INACTIVE)
+          if (arg == ARM_SPI_SS_INACTIVE) {
             GPIO_PinWrite(io->port, io->pin, GPIO_PIN_OUT_HIGH);
-          else
+          }
+          else {
             GPIO_PinWrite(io->port, io->pin, GPIO_PIN_OUT_LOW);
+          }
+          return ARM_DRIVER_OK;
         }
         else {
           return ARM_DRIVER_ERROR;
         }
-
-        return ARM_DRIVER_OK;
       }
       /* Slave modes */
       else if (val == ARM_SPI_MODE_SLAVE) {
@@ -1480,6 +1481,7 @@ int32_t SPI_Control(uint32_t control, uint32_t arg, SPI_RESOURCES *spi)
         if (spi->io.nss != NULL) {
           /* Configure NSS pin as GPIO output */
           PinConfig(spi->io.nss, &SPI_pin_cfg_out_pp);
+          GPIO_PinWrite(spi->io.nss->port, spi->io.nss->pin, GPIO_PIN_OUT_HIGH);
 
           /* Software slave management */
           cr1 |= SPI_CR1_SSM | SPI_CR1_SSI;
