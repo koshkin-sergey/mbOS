@@ -92,7 +92,7 @@ typedef __PACKED_STRUCT header_s {
  *  global variable definitions (scope: module-local)
  ******************************************************************************/
 
-static buffer_t buf_rx;
+//static buffer_t buf_rx;
 static buffer_t buf_tx;
 
 static osThread_t           thread_cb;
@@ -110,10 +110,10 @@ static const osThreadAttr_t thread_attr = {
 static osEventFlagsId_t         ble_evt;
 static osEventFlags_t           ble_evt_cb;
 static const osEventFlagsAttr_t ble_evt_attr = {
-    .name      = NULL,
-    .attr_bits = 0U,
-    .cb_mem    = &ble_evt_cb,
-    .cb_size   = sizeof(ble_evt_cb)
+  .name      = NULL,
+  .attr_bits = 0U,
+  .cb_mem    = &ble_evt_cb,
+  .cb_size   = sizeof(ble_evt_cb)
 };
 
 static osMemoryPoolId_t         event_pool;
@@ -126,6 +126,18 @@ static const osMemoryPoolAttr_t event_pool_attr = {
   .cb_size   = sizeof(event_pool_cb),
   .mp_mem    = &event_pool_mem[0],
   .mp_size   = osMemoryPoolMemSize(EVENT_POOL_CNT, BUFFER_SIZE),
+};
+
+static osDataQueueId_t         event_queue;
+static osDataQueue_t           event_queue_cb;
+static void* event_queue_mem[EVENT_POOL_CNT];
+static const osDataQueueAttr_t event_queue_attr = {
+  .name = NULL,
+  .attr_bits = 0U,
+  .cb_mem    = &event_queue_cb,
+  .cb_size   = sizeof(event_queue_cb),
+  .dq_mem    = &event_queue_mem[0],
+  .dq_size   = sizeof(event_queue_mem),
 };
 
 static ARM_DRIVER_SPI *driver_spi = &ARM_Driver_SPI_(DRIVER_SPI_NUM);
@@ -203,30 +215,43 @@ uint32_t isEventAvailable(void)
   return GPIO_PinRead(BLE_EVENT_PORT, BLE_EVENT_PIN);
 }
 
-static void ReceiveEvent(buffer_t *buf)
+static void ReceiveEvent(void)
 {
-  int32_t  ret;
-  header_t hdr;
+  int32_t   ret;
+  header_t  hdr;
+  void     *buf_rx;
 
   while(isEventAvailable()) {
-    hdr.ctrl = BLE_READ_OPER;
-    /* CS reset */
-    driver_spi->Control(ARM_SPI_CONTROL_SS, ARM_SPI_SS_ACTIVE);
-    /* Read header */
-    ret = TransferHeader(&hdr);
-    if ((ret == 0) && (hdr.ctrl == BLE_READY) && (hdr.rbuf_size > 0U)) {
-      if (hdr.rbuf_size > BUFFER_SIZE) {
-        hdr.rbuf_size = BUFFER_SIZE;
+    buf_rx = osMemoryPoolAlloc(event_pool, osWaitForever);
+    if (buf_rx != NULL) {
+      hdr.ctrl = BLE_READ_OPER;
+      /* CS reset */
+      driver_spi->Control(ARM_SPI_CONTROL_SS, ARM_SPI_SS_ACTIVE);
+      /* Read header */
+      ret = TransferHeader(&hdr);
+      if ((ret == 0) && (hdr.ctrl == BLE_READY) && (hdr.rbuf_size > 0U)) {
+        if (hdr.rbuf_size > BUFFER_SIZE) {
+          hdr.rbuf_size = BUFFER_SIZE;
+        }
+        ret = driver_spi->Receive(buf_rx, hdr.rbuf_size);
+        if (ret == ARM_DRIVER_OK) {
+          osEventFlagsWait(ble_evt, FLAG_TRANSFER_COMPLETE, osFlagsWaitAny,
+                           osWaitForever);
+        }
       }
-      ret = driver_spi->Receive(&buf->data[0], hdr.rbuf_size);
+      else {
+        ret = ARM_DRIVER_ERROR;
+      }
+      /* Release CS line */
+      driver_spi->Control(ARM_SPI_CONTROL_SS, ARM_SPI_SS_INACTIVE);
+
       if (ret == ARM_DRIVER_OK) {
-        osEventFlagsWait(ble_evt, FLAG_TRANSFER_COMPLETE, osFlagsWaitAny,
-            osWaitForever);
-        buf->size = driver_spi->GetDataCount();
+        osDataQueuePut(event_queue, &buf_rx, osWaitForever);
+      }
+      else {
+        osMemoryPoolFree(event_pool, buf_rx);
       }
     }
-    /* Release CS line */
-    driver_spi->Control(ARM_SPI_CONTROL_SS, ARM_SPI_SS_INACTIVE);
   };
 }
 
@@ -309,7 +334,7 @@ void thread_ble_tl(void *param)
     }
 
     if (flags & FLAG_RECEIVE) {
-      ReceiveEvent(&buf_rx);
+      ReceiveEvent();
     }
 
     if (flags & FLAG_SEND) {
@@ -341,6 +366,8 @@ int32_t BLE_InitTransportLayer(const void* pConf)
   EventPinConfig();
   /* Create Event Pool */
   event_pool = osMemoryPoolNew(EVENT_POOL_CNT, BUFFER_SIZE, &event_pool_attr);
+  /* Create Event Queue */
+  event_queue = osDataQueueNew(EVENT_POOL_CNT, sizeof(void*), &event_queue_attr);
   /* Create Event Flag */
   ble_evt = osEventFlagsNew(&ble_evt_attr);
   if (ble_evt != NULL) {
