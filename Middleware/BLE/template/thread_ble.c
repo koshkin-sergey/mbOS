@@ -86,11 +86,6 @@ static void UserEvent(void* pData)
 
 }
 
-static int32_t DeInit(void)
-{
-  return (0);
-}
-
 static int32_t Receive(uint8_t* buf, uint16_t size)
 {
   return (0);
@@ -112,7 +107,7 @@ static void BLE_Init(void)
 {
   HCI_IO_t hci_io = {
     .Init    = BLE_InitTransportLayer,
-    .DeInit  = DeInit,
+    .DeInit  = BLE_DeInit,
     .Reset   = BLE_Reset,
     .Receive = Receive,
     .Send    = BLE_Send,

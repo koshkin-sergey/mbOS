@@ -92,9 +92,9 @@ typedef __PACKED_STRUCT header_s {
  *  global variable definitions (scope: module-local)
  ******************************************************************************/
 
-//static buffer_t buf_rx;
 static buffer_t buf_tx;
 
+static osThreadId_t         thread;
 static osThread_t           thread_cb;
 static uint64_t             thread_stack[THREAD_STK_SIZE/8U];
 static const osThreadAttr_t thread_attr = {
@@ -107,13 +107,13 @@ static const osThreadAttr_t thread_attr = {
   .priority   = osPriorityHigh,
 };
 
-static osEventFlagsId_t         ble_evt;
-static osEventFlags_t           ble_evt_cb;
-static const osEventFlagsAttr_t ble_evt_attr = {
+static osEventFlagsId_t         evt_flags;
+static osEventFlags_t           evt_flags_cb;
+static const osEventFlagsAttr_t evt_flags_attr = {
   .name      = NULL,
   .attr_bits = 0U,
-  .cb_mem    = &ble_evt_cb,
-  .cb_size   = sizeof(ble_evt_cb)
+  .cb_mem    = &evt_flags_cb,
+  .cb_size   = sizeof(evt_flags_cb)
 };
 
 static osMemoryPoolId_t         event_pool;
@@ -149,14 +149,14 @@ static ARM_DRIVER_SPI *driver_spi = &ARM_Driver_SPI_(DRIVER_SPI_NUM);
 static void SPI_Callback(uint32_t event)
 {
   if (event & ARM_SPI_EVENT_TRANSFER_COMPLETE) {
-    osEventFlagsSet(ble_evt, FLAG_TRANSFER_COMPLETE);
+    osEventFlagsSet(evt_flags, FLAG_TRANSFER_COMPLETE);
   }
 }
 
 static void EXTI_Callback(EXTI_Line_t line)
 {
   if (line == BLE_EXTI_LINE) {
-    osEventFlagsSet(ble_evt, FLAG_RECEIVE);
+    osEventFlagsSet(evt_flags, FLAG_RECEIVE);
   }
 }
 
@@ -201,7 +201,7 @@ int32_t TransferHeader(header_t *hdr)
     return (-1);
   }
 
-  flags = osEventFlagsWait(ble_evt, FLAG_TRANSFER_COMPLETE, osFlagsWaitAny,
+  flags = osEventFlagsWait(evt_flags, FLAG_TRANSFER_COMPLETE, osFlagsWaitAny,
                            osWaitForever);
   if ((int32_t)flags < 0) {
     return (-2);
@@ -235,7 +235,7 @@ static void ReceiveEvent(void)
         }
         ret = driver_spi->Receive(buf_rx, hdr.rbuf_size);
         if (ret == ARM_DRIVER_OK) {
-          osEventFlagsWait(ble_evt, FLAG_TRANSFER_COMPLETE, osFlagsWaitAny,
+          osEventFlagsWait(evt_flags, FLAG_TRANSFER_COMPLETE, osFlagsWaitAny,
                            osWaitForever);
         }
       }
@@ -273,7 +273,7 @@ static void SendData(buffer_t *buf)
       if (hdr.wbuf_size >= buf->size) {
         ret = driver_spi->Send(&buf->data[0], buf->size);
         if (ret == ARM_DRIVER_OK) {
-          osEventFlagsWait(ble_evt, FLAG_TRANSFER_COMPLETE, osFlagsWaitAny,
+          osEventFlagsWait(evt_flags, FLAG_TRANSFER_COMPLETE, osFlagsWaitAny,
                            osWaitForever);
           result = 0;
         }
@@ -286,7 +286,7 @@ static void SendData(buffer_t *buf)
     }
   } while((result != 0) && (cnt < 10U));
 
-  osEventFlagsSet(ble_evt, FLAG_TX_READY);
+  osEventFlagsSet(evt_flags, FLAG_TX_READY);
 }
 
 void ResetModule(void)
@@ -323,10 +323,10 @@ void thread_ble_tl(void *param)
   EXTI_SetConfigLine(BLE_EXTI_LINE, BLE_EXTI_PORT, EXTI_MODE_INTERRUPT,
                      EXTI_TRIGGER_RISING);
 
-  osEventFlagsSet(ble_evt, FLAG_TX_READY);
+  osEventFlagsSet(evt_flags, FLAG_TX_READY);
 
   for(;;) {
-    flags = osEventFlagsWait(ble_evt, FLAG_RECEIVE | FLAG_SEND | FLAG_RESET,
+    flags = osEventFlagsWait(evt_flags, FLAG_RECEIVE | FLAG_SEND | FLAG_RESET,
                              osFlagsWaitAny, osWaitForever);
     if ((int32_t)flags < 0) {
       DEBUG_LOG("Error of event wait %d", (int32_t)flags);
@@ -356,10 +356,12 @@ void thread_ble_tl(void *param)
  * @brief       Create BLE transport layer thread.
  *
  * @param[in]   pConf  Pointer to configuration struct
- * @return      0
+ * @return      Execution Status
  */
 int32_t BLE_InitTransportLayer(const void* pConf)
 {
+  int32_t status;
+
   /* Initialize reset pin */
   ResetPinConfig();
   /* Initialize event pin */
@@ -369,13 +371,50 @@ int32_t BLE_InitTransportLayer(const void* pConf)
   /* Create Event Queue */
   event_queue = osDataQueueNew(EVENT_POOL_CNT, sizeof(void*), &event_queue_attr);
   /* Create Event Flag */
-  ble_evt = osEventFlagsNew(&ble_evt_attr);
-  if (ble_evt != NULL) {
-    /* Create Thread */
-    osThreadNew(thread_ble_tl, (void*)pConf, &thread_attr);
+  evt_flags = osEventFlagsNew(&evt_flags_attr);
+  /* Create Thread */
+  thread = osThreadNew(thread_ble_tl, (void*)pConf, &thread_attr);
+
+  if ((event_pool == NULL) || (event_queue == NULL) ||
+      (evt_flags  == NULL) || (thread      == NULL)) {
+    BLE_DeInit();
+    status = BLE_TL_ERROR;
+    DEBUG_LOG("Error creating thread for BLE transport layer\r\n");
+  }
+  else {
+    status = BLE_TL_OK;
   }
 
-  return (0);
+  return (status);
+}
+
+/**
+ * @fn          int32_t BLE_DeInit(void)
+ * @brief       DeInitializes the peripherals communication with the Bluetooth
+                module (via SPI, I2C, USART, ...)
+ *
+ * @return      Execution Status
+ */
+int32_t BLE_DeInit(void)
+{
+  /* Delete Thread */
+  if (thread != NULL) {
+    osThreadTerminate(thread);
+  }
+  /* Delete Event Flag */
+  if (evt_flags != NULL) {
+    osEventFlagsDelete(evt_flags);
+  }
+  /* Delete Event Pool */
+  if (event_pool != NULL) {
+    osMemoryPoolDelete(event_pool);
+  }
+  /* Delete Event Queue */
+  if (event_queue != NULL) {
+    osDataQueueDelete(event_queue);
+  }
+
+  return (BLE_TL_OK);
 }
 
 /**
@@ -386,7 +425,7 @@ int32_t BLE_InitTransportLayer(const void* pConf)
  */
 int32_t BLE_Reset(void)
 {
-  osEventFlagsSet(ble_evt, FLAG_RESET);
+  osEventFlagsSet(evt_flags, FLAG_RESET);
 
   return (0);
 }
@@ -407,7 +446,7 @@ int32_t BLE_Send(const uint8_t* buf, uint16_t size)
     return (0);
   }
 
-  flags = osEventFlagsWait(ble_evt, FLAG_TX_READY, osFlagsWaitAny, 10);
+  flags = osEventFlagsWait(evt_flags, FLAG_TX_READY, osFlagsWaitAny, 10);
   if ((int32_t)flags < 0) {
     return (0);
   }
@@ -415,7 +454,7 @@ int32_t BLE_Send(const uint8_t* buf, uint16_t size)
   memcpy(&buf_tx.data[0], buf, size);
   buf_tx.size = size;
 
-  osEventFlagsSet(ble_evt, FLAG_SEND);
+  osEventFlagsSet(evt_flags, FLAG_SEND);
 
   return (size);
 }
