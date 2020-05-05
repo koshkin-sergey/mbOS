@@ -29,6 +29,7 @@
 
 #include "app.h"
 #include <string.h>
+#include <BLE/ble.h>
 #include <asm/GPIO_STM32F7xx.h>
 #include <asm/EXTI_STM32F7xx.h>
 #include <CMSIS/Driver/Driver_SPI.h>
@@ -191,7 +192,7 @@ static void EventPinConfig(void)
   GPIO_PinConfig(BLE_EVENT_PORT, BLE_EVENT_PIN, &event_pin_cfg);
 }
 
-int32_t TransferHeader(header_t *hdr)
+static int32_t TransferHeader(header_t *hdr)
 {
   int32_t  ret;
   uint32_t flags;
@@ -210,20 +211,20 @@ int32_t TransferHeader(header_t *hdr)
   return (0);
 }
 
-uint32_t isEventAvailable(void)
+static uint32_t isEventAvailable(void)
 {
   return GPIO_PinRead(BLE_EVENT_PORT, BLE_EVENT_PIN);
 }
 
 static void ReceiveEvent(void)
 {
-  int32_t   ret;
-  header_t  hdr;
-  void     *buf_rx;
+  int32_t       ret;
+  header_t      hdr;
+  hci_packet_t *packet;
 
   while(isEventAvailable()) {
-    buf_rx = osMemoryPoolAlloc(event_pool, osWaitForever);
-    if (buf_rx != NULL) {
+    packet = osMemoryPoolAlloc(event_pool, osWaitForever);
+    if (packet != NULL) {
       hdr.ctrl = BLE_READ_OPER;
       /* CS reset */
       driver_spi->Control(ARM_SPI_CONTROL_SS, ARM_SPI_SS_ACTIVE);
@@ -233,10 +234,13 @@ static void ReceiveEvent(void)
         if (hdr.rbuf_size > BUFFER_SIZE) {
           hdr.rbuf_size = BUFFER_SIZE;
         }
-        ret = driver_spi->Receive(buf_rx, hdr.rbuf_size);
+        ret = driver_spi->Receive(packet, hdr.rbuf_size);
         if (ret == ARM_DRIVER_OK) {
           osEventFlagsWait(evt_flags, FLAG_TRANSFER_COMPLETE, osFlagsWaitAny,
                            osWaitForever);
+        }
+        if (packet->type != HCI_EVENT_PACKET) {
+          ret = ARM_DRIVER_ERROR;
         }
       }
       else {
@@ -246,10 +250,10 @@ static void ReceiveEvent(void)
       driver_spi->Control(ARM_SPI_CONTROL_SS, ARM_SPI_SS_INACTIVE);
 
       if (ret == ARM_DRIVER_OK) {
-        osDataQueuePut(event_queue, &buf_rx, osWaitForever);
+        osDataQueuePut(event_queue, &packet, osWaitForever);
       }
       else {
-        osMemoryPoolFree(event_pool, buf_rx);
+        osMemoryPoolFree(event_pool, packet);
       }
     }
   };
@@ -289,7 +293,7 @@ static void SendData(buffer_t *buf)
   osEventFlagsSet(evt_flags, FLAG_TX_READY);
 }
 
-void ResetModule(void)
+static void ResetModule(void)
 {
   GPIO_PinWrite(BLE_RESET_PORT, BLE_RESET_PIN, GPIO_PIN_OUT_LOW);
   osDelay(100);

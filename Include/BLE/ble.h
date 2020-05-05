@@ -26,7 +26,18 @@
 #ifndef BLE_H_
 #define BLE_H_
 
-#include <stdint.h>
+#include <CMSIS/Core/cmsis_compiler.h>
+
+/**
+ * @brief     HCI packet indicator
+ * @note      HCI does not provide the ability to differentiate the four HCI
+ *            packet types. Therefore, if the HCI packets are sent via a common
+ *            physical interface, an HCI packet indicator has to be added.
+ */
+#define HCI_COMMAND_PACKET            0x01U
+#define HCI_ACL_DATA_PACKET           0x02U
+#define HCI_SYNC_DATA_PACKET          0x03U
+#define HCI_EVENT_PACKET              0x04U
 
 /* Function documentation */
 /**
@@ -71,6 +82,28 @@ typedef struct HCI_IO_s {
   int32_t (* Send)    (const uint8_t*, uint16_t); ///< Pointer to \ref IO_Send: IO Bus data transmission.
 } HCI_IO_t;
 
+typedef __PACKED_STRUCT hci_cmd_hdr_s {
+  struct {
+    uint16_t ocf:10;  // OpCode Command Field
+    uint16_t ogf:6;   // OpCode Group Field
+  };
+  uint8_t plen;       // Parameter Total Length
+  uint8_t params[];
+} hci_cmd_hdr_t;
+
+typedef __PACKED_STRUCT hci_event_hdr_s {
+  uint8_t code;
+  uint8_t plen;
+  uint8_t params[];
+} hci_event_hdr_t;
+
+typedef __PACKED_STRUCT hci_event_packet_s {
+  uint8_t type;
+  __PACKED_UNION {
+    hci_cmd_hdr_t   cmd;
+    hci_event_hdr_t event;
+  };
+} hci_packet_t;
 /**
  * @fn          void (*)(void*)
  * @brief       This callback is triggered when an user event is received from
@@ -92,7 +125,7 @@ typedef void(* UserEvtRx_t)(void* pData);
  * @param[in]   pConf      Configuration structure pointer
  * @param[in]   fops       The HCI IO structure managing the IO BUS
  */
-void HCI_Init(UserEvtRx_t UserEvtRx, const void* pConf, HCI_IO_t* fops);
+void HCI_Init(UserEvtRx_t UserEvtRx, const void* pConf, const HCI_IO_t* fops);
 
 /**
  * @fn          int32_t HCI_NotifyAsynchEvt(void*)
