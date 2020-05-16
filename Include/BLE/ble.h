@@ -82,26 +82,31 @@ typedef struct HCI_IO_s {
   int32_t (* Send)    (const uint8_t*, uint16_t); ///< Pointer to \ref IO_Send: IO Bus data transmission.
 } HCI_IO_t;
 
-typedef __PACKED_STRUCT hci_cmd_hdr_s {
+typedef union opcode_u {
   struct {
     uint16_t ocf:10;  // OpCode Command Field
     uint16_t ogf:6;   // OpCode Group Field
   };
-  uint8_t plen;       // Parameter Total Length
-  uint8_t params[];
-} hci_cmd_hdr_t;
+  uint16_t value;
+} opcode_t;
+
+typedef __PACKED_STRUCT hci_cmd_hdr_s {
+  opcode_t opcode;
+  uint8_t  plen;       // Parameter Total Length
+  uint8_t  params[];
+} hci_cmd_t;
 
 typedef __PACKED_STRUCT hci_event_hdr_s {
   uint8_t code;
   uint8_t plen;
   uint8_t params[];
-} hci_event_hdr_t;
+} hci_event_t;
 
 typedef __PACKED_STRUCT hci_event_packet_s {
   uint8_t type;
   __PACKED_UNION {
-    hci_cmd_hdr_t   cmd;
-    hci_event_hdr_t event;
+    hci_cmd_t   cmd;
+    hci_event_t event;
   };
 } hci_packet_t;
 /**
@@ -146,5 +151,15 @@ int32_t HCI_NotifyAsynchEvt(void* pdata);
  *              It will call user_notify() if necessary.
  */
 void HCI_UserEvtProc(void);
+
+/**
+ * @fn          int32_t HCI_GetEvent(hci_event_t*, opcode_t)
+ * @brief       Get HCI Event.
+ *
+ * @param[out]  event   Pointer to Event buffer.
+ * @param[in]   opcode
+ * @return      Execution Status
+ */
+int32_t HCI_GetEvent(hci_event_t *event, opcode_t opcode);
 
 #endif /* BLE_H_ */

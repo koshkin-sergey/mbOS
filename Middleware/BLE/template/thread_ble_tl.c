@@ -108,6 +108,15 @@ static const osThreadAttr_t thread_attr = {
   .priority   = osPriorityHigh,
 };
 
+static osSemaphoreId_t  sem_spi;
+static osSemaphore_t    sem_spi_cb;
+static const osSemaphoreAttr_t  sem_spi_attr = {
+  .name      = NULL,
+  .attr_bits = 0U,
+  .cb_mem    = &sem_spi_cb,
+  .cb_size   = sizeof(sem_spi_cb)
+};
+
 static osEventFlagsId_t         evt_flags;
 static osEventFlags_t           evt_flags_cb;
 static const osEventFlagsAttr_t evt_flags_attr = {
@@ -211,6 +220,18 @@ static int32_t TransferHeader(header_t *hdr)
   return (0);
 }
 
+static void CS_Active(void)
+{
+  osSemaphoreAcquire(sem_spi, osWaitForever);
+  driver_spi->Control(ARM_SPI_CONTROL_SS, ARM_SPI_SS_ACTIVE);
+}
+
+static void CS_Inactive(void)
+{
+  driver_spi->Control(ARM_SPI_CONTROL_SS, ARM_SPI_SS_INACTIVE);
+  osSemaphoreRelease(sem_spi);
+}
+
 static uint32_t isEventAvailable(void)
 {
   return GPIO_PinRead(BLE_EVENT_PORT, BLE_EVENT_PIN);
@@ -227,7 +248,7 @@ static void ReceiveEvent(void)
     if (packet != NULL) {
       hdr.ctrl = BLE_READ_OPER;
       /* CS reset */
-      driver_spi->Control(ARM_SPI_CONTROL_SS, ARM_SPI_SS_ACTIVE);
+      CS_Active();
       /* Read header */
       ret = TransferHeader(&hdr);
       if ((ret == 0) && (hdr.ctrl == BLE_READY) && (hdr.rbuf_size > 0U)) {
@@ -247,7 +268,7 @@ static void ReceiveEvent(void)
         ret = ARM_DRIVER_ERROR;
       }
       /* Release CS line */
-      driver_spi->Control(ARM_SPI_CONTROL_SS, ARM_SPI_SS_INACTIVE);
+      CS_Inactive();
 
       if (ret == ARM_DRIVER_OK) {
         osDataQueuePut(event_queue, &packet, osWaitForever);
@@ -270,7 +291,7 @@ static void SendData(buffer_t *buf)
     ++cnt;
     hdr.ctrl = BLE_WRITE_OPER;
     /* CS reset */
-    driver_spi->Control(ARM_SPI_CONTROL_SS, ARM_SPI_SS_ACTIVE);
+    CS_Active();
     /* Read header */
     ret = TransferHeader(&hdr);
     if ((ret == 0) && (hdr.ctrl == BLE_READY)) {
@@ -284,7 +305,7 @@ static void SendData(buffer_t *buf)
       }
     }
     /* Release CS line */
-    driver_spi->Control(ARM_SPI_CONTROL_SS, ARM_SPI_SS_INACTIVE);
+    CS_Inactive();
     if (result != 0) {
       osDelay(1);
     }
@@ -376,11 +397,13 @@ int32_t BLE_InitTransportLayer(const void* pConf)
   event_queue = osDataQueueNew(EVENT_POOL_CNT, sizeof(void*), &event_queue_attr);
   /* Create Event Flag */
   evt_flags = osEventFlagsNew(&evt_flags_attr);
+  /* Create Semaphore */
+  sem_spi = osSemaphoreNew(1U, 1U, &sem_spi_attr);
   /* Create Thread */
   thread = osThreadNew(thread_ble_tl, (void*)pConf, &thread_attr);
 
   if ((event_pool == NULL) || (event_queue == NULL) ||
-      (evt_flags  == NULL) || (thread      == NULL)) {
+      (evt_flags  == NULL) || (sem_spi     == NULL) || (thread == NULL)) {
     BLE_DeInit();
     status = BLE_TL_ERROR;
     DEBUG_LOG("Error creating thread for BLE transport layer\r\n");
@@ -461,6 +484,36 @@ int32_t BLE_Send(const uint8_t* buf, uint16_t size)
   osEventFlagsSet(evt_flags, FLAG_SEND);
 
   return (size);
+}
+
+/**
+ * @fn          int32_t HCI_GetEvent(hci_event_t*, opcode_t)
+ * @brief       Get HCI Event.
+ *
+ * @param[out]  event   Pointer to Event buffer.
+ * @param[in]   opcode
+ * @return      Execution Status
+ */
+int32_t HCI_GetEvent(hci_event_t *event, opcode_t opcode)
+{
+  hci_packet_t *packet;
+  osStatus_t    status;
+
+  (void)opcode;
+
+  if (event == NULL) {
+    return (BLE_TL_ERROR);
+  }
+
+  status = osDataQueueGet(event_queue, &packet, osWaitForever);
+  if (status != osOK) {
+    return (BLE_TL_ERROR);
+  }
+
+  memcpy(event, &packet->event, sizeof(hci_event_t));
+  osMemoryPoolFree(event_pool, packet);
+
+  return (BLE_TL_OK);
 }
 
 /* ----------------------------- End of file ---------------------------------*/
