@@ -162,4 +162,14 @@ void HCI_UserEvtProc(void);
  */
 int32_t HCI_GetEvent(hci_event_t *event, opcode_t opcode);
 
+/**
+ * @fn          int32_t HCI_GetCmdEvent(hci_event_t*, opcode_t)
+ * @brief       Get HCI Command Event.
+ *
+ * @param[out]  event   Pointer to Event buffer.
+ * @param[in]   opcode
+ * @return      Execution Status
+ */
+int32_t HCI_GetCmdEvent(hci_event_t *event, opcode_t opcode);
+
 #endif /* BLE_H_ */

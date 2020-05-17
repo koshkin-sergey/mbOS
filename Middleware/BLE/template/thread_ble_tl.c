@@ -138,16 +138,28 @@ static const osMemoryPoolAttr_t event_pool_attr = {
   .mp_size   = osMemoryPoolMemSize(EVENT_POOL_CNT, BUFFER_SIZE),
 };
 
-static osDataQueueId_t         event_queue;
-static osDataQueue_t           event_queue_cb;
-static void* event_queue_mem[EVENT_POOL_CNT];
-static const osDataQueueAttr_t event_queue_attr = {
-  .name = NULL,
+static osDataQueueId_t         que_event;
+static osDataQueue_t           que_event_cb;
+static void* que_event_mem[EVENT_POOL_CNT];
+static const osDataQueueAttr_t que_event_attr = {
+  .name      = NULL,
   .attr_bits = 0U,
-  .cb_mem    = &event_queue_cb,
-  .cb_size   = sizeof(event_queue_cb),
-  .dq_mem    = &event_queue_mem[0],
-  .dq_size   = sizeof(event_queue_mem),
+  .cb_mem    = &que_event_cb,
+  .cb_size   = sizeof(que_event_cb),
+  .dq_mem    = &que_event_mem[0],
+  .dq_size   = sizeof(que_event_mem),
+};
+
+static osDataQueueId_t         que_cmd_event;
+static osDataQueue_t           que_cmd_event_cb;
+static void* que_cmd_event_mem[EVENT_POOL_CNT];
+static const osDataQueueAttr_t que_cmd_event_attr = {
+  .name      = NULL,
+  .attr_bits = 0U,
+  .cb_mem    = &que_cmd_event_cb,
+  .cb_size   = sizeof(que_cmd_event_cb),
+  .dq_mem    = &que_cmd_event_mem[0],
+  .dq_size   = sizeof(que_cmd_event_mem),
 };
 
 static ARM_DRIVER_SPI *driver_spi = &ARM_Driver_SPI_(DRIVER_SPI_NUM);
@@ -271,7 +283,12 @@ static void ReceiveEvent(void)
       CS_Inactive();
 
       if (ret == ARM_DRIVER_OK) {
-        osDataQueuePut(event_queue, &packet, osWaitForever);
+        if ((packet->event.code == 0x0E) || (packet->event.code == 0x0F)) {
+          osDataQueuePut(que_cmd_event, &packet, osWaitForever);
+        }
+        else {
+          osDataQueuePut(que_event, &packet, osWaitForever);
+        }
       }
       else {
         osMemoryPoolFree(event_pool, packet);
@@ -394,7 +411,9 @@ int32_t BLE_InitTransportLayer(const void* pConf)
   /* Create Event Pool */
   event_pool = osMemoryPoolNew(EVENT_POOL_CNT, BUFFER_SIZE, &event_pool_attr);
   /* Create Event Queue */
-  event_queue = osDataQueueNew(EVENT_POOL_CNT, sizeof(void*), &event_queue_attr);
+  que_event = osDataQueueNew(EVENT_POOL_CNT, sizeof(void*), &que_event_attr);
+  /* Create Command Event Queue */
+  que_cmd_event = osDataQueueNew(EVENT_POOL_CNT, sizeof(void*), &que_cmd_event_attr);
   /* Create Event Flag */
   evt_flags = osEventFlagsNew(&evt_flags_attr);
   /* Create Semaphore */
@@ -402,8 +421,8 @@ int32_t BLE_InitTransportLayer(const void* pConf)
   /* Create Thread */
   thread = osThreadNew(thread_ble_tl, (void*)pConf, &thread_attr);
 
-  if ((event_pool == NULL) || (event_queue == NULL) ||
-      (evt_flags  == NULL) || (sem_spi     == NULL) || (thread == NULL)) {
+  if ((event_pool == NULL) || (que_event == NULL) || (que_cmd_event == NULL) ||
+      (evt_flags  == NULL) || (sem_spi   == NULL) || (thread        == NULL)) {
     BLE_DeInit();
     status = BLE_TL_ERROR;
     DEBUG_LOG("Error creating thread for BLE transport layer\r\n");
@@ -437,8 +456,16 @@ int32_t BLE_DeInit(void)
     osMemoryPoolDelete(event_pool);
   }
   /* Delete Event Queue */
-  if (event_queue != NULL) {
-    osDataQueueDelete(event_queue);
+  if (que_event != NULL) {
+    osDataQueueDelete(que_event);
+  }
+  /* Delete Command Event Queue */
+  if (que_cmd_event != NULL) {
+    osDataQueueDelete(que_cmd_event);
+  }
+  /* Delete Semaphore */
+  if (sem_spi != NULL) {
+    osSemaphoreDelete(sem_spi);
   }
 
   return (BLE_TL_OK);
@@ -505,7 +532,37 @@ int32_t HCI_GetEvent(hci_event_t *event, opcode_t opcode)
     return (BLE_TL_ERROR);
   }
 
-  status = osDataQueueGet(event_queue, &packet, osWaitForever);
+  status = osDataQueueGet(que_event, &packet, osWaitForever);
+  if (status != osOK) {
+    return (BLE_TL_ERROR);
+  }
+
+  memcpy(event, &packet->event, sizeof(hci_event_t));
+  osMemoryPoolFree(event_pool, packet);
+
+  return (BLE_TL_OK);
+}
+
+/**
+ * @fn          int32_t HCI_GetCmdEvent(hci_event_t*, opcode_t)
+ * @brief       Get HCI Command Event.
+ *
+ * @param[out]  event   Pointer to Event buffer.
+ * @param[in]   opcode
+ * @return      Execution Status
+ */
+int32_t HCI_GetCmdEvent(hci_event_t *event, opcode_t opcode)
+{
+  hci_packet_t *packet;
+  osStatus_t    status;
+
+  (void)opcode;
+
+  if (event == NULL) {
+    return (BLE_TL_ERROR);
+  }
+
+  status = osDataQueueGet(que_cmd_event, &packet, osWaitForever);
   if (status != osOK) {
     return (BLE_TL_ERROR);
   }
