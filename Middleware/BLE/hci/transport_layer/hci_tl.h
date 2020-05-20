@@ -34,9 +34,10 @@
  * @brief Contain the HCI context
  */
 typedef struct HCI_Context_s {
-  HCI_IO_t    io;        ///< Manage the BUS IO operations.
-  UserEvtRx_t UserEvtRx; ///< ACI events callback function pointer.
-} HCI_Context_t;
+  HCI_IO_t          *io;        ///< Manage the BUS IO operations.
+  UserEvtRx_t       *UserEvtRx; ///< ACI events callback function pointer.
+  HCI_TL_InitConf_t  init_conf;
+} const HCI_Context_t;
 
 /**
  * @struct hci_request

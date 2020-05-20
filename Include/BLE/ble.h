@@ -96,10 +96,28 @@ typedef __PACKED_STRUCT hci_cmd_hdr_s {
   uint8_t  params[];
 } hci_cmd_t;
 
+/**
+ * This the payload of hci_event_t for a command status event
+ */
+typedef __PACKED_STRUCT {
+  uint8_t   status;
+  uint8_t   numcmd;
+  uint16_t  opcode;
+} hci_cs_evt_t;
+
+/**
+ * This the payload of hci_event_t for a command complete event
+ */
+typedef __PACKED_STRUCT {
+  uint8_t   numcmd;
+  uint16_t  opcode;
+  uint8_t   payload[];
+} hci_cc_evt_t;
+
 typedef __PACKED_STRUCT hci_event_hdr_s {
   uint8_t code;
   uint8_t plen;
-  uint8_t params[];
+  uint8_t payload[];
 } hci_event_t;
 
 typedef __PACKED_STRUCT hci_event_packet_s {
@@ -109,6 +127,14 @@ typedef __PACKED_STRUCT hci_event_packet_s {
     hci_event_t event;
   };
 } hci_packet_t;
+
+typedef struct HCI_TL_InitConf_s {
+  uint32_t hci_packet_size;
+  hci_packet_t* (*MemoryAlloc)(void);
+  void (*MemoryFree)(hci_packet_t*);
+  void (*EvtRxCallback)(hci_packet_t*);
+} const HCI_TL_InitConf_t;
+
 /**
  * @fn          void (*)(void*)
  * @brief       This callback is triggered when an user event is received from
@@ -116,7 +142,7 @@ typedef __PACKED_STRUCT hci_event_packet_s {
  *
  * @param[in]   pData
  */
-typedef void(* UserEvtRx_t)(void* pData);
+typedef void (*UserEvtRx_t)(void *data);
 
 /**
  * @fn          void HCI_Init(UserEvtRx_t, const void*, HCI_IO_t*)
@@ -143,33 +169,5 @@ void HCI_Init(UserEvtRx_t UserEvtRx, const void* pConf, const HCI_IO_t* fops);
  *              1: no packet/event processed
  */
 int32_t HCI_NotifyAsynchEvt(void* pdata);
-
-/**
- * @fn          void HCI_UserEvtProc(void)
- * @brief       Processing function that must be called after an event is received
- *              from HCI interface. It must be called outside ISR.
- *              It will call user_notify() if necessary.
- */
-void HCI_UserEvtProc(void);
-
-/**
- * @fn          int32_t HCI_GetEvent(hci_event_t*, opcode_t)
- * @brief       Get HCI Event.
- *
- * @param[out]  event   Pointer to Event buffer.
- * @param[in]   opcode
- * @return      Execution Status
- */
-int32_t HCI_GetEvent(hci_event_t *event, opcode_t opcode);
-
-/**
- * @fn          int32_t HCI_GetCmdEvent(hci_event_t*, opcode_t)
- * @brief       Get HCI Command Event.
- *
- * @param[out]  event   Pointer to Event buffer.
- * @param[in]   opcode
- * @return      Execution Status
- */
-int32_t HCI_GetCmdEvent(hci_event_t *event, opcode_t opcode);
 
 #endif /* BLE_H_ */

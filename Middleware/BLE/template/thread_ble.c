@@ -30,6 +30,8 @@
 #include "app.h"
 #include <BLE/ble.h>
 
+#include "../Middleware/BlueNRG_MS/hci/transport_layer/hci_le.h"
+
 /*******************************************************************************
  *  defines and macros (scope: module-local)
  ******************************************************************************/
@@ -43,15 +45,6 @@
 /*******************************************************************************
  *  typedefs and structures (scope: module-local)
  ******************************************************************************/
-
-typedef __PACKED_STRUCT hci_command_hdr_s {
-  uint8_t pid;        // HCI packet indicator
-  struct {
-    uint16_t ocf:10;  // OpCode Command Field
-    uint16_t ogf:6;   // OpCode Group Field
-  };
-  uint8_t plen;       // Parameter Total Length
-} hci_command_hdr_t;
 
 /*******************************************************************************
  *  global variable definitions  (scope: module-exported)
@@ -81,26 +74,11 @@ static const osThreadAttr_t thread_attr = {
  *  function implementations (scope: module-local)
  ******************************************************************************/
 
-static void UserEvent(void* pData)
+static void UserEvtRx(void *data)
 {
+  hci_event_t *evt = (hci_event_t *)data;
 
-}
-
-static int32_t Receive(uint8_t* buf, uint16_t size)
-{
-  return (0);
-}
-
-static void TestSend(void)
-{
-  hci_command_hdr_t hdr;
-
-  hdr.pid = 0x01;
-  hdr.ogf = 0x03;
-  hdr.ocf = 0x003;
-  hdr.plen = 0x00;
-
-  BLE_Send((uint8_t *)&hdr, sizeof(hdr));
+  hci_reset();
 }
 
 static void BLE_Init(void)
@@ -109,11 +87,10 @@ static void BLE_Init(void)
     .Init    = BLE_InitTransportLayer,
     .DeInit  = BLE_DeInit,
     .Reset   = BLE_Reset,
-    .Receive = Receive,
     .Send    = BLE_Send,
   };
 
-  HCI_Init(UserEvent, NULL, &hci_io);
+  HCI_Init(UserEvtRx, NULL, &hci_io);
 }
 
 __NO_RETURN static
@@ -123,7 +100,6 @@ void thread_ble(void *param)
 
   DEBUG_LOG("Created thread for Bluetooth LE stack\r\n");
   BLE_Init();
-  TestSend();
 
   for(;;) {
     osDelay(500);

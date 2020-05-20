@@ -23,11 +23,155 @@
  * limitations under the License.
  */
 
+/*******************************************************************************
+ *  includes
+ ******************************************************************************/
+
 #include "hci_tl.h"
 
-#include <stddef.h>
+#include <string.h>
+#include <Kernel/kernel.h>
 
-static HCI_Context_t hciContext;
+#include "../../includes/hci_const.h"
+
+/*******************************************************************************
+ *  defines and macros (scope: module-local)
+ ******************************************************************************/
+
+#define THREAD_STK_SIZE               512U
+#define BUFFER_SIZE                   128U
+#define EVENT_POOL_CNT                5U
+#define HCI_DEFAULT_TIMEOUT           1000U
+
+/*******************************************************************************
+ *  function prototypes (scope: module-local)
+ ******************************************************************************/
+
+static hci_packet_t* MemoryAlloc(void);
+static void MemoryFree(hci_packet_t *packet);
+static void EvtRxCallback(hci_packet_t *packet);
+
+/*******************************************************************************
+ *  global variable definitions (scope: module-local)
+ ******************************************************************************/
+
+static HCI_IO_t io;
+static UserEvtRx_t user_evt_rx;
+static HCI_Context_t hciContext = {
+  &io,
+  &user_evt_rx,
+  {
+      BUFFER_SIZE,
+      MemoryAlloc,
+      MemoryFree,
+      EvtRxCallback,
+  }
+};
+
+static uint8_t buf_tx[BUFFER_SIZE];
+
+static osThread_t           thread_async_evt_cb;
+static uint64_t             thread_async_evt_stack[THREAD_STK_SIZE/8U];
+static const osThreadAttr_t thread_async_evt_attr = {
+  .name       = NULL,
+  .attr_bits  = 0U,
+  .cb_mem     = &thread_async_evt_cb,
+  .cb_size    = sizeof(thread_async_evt_cb),
+  .stack_mem  = &thread_async_evt_stack[0],
+  .stack_size = sizeof(thread_async_evt_stack),
+  .priority   = osPriorityNormal,
+};
+
+static osMemoryPoolId_t         event_pool;
+static osMemoryPool_t           event_pool_cb;
+static uint8_t event_pool_mem[osMemoryPoolMemSize(EVENT_POOL_CNT, BUFFER_SIZE)];
+static const osMemoryPoolAttr_t event_pool_attr = {
+  .name      = NULL,
+  .attr_bits = 0U,
+  .cb_mem    = &event_pool_cb,
+  .cb_size   = sizeof(event_pool_cb),
+  .mp_mem    = &event_pool_mem[0],
+  .mp_size   = osMemoryPoolMemSize(EVENT_POOL_CNT, BUFFER_SIZE),
+};
+
+static osDataQueueId_t         que_async_event;
+static osDataQueue_t           que_async_event_cb;
+static void* que_async_event_mem[EVENT_POOL_CNT];
+static const osDataQueueAttr_t que_async_event_attr = {
+  .name      = NULL,
+  .attr_bits = 0U,
+  .cb_mem    = &que_async_event_cb,
+  .cb_size   = sizeof(que_async_event_cb),
+  .dq_mem    = &que_async_event_mem[0],
+  .dq_size   = sizeof(que_async_event_mem),
+};
+
+static osDataQueueId_t         que_cmd_event;
+static osDataQueue_t           que_cmd_event_cb;
+static void* que_cmd_event_mem[EVENT_POOL_CNT];
+static const osDataQueueAttr_t que_cmd_event_attr = {
+  .name      = NULL,
+  .attr_bits = 0U,
+  .cb_mem    = &que_cmd_event_cb,
+  .cb_size   = sizeof(que_cmd_event_cb),
+  .dq_mem    = &que_cmd_event_mem[0],
+  .dq_size   = sizeof(que_cmd_event_mem),
+};
+
+/*******************************************************************************
+ *  function implementations (scope: module-local)
+ ******************************************************************************/
+
+static hci_packet_t* MemoryAlloc(void)
+{
+  return (hci_packet_t *)osMemoryPoolAlloc(event_pool, osWaitForever);
+}
+
+static void MemoryFree(hci_packet_t *packet)
+{
+  osMemoryPoolFree(event_pool, packet);
+}
+
+static void EvtRxCallback(hci_packet_t *packet)
+{
+  if (packet->type != HCI_EVENT_PACKET) {
+    return;
+  }
+
+  if ((packet->event.code == EVT_CMD_COMPLETE) ||
+      (packet->event.code == EVT_CMD_STATUS)) {
+    osDataQueuePut(que_cmd_event, &packet, osWaitForever);
+  }
+  else {
+    osDataQueuePut(que_async_event, &packet, osWaitForever);
+  }
+}
+
+/**
+ * @fn          void HCI_UserEvtProc(void *param)
+ * @brief       Processing function that must be called after an event is received
+ *              from HCI interface. It will call user_notify() if necessary.
+ */
+__NO_RETURN
+static void HCI_UserEvtProc(void *param)
+{
+  hci_packet_t *packet;
+  UserEvtRx_t   UserEvtRx = *hciContext.UserEvtRx;
+
+  for(;;) {
+    osDataQueueGet(que_async_event, &packet, osWaitForever);
+
+    if (UserEvtRx != NULL) {
+      UserEvtRx(&packet->event);
+    }
+
+    MemoryFree(packet);
+  }
+}
+
+/*******************************************************************************
+ *  function implementations (scope: module-exported)
+ ******************************************************************************/
 
 /**
  * @fn          void HCI_Init(UserEvtRx_t, const void*, HCI_IO_t*)
@@ -43,90 +187,39 @@ static HCI_Context_t hciContext;
  */
 void HCI_Init(UserEvtRx_t UserEvtRx, const void* pConf, const HCI_IO_t* fops)
 {
+  HCI_IO_t *io = hciContext.io;
+
   if (UserEvtRx != NULL) {
-    hciContext.UserEvtRx = UserEvtRx;
+    *hciContext.UserEvtRx = UserEvtRx;
   }
 
-  /* Register bus function */
-  hciContext.io.Init    = fops->Init;
-  hciContext.io.DeInit  = fops->DeInit;
-  hciContext.io.Reset   = fops->Reset;
-  hciContext.io.Receive = fops->Receive;
-  hciContext.io.Send    = fops->Send;
+  if (fops != NULL) {
+    /* Register bus function */
+    io->Init    = fops->Init;
+    io->DeInit  = fops->DeInit;
+    io->Reset   = fops->Reset;
+    io->Receive = fops->Receive;
+    io->Send    = fops->Send;
+  }
+
+  /* Create Event Pool */
+  event_pool = osMemoryPoolNew(EVENT_POOL_CNT, BUFFER_SIZE, &event_pool_attr);
+  /* Create Event Queue */
+  que_async_event = osDataQueueNew(EVENT_POOL_CNT, sizeof(void*), &que_async_event_attr);
+  /* Create Command Event Queue */
+  que_cmd_event = osDataQueueNew(EVENT_POOL_CNT, sizeof(void*), &que_cmd_event_attr);
+  /* Create Thread */
+  osThreadNew(HCI_UserEvtProc, NULL, &thread_async_evt_attr);
 
   /* Initialize low level driver */
-  if (hciContext.io.Init != NULL) {
-    hciContext.io.Init(pConf);
+  if (io->Init != NULL) {
+    io->Init(&hciContext.init_conf);
   }
+
   /* Reset Bluetooth module */
-  if (hciContext.io.Reset != NULL) {
-    hciContext.io.Reset();
+  if (io->Reset != NULL) {
+    io->Reset();
   }
-}
-
-/**
- * @fn          void HCI_UserEvtProc(void)
- * @brief       Processing function that must be called after an event is received
- *              from HCI interface. It must be called outside ISR.
- *              It will call user_notify() if necessary.
- */
-void HCI_UserEvtProc(void)
-{
-
-}
-
-/**
- * @fn          int32_t HCI_NotifyAsynchEvt(void*)
- * @brief       Interrupt service routine that must be called when the BlueNRG
- *              reports a packet received or an event to the host through the
- *              BlueNRG-MS interrupt line.
- *
- * @param[in]   pdata   Packet or event pointer
- * @return      0: packet/event processed
- *              1: no packet/event processed
- */
-int32_t HCI_NotifyAsynchEvt(void* pdata)
-{
-  return 0;
-}
-
-/**
- * @fn          void hci_resume_flow(void)
- * @brief       This function resume the User Event Flow which has been stopped
- *              on return from UserEvtRx() when the User Event has not been
- *              processed.
- */
-void hci_resume_flow(void)
-{
-
-}
-
-/**
- * @fn          void hci_cmd_resp_wait(uint32_t)
- * @brief       This function is called when an ACI/HCI command is sent and the response
- *              is waited from the BLE core.
- *              The application shall implement a mechanism to not return from this function
- *              until the waited event is received.
- *              This is notified to the application with hci_cmd_resp_release().
- *              It is called from the same context the HCI command has been sent.
- *
- * @param[in]   timeout  Waiting timeout
- */
-void hci_cmd_resp_wait(uint32_t timeout)
-{
-
-}
-
-/**
- * @fn          void hci_cmd_resp_release(uint32_t)
- * @brief       This function is called when an ACI/HCI command is sent and the response is
- *              received from the BLE core.
- *
- * @param[in]   flag  Release flag
- */
-void hci_cmd_resp_release(uint32_t flag)
-{
-
 }
 
 /**
@@ -142,5 +235,60 @@ void hci_cmd_resp_release(uint32_t flag)
  */
 int32_t HCI_SendReq(struct hci_request* r, bool async)
 {
-  return 0;
+  (void)async;
+  uint32_t cmd_busy;
+  osStatus_t status;
+  opcode_t opcode;
+  HCI_IO_t *io = hciContext.io;
+  hci_packet_t *packet = (hci_packet_t *)buf_tx;
+
+  if (io->Send == NULL) {
+    return (-1);
+  }
+
+  cmd_busy = 1U;
+
+  opcode.ogf = r->ogf;
+  opcode.ocf = r->ocf;
+  packet->type = HCI_COMMAND_PACKET;
+  packet->cmd.opcode.value = opcode.value;
+  packet->cmd.plen = r->clen;
+  memcpy(packet->cmd.params, r->cparam, r->clen);
+
+  io->Send((const uint8_t *)packet, sizeof(hci_cmd_t) + r->clen +1U);
+
+  while(cmd_busy) {
+    status = osDataQueueGet(que_cmd_event, &packet, HCI_DEFAULT_TIMEOUT);
+    if (status != osOK) {
+      return (-1);
+    }
+
+    if (packet->event.code == EVT_CMD_STATUS) {
+      hci_cs_evt_t *cmd_status_evt = (hci_cs_evt_t *)packet->event.payload;
+      if (cmd_status_evt->opcode == opcode.value) {
+        *(uint8_t *)(r->rparam) = cmd_status_evt->status;
+      }
+
+      if (cmd_status_evt->numcmd != 0U) {
+        cmd_busy = 0U;
+      }
+    }
+    else {
+      hci_cc_evt_t *cmd_complete_evt = (hci_cc_evt_t *)packet->event.payload;
+      if (cmd_complete_evt->opcode == opcode.value) {
+        if (r->rlen > packet->event.plen) {
+          r->rlen = packet->event.plen;
+        }
+        memcpy(r->rparam, cmd_complete_evt->payload, r->rlen);
+      }
+
+      if (cmd_complete_evt->numcmd != 0U) {
+        cmd_busy = 0U;
+      }
+    }
+
+    MemoryFree(packet);
+  }
+
+  return (0);
 }
