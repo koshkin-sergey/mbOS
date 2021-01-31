@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2019-2021 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -66,7 +66,7 @@ static osStatus_t Delay(uint32_t ticks)
     END_CRITICAL_SECTION
   }
 
-  return osOK;
+  return (osOK);
 }
 
 static osStatus_t DelayUntil(uint32_t ticks)
@@ -74,7 +74,7 @@ static osStatus_t DelayUntil(uint32_t ticks)
   ticks -= osInfo.kernel.tick;
 
   if ((ticks == 0U) || (ticks > 0x7FFFFFFFU)) {
-    return osErrorParameter;
+    return (osErrorParameter);
   }
 
   if (ticks != 0U) {
@@ -83,7 +83,7 @@ static osStatus_t DelayUntil(uint32_t ticks)
     END_CRITICAL_SECTION
   }
 
-  return osOK;
+  return (osOK);
 }
 
 /*******************************************************************************
@@ -107,7 +107,7 @@ osStatus_t osDelay(uint32_t ticks)
     status = (osStatus_t)SVC_1(ticks, Delay);
   }
 
-  return status;
+  return (status);
 }
 
 /**
@@ -127,7 +127,7 @@ osStatus_t osDelayUntil(uint32_t ticks)
     status = (osStatus_t)SVC_1(ticks, DelayUntil);
   }
 
-  return status;
+  return (status);
 }
 
 /*------------------------------ End of file ---------------------------------*/

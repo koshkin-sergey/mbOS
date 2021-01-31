@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2017-2021 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -92,11 +92,11 @@ void osTick_Handler(void)
 static osStatus_t KernelInitialize(void)
 {
   if (osInfo.kernel.state == osKernelReady) {
-    return osOK;
+    return (osOK);
   }
 
   if (osInfo.kernel.state != osKernelInactive) {
-    return osError;
+    return (osError);
   }
 
   /* Initialize osInfo */
@@ -142,12 +142,12 @@ static osStatus_t KernelStart(void)
   uint32_t sh;
 
   if (osInfo.kernel.state != osKernelReady) {
-    return osError;
+    return (osError);
   }
 
   /* Thread startup (Idle and Timer Thread) */
   if (!libThreadStartup()) {
-    return osError;
+    return (osError);
   }
 
   /* Setup SVC and PendSV System Service Calls */
@@ -160,17 +160,11 @@ static osStatus_t KernelStart(void)
   /* Switch to Ready Thread with highest Priority */
   thread = libThreadHighestPrioGet();
   if (thread == NULL) {
-    return osError;
+    return (osError);
   }
   libThreadSwitch(thread);
 
-  if ((osConfig.flags & osConfigPrivilegedMode) != 0U) {
-    // Privileged Thread mode & PSP
-    __set_CONTROL(0x02U);
-  } else {
-    // Unprivileged Thread mode & PSP
-    __set_CONTROL(0x03U);
-  }
+  setPrivilegedMode(osConfig.flags & osConfigPrivilegedMode);
 
   osInfo.kernel.state = osKernelRunning;
 
@@ -307,7 +301,7 @@ osStatus_t osKernelGetInfo(osVersion_t *version, char *id_buf, uint32_t id_size)
 {
   osStatus_t status;
 
-  if (IsIrqMode() || IsIrqMasked()) {
+  if (IsIrqMode() || IsIrqMasked() || IsPrivileged()) {
     status = KernelGetInfo(version, id_buf, id_size);
   }
   else {
@@ -326,7 +320,7 @@ osKernelState_t osKernelGetState(void)
 {
   osKernelState_t state;
 
-  if (IsIrqMode() || IsIrqMasked()) {
+  if (IsIrqMode() || IsIrqMasked() || IsPrivileged()) {
     state = KernelGetState();
   }
   else {

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2017-2021 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,10 +17,7 @@
  * Project: mbOS real-time kernel
  */
 
-        .file    "irq_cm3.S"
         .syntax  unified
-        .fpu     softvfp
-
 
         .section ".rodata"
         .global  irqLib               // Non weak library reference
@@ -89,8 +86,8 @@ Context_Exit:
         .global  SVC_Handler
         .fnstart
         .cantunwind
-
 SVC_Handler:
+
         MOV       R0,LR
         LSRS      R0,R0,#3            // Determine return stack from EXC_RETURN bit 2
         BCC       SVC_MSP             // Branch if return stack is MSP
@@ -126,8 +123,8 @@ SVC_MSP:
         .global  SysTick_Handler
         .fnstart
         .cantunwind
-
 SysTick_Handler:
+
         PUSH     {R0,LR}                // Save EXC_RETURN
         BL       osTick_Handler         // Call osTick_Handler
         POP      {R0,R1}                // Restore EXC_RETURN

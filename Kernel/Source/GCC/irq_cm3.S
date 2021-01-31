@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2018-2021 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,9 +17,7 @@
  * Project: mbOS real-time kernel
  */
 
-        .file    "irq_cm3.S"
         .syntax  unified
-        .fpu     softvfp
 
         .section ".rodata"
         .global  irqLib               // Non weak library reference
@@ -36,8 +34,8 @@ irqLib:
         .global  PendSV_Handler
         .fnstart
         .cantunwind
-
 PendSV_Handler:
+
         LDR       R3,=osInfo          // in R3 - =run_task
         LDM       R3,{R1,R2}          // in R1 - current run task, in R2 - next run task
         CMP       R1,R2               // Check if thread switch is required
@@ -72,8 +70,8 @@ Context_Exit:
         .global  SVC_Handler
         .fnstart
         .cantunwind
-
 SVC_Handler:
+
         TST       LR,#0x04            // Determine return stack from EXC_RETURN bit 2
         ITE       EQ
         MRSEQ     R0,MSP              // Get MSP if return stack is MSP
@@ -101,8 +99,8 @@ SVC_Exit:
         .global  SysTick_Handler
         .fnstart
         .cantunwind
-
 SysTick_Handler:
+
         PUSH     {R0,LR}                // Save EXC_RETURN
         BL       osTick_Handler         // Call osTick_Handler
         POP      {R0,LR}                // Restore EXC_RETURN
