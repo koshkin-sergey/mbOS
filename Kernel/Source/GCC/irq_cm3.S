@@ -52,7 +52,7 @@ SVC_Handler:
         POP       {R12,LR}            // Restore SP and EXC_RETURN
         STM       R12,{R0-R1}         // Store return values
 
-SVC_Contex:
+SVC_Context:
         LDR       R3,=osInfo          // in R3 - =run_task
         LDM       R3,{R1,R2}          // in R1 - current run task, in R2 - next run task
         CMP       R1,R2               // Check if thread switch is required
@@ -92,7 +92,7 @@ PendSV_Handler:
         BL       osPendSV_Handler       // Call osPendSV_Handler
         POP      {LR}                   // Restore EXC_RETURN
         MRS      R12,PSP
-        B        SVC_Contex
+        B        SVC_Context
 
         .fnend
         .size    PendSV_Handler, .-PendSV_Handler
@@ -109,7 +109,7 @@ SysTick_Handler:
         BL       osTick_Handler         // Call osTick_Handler
         POP      {LR}                   // Restore EXC_RETURN
         MRS      R12,PSP
-        B        SVC_Contex
+        B        SVC_Context
 
         .fnend
         .size    SysTick_Handler, .-SysTick_Handler
