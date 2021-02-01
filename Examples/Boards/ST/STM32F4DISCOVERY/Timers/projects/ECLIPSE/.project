@@ -40,6 +40,11 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
+			<name>src/Kernel</name>
+			<type>2</type>
+			<locationURI>mbOS/Kernel/Source</locationURI>
+		</link>
+		<link>
 			<name>src/stm32f4_example_timers.c</name>
 			<type>1</type>
 			<locationURI>$%7BSTM32F4DISCOVERY%7D/Timers/stm32f4_example_timers.c</locationURI>
