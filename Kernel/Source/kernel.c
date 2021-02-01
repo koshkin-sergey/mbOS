@@ -89,6 +89,11 @@ void osTick_Handler(void)
   END_CRITICAL_SECTION
 }
 
+void osPendSV_Handler(void)
+{
+  libThreadDispatch(NULL);
+}
+
 static osStatus_t KernelInitialize(void)
 {
   if (osInfo.kernel.state == osKernelReady) {

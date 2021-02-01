@@ -40,6 +40,11 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
+			<name>src/Kernel</name>
+			<type>2</type>
+			<locationURI>WORKSPACE_LOC/mbOS/Kernel/Source</locationURI>
+		</link>
+		<link>
 			<name>src/stm32f0_example_event_flags.c</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/stm32f0_example_event_flags.c</locationURI>

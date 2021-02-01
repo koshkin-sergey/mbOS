@@ -273,5 +273,6 @@ osStatus_t libMemoryPoolFree(osMemoryPoolInfo_t *mp_info, void *block);
  ******************************************************************************/
 
 extern void osTick_Handler(void);
+extern void osPendSV_Handler(void);
 
 #endif /* _KERNEL_LIB_H_ */

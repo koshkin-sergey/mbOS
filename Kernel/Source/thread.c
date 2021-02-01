@@ -624,7 +624,7 @@ void libThreadSwitch(osThread_t *thread)
 {
   thread->state = ThreadStateRunning;
   osInfo.thread.run.next = thread;
-  archSwitchContextRequest();
+//  archSwitchContextRequest();
 }
 
 /**

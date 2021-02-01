@@ -30,58 +30,6 @@ irqLib:
         .align   2
 
         .thumb_func
-        .type    PendSV_Handler, %function
-        .global  PendSV_Handler
-        .fnstart
-        .cantunwind
-PendSV_Handler:
-
-        LDR       R3,=osInfo          // in R3 - =run_task
-        LDM       R3!,{R1,R2}         // in R1 - current run task, in R2 - next run task
-        CMP       R1,R2               // Check if thread switch is required
-        BEQ       Context_Exit        // Exit when threads are the same
-
-        CMP       R1,#0
-        BEQ       Context_Switch      // Branch if running thread is deleted
-
-ContextSave:
-        MRS       R0,PSP              // in PSP - process(task) stack pointer
-        SUBS      R0,#32              // allocate space for r4-r11
-        STR       R0,[R1]             // save own SP in TCB
-        STMIA     R0!,{R4-R7}
-        MOV       R4,R8
-        MOV       R5,R9
-        MOV       R6,R10
-        MOV       R7,R11
-        STMIA     R0!,{R4-R7}
-
-Context_Switch:
-        SUBS      R3,#8               // Adjust address
-        STR       R2,[R3]             // in r3 current run task
-
-Context_Restore:
-        LDR       R0,[R2]             // in r0 - new task SP
-        ADDS      R0,#16              // Adjust address
-        LDMIA     R0!,{R4-R7}         // Restore R8..R11
-        MOV       R8,R4
-        MOV       R9,R5
-        MOV       R10,R6
-        MOV       R11,R7
-        MSR       PSP,R0              // Set PSP
-        SUBS      R0,#32              // Adjust address
-        LDMIA     R0!,{R4-R7}         // Restore R4..R7
-
-        LDR       R0,=0xFFFFFFFD      // Set EXC_RETURN value
-        BX        R0                  // Exit from handler
-
-Context_Exit:
-        BX        LR                  // Exit from handler
-
-        .fnend
-        .size    PendSV_Handler, .-PendSV_Handler
-
-
-        .thumb_func
         .type    SVC_Handler, %function
         .global  SVC_Handler
         .fnstart
@@ -107,15 +55,71 @@ SVC_Number:
         STMIA     R2!,{R0-R1}         // Store return values
         MOV       LR,R3               // Set EXC_RETURN
 
-SVC_Exit:
-        BX        LR                  // Exit from handler
+SVC_Context:
+        LDR       R3,=osInfo          // in R3 - =run_task
+        LDM       R3!,{R1,R2}         // in R1 - current run task, in R2 - next run task
+        CMP       R1,R2               // Check if thread switch is required
+        BEQ       SVC_Exit            // Branch when threads are the same
+
+        CMP       R1,#0
+        BEQ       SVC_ContextSwitch   // Branch if running thread is deleted
+
+SVC_ContextSave:
+        MRS       R0,PSP              // in PSP - process(task) stack pointer
+        SUBS      R0,#32              // allocate space for r4-r11
+        STR       R0,[R1]             // save own SP in TCB
+        STMIA     R0!,{R4-R7}         // Save R4..R7
+        MOV       R4,R8
+        MOV       R5,R9
+        MOV       R6,R10
+        MOV       R7,R11
+        STMIA     R0!,{R4-R7}         // Save R8..R11
+
+SVC_ContextSwitch:
+        SUBS      R3,#8               // Adjust address
+        STR       R2,[R3]             // in r3 current run task
+
+SVC_ContextRestore:
+        LDR       R0,[R2]             // in r0 - new task SP
+        ADDS      R0,#16              // Adjust address
+        LDMIA     R0!,{R4-R7}         // Restore R8..R11
+        MOV       R8,R4
+        MOV       R9,R5
+        MOV       R10,R6
+        MOV       R11,R7
+        MSR       PSP,R0              // Set PSP
+        SUBS      R0,#32              // Adjust address
+        LDMIA     R0!,{R4-R7}         // Restore R4..R7
+
+        LDR       R0,=0xFFFFFFFD      // Set EXC_RETURN value
+        BX        R0                  // Exit from handler
 
 SVC_MSP:
         MRS       R0,MSP              // Get MSP
         B         SVC_Number
 
+SVC_Exit:
+        BX        LR                  // Exit from handler
+
         .fnend
         .size    SVC_Handler, .-SVC_Handler
+
+
+        .thumb_func
+        .type    PendSV_Handler, %function
+        .global  PendSV_Handler
+        .fnstart
+        .cantunwind
+PendSV_Handler:
+
+        PUSH     {LR}                   // Save EXC_RETURN
+        BL       osPendSV_Handler       // Call osRtxPendSV_Handler
+        POP      {R1}                   // Restore EXC_RETURN
+        MOV      LR,R1                  // Set EXC_RETURN
+        B        SVC_Context
+
+        .fnend
+        .size    PendSV_Handler, .-PendSV_Handler
 
 
         .thumb_func
@@ -125,11 +129,11 @@ SVC_MSP:
         .cantunwind
 SysTick_Handler:
 
-        PUSH     {R0,LR}                // Save EXC_RETURN
+        PUSH     {LR}                   // Save EXC_RETURN
         BL       osTick_Handler         // Call osTick_Handler
-        POP      {R0,R1}                // Restore EXC_RETURN
+        POP      {R1}                   // Restore EXC_RETURN
         MOV      LR,R1                  // Set EXC_RETURN
-        BX       LR                     // Exit from handler
+        B        SVC_Context
 
         .fnend
         .size    SysTick_Handler, .-SysTick_Handler
