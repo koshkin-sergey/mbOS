@@ -62,8 +62,9 @@ SVC_Context:
         CBZ       R1,SVC_ContextSwitch// Branch if running thread is deleted
 
 SVC_ContextSave:
-        STMDB     R12!,{R4-R11}       // Save R4..R11
-        STR       R12,[R1]            // save own SP in TCB
+        MRS       R0,PSP
+        STMDB     R0!,{R4-R11}        // Save R4..R11
+        STR       R0,[R1]             // save own SP in TCB
 
 SVC_ContextSwitch:
         STR       R2,[R3]             // osInfo.thread.run: curr = next
@@ -91,7 +92,6 @@ PendSV_Handler:
         PUSH     {LR}                   // Save EXC_RETURN
         BL       osPendSV_Handler       // Call osPendSV_Handler
         POP      {LR}                   // Restore EXC_RETURN
-        MRS      R12,PSP
         B        SVC_Context
 
         .fnend
@@ -108,7 +108,6 @@ SysTick_Handler:
         PUSH     {LR}                   // Save EXC_RETURN
         BL       osTick_Handler         // Call osTick_Handler
         POP      {LR}                   // Restore EXC_RETURN
-        MRS      R12,PSP
         B        SVC_Context
 
         .fnend

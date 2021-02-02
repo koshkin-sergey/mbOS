@@ -93,7 +93,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="Kernel/GCC/irq_cm3.S|Kernel/GCC/irq_arm.S|Kernel/IAR|Kernel/ARM" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="src"/>
+						<entry excluding="Kernel/GCC/irq_cm4f.S|Kernel/GCC/irq_cm3.S|Kernel/GCC/irq_arm.S|Kernel/IAR|Kernel/ARM" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
