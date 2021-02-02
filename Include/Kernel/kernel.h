@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2017-2021 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -284,6 +284,17 @@ typedef struct osThread_s {
   uint32_t                      delay;  ///< Delay Time
 } osThread_t;
 
+/* Generic Object Control Block */
+typedef struct osObject_s {
+  uint8_t                          id;  ///< Object Identifier
+  uint8_t                       state;  ///< Object State
+  uint8_t                       flags;  ///< Object Flags
+  uint8_t                    reserved;
+  const char                    *name;  ///< Object Name
+  queue_t                  post_queue;  ///< Post Processing queue
+  queue_t                  wait_queue;  ///< Waiting Threads queue
+} osObject_t;
+
 /* Semaphore Control Block */
 typedef struct osSemaphore_s {
   uint8_t                          id;  ///< Object Identifier
@@ -291,6 +302,7 @@ typedef struct osSemaphore_s {
   uint8_t                       flags;  ///< Object Flags
   uint8_t                    reserved;
   const char                    *name;  ///< Object Name
+  queue_t                  post_queue;  ///< Post Processing queue
   queue_t                  wait_queue;  ///< Waiting Threads queue
   uint16_t                      count;  ///< Current number of tokens
   uint16_t                  max_count;  ///< Maximum number of tokens
@@ -303,6 +315,7 @@ typedef struct osEventFlags_s {
   uint8_t                       flags;  ///< Object Flags
   uint8_t                    reserved;
   const char                    *name;  ///< Object Name
+  queue_t                  post_queue;  ///< Post Processing queue
   queue_t                  wait_queue;  ///< Waiting Threads queue
   uint32_t                event_flags;  ///< Initial value of the eventflag bit pattern
 } osEventFlags_t;
@@ -326,6 +339,7 @@ typedef struct osMemoryPool_s {
   uint8_t                       flags;  ///< Object Flags
   uint8_t                    reserved;
   const char                    *name;  ///< Object Name
+  queue_t                  post_queue;  ///< Post Processing queue
   queue_t                  wait_queue;  ///< Waiting Threads queue
   osMemoryPoolInfo_t             info;  ///< Memory Pool Info
 } osMemoryPool_t;
@@ -348,6 +362,7 @@ typedef struct osMessageQueue_s {
   uint8_t                       flags;  ///< Object Flags
   uint8_t                    reserved;
   const char                    *name;  ///< Object Name
+  queue_t                  post_queue;  ///< Post Processing queue
   queue_t              wait_put_queue;  ///< Queue of threads waiting to send a message
   queue_t              wait_get_queue;  ///< Queue of threads waiting to receive a message
   osMemoryPoolInfo_t          mp_info;  ///< Memory Pool Info
@@ -363,6 +378,7 @@ typedef struct osDataQueue_s {
   uint8_t                       flags;  ///< Object Flags
   uint8_t                    reserved;
   const char                    *name;  ///< Object Name
+  queue_t                  post_queue;  ///< Post Processing queue
   queue_t              wait_put_queue;  ///< Queue of threads waiting to send a data
   queue_t              wait_get_queue;  ///< Queue of threads waiting to receive a data
   uint32_t             max_data_count;  ///< Maximum number of Data
@@ -381,6 +397,7 @@ typedef struct osMutex_s {
   uint8_t                       flags;  ///< Object Flags
   uint8_t                        attr;  ///< Object Attributes
   const char                    *name;  ///< Object Name
+  queue_t                  post_queue;  ///< Post Processing queue
   queue_t                    wait_que;  ///< List of tasks that wait a mutex
   queue_t                   mutex_que;  ///< To include in thread's locked mutexes list (if any)
   osThread_t                  *holder;  ///< Current mutex owner(thread that locked mutex)

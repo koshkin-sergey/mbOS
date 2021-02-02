@@ -85,7 +85,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="ARM/|GCC/irq_cm3.S|IAR/|GCC/irq_arm.S" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Source"/>
+						<entry excluding="GCC/irq_cm4f.S|ARM/|GCC/irq_cm3.S|IAR/|GCC/irq_arm.S" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Source"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -186,7 +186,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="ARM/|IAR/|GCC/irq_cm0.S|GCC/irq_arm.S" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Source"/>
+						<entry excluding="GCC/irq_cm4f.S|ARM/|IAR/|GCC/irq_cm0.S|GCC/irq_arm.S" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Source"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -287,7 +287,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="ARM/|IAR/|GCC/irq_cm0.S|GCC/irq_arm.S" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Source"/>
+						<entry excluding="GCC/irq_cm4f.S|ARM/|IAR/|GCC/irq_cm0.S|GCC/irq_arm.S" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Source"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -391,7 +391,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="ARM/|GCC/irq_cm3.S|IAR/|GCC/irq_cm0.S" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Source"/>
+						<entry excluding="GCC/irq_cm4f.S|ARM/|GCC/irq_cm3.S|IAR/|GCC/irq_cm0.S" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Source"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
