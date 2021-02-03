@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2017-2021 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -33,30 +33,6 @@
 /*******************************************************************************
  *  Helper functions
  ******************************************************************************/
-
-static void ThreadStackInit(uint32_t func_addr, void *func_param, osThread_t *thread)
-{
-  uint32_t *stk = (uint32_t *)((uint32_t)thread->stk_mem + thread->stk_size);
-
-  *(--stk) = 0x01000000L;                       //-- xPSR
-  *(--stk) = func_addr;                         //-- Entry Point
-  *(--stk) = (uint32_t)osThreadExit;            //-- R14 (LR)
-  *(--stk) = 0x12121212L;                       //-- R12
-  *(--stk) = 0x03030303L;                       //-- R3
-  *(--stk) = 0x02020202L;                       //-- R2
-  *(--stk) = 0x01010101L;                       //-- R1
-  *(--stk) = (uint32_t)func_param;              //-- R0 - thread's function argument
-  *(--stk) = 0x11111111L;                       //-- R11
-  *(--stk) = 0x10101010L;                       //-- R10
-  *(--stk) = 0x09090909L;                       //-- R9
-  *(--stk) = 0x08080808L;                       //-- R8
-  *(--stk) = 0x07070707L;                       //-- R7
-  *(--stk) = 0x06060606L;                       //-- R6
-  *(--stk) = 0x05050505L;                       //-- R5
-  *(--stk) = 0x04040404L;                       //-- R4
-
-  thread->stk = (uint32_t)stk;
-}
 
 /**
  * @brief       Adds thread to the end of ready queue for current priority
@@ -147,7 +123,14 @@ static osThreadId_t ThreadNew(osThreadFunc_t func, void *argument, const osThrea
     *ptr++ = FILL_STACK_VALUE;
   }
 
-  ThreadStackInit((uint32_t)func, argument, thread);
+  StackAttr_t stack_attr = {
+      .func_addr  = func,
+      .func_param = argument,
+      .func_exit  = osThreadExit,
+      .stk_mem    = stack_mem,
+      .stk_size   = stack_size,
+  };
+  thread->stk = StackInit(&stack_attr);
 
   ThreadReadyAdd(thread);
   libThreadDispatch(thread);
@@ -624,7 +607,6 @@ void libThreadSwitch(osThread_t *thread)
 {
   thread->state = ThreadStateRunning;
   osInfo.thread.run.next = thread;
-//  archSwitchContextRequest();
 }
 
 /**
