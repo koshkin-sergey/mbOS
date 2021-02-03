@@ -86,8 +86,12 @@ typedef struct KernelInfo_s {
   queue_t             ready_list[NUM_PRIORITY];   ///< all ready to run(RUNNABLE) tasks
   queue_t                          timer_queue;
   queue_t                          delay_queue;
-  queue_t                           post_queue;
   osSemaphoreId_t              timer_semaphore;
+  struct {                                        ///< ISR Post Processing functions
+    queue_t                              queue;
+    void       (*event_flags)(osEventFlags_t*);   ///< Event Flags Post Processing function
+    void          (*semaphore)(osSemaphore_t*);   ///< Semaphore Post Processing function
+  } post_process;
 } KernelInfo_t;
 
 typedef enum {

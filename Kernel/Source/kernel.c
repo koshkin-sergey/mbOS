@@ -80,7 +80,7 @@ static osStatus_t KernelInitialize(void)
 
   QueueReset(&osInfo.timer_queue);
   QueueReset(&osInfo.delay_queue);
-  QueueReset(&osInfo.post_queue);
+  QueueReset(&osInfo.post_process.queue);
 
   osInfo.kernel.state = osKernelReady;
 
