@@ -284,17 +284,6 @@ typedef struct osThread_s {
   uint32_t                      delay;  ///< Delay Time
 } osThread_t;
 
-/* Generic Object Control Block */
-typedef struct osObject_s {
-  uint8_t                          id;  ///< Object Identifier
-  uint8_t                       state;  ///< Object State
-  uint8_t                       flags;  ///< Object Flags
-  uint8_t                    reserved;
-  const char                    *name;  ///< Object Name
-  queue_t                  post_queue;  ///< Post Processing queue
-  queue_t                  wait_queue;  ///< Waiting Threads queue
-} osObject_t;
-
 /* Semaphore Control Block */
 typedef struct osSemaphore_s {
   uint8_t                          id;  ///< Object Identifier

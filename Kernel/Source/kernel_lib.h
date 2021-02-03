@@ -26,7 +26,7 @@
 #include "Kernel/kernel.h"
 
 /*******************************************************************************
- *  defines and macros (scope: module-local)
+ *  defines and macros
  ******************************************************************************/
 
 /* Kernel Information */
@@ -64,7 +64,7 @@
 #define osThreadWait                (-16)
 
 /*******************************************************************************
- *  typedefs and structures (scope: module-local)
+ *  typedefs and structures
  ******************************************************************************/
 
 /* Kernel Runtime Information structure */
@@ -86,6 +86,7 @@ typedef struct KernelInfo_s {
   queue_t             ready_list[NUM_PRIORITY];   ///< all ready to run(RUNNABLE) tasks
   queue_t                          timer_queue;
   queue_t                          delay_queue;
+  queue_t                           post_queue;
   osSemaphoreId_t              timer_semaphore;
 } KernelInfo_t;
 
@@ -93,6 +94,17 @@ typedef enum {
   DISPATCH_NO  = 0,
   DISPATCH_YES = 1,
 } dispatch_t;
+
+/* Generic Object Control Block */
+typedef struct osObject_s {
+  uint8_t                          id;  ///< Object Identifier
+  uint8_t                       state;  ///< Object State
+  uint8_t                       flags;  ///< Object Flags
+  uint8_t                    reserved;
+  const char                    *name;  ///< Object Name
+  queue_t                  post_queue;  ///< Post Processing queue
+  queue_t                  wait_queue;  ///< Waiting Threads queue
+} osObject_t;
 
 /*******************************************************************************
  *  exported variables
@@ -274,5 +286,6 @@ osStatus_t libMemoryPoolFree(osMemoryPoolInfo_t *mp_info, void *block);
 
 extern void osTick_Handler(void);
 extern void osPendSV_Handler(void);
+extern void osPostProcess(osObject_t *object);
 
 #endif /* _KERNEL_LIB_H_ */

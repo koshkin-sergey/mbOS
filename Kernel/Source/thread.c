@@ -123,6 +123,7 @@ static osThreadId_t ThreadNew(osThreadFunc_t func, void *argument, const osThrea
     *ptr++ = FILL_STACK_VALUE;
   }
 
+  /* Init thread stack */
   StackAttr_t stack_attr = {
       .func_addr  = func,
       .func_param = argument,

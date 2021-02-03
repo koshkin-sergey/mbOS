@@ -1,0 +1,106 @@
+/*
+ * Copyright (C) 2021 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * All rights reserved
+ *
+ * Licensed under the Apache License, Version 2.0 (the License); you may
+ * not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an AS IS BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * Project: mbOS real-time kernel
+ */
+
+/**
+ * @file
+ *
+ * Kernel system routines.
+ *
+ */
+
+/*******************************************************************************
+ *  includes
+ ******************************************************************************/
+
+#include "kernel_lib.h"
+
+/*******************************************************************************
+ *  Helper functions
+ ******************************************************************************/
+
+/**
+ * @fn          uint32_t post_queue_put(osObject_t*)
+ * @brief       Put Object into ISR Queue.
+ * @param[in]   object  object.
+ * @return      1 - success, 0 - failure.
+ */
+static uint32_t post_queue_put(osObject_t *object)
+{
+
+}
+
+/**
+ * @fn          osObject_t post_queue_get*(void)
+ * @brief       Get Object from ISR Queue.
+ * @return      object or NULL.
+ */
+static osObject_t* post_queue_get(void)
+{
+
+}
+
+/*******************************************************************************
+ *  function implementations (scope: module-exported)
+ ******************************************************************************/
+
+/**
+ * @fn          void osTick_Handler(void)
+ * @brief       Tick Handler.
+ */
+void osTick_Handler(void)
+{
+  osTimer_t *timer;
+  queue_t   *timer_queue;
+
+  ++osInfo.kernel.tick;
+
+  /* Process Timers */
+  if (osInfo.timer_semaphore != NULL) {
+    timer_queue = &osInfo.timer_queue;
+    if (!isQueueEmpty(timer_queue)) {
+      timer = GetTimerByQueue(timer_queue->next);
+      if (time_before_eq(timer->time, osInfo.kernel.tick)) {
+        osSemaphoreRelease(osInfo.timer_semaphore);
+      }
+    }
+  }
+
+  /* Process Thread Delays */
+  if (libThreadDelayTick() == true) {
+    libThreadDispatch(NULL);
+  }
+}
+
+/**
+ * @fn          void osPendSV_Handler(void)
+ * @brief       Pending Service Call Handler.
+ */
+void osPendSV_Handler(void)
+{
+  libThreadDispatch(NULL);
+}
+
+/**
+ * @brief       Register post ISR processing.
+ * @param[in]   object  generic object.
+ */
+void osPostProcess(osObject_t *object)
+{
+
+}
