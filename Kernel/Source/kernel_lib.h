@@ -60,6 +60,7 @@
 #define GetMutexByQueque(que)       container_of(que, osMutex_t, mutex_que)
 #define GetTimerByQueue(que)        container_of(que, osTimer_t, timer_que)
 #define GetMessageByQueue(que)      container_of(que, osMessage_t, msg_que)
+#define GetObjectByQueue(que)       container_of(que, osObject_t, post_queue)
 
 #define osThreadWait                (-16)
 
@@ -283,6 +284,39 @@ void *libMemoryPoolAlloc(osMemoryPoolInfo_t *mp_info);
  * @return      status code that indicates the execution status of the function.
  */
 osStatus_t libMemoryPoolFree(osMemoryPoolInfo_t *mp_info, void *block);
+
+/*******************************************************************************
+ *  Post ISR processing functions
+ ******************************************************************************/
+
+/**
+ * @fn          void osKrnSemaphorePostProcess(osSemaphore_t*)
+ * @brief       Semaphore post ISR processing.
+ * @param[in]   sem  semaphore object.
+ */
+void osKrnSemaphorePostProcess(osSemaphore_t *sem);
+
+/**
+ * @fn          void osKrnEventFlagsPostProcess(osEventFlags_t*)
+ * @brief       Event Flags post ISR processing.
+ * @param[in]   evf  event flags object.
+ */
+void osKrnEventFlagsPostProcess(osEventFlags_t *evf);
+
+/**
+ * @fn          void osKrnMessageQueuePostProcess(osMessageQueue_t*)
+ * @brief       Message Queue post ISR processing.
+ * @param[in]   mq  message queue object.
+ */
+void osKrnMessageQueuePostProcess(osMessageQueue_t *mq);
+
+/**
+ * @fn          void osKrnDataQueuePostProcess(osDataQueue_t*)
+ * @brief       Data Queue post ISR processing.
+ * @param[in]   dq  data queue object.
+ */
+void osKrnDataQueuePostProcess(osDataQueue_t *dq);
+
 
 /*******************************************************************************
  *  System Library functions

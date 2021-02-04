@@ -35,14 +35,18 @@
  ******************************************************************************/
 
 /**
- * @fn          uint32_t post_queue_put(osObject_t*)
+ * @fn          void post_queue_put(osObject_t*)
  * @brief       Put Object into ISR Queue.
  * @param[in]   object  object.
- * @return      1 - success, 0 - failure.
  */
-static uint32_t post_queue_put(osObject_t *object)
+static void post_queue_put(osObject_t *object)
 {
+  BEGIN_CRITICAL_SECTION
 
+  /* Add the object to the end of post ISR queue */
+  QueueAppend(&osInfo.post_process.queue, &object->post_queue);
+
+  END_CRITICAL_SECTION
 }
 
 /**
@@ -52,7 +56,19 @@ static uint32_t post_queue_put(osObject_t *object)
  */
 static osObject_t* post_queue_get(void)
 {
+  queue_t    *que;
+  osObject_t *obj;
 
+  que = &osInfo.post_process.queue;
+
+  if (!isQueueEmpty(que)) {
+    obj = GetObjectByQueue(QueueExtract(que));
+  }
+  else {
+    obj = NULL;
+  }
+
+  return (obj);
 }
 
 /*******************************************************************************
@@ -93,6 +109,36 @@ void osTick_Handler(void)
  */
 void osPendSV_Handler(void)
 {
+  osObject_t *object;
+
+  for (;;) {
+    object = post_queue_get();
+    if (object == NULL) {
+      break;
+    }
+
+    switch (object->id) {
+      case ID_SEMAPHORE:
+        osKrnSemaphorePostProcess((osSemaphore_t *)object);
+        break;
+
+      case ID_EVENT_FLAGS:
+        osKrnEventFlagsPostProcess((osEventFlags_t *)object);
+        break;
+
+      case ID_MESSAGE_QUEUE:
+        osKrnMessageQueuePostProcess((osMessageQueue_t *)object);
+        break;
+
+      case ID_DATA_QUEUE:
+        osKrnDataQueuePostProcess((osDataQueue_t *)object);
+        break;
+
+      default:
+        break;
+    }
+  }
+
   libThreadDispatch(NULL);
 }
 
@@ -102,5 +148,6 @@ void osPendSV_Handler(void)
  */
 void osPostProcess(osObject_t *object)
 {
-
+  post_queue_put(object);
+  PendServCallReq();
 }

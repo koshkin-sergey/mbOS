@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2019-2021 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -348,6 +348,20 @@ static osStatus_t DataQueueDelete(osDataQueueId_t dq_id)
   dq->id = ID_INVALID;
 
   return (osOK);
+}
+
+/*******************************************************************************
+ *  Post ISR processing
+ ******************************************************************************/
+
+/**
+ * @fn          void osKrnDataQueuePostProcess(osDataQueue_t*)
+ * @brief       Data Queue post ISR processing.
+ * @param[in]   dq  data queue object.
+ */
+void osKrnDataQueuePostProcess(osDataQueue_t *dq)
+{
+
 }
 
 /*******************************************************************************

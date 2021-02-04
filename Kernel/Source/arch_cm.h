@@ -227,7 +227,8 @@ uint32_t SystemIsrInit(void)
 #if   ((defined(__ARM_ARCH_7M__)      && (__ARM_ARCH_7M__      != 0)) ||       \
        (defined(__ARM_ARCH_7EM__)     && (__ARM_ARCH_7EM__     != 0)) ||       \
        (defined(__ARM_ARCH_8M_MAIN__) && (__ARM_ARCH_8M_MAIN__ != 0)))
-  uint32_t p, n;
+  uint32_t p;
+  uint32_t n;
 
   SCB->SHP[10] = 0xFFU;
   n = 32U - (uint32_t)__CLZ(~(SCB->SHP[10] | 0xFFFFFF00U));
@@ -268,8 +269,12 @@ void setPrivilegedMode(uint32_t flag)
   }
 }
 
+/**
+ * @fn          void PendServCallReq(void)
+ * @brief       Set Pending SV (Service Call) Flag.
+ */
 __STATIC_FORCEINLINE
-void SwitchContextRequest(void)
+void PendServCallReq(void)
 {
   SCB->ICSR = PENDSVSET;
 }
