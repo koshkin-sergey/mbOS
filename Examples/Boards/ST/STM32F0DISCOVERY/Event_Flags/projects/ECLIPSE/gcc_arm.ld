@@ -1,5 +1,7 @@
 /*
- * Copyright (c) 2009-2021 Arm Limited. All rights reserved.
+ * Copyright (c) 2009-2019 Arm Limited.
+ * Copyright (C) 2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -27,7 +29,7 @@
 //  </h>
  -----------------------------------------------------------------------------*/
 __ROM_BASE = 0x08000000;
-__ROM_SIZE = 0x00040000;
+__ROM_SIZE = 0x00010000;
 
 /*--------------------- Embedded RAM Configuration ----------------------------
 //  <h> RAM Configuration
@@ -36,7 +38,7 @@ __ROM_SIZE = 0x00040000;
 //  </h>
  -----------------------------------------------------------------------------*/
 __RAM_BASE = 0x20000000;
-__RAM_SIZE = 0x00020000;
+__RAM_SIZE = 0x00002000;
 
 /*--------------------- Stack / Heap Configuration ----------------------------
 //  <h> Stack / Heap Configuration

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2017-2021 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -31,30 +31,10 @@
 #include "kernel_lib.h"
 
 /*******************************************************************************
- *  external declarations
- ******************************************************************************/
-
-/*******************************************************************************
  *  defines and macros (scope: module-local)
  ******************************************************************************/
 
 #define SemaphoreTokenLimit   65535U ///< maximum number of tokens per semaphore
-
-/*******************************************************************************
- *  typedefs and structures (scope: module-local)
- ******************************************************************************/
-
-/*******************************************************************************
- *  global variable definitions  (scope: module-exported)
- ******************************************************************************/
-
-/*******************************************************************************
- *  global variable definitions (scope: module-local)
- ******************************************************************************/
-
-/*******************************************************************************
- *  function prototypes (scope: module-local)
- ******************************************************************************/
 
 /*******************************************************************************
  *  function implementations (scope: module-local)
@@ -110,7 +90,7 @@ static osStatus_t SemaphoreAcquire(osSemaphoreId_t semaphore_id, uint32_t timeou
 
   /* Check parameters */
   if ((sem == NULL) || (sem->id != ID_SEMAPHORE)) {
-    return osErrorParameter;
+    return (osErrorParameter);
   }
 
   BEGIN_CRITICAL_SECTION
@@ -148,7 +128,7 @@ static osStatus_t SemaphoreRelease(osSemaphoreId_t semaphore_id)
 
   /* Check parameters */
   if ((sem == NULL) || (sem->id != ID_SEMAPHORE)) {
-    return osErrorParameter;
+    return (osErrorParameter);
   }
 
   BEGIN_CRITICAL_SECTION
@@ -181,7 +161,7 @@ static uint32_t SemaphoreGetCount(osSemaphoreId_t semaphore_id)
 
   /* Check parameters */
   if ((sem == NULL) || (sem->id != ID_SEMAPHORE)) {
-    return 0U;
+    return (0U);
   }
 
   return (sem->count);
@@ -193,7 +173,7 @@ static osStatus_t SemaphoreDelete(osSemaphoreId_t semaphore_id)
 
   /* Check parameters */
   if ((sem == NULL) || (sem->id != ID_SEMAPHORE)) {
-    return osErrorParameter;
+    return (osErrorParameter);
   }
 
   /* Unblock waiting threads */
@@ -202,6 +182,20 @@ static osStatus_t SemaphoreDelete(osSemaphoreId_t semaphore_id)
   sem->id = ID_INVALID;
 
   return (osOK);
+}
+
+/*******************************************************************************
+ *  Post ISR processing
+ ******************************************************************************/
+
+/**
+ * @fn          void osKrnSemaphorePostProcess(osSemaphore_t*)
+ * @brief       Semaphore post ISR processing.
+ * @param[in]   sem  semaphore object.
+ */
+void osKrnSemaphorePostProcess(osSemaphore_t *sem)
+{
+
 }
 
 /*******************************************************************************

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>STM32F4DISC_timers</name>
+	<name>STM32F0DISCOVERY_Event_Flags</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -32,7 +32,7 @@
 		<link>
 			<name>src/Config</name>
 			<type>2</type>
-			<locationURI>$%7BSTM32F4DISCOVERY%7D/Common/Config</locationURI>
+			<locationURI>PARENT-3-PROJECT_LOC/Common/Config</locationURI>
 		</link>
 		<link>
 			<name>src/Device</name>
@@ -42,12 +42,12 @@
 		<link>
 			<name>src/Kernel</name>
 			<type>2</type>
-			<locationURI>mbOS/Kernel/Source</locationURI>
+			<locationURI>WORKSPACE_LOC/mbOS/Kernel/Source</locationURI>
 		</link>
 		<link>
-			<name>src/stm32f4_example_timers.c</name>
+			<name>src/stm32f0_example_event_flags.c</name>
 			<type>1</type>
-			<locationURI>$%7BSTM32F4DISCOVERY%7D/Timers/stm32f4_example_timers.c</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/stm32f0_example_event_flags.c</locationURI>
 		</link>
 		<link>
 			<name>src/Device/Drivers</name>
@@ -60,38 +60,24 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>src/Device/Drivers/GPIO_STM32F4xx.c</name>
+			<name>src/Device/Drivers/GPIO_STM32F0xx.c</name>
 			<type>1</type>
-			<locationURI>$%7BSTM32F4xx%7D/Driver/GPIO_STM32F4xx.c</locationURI>
+			<locationURI>WORKSPACE_LOC/mbOS/Device/STMicroelectronics/STM32F0xx/Driver/GPIO_STM32F0xx.c</locationURI>
 		</link>
 		<link>
-			<name>src/Device/Drivers/RCC_STM32F4xx.c</name>
+			<name>src/Device/Drivers/RCC_STM32F0xx.c</name>
 			<type>1</type>
-			<locationURI>$%7BSTM32F4xx%7D/Driver/RCC_STM32F4xx.c</locationURI>
+			<locationURI>WORKSPACE_LOC/mbOS/Device/STMicroelectronics/STM32F0xx/Driver/RCC_STM32F0xx.c</locationURI>
 		</link>
 		<link>
-			<name>src/Device/Startup/startup_stm32f407xx.c</name>
+			<name>src/Device/Startup/startup_stm32f051x8.c</name>
 			<type>1</type>
-			<locationURI>$%7BSTM32F4xx%7D/Startup/startup_stm32f407xx.c</locationURI>
+			<locationURI>WORKSPACE_LOC/mbOS/Device/STMicroelectronics/STM32F0xx/Startup/startup_stm32f051x8.c</locationURI>
 		</link>
 		<link>
-			<name>src/Device/Startup/system_stm32f4xx.c</name>
+			<name>src/Device/Startup/system_stm32f0xx.c</name>
 			<type>1</type>
-			<locationURI>$%7BSTM32F4xx%7D/Startup/system_stm32f4xx.c</locationURI>
+			<locationURI>WORKSPACE_LOC/mbOS/Device/STMicroelectronics/STM32F0xx/Startup/system_stm32f0xx.c</locationURI>
 		</link>
 	</linkedResources>
-	<variableList>
-		<variable>
-			<name>STM32F4DISCOVERY</name>
-			<value>$%7BmbOS%7D/Examples/Boards/ST/STM32F4DISCOVERY</value>
-		</variable>
-		<variable>
-			<name>STM32F4xx</name>
-			<value>$%7BmbOS%7D/Device/STMicroelectronics/STM32F4xx</value>
-		</variable>
-		<variable>
-			<name>mbOS</name>
-			<value>$%7BWORKSPACE_LOC%7D/mbOS</value>
-		</variable>
-	</variableList>
 </projectDescription>

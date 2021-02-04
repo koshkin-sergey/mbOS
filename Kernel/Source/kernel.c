@@ -61,34 +61,6 @@ KernelInfo_t osInfo;
  *  function implementations (scope: module-local)
  ******************************************************************************/
 
-void osTick_Handler(void)
-{
-  osTimer_t *timer;
-  queue_t   *timer_queue;
-
-  ++osInfo.kernel.tick;
-
-  /* Process Timers */
-  if (osInfo.timer_semaphore != NULL) {
-    timer_queue = &osInfo.timer_queue;
-    if (!isQueueEmpty(timer_queue)) {
-      timer = GetTimerByQueue(timer_queue->next);
-      if (time_before_eq(timer->time, osInfo.kernel.tick)) {
-        osSemaphoreRelease(osInfo.timer_semaphore);
-      }
-    }
-  }
-
-  BEGIN_CRITICAL_SECTION
-
-  /* Process Thread Delays */
-  if (libThreadDelayTick() == true) {
-    libThreadDispatch(NULL);
-  }
-
-  END_CRITICAL_SECTION
-}
-
 static osStatus_t KernelInitialize(void)
 {
   if (osInfo.kernel.state == osKernelReady) {
@@ -108,6 +80,7 @@ static osStatus_t KernelInitialize(void)
 
   QueueReset(&osInfo.timer_queue);
   QueueReset(&osInfo.delay_queue);
+  QueueReset(&osInfo.post_process.queue);
 
   osInfo.kernel.state = osKernelReady;
 

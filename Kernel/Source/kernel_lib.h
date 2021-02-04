@@ -26,7 +26,7 @@
 #include "Kernel/kernel.h"
 
 /*******************************************************************************
- *  defines and macros (scope: module-local)
+ *  defines and macros
  ******************************************************************************/
 
 /* Kernel Information */
@@ -60,11 +60,12 @@
 #define GetMutexByQueque(que)       container_of(que, osMutex_t, mutex_que)
 #define GetTimerByQueue(que)        container_of(que, osTimer_t, timer_que)
 #define GetMessageByQueue(que)      container_of(que, osMessage_t, msg_que)
+#define GetObjectByQueue(que)       container_of(que, osObject_t, post_queue)
 
 #define osThreadWait                (-16)
 
 /*******************************************************************************
- *  typedefs and structures (scope: module-local)
+ *  typedefs and structures
  ******************************************************************************/
 
 /* Kernel Runtime Information structure */
@@ -87,12 +88,28 @@ typedef struct KernelInfo_s {
   queue_t                          timer_queue;
   queue_t                          delay_queue;
   osSemaphoreId_t              timer_semaphore;
+  struct {                                        ///< ISR Post Processing functions
+    queue_t                              queue;
+    void       (*event_flags)(osEventFlags_t*);   ///< Event Flags Post Processing function
+    void          (*semaphore)(osSemaphore_t*);   ///< Semaphore Post Processing function
+  } post_process;
 } KernelInfo_t;
 
 typedef enum {
   DISPATCH_NO  = 0,
   DISPATCH_YES = 1,
 } dispatch_t;
+
+/* Generic Object Control Block */
+typedef struct osObject_s {
+  uint8_t                          id;  ///< Object Identifier
+  uint8_t                       state;  ///< Object State
+  uint8_t                       flags;  ///< Object Flags
+  uint8_t                    reserved;
+  const char                    *name;  ///< Object Name
+  queue_t                  post_queue;  ///< Post Processing queue
+  queue_t                  wait_queue;  ///< Waiting Threads queue
+} osObject_t;
 
 /*******************************************************************************
  *  exported variables
@@ -269,9 +286,44 @@ void *libMemoryPoolAlloc(osMemoryPoolInfo_t *mp_info);
 osStatus_t libMemoryPoolFree(osMemoryPoolInfo_t *mp_info, void *block);
 
 /*******************************************************************************
+ *  Post ISR processing functions
+ ******************************************************************************/
+
+/**
+ * @fn          void osKrnSemaphorePostProcess(osSemaphore_t*)
+ * @brief       Semaphore post ISR processing.
+ * @param[in]   sem  semaphore object.
+ */
+void osKrnSemaphorePostProcess(osSemaphore_t *sem);
+
+/**
+ * @fn          void osKrnEventFlagsPostProcess(osEventFlags_t*)
+ * @brief       Event Flags post ISR processing.
+ * @param[in]   evf  event flags object.
+ */
+void osKrnEventFlagsPostProcess(osEventFlags_t *evf);
+
+/**
+ * @fn          void osKrnMessageQueuePostProcess(osMessageQueue_t*)
+ * @brief       Message Queue post ISR processing.
+ * @param[in]   mq  message queue object.
+ */
+void osKrnMessageQueuePostProcess(osMessageQueue_t *mq);
+
+/**
+ * @fn          void osKrnDataQueuePostProcess(osDataQueue_t*)
+ * @brief       Data Queue post ISR processing.
+ * @param[in]   dq  data queue object.
+ */
+void osKrnDataQueuePostProcess(osDataQueue_t *dq);
+
+
+/*******************************************************************************
  *  System Library functions
  ******************************************************************************/
 
 extern void osTick_Handler(void);
+extern void osPendSV_Handler(void);
+extern void osPostProcess(osObject_t *object);
 
 #endif /* _KERNEL_LIB_H_ */

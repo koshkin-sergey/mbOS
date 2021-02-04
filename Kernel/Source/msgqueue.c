@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2013-2021 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -387,6 +387,20 @@ static osStatus_t MessageQueueDelete(osMessageQueueId_t mq_id)
   mq->id = ID_INVALID;
 
   return (osOK);
+}
+
+/*******************************************************************************
+ *  Post ISR processing
+ ******************************************************************************/
+
+/**
+ * @fn          void osKrnMessageQueuePostProcess(osMessageQueue_t*)
+ * @brief       Message Queue post ISR processing.
+ * @param[in]   mq  message queue object.
+ */
+void osKrnMessageQueuePostProcess(osMessageQueue_t *mq)
+{
+
 }
 
 /*******************************************************************************

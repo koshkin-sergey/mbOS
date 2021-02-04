@@ -168,6 +168,15 @@ typedef struct
 
 #endif
 
+/// Attributes structure for StackInit function.
+typedef struct StackAttr_s {
+  void             *func_addr;
+  void            *func_param;
+  void             *func_exit;
+  void               *stk_mem;
+  uint32_t           stk_size;
+} StackAttr_t;
+
 /*******************************************************************************
  *  exported functions
  ******************************************************************************/
@@ -218,7 +227,8 @@ uint32_t SystemIsrInit(void)
 #if   ((defined(__ARM_ARCH_7M__)      && (__ARM_ARCH_7M__      != 0)) ||       \
        (defined(__ARM_ARCH_7EM__)     && (__ARM_ARCH_7EM__     != 0)) ||       \
        (defined(__ARM_ARCH_8M_MAIN__) && (__ARM_ARCH_8M_MAIN__ != 0)))
-  uint32_t p, n;
+  uint32_t p;
+  uint32_t n;
 
   SCB->SHP[10] = 0xFFU;
   n = 32U - (uint32_t)__CLZ(~(SCB->SHP[10] | 0xFFFFFF00U));
@@ -259,10 +269,39 @@ void setPrivilegedMode(uint32_t flag)
   }
 }
 
+/**
+ * @fn          void PendServCallReq(void)
+ * @brief       Set Pending SV (Service Call) Flag.
+ */
 __STATIC_FORCEINLINE
-void archSwitchContextRequest(void)
+void PendServCallReq(void)
 {
   SCB->ICSR = PENDSVSET;
+}
+
+__STATIC_INLINE
+uint32_t StackInit(StackAttr_t *attr)
+{
+  uint32_t *stk = (uint32_t *)((uint32_t)attr->stk_mem + attr->stk_size);
+
+  *(--stk) = 0x01000000L;                       //-- xPSR
+  *(--stk) = (uint32_t)attr->func_addr;         //-- Entry Point
+  *(--stk) = (uint32_t)attr->func_exit;         //-- R14 (LR)
+  *(--stk) = 0x12121212L;                       //-- R12
+  *(--stk) = 0x03030303L;                       //-- R3
+  *(--stk) = 0x02020202L;                       //-- R2
+  *(--stk) = 0x01010101L;                       //-- R1
+  *(--stk) = (uint32_t)attr->func_param;        //-- R0 - thread's function argument
+  *(--stk) = 0x11111111L;                       //-- R11
+  *(--stk) = 0x10101010L;                       //-- R10
+  *(--stk) = 0x09090909L;                       //-- R9
+  *(--stk) = 0x08080808L;                       //-- R8
+  *(--stk) = 0x07070707L;                       //-- R7
+  *(--stk) = 0x06060606L;                       //-- R6
+  *(--stk) = 0x05050505L;                       //-- R5
+  *(--stk) = 0x04040404L;                       //-- R4
+
+  return ((uint32_t)stk);
 }
 
 __STATIC_FORCEINLINE

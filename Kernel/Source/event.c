@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2017-2021 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -68,7 +68,7 @@ uint32_t FlagsSet(osEventFlags_t *evf, uint32_t flags)
   evf->event_flags |= flags;
   event_flags = evf->event_flags;
 
-  return event_flags;
+  return (event_flags);
 }
 
 static
@@ -98,7 +98,7 @@ uint32_t FlagsCheck (osEventFlags_t *evf, uint32_t flags, uint32_t options)
     }
   }
 
-  return pattern;
+  return (pattern);
 }
 
 static osEventFlagsId_t EventFlagsNew(const osEventFlagsAttr_t *attr)
@@ -142,7 +142,8 @@ static const char *EventFlagsGetName(osEventFlagsId_t ef_id)
 static uint32_t EventFlagsSet(osEventFlagsId_t ef_id, uint32_t flags)
 {
   osEventFlags_t *evf = (osEventFlags_t *)ef_id;
-  uint32_t        event_flags, pattern;
+  uint32_t        event_flags;
+  uint32_t        pattern;
   queue_t        *que;
   osThread_t     *thread;
 
@@ -276,6 +277,20 @@ static osStatus_t EventFlagsDelete(osEventFlagsId_t ef_id)
 }
 
 /*******************************************************************************
+ *  Post ISR processing
+ ******************************************************************************/
+
+/**
+ * @fn          void osKrnEventFlagsPostProcess(osEventFlags_t*)
+ * @brief       Event Flags post ISR processing.
+ * @param[in]   evf  event flags object.
+ */
+void osKrnEventFlagsPostProcess(osEventFlags_t *evf)
+{
+
+}
+
+/*******************************************************************************
  *  Public API
  ******************************************************************************/
 
@@ -296,7 +311,7 @@ osEventFlagsId_t osEventFlagsNew(const osEventFlagsAttr_t *attr)
     ef_id = (osEventFlagsId_t)SVC_1(attr, EventFlagsNew);
   }
 
-  return ef_id;
+  return (ef_id);
 }
 
 /**
