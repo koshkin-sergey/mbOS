@@ -473,8 +473,6 @@ bool libThreadStartup(void)
  */
 void libThreadWaitExit(osThread_t *thread, uint32_t ret_val, dispatch_t dispatch)
 {
-  BEGIN_CRITICAL_SECTION
-
   thread->winfo.ret_val = ret_val;
 
   /* Remove the thread from delay queue */
@@ -483,8 +481,6 @@ void libThreadWaitExit(osThread_t *thread, uint32_t ret_val, dispatch_t dispatch
   if (dispatch != DISPATCH_NO) {
     libThreadDispatch(thread);
   }
-
-  END_CRITICAL_SECTION
 }
 
 /**

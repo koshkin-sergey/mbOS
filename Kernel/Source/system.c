@@ -119,7 +119,7 @@ void osPendSV_Handler(void)
 
     switch (object->id) {
       case ID_SEMAPHORE:
-        osKrnSemaphorePostProcess((osSemaphore_t *)object);
+        krnSemaphorePostProcess((osSemaphore_t *)object);
         break;
 
       case ID_EVENT_FLAGS:

@@ -290,11 +290,11 @@ osStatus_t libMemoryPoolFree(osMemoryPoolInfo_t *mp_info, void *block);
  ******************************************************************************/
 
 /**
- * @fn          void osKrnSemaphorePostProcess(osSemaphore_t*)
+ * @fn          void krnSemaphorePostProcess(osSemaphore_t*)
  * @brief       Semaphore post ISR processing.
  * @param[in]   sem  semaphore object.
  */
-void osKrnSemaphorePostProcess(osSemaphore_t *sem);
+void krnSemaphorePostProcess(osSemaphore_t *sem);
 
 /**
  * @fn          void osKrnEventFlagsPostProcess(osEventFlags_t*)

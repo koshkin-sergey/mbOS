@@ -40,7 +40,7 @@
  *  function implementations (scope: module-local)
  ******************************************************************************/
 
-static osSemaphoreId_t SemaphoreNew(uint32_t max_count, uint32_t initial_count, const osSemaphoreAttr_t *attr)
+static osSemaphoreId_t svcSemaphoreNew(uint32_t max_count, uint32_t initial_count, const osSemaphoreAttr_t *attr)
 {
   osSemaphore_t *sem;
 
@@ -70,7 +70,7 @@ static osSemaphoreId_t SemaphoreNew(uint32_t max_count, uint32_t initial_count, 
   return (sem);
 }
 
-static const char *SemaphoreGetName(osSemaphoreId_t semaphore_id)
+static const char *svcSemaphoreGetName(osSemaphoreId_t semaphore_id)
 {
   osSemaphore_t *sem = semaphore_id;
 
@@ -82,7 +82,7 @@ static const char *SemaphoreGetName(osSemaphoreId_t semaphore_id)
   return (sem->name);
 }
 
-static osStatus_t SemaphoreAcquire(osSemaphoreId_t semaphore_id, uint32_t timeout)
+static osStatus_t svcSemaphoreAcquire(osSemaphoreId_t semaphore_id, uint32_t timeout)
 {
   osSemaphore_t *sem = semaphore_id;
   osStatus_t status;
@@ -90,6 +90,105 @@ static osStatus_t SemaphoreAcquire(osSemaphoreId_t semaphore_id, uint32_t timeou
 
   /* Check parameters */
   if ((sem == NULL) || (sem->id != ID_SEMAPHORE)) {
+    return (osErrorParameter);
+  }
+
+  /* Try to acquire token */
+  if (sem->count > 0U) {
+    sem->count--;
+    status = osOK;
+  }
+  else {
+    /* No token available */
+    if (timeout != 0U) {
+      thread = ThreadGetRunning();
+      if (libThreadWaitEnter(thread, &sem->wait_queue, timeout)) {
+        status = (osStatus_t)osThreadWait;
+      }
+      else {
+        status = osErrorTimeout;
+      }
+    }
+    else {
+      status = osErrorResource;
+    }
+  }
+
+  return (status);
+}
+
+static osStatus_t svcSemaphoreRelease(osSemaphoreId_t semaphore_id)
+{
+  osSemaphore_t *sem = semaphore_id;
+  osStatus_t status;
+
+  /* Check parameters */
+  if ((sem == NULL) || (sem->id != ID_SEMAPHORE)) {
+    return (osErrorParameter);
+  }
+
+  /* Check if Thread is waiting for a token */
+  if (!isQueueEmpty(&sem->wait_queue)) {
+    /* Wakeup waiting Thread with highest Priority */
+    libThreadWaitExit(GetThreadByQueue(sem->wait_queue.next), (uint32_t)osOK, DISPATCH_YES);
+    status = osOK;
+  }
+  else {
+    /* Try to release token */
+    if (sem->count < sem->max_count) {
+      sem->count++;
+      status = osOK;
+    }
+    else {
+      status = osErrorResource;
+    }
+  }
+
+  return (status);
+}
+
+static uint32_t svcSemaphoreGetCount(osSemaphoreId_t semaphore_id)
+{
+  osSemaphore_t *sem = semaphore_id;
+
+  /* Check parameters */
+  if ((sem == NULL) || (sem->id != ID_SEMAPHORE)) {
+    return (0U);
+  }
+
+  return (sem->count);
+}
+
+static osStatus_t svcSemaphoreDelete(osSemaphoreId_t semaphore_id)
+{
+  osSemaphore_t *sem = semaphore_id;
+
+  /* Check parameters */
+  if ((sem == NULL) || (sem->id != ID_SEMAPHORE)) {
+    return (osErrorParameter);
+  }
+
+  /* Unblock waiting threads */
+  libThreadWaitDelete(&sem->wait_queue);
+  /* Mark object as invalid */
+  sem->id = ID_INVALID;
+
+  return (osOK);
+}
+
+/*******************************************************************************
+ *  ISR Calls
+ ******************************************************************************/
+
+__STATIC_INLINE
+osStatus_t isrSemaphoreAcquire(osSemaphoreId_t semaphore_id, uint32_t timeout)
+{
+  osSemaphore_t *sem = semaphore_id;
+  osStatus_t status;
+  osThread_t *thread;
+
+  /* Check parameters */
+  if ((sem == NULL) || (sem->id != ID_SEMAPHORE) || (timeout != 0U)) {
     return (osErrorParameter);
   }
 
@@ -121,7 +220,8 @@ static osStatus_t SemaphoreAcquire(osSemaphoreId_t semaphore_id, uint32_t timeou
   return (status);
 }
 
-static osStatus_t SemaphoreRelease(osSemaphoreId_t semaphore_id)
+__STATIC_INLINE
+osStatus_t isrSemaphoreRelease(osSemaphoreId_t semaphore_id)
 {
   osSemaphore_t *sem = semaphore_id;
   osStatus_t status;
@@ -155,45 +255,16 @@ static osStatus_t SemaphoreRelease(osSemaphoreId_t semaphore_id)
   return (status);
 }
 
-static uint32_t SemaphoreGetCount(osSemaphoreId_t semaphore_id)
-{
-  osSemaphore_t *sem = semaphore_id;
-
-  /* Check parameters */
-  if ((sem == NULL) || (sem->id != ID_SEMAPHORE)) {
-    return (0U);
-  }
-
-  return (sem->count);
-}
-
-static osStatus_t SemaphoreDelete(osSemaphoreId_t semaphore_id)
-{
-  osSemaphore_t *sem = semaphore_id;
-
-  /* Check parameters */
-  if ((sem == NULL) || (sem->id != ID_SEMAPHORE)) {
-    return (osErrorParameter);
-  }
-
-  /* Unblock waiting threads */
-  libThreadWaitDelete(&sem->wait_queue);
-  /* Mark object as invalid */
-  sem->id = ID_INVALID;
-
-  return (osOK);
-}
-
 /*******************************************************************************
  *  Post ISR processing
  ******************************************************************************/
 
 /**
- * @fn          void osKrnSemaphorePostProcess(osSemaphore_t*)
+ * @fn          void krnSemaphorePostProcess(osSemaphore_t*)
  * @brief       Semaphore post ISR processing.
  * @param[in]   sem  semaphore object.
  */
-void osKrnSemaphorePostProcess(osSemaphore_t *sem)
+void krnSemaphorePostProcess(osSemaphore_t *sem)
 {
 
 }
@@ -218,7 +289,7 @@ osSemaphoreId_t osSemaphoreNew(uint32_t max_count, uint32_t initial_count, const
     semaphore_id = NULL;
   }
   else {
-    semaphore_id = (osSemaphoreId_t)SVC_3(max_count, initial_count, attr, SemaphoreNew);
+    semaphore_id = (osSemaphoreId_t)SVC_3(max_count, initial_count, attr, svcSemaphoreNew);
   }
 
   return (semaphore_id);
@@ -238,7 +309,7 @@ const char *osSemaphoreGetName(osSemaphoreId_t semaphore_id)
     name = NULL;
   }
   else {
-    name = (const char *)SVC_1(semaphore_id, SemaphoreGetName);
+    name = (const char *)SVC_1(semaphore_id, svcSemaphoreGetName);
   }
 
   return (name);
@@ -256,15 +327,10 @@ osStatus_t osSemaphoreAcquire(osSemaphoreId_t semaphore_id, uint32_t timeout)
   osStatus_t status;
 
   if (IsIrqMode() || IsIrqMasked()) {
-    if (timeout != 0U) {
-      status = osErrorParameter;
-    }
-    else {
-      status = SemaphoreAcquire(semaphore_id, timeout);
-    }
+    status = isrSemaphoreAcquire(semaphore_id, timeout);
   }
   else {
-    status = (osStatus_t)SVC_2(semaphore_id, timeout, SemaphoreAcquire);
+    status = (osStatus_t)SVC_2(semaphore_id, timeout, svcSemaphoreAcquire);
     if (status == osThreadWait) {
       status = (osStatus_t)ThreadGetRunning()->winfo.ret_val;
     }
@@ -284,10 +350,10 @@ osStatus_t osSemaphoreRelease(osSemaphoreId_t semaphore_id)
   osStatus_t status;
 
   if (IsIrqMode() || IsIrqMasked()) {
-    status = SemaphoreRelease(semaphore_id);
+    status = isrSemaphoreRelease(semaphore_id);
   }
   else {
-    status = (osStatus_t)SVC_1(semaphore_id, SemaphoreRelease);
+    status = (osStatus_t)SVC_1(semaphore_id, svcSemaphoreRelease);
   }
 
   return (status);
@@ -304,10 +370,10 @@ uint32_t osSemaphoreGetCount(osSemaphoreId_t semaphore_id)
   uint32_t count;
 
   if (IsIrqMode() || IsIrqMasked()) {
-    count = SemaphoreGetCount(semaphore_id);
+    count = svcSemaphoreGetCount(semaphore_id);
   }
   else {
-    count = SVC_1(semaphore_id, SemaphoreGetCount);
+    count = SVC_1(semaphore_id, svcSemaphoreGetCount);
   }
 
   return (count);
@@ -327,7 +393,7 @@ osStatus_t osSemaphoreDelete(osSemaphoreId_t semaphore_id)
     status = osErrorISR;
   }
   else {
-    status = (osStatus_t)SVC_1(semaphore_id, SemaphoreDelete);
+    status = (osStatus_t)SVC_1(semaphore_id, svcSemaphoreDelete);
   }
 
   return (status);
