@@ -37,6 +37,34 @@
 #define SemaphoreTokenLimit   65535U ///< maximum number of tokens per semaphore
 
 /*******************************************************************************
+ *  Helper functions
+ ******************************************************************************/
+
+/**
+ * @brief       Decrement Semaphore tokens.
+ * @param[in]   sem  semaphore object.
+ * @return      osOK - success, osErrorResource - failure.
+ */
+static osStatus_t SemaphoreTokenDecrement(osSemaphore_t *sem)
+{
+  osStatus_t status;
+
+  BEGIN_CRITICAL_SECTION
+
+  if (sem->count != 0U) {
+    sem->count--;
+    status = osOK;
+  }
+  else {
+    status = osErrorResource;
+  }
+
+  END_CRITICAL_SECTION
+
+  return (status);
+}
+
+/*******************************************************************************
  *  function implementations (scope: module-local)
  ******************************************************************************/
 
@@ -94,23 +122,15 @@ static osStatus_t svcSemaphoreAcquire(osSemaphoreId_t semaphore_id, uint32_t tim
   }
 
   /* Try to acquire token */
-  if (sem->count > 0U) {
-    sem->count--;
-    status = osOK;
-  }
-  else {
+  status = SemaphoreTokenDecrement(sem);
+  if ((status == osErrorResource) && (timeout != 0U)) {
     /* No token available */
-    if (timeout != 0U) {
-      thread = ThreadGetRunning();
-      if (libThreadWaitEnter(thread, &sem->wait_queue, timeout)) {
-        status = (osStatus_t)osThreadWait;
-      }
-      else {
-        status = osErrorTimeout;
-      }
+    thread = ThreadGetRunning();
+    if (libThreadWaitEnter(thread, &sem->wait_queue, timeout)) {
+      status = (osStatus_t)osThreadWait;
     }
     else {
-      status = osErrorResource;
+      status = osErrorTimeout;
     }
   }
 
@@ -185,37 +205,14 @@ osStatus_t isrSemaphoreAcquire(osSemaphoreId_t semaphore_id, uint32_t timeout)
 {
   osSemaphore_t *sem = semaphore_id;
   osStatus_t status;
-  osThread_t *thread;
 
   /* Check parameters */
   if ((sem == NULL) || (sem->id != ID_SEMAPHORE) || (timeout != 0U)) {
     return (osErrorParameter);
   }
 
-  BEGIN_CRITICAL_SECTION
-
   /* Try to acquire token */
-  if (sem->count > 0U) {
-    sem->count--;
-    status = osOK;
-  }
-  else {
-    /* No token available */
-    if (timeout != 0U) {
-      thread = ThreadGetRunning();
-      if (libThreadWaitEnter(thread, &sem->wait_queue, timeout)) {
-        status = (osStatus_t)osThreadWait;
-      }
-      else {
-        status = osErrorTimeout;
-      }
-    }
-    else {
-      status = osErrorResource;
-    }
-  }
-
-  END_CRITICAL_SECTION
+  status = SemaphoreTokenDecrement(sem);
 
   return (status);
 }
