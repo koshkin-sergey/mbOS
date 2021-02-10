@@ -31,54 +31,39 @@
 #include "kernel_lib.h"
 
 /*******************************************************************************
- *  external declarations
- ******************************************************************************/
-
-/*******************************************************************************
  *  defines and macros (scope: module-local)
  ******************************************************************************/
 
 #define osEventFlagsLimit     31U    ///< number of Event Flags available per object
 
 /*******************************************************************************
- *  typedefs and structures (scope: module-local)
- ******************************************************************************/
-
-/*******************************************************************************
- *  global variable definitions  (scope: module-exported)
- ******************************************************************************/
-
-/*******************************************************************************
- *  global variable definitions (scope: module-local)
- ******************************************************************************/
-
-/*******************************************************************************
- *  function prototypes (scope: module-local)
- ******************************************************************************/
-
-/*******************************************************************************
- *  function implementations (scope: module-local)
+ *  Helper functions
  ******************************************************************************/
 
 static
-uint32_t FlagsSet(osEventFlags_t *evf, uint32_t flags)
+uint32_t EventFlagsSet(osEventFlags_t *evf, uint32_t flags)
 {
   uint32_t event_flags;
 
+  BEGIN_CRITICAL_SECTION
+
   evf->event_flags |= flags;
   event_flags = evf->event_flags;
+
+  END_CRITICAL_SECTION
 
   return (event_flags);
 }
 
 static
-uint32_t FlagsCheck (osEventFlags_t *evf, uint32_t flags, uint32_t options)
+uint32_t EventFlagsCheck(osEventFlags_t *evf, uint32_t flags, uint32_t options)
 {
   uint32_t pattern;
 
   if ((options & osFlagsNoClear) == 0U) {
-    pattern = evf->event_flags;
+    BEGIN_CRITICAL_SECTION
 
+    pattern = evf->event_flags;
     if ((((options & osFlagsWaitAll) != 0U) && ((pattern & flags) != flags)) ||
         (((options & osFlagsWaitAll) == 0U) && ((pattern & flags) == 0U)))
     {
@@ -87,6 +72,8 @@ uint32_t FlagsCheck (osEventFlags_t *evf, uint32_t flags, uint32_t options)
     else {
       evf->event_flags &= ~flags;
     }
+
+    END_CRITICAL_SECTION
   }
   else {
     pattern = evf->event_flags;
@@ -101,7 +88,11 @@ uint32_t FlagsCheck (osEventFlags_t *evf, uint32_t flags, uint32_t options)
   return (pattern);
 }
 
-static osEventFlagsId_t EventFlagsNew(const osEventFlagsAttr_t *attr)
+/*******************************************************************************
+ *  function implementations (scope: module-local)
+ ******************************************************************************/
+
+static osEventFlagsId_t svcEventFlagsNew(const osEventFlagsAttr_t *attr)
 {
   osEventFlags_t *evf;
 
@@ -127,7 +118,7 @@ static osEventFlagsId_t EventFlagsNew(const osEventFlagsAttr_t *attr)
   return (evf);
 }
 
-static const char *EventFlagsGetName(osEventFlagsId_t ef_id)
+static const char *svcEventFlagsGetName(osEventFlagsId_t ef_id)
 {
   osEventFlags_t *evf = (osEventFlags_t *)ef_id;
 
@@ -139,7 +130,7 @@ static const char *EventFlagsGetName(osEventFlagsId_t ef_id)
   return (evf->name);
 }
 
-static uint32_t EventFlagsSet(osEventFlagsId_t ef_id, uint32_t flags)
+static uint32_t svcEventFlagsSet(osEventFlagsId_t ef_id, uint32_t flags)
 {
   osEventFlags_t *evf = (osEventFlags_t *)ef_id;
   uint32_t        event_flags;
@@ -154,18 +145,16 @@ static uint32_t EventFlagsSet(osEventFlagsId_t ef_id, uint32_t flags)
     return ((uint32_t)osErrorParameter);
   }
 
-  BEGIN_CRITICAL_SECTION
-
   /* Set Event Flags */
-  event_flags = FlagsSet(evf, flags);
+  event_flags = EventFlagsSet(evf, flags);
 
+  /* Check if Threads are waiting for Event Flags */
   que = evf->wait_queue.next;
   while (que != &evf->wait_queue) {
     thread = GetThreadByQueue(que);
     que = que->next;
 
-    pattern = FlagsCheck(evf, thread->winfo.event.flags, thread->winfo.event.options);
-
+    pattern = EventFlagsCheck(evf, thread->winfo.event.flags, thread->winfo.event.options);
     if (pattern) {
       if (!(thread->winfo.event.options & osFlagsNoClear)) {
         event_flags = pattern & ~thread->winfo.event.flags;
@@ -176,14 +165,13 @@ static uint32_t EventFlagsSet(osEventFlagsId_t ef_id, uint32_t flags)
       libThreadWaitExit(thread, pattern, DISPATCH_NO);
     }
   }
-  libThreadDispatch(NULL);
 
-  END_CRITICAL_SECTION
+  libThreadDispatch(NULL);
 
   return (event_flags);
 }
 
-static uint32_t EventFlagsClear(osEventFlagsId_t ef_id, uint32_t flags)
+static uint32_t svcEventFlagsClear(osEventFlagsId_t ef_id, uint32_t flags)
 {
   osEventFlags_t *evf = (osEventFlags_t *)ef_id;
   uint32_t event_flags;
@@ -205,7 +193,7 @@ static uint32_t EventFlagsClear(osEventFlagsId_t ef_id, uint32_t flags)
   return (event_flags);
 }
 
-static uint32_t EventFlagsGet(osEventFlagsId_t ef_id)
+static uint32_t svcEventFlagsGet(osEventFlagsId_t ef_id)
 {
   osEventFlags_t *evf = (osEventFlags_t *)ef_id;
 
@@ -217,7 +205,7 @@ static uint32_t EventFlagsGet(osEventFlagsId_t ef_id)
   return (evf->event_flags);
 }
 
-static uint32_t EventFlagsWait(osEventFlagsId_t ef_id, uint32_t flags, uint32_t options, uint32_t timeout)
+static uint32_t svcEventFlagsWait(osEventFlagsId_t ef_id, uint32_t flags, uint32_t options, uint32_t timeout)
 {
   osEventFlags_t *evf = (osEventFlags_t *)ef_id;
   osThread_t *thread;
@@ -231,9 +219,7 @@ static uint32_t EventFlagsWait(osEventFlagsId_t ef_id, uint32_t flags, uint32_t 
     return ((uint32_t)osErrorParameter);
   }
 
-  BEGIN_CRITICAL_SECTION
-
-  event_flags = FlagsCheck(evf, flags, options);
+  event_flags = EventFlagsCheck(evf, flags, options);
 
   if (event_flags == 0U) {
     if (timeout != 0U) {
@@ -253,12 +239,10 @@ static uint32_t EventFlagsWait(osEventFlagsId_t ef_id, uint32_t flags, uint32_t 
     }
   }
 
-  END_CRITICAL_SECTION
-
   return (event_flags);
 }
 
-static osStatus_t EventFlagsDelete(osEventFlagsId_t ef_id)
+static osStatus_t svcEventFlagsDelete(osEventFlagsId_t ef_id)
 {
   osEventFlags_t *evf = (osEventFlags_t *)ef_id;
 
@@ -277,17 +261,80 @@ static osStatus_t EventFlagsDelete(osEventFlagsId_t ef_id)
 }
 
 /*******************************************************************************
+ *  ISR Calls
+ ******************************************************************************/
+
+__STATIC_INLINE
+uint32_t isrEventFlagsSet(osEventFlagsId_t ef_id, uint32_t flags)
+{
+  osEventFlags_t *evf = (osEventFlags_t *)ef_id;
+  uint32_t        event_flags;
+
+  /* Check parameters */
+  if ((evf == NULL) || (evf->id != ID_EVENT_FLAGS) ||
+      (flags == 0U) || ((flags & (1UL << osEventFlagsLimit)) != 0U))
+  {
+    return ((uint32_t)osErrorParameter);
+  }
+
+  /* Set Event Flags */
+  event_flags = EventFlagsSet(evf, flags);
+
+  /* Register post ISR processing */
+  krnPostProcess((osObject_t *)evf);
+
+  return (event_flags);
+}
+
+__STATIC_INLINE
+uint32_t isrEventFlagsWait(osEventFlagsId_t ef_id, uint32_t flags, uint32_t options, uint32_t timeout)
+{
+  osEventFlags_t *evf = (osEventFlags_t *)ef_id;
+  osThread_t *thread;
+  winfo_event_t *winfo;
+  uint32_t event_flags;
+
+  /* Check parameters */
+  if ((evf == NULL) || (evf->id != ID_EVENT_FLAGS) || (timeout != 0U) ||
+      (flags == 0U) || ((flags & (1UL << osEventFlagsLimit)) != 0U))
+  {
+    return ((uint32_t)osErrorParameter);
+  }
+
+  /* Check Event Flags */
+  event_flags = EventFlagsCheck(evf, flags, options);
+  if (event_flags == 0U) {
+    event_flags = (uint32_t)osErrorResource;
+  }
+
+  return (event_flags);
+}
+
+/*******************************************************************************
  *  Post ISR processing
  ******************************************************************************/
 
 /**
- * @fn          void osKrnEventFlagsPostProcess(osEventFlags_t*)
  * @brief       Event Flags post ISR processing.
  * @param[in]   evf  event flags object.
  */
 void krnEventFlagsPostProcess(osEventFlags_t *evf)
 {
+  uint32_t    pattern;
+  queue_t    *que;
+  osThread_t *thread;
 
+  /* Check if Threads are waiting for Event Flags */
+  que = evf->wait_queue.next;
+  while (que != &evf->wait_queue) {
+    thread = GetThreadByQueue(que);
+    que = que->next;
+
+    pattern = EventFlagsCheck(evf, thread->winfo.event.flags, thread->winfo.event.options);
+    if (pattern) {
+      libThreadWaitExit(thread, pattern, DISPATCH_NO);
+    }
+  }
 }
 
 /*******************************************************************************
@@ -308,7 +355,7 @@ osEventFlagsId_t osEventFlagsNew(const osEventFlagsAttr_t *attr)
     ef_id = NULL;
   }
   else {
-    ef_id = (osEventFlagsId_t)SVC_1(attr, EventFlagsNew);
+    ef_id = (osEventFlagsId_t)SVC_1(attr, svcEventFlagsNew);
   }
 
   return (ef_id);
@@ -328,7 +375,7 @@ const char *osEventFlagsGetName(osEventFlagsId_t ef_id)
     name = NULL;
   }
   else {
-    name = (const char *)SVC_1(ef_id, EventFlagsGetName);
+    name = (const char *)SVC_1(ef_id, svcEventFlagsGetName);
   }
 
   return (name);
@@ -346,10 +393,10 @@ uint32_t osEventFlagsSet(osEventFlagsId_t ef_id, uint32_t flags)
   uint32_t event_flags;
 
   if (IsIrqMode() || IsIrqMasked()) {
-    event_flags = EventFlagsSet(ef_id, flags);
+    event_flags = isrEventFlagsSet(ef_id, flags);
   }
   else {
-    event_flags = SVC_2(ef_id, flags, EventFlagsSet);
+    event_flags = SVC_2(ef_id, flags, svcEventFlagsSet);
   }
 
   return (event_flags);
@@ -367,10 +414,10 @@ uint32_t osEventFlagsClear(osEventFlagsId_t ef_id, uint32_t flags)
   uint32_t event_flags;
 
   if (IsIrqMode() || IsIrqMasked()) {
-    event_flags = EventFlagsClear(ef_id, flags);
+    event_flags = svcEventFlagsClear(ef_id, flags);
   }
   else {
-    event_flags = SVC_2(ef_id, flags, EventFlagsClear);
+    event_flags = SVC_2(ef_id, flags, svcEventFlagsClear);
   }
 
   return (event_flags);
@@ -387,10 +434,10 @@ uint32_t osEventFlagsGet(osEventFlagsId_t ef_id)
   uint32_t event_flags;
 
   if (IsIrqMode() || IsIrqMasked()) {
-    event_flags = EventFlagsGet(ef_id);
+    event_flags = svcEventFlagsGet(ef_id);
   }
   else {
-    event_flags = SVC_1(ef_id, EventFlagsGet);
+    event_flags = SVC_1(ef_id, svcEventFlagsGet);
   }
 
   return (event_flags);
@@ -410,15 +457,10 @@ uint32_t osEventFlagsWait(osEventFlagsId_t ef_id, uint32_t flags, uint32_t optio
   uint32_t event_flags;
 
   if (IsIrqMode() || IsIrqMasked()) {
-    if (timeout != 0U) {
-      event_flags = (uint32_t)osErrorParameter;
-    }
-    else {
-      event_flags = EventFlagsWait(ef_id, flags, options, timeout);
-    }
+    event_flags = isrEventFlagsWait(ef_id, flags, options, timeout);
   }
   else {
-    event_flags = SVC_4(ef_id, flags, options, timeout, EventFlagsWait);
+    event_flags = SVC_4(ef_id, flags, options, timeout, svcEventFlagsWait);
     if ((int32_t)event_flags == osThreadWait) {
       event_flags = ThreadGetRunning()->winfo.ret_val;
     }
@@ -441,7 +483,7 @@ osStatus_t osEventFlagsDelete(osEventFlagsId_t ef_id)
     status = osErrorISR;
   }
   else {
-    status = (osStatus_t)SVC_1(ef_id, EventFlagsDelete);
+    status = (osStatus_t)SVC_1(ef_id, svcEventFlagsDelete);
   }
 
   return (status);
