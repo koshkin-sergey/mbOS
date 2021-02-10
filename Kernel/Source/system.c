@@ -123,15 +123,15 @@ void osPendSV_Handler(void)
         break;
 
       case ID_EVENT_FLAGS:
-        osKrnEventFlagsPostProcess((osEventFlags_t *)object);
+        krnEventFlagsPostProcess((osEventFlags_t *)object);
         break;
 
       case ID_MESSAGE_QUEUE:
-        osKrnMessageQueuePostProcess((osMessageQueue_t *)object);
+        krnMessageQueuePostProcess((osMessageQueue_t *)object);
         break;
 
       case ID_DATA_QUEUE:
-        osKrnDataQueuePostProcess((osDataQueue_t *)object);
+        krnDataQueuePostProcess((osDataQueue_t *)object);
         break;
 
       default:
@@ -146,7 +146,7 @@ void osPendSV_Handler(void)
  * @brief       Register post ISR processing.
  * @param[in]   object  generic object.
  */
-void osPostProcess(osObject_t *object)
+void krnPostProcess(osObject_t *object)
 {
   post_queue_put(object);
   PendServCallReq();

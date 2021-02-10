@@ -301,21 +301,21 @@ void krnSemaphorePostProcess(osSemaphore_t *sem);
  * @brief       Event Flags post ISR processing.
  * @param[in]   evf  event flags object.
  */
-void osKrnEventFlagsPostProcess(osEventFlags_t *evf);
+void krnEventFlagsPostProcess(osEventFlags_t *evf);
 
 /**
  * @fn          void osKrnMessageQueuePostProcess(osMessageQueue_t*)
  * @brief       Message Queue post ISR processing.
  * @param[in]   mq  message queue object.
  */
-void osKrnMessageQueuePostProcess(osMessageQueue_t *mq);
+void krnMessageQueuePostProcess(osMessageQueue_t *mq);
 
 /**
  * @fn          void osKrnDataQueuePostProcess(osDataQueue_t*)
  * @brief       Data Queue post ISR processing.
  * @param[in]   dq  data queue object.
  */
-void osKrnDataQueuePostProcess(osDataQueue_t *dq);
+void krnDataQueuePostProcess(osDataQueue_t *dq);
 
 
 /*******************************************************************************
@@ -324,6 +324,6 @@ void osKrnDataQueuePostProcess(osDataQueue_t *dq);
 
 extern void osTick_Handler(void);
 extern void osPendSV_Handler(void);
-extern void osPostProcess(osObject_t *object);
+extern void krnPostProcess(osObject_t *object);
 
 #endif /* _KERNEL_LIB_H_ */

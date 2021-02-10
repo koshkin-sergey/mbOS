@@ -359,7 +359,7 @@ static osStatus_t DataQueueDelete(osDataQueueId_t dq_id)
  * @brief       Data Queue post ISR processing.
  * @param[in]   dq  data queue object.
  */
-void osKrnDataQueuePostProcess(osDataQueue_t *dq)
+void krnDataQueuePostProcess(osDataQueue_t *dq)
 {
 
 }

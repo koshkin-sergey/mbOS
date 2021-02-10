@@ -64,6 +64,31 @@ static osStatus_t SemaphoreTokenDecrement(osSemaphore_t *sem)
   return (status);
 }
 
+/**
+ * @brief       Increment Semaphore tokens.
+ * @param[in]   sem  semaphore object.
+ * @return      osOK - success, osErrorResource - failure.
+ */
+static osStatus_t SemaphoreTokenIncrement(osSemaphore_t *sem)
+{
+  osStatus_t status;
+
+  BEGIN_CRITICAL_SECTION
+
+  /* Try to release token */
+  if (sem->count < sem->max_count) {
+    sem->count++;
+    status = osOK;
+  }
+  else {
+    status = osErrorResource;
+  }
+
+  END_CRITICAL_SECTION
+
+  return (status);
+}
+
 /*******************************************************************************
  *  function implementations (scope: module-local)
  ******************************************************************************/
@@ -155,13 +180,7 @@ static osStatus_t svcSemaphoreRelease(osSemaphoreId_t semaphore_id)
   }
   else {
     /* Try to release token */
-    if (sem->count < sem->max_count) {
-      sem->count++;
-      status = osOK;
-    }
-    else {
-      status = osErrorResource;
-    }
+    status = SemaphoreTokenIncrement(sem);
   }
 
   return (status);
@@ -228,26 +247,12 @@ osStatus_t isrSemaphoreRelease(osSemaphoreId_t semaphore_id)
     return (osErrorParameter);
   }
 
-  BEGIN_CRITICAL_SECTION
-
-  /* Check if Thread is waiting for a token */
-  if (!isQueueEmpty(&sem->wait_queue)) {
-    /* Wakeup waiting Thread with highest Priority */
-    libThreadWaitExit(GetThreadByQueue(sem->wait_queue.next), (uint32_t)osOK, DISPATCH_YES);
-    status = osOK;
+  /* Try to release token */
+  status = SemaphoreTokenIncrement(sem);
+  if (status == osOK) {
+    /* Register post ISR processing */
+    krnPostProcess((osObject_t *)sem);
   }
-  else {
-    /* Try to release token */
-    if (sem->count < sem->max_count) {
-      sem->count++;
-      status = osOK;
-    }
-    else {
-      status = osErrorResource;
-    }
-  }
-
-  END_CRITICAL_SECTION
 
   return (status);
 }
@@ -263,7 +268,17 @@ osStatus_t isrSemaphoreRelease(osSemaphoreId_t semaphore_id)
  */
 void krnSemaphorePostProcess(osSemaphore_t *sem)
 {
+  osStatus_t status;
 
+  /* Check if Thread is waiting for a token */
+  if (!isQueueEmpty(&sem->wait_queue)) {
+    /* Try to acquire token */
+    status = SemaphoreTokenDecrement(sem);
+    if (status == osOK) {
+      /* Wakeup waiting Thread with highest Priority */
+      libThreadWaitExit(GetThreadByQueue(sem->wait_queue.next), (uint32_t)osOK, DISPATCH_NO);
+    }
+  }
 }
 
 /*******************************************************************************

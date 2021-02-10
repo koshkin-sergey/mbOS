@@ -398,7 +398,7 @@ static osStatus_t MessageQueueDelete(osMessageQueueId_t mq_id)
  * @brief       Message Queue post ISR processing.
  * @param[in]   mq  message queue object.
  */
-void osKrnMessageQueuePostProcess(osMessageQueue_t *mq)
+void krnMessageQueuePostProcess(osMessageQueue_t *mq)
 {
 
 }

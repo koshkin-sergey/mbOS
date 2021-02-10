@@ -285,7 +285,7 @@ static osStatus_t EventFlagsDelete(osEventFlagsId_t ef_id)
  * @brief       Event Flags post ISR processing.
  * @param[in]   evf  event flags object.
  */
-void osKrnEventFlagsPostProcess(osEventFlags_t *evf)
+void krnEventFlagsPostProcess(osEventFlags_t *evf)
 {
 
 }
