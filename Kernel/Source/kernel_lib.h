@@ -262,20 +262,20 @@ void libMutexOwnerRelease(queue_t *que);
  * @param[in]   block_mem     pointer to memory for block storage.
  * @param[in]   mp_info       memory pool info.
  */
-void libMemoryPoolInit(uint32_t block_count, uint32_t block_size, void *block_mem, osMemoryPoolInfo_t *mp_info);
+void krnMemoryPoolInit(uint32_t block_count, uint32_t block_size, void *block_mem, osMemoryPoolInfo_t *mp_info);
 
 /**
  * @brief       Reset Memory Pool.
  * @param[in]   mp_info       memory pool info.
  */
-void libMemoryPoolReset(osMemoryPoolInfo_t *mp_info);
+void krnMemoryPoolReset(osMemoryPoolInfo_t *mp_info);
 
 /**
  * @brief       Allocate a memory block from a Memory Pool.
  * @param[in]   mp_info   memory pool info.
  * @return      address of the allocated memory block or NULL in case of no memory is available.
  */
-void *libMemoryPoolAlloc(osMemoryPoolInfo_t *mp_info);
+void *krnMemoryPoolAlloc(osMemoryPoolInfo_t *mp_info);
 
 /**
  * @brief       Return an allocated memory block back to a Memory Pool.
@@ -283,7 +283,7 @@ void *libMemoryPoolAlloc(osMemoryPoolInfo_t *mp_info);
  * @param[in]   block     address of the allocated memory block to be returned to the memory pool.
  * @return      status code that indicates the execution status of the function.
  */
-osStatus_t libMemoryPoolFree(osMemoryPoolInfo_t *mp_info, void *block);
+osStatus_t krnMemoryPoolFree(osMemoryPoolInfo_t *mp_info, void *block);
 
 /*******************************************************************************
  *  Post ISR processing functions

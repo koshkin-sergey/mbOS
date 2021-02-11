@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2017-2021 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -31,10 +31,98 @@
 #include "kernel_lib.h"
 
 /*******************************************************************************
+ *  Library functions
+ ******************************************************************************/
+
+/**
+ * @brief       Initialize Memory Pool.
+ * @param[in]   block_count   maximum number of memory blocks in memory pool.
+ * @param[in]   block_size    size of a memory block in bytes.
+ * @param[in]   block_mem     pointer to memory for block storage.
+ * @param[in]   mp_info       memory pool info.
+ */
+void krnMemoryPoolInit(uint32_t block_count, uint32_t block_size, void *block_mem, osMemoryPoolInfo_t *mp_info)
+{
+  // Initialize information structure
+  mp_info->max_blocks  = block_count;
+  mp_info->used_blocks = 0U;
+  mp_info->block_size  = block_size;
+  mp_info->block_base  = block_mem;
+  mp_info->block_free  = block_mem;
+  mp_info->block_lim   = &(((uint8_t *)block_mem)[block_count * block_size]);
+
+  /* Reset Memory Pool */
+  krnMemoryPoolReset(mp_info);
+}
+
+/**
+ * @brief       Reset Memory Pool.
+ * @param[in]   mp_info       memory pool info.
+ */
+void krnMemoryPoolReset(osMemoryPoolInfo_t *mp_info)
+{
+  void *mem;
+  void *block;
+  uint32_t block_count;
+
+  /* Link all free blocks */
+  mem = mp_info->block_base;
+  block_count = mp_info->max_blocks;
+
+  while (--block_count != 0U) {
+    block = &((uint8_t *)mem)[mp_info->block_size];
+    *((void **)mem) = block;
+    mem = block;
+  }
+  *((void **)mem) = NULL;
+}
+
+/**
+ * @brief       Allocate a memory block from a Memory Pool.
+ * @param[in]   mp_info   memory pool info.
+ * @return      address of the allocated memory block or NULL in case of no memory is available.
+ */
+void *krnMemoryPoolAlloc(osMemoryPoolInfo_t *mp_info)
+{
+  void *block;
+
+  if (mp_info == NULL) {
+    return (NULL);
+  }
+
+  block = mp_info->block_free;
+  if (block != NULL) {
+    mp_info->block_free = *((void **)block);
+    mp_info->used_blocks++;
+  }
+
+  return (block);
+}
+
+/**
+ * @brief       Return an allocated memory block back to a Memory Pool.
+ * @param[in]   mp_info   memory pool info.
+ * @param[in]   block     address of the allocated memory block to be returned to the memory pool.
+ * @return      status code that indicates the execution status of the function.
+ */
+osStatus_t krnMemoryPoolFree(osMemoryPoolInfo_t *mp_info, void *block)
+{
+  if ((mp_info == NULL) || (block < mp_info->block_base) || (block >= mp_info->block_lim)) {
+    return (osErrorParameter);
+  }
+
+  *((void **)block) = mp_info->block_free;
+  mp_info->block_free = block;
+  mp_info->used_blocks--;
+
+  return (osOK);
+}
+
+/*******************************************************************************
  *  function implementations (scope: module-local)
  ******************************************************************************/
 
-static osMemoryPoolId_t MemoryPoolNew(uint32_t block_count, uint32_t block_size, const osMemoryPoolAttr_t *attr)
+static osMemoryPoolId_t svcMemoryPoolNew(uint32_t block_count, uint32_t block_size, const osMemoryPoolAttr_t *attr)
 {
   osMemoryPool_t *mp;
   void           *mp_mem;
@@ -60,12 +148,12 @@ static osMemoryPoolId_t MemoryPoolNew(uint32_t block_count, uint32_t block_size,
   mp->flags = 0U;
   mp->name = attr->name;
   QueueReset(&mp->wait_queue);
-  libMemoryPoolInit(block_count, block_size, mp_mem, &mp->info);
+  krnMemoryPoolInit(block_count, block_size, mp_mem, &mp->info);
 
   return (mp);
 }
 
-static const char *MemoryPoolGetName(osMemoryPoolId_t mp_id)
+static const char *svcMemoryPoolGetName(osMemoryPoolId_t mp_id)
 {
   osMemoryPool_t *mp = mp_id;
 
@@ -77,7 +165,7 @@ static const char *MemoryPoolGetName(osMemoryPoolId_t mp_id)
   return (mp->name);
 }
 
-static void *MemoryPoolAlloc(osMemoryPoolId_t mp_id, uint32_t timeout)
+static void *svcMemoryPoolAlloc(osMemoryPoolId_t mp_id, uint32_t timeout)
 {
   osMemoryPool_t *mp = mp_id;
   void           *block;
@@ -90,7 +178,7 @@ static void *MemoryPoolAlloc(osMemoryPoolId_t mp_id, uint32_t timeout)
   BEGIN_CRITICAL_SECTION
 
   /* Allocate memory */
-  block = libMemoryPoolAlloc(&mp->info);
+  block = krnMemoryPoolAlloc(&mp->info);
   if (block == NULL && timeout != 0U) {
     if (libThreadWaitEnter(ThreadGetRunning(), &mp->wait_queue, timeout)) {
       block = (void *)osThreadWait;
@@ -102,7 +190,7 @@ static void *MemoryPoolAlloc(osMemoryPoolId_t mp_id, uint32_t timeout)
   return (block);
 }
 
-static osStatus_t MemoryPoolFree(osMemoryPoolId_t mp_id, void *block)
+static osStatus_t svcMemoryPoolFree(osMemoryPoolId_t mp_id, void *block)
 {
   osMemoryPool_t *mp = mp_id;
   osStatus_t      status;
@@ -122,7 +210,7 @@ static osStatus_t MemoryPoolFree(osMemoryPoolId_t mp_id, void *block)
   }
   else {
     /* Free memory */
-    status = libMemoryPoolFree(&mp->info, block);
+    status = krnMemoryPoolFree(&mp->info, block);
   }
 
   END_CRITICAL_SECTION
@@ -130,7 +218,7 @@ static osStatus_t MemoryPoolFree(osMemoryPoolId_t mp_id, void *block)
   return (status);
 }
 
-static uint32_t MemoryPoolGetCapacity(osMemoryPoolId_t mp_id)
+static uint32_t svcMemoryPoolGetCapacity(osMemoryPoolId_t mp_id)
 {
   osMemoryPool_t *mp = mp_id;
 
@@ -142,7 +230,7 @@ static uint32_t MemoryPoolGetCapacity(osMemoryPoolId_t mp_id)
   return (mp->info.max_blocks);
 }
 
-static uint32_t MemoryPoolGetBlockSize(osMemoryPoolId_t mp_id)
+static uint32_t svcMemoryPoolGetBlockSize(osMemoryPoolId_t mp_id)
 {
   osMemoryPool_t *mp = mp_id;
 
@@ -154,7 +242,7 @@ static uint32_t MemoryPoolGetBlockSize(osMemoryPoolId_t mp_id)
   return (mp->info.block_size);
 }
 
-static uint32_t MemoryPoolGetCount(osMemoryPoolId_t mp_id)
+static uint32_t svcMemoryPoolGetCount(osMemoryPoolId_t mp_id)
 {
   osMemoryPool_t *mp = mp_id;
 
@@ -166,7 +254,7 @@ static uint32_t MemoryPoolGetCount(osMemoryPoolId_t mp_id)
   return (mp->info.used_blocks);
 }
 
-static uint32_t MemoryPoolGetSpace(osMemoryPoolId_t mp_id)
+static uint32_t svcMemoryPoolGetSpace(osMemoryPoolId_t mp_id)
 {
   osMemoryPool_t *mp = mp_id;
 
@@ -178,7 +266,7 @@ static uint32_t MemoryPoolGetSpace(osMemoryPoolId_t mp_id)
   return (mp->info.max_blocks - mp->info.used_blocks);
 }
 
-static osStatus_t MemoryPoolDelete(osMemoryPoolId_t mp_id)
+static osStatus_t svcMemoryPoolDelete(osMemoryPoolId_t mp_id)
 {
   osMemoryPool_t *mp = mp_id;
 
@@ -197,91 +285,54 @@ static osStatus_t MemoryPoolDelete(osMemoryPoolId_t mp_id)
 }
 
 /*******************************************************************************
- *  Library functions
+ *  ISR Calls
  ******************************************************************************/
 
-/**
- * @brief       Initialize Memory Pool.
- * @param[in]   block_count   maximum number of memory blocks in memory pool.
- * @param[in]   block_size    size of a memory block in bytes.
- * @param[in]   block_mem     pointer to memory for block storage.
- * @param[in]   mp_info       memory pool info.
- */
-void libMemoryPoolInit(uint32_t block_count, uint32_t block_size, void *block_mem, osMemoryPoolInfo_t *mp_info)
+__STATIC_INLINE
+void *isrMemoryPoolAlloc(osMemoryPoolId_t mp_id, uint32_t timeout)
 {
-  // Initialize information structure
-  mp_info->max_blocks  = block_count;
-  mp_info->used_blocks = 0U;
-  mp_info->block_size  = block_size;
-  mp_info->block_base  = block_mem;
-  mp_info->block_free  = block_mem;
-  mp_info->block_lim   = &(((uint8_t *)block_mem)[block_count * block_size]);
+  osMemoryPool_t *mp = mp_id;
+  void           *block;
 
-  /* Reset Memory Pool */
-  libMemoryPoolReset(mp_info);
-}
-
-/**
- * @brief       Reset Memory Pool.
- * @param[in]   mp_info       memory pool info.
- */
-void libMemoryPoolReset(osMemoryPoolInfo_t *mp_info)
-{
-  void *mem;
-  void *block;
-  uint32_t block_count;
-
-  /* Link all free blocks */
-  mem = mp_info->block_base;
-  block_count = mp_info->max_blocks;
-
-  while (--block_count != 0U) {
-    block = &((uint8_t *)mem)[mp_info->block_size];
-    *((void **)mem) = block;
-    mem = block;
-  }
-  *((void **)mem) = NULL;
-}
-
-/**
- * @brief       Allocate a memory block from a Memory Pool.
- * @param[in]   mp_info   memory pool info.
- * @return      address of the allocated memory block or NULL in case of no memory is available.
- */
-void *libMemoryPoolAlloc(osMemoryPoolInfo_t *mp_info)
-{
-  void *block;
-
-  if (mp_info == NULL) {
+  /* Check parameters */
+  if ((mp == NULL) || (mp->id != ID_MEMORYPOOL) || (timeout != 0U)) {
     return (NULL);
   }
 
-  block = mp_info->block_free;
-  if (block != NULL) {
-    mp_info->block_free = *((void **)block);
-    mp_info->used_blocks++;
+  /* Allocate memory */
+  block = krnMemoryPoolAlloc(&mp->info);
+  if (block == NULL && timeout != 0U) {
+    if (libThreadWaitEnter(ThreadGetRunning(), &mp->wait_queue, timeout)) {
+      block = (void *)osThreadWait;
+    }
   }
 
   return (block);
 }
 
-/**
- * @brief       Return an allocated memory block back to a Memory Pool.
- * @param[in]   mp_info   memory pool info.
- * @param[in]   block     address of the allocated memory block to be returned to the memory pool.
- * @return      status code that indicates the execution status of the function.
- */
-osStatus_t libMemoryPoolFree(osMemoryPoolInfo_t *mp_info, void *block)
+__STATIC_INLINE
+osStatus_t isrMemoryPoolFree(osMemoryPoolId_t mp_id, void *block)
 {
-  if ((mp_info == NULL) || (block < mp_info->block_base) || (block >= mp_info->block_lim)) {
+  osMemoryPool_t *mp = mp_id;
+  osStatus_t      status;
+
+  /* Check parameters */
+  if ((mp == NULL) || (mp->id != ID_MEMORYPOOL)) {
     return (osErrorParameter);
   }
 
-  *((void **)block) = mp_info->block_free;
-  mp_info->block_free = block;
-  mp_info->used_blocks--;
+  /* Check if Thread is waiting to allocate memory */
+  if (!isQueueEmpty(&mp->wait_queue)) {
+    /* Wakeup waiting Thread with highest Priority */
+    libThreadWaitExit(GetThreadByQueue(mp->wait_queue.next), (uint32_t)block, DISPATCH_YES);
+    status = osOK;
+  }
+  else {
+    /* Free memory */
+    status = krnMemoryPoolFree(&mp->info, block);
+  }
 
-  return (osOK);
+  return (status);
 }
 
 /*******************************************************************************
@@ -304,7 +355,7 @@ osMemoryPoolId_t osMemoryPoolNew(uint32_t block_count, uint32_t block_size, cons
     mp_id = NULL;
   }
   else {
-    mp_id = (osMemoryPoolId_t)SVC_3(block_count, block_size, attr, MemoryPoolNew);
+    mp_id = (osMemoryPoolId_t)SVC_3(block_count, block_size, attr, svcMemoryPoolNew);
   }
 
   return (mp_id);
@@ -324,7 +375,7 @@ const char *osMemoryPoolGetName(osMemoryPoolId_t mp_id)
     name = NULL;
   }
   else {
-    name = (const char *)SVC_1(mp_id, MemoryPoolGetName);
+    name = (const char *)SVC_1(mp_id, svcMemoryPoolGetName);
   }
 
   return (name);
@@ -342,15 +393,10 @@ void *osMemoryPoolAlloc(osMemoryPoolId_t mp_id, uint32_t timeout)
   void *memory;
 
   if (IsIrqMode() || IsIrqMasked()) {
-    if (timeout != 0U) {
-      memory = NULL;
-    }
-    else {
-      memory = MemoryPoolAlloc(mp_id, timeout);
-    }
+    memory = isrMemoryPoolAlloc(mp_id, timeout);
   }
   else {
-    memory = (void *)SVC_2(mp_id, timeout, MemoryPoolAlloc);
+    memory = (void *)SVC_2(mp_id, timeout, svcMemoryPoolAlloc);
     if ((int32_t)memory == osThreadWait) {
       memory = (void *)ThreadGetRunning()->winfo.ret_val;
       if ((osStatus_t)memory == osErrorTimeout) {
@@ -374,10 +420,10 @@ osStatus_t osMemoryPoolFree(osMemoryPoolId_t mp_id, void *block)
   osStatus_t status;
 
   if (IsIrqMode() || IsIrqMasked()) {
-    status = MemoryPoolFree(mp_id, block);
+    status = isrMemoryPoolFree(mp_id, block);
   }
   else {
-    status = (osStatus_t)SVC_2(mp_id, block, MemoryPoolFree);
+    status = (osStatus_t)SVC_2(mp_id, block, svcMemoryPoolFree);
   }
 
   return (status);
@@ -394,10 +440,10 @@ uint32_t osMemoryPoolGetCapacity(osMemoryPoolId_t mp_id)
   uint32_t capacity;
 
   if (IsIrqMode() || IsIrqMasked()) {
-    capacity = MemoryPoolGetCapacity(mp_id);
+    capacity = svcMemoryPoolGetCapacity(mp_id);
   }
   else {
-    capacity = SVC_1(mp_id, MemoryPoolGetCapacity);
+    capacity = SVC_1(mp_id, svcMemoryPoolGetCapacity);
   }
 
   return (capacity);
@@ -414,10 +460,10 @@ uint32_t osMemoryPoolGetBlockSize(osMemoryPoolId_t mp_id)
   uint32_t block_size;
 
   if (IsIrqMode() || IsIrqMasked()) {
-    block_size = MemoryPoolGetBlockSize(mp_id);
+    block_size = svcMemoryPoolGetBlockSize(mp_id);
   }
   else {
-    block_size = SVC_1(mp_id, MemoryPoolGetBlockSize);
+    block_size = SVC_1(mp_id, svcMemoryPoolGetBlockSize);
   }
 
   return (block_size);
@@ -434,10 +480,10 @@ uint32_t osMemoryPoolGetCount(osMemoryPoolId_t mp_id)
   uint32_t count;
 
   if (IsIrqMode() || IsIrqMasked()) {
-    count = MemoryPoolGetCount(mp_id);
+    count = svcMemoryPoolGetCount(mp_id);
   }
   else {
-    count = SVC_1(mp_id, MemoryPoolGetCount);
+    count = SVC_1(mp_id, svcMemoryPoolGetCount);
   }
 
   return (count);
@@ -454,10 +500,10 @@ uint32_t osMemoryPoolGetSpace(osMemoryPoolId_t mp_id)
   uint32_t space;
 
   if (IsIrqMode() || IsIrqMasked()) {
-    space = MemoryPoolGetSpace(mp_id);
+    space = svcMemoryPoolGetSpace(mp_id);
   }
   else {
-    space = SVC_1(mp_id, MemoryPoolGetSpace);
+    space = SVC_1(mp_id, svcMemoryPoolGetSpace);
   }
 
   return (space);
@@ -477,7 +523,7 @@ osStatus_t osMemoryPoolDelete(osMemoryPoolId_t mp_id)
     status = osErrorISR;
   }
   else {
-    status = (osStatus_t)SVC_1(mp_id, MemoryPoolDelete);
+    status = (osStatus_t)SVC_1(mp_id, svcMemoryPoolDelete);
   }
 
   return (status);

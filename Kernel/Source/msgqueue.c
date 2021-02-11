@@ -65,7 +65,7 @@ static osMessage_t *MessagePut(osMessageQueue_t *mq, const void *msg_ptr, uint8_
   osMessage_t *msg;
 
   /* Try to allocate memory */
-  msg = libMemoryPoolAlloc(&mq->mp_info);
+  msg = krnMemoryPoolAlloc(&mq->mp_info);
   if (msg != NULL) {
     /* Copy Message */
     memcpy(&msg[1], msg_ptr, mq->msg_size);
@@ -104,7 +104,7 @@ static osMessage_t *MessageGet(osMessageQueue_t *mq, void *msg_ptr, uint8_t *msg
     }
     /* Free memory */
     msg->id = ID_INVALID;
-    libMemoryPoolFree(&mq->mp_info, msg);
+    krnMemoryPoolFree(&mq->mp_info, msg);
     mq->msg_count--;
   }
   else {
@@ -147,7 +147,7 @@ static osMessageQueueId_t MessageQueueNew(uint32_t msg_count, uint32_t msg_size,
   QueueReset(&mq->wait_put_queue);
   QueueReset(&mq->wait_get_queue);
   QueueReset(&mq->msg_queue);
-  libMemoryPoolInit(msg_count, block_size, mq_mem, &mq->mp_info);
+  krnMemoryPoolInit(msg_count, block_size, mq_mem, &mq->mp_info);
 
   return (mq);
 }
@@ -346,7 +346,7 @@ static osStatus_t MessageQueueReset(osMessageQueueId_t mq_id)
   /* Remove Messages from Queue */
   mq->msg_count = 0U;
   QueueReset(&mq->msg_queue);
-  libMemoryPoolReset(&mq->mp_info);
+  krnMemoryPoolReset(&mq->mp_info);
 
   /* Check if Threads are waiting to send Messages */
   if (!isQueueEmpty(&mq->wait_put_queue)) {
