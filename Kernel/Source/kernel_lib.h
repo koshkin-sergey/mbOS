@@ -290,33 +290,34 @@ osStatus_t krnMemoryPoolFree(osMemoryPoolInfo_t *mp_info, void *block);
  ******************************************************************************/
 
 /**
- * @fn          void krnSemaphorePostProcess(osSemaphore_t*)
  * @brief       Semaphore post ISR processing.
  * @param[in]   sem  semaphore object.
  */
 void krnSemaphorePostProcess(osSemaphore_t *sem);
 
 /**
- * @fn          void osKrnEventFlagsPostProcess(osEventFlags_t*)
  * @brief       Event Flags post ISR processing.
  * @param[in]   evf  event flags object.
  */
 void krnEventFlagsPostProcess(osEventFlags_t *evf);
 
 /**
- * @fn          void osKrnMessageQueuePostProcess(osMessageQueue_t*)
  * @brief       Message Queue post ISR processing.
  * @param[in]   mq  message queue object.
  */
 void krnMessageQueuePostProcess(osMessageQueue_t *mq);
 
 /**
- * @fn          void osKrnDataQueuePostProcess(osDataQueue_t*)
  * @brief       Data Queue post ISR processing.
  * @param[in]   dq  data queue object.
  */
 void krnDataQueuePostProcess(osDataQueue_t *dq);
 
+/**
+ * @brief       Memory Pool post ISR processing.
+ * @param[in]   mp  memory pool object.
+ */
+void krnMemoryPoolPostProcess(osMemoryPool_t *mp);
 
 /*******************************************************************************
  *  System Library functions

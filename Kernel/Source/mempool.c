@@ -90,11 +90,15 @@ void *krnMemoryPoolAlloc(osMemoryPoolInfo_t *mp_info)
     return (NULL);
   }
 
+  BEGIN_CRITICAL_SECTION
+
   block = mp_info->block_free;
   if (block != NULL) {
     mp_info->block_free = *((void **)block);
     mp_info->used_blocks++;
   }
+
+  END_CRITICAL_SECTION
 
   return (block);
 }
@@ -111,11 +115,38 @@ osStatus_t krnMemoryPoolFree(osMemoryPoolInfo_t *mp_info, void *block)
     return (osErrorParameter);
   }
 
+  BEGIN_CRITICAL_SECTION
+
   *((void **)block) = mp_info->block_free;
   mp_info->block_free = block;
   mp_info->used_blocks--;
 
+  END_CRITICAL_SECTION
+
   return (osOK);
+}
+
+/*******************************************************************************
+ *  Post ISR processing
+ ******************************************************************************/
+
+/**
+ * @brief       Memory Pool post ISR processing.
+ * @param[in]   mp  memory pool object.
+ */
+void krnMemoryPoolPostProcess(osMemoryPool_t *mp)
+{
+  void *block;
+
+  /* Check if Thread is waiting to allocate memory */
+  if (!isQueueEmpty(&mp->wait_queue)) {
+    /* Allocate memory */
+    block = krnMemoryPoolAlloc(&mp->info);
+    if (block != NULL) {
+      /* Wakeup waiting Thread with highest Priority */
+      libThreadWaitExit(GetThreadByQueue(mp->wait_queue.next), (uint32_t)block, DISPATCH_NO);
+    }
+  }
 }
 
 /*******************************************************************************
@@ -175,8 +206,6 @@ static void *svcMemoryPoolAlloc(osMemoryPoolId_t mp_id, uint32_t timeout)
     return (NULL);
   }
 
-  BEGIN_CRITICAL_SECTION
-
   /* Allocate memory */
   block = krnMemoryPoolAlloc(&mp->info);
   if (block == NULL && timeout != 0U) {
@@ -184,8 +213,6 @@ static void *svcMemoryPoolAlloc(osMemoryPoolId_t mp_id, uint32_t timeout)
       block = (void *)osThreadWait;
     }
   }
-
-  END_CRITICAL_SECTION
 
   return (block);
 }
@@ -200,8 +227,6 @@ static osStatus_t svcMemoryPoolFree(osMemoryPoolId_t mp_id, void *block)
     return (osErrorParameter);
   }
 
-  BEGIN_CRITICAL_SECTION
-
   /* Check if Thread is waiting to allocate memory */
   if (!isQueueEmpty(&mp->wait_queue)) {
     /* Wakeup waiting Thread with highest Priority */
@@ -212,8 +237,6 @@ static osStatus_t svcMemoryPoolFree(osMemoryPoolId_t mp_id, void *block)
     /* Free memory */
     status = krnMemoryPoolFree(&mp->info, block);
   }
-
-  END_CRITICAL_SECTION
 
   return (status);
 }
@@ -301,11 +324,6 @@ void *isrMemoryPoolAlloc(osMemoryPoolId_t mp_id, uint32_t timeout)
 
   /* Allocate memory */
   block = krnMemoryPoolAlloc(&mp->info);
-  if (block == NULL && timeout != 0U) {
-    if (libThreadWaitEnter(ThreadGetRunning(), &mp->wait_queue, timeout)) {
-      block = (void *)osThreadWait;
-    }
-  }
 
   return (block);
 }
@@ -321,15 +339,11 @@ osStatus_t isrMemoryPoolFree(osMemoryPoolId_t mp_id, void *block)
     return (osErrorParameter);
   }
 
-  /* Check if Thread is waiting to allocate memory */
-  if (!isQueueEmpty(&mp->wait_queue)) {
-    /* Wakeup waiting Thread with highest Priority */
-    libThreadWaitExit(GetThreadByQueue(mp->wait_queue.next), (uint32_t)block, DISPATCH_YES);
-    status = osOK;
-  }
-  else {
-    /* Free memory */
-    status = krnMemoryPoolFree(&mp->info, block);
+  /* Free memory */
+  status = krnMemoryPoolFree(&mp->info, block);
+  if (status == osOK) {
+    /* Register post ISR processing */
+    krnPostProcess((osObject_t *)mp);
   }
 
   return (status);

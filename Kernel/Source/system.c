@@ -126,6 +126,10 @@ void osPendSV_Handler(void)
         krnEventFlagsPostProcess((osEventFlags_t *)object);
         break;
 
+      case ID_MEMORYPOOL:
+        krnMemoryPoolPostProcess((osMemoryPool_t *)object);
+        break;
+
       case ID_MESSAGE_QUEUE:
         krnMessageQueuePostProcess((osMessageQueue_t *)object);
         break;
