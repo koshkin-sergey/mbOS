@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2017-2021 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -31,33 +31,44 @@
 #include "kernel_lib.h"
 
 /*******************************************************************************
- *  external declarations
- ******************************************************************************/
-
-/*******************************************************************************
  *  defines and macros (scope: module-local)
  ******************************************************************************/
 
 #define osMutexLockLimit              (255U)
 
 /*******************************************************************************
- *  typedefs and structures (scope: module-local)
+ *  Library functions
  ******************************************************************************/
 
-/*******************************************************************************
- *  global variable definitions  (scope: module-exported)
- ******************************************************************************/
+/**
+ * @brief       Release Mutexes when owner Task terminates.
+ * @param[in]   que   Queue of mutexes
+ */
+void krnMutexOwnerRelease(queue_t *que)
+{
+  osMutex_t  *mutex;
+  osThread_t *thread;
+
+  while (!isQueueEmpty(que)) {
+    mutex = GetMutexByQueque(QueueExtract(que));
+    if ((mutex->attr & osMutexRobust) != 0U) {
+      mutex->holder = NULL;
+      mutex->cnt = 0U;
+      /* Check if Thread is waiting for a Mutex */
+      if (!isQueueEmpty(&mutex->wait_que)) {
+        /* Wakeup waiting Thread with highest Priority */
+        thread = GetThreadByQueue(mutex->wait_que.next);
+        libThreadWaitExit(thread, (uint32_t)osOK, DISPATCH_NO);
+        mutex->holder = thread;
+        mutex->cnt = 1U;
+        QueueAppend(&thread->mutex_que, &mutex->mutex_que);
+      }
+    }
+  }
+}
 
 /*******************************************************************************
- *  global variable definitions (scope: module-local)
- ******************************************************************************/
-
-/*******************************************************************************
- *  function prototypes (scope: module-local)
- ******************************************************************************/
-
-/*******************************************************************************
- *  function implementations (scope: module-local)
+ *  Helper functions
  ******************************************************************************/
 
 static void RestoreThreadPriority(osThread_t *thread)
@@ -86,7 +97,11 @@ static void RestoreThreadPriority(osThread_t *thread)
   libThreadSetPriority(thread, priority);
 }
 
-static osMutexId_t MutexNew(const osMutexAttr_t *attr)
+/*******************************************************************************
+ *  Service Calls
+ ******************************************************************************/
+
+static osMutexId_t svcMutexNew(const osMutexAttr_t *attr)
 {
   osMutex_t *mutex;
 
@@ -115,7 +130,7 @@ static osMutexId_t MutexNew(const osMutexAttr_t *attr)
   return (mutex);
 }
 
-static const char *MutexGetName(osMutexId_t mutex_id)
+static const char *svcMutexGetName(osMutexId_t mutex_id)
 {
   osMutex_t *mutex = mutex_id;
 
@@ -127,7 +142,7 @@ static const char *MutexGetName(osMutexId_t mutex_id)
   return (mutex->name);
 }
 
-static osStatus_t MutexAcquire(osMutexId_t mutex_id, uint32_t timeout)
+static osStatus_t svcMutexAcquire(osMutexId_t mutex_id, uint32_t timeout)
 {
   osMutex_t  *mutex = mutex_id;
   osThread_t *running_thread;
@@ -190,7 +205,7 @@ static osStatus_t MutexAcquire(osMutexId_t mutex_id, uint32_t timeout)
   return (status);
 }
 
-static osStatus_t MutexRelease(osMutexId_t mutex_id)
+static osStatus_t svcMutexRelease(osMutexId_t mutex_id)
 {
   osMutex_t  *mutex = mutex_id;
   osThread_t *thread;
@@ -245,7 +260,7 @@ static osStatus_t MutexRelease(osMutexId_t mutex_id)
   return (osOK);
 }
 
-static osThreadId_t MutexGetOwner(osMutexId_t mutex_id)
+static osThreadId_t svcMutexGetOwner(osMutexId_t mutex_id)
 {
   osMutex_t *mutex = mutex_id;
 
@@ -261,7 +276,7 @@ static osThreadId_t MutexGetOwner(osMutexId_t mutex_id)
   return (mutex->holder);
 }
 
-static osStatus_t MutexDelete(osMutexId_t mutex_id)
+static osStatus_t svcMutexDelete(osMutexId_t mutex_id)
 {
   osMutex_t *mutex = mutex_id;
 
@@ -293,37 +308,6 @@ static osStatus_t MutexDelete(osMutexId_t mutex_id)
 }
 
 /*******************************************************************************
- *  Library functions
- ******************************************************************************/
-
-/**
- * @brief       Release Mutexes when owner Task terminates.
- * @param[in]   que   Queue of mutexes
- */
-void libMutexOwnerRelease(queue_t *que)
-{
-  osMutex_t  *mutex;
-  osThread_t *thread;
-
-  while (!isQueueEmpty(que)) {
-    mutex = GetMutexByQueque(QueueExtract(que));
-    if ((mutex->attr & osMutexRobust) != 0U) {
-      mutex->holder = NULL;
-      mutex->cnt = 0U;
-      /* Check if Thread is waiting for a Mutex */
-      if (!isQueueEmpty(&mutex->wait_que)) {
-        /* Wakeup waiting Thread with highest Priority */
-        thread = GetThreadByQueue(mutex->wait_que.next);
-        libThreadWaitExit(thread, (uint32_t)osOK, DISPATCH_NO);
-        mutex->holder = thread;
-        mutex->cnt = 1U;
-        QueueAppend(&thread->mutex_que, &mutex->mutex_que);
-      }
-    }
-  }
-}
-
-/*******************************************************************************
  *  Public API
  ******************************************************************************/
 
@@ -341,7 +325,7 @@ osMutexId_t osMutexNew(const osMutexAttr_t *attr)
     mutex_id = NULL;
   }
   else {
-    mutex_id = (osMutexId_t)SVC_1(attr, MutexNew);
+    mutex_id = (osMutexId_t)SVC_1(attr, svcMutexNew);
   }
 
   return (mutex_id);
@@ -361,7 +345,7 @@ const char *osMutexGetName(osMutexId_t mutex_id)
     name = NULL;
   }
   else {
-    name = (const char *)SVC_1(mutex_id, MutexGetName);
+    name = (const char *)SVC_1(mutex_id, svcMutexGetName);
   }
 
   return (name);
@@ -382,7 +366,7 @@ osStatus_t osMutexAcquire(osMutexId_t mutex_id, uint32_t timeout)
     status = osErrorISR;
   }
   else {
-    status = (osStatus_t)SVC_2(mutex_id, timeout, MutexAcquire);
+    status = (osStatus_t)SVC_2(mutex_id, timeout, svcMutexAcquire);
     if (status == osThreadWait) {
       status = (osStatus_t)ThreadGetRunning()->winfo.ret_val;
     }
@@ -405,7 +389,7 @@ osStatus_t osMutexRelease(osMutexId_t mutex_id)
     status = osErrorISR;
   }
   else {
-    status = (osStatus_t)SVC_1(mutex_id, MutexRelease);
+    status = (osStatus_t)SVC_1(mutex_id, svcMutexRelease);
   }
 
   return (status);
@@ -425,7 +409,7 @@ osThreadId_t osMutexGetOwner(osMutexId_t mutex_id)
     thread = NULL;
   }
   else {
-    thread = (osThreadId_t)SVC_1(mutex_id, MutexGetOwner);
+    thread = (osThreadId_t)SVC_1(mutex_id, svcMutexGetOwner);
   }
 
   return (thread);
@@ -445,7 +429,7 @@ osStatus_t osMutexDelete(osMutexId_t mutex_id)
     status = osErrorISR;
   }
   else {
-    status = (osStatus_t)SVC_1(mutex_id, MutexDelete);
+    status = (osStatus_t)SVC_1(mutex_id, svcMutexDelete);
   }
 
   return (status);

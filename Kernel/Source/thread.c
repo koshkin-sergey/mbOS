@@ -356,7 +356,7 @@ static void ThreadExit(void)
   thread = ThreadGetRunning();
 
   /* Release owned Mutexes */
-  libMutexOwnerRelease(&thread->mutex_que);
+  krnMutexOwnerRelease(&thread->mutex_que);
 
   ThreadReadyDel(thread);
   libThreadSwitch(libThreadHighestPrioGet());
@@ -406,7 +406,7 @@ static osStatus_t ThreadTerminate(osThreadId_t thread_id)
 
   if (status == osOK) {
     /* Release owned Mutexes */
-    libMutexOwnerRelease(&thread->mutex_que);
+    krnMutexOwnerRelease(&thread->mutex_que);
 
     if (thread->state == ThreadStateRunning) {
       libThreadSwitch(libThreadHighestPrioGet());

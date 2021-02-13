@@ -253,7 +253,7 @@ void libTimerThread(void *argument);
  * @brief       Release Mutexes when owner Task terminates.
  * @param[in]   que   Queue of mutexes
  */
-void libMutexOwnerRelease(queue_t *que);
+void krnMutexOwnerRelease(queue_t *que);
 
 /**
  * @brief       Initialize Memory Pool.
