@@ -32,31 +32,7 @@
 #include "kernel_lib.h"
 
 /*******************************************************************************
- *  external declarations
- ******************************************************************************/
-
-/*******************************************************************************
- *  defines and macros (scope: module-local)
- ******************************************************************************/
-
-/*******************************************************************************
- *  typedefs and structures (scope: module-local)
- ******************************************************************************/
-
-/*******************************************************************************
- *  global variable definitions  (scope: module-exported)
- ******************************************************************************/
-
-/*******************************************************************************
- *  global variable definitions (scope: module-local)
- ******************************************************************************/
-
-/*******************************************************************************
- *  function prototypes (scope: module-local)
- ******************************************************************************/
-
-/*******************************************************************************
- *  function implementations (scope: module-local)
+ *  Helper functions
  ******************************************************************************/
 
 static osMessage_t *MessagePut(osMessageQueue_t *mq, const void *msg_ptr, uint8_t msg_prio)
@@ -114,7 +90,11 @@ static osMessage_t *MessageGet(osMessageQueue_t *mq, void *msg_ptr, uint8_t *msg
   return (msg);
 }
 
-static osMessageQueueId_t MessageQueueNew(uint32_t msg_count, uint32_t msg_size, const osMessageQueueAttr_t *attr)
+/*******************************************************************************
+ *  Service Calls
+ ******************************************************************************/
+
+static osMessageQueueId_t svcMessageQueueNew(uint32_t msg_count, uint32_t msg_size, const osMessageQueueAttr_t *attr)
 {
   osMessageQueue_t *mq;
   void             *mq_mem;
@@ -152,7 +132,7 @@ static osMessageQueueId_t MessageQueueNew(uint32_t msg_count, uint32_t msg_size,
   return (mq);
 }
 
-static const char *MessageQueueGetName(osMessageQueueId_t mq_id)
+static const char *svcMessageQueueGetName(osMessageQueueId_t mq_id)
 {
   osMessageQueue_t *mq = mq_id;
 
@@ -164,7 +144,7 @@ static const char *MessageQueueGetName(osMessageQueueId_t mq_id)
   return (mq->name);
 }
 
-static osStatus_t MessageQueuePut(osMessageQueueId_t mq_id, const void *msg_ptr, uint8_t msg_prio, uint32_t timeout)
+static osStatus_t svcMessageQueuePut(osMessageQueueId_t mq_id, const void *msg_ptr, uint8_t msg_prio, uint32_t timeout)
 {
   osMessageQueue_t *mq = mq_id;
   osMessage_t      *msg;
@@ -176,8 +156,6 @@ static osStatus_t MessageQueuePut(osMessageQueueId_t mq_id, const void *msg_ptr,
   if ((mq == NULL) || (mq->id != ID_MESSAGE_QUEUE) || (msg_ptr == NULL)) {
     return (osErrorParameter);
   }
-
-  BEGIN_CRITICAL_SECTION
 
   /* Check if Thread is waiting to receive a Message */
   if (!isQueueEmpty(&mq->wait_get_queue)) {
@@ -204,7 +182,7 @@ static osStatus_t MessageQueuePut(osMessageQueueId_t mq_id, const void *msg_ptr,
         thread = ThreadGetRunning();
         if (libThreadWaitEnter(thread, &mq->wait_put_queue, timeout)) {
           winfo = &thread->winfo.msgque;
-          winfo->msg      = (uint32_t)msg_ptr;
+          winfo->msg      = (void *)msg_ptr;
           winfo->msg_prio = (uint32_t)msg_prio;
           status = (osStatus_t)osThreadWait;
         }
@@ -218,12 +196,10 @@ static osStatus_t MessageQueuePut(osMessageQueueId_t mq_id, const void *msg_ptr,
     }
   }
 
-  END_CRITICAL_SECTION
-
   return (status);
 }
 
-static osStatus_t MessageQueueGet(osMessageQueueId_t mq_id, void *msg_ptr, uint8_t *msg_prio, uint32_t timeout)
+static osStatus_t svcMessageQueueGet(osMessageQueueId_t mq_id, void *msg_ptr, uint8_t *msg_prio, uint32_t timeout)
 {
   osMessageQueue_t *mq = mq_id;
   osMessage_t      *msg;
@@ -235,8 +211,6 @@ static osStatus_t MessageQueueGet(osMessageQueueId_t mq_id, void *msg_ptr, uint8
   if ((mq == NULL) || (mq->id != ID_MESSAGE_QUEUE) || (msg_ptr == NULL)) {
     return (osErrorParameter);
   }
-
-  BEGIN_CRITICAL_SECTION
 
   /* Get Message from Queue */
   msg = MessageGet(mq, msg_ptr, msg_prio);
@@ -263,7 +237,7 @@ static osStatus_t MessageQueueGet(osMessageQueueId_t mq_id, void *msg_ptr, uint8
       thread = ThreadGetRunning();
       if (libThreadWaitEnter(thread, &mq->wait_get_queue, timeout)) {
         winfo = &thread->winfo.msgque;
-        winfo->msg      = (uint32_t)msg_ptr;
+        winfo->msg      = msg_ptr;
         winfo->msg_prio = (uint32_t)msg_prio;
         status = (osStatus_t)osThreadWait;
       }
@@ -276,12 +250,10 @@ static osStatus_t MessageQueueGet(osMessageQueueId_t mq_id, void *msg_ptr, uint8
     }
   }
 
-  END_CRITICAL_SECTION
-
   return (status);
 }
 
-static uint32_t MessageQueueGetCapacity(osMessageQueueId_t mq_id)
+static uint32_t svcMessageQueueGetCapacity(osMessageQueueId_t mq_id)
 {
   osMessageQueue_t *mq = mq_id;
 
@@ -293,7 +265,7 @@ static uint32_t MessageQueueGetCapacity(osMessageQueueId_t mq_id)
   return (mq->mp_info.max_blocks);
 }
 
-static uint32_t MessageQueueGetMsgSize(osMessageQueueId_t mq_id)
+static uint32_t svcMessageQueueGetMsgSize(osMessageQueueId_t mq_id)
 {
   osMessageQueue_t *mq = mq_id;
 
@@ -305,7 +277,7 @@ static uint32_t MessageQueueGetMsgSize(osMessageQueueId_t mq_id)
   return (mq->msg_size);
 }
 
-static uint32_t MessageQueueGetCount(osMessageQueueId_t mq_id)
+static uint32_t svcMessageQueueGetCount(osMessageQueueId_t mq_id)
 {
   osMessageQueue_t *mq = mq_id;
 
@@ -317,7 +289,7 @@ static uint32_t MessageQueueGetCount(osMessageQueueId_t mq_id)
   return (mq->msg_count);
 }
 
-static uint32_t MessageQueueGetSpace(osMessageQueueId_t mq_id)
+static uint32_t svcMessageQueueGetSpace(osMessageQueueId_t mq_id)
 {
   osMessageQueue_t *mq = mq_id;
 
@@ -329,7 +301,7 @@ static uint32_t MessageQueueGetSpace(osMessageQueueId_t mq_id)
   return (mq->mp_info.max_blocks - mq->msg_count);
 }
 
-static osStatus_t MessageQueueReset(osMessageQueueId_t mq_id)
+static osStatus_t svcMessageQueueReset(osMessageQueueId_t mq_id)
 {
   osMessageQueue_t *mq = mq_id;
   osMessage_t      *msg;
@@ -340,8 +312,6 @@ static osStatus_t MessageQueueReset(osMessageQueueId_t mq_id)
   if ((mq == NULL) || (mq->id != ID_MESSAGE_QUEUE)) {
     return (osErrorParameter);
   }
-
-  BEGIN_CRITICAL_SECTION
 
   /* Remove Messages from Queue */
   mq->msg_count = 0U;
@@ -365,12 +335,10 @@ static osStatus_t MessageQueueReset(osMessageQueueId_t mq_id)
     libThreadDispatch(NULL);
   }
 
-  END_CRITICAL_SECTION
-
   return (osOK);
 }
 
-static osStatus_t MessageQueueDelete(osMessageQueueId_t mq_id)
+static osStatus_t svcMessageQueueDelete(osMessageQueueId_t mq_id)
 {
   osMessageQueue_t *mq = mq_id;
 
@@ -390,17 +358,102 @@ static osStatus_t MessageQueueDelete(osMessageQueueId_t mq_id)
 }
 
 /*******************************************************************************
+ *  ISR Calls
+ ******************************************************************************/
+
+__STATIC_INLINE
+osStatus_t isrMessageQueuePut(osMessageQueueId_t mq_id, const void *msg_ptr, uint8_t msg_prio, uint32_t timeout)
+{
+  osMessageQueue_t *mq = mq_id;
+  osMessage_t      *msg;
+  osStatus_t        status;
+
+  /* Check parameters */
+  if ((mq      == NULL) || (mq->id  != ID_MESSAGE_QUEUE) ||
+      (msg_ptr == NULL) || (timeout != 0U)) {
+    return (osErrorParameter);
+  }
+
+  /* Try to put Message into Queue */
+  msg = MessagePut(mq, msg_ptr, msg_prio);
+  if (msg != NULL) {
+    /* Register post ISR processing */
+    krnPostProcess((osObject_t *)mq);
+    status = osOK;
+  }
+  else {
+    /* No memory available */
+    status = osErrorResource;
+  }
+
+  return (status);
+}
+
+__STATIC_INLINE
+osStatus_t isrMessageQueueGet(osMessageQueueId_t mq_id, void *msg_ptr, uint8_t *msg_prio, uint32_t timeout)
+{
+  osMessageQueue_t *mq = mq_id;
+  osMessage_t      *msg;
+  osStatus_t        status;
+
+  /* Check parameters */
+  if ((mq      == NULL) || (mq->id  != ID_MESSAGE_QUEUE) ||
+      (msg_ptr == NULL) || (timeout != 0U)) {
+    return (osErrorParameter);
+  }
+
+  /* Get Message from Queue */
+  msg = MessageGet(mq, msg_ptr, msg_prio);
+  if (msg != NULL) {
+    /* Register post ISR processing */
+    krnPostProcess((osObject_t *)mq);
+    status = osOK;
+  }
+  else {
+    /* No Message available */
+    status = osErrorResource;
+  }
+
+  return (status);
+}
+
+/*******************************************************************************
  *  Post ISR processing
  ******************************************************************************/
 
 /**
- * @fn          void osKrnMessageQueuePostProcess(osMessageQueue_t*)
  * @brief       Message Queue post ISR processing.
  * @param[in]   mq  message queue object.
  */
 void krnMessageQueuePostProcess(osMessageQueue_t *mq)
 {
+  osMessage_t    *msg;
+  osThread_t     *thread;
+  winfo_msgque_t *winfo;
 
+  /* Check if Thread is waiting to receive a Message */
+  if (!isQueueEmpty(&mq->wait_get_queue)) {
+    /* Get waiting Thread with highest Priority */
+    thread = GetThreadByQueue(mq->wait_get_queue.next);
+    winfo = &thread->winfo.msgque;
+    /* Try to get Message from Queue */
+    msg = MessageGet(mq, winfo->msg, (uint8_t *)winfo->msg_prio);
+    if (msg != NULL) {
+      /* Wakeup waiting Thread */
+      libThreadWaitExit(thread, (uint32_t)osOK, DISPATCH_NO);
+    }
+  }
+  else if (!isQueueEmpty(&mq->wait_put_queue)) {
+    /* Get waiting Thread with highest Priority */
+    thread = GetThreadByQueue(mq->wait_put_queue.next);
+    winfo = &thread->winfo.msgque;
+    /* Try to put Message into Queue */
+    msg = MessagePut(mq, (const void *)winfo->msg, (uint8_t)winfo->msg_prio);
+    if (msg != NULL) {
+      /* Wakeup waiting Thread */
+      libThreadWaitExit(thread, (uint32_t)osOK, DISPATCH_NO);
+    }
+  }
 }
 
 /*******************************************************************************
@@ -423,7 +476,7 @@ osMessageQueueId_t osMessageQueueNew(uint32_t msg_count, uint32_t msg_size, cons
     mq_id = NULL;
   }
   else {
-    mq_id = (osMessageQueueId_t)SVC_3(msg_count, msg_size, attr, MessageQueueNew);
+    mq_id = (osMessageQueueId_t)SVC_3(msg_count, msg_size, attr, svcMessageQueueNew);
   }
 
   return (mq_id);
@@ -443,7 +496,7 @@ const char *osMessageQueueGetName(osMessageQueueId_t mq_id)
     name = NULL;
   }
   else {
-    name = (const char *)SVC_1(mq_id, MessageQueueGetName);
+    name = (const char *)SVC_1(mq_id, svcMessageQueueGetName);
   }
 
   return (name);
@@ -463,15 +516,10 @@ osStatus_t osMessageQueuePut(osMessageQueueId_t mq_id, const void *msg_ptr, uint
   osStatus_t status;
 
   if (IsIrqMode() || IsIrqMasked()) {
-    if (timeout != 0U) {
-      status = osErrorParameter;
-    }
-    else {
-      status = MessageQueuePut(mq_id, msg_ptr, msg_prio, timeout);
-    }
+    status = isrMessageQueuePut(mq_id, msg_ptr, msg_prio, timeout);
   }
   else {
-    status = (osStatus_t)SVC_4(mq_id, msg_ptr, msg_prio, timeout, MessageQueuePut);
+    status = (osStatus_t)SVC_4(mq_id, msg_ptr, msg_prio, timeout, svcMessageQueuePut);
     if (status == osThreadWait) {
       status = (osStatus_t)ThreadGetRunning()->winfo.ret_val;
     }
@@ -494,15 +542,10 @@ osStatus_t osMessageQueueGet(osMessageQueueId_t mq_id, void *msg_ptr, uint8_t *m
   osStatus_t status;
 
   if (IsIrqMode() || IsIrqMasked()) {
-    if (timeout != 0U) {
-      status = osErrorParameter;
-    }
-    else {
-      status = MessageQueueGet(mq_id, msg_ptr, msg_prio, timeout);
-    }
+    status = isrMessageQueueGet(mq_id, msg_ptr, msg_prio, timeout);
   }
   else {
-    status = (osStatus_t)SVC_4(mq_id, msg_ptr, msg_prio, timeout, MessageQueueGet);
+    status = (osStatus_t)SVC_4(mq_id, msg_ptr, msg_prio, timeout, svcMessageQueueGet);
     if (status == osThreadWait) {
       status = (osStatus_t)ThreadGetRunning()->winfo.ret_val;
     }
@@ -522,10 +565,10 @@ uint32_t osMessageQueueGetCapacity(osMessageQueueId_t mq_id)
   uint32_t capacity;
 
   if (IsIrqMode() || IsIrqMasked()) {
-    capacity = MessageQueueGetCapacity(mq_id);
+    capacity = svcMessageQueueGetCapacity(mq_id);
   }
   else {
-    capacity = SVC_1(mq_id, MessageQueueGetCapacity);
+    capacity = SVC_1(mq_id, svcMessageQueueGetCapacity);
   }
 
   return (capacity);
@@ -542,10 +585,10 @@ uint32_t osMessageQueueGetMsgSize(osMessageQueueId_t mq_id)
   uint32_t msg_size;
 
   if (IsIrqMode() || IsIrqMasked()) {
-    msg_size = MessageQueueGetMsgSize(mq_id);
+    msg_size = svcMessageQueueGetMsgSize(mq_id);
   }
   else {
-    msg_size = SVC_1(mq_id, MessageQueueGetMsgSize);
+    msg_size = SVC_1(mq_id, svcMessageQueueGetMsgSize);
   }
 
   return (msg_size);
@@ -562,10 +605,10 @@ uint32_t osMessageQueueGetCount(osMessageQueueId_t mq_id)
   uint32_t count;
 
   if (IsIrqMode() || IsIrqMasked()) {
-    count = MessageQueueGetCount(mq_id);
+    count = svcMessageQueueGetCount(mq_id);
   }
   else {
-    count = SVC_1(mq_id, MessageQueueGetCount);
+    count = SVC_1(mq_id, svcMessageQueueGetCount);
   }
 
   return (count);
@@ -582,10 +625,10 @@ uint32_t osMessageQueueGetSpace(osMessageQueueId_t mq_id)
   uint32_t space;
 
   if (IsIrqMode() || IsIrqMasked()) {
-    space = MessageQueueGetSpace(mq_id);
+    space = svcMessageQueueGetSpace(mq_id);
   }
   else {
-    space = SVC_1(mq_id, MessageQueueGetSpace);
+    space = SVC_1(mq_id, svcMessageQueueGetSpace);
   }
 
   return (space);
@@ -605,7 +648,7 @@ osStatus_t osMessageQueueReset(osMessageQueueId_t mq_id)
     status = osErrorISR;
   }
   else {
-    status = (osStatus_t)SVC_1(mq_id, MessageQueueReset);
+    status = (osStatus_t)SVC_1(mq_id, svcMessageQueueReset);
   }
 
   return (status);
@@ -625,7 +668,7 @@ osStatus_t osMessageQueueDelete(osMessageQueueId_t mq_id)
     status = osErrorISR;
   }
   else {
-    status = (osStatus_t)SVC_1(mq_id, MessageQueueDelete);
+    status = (osStatus_t)SVC_1(mq_id, svcMessageQueueDelete);
   }
 
   return (status);

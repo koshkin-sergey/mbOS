@@ -108,7 +108,6 @@ typedef struct osObject_s {
   uint8_t                    reserved;
   const char                    *name;  ///< Object Name
   queue_t                  post_queue;  ///< Post Processing queue
-  queue_t                  wait_queue;  ///< Waiting Threads queue
 } osObject_t;
 
 /*******************************************************************************

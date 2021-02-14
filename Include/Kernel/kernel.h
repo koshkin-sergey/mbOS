@@ -218,7 +218,7 @@ typedef struct osTimerFinfo_s {
 } osTimerFinfo_t;
 
 typedef struct winfo_msgque_s {
-  uint32_t  msg;
+  void     *msg;
   uint32_t  msg_prio;
 } winfo_msgque_t;
 
