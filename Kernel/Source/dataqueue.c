@@ -32,31 +32,7 @@
 #include "kernel_lib.h"
 
 /*******************************************************************************
- *  external declarations
- ******************************************************************************/
-
-/*******************************************************************************
- *  defines and macros (scope: module-local)
- ******************************************************************************/
-
-/*******************************************************************************
- *  typedefs and structures (scope: module-local)
- ******************************************************************************/
-
-/*******************************************************************************
- *  global variable definitions  (scope: module-exported)
- ******************************************************************************/
-
-/*******************************************************************************
- *  global variable definitions (scope: module-local)
- ******************************************************************************/
-
-/*******************************************************************************
- *  function prototypes (scope: module-local)
- ******************************************************************************/
-
-/*******************************************************************************
- *  function implementations (scope: module-local)
+ *  Helper functions
  ******************************************************************************/
 
 static bool DataPut(osDataQueue_t *dq, const void *data_ptr)
@@ -92,7 +68,22 @@ static bool DataGet(osDataQueue_t *dq, void *data_ptr)
   return (true);
 }
 
-static osDataQueueId_t DataQueueNew(uint32_t data_count, uint32_t data_size, const osDataQueueAttr_t *attr)
+static void DataReset(osDataQueue_t *dq)
+{
+  BEGIN_CRITICAL_SECTION
+
+  dq->data_count = 0U;
+  dq->head       = 0U;
+  dq->tail       = 0U;
+
+  END_CRITICAL_SECTION
+}
+
+/*******************************************************************************
+ *  Service Calls
+ ******************************************************************************/
+
+static osDataQueueId_t svcDataQueueNew(uint32_t data_count, uint32_t data_size, const osDataQueueAttr_t *attr)
 {
   osDataQueue_t *dq;
   void          *dq_mem;
@@ -132,7 +123,7 @@ static osDataQueueId_t DataQueueNew(uint32_t data_count, uint32_t data_size, con
   return (dq);
 }
 
-static const char *DataQueueGetName(osDataQueueId_t dq_id)
+static const char *svcDataQueueGetName(osDataQueueId_t dq_id)
 {
   osDataQueue_t *dq = dq_id;
 
@@ -144,7 +135,7 @@ static const char *DataQueueGetName(osDataQueueId_t dq_id)
   return (dq->name);
 }
 
-static osStatus_t DataQueuePut(osDataQueueId_t dq_id, const void *data_ptr, uint32_t timeout)
+static osStatus_t svcDataQueuePut(osDataQueueId_t dq_id, const void *data_ptr, uint32_t timeout)
 {
   osDataQueue_t    *dq = dq_id;
   osThread_t       *thread;
@@ -154,8 +145,6 @@ static osStatus_t DataQueuePut(osDataQueueId_t dq_id, const void *data_ptr, uint
   if ((dq == NULL) || (dq->id != ID_DATA_QUEUE) || (data_ptr == NULL)) {
     return (osErrorParameter);
   }
-
-  BEGIN_CRITICAL_SECTION
 
   /* Check if Thread is waiting to receive a data */
   if (!isQueueEmpty(&dq->wait_get_queue)) {
@@ -189,12 +178,10 @@ static osStatus_t DataQueuePut(osDataQueueId_t dq_id, const void *data_ptr, uint
     }
   }
 
-  END_CRITICAL_SECTION
-
   return (status);
 }
 
-static osStatus_t DataQueueGet(osDataQueueId_t dq_id, void *data_ptr, uint32_t timeout)
+static osStatus_t svcDataQueueGet(osDataQueueId_t dq_id, void *data_ptr, uint32_t timeout)
 {
   osDataQueue_t    *dq = dq_id;
   osThread_t       *thread;
@@ -204,8 +191,6 @@ static osStatus_t DataQueueGet(osDataQueueId_t dq_id, void *data_ptr, uint32_t t
   if ((dq == NULL) || (dq->id != ID_DATA_QUEUE) || (data_ptr == NULL)) {
     return (osErrorParameter);
   }
-
-  BEGIN_CRITICAL_SECTION
 
   /* Get Data from Queue */
   if (DataGet(dq, data_ptr) != false) {
@@ -239,12 +224,10 @@ static osStatus_t DataQueueGet(osDataQueueId_t dq_id, void *data_ptr, uint32_t t
     }
   }
 
-  END_CRITICAL_SECTION
-
   return (status);
 }
 
-static uint32_t DataQueueGetCapacity(osDataQueueId_t dq_id)
+static uint32_t svcDataQueueGetCapacity(osDataQueueId_t dq_id)
 {
   osDataQueue_t *dq = dq_id;
 
@@ -256,7 +239,7 @@ static uint32_t DataQueueGetCapacity(osDataQueueId_t dq_id)
   return (dq->max_data_count);
 }
 
-static uint32_t DataQueueGetMsgSize(osDataQueueId_t dq_id)
+static uint32_t svcDataQueueGetDataSize(osDataQueueId_t dq_id)
 {
   osDataQueue_t *dq = dq_id;
 
@@ -268,7 +251,7 @@ static uint32_t DataQueueGetMsgSize(osDataQueueId_t dq_id)
   return (dq->data_size);
 }
 
-static uint32_t DataQueueGetCount(osDataQueueId_t dq_id)
+static uint32_t svcDataQueueGetCount(osDataQueueId_t dq_id)
 {
   osDataQueue_t *dq = dq_id;
 
@@ -280,7 +263,7 @@ static uint32_t DataQueueGetCount(osDataQueueId_t dq_id)
   return (dq->data_count);
 }
 
-static uint32_t DataQueueGetSpace(osDataQueueId_t dq_id)
+static uint32_t svcDataQueueGetSpace(osDataQueueId_t dq_id)
 {
   osDataQueue_t *dq = dq_id;
 
@@ -292,7 +275,7 @@ static uint32_t DataQueueGetSpace(osDataQueueId_t dq_id)
   return (dq->max_data_count - dq->data_count);
 }
 
-static osStatus_t DataQueueReset(osDataQueueId_t dq_id)
+static osStatus_t svcDataQueueReset(osDataQueueId_t dq_id)
 {
   osDataQueue_t    *dq = dq_id;
   osThread_t       *thread;
@@ -303,13 +286,8 @@ static osStatus_t DataQueueReset(osDataQueueId_t dq_id)
     return (osErrorParameter);
   }
 
-  BEGIN_CRITICAL_SECTION
-
   /* Remove data from Queue */
-  dq->data_count = 0U;
-  dq->head       = 0U;
-  dq->tail       = 0U;
-
+  DataReset(dq);
   /* Check if Threads are waiting to send a data */
   if (!isQueueEmpty(&dq->wait_put_queue)) {
     do {
@@ -326,12 +304,10 @@ static osStatus_t DataQueueReset(osDataQueueId_t dq_id)
     libThreadDispatch(NULL);
   }
 
-  END_CRITICAL_SECTION
-
   return (osOK);
 }
 
-static osStatus_t DataQueueDelete(osDataQueueId_t dq_id)
+static osStatus_t svcDataQueueDelete(osDataQueueId_t dq_id)
 {
   osDataQueue_t *dq = dq_id;
 
@@ -351,11 +327,66 @@ static osStatus_t DataQueueDelete(osDataQueueId_t dq_id)
 }
 
 /*******************************************************************************
+ *  ISR Calls
+ ******************************************************************************/
+
+__STATIC_INLINE
+osStatus_t isrDataQueuePut(osDataQueueId_t dq_id, const void *data_ptr, uint32_t timeout)
+{
+  osDataQueue_t    *dq = dq_id;
+  osStatus_t        status;
+
+  /* Check parameters */
+  if ((dq       == NULL) || (dq->id  != ID_DATA_QUEUE) ||
+      (data_ptr == NULL) || (timeout != 0U)) {
+    return (osErrorParameter);
+  }
+
+  /* Try to put a data into Queue */
+  if (DataPut(dq, data_ptr) != false) {
+    /* Register post ISR processing */
+    krnPostProcess((osObject_t *)dq);
+    status = osOK;
+  }
+  else {
+    /* No memory available */
+    status = osErrorResource;
+  }
+
+  return (status);
+}
+
+__STATIC_INLINE
+osStatus_t isrDataQueueGet(osDataQueueId_t dq_id, void *data_ptr, uint32_t timeout)
+{
+  osDataQueue_t    *dq = dq_id;
+  osStatus_t        status;
+
+  /* Check parameters */
+  if ((dq       == NULL) || (dq->id  != ID_DATA_QUEUE) ||
+      (data_ptr == NULL) || (timeout != 0U)) {
+    return (osErrorParameter);
+  }
+
+  /* Get Data from Queue */
+  if (DataGet(dq, data_ptr) != false) {
+    /* Register post ISR processing */
+    krnPostProcess((osObject_t *)dq);
+    status = osOK;
+  }
+  else {
+    /* No Data available */
+    status = osErrorResource;
+  }
+
+  return (status);
+}
+
+/*******************************************************************************
  *  Post ISR processing
  ******************************************************************************/
 
 /**
- * @fn          void osKrnDataQueuePostProcess(osDataQueue_t*)
  * @brief       Data Queue post ISR processing.
  * @param[in]   dq  data queue object.
  */
@@ -384,7 +415,7 @@ osDataQueueId_t osDataQueueNew(uint32_t data_count, uint32_t data_size, const os
     dq_id = NULL;
   }
   else {
-    dq_id = (osDataQueueId_t)SVC_3(data_count, data_size, attr, DataQueueNew);
+    dq_id = (osDataQueueId_t)SVC_3(data_count, data_size, attr, svcDataQueueNew);
   }
 
   return (dq_id);
@@ -404,7 +435,7 @@ const char *osDataQueueGetName(osDataQueueId_t dq_id)
     name = NULL;
   }
   else {
-    name = (const char *)SVC_1(dq_id, DataQueueGetName);
+    name = (const char *)SVC_1(dq_id, svcDataQueueGetName);
   }
 
   return (name);
@@ -423,15 +454,10 @@ osStatus_t osDataQueuePut(osDataQueueId_t dq_id, const void *data_ptr, uint32_t 
   osStatus_t status;
 
   if (IsIrqMode() || IsIrqMasked()) {
-    if (timeout != 0U) {
-      status = osErrorParameter;
-    }
-    else {
-      status = DataQueuePut(dq_id, data_ptr, timeout);
-    }
+    status = isrDataQueuePut(dq_id, data_ptr, timeout);
   }
   else {
-    status = (osStatus_t)SVC_3(dq_id, data_ptr, timeout, DataQueuePut);
+    status = (osStatus_t)SVC_3(dq_id, data_ptr, timeout, svcDataQueuePut);
     if (status == osThreadWait) {
       status = (osStatus_t)ThreadGetRunning()->winfo.ret_val;
     }
@@ -453,15 +479,10 @@ osStatus_t osDataQueueGet(osDataQueueId_t dq_id, void *data_ptr, uint32_t timeou
   osStatus_t status;
 
   if (IsIrqMode() || IsIrqMasked()) {
-    if (timeout != 0U) {
-      status = osErrorParameter;
-    }
-    else {
-      status = DataQueueGet(dq_id, data_ptr, timeout);
-    }
+    status = isrDataQueueGet(dq_id, data_ptr, timeout);
   }
   else {
-    status = (osStatus_t)SVC_3(dq_id, data_ptr, timeout, DataQueueGet);
+    status = (osStatus_t)SVC_3(dq_id, data_ptr, timeout, svcDataQueueGet);
     if (status == osThreadWait) {
       status = (osStatus_t)ThreadGetRunning()->winfo.ret_val;
     }
@@ -481,10 +502,10 @@ uint32_t osDataQueueGetCapacity(osDataQueueId_t dq_id)
   uint32_t capacity;
 
   if (IsIrqMode() || IsIrqMasked()) {
-    capacity = DataQueueGetCapacity(dq_id);
+    capacity = svcDataQueueGetCapacity(dq_id);
   }
   else {
-    capacity = SVC_1(dq_id, DataQueueGetCapacity);
+    capacity = SVC_1(dq_id, svcDataQueueGetCapacity);
   }
 
   return (capacity);
@@ -501,10 +522,10 @@ uint32_t osDataQueueGetDataSize(osDataQueueId_t dq_id)
   uint32_t data_size;
 
   if (IsIrqMode() || IsIrqMasked()) {
-    data_size = DataQueueGetMsgSize(dq_id);
+    data_size = svcDataQueueGetDataSize(dq_id);
   }
   else {
-    data_size = SVC_1(dq_id, DataQueueGetMsgSize);
+    data_size = SVC_1(dq_id, svcDataQueueGetDataSize);
   }
 
   return (data_size);
@@ -521,10 +542,10 @@ uint32_t osDataQueueGetCount(osDataQueueId_t dq_id)
   uint32_t count;
 
   if (IsIrqMode() || IsIrqMasked()) {
-    count = DataQueueGetCount(dq_id);
+    count = svcDataQueueGetCount(dq_id);
   }
   else {
-    count = SVC_1(dq_id, DataQueueGetCount);
+    count = SVC_1(dq_id, svcDataQueueGetCount);
   }
 
   return (count);
@@ -541,10 +562,10 @@ uint32_t osDataQueueGetSpace(osDataQueueId_t dq_id)
   uint32_t space;
 
   if (IsIrqMode() || IsIrqMasked()) {
-    space = DataQueueGetSpace(dq_id);
+    space = svcDataQueueGetSpace(dq_id);
   }
   else {
-    space = SVC_1(dq_id, DataQueueGetSpace);
+    space = SVC_1(dq_id, svcDataQueueGetSpace);
   }
 
   return (space);
@@ -564,7 +585,7 @@ osStatus_t osDataQueueReset(osDataQueueId_t dq_id)
     status = osErrorISR;
   }
   else {
-    status = (osStatus_t)SVC_1(dq_id, DataQueueReset);
+    status = (osStatus_t)SVC_1(dq_id, svcDataQueueReset);
   }
 
   return (status);
@@ -584,7 +605,7 @@ osStatus_t osDataQueueDelete(osDataQueueId_t dq_id)
     status = osErrorISR;
   }
   else {
-    status = (osStatus_t)SVC_1(dq_id, DataQueueDelete);
+    status = (osStatus_t)SVC_1(dq_id, svcDataQueueDelete);
   }
 
   return (status);

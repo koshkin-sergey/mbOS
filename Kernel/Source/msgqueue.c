@@ -48,6 +48,9 @@ static osMessage_t *MessagePut(osMessageQueue_t *mq, const void *msg_ptr, uint8_
     msg->id = ID_MESSAGE;
     msg->flags = 0U;
     msg->priority = msg_prio;
+
+    BEGIN_CRITICAL_SECTION
+
     /* Put Message into Queue */
     que = &mq->msg_queue;
     if (msg_prio != 0U) {
@@ -57,8 +60,11 @@ static osMessage_t *MessagePut(osMessageQueue_t *mq, const void *msg_ptr, uint8_
         }
       }
     }
+
     QueueAppend(que, &msg->msg_que);
     mq->msg_count++;
+
+    END_CRITICAL_SECTION
   }
 
   return (msg);
@@ -72,7 +78,14 @@ static osMessage_t *MessageGet(osMessageQueue_t *mq, void *msg_ptr, uint8_t *msg
   que = &mq->msg_queue;
 
   if (!isQueueEmpty(que)) {
+
+    BEGIN_CRITICAL_SECTION
+
     msg = GetMessageByQueue(QueueExtract(que));
+    mq->msg_count--;
+
+    END_CRITICAL_SECTION
+
     /* Copy Message */
     memcpy(msg_ptr, &msg[1], mq->msg_size);
     if (msg_prio != NULL) {
@@ -81,13 +94,23 @@ static osMessage_t *MessageGet(osMessageQueue_t *mq, void *msg_ptr, uint8_t *msg
     /* Free memory */
     msg->id = ID_INVALID;
     krnMemoryPoolFree(&mq->mp_info, msg);
-    mq->msg_count--;
   }
   else {
     msg = NULL;
   }
 
   return (msg);
+}
+
+static void MessageReset(osMessageQueue_t *mq)
+{
+  BEGIN_CRITICAL_SECTION
+
+  mq->msg_count = 0U;
+  QueueReset(&mq->msg_queue);
+  krnMemoryPoolReset(&mq->mp_info);
+
+  END_CRITICAL_SECTION
 }
 
 /*******************************************************************************
@@ -314,10 +337,7 @@ static osStatus_t svcMessageQueueReset(osMessageQueueId_t mq_id)
   }
 
   /* Remove Messages from Queue */
-  mq->msg_count = 0U;
-  QueueReset(&mq->msg_queue);
-  krnMemoryPoolReset(&mq->mp_info);
-
+  MessageReset(mq);
   /* Check if Threads are waiting to send Messages */
   if (!isQueueEmpty(&mq->wait_put_queue)) {
     do {
