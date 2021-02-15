@@ -37,35 +37,44 @@
 
 static bool DataPut(osDataQueue_t *dq, const void *data_ptr)
 {
-  if (dq->data_count == dq->max_data_count) {
-    return (false);
+  bool status = false;
+
+  BEGIN_CRITICAL_SECTION
+
+  if (dq->data_count != dq->max_data_count) {
+    memcpy(&dq->dq_mem[dq->head], data_ptr, dq->data_size);
+    dq->head += dq->data_size;
+    if (dq->head >= dq->data_limit) {
+      dq->head = 0U;
+    }
+
+    dq->data_count++;
+    status = true;
   }
 
-  memcpy(&dq->dq_mem[dq->head], data_ptr, dq->data_size);
-  dq->head += dq->data_size;
-  if (dq->head >= dq->data_limit) {
-    dq->head = 0U;
-  }
+  END_CRITICAL_SECTION
 
-  dq->data_count++;
-
-  return (true);
+  return (status);
 }
 
 static bool DataGet(osDataQueue_t *dq, void *data_ptr)
 {
-  if (dq->data_count == 0U) {
-    return (false);
+  bool status = false;
+
+  BEGIN_CRITICAL_SECTION
+
+  if (dq->data_count != 0U) {
+    memcpy(data_ptr, &dq->dq_mem[dq->tail], dq->data_size);
+    dq->data_count--;
+    dq->tail += dq->data_size;
+    if (dq->tail >= dq->data_limit) {
+      dq->tail = 0U;
+    }
   }
 
-  memcpy(data_ptr, &dq->dq_mem[dq->tail], dq->data_size);
-  dq->data_count--;
-  dq->tail += dq->data_size;
-  if (dq->tail >= dq->data_limit) {
-    dq->tail = 0U;
-  }
+  END_CRITICAL_SECTION
 
-  return (true);
+  return (status);
 }
 
 static void DataReset(osDataQueue_t *dq)
