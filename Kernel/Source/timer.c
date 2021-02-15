@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011-2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2011-2021 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -55,10 +55,10 @@ static osTimerFinfo_t *TimerGetFinfo(void)
       timer_finfo = NULL;
     }
     else {
-      libTimerRemove(timer);
+      krnTimerRemove(timer);
       timer_finfo = &timer->finfo;
       if (timer->type == osTimerPeriodic) {
-        libTimerInsert(timer, timer->load);
+        krnTimerInsert(timer, timer->load);
       }
       else {
         timer->state = osTimerStopped;
@@ -70,10 +70,55 @@ static osTimerFinfo_t *TimerGetFinfo(void)
 }
 
 /*******************************************************************************
+ *  Library functions
+ ******************************************************************************/
+
+void krnTimerInsert(osTimer_t *timer, uint32_t time)
+{
+  queue_t *que;
+  queue_t *timer_queue;
+
+  timer_queue = &osInfo.timer_queue;
+  timer->time = time + osInfo.kernel.tick;
+
+  for (que = timer_queue->next; que != timer_queue; que = que->next) {
+    if (time_before(timer->time, GetTimerByQueue(que)->time)) {
+      break;
+    }
+  }
+
+  QueueAppend(que, &timer->timer_que);
+}
+
+void krnTimerRemove(osTimer_t *timer)
+{
+  QueueRemoveEntry(&timer->timer_que);
+}
+
+void krnTimerThread(void *argument)
+{
+  (void)          argument;
+  osTimerFinfo_t *timer_finfo;
+
+  osInfo.timer_semaphore = osSemaphoreNew(1U, 0U, osConfig.timer_semaphore_attr);
+  if (osInfo.timer_semaphore == NULL) {
+    return;
+  }
+
+  for (;;) {
+    osSemaphoreAcquire(osInfo.timer_semaphore, osWaitForever);
+
+    while ((timer_finfo = (osTimerFinfo_t *)SVC_0(TimerGetFinfo)) != NULL) {
+      (timer_finfo->func)(timer_finfo->arg);
+    }
+  }
+}
+
+/*******************************************************************************
  *  Service Calls
  ******************************************************************************/
 
-static osTimerId_t TimerNew(osTimerFunc_t func, osTimerType_t type, void *argument, const osTimerAttr_t *attr)
+static osTimerId_t svcTimerNew(osTimerFunc_t func, osTimerType_t type, void *argument, const osTimerAttr_t *attr)
 {
   osTimer_t *timer;
 
@@ -104,7 +149,7 @@ static osTimerId_t TimerNew(osTimerFunc_t func, osTimerType_t type, void *argume
   return (timer);
 }
 
-static const char *TimerGetName(osTimerId_t timer_id)
+static const char *svcTimerGetName(osTimerId_t timer_id)
 {
   osTimer_t *timer = timer_id;
 
@@ -116,7 +161,7 @@ static const char *TimerGetName(osTimerId_t timer_id)
   return (timer->name);
 }
 
-static osStatus_t TimerStart(osTimerId_t timer_id, uint32_t ticks)
+static osStatus_t svcTimerStart(osTimerId_t timer_id, uint32_t ticks)
 {
   osTimer_t *timer = timer_id;
 
@@ -126,7 +171,7 @@ static osStatus_t TimerStart(osTimerId_t timer_id, uint32_t ticks)
   }
 
   if (timer->state == osTimerRunning) {
-    libTimerRemove(timer);
+    krnTimerRemove(timer);
   }
   else {
     if (osInfo.timer_semaphore == NULL) {
@@ -138,12 +183,12 @@ static osStatus_t TimerStart(osTimerId_t timer_id, uint32_t ticks)
     }
   }
 
-  libTimerInsert(timer, ticks);
+  krnTimerInsert(timer, ticks);
 
   return (osOK);
 }
 
-static osStatus_t TimerStop(osTimerId_t timer_id)
+static osStatus_t svcTimerStop(osTimerId_t timer_id)
 {
   osTimer_t *timer = timer_id;
 
@@ -159,12 +204,12 @@ static osStatus_t TimerStop(osTimerId_t timer_id)
 
   timer->state = osTimerStopped;
 
-  libTimerRemove(timer);
+  krnTimerRemove(timer);
 
   return (osOK);
 }
 
-static uint32_t TimerIsRunning(osTimerId_t timer_id)
+static uint32_t svcTimerIsRunning(osTimerId_t timer_id)
 {
   osTimer_t *timer = timer_id;
   uint32_t   is_running;
@@ -184,7 +229,7 @@ static uint32_t TimerIsRunning(osTimerId_t timer_id)
   return (is_running);
 }
 
-static osStatus_t TimerDelete(osTimerId_t timer_id)
+static osStatus_t svcTimerDelete(osTimerId_t timer_id)
 {
   osTimer_t *timer = timer_id;
 
@@ -195,7 +240,7 @@ static osStatus_t TimerDelete(osTimerId_t timer_id)
 
   /* Check object state */
   if (timer->state == osTimerRunning) {
-    libTimerRemove(timer);
+    krnTimerRemove(timer);
   }
 
   /* Mark object as inactive and invalid */
@@ -203,51 +248,6 @@ static osStatus_t TimerDelete(osTimerId_t timer_id)
   timer->id    = ID_INVALID;
 
   return (osOK);
-}
-
-/*******************************************************************************
- *  Library functions
- ******************************************************************************/
-
-void libTimerInsert(osTimer_t *timer, uint32_t time)
-{
-  queue_t *que;
-  queue_t *timer_queue;
-
-  timer_queue = &osInfo.timer_queue;
-  timer->time = time + osInfo.kernel.tick;
-
-  for (que = timer_queue->next; que != timer_queue; que = que->next) {
-    if (time_before(timer->time, GetTimerByQueue(que)->time)) {
-      break;
-    }
-  }
-
-  QueueAppend(que, &timer->timer_que);
-}
-
-void libTimerRemove(osTimer_t *timer)
-{
-  QueueRemoveEntry(&timer->timer_que);
-}
-
-void libTimerThread(void *argument)
-{
-  (void)          argument;
-  osTimerFinfo_t *timer_finfo;
-
-  osInfo.timer_semaphore = osSemaphoreNew(1U, 0U, osConfig.timer_semaphore_attr);
-  if (osInfo.timer_semaphore == NULL) {
-    return;
-  }
-
-  for (;;) {
-    osSemaphoreAcquire(osInfo.timer_semaphore, osWaitForever);
-
-    while ((timer_finfo = (osTimerFinfo_t *)SVC_0(TimerGetFinfo)) != NULL) {
-      (timer_finfo->func)(timer_finfo->arg);
-    }
-  }
 }
 
 /*******************************************************************************
@@ -271,7 +271,7 @@ osTimerId_t osTimerNew(osTimerFunc_t func, osTimerType_t type, void *argument, c
     timer_id = NULL;
   }
   else {
-    timer_id = (osTimerId_t)SVC_4(func, type, argument, attr, TimerNew);
+    timer_id = (osTimerId_t)SVC_4(func, type, argument, attr, svcTimerNew);
   }
 
   return (timer_id);
@@ -291,7 +291,7 @@ const char *osTimerGetName(osTimerId_t timer_id)
     name = NULL;
   }
   else {
-    name = (const char *)SVC_1(timer_id, TimerGetName);
+    name = (const char *)SVC_1(timer_id, svcTimerGetName);
   }
 
   return (name);
@@ -312,7 +312,7 @@ osStatus_t osTimerStart(osTimerId_t timer_id, uint32_t ticks)
     status = osErrorISR;
   }
   else {
-    status = (osStatus_t)SVC_2(timer_id, ticks, TimerStart);
+    status = (osStatus_t)SVC_2(timer_id, ticks, svcTimerStart);
   }
 
   return (status);
@@ -332,7 +332,7 @@ osStatus_t osTimerStop(osTimerId_t timer_id)
     status = osErrorISR;
   }
   else {
-    status = (osStatus_t)SVC_1(timer_id, TimerStop);
+    status = (osStatus_t)SVC_1(timer_id, svcTimerStop);
   }
 
   return (status);
@@ -352,7 +352,7 @@ uint32_t osTimerIsRunning(osTimerId_t timer_id)
     is_running = 0U;
   }
   else {
-    is_running = SVC_1(timer_id, TimerIsRunning);
+    is_running = SVC_1(timer_id, svcTimerIsRunning);
   }
 
   return (is_running);
@@ -372,7 +372,7 @@ osStatus_t osTimerDelete(osTimerId_t timer_id)
     status = osErrorISR;
   }
   else {
-    status = (osStatus_t)SVC_1(timer_id, TimerDelete);
+    status = (osStatus_t)SVC_1(timer_id, svcTimerDelete);
   }
 
   return (status);

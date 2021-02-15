@@ -244,9 +244,9 @@ void QueueRemoveEntry(queue_t *entry)
 
 /* Timer */
 
-void libTimerInsert(osTimer_t *timer, uint32_t time);
-void libTimerRemove(osTimer_t *timer);
-void libTimerThread(void *argument);
+void krnTimerInsert(osTimer_t *timer, uint32_t time);
+void krnTimerRemove(osTimer_t *timer);
+void krnTimerThread(void *argument);
 
 /**
  * @brief       Release Mutexes when owner Task terminates.

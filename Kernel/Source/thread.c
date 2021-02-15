@@ -457,7 +457,7 @@ bool libThreadStartup(void)
 
   /* Create Timer Thread */
   if (osInfo.thread.timer == NULL) {
-    osInfo.thread.timer = ThreadNew(libTimerThread, NULL, osConfig.timer_thread_attr);
+    osInfo.thread.timer = ThreadNew(krnTimerThread, NULL, osConfig.timer_thread_attr);
     if (osInfo.thread.timer == NULL) {
       ret = false;
     }
