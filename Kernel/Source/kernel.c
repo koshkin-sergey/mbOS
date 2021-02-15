@@ -61,7 +61,7 @@ KernelInfo_t osInfo;
  *  function implementations (scope: module-local)
  ******************************************************************************/
 
-static osStatus_t KernelInitialize(void)
+static osStatus_t svcKernelInitialize(void)
 {
   if (osInfo.kernel.state == osKernelReady) {
     return (osOK);
@@ -87,7 +87,7 @@ static osStatus_t KernelInitialize(void)
   return (osOK);
 }
 
-static osStatus_t KernelGetInfo(osVersion_t *version, char *id_buf, uint32_t id_size)
+static osStatus_t svcKernelGetInfo(osVersion_t *version, char *id_buf, uint32_t id_size)
 {
   if (version != NULL) {
     version->api    = osVersionAPI;
@@ -104,12 +104,12 @@ static osStatus_t KernelGetInfo(osVersion_t *version, char *id_buf, uint32_t id_
   return (osOK);
 }
 
-static osKernelState_t KernelGetState(void)
+static osKernelState_t svcKernelGetState(void)
 {
   return (osInfo.kernel.state);
 }
 
-static osStatus_t KernelStart(void)
+static osStatus_t svcKernelStart(void)
 {
   osThread_t *thread;
   uint32_t sh;
@@ -149,7 +149,7 @@ static osStatus_t KernelStart(void)
 #pragma GCC diagnostic ignored "-Wswitch-enum"
 #endif
 
-static int32_t KernelLock(void)
+static int32_t svcKernelLock(void)
 {
   int32_t lock;
 
@@ -171,7 +171,7 @@ static int32_t KernelLock(void)
   return (lock);
 }
 
-static int32_t KernelUnlock(void)
+static int32_t svcKernelUnlock(void)
 {
   int32_t lock;
 
@@ -193,7 +193,7 @@ static int32_t KernelUnlock(void)
   return (lock);
 }
 
-static int32_t KernelRestoreLock(int32_t lock)
+static int32_t svcKernelRestoreLock(int32_t lock)
 {
   int32_t lock_new;
 
@@ -229,12 +229,12 @@ static int32_t KernelRestoreLock(int32_t lock)
 #pragma GCC diagnostic pop
 #endif
 
-static uint32_t KernelGetTickCount(void)
+static uint32_t svcKernelGetTickCount(void)
 {
   return (osInfo.kernel.tick);
 }
 
-static uint32_t KernelGetTickFreq(void)
+static uint32_t svcKernelGetTickFreq(void)
 {
   return (osConfig.tick_freq);
 }
@@ -256,7 +256,7 @@ osStatus_t osKernelInitialize(void)
     status = osErrorISR;
   }
   else {
-    status = (osStatus_t)SVC_0(KernelInitialize);
+    status = (osStatus_t)SVC_0(svcKernelInitialize);
   }
 
   return (status);
@@ -275,10 +275,10 @@ osStatus_t osKernelGetInfo(osVersion_t *version, char *id_buf, uint32_t id_size)
   osStatus_t status;
 
   if (IsIrqMode() || IsIrqMasked() || IsPrivileged()) {
-    status = KernelGetInfo(version, id_buf, id_size);
+    status = svcKernelGetInfo(version, id_buf, id_size);
   }
   else {
-    status = (osStatus_t)SVC_3(version, id_buf, id_size, KernelGetInfo);
+    status = (osStatus_t)SVC_3(version, id_buf, id_size, svcKernelGetInfo);
   }
 
   return (status);
@@ -294,10 +294,10 @@ osKernelState_t osKernelGetState(void)
   osKernelState_t state;
 
   if (IsIrqMode() || IsIrqMasked() || IsPrivileged()) {
-    state = KernelGetState();
+    state = svcKernelGetState();
   }
   else {
-    state = (osKernelState_t)SVC_0(KernelGetState);
+    state = (osKernelState_t)SVC_0(svcKernelGetState);
   }
 
   return (state);
@@ -316,7 +316,7 @@ osStatus_t osKernelStart(void)
     status = osErrorISR;
   }
   else {
-    status = (osStatus_t)SVC_0(KernelStart);
+    status = (osStatus_t)SVC_0(svcKernelStart);
   }
 
   return (status);
@@ -335,7 +335,7 @@ int32_t osKernelLock(void)
     lock = (int32_t)osErrorISR;
   }
   else {
-    lock = (int32_t)SVC_0(KernelLock);
+    lock = (int32_t)SVC_0(svcKernelLock);
   }
 
   return (lock);
@@ -354,7 +354,7 @@ int32_t osKernelUnlock(void)
     lock = (int32_t)osErrorISR;
   }
   else {
-    lock = (int32_t)SVC_0(KernelUnlock);
+    lock = (int32_t)SVC_0(svcKernelUnlock);
   }
 
   return (lock);
@@ -374,7 +374,7 @@ int32_t osKernelRestoreLock(int32_t lock)
     lock_new = (int32_t)osErrorISR;
   }
   else {
-    lock_new = (int32_t)SVC_1(lock, KernelRestoreLock);
+    lock_new = (int32_t)SVC_1(lock, svcKernelRestoreLock);
   }
 
   return (lock_new);
@@ -390,10 +390,10 @@ uint32_t osKernelGetTickCount(void)
   uint32_t count;
 
   if (IsIrqMode() || IsIrqMasked()) {
-    count = KernelGetTickCount();
+    count = svcKernelGetTickCount();
   }
   else {
-    count = SVC_0(KernelGetTickCount);
+    count = SVC_0(svcKernelGetTickCount);
   }
 
   return (count);
@@ -409,10 +409,10 @@ uint32_t osKernelGetTickFreq(void)
   uint32_t freq;
 
   if (IsIrqMode() || IsIrqMasked()) {
-    freq = KernelGetTickFreq();
+    freq = svcKernelGetTickFreq();
   }
   else {
-    freq = SVC_0(KernelGetTickFreq);
+    freq = SVC_0(svcKernelGetTickFreq);
   }
 
   return (freq);
