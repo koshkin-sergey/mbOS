@@ -401,7 +401,27 @@ osStatus_t isrDataQueueGet(osDataQueueId_t dq_id, void *data_ptr, uint32_t timeo
  */
 void krnDataQueuePostProcess(osDataQueue_t *dq)
 {
+  osThread_t *thread;
 
+  /* Check if Thread is waiting to receive a data */
+  if (!isQueueEmpty(&dq->wait_get_queue)) {
+    thread = GetThreadByQueue(dq->wait_get_queue.next);
+    /* Try to get Data from Queue */
+    if (DataGet(dq, (void *)thread->winfo.dataque.data_ptr) != false) {
+      /* Wakeup waiting Thread with highest Priority */
+      libThreadWaitExit(thread, (uint32_t)osOK, DISPATCH_NO);
+    }
+  }
+  /* Check if Thread is waiting to send a data */
+  else if (!isQueueEmpty(&dq->wait_put_queue)) {
+    /* Get waiting Thread with highest Priority */
+    thread = GetThreadByQueue(dq->wait_put_queue.next);
+    /* Try to put a data into Queue */
+    if (DataPut(dq, (const void *)thread->winfo.dataque.data_ptr) != false) {
+      /* Wakeup waiting Thread with highest Priority */
+      libThreadWaitExit(thread, (uint32_t)osOK, DISPATCH_NO);
+    }
+  }
 }
 
 /*******************************************************************************
