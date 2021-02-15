@@ -144,7 +144,7 @@ void krnMemoryPoolPostProcess(osMemoryPool_t *mp)
     block = krnMemoryPoolAlloc(&mp->info);
     if (block != NULL) {
       /* Wakeup waiting Thread with highest Priority */
-      libThreadWaitExit(GetThreadByQueue(mp->wait_queue.next), (uint32_t)block, DISPATCH_NO);
+      krnThreadWaitExit(GetThreadByQueue(mp->wait_queue.next), (uint32_t)block, DISPATCH_NO);
     }
   }
 }
@@ -209,8 +209,9 @@ static void *svcMemoryPoolAlloc(osMemoryPoolId_t mp_id, uint32_t timeout)
   /* Allocate memory */
   block = krnMemoryPoolAlloc(&mp->info);
   if (block == NULL && timeout != 0U) {
-    if (libThreadWaitEnter(ThreadGetRunning(), &mp->wait_queue, timeout)) {
-      block = (void *)osThreadWait;
+    block = (void *)krnThreadWaitEnter(ThreadGetRunning(), &mp->wait_queue, timeout);
+    if (block == (void *)osErrorTimeout) {
+      block = NULL;
     }
   }
 
@@ -230,7 +231,7 @@ static osStatus_t svcMemoryPoolFree(osMemoryPoolId_t mp_id, void *block)
   /* Check if Thread is waiting to allocate memory */
   if (!isQueueEmpty(&mp->wait_queue)) {
     /* Wakeup waiting Thread with highest Priority */
-    libThreadWaitExit(GetThreadByQueue(mp->wait_queue.next), (uint32_t)block, DISPATCH_YES);
+    krnThreadWaitExit(GetThreadByQueue(mp->wait_queue.next), (uint32_t)block, DISPATCH_YES);
     status = osOK;
   }
   else {
@@ -299,7 +300,7 @@ static osStatus_t svcMemoryPoolDelete(osMemoryPoolId_t mp_id)
   }
 
   /* Unblock waiting threads */
-  libThreadWaitDelete(&mp->wait_queue);
+  krnThreadWaitDelete(&mp->wait_queue);
 
   /* Mark object as invalid */
   mp->id = ID_INVALID;

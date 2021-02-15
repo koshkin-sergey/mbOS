@@ -127,14 +127,14 @@ extern const osConfig_t osConfig;         ///< Kernel Configuration
  * @brief       Thread startup (Idle and Timer Thread).
  * @return      true - success, false - failure.
  */
-bool libThreadStartup(void);
+bool krnThreadStartup(void);
 
 /**
  * @brief       Exit Thread wait state.
  * @param[out]  thread    thread object.
  * @param[in]   ret_val   return value.
  */
-void libThreadWaitExit(osThread_t *thread, uint32_t ret_val, dispatch_t dispatch);
+void krnThreadWaitExit(osThread_t *thread, uint32_t ret_val, dispatch_t dispatch);
 
 /**
  * @brief       Enter Thread wait state.
@@ -142,35 +142,35 @@ void libThreadWaitExit(osThread_t *thread, uint32_t ret_val, dispatch_t dispatch
  * @param[out]  wait_que  Pointer to wait queue.
  * @param[in]   timeout   Timeout
  */
-bool libThreadWaitEnter(osThread_t *thread, queue_t *wait_que, uint32_t timeout);
+osStatus_t krnThreadWaitEnter(osThread_t *thread, queue_t *wait_que, uint32_t timeout);
 
 /**
  * @brief
  * @param wait_que
  */
-void libThreadWaitDelete(queue_t *que);
+void krnThreadWaitDelete(queue_t *que);
 
 /**
  * @brief       Process Thread Delay Tick (executed each System Tick).
  */
-bool libThreadDelayTick(void);
+bool krnThreadDelayTick(void);
 
 /**
  * @brief       Change priority of a thread.
  * @param[in]   thread    thread object.
  * @param[in]   priority  new priority value for the thread.
  */
-void libThreadSetPriority(osThread_t *thread, int8_t priority);
+void krnThreadSetPriority(osThread_t *thread, int8_t priority);
 
-osThread_t *libThreadHighestPrioGet(void);
+osThread_t *krnThreadHighestPrioGet(void);
 
-void libThreadSwitch(osThread_t *thread);
+void krnThreadSwitch(osThread_t *thread);
 
 /**
  * @brief       Dispatch specified Thread or Ready Thread with Highest Priority.
  * @param[in]   thread  thread object or NULL.
  */
-void libThreadDispatch(osThread_t *thread);
+void krnThreadDispatch(osThread_t *thread);
 
 __STATIC_FORCEINLINE
 osThread_t *ThreadGetRunning(void)

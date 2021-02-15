@@ -58,7 +58,7 @@ void krnMutexOwnerRelease(queue_t *que)
       if (!isQueueEmpty(&mutex->wait_que)) {
         /* Wakeup waiting Thread with highest Priority */
         thread = GetThreadByQueue(mutex->wait_que.next);
-        libThreadWaitExit(thread, (uint32_t)osOK, DISPATCH_NO);
+        krnThreadWaitExit(thread, (uint32_t)osOK, DISPATCH_NO);
         mutex->holder = thread;
         mutex->cnt = 1U;
         QueueAppend(&thread->mutex_que, &mutex->mutex_que);
@@ -94,7 +94,7 @@ static void RestoreThreadPriority(osThread_t *thread)
     }
   }
 
-  libThreadSetPriority(thread, priority);
+  krnThreadSetPriority(thread, priority);
 }
 
 /*******************************************************************************
@@ -185,16 +185,11 @@ static osStatus_t svcMutexAcquire(osMutexId_t mutex_id, uint32_t timeout)
         if ((mutex->attr & osMutexPrioInherit) != 0U) {
           /* Raise priority of owner Task if lower than priority of running Task */
           if (mutex->holder->priority < running_thread->priority) {
-            libThreadSetPriority(mutex->holder, running_thread->priority);
+            krnThreadSetPriority(mutex->holder, running_thread->priority);
           }
         }
         /* Suspend current Thread */
-        if (libThreadWaitEnter(running_thread, &mutex->wait_que, timeout)) {
-          status = (osStatus_t)osThreadWait;
-        }
-        else {
-          status = osErrorTimeout;
-        }
+        status = krnThreadWaitEnter(running_thread, &mutex->wait_que, timeout);
       }
       else {
         status = osErrorResource;
@@ -248,13 +243,13 @@ static osStatus_t svcMutexRelease(osMutexId_t mutex_id)
     if (!isQueueEmpty(&mutex->wait_que)) {
       /* Wakeup waiting Thread with highest Priority */
       thread = GetThreadByQueue(mutex->wait_que.next);
-      libThreadWaitExit(thread, (uint32_t)osOK, DISPATCH_NO);
+      krnThreadWaitExit(thread, (uint32_t)osOK, DISPATCH_NO);
       mutex->holder = thread;
       mutex->cnt = 1U;
       QueueAppend(&thread->mutex_que, &mutex->mutex_que);
     }
 
-    libThreadDispatch(NULL);
+    krnThreadDispatch(NULL);
   }
 
   return (osOK);
@@ -296,9 +291,9 @@ static osStatus_t svcMutexDelete(osMutexId_t mutex_id)
     }
 
     /* Unblock waiting threads */
-    libThreadWaitDelete(&mutex->wait_que);
+    krnThreadWaitDelete(&mutex->wait_que);
 
-    libThreadDispatch(NULL);
+    krnThreadDispatch(NULL);
   }
 
   /* Mutex not exists now */

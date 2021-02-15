@@ -162,11 +162,11 @@ static uint32_t svcEventFlagsSet(osEventFlagsId_t ef_id, uint32_t flags)
       else {
         event_flags = pattern;
       }
-      libThreadWaitExit(thread, pattern, DISPATCH_NO);
+      krnThreadWaitExit(thread, pattern, DISPATCH_NO);
     }
   }
 
-  libThreadDispatch(NULL);
+  krnThreadDispatch(NULL);
 
   return (event_flags);
 }
@@ -224,14 +224,11 @@ static uint32_t svcEventFlagsWait(osEventFlagsId_t ef_id, uint32_t flags, uint32
   if (event_flags == 0U) {
     if (timeout != 0U) {
       thread = ThreadGetRunning();
-      if (libThreadWaitEnter(thread, &evf->wait_queue, timeout)) {
+      event_flags = (uint32_t)krnThreadWaitEnter(thread, &evf->wait_queue, timeout);
+      if (event_flags != (uint32_t)osErrorTimeout) {
         winfo = &thread->winfo.event;
         winfo->options = options;
         winfo->flags = flags;
-        event_flags = (uint32_t)osThreadWait;
-      }
-      else {
-        event_flags = (uint32_t)osErrorTimeout;
       }
     }
     else {
@@ -252,7 +249,7 @@ static osStatus_t svcEventFlagsDelete(osEventFlagsId_t ef_id)
   }
 
   /* Unblock waiting threads */
-  libThreadWaitDelete(&evf->wait_queue);
+  krnThreadWaitDelete(&evf->wait_queue);
 
   /* Mark object as invalid */
   evf->id = ID_INVALID;
@@ -332,7 +329,7 @@ void krnEventFlagsPostProcess(osEventFlags_t *evf)
 
     pattern = EventFlagsCheck(evf, thread->winfo.event.flags, thread->winfo.event.options);
     if (pattern) {
-      libThreadWaitExit(thread, pattern, DISPATCH_NO);
+      krnThreadWaitExit(thread, pattern, DISPATCH_NO);
     }
   }
 }

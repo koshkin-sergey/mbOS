@@ -72,7 +72,7 @@ static void ThreadReadyDel(osThread_t *thread)
  *  Service Calls
  ******************************************************************************/
 
-static osThreadId_t ThreadNew(osThreadFunc_t func, void *argument, const osThreadAttr_t *attr)
+static osThreadId_t svcThreadNew(osThreadFunc_t func, void *argument, const osThreadAttr_t *attr)
 {
   osThread_t   *thread;
   void         *stack_mem;
@@ -134,13 +134,13 @@ static osThreadId_t ThreadNew(osThreadFunc_t func, void *argument, const osThrea
   thread->stk = StackInit(&stack_attr);
 
   ThreadReadyAdd(thread);
-  libThreadDispatch(thread);
+  krnThreadDispatch(thread);
 
   return (thread);
 }
 
 static
-const char *ThreadGetName(osThreadId_t thread_id)
+const char *svcThreadGetName(osThreadId_t thread_id)
 {
   osThread_t *thread = (osThread_t *)thread_id;
 
@@ -153,7 +153,7 @@ const char *ThreadGetName(osThreadId_t thread_id)
 }
 
 static
-osThreadId_t ThreadGetId(void)
+osThreadId_t svcThreadGetId(void)
 {
   osThread_t *thread;
 
@@ -163,7 +163,7 @@ osThreadId_t ThreadGetId(void)
 }
 
 static
-osThreadState_t ThreadGetState(osThreadId_t thread_id)
+osThreadState_t svcThreadGetState(osThreadId_t thread_id)
 {
   osThread_t *thread = (osThread_t *)thread_id;
 
@@ -176,7 +176,7 @@ osThreadState_t ThreadGetState(osThreadId_t thread_id)
 }
 
 static
-uint32_t ThreadGetStackSize(osThreadId_t thread_id)
+uint32_t svcThreadGetStackSize(osThreadId_t thread_id)
 {
   osThread_t *thread = (osThread_t *)thread_id;
 
@@ -189,7 +189,7 @@ uint32_t ThreadGetStackSize(osThreadId_t thread_id)
 }
 
 static
-uint32_t ThreadGetStackSpace(osThreadId_t thread_id)
+uint32_t svcThreadGetStackSpace(osThreadId_t thread_id)
 {
   osThread_t *thread = (osThread_t *)thread_id;
   const uint32_t *stack;
@@ -210,7 +210,7 @@ uint32_t ThreadGetStackSpace(osThreadId_t thread_id)
   return (space);
 }
 
-static osStatus_t ThreadSetPriority(osThreadId_t thread_id, osPriority_t priority)
+static osStatus_t svcThreadSetPriority(osThreadId_t thread_id, osPriority_t priority)
 {
   osThread_t *thread = (osThread_t *)thread_id;
 
@@ -227,13 +227,13 @@ static osStatus_t ThreadSetPriority(osThreadId_t thread_id, osPriority_t priorit
 
   if (thread->base_priority != (int8_t)priority) {
     thread->base_priority = (int8_t)priority;
-    libThreadSetPriority(thread, (int8_t)priority);
+    krnThreadSetPriority(thread, (int8_t)priority);
   }
 
   return (osOK);
 }
 
-static osPriority_t ThreadGetPriority(osThreadId_t thread_id)
+static osPriority_t svcThreadGetPriority(osThreadId_t thread_id)
 {
   osThread_t *thread = (osThread_t *)thread_id;
   osPriority_t priority;
@@ -253,7 +253,7 @@ static osPriority_t ThreadGetPriority(osThreadId_t thread_id)
   return (priority);
 }
 
-static osStatus_t ThreadYield(void)
+static osStatus_t svcThreadYield(void)
 {
   queue_t    *que;
   osThread_t *thread_running;
@@ -267,7 +267,7 @@ static osStatus_t ThreadYield(void)
 
     if (!isQueueEmpty(que)) {
       thread_running->state = ThreadStateReady;
-      libThreadSwitch(GetThreadByQueue(que->next));
+      krnThreadSwitch(GetThreadByQueue(que->next));
     }
 
     /* Add the running thread to the end of ready queue */
@@ -278,7 +278,7 @@ static osStatus_t ThreadYield(void)
 }
 
 static
-osStatus_t ThreadSuspend(osThreadId_t thread_id)
+osStatus_t svcThreadSuspend(osThreadId_t thread_id)
 {
   osThread_t *thread = (osThread_t *)thread_id;
   osStatus_t status = osOK;
@@ -297,8 +297,8 @@ osStatus_t ThreadSuspend(osThreadId_t thread_id)
       else {
         ThreadReadyDel(thread);
         thread->state = ThreadStateBlocked;
-        thread = libThreadHighestPrioGet();
-        libThreadSwitch(thread);
+        thread = krnThreadHighestPrioGet();
+        krnThreadSwitch(thread);
       }
       break;
 
@@ -324,7 +324,7 @@ osStatus_t ThreadSuspend(osThreadId_t thread_id)
   return (status);
 }
 
-static osStatus_t ThreadResume(osThreadId_t thread_id)
+static osStatus_t svcThreadResume(osThreadId_t thread_id)
 {
   osThread_t *thread = (osThread_t *)thread_id;
 
@@ -339,12 +339,12 @@ static osStatus_t ThreadResume(osThreadId_t thread_id)
   }
 
   /* Wakeup Thread */
-  libThreadWaitExit(thread, (uint32_t)osErrorTimeout, DISPATCH_YES);
+  krnThreadWaitExit(thread, (uint32_t)osErrorTimeout, DISPATCH_YES);
 
   return (osOK);
 }
 
-static void ThreadExit(void)
+static void svcThreadExit(void)
 {
   osThread_t *thread;
 
@@ -359,12 +359,12 @@ static void ThreadExit(void)
   krnMutexOwnerRelease(&thread->mutex_que);
 
   ThreadReadyDel(thread);
-  libThreadSwitch(libThreadHighestPrioGet());
+  krnThreadSwitch(krnThreadHighestPrioGet());
   thread->state = ThreadStateInactive;
   thread->id = ID_INVALID;
 }
 
-static osStatus_t ThreadTerminate(osThreadId_t thread_id)
+static osStatus_t svcThreadTerminate(osThreadId_t thread_id)
 {
   osThread_t *thread = (osThread_t *)thread_id;
   osStatus_t status = osOK;
@@ -409,10 +409,10 @@ static osStatus_t ThreadTerminate(osThreadId_t thread_id)
     krnMutexOwnerRelease(&thread->mutex_que);
 
     if (thread->state == ThreadStateRunning) {
-      libThreadSwitch(libThreadHighestPrioGet());
+      krnThreadSwitch(krnThreadHighestPrioGet());
     }
     else {
-      libThreadDispatch(NULL);
+      krnThreadDispatch(NULL);
     }
 
     thread->state = ThreadStateInactive;
@@ -422,12 +422,12 @@ static osStatus_t ThreadTerminate(osThreadId_t thread_id)
   return (status);
 }
 
-static uint32_t ThreadGetCount(void)
+static uint32_t svcThreadGetCount(void)
 {
   return (0U);
 }
 
-static uint32_t ThreadEnumerate(osThreadId_t *thread_array, uint32_t array_items)
+static uint32_t svcThreadEnumerate(osThreadId_t *thread_array, uint32_t array_items)
 {
   (void)thread_array;
   (void)array_items;
@@ -443,13 +443,13 @@ static uint32_t ThreadEnumerate(osThreadId_t *thread_array, uint32_t array_items
  * @brief       Thread startup (Idle and Timer Thread).
  * @return      true - success, false - failure.
  */
-bool libThreadStartup(void)
+bool krnThreadStartup(void)
 {
   bool ret = true;
 
   /* Create Idle Thread */
   if (osInfo.thread.idle == NULL) {
-    osInfo.thread.idle = ThreadNew(osIdleThread, NULL, osConfig.idle_thread_attr);
+    osInfo.thread.idle = svcThreadNew(osIdleThread, NULL, osConfig.idle_thread_attr);
     if (osInfo.thread.idle == NULL) {
       ret = false;
     }
@@ -457,7 +457,7 @@ bool libThreadStartup(void)
 
   /* Create Timer Thread */
   if (osInfo.thread.timer == NULL) {
-    osInfo.thread.timer = ThreadNew(krnTimerThread, NULL, osConfig.timer_thread_attr);
+    osInfo.thread.timer = svcThreadNew(krnTimerThread, NULL, osConfig.timer_thread_attr);
     if (osInfo.thread.timer == NULL) {
       ret = false;
     }
@@ -471,7 +471,7 @@ bool libThreadStartup(void)
  * @param[out]  thread    thread object.
  * @param[in]   ret_val   return value.
  */
-void libThreadWaitExit(osThread_t *thread, uint32_t ret_val, dispatch_t dispatch)
+void krnThreadWaitExit(osThread_t *thread, uint32_t ret_val, dispatch_t dispatch)
 {
   thread->winfo.ret_val = ret_val;
 
@@ -479,7 +479,7 @@ void libThreadWaitExit(osThread_t *thread, uint32_t ret_val, dispatch_t dispatch
   QueueRemoveEntry(&thread->delay_que);
   ThreadReadyAdd(thread);
   if (dispatch != DISPATCH_NO) {
-    libThreadDispatch(thread);
+    krnThreadDispatch(thread);
   }
 }
 
@@ -489,13 +489,13 @@ void libThreadWaitExit(osThread_t *thread, uint32_t ret_val, dispatch_t dispatch
  * @param[out]  wait_que  Pointer to wait queue.
  * @param[in]   timeout   Timeout
  */
-bool libThreadWaitEnter(osThread_t *thread, queue_t *wait_que, uint32_t timeout)
+osStatus_t krnThreadWaitEnter(osThread_t *thread, queue_t *wait_que, uint32_t timeout)
 {
   queue_t *que;
   queue_t *delay_queue;
 
   if (osInfo.kernel.state != osKernelRunning) {
-    return (false);
+    return (osErrorTimeout);
   }
 
   ThreadReadyDel(thread);
@@ -525,28 +525,28 @@ bool libThreadWaitEnter(osThread_t *thread, queue_t *wait_que, uint32_t timeout)
     QueueAppend(que, &thread->delay_que);
   }
 
-  thread = libThreadHighestPrioGet();
-  libThreadSwitch(thread);
+  thread = krnThreadHighestPrioGet();
+  krnThreadSwitch(thread);
 
-  return (true);
+  return ((osStatus_t)osThreadWait);
 }
 
 /**
  * @brief
  * @param wait_que
  */
-void libThreadWaitDelete(queue_t *wait_que)
+void krnThreadWaitDelete(queue_t *wait_que)
 {
   while (!isQueueEmpty(wait_que)) {
-    libThreadWaitExit(GetThreadByQueue(wait_que->next), (uint32_t)osErrorResource, DISPATCH_NO);
+    krnThreadWaitExit(GetThreadByQueue(wait_que->next), (uint32_t)osErrorResource, DISPATCH_NO);
   }
-  libThreadDispatch(NULL);
+  krnThreadDispatch(NULL);
 }
 
 /**
  * @brief       Process Thread Delay Tick (executed each System Tick).
  */
-bool libThreadDelayTick(void)
+bool krnThreadDelayTick(void)
 {
   osThread_t *thread;
   bool        result = false;
@@ -558,7 +558,7 @@ bool libThreadDelayTick(void)
       break;
     }
     else {
-      libThreadWaitExit(thread, (uint32_t)osErrorTimeout, DISPATCH_NO);
+      krnThreadWaitExit(thread, (uint32_t)osErrorTimeout, DISPATCH_NO);
       result = true;
     }
   }
@@ -571,7 +571,7 @@ bool libThreadDelayTick(void)
  * @param[in]   thread    thread object.
  * @param[in]   priority  new priority value for the thread.
  */
-void libThreadSetPriority(osThread_t *thread, int8_t priority)
+void krnThreadSetPriority(osThread_t *thread, int8_t priority)
 {
   if (thread->priority != priority) {
     if (thread->state == ThreadStateBlocked) {
@@ -585,7 +585,7 @@ void libThreadSetPriority(osThread_t *thread, int8_t priority)
   }
 }
 
-osThread_t *libThreadHighestPrioGet(void)
+osThread_t *krnThreadHighestPrioGet(void)
 {
   int8_t priority;
   osThread_t *thread;
@@ -600,7 +600,7 @@ osThread_t *libThreadHighestPrioGet(void)
   return (thread);
 }
 
-void libThreadSwitch(osThread_t *thread)
+void krnThreadSwitch(osThread_t *thread)
 {
   thread->state = ThreadStateRunning;
   osInfo.thread.run.next = thread;
@@ -610,12 +610,12 @@ void libThreadSwitch(osThread_t *thread)
  * @brief       Dispatch specified Thread or Ready Thread with Highest Priority.
  * @param[in]   thread  thread object or NULL.
  */
-void libThreadDispatch(osThread_t *thread)
+void krnThreadDispatch(osThread_t *thread)
 {
   osThread_t *thread_running;
 
   if (thread == NULL) {
-    thread = libThreadHighestPrioGet();
+    thread = krnThreadHighestPrioGet();
   }
 
   thread_running = ThreadGetRunning();
@@ -626,7 +626,7 @@ void libThreadDispatch(osThread_t *thread)
       (thread->priority > thread_running->priority)) {
     /* Preempt running Thread */
     thread_running->state = ThreadStateReady;
-    libThreadSwitch(thread);
+    krnThreadSwitch(thread);
   }
 }
 
@@ -650,7 +650,7 @@ osThreadId_t osThreadNew(osThreadFunc_t func, void *argument, const osThreadAttr
     thread_id = NULL;
   }
   else {
-    thread_id = (osThreadId_t)SVC_3(func, argument, attr, ThreadNew);
+    thread_id = (osThreadId_t)SVC_3(func, argument, attr, svcThreadNew);
   }
 
   return (thread_id);
@@ -670,7 +670,7 @@ const char *osThreadGetName(osThreadId_t thread_id)
     name = NULL;
   }
   else {
-    name = (const char *)SVC_1(thread_id, ThreadGetName);
+    name = (const char *)SVC_1(thread_id, svcThreadGetName);
   }
 
   return (name);
@@ -686,10 +686,10 @@ osThreadId_t osThreadGetId(void)
   osThreadId_t thread_id;
 
   if (IsIrqMode() || IsIrqMasked()) {
-    thread_id = ThreadGetId();
+    thread_id = svcThreadGetId();
   }
   else {
-    thread_id = (osThreadId_t)SVC_0(ThreadGetId);
+    thread_id = (osThreadId_t)SVC_0(svcThreadGetId);
   }
 
   return (thread_id);
@@ -709,7 +709,7 @@ osThreadState_t osThreadGetState(osThreadId_t thread_id)
     state = osThreadError;
   }
   else {
-    state = (osThreadState_t)SVC_1(thread_id, ThreadGetState);
+    state = (osThreadState_t)SVC_1(thread_id, svcThreadGetState);
   }
 
   return (state);
@@ -729,7 +729,7 @@ uint32_t osThreadGetStackSize(osThreadId_t thread_id)
     stack_size = 0U;
   }
   else {
-    stack_size = SVC_1(thread_id, ThreadGetStackSize);
+    stack_size = SVC_1(thread_id, svcThreadGetStackSize);
   }
 
   return (stack_size);
@@ -749,7 +749,7 @@ uint32_t osThreadGetStackSpace(osThreadId_t thread_id)
     stack_space = 0U;
   }
   else {
-    stack_space = SVC_1(thread_id, ThreadGetStackSpace);
+    stack_space = SVC_1(thread_id, svcThreadGetStackSpace);
   }
 
   return (stack_space);
@@ -770,7 +770,7 @@ osStatus_t osThreadSetPriority(osThreadId_t thread_id, osPriority_t priority)
     status = osErrorISR;
   }
   else {
-    status = (osStatus_t)SVC_2(thread_id, priority, ThreadSetPriority);
+    status = (osStatus_t)SVC_2(thread_id, priority, svcThreadSetPriority);
   }
 
   return (status);
@@ -790,7 +790,7 @@ osPriority_t osThreadGetPriority(osThreadId_t thread_id)
     priority = osPriorityError;
   }
   else {
-    priority = (osPriority_t)SVC_1(thread_id, ThreadGetPriority);
+    priority = (osPriority_t)SVC_1(thread_id, svcThreadGetPriority);
   }
 
   return (priority);
@@ -809,7 +809,7 @@ osStatus_t osThreadYield(void)
     status = osErrorISR;
   }
   else {
-    status = (osStatus_t)SVC_0(ThreadYield);
+    status = (osStatus_t)SVC_0(svcThreadYield);
   }
 
   return (status);
@@ -829,7 +829,7 @@ osStatus_t osThreadSuspend(osThreadId_t thread_id)
     status = osErrorISR;
   }
   else {
-    status = (osStatus_t)SVC_1(thread_id, ThreadSuspend);
+    status = (osStatus_t)SVC_1(thread_id, svcThreadSuspend);
   }
 
   return (status);
@@ -849,7 +849,7 @@ osStatus_t osThreadResume(osThreadId_t thread_id)
     status = osErrorISR;
   }
   else {
-    status = (osStatus_t)SVC_1(thread_id, ThreadResume);
+    status = (osStatus_t)SVC_1(thread_id, svcThreadResume);
   }
 
   return (status);
@@ -862,7 +862,7 @@ osStatus_t osThreadResume(osThreadId_t thread_id)
 __NO_RETURN
 void osThreadExit(void)
 {
-  SVC_0(ThreadExit);
+  SVC_0(svcThreadExit);
   for (;;);
 }
 
@@ -880,7 +880,7 @@ osStatus_t osThreadTerminate(osThreadId_t thread_id)
     status = osErrorISR;
   }
   else {
-    status = (osStatus_t)SVC_1(thread_id, ThreadTerminate);
+    status = (osStatus_t)SVC_1(thread_id, svcThreadTerminate);
   }
 
   return (status);
@@ -899,7 +899,7 @@ uint32_t osThreadGetCount(void)
     count = 0U;
   }
   else {
-    count = SVC_0(ThreadGetCount);
+    count = SVC_0(svcThreadGetCount);
   }
 
   return (count);
@@ -920,7 +920,7 @@ uint32_t osThreadEnumerate(osThreadId_t *thread_array, uint32_t array_items)
     count = 0U;
   }
   else {
-    count = SVC_2(thread_array, array_items, ThreadEnumerate);
+    count = SVC_2(thread_array, array_items, svcThreadEnumerate);
   }
 
   return (count);

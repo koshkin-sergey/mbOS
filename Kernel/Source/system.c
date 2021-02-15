@@ -98,8 +98,8 @@ void osTick_Handler(void)
   }
 
   /* Process Thread Delays */
-  if (libThreadDelayTick() == true) {
-    libThreadDispatch(NULL);
+  if (krnThreadDelayTick() == true) {
+    krnThreadDispatch(NULL);
   }
 }
 
@@ -143,7 +143,7 @@ void osPendSV_Handler(void)
     }
   }
 
-  libThreadDispatch(NULL);
+  krnThreadDispatch(NULL);
 }
 
 /**

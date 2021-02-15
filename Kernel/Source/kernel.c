@@ -119,7 +119,7 @@ static osStatus_t svcKernelStart(void)
   }
 
   /* Thread startup (Idle and Timer Thread) */
-  if (!libThreadStartup()) {
+  if (!krnThreadStartup()) {
     return (osError);
   }
 
@@ -131,11 +131,11 @@ static osStatus_t svcKernelStart(void)
   osSysTickInit(osConfig.tick_freq);
 
   /* Switch to Ready Thread with highest Priority */
-  thread = libThreadHighestPrioGet();
+  thread = krnThreadHighestPrioGet();
   if (thread == NULL) {
     return (osError);
   }
-  libThreadSwitch(thread);
+  krnThreadSwitch(thread);
 
   setPrivilegedMode(osConfig.flags & osConfigPrivilegedMode);
 

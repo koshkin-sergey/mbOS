@@ -139,7 +139,6 @@ static osStatus_t svcSemaphoreAcquire(osSemaphoreId_t semaphore_id, uint32_t tim
 {
   osSemaphore_t *sem = semaphore_id;
   osStatus_t status;
-  osThread_t *thread;
 
   /* Check parameters */
   if ((sem == NULL) || (sem->id != ID_SEMAPHORE)) {
@@ -150,13 +149,7 @@ static osStatus_t svcSemaphoreAcquire(osSemaphoreId_t semaphore_id, uint32_t tim
   status = SemaphoreTokenDecrement(sem);
   if ((status == osErrorResource) && (timeout != 0U)) {
     /* No token available */
-    thread = ThreadGetRunning();
-    if (libThreadWaitEnter(thread, &sem->wait_queue, timeout)) {
-      status = (osStatus_t)osThreadWait;
-    }
-    else {
-      status = osErrorTimeout;
-    }
+    status = krnThreadWaitEnter(ThreadGetRunning(), &sem->wait_queue, timeout);
   }
 
   return (status);
@@ -175,7 +168,7 @@ static osStatus_t svcSemaphoreRelease(osSemaphoreId_t semaphore_id)
   /* Check if Thread is waiting for a token */
   if (!isQueueEmpty(&sem->wait_queue)) {
     /* Wakeup waiting Thread with highest Priority */
-    libThreadWaitExit(GetThreadByQueue(sem->wait_queue.next), (uint32_t)osOK, DISPATCH_YES);
+    krnThreadWaitExit(GetThreadByQueue(sem->wait_queue.next), (uint32_t)osOK, DISPATCH_YES);
     status = osOK;
   }
   else {
@@ -208,7 +201,7 @@ static osStatus_t svcSemaphoreDelete(osSemaphoreId_t semaphore_id)
   }
 
   /* Unblock waiting threads */
-  libThreadWaitDelete(&sem->wait_queue);
+  krnThreadWaitDelete(&sem->wait_queue);
   /* Mark object as invalid */
   sem->id = ID_INVALID;
 
@@ -276,7 +269,7 @@ void krnSemaphorePostProcess(osSemaphore_t *sem)
     status = SemaphoreTokenDecrement(sem);
     if (status == osOK) {
       /* Wakeup waiting Thread with highest Priority */
-      libThreadWaitExit(GetThreadByQueue(sem->wait_queue.next), (uint32_t)osOK, DISPATCH_NO);
+      krnThreadWaitExit(GetThreadByQueue(sem->wait_queue.next), (uint32_t)osOK, DISPATCH_NO);
     }
   }
 }
