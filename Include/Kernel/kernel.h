@@ -33,7 +33,7 @@ extern "C"
 #endif
 
 /*******************************************************************************
- *  defines and macros (scope: module-local)
+ *  defines and macros
  ******************************************************************************/
 
 /* -------  Start of section using anonymous unions and disabling warnings  ------- */
@@ -111,7 +111,7 @@ extern "C"
 #define NUM_PRIORITY                  (32U)
 
 /*******************************************************************************
- *  typedefs and structures (scope: module-local)
+ *  typedefs and structures
  ******************************************************************************/
 
 /// Version information.
@@ -421,8 +421,6 @@ typedef struct {
   void                    *stack_mem;   ///< memory for stack
   uint32_t                stack_size;   ///< size of stack
   osPriority_t              priority;   ///< initial thread priority (default: osPriorityNormal)
-  TZ_ModuleId_t            tz_module;   ///< TrustZone module identifier
-  uint32_t                  reserved;   ///< reserved (must be 0)
 } osThreadAttr_t;
 
 /// Attributes structure for timer.

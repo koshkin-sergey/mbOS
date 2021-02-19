@@ -112,7 +112,6 @@ static osKernelState_t svcKernelGetState(void)
 static osStatus_t svcKernelStart(void)
 {
   osThread_t *thread;
-  uint32_t sh;
 
   if (osInfo.kernel.state != osKernelReady) {
     return (osError);
@@ -124,8 +123,7 @@ static osStatus_t svcKernelStart(void)
   }
 
   /* Setup SVC and PendSV System Service Calls */
-  sh = SystemIsrInit();
-  osInfo.base_priority = (osConfig.max_api_interrupt_priority << sh) & 0x000000FFU;
+  SystemIsrInit();
 
   /* Setup RTOS Tick */
   osSysTickInit(osConfig.tick_freq);

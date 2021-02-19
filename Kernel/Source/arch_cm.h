@@ -1,9 +1,3 @@
-/******************************************************************************
- * @file    arch_cm.h
- * @brief   
- * @author  Sergey Koshkin
- * @version V1.0.0
- ******************************************************************************/
 /*
  * Copyright (C) 2021 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved.
@@ -82,30 +76,9 @@
 
 #endif
 
-#if   ((defined(__ARM_ARCH_7M__)      && (__ARM_ARCH_7M__      != 0)) ||       \
-       (defined(__ARM_ARCH_7EM__)     && (__ARM_ARCH_7EM__     != 0)) ||       \
-       (defined(__ARM_ARCH_8M_MAIN__) && (__ARM_ARCH_8M_MAIN__ != 0)))
-
-#define BEGIN_CRITICAL_SECTION        uint32_t basepri = __get_BASEPRI(); \
-                                      __set_BASEPRI(osInfo.base_priority);
-#define END_CRITICAL_SECTION          __set_BASEPRI(basepri);
-
-#elif ((defined(__ARM_ARCH_6M__)      && (__ARM_ARCH_6M__      != 0)) ||       \
-       (defined(__ARM_ARCH_8M_BASE__) && (__ARM_ARCH_8M_BASE__ != 0)))
-
 #define BEGIN_CRITICAL_SECTION        uint32_t primask = __get_PRIMASK(); \
                                       __disable_irq();
 #define END_CRITICAL_SECTION          __set_PRIMASK(primask);
-
-#endif
-
-#ifndef BEGIN_CRITICAL_SECTION
-  #define BEGIN_CRITICAL_SECTION
-#endif
-
-#ifndef END_CRITICAL_SECTION
-  #define END_CRITICAL_SECTION
-#endif
 
 #define SVC_0(func)                                   (uint32_t)svc_0((uint32_t)(func))
 #define SVC_1(param1, func)                           (uint32_t)svc_1((uint32_t)(param1), (uint32_t)(func))
@@ -147,6 +120,13 @@ typedef struct
         uint32_t RESERVED0[5U];
   __IOM uint32_t CPACR;                  /*!< Offset: 0x088 (R/W)  Coprocessor Access Control Register */
 } SCB_Type;
+
+#define SCB_MEMMANAGE_PRIO      0U
+#define SCB_BUSFAULT_PRIO       1U
+#define SCB_USAGEFAULT_PRIO     2U
+#define SCB_SVCALL_PRIO         7U
+#define SCB_PENDSV_PRIO        10U
+#define SCB_SYSTICK_PRIO       11U
 
 #elif ((defined(__ARM_ARCH_6M__)      && (__ARM_ARCH_6M__      != 0)) || \
        (defined(__ARM_ARCH_8M_BASE__) && (__ARM_ARCH_8M_BASE__ != 0)))
@@ -222,32 +202,31 @@ bool IsIrqMasked(void)
 }
 
 __STATIC_INLINE
-uint32_t SystemIsrInit(void)
+void SystemIsrInit(void)
 {
+  uint32_t n;
+
 #if   ((defined(__ARM_ARCH_7M__)      && (__ARM_ARCH_7M__      != 0)) ||       \
        (defined(__ARM_ARCH_7EM__)     && (__ARM_ARCH_7EM__     != 0)) ||       \
        (defined(__ARM_ARCH_8M_MAIN__) && (__ARM_ARCH_8M_MAIN__ != 0)))
-  uint32_t p;
-  uint32_t n;
 
-  SCB->SHP[10] = 0xFFU;
+  uint32_t p;
+
+  SCB->SHP[SCB_PENDSV_PRIO] = 0xFFU;
   n = 32U - (uint32_t)__CLZ(~(SCB->SHP[10] | 0xFFFFFF00U));
   p = ((SCB->AIRCR >> 8) & 0x07U);
   if (p >= n) {
     n = p + 1U;
   }
-  SCB->SHP[7] = (uint8_t)(0xFEU << n);
-  return (n);
+  SCB->SHP[SCB_SVCALL_PRIO] = (uint8_t)(0xFEU << n);
+
 #elif ((defined(__ARM_ARCH_6M__)      && (__ARM_ARCH_6M__      != 0)) || \
        (defined(__ARM_ARCH_8M_BASE__) && (__ARM_ARCH_8M_BASE__ != 0)))
-  uint32_t n;
 
   SCB->SHP[1] |= 0x00FF0000U;
   n = SCB->SHP[1];
   SCB->SHP[0] |= (n << (8+1)) & 0xFC000000U;
-  return (0U);
-#else
-  return (0U);
+
 #endif
 }
 

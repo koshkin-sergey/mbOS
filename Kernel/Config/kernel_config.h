@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2019-2021 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -47,14 +47,6 @@
 #endif
 
 //   </e>
-
-//   <o>Maximum priority of interrupts <1-255>
-//   <i> Defines the maximum priority of interrupts from which ISR safe API functions can be called.
-//   <i> Should be always greater than 0.
-#ifndef MAX_API_INT_PRIO
-#define MAX_API_INT_PRIO            1
-#endif
-
 // </h>
 
 // <h>Thread Configuration
@@ -72,14 +64,6 @@
 //   <i> Default: 256
 #ifndef OS_IDLE_THREAD_STACK_SIZE
 #define OS_IDLE_THREAD_STACK_SIZE   256
-#endif
-
-//   <o>Idle Thread TrustZone Module Identifier
-//   <i> Defines TrustZone Thread Context Management Identifier.
-//   <i> Applies only to cores with TrustZone technology.
-//   <i> Default: 0 (not used)
-#ifndef OS_IDLE_THREAD_TZ_MOD_ID
-#define OS_IDLE_THREAD_TZ_MOD_ID    0
 #endif
 
 //   <q>Stack overrun checking
@@ -122,14 +106,6 @@
 //   <i> Default: 256
 #ifndef OS_TIMER_THREAD_STACK_SIZE
 #define OS_TIMER_THREAD_STACK_SIZE  256
-#endif
-
-//   <o>Timer Thread TrustZone Module Identifier
-//   <i> Defines TrustZone Thread Context Management Identifier.
-//   <i> Applies only to cores with TrustZone technology.
-//   <i> Default: 0 (not used)
-#ifndef OS_TIMER_THREAD_TZ_MOD_ID
-#define OS_TIMER_THREAD_TZ_MOD_ID   0
 #endif
 
 // </h>
