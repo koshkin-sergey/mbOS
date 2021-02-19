@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2019-2021 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -40,12 +40,6 @@ static const osThreadAttr_t os_idle_thread_attr = {
   &os_idle_thread_stack[0],
   (uint32_t)sizeof(os_idle_thread_stack),
   osPriorityIdle,
-#if defined(OS_IDLE_THREAD_TZ_MOD_ID)
-  (uint32_t)OS_IDLE_THREAD_TZ_MOD_ID,
-#else
-  0U,
-#endif
-  0U
 };
 
 /* Timer Thread Control Block */
@@ -67,12 +61,6 @@ static const osThreadAttr_t os_timer_thread_attr = {
   &os_timer_thread_stack[0],
   (uint32_t)sizeof(os_timer_thread_stack),
   osPriorityISR,
-#if defined(OS_TIMER_THREAD_TZ_MOD_ID)
-  (uint32_t)OS_TIMER_THREAD_TZ_MOD_ID,
-#else
-  0U,
-#endif
-  0U
 };
 
 /* Timer Semaphore Control Block */
@@ -104,7 +92,6 @@ const osConfig_t osConfig __USED __attribute__((section(".rodata"))) = {
 #else
   0U,
 #endif
-  (uint32_t)MAX_API_INT_PRIO,
   &os_idle_thread_attr,
   &os_timer_thread_attr,
   &os_timer_semaphore_attr
