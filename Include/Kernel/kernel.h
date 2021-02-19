@@ -490,7 +490,6 @@ typedef struct osConfig_s {
   uint32_t                             flags;   ///< OS Configuration Flags
   uint32_t                         tick_freq;   ///< Kernel Tick Frequency
   uint32_t                     robin_timeout;   ///< Round Robin Timeout Tick
-  uint32_t        max_api_interrupt_priority;
   const
   osThreadAttr_t           *idle_thread_attr;   ///< Idle Thread Attributes
   const
