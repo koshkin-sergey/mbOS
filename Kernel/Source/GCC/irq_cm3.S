@@ -73,7 +73,7 @@ SVC_ContextRestore:
         LDR       R0,[R2]             // Load SP
         LDMIA     R0!,{R4-R11}        // Restore R4..R11
         MSR       PSP,R0              // Set PSP
-        MVN       LR,#~0xFFFFFFFD     // Set EXC_RETURN value
+        LDR       LR,[R2,#4]
 
 SVC_Exit:
         BX        LR                  // Exit from handler

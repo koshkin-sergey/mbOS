@@ -31,6 +31,10 @@
  *  defines and macros
  ******************************************************************************/
 
+/* Minimal thread stack size in bytes */
+#define MIN_THREAD_STK_SIZE   64U
+#define INIT_EXC_RETURN       0xFFFFFFFDUL
+
 /* following defines should be used for structure members */
 #define __IM                volatile const      /*! Defines 'read only' structure member permissions */
 #define __OM                volatile            /*! Defines 'write only' structure member permissions */

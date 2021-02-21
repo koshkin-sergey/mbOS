@@ -93,7 +93,7 @@ static osThreadId_t svcThreadNew(osThreadFunc_t func, void *argument, const osTh
   }
 
   if ((stack_mem == NULL) || (((uint32_t)stack_mem & 7U) != 0U) ||
-      (stack_size < 64U)  || ((stack_size & 7U) != 0U)            ) {
+      (stack_size < MIN_THREAD_STK_SIZE)  || ((stack_size & 7U) != 0U)            ) {
     return (NULL);
   }
 
@@ -105,6 +105,7 @@ static osThreadId_t svcThreadNew(osThreadFunc_t func, void *argument, const osTh
   }
 
   /* Init thread control block */
+  thread->exc_return    = INIT_EXC_RETURN;
   thread->stk_mem       = stack_mem;
   thread->stk_size      = stack_size;
   thread->base_priority = (int8_t)priority;

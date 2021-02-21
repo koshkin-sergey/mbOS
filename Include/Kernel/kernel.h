@@ -270,6 +270,7 @@ typedef void *osMemoryPoolId_t;
 /* Thread Control Block */
 typedef struct osThread_s {
   uint32_t                        stk;  ///< Address of thread's top of stack
+  uint32_t                 exc_return;
   queue_t                  thread_que;  ///< Queue is used to include thread in ready/wait lists
   queue_t                   mutex_que;  ///< List of all mutexes that tack locked
   void                       *stk_mem;  ///< Base address of thread's stack space
