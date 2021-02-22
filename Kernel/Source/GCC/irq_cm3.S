@@ -20,7 +20,7 @@
         .syntax  unified
 
         .section ".rodata"
-        .global  irqLib               // Non weak library reference
+        .global  irqLib                 // Non weak library reference
 irqLib:
         .byte    0
 
@@ -30,53 +30,52 @@ irqLib:
         .align   2
 
 
-        .thumb_func
+	        .thumb_func
         .type    SVC_Handler, %function
         .global  SVC_Handler
         .fnstart
         .cantunwind
 SVC_Handler:
 
-        TST       LR,#0x04            // Determine return stack from EXC_RETURN bit 2
+        TST       LR,#0x04              // Determine return stack from EXC_RETURN bit 2
         ITE       EQ
-        MRSEQ     R0,MSP              // Get MSP if return stack is MSP
-        MRSNE     R0,PSP              // Get PSP if return stack is PSP
+        MRSEQ     R0,MSP                // Get MSP if return stack is MSP
+        MRSNE     R0,PSP                // Get PSP if return stack is PSP
 
-        LDR       R1,[R0,#24]         // Read Saved PC from Stack
-        LDRB      R1,[R1,#-2]         // Load SVC Number
-        CBNZ      R1,SVC_Exit         // Branch if not SVC 0
+        LDR       R1,[R0,#24]           // Load saved PC from stack
+        LDRB      R1,[R1,#-2]           // Load SVC number
+        CBNZ      R1,SVC_Exit           // Branch if not SVC 0
 
-        PUSH      {R0,LR}             // Save SP and EXC_RETURN
-        LDM       R0,{R0-R3,R12}      // Read R0-R3,R12 from stack
-        BLX       R12                 // Call SVC Function
-        POP       {R12,LR}            // Restore SP and EXC_RETURN
-        STM       R12,{R0-R1}         // Store return values
+        PUSH      {R0,LR}               // Save SP and EXC_RETURN
+        LDM       R0,{R0-R3,R12}        // Load function parameters and address from stack
+        BLX       R12                   // Call service function
+        POP       {R12,LR}              // Restore SP and EXC_RETURN
+        STM       R12,{R0-R1}           // Store function return values
 
 SVC_Context:
-        LDR       R3,=osInfo          // in R3 - =run_task
-        LDM       R3,{R1,R2}          // in R1 - current run task, in R2 - next run task
-        CMP       R1,R2               // Check if thread switch is required
+        LDR       R3,=osInfo            // Load address of osInfo
+        LDM       R3,{R1,R2}            // Load osInfo.thread.run: curr & next
+        CMP       R1,R2                 // Check if thread switch is required
         IT        EQ
-        BXEQ      LR                  // Exit when threads are the same
+        BXEQ      LR                    // Exit when threads are the same
 
-        CBZ       R1,SVC_ContextSwitch// Branch if running thread is deleted
+        CBZ       R1,SVC_ContextSwitch  // Branch if running thread is deleted
 
 SVC_ContextSave:
-        MRS       R0,PSP
-        STMDB     R0!,{R4-R11}        // Save R4..R11
-        STR       R0,[R1]             // save own SP in TCB
+        STMDB     R12!,{R4-R11}         // Save R4..R11
+        STR       R12,[R1]              // Store SP
 
 SVC_ContextSwitch:
-        STR       R2,[R3]             // osInfo.thread.run: curr = next
+        STR       R2,[R3]               // osInfo.thread.run: curr = next
 
 SVC_ContextRestore:
-        LDR       R0,[R2]             // Load SP
-        LDMIA     R0!,{R4-R11}        // Restore R4..R11
-        MSR       PSP,R0              // Set PSP
-        LDR       LR,[R2,#4]
+        LDR       R0,[R2]               // Load SP
+        LDR       LR,[R2,#4]            // Load EXC_RETURN value
+        LDMIA     R0!,{R4-R11}          // Restore R4..R11
+        MSR       PSP,R0                // Set PSP
 
 SVC_Exit:
-        BX        LR                  // Exit from handler
+        BX        LR                    // Exit from handler
 
         .fnend
         .size    SVC_Handler, .-SVC_Handler
@@ -89,9 +88,10 @@ SVC_Exit:
         .cantunwind
 PendSV_Handler:
 
-        PUSH     {LR}                   // Save EXC_RETURN
+        PUSH     {R0,LR}                // Save EXC_RETURN
         BL       osPendSV_Handler       // Call osPendSV_Handler
-        POP      {LR}                   // Restore EXC_RETURN
+        POP      {R0,LR}                // Restore EXC_RETURN
+        MRS      R12,PSP
         B        SVC_Context
 
         .fnend
@@ -105,9 +105,10 @@ PendSV_Handler:
         .cantunwind
 SysTick_Handler:
 
-        PUSH     {LR}                   // Save EXC_RETURN
+        PUSH     {R0,LR}                // Save EXC_RETURN
         BL       osTick_Handler         // Call osTick_Handler
-        POP      {LR}                   // Restore EXC_RETURN
+        POP      {R0,LR}                // Restore EXC_RETURN
+        MRS      R12,PSP
         B        SVC_Context
 
         .fnend
