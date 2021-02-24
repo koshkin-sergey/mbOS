@@ -287,8 +287,6 @@ __STATIC_INLINE
 uint32_t isrEventFlagsWait(osEventFlagsId_t ef_id, uint32_t flags, uint32_t options, uint32_t timeout)
 {
   osEventFlags_t *evf = (osEventFlags_t *)ef_id;
-  osThread_t *thread;
-  winfo_event_t *winfo;
   uint32_t event_flags;
 
   /* Check parameters */

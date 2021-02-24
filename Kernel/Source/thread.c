@@ -126,10 +126,10 @@ static osThreadId_t svcThreadNew(osThreadFunc_t func, void *argument, const osTh
 
   /* Init thread stack */
   StackAttr_t stack_attr = {
-      .func_addr  = func,
-      .func_param = argument,
-      .func_exit  = osThreadExit,
-      .stk_mem    = stack_mem,
+      .func_addr  = (uint32_t)func,
+      .func_param = (uint32_t)argument,
+      .func_exit  = (uint32_t)osThreadExit,
+      .stk_mem    = (uint32_t)stack_mem,
       .stk_size   = stack_size,
   };
   thread->stk = StackInit(&stack_attr);

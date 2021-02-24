@@ -154,10 +154,10 @@ typedef struct
 
 /// Attributes structure for StackInit function.
 typedef struct StackAttr_s {
-  void             *func_addr;
-  void            *func_param;
-  void             *func_exit;
-  void               *stk_mem;
+  uint32_t          func_addr;
+  uint32_t         func_param;
+  uint32_t          func_exit;
+  uint32_t            stk_mem;
   uint32_t           stk_size;
 } StackAttr_t;
 
@@ -265,16 +265,16 @@ void PendServCallReq(void)
 __STATIC_INLINE
 uint32_t StackInit(StackAttr_t *attr)
 {
-  uint32_t *stk = (uint32_t *)((uint32_t)attr->stk_mem + attr->stk_size);
+  uint32_t *stk = (uint32_t *)(attr->stk_mem + attr->stk_size);
 
   *(--stk) = 0x01000000L;                       //-- xPSR
-  *(--stk) = (uint32_t)attr->func_addr;         //-- Entry Point
-  *(--stk) = (uint32_t)attr->func_exit;         //-- R14 (LR)
+  *(--stk) = attr->func_addr;                   //-- Entry Point
+  *(--stk) = attr->func_exit;                   //-- R14 (LR)
   *(--stk) = 0x12121212L;                       //-- R12
   *(--stk) = 0x03030303L;                       //-- R3
   *(--stk) = 0x02020202L;                       //-- R2
   *(--stk) = 0x01010101L;                       //-- R1
-  *(--stk) = (uint32_t)attr->func_param;        //-- R0 - thread's function argument
+  *(--stk) = attr->func_param;                  //-- R0 - thread's function argument
   *(--stk) = 0x11111111L;                       //-- R11
   *(--stk) = 0x10101010L;                       //-- R10
   *(--stk) = 0x09090909L;                       //-- R9
