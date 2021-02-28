@@ -345,7 +345,7 @@
                 </option>
                 <option>
                     <name>CCIncludePath2</name>
-                    <state>C:\Users\Sergey\Projects\mbOS\Include</state>
+                    <state>$PROJ_DIR$\..\..\..\..\Include</state>
                 </option>
                 <option>
                     <name>CCStdIncCheck</name>
@@ -1396,7 +1396,7 @@
                 </option>
                 <option>
                     <name>CCIncludePath2</name>
-                    <state>C:\Users\Sergey\Projects\mbOS\Include</state>
+                    <state>$PROJ_DIR$\..\..\..\..\Include</state>
                 </option>
                 <option>
                     <name>CCStdIncCheck</name>
@@ -2245,12 +2245,12 @@
                 <option>
                     <name>FPU2</name>
                     <version>0</version>
-                    <state>0</state>
+                    <state>4</state>
                 </option>
                 <option>
                     <name>NrRegs</name>
                     <version>0</version>
-                    <state>0</state>
+                    <state>1</state>
                 </option>
                 <option>
                     <name>NEON</name>
@@ -2447,7 +2447,7 @@
                 </option>
                 <option>
                     <name>CCIncludePath2</name>
-                    <state>C:\Users\Sergey\Projects\mbOS\Include</state>
+                    <state>$PROJ_DIR$\..\..\..\..\Include</state>
                 </option>
                 <option>
                     <name>CCStdIncCheck</name>
@@ -3144,7 +3144,7 @@
                 </option>
                 <option>
                     <name>IarchiveOutput</name>
-                    <state>$PROJ_DIR$\..\Kernel_CM4.a</state>
+                    <state>$PROJ_DIR$\..\Kernel_CM4F.a</state>
                 </option>
             </data>
         </settings>
@@ -3181,6 +3181,9 @@
             <name>$PROJ_DIR$\..\..\..\Source\semaphore.c</name>
         </file>
         <file>
+            <name>$PROJ_DIR$\..\..\..\Source\system.c</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\..\..\..\Source\thread.c</name>
         </file>
         <file>
@@ -3200,6 +3203,14 @@
             <name>$PROJ_DIR$\..\..\..\Source\IAR\irq_cm3.s</name>
             <excluded>
                 <configuration>CM0</configuration>
+                <configuration>CM4</configuration>
+            </excluded>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\Source\IAR\irq_cm4f.s</name>
+            <excluded>
+                <configuration>CM0</configuration>
+                <configuration>CM3</configuration>
             </excluded>
         </file>
     </group>

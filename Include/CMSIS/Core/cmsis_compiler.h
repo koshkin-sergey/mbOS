@@ -58,7 +58,7 @@
  * IAR Compiler
  */
 #elif defined ( __ICCARM__ )
-  #include <cmsis_iccarm.h>
+  #include "cmsis_iccarm.h"
 
 
 /*
