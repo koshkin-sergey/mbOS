@@ -28,6 +28,9 @@
  *  includes
  ******************************************************************************/
 
+#include <stdbool.h>
+#include "CMSIS/Core/cmsis_compiler.h"
+
 #if   ((defined(__ARM_ARCH_6M__)      && (__ARM_ARCH_6M__      != 0)) ||       \
        (defined(__ARM_ARCH_7M__)      && (__ARM_ARCH_7M__      != 0)) ||       \
        (defined(__ARM_ARCH_7EM__)     && (__ARM_ARCH_7EM__     != 0)) ||       \
