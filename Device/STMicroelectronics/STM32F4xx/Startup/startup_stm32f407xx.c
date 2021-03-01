@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2019-2021 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -34,8 +34,8 @@ extern __NO_RETURN void __PROGRAM_START(void);
 /*----------------------------------------------------------------------------
   Internal References
  *----------------------------------------------------------------------------*/
-void __NO_RETURN Default_Handler(void);
-void __NO_RETURN Reset_Handler  (void);
+__NO_RETURN void Reset_Handler  (void);
+            void Default_Handler(void);
 
 /*----------------------------------------------------------------------------
   Exception / Interrupt Handler

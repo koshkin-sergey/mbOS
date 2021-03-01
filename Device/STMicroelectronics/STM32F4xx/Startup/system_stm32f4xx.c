@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2019-2021 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -33,6 +33,11 @@
   */
 void SystemInit(void)
 {
+#if defined (__FPU_USED) && (__FPU_USED == 1U)
+  SCB->CPACR |= ((3U << 10U*2U) |           /* enable CP10 Full Access */
+                 (3U << 11U*2U)  );         /* enable CP11 Full Access */
+#endif  
+
   RCC_ClkReset();
 }
 
