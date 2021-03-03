@@ -92,8 +92,10 @@ static const GPIO_PIN_CFG_t LED_cfg = {
  *  function implementations (scope: module-local)
  ******************************************************************************/
 
+__NO_RETURN
 static void threadA_func(void *param)
 {
+  (void)   param;
   uint32_t flags;
 
   for (;;) {
@@ -104,8 +106,10 @@ static void threadA_func(void *param)
   }
 }
 
+__NO_RETURN
 static void threadB_func(void *param)
 {
+  (void)   param;
   uint32_t flags;
   uint32_t tick;
 
