@@ -100,8 +100,11 @@ static const GPIO_PIN_CFG_t LED_cfg = {
  *  function implementations (scope: module-local)
  ******************************************************************************/
 
+__NO_RETURN
 static void threadA_func(void *param)
 {
+  (void) param;
+
   osTimerStart(timer1, TIMEOUT);
 
   for (;;) {
@@ -111,8 +114,11 @@ static void threadA_func(void *param)
   }
 }
 
+__NO_RETURN
 static void threadB_func(void *param)
 {
+  (void) param;
+
   osDelay(TIMEOUT);
   osTimerStart(timer2, TIMEOUT);
 
@@ -125,11 +131,15 @@ static void threadB_func(void *param)
 
 static void timer1_func(void *argument)
 {
+  (void) argument;
+
   GPIO_PinToggle(LED_PORT, LED_ORANGE);
 }
 
 static void timer2_func(void *argument)
 {
+  (void) argument;
+
   GPIO_PinToggle(LED_PORT, LED_BLUE);
 }
 
