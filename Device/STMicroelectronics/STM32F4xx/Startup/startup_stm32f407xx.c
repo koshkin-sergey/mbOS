@@ -253,11 +253,17 @@ extern const pFunc __VECTOR_TABLE[];
 /*----------------------------------------------------------------------------
   Reset Handler called on controller reset
  *----------------------------------------------------------------------------*/
+__NO_RETURN
 void Reset_Handler(void)
 {
   SystemInit();                      /* CMSIS System Initialization           */
   __PROGRAM_START();                 /* Enter PreMain (C library entry point) */
 }
+
+#if defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
+  #pragma clang diagnostic push
+  #pragma clang diagnostic ignored "-Wmissing-noreturn"
+#endif
 
 /*----------------------------------------------------------------------------
   Default Handler for Exceptions / Interrupts
@@ -266,3 +272,7 @@ void Default_Handler(void)
 {
   while(1);
 }
+
+#if defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
+  #pragma clang diagnostic pop
+#endif
