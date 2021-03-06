@@ -47,7 +47,8 @@ extern "C"
   #pragma clang diagnostic ignored "-Wc11-extensions"
   #pragma clang diagnostic ignored "-Wreserved-id-macro"
 #elif defined (__GNUC__)
-  /* anonymous unions are enabled by default */
+  #pragma GCC diagnostic push
+  #pragma GCC diagnostic ignored "-Wpedantic"
 #elif defined (__TMS470__)
   /* anonymous unions are enabled by default */
 #elif defined (__TASKING__)
@@ -1228,7 +1229,7 @@ osStatus_t osMutexDelete(osMutexId_t mutex_id);
 #elif (defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050))
   #pragma clang diagnostic pop
 #elif defined (__GNUC__)
-  /* anonymous unions are enabled by default */
+  #pragma GCC diagnostic pop
 #elif defined (__TMS470__)
   /* anonymous unions are enabled by default */
 #elif defined (__TASKING__)

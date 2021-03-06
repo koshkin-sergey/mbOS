@@ -1,9 +1,3 @@
-/******************************************************************************
- * @file    arch.h
- * @brief
- * @author  Sergey Koshkin
- * @version V1.0.0
- ******************************************************************************/
 /*
  * Copyright (C) 2017-2021 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
@@ -24,12 +18,16 @@
 #ifndef  _ARCH_H_
 #define  _ARCH_H_
 
-/*******************************************************************************
- *  includes
- ******************************************************************************/
+#include <stdint.h>
 
-#include <stdbool.h>
-#include "CMSIS/Core/cmsis_compiler.h"
+/// Attributes structure for StackInit function.
+typedef struct StackAttr_s {
+  uint32_t          func_addr;
+  uint32_t         func_param;
+  uint32_t          func_exit;
+  uint32_t            stk_mem;
+  uint32_t           stk_size;
+} StackAttr_t;
 
 #if   ((defined(__ARM_ARCH_6M__)      && (__ARM_ARCH_6M__      != 0)) ||       \
        (defined(__ARM_ARCH_7M__)      && (__ARM_ARCH_7M__      != 0)) ||       \
@@ -37,20 +35,26 @@
        (defined(__ARM_ARCH_8M_BASE__) && (__ARM_ARCH_8M_BASE__ != 0)) ||       \
        (defined(__ARM_ARCH_8M_MAIN__) && (__ARM_ARCH_8M_MAIN__ != 0)))
 
+#include "CMSIS/Core/cmsis_compiler.h"
 #include "arch_cm.h"
 
 #elif ((defined(__ARM_ARCH_4T__)      && (__ARM_ARCH_4T__      != 0)) ||       \
        (defined(__ARM_ARCH_5T__)      && (__ARM_ARCH_5T__      != 0)))
 
+#include "CMSIS/Core_ARM/cmsis_compiler.h"
 #include "arch_arm.h"
 
 #endif
 
-/*******************************************************************************
- *  defines and macros
- ******************************************************************************/
-
 #define FILL_STACK_VALUE              (0xFFFFFFFFU)
+/* Minimal thread stack size in bytes */
+#define MIN_THREAD_STK_SIZE           64U
+
+#define SVC_0(func)                                   (uint32_t)svc_0((uint32_t)(func))
+#define SVC_1(param1, func)                           (uint32_t)svc_1((uint32_t)(param1), (uint32_t)(func))
+#define SVC_2(param1, param2, func)                   (uint32_t)svc_2((uint32_t)(param1), (uint32_t)(param2), (uint32_t)(func))
+#define SVC_3(param1, param2, param3, func)           (uint32_t)svc_3((uint32_t)(param1), (uint32_t)(param2), (uint32_t)(param3), (uint32_t)(func))
+#define SVC_4(param1, param2, param3, param4, func)   (uint32_t)svc_4((uint32_t)(param1), (uint32_t)(param2), (uint32_t)(param3), (uint32_t)(param4), (uint32_t)(func))
 
 #endif  // _ARCH_H_
 

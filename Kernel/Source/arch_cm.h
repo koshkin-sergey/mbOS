@@ -21,12 +21,16 @@
 #define ARCH_CM_H_
 
 /*******************************************************************************
+ *  includes
+ ******************************************************************************/
+
+#include <stdbool.h>
+
+/*******************************************************************************
  *  defines and macros
  ******************************************************************************/
 
-/* Minimal thread stack size in bytes */
-#define MIN_THREAD_STK_SIZE   64U
-#define INIT_EXC_RETURN       0xFFFFFFFDUL
+#define INIT_EXC_RETURN               0xFFFFFFFDUL
 
 /* following defines should be used for structure members */
 #define __IM                volatile const      /*! Defines 'read only' structure member permissions */
@@ -77,14 +81,8 @@
                                       __disable_irq();
 #define END_CRITICAL_SECTION          __set_PRIMASK(primask);
 
-#define SVC_0(func)                                   (uint32_t)svc_0((uint32_t)(func))
-#define SVC_1(param1, func)                           (uint32_t)svc_1((uint32_t)(param1), (uint32_t)(func))
-#define SVC_2(param1, param2, func)                   (uint32_t)svc_2((uint32_t)(param1), (uint32_t)(param2), (uint32_t)(func))
-#define SVC_3(param1, param2, param3, func)           (uint32_t)svc_3((uint32_t)(param1), (uint32_t)(param2), (uint32_t)(param3), (uint32_t)(func))
-#define SVC_4(param1, param2, param3, param4, func)   (uint32_t)svc_4((uint32_t)(param1), (uint32_t)(param2), (uint32_t)(param3), (uint32_t)(param4), (uint32_t)(func))
-
 /*******************************************************************************
- *  typedefs and structures (scope: module-local)
+ *  typedefs and structures
  ******************************************************************************/
 
 #if   ((defined(__ARM_ARCH_7M__)      && (__ARM_ARCH_7M__      != 0)) ||       \
@@ -144,15 +142,6 @@ typedef struct
 } SCB_Type;
 
 #endif
-
-/// Attributes structure for StackInit function.
-typedef struct StackAttr_s {
-  uint32_t          func_addr;
-  uint32_t         func_param;
-  uint32_t          func_exit;
-  uint32_t            stk_mem;
-  uint32_t           stk_size;
-} StackAttr_t;
 
 /*******************************************************************************
  *  exported functions
@@ -256,8 +245,10 @@ void PendServCallReq(void)
 }
 
 __STATIC_INLINE
-uint32_t StackInit(StackAttr_t *attr)
+uint32_t StackInit(StackAttr_t *attr, bool privileged)
 {
+  (void) privileged;
+
   uint32_t *stk = (uint32_t *)(attr->stk_mem + attr->stk_size);
 
   *(--stk) = 0x01000000L;                       //-- xPSR

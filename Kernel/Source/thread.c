@@ -132,7 +132,10 @@ static osThreadId_t svcThreadNew(osThreadFunc_t func, void *argument, const osTh
       .stk_mem    = (uint32_t)stack_mem,
       .stk_size   = stack_size,
   };
-  thread->stk = StackInit(&stack_attr);
+  thread->stk = StackInit(
+      &stack_attr,
+      (osConfig.flags & osConfigPrivilegedMode) != 0U
+  );
 
   ThreadReadyAdd(thread);
   krnThreadDispatch(thread);
