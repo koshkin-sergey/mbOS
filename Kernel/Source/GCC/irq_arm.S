@@ -59,18 +59,16 @@ SWI_Handler:
                 .cantunwind
 IRQ_Handler:
 
-                MOV     R13, R0                     // Save r0 in R13_irq (SP)
+                MOV     SP, R0                      // Save R0 in SP_irq
                 SUB     R0, LR, #4                  // Put return address in R0
-                MOV     R14, R1                     // Save R1 in R14_irq (LR)
-                MRS     R1, SPSR                    // Put the SPSR_irq in R1
                 MSR     CPSR_c, #(MODE_SVC | I_BIT) // Switch to Supervisor mode, IRQ disabled
-                MSR     SPSR_cxsf, R1               // Store SPSR_irq to SPSR_svc
                 STMFD   SP!, {R0}                   // Save LR_irq to SVC stack
-                STMFD   SP!, {R2-R3,R12,LR}         // Save APCS corruptible registers to SVC stack
+                STMFD   SP!, {R1-R3,R12,LR}         // Save APCS corruptible registers to SVC stack
                 MOV     R0, SP                      // Make the SP_svc visible to IRQ mode
-                SUB     SP, SP, #(2*4)              // Make room for stacking R0, R1
+                SUB     SP, SP, #(2*4)              // Make room for stacking SPSR_irq, R0
                 MSR     CPSR_c, #(MODE_IRQ | I_BIT) // Switch to IRQ mode, IRQ disabled
-                STMFD   R0!, {R13,R14}              // Save R0, R1 to SVC stack
+                MRS     R1, SPSR                    // Put the SPSR_irq in R1
+                STMFD   R0, {R1,SP}                 // Save SPSR_irq, R0 to SVC stack
                 MSR     CPSR_c, #(MODE_SVC | I_BIT) // Switch to Supervisor mode, IRQ disabled
 
                 LDR     R0, =IRQ_NestLevel
@@ -115,6 +113,8 @@ IRQ_End:
                 SUBS    R1, R1, #1                  // Decrement IRQ nesting level
                 STR     R1, [R0]
 
+                LDMFD   SP!, {R0}                   // Restore SPSR_irq in R0
+                MSR     SPSR_cxsf, R0               // Move SPSR_irq to SPSR_svc
                 LDMFD   SP!, {R0-R3, R12, LR, PC}^  // Restore stacked APCS registers and return from IRQ handler
 
                 .fnend
