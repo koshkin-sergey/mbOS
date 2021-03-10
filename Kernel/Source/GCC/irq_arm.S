@@ -61,14 +61,15 @@ IRQ_Handler:
 
                 MOV     SP, R0                      // Save R0 in SP_irq
                 SUB     R0, LR, #4                  // Put return address in R0
-                MSR     CPSR_c, #(MODE_SVC | I_BIT) // Switch to Supervisor mode, IRQ disabled
-                STMFD   SP!, {R0}                   // Save LR_irq to SVC stack
-                STMFD   SP!, {R1-R3,R12,LR}         // Save APCS corruptible registers to SVC stack
-                MOV     R0, SP                      // Make the SP_svc visible to IRQ mode
-                SUB     SP, SP, #(2*4)              // Make room for stacking SPSR_irq, R0
-                MSR     CPSR_c, #(MODE_IRQ | I_BIT) // Switch to IRQ mode, IRQ disabled
+                MOV     LR, R1                      // Save R1 in LR_irq
                 MRS     R1, SPSR                    // Put the SPSR_irq in R1
-                STMFD   R0, {R1,SP}                 // Save SPSR_irq, R0 to SVC stack
+                MSR     CPSR_c, #(MODE_SVC | I_BIT) // Switch to Supervisor mode, IRQ disabled
+                STMFD   SP!, {R0,R1}                // Save SPSR_irq and LR_irq to SVC stack
+                STMFD   SP!, {R2,R3,R12,LR}         // Save APCS corruptible registers to SVC stack
+                MOV     R0, SP                      // Make the SP_svc visible to IRQ mode
+                SUB     SP, SP, #(2*4)              // Make room for stacking R0, R1
+                MSR     CPSR_c, #(MODE_IRQ | I_BIT) // Switch to IRQ mode, IRQ disabled
+                STMFD   R0, {SP,LR}                 // Save R0, R1 to SVC stack
                 MSR     CPSR_c, #(MODE_SVC | I_BIT) // Switch to Supervisor mode, IRQ disabled
 
                 LDR     R0, =IRQ_NestLevel
@@ -113,9 +114,11 @@ IRQ_End:
                 SUBS    R1, R1, #1                  // Decrement IRQ nesting level
                 STR     R1, [R0]
 
-                LDMFD   SP!, {R0}                   // Restore SPSR_irq in R0
-                MSR     SPSR_cxsf, R0               // Move SPSR_irq to SPSR_svc
-                LDMFD   SP!, {R0-R3, R12, LR, PC}^  // Restore stacked APCS registers and return from IRQ handler
+                MOV     R0, SP                      // Move SP_svc to R0
+                ADD     SP, SP, #(8*4)              // Fake unstacking 8 registers from SP_svc
+                LDR     R1, [R0, #(7*4)]            // Restore SPSR_irq in R1
+                MSR     SPSR_cxsf, R1               // Move SPSR_irq to SPSR_svc
+                LDMFD   R0, {R0-R3, R12, LR, PC}^   // Restore stacked APCS registers and return from IRQ handler
 
                 .fnend
                 .size    IRQ_Handler, .-IRQ_Handler
@@ -127,7 +130,7 @@ IRQ_End:
                 .cantunwind
 ContextSwitch:
 
-                STMFD    SP!, {LR}
+                PUSH    {LR}
 
                 LDR     R0, =IRQ_NestLevel          // Check interrupt nesting level
                 LDR     R1, [R0]                    // Load IRQ nest level
@@ -147,7 +150,7 @@ ContextSwitch:
 ContextCheck:
                 STR     R1, [R12]                   // Store run.next as run.curr
                 // R0 = curr, R1 = next, R2 = &IRQ_PendSV, R3 = IRQ_PendSV, R12 = &osInfo.thread.run
-                STMFD   SP!, {R1-R3, R12}
+                PUSH    {R1-R3, R12}
                 CMP     R0, #0                      // Is osInfo.thread.run.curr == 0
                 BEQ     PostProcess                 // Current deleted, skip context save
 
@@ -158,7 +161,7 @@ ContextSave:
                 SUB     SP, SP, #4
                 STM     SP, {SP}^                   // Save SP_usr to current stack
                 POP     {R1}                        // Pop SP_usr into R1
-
+                // R0 = SP_svc, R1 = SP_usr
                 SUB     R1, R1, #64                 // Adjust SP_usr to R4 of the basic frame
                 STMIA   R1!, {R4-R11}               // Save R4-R11 to user stack
                 LDMIA   R0!, {R4-R8}                // Load stacked R0-R3,R12 into R4-R8
@@ -177,14 +180,46 @@ PostProcess:
                 CMP     R10, #1                     // Compare PendSV value
                 BNE     ContextRestore              // Skip post processing if not pending
 
+                MOV     R4, SP                      // Move SP_svc into R4
+                AND     R4, R4, #4                  // Get stack adjustment to ensure 8-byte alignment
+                SUB     SP, SP, R4                  // Adjust stack
+
+                MOV     R6, #0                      // Set PendSV clear value
+                B       PendCheck
+
 PendExec:
+                STRB    R6, [R9]                    // Clear PendSV flag
+                MSR     CPSR_c, #MODE_SVC           // Re-enable interrupts
+                LDR     R12, =osPendSV_Handler
+                MOV     LR, PC
+                BX      R12                         // Post process pending objects
+                MSR     CPSR_c, #(MODE_SVC | I_BIT) // Disable interrupts
 
 PendCheck:
+                LDR     R8, [R11, #4]               // Load osInfo.thread.run.next
+                STR     R8, [R11]                   // Store run.next as run.curr
+                LDRB    R0, [R9]                    // Load PendSV flag
+                CMP     R0, #1                      // Compare PendSV value
+                BEQ     PendExec                    // Branch to PendExec if PendSV is set
+                ADD     SP, SP, R4                  // Restore stack adjustment
 
 ContextRestore:
+                LDR     LR, [R8]                    // Load next osThread_t.sp
+                LDMIA   LR!, {R4-R11}               // Restore R4-R11
+                ADD     R12, LR, #32                // Adjust sp and save it into R12
+                PUSH    {R12}                       // Push sp onto stack
+                LDM     SP, {SP}^                   // Restore SP_usr directly
+                ADD     SP, SP, #4                  // Adjust SP_svc
+                LDMIA   LR!, {R0-R3, R12}           // Load user registers R0-R3,R12
+                STMIB   SP!, {R0-R3, R12}           // Store them to SP_svc
+                LDM     LR, {LR}^                   // Restore LR_usr directly
+                LDMIB   LR!, {R0-R1}                // Load user registers PC,CPSR
+                ADD     SP, SP, #4
+                STMIB   SP!, {R0-R1}                // Store them to SP_svc
+                SUB     SP, SP, #32                 // Adjust SP_svc to stacked LR
 
 ContextExit:
-                LDMFD    SP!, {PC}
+                POP     {PC}                        // Return
 
                 .fnend
                 .size    ContextSwitch, .-ContextSwitch

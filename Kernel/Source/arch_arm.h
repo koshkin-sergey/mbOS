@@ -145,6 +145,10 @@ uint32_t StackInit(StackAttr_t *attr, bool privileged)
   *(--stk) = attr->func_addr;                   //-- Entry Point (PC)
   *(--stk) = attr->func_exit;                   //-- R14 (LR)
   *(--stk) = 0x12121212L;                       //-- R12
+  *(--stk) = 0x03030303L;                       //-- R3
+  *(--stk) = 0x02020202L;                       //-- R2
+  *(--stk) = 0x01010101L;                       //-- R1
+  *(--stk) = attr->func_param;                  //-- R0 - thread's function argument
   *(--stk) = 0x11111111L;                       //-- R11
   *(--stk) = 0x10101010L;                       //-- R10
   *(--stk) = 0x09090909L;                       //-- R9
@@ -153,10 +157,6 @@ uint32_t StackInit(StackAttr_t *attr, bool privileged)
   *(--stk) = 0x06060606L;                       //-- R6
   *(--stk) = 0x05050505L;                       //-- R5
   *(--stk) = 0x04040404L;                       //-- R4
-  *(--stk) = 0x03030303L;                       //-- R3
-  *(--stk) = 0x02020202L;                       //-- R2
-  *(--stk) = 0x01010101L;                       //-- R1
-  *(--stk) = attr->func_param;                  //-- R0 - thread's function argument
 
   return ((uint32_t)stk);
 }
