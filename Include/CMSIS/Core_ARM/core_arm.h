@@ -96,7 +96,7 @@
 #if defined __CHECK_DEVICE_DEFINES
   #ifndef __ARM_REV
     #define __ARM_REV              0x0000U
-    #warning "__CA_REV not defined in device header file; using default!"
+    #warning "__ARM_REV not defined in device header file; using default!"
   #endif
 #endif
 
