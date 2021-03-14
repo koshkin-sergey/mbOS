@@ -27,37 +27,37 @@
 //    <o1> Flash Size (in Bytes) <0x0-0xFFFFFFFF:8>
 //  </h>
  -----------------------------------------------------------------------------*/
-__ROM_BASE = 0x08000000;
-__ROM_SIZE = 0x00010000;
+__ROM_BASE = 0x00080000;
+__ROM_SIZE = 0x0000F800;
 
 /*--------------------- RAM Configuration -----------------------------------
 // <h> RAM Configuration
 //   <o0> RAM Base Address    <0x0-0xFFFFFFFF:8>
 //   <o1> RAM Total Size (in Bytes) <0x0-0xFFFFFFFF:8>
 //   <h> Stack / Heap Configuration
-//     <o4>  Stack Size (in Bytes) <0x0-0xFFFFFFFF:8>
-//     <o5>  Heap Size (in Bytes) <0x0-0xFFFFFFFF:8>
+//     <o2>  Stack Size (in Bytes) <0x0-0xFFFFFFFF:8>
+//     <o3>  Heap Size (in Bytes) <0x0-0xFFFFFFFF:8>
 //     <h> Exceptional Modes
-//       <o6> UND Stack Size (in Bytes) <0x0-0xFFFFFFFF:8>
-//       <o7> ABT Stack Size (in Bytes) <0x0-0xFFFFFFFF:8>
-//       <o8> SVC Stack Size (in Bytes) <0x0-0xFFFFFFFF:8>
-//       <o9> IRQ Stack Size (in Bytes) <0x0-0xFFFFFFFF:8>
-//       <o10> FIQ Stack Size (in Bytes) <0x0-0xFFFFFFFF:8>
+//       <o4> UND Stack Size (in Bytes) <0x0-0xFFFFFFFF:8>
+//       <o5> ABT Stack Size (in Bytes) <0x0-0xFFFFFFFF:8>
+//       <o6> SVC Stack Size (in Bytes) <0x0-0xFFFFFFFF:8>
+//       <o7> IRQ Stack Size (in Bytes) <0x0-0xFFFFFFFF:8>
+//       <o8> FIQ Stack Size (in Bytes) <0x0-0xFFFFFFFF:8>
 //     </h>
 //   </h>
 // </h>
  *----------------------------------------------------------------------------*/
-#define __RAM_BASE       0x80200000
-#define __RAM_SIZE       0x00200000
+__RAM_BASE       = 0x00010000;
+__RAM_SIZE       = 0x00002000;
 
-#define __STACK_SIZE     0x00001000
-#define __HEAP_SIZE      0x00000000
+__STACK_SIZE     = 0x00000100;
+__HEAP_SIZE      = 0x00000000;
 
-#define __UND_STACK_SIZE 0x00000100
-#define __ABT_STACK_SIZE 0x00000100
-#define __SVC_STACK_SIZE 0x00000100
-#define __IRQ_STACK_SIZE 0x00000100
-#define __FIQ_STACK_SIZE 0x00000100
+__UND_STACK_SIZE = 0x00000000;
+__ABT_STACK_SIZE = 0x00000000;
+__SVC_STACK_SIZE = 0x00000100;
+__IRQ_STACK_SIZE = 0x00000000;
+__FIQ_STACK_SIZE = 0x00000000;
 
 /*-----------------------------------------------------------------------------
 //                   <<< end of configuration section >>>                    
@@ -75,12 +75,7 @@ SECTIONS
 {
     .text :
     {
-        Image$$VECTORS$$Base = .;
-        * (RESET)
-        KEEP(*(.isr_vector))
-        Image$$VECTORS$$Limit = .;
-
-        *(SVC_TABLE)
+        KEEP(*(.vectors))
         *(.text*)
 
         KEEP(*(.init))
@@ -173,30 +168,30 @@ SECTIONS
         __data_end__ = .;
     } > RAM
 
-    .bss ALIGN(0x400):
+    .bss :
     {
+        . = ALIGN(4);
         Image$$ZI_DATA$$Base = .;
         __bss_start__ = .;
         *(.bss*)
         *(COMMON)
+        . = ALIGN(4);
         __bss_end__ = .;
         Image$$ZI_DATA$$Limit = .;
         __end__ = .;
         end = __end__;
     } > RAM
 
-#if defined(__HEAP_SIZE) && (__HEAP_SIZE > 0)    
-    .heap (NOLOAD):
+    .heap (COPY):
     {
         . = ALIGN(8);
         Image$$HEAP$$ZI$$Base = .;
         . += __HEAP_SIZE;
         Image$$HEAP$$ZI$$Limit = .;
         __HeapLimit = .;
-    } > RAM  
-#endif
+    } > RAM
 
-    .stack (NOLOAD):
+    .stack (COPY):
     {
         . = ORIGIN(RAM) + LENGTH(RAM) - __STACK_SIZE - __FIQ_STACK_SIZE - __IRQ_STACK_SIZE - __SVC_STACK_SIZE - __ABT_STACK_SIZE - __UND_STACK_SIZE;
         . = ALIGN(8);

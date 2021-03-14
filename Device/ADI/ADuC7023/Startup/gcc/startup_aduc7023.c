@@ -20,6 +20,8 @@
 #include <CMSIS/Core_ARM/cmsis_compiler.h>
 #include <asm/system_aduc7023.h>
 
+#pragma GCC target ("arm")
+
 /*----------------------------------------------------------------------------
   Definitions
  *----------------------------------------------------------------------------*/
@@ -34,7 +36,7 @@
 /*----------------------------------------------------------------------------
   Internal References
  *----------------------------------------------------------------------------*/
-void Vectors       (void) __attribute__ ((naked, section("RESET")));
+void Vectors       (void) __attribute__ ((naked, section(".vectors")));
 void Reset_Handler (void) __attribute__ ((naked));
 
 /*----------------------------------------------------------------------------
