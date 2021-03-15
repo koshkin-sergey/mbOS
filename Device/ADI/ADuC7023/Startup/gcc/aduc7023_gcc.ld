@@ -95,9 +95,7 @@ SECTIONS
         *(SORT(.dtors.*))
         *(.dtors)
 
-        Image$$RO_DATA$$Base = .;
         *(.rodata*)
-        Image$$RO_DATA$$Limit = .;
 
         KEEP(*(.eh_frame*))
     } > ROM
@@ -133,36 +131,42 @@ SECTIONS
         __zero_table_end__ = .;
     } > ROM
 
-    __etext = .;
+  /**
+   * Location counter can end up 2byte aligned with narrow Thumb code but
+   * __etext is assumed by startup code to be the LMA of a section in RAM
+   * which must be 4byte aligned 
+   */
+  __etext = ALIGN (4);
 
     .data : AT (__etext)
     {
-        Image$$RW_DATA$$Base = .;
         __data_start__ = .;
         *(vtable)
-        *(.data*)
-        Image$$RW_DATA$$Limit = .;
+    *(.data)
+    *(.data.*)
 
         . = ALIGN(4);
         /* preinit data */
-        PROVIDE (__preinit_array_start = .);
+    PROVIDE_HIDDEN (__preinit_array_start = .);
         KEEP(*(.preinit_array))
-        PROVIDE (__preinit_array_end = .);
+    PROVIDE_HIDDEN (__preinit_array_end = .);
 
         . = ALIGN(4);
         /* init data */
-        PROVIDE (__init_array_start = .);
+    PROVIDE_HIDDEN (__init_array_start = .);
         KEEP(*(SORT(.init_array.*)))
         KEEP(*(.init_array))
-        PROVIDE (__init_array_end = .);
+    PROVIDE_HIDDEN (__init_array_end = .);
+
 
         . = ALIGN(4);
         /* finit data */
-        PROVIDE (__fini_array_start = .);
+    PROVIDE_HIDDEN (__fini_array_start = .);
         KEEP(*(SORT(.fini_array.*)))
         KEEP(*(.fini_array))
-        PROVIDE (__fini_array_end = .);
+    PROVIDE_HIDDEN (__fini_array_end = .);
 
+    KEEP(*(.jcr*))
         . = ALIGN(4);
         /* All data end */
         __data_end__ = .;
