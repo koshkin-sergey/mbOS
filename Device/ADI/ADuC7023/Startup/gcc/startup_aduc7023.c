@@ -36,8 +36,9 @@
 /*----------------------------------------------------------------------------
   Internal References
  *----------------------------------------------------------------------------*/
-void Vectors       (void) __attribute__ ((naked, section(".vectors")));
-void Reset_Handler (void) __attribute__ ((naked));
+            void Vectors       (void) __attribute__ ((naked, section(".vectors")));
+__NO_RETURN void Reset_Handler (void) __attribute__ ((naked));
+__NO_RETURN void __do_reset    (void);
 
 /*----------------------------------------------------------------------------
   Exception / Interrupt Handler
@@ -52,43 +53,50 @@ void FIQ_Handler   (void) __attribute__ ((weak, alias("Default_Handler")));
 /*----------------------------------------------------------------------------
   Exception / Interrupt Vector Table
  *----------------------------------------------------------------------------*/
-void Vectors(void) {
+void Vectors(void)
+{
   __ASM volatile(
-  "LDR    PC, =Reset_Handler                        \n"
-  "LDR    PC, =Undef_Handler                        \n"
-  "LDR    PC, =SWI_Handler                          \n"
-  "LDR    PC, =PAbt_Handler                         \n"
-  "LDR    PC, =DAbt_Handler                         \n"
-  "NOP                                              \n"
-  "LDR    PC, =IRQ_Handler                          \n"
-  "LDR    PC, =FIQ_Handler                          \n"
+      "LDR    PC, =Reset_Handler                        \n"
+      "LDR    PC, =Undef_Handler                        \n"
+      "LDR    PC, =SWI_Handler                          \n"
+      "LDR    PC, =PAbt_Handler                         \n"
+      "LDR    PC, =DAbt_Handler                         \n"
+      "NOP                                              \n"
+      "LDR    PC, =IRQ_Handler                          \n"
+      "LDR    PC, =FIQ_Handler                          \n"
   );
 }
 
 /*----------------------------------------------------------------------------
   Reset Handler called on controller reset
  *----------------------------------------------------------------------------*/
-void Reset_Handler(void) {
+__NO_RETURN
+void Reset_Handler(void)
+{
   __ASM volatile(
-  // Setup Stack for each exceptional mode
-  "MSR    CPSR_c, #0xD1                            \n"
-  "LDR    SP, =Image$$FIQ_STACK$$ZI$$Limit         \n"
-  "MSR    CPSR_c, #0xD2                            \n"
-  "LDR    SP, =Image$$IRQ_STACK$$ZI$$Limit         \n"
-  "MSR    CPSR_c, #0xD3                            \n"
-  "LDR    SP, =Image$$SVC_STACK$$ZI$$Limit         \n"
-  "MSR    CPSR_c, #0xD7                            \n"
-  "LDR    SP, =Image$$ABT_STACK$$ZI$$Limit         \n"
-  "MSR    CPSR_c, #0xDB                            \n"
-  "LDR    SP, =Image$$UND_STACK$$ZI$$Limit         \n"
-  "MSR    CPSR_c, #0xDF                            \n"
-  "LDR    SP, =Image$$SYS_STACK$$ZI$$Limit         \n"
-
-  // Call SystemInit
-  "BL     SystemInit                               \n"
-  // Call __main
-  "BL     _start                                   \n"
+      // Setup Stack for each exceptional mode
+      "MSR    CPSR_c, #0xD1                            \n"
+      "LDR    SP, =Image$$FIQ_STACK$$ZI$$Limit         \n"
+      "MSR    CPSR_c, #0xD2                            \n"
+      "LDR    SP, =Image$$IRQ_STACK$$ZI$$Limit         \n"
+      "MSR    CPSR_c, #0xD3                            \n"
+      "LDR    SP, =Image$$SVC_STACK$$ZI$$Limit         \n"
+      "MSR    CPSR_c, #0xD7                            \n"
+      "LDR    SP, =Image$$ABT_STACK$$ZI$$Limit         \n"
+      "MSR    CPSR_c, #0xDB                            \n"
+      "LDR    SP, =Image$$UND_STACK$$ZI$$Limit         \n"
+      "MSR    CPSR_c, #0xDF                            \n"
+      "LDR    SP, =Image$$SYS_STACK$$ZI$$Limit         \n"
+      // Call __do_reset
+      "B      __do_reset                               \n"
   );
+}
+
+__NO_RETURN
+void __do_reset(void)
+{
+  SystemInit();                      /* CMSIS System Initialization           */
+  __PROGRAM_START();                 /* Enter PreMain (C library entry point) */
 }
 
 /*----------------------------------------------------------------------------

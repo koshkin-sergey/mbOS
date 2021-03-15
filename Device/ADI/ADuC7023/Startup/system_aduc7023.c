@@ -15,8 +15,6 @@
  * limitations under the License.
  */
 
-#pragma GCC target ("arm")
-
 /**
   * @brief  Setup the microcontroller system.
   * @param  None
