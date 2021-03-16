@@ -56,14 +56,23 @@ void FIQ_Handler   (void) __attribute__ ((weak, alias("Default_Handler")));
 void Vectors(void)
 {
   __ASM volatile(
-      "LDR    PC, =Reset_Handler                        \n"
-      "LDR    PC, =Undef_Handler                        \n"
-      "LDR    PC, =SWI_Handler                          \n"
-      "LDR    PC, =PAbt_Handler                         \n"
-      "LDR    PC, =DAbt_Handler                         \n"
+      "LDR    PC, Reset_Addr                            \n"
+      "LDR    PC, Undef_Addr                            \n"
+      "LDR    PC, SWI_Addr                              \n"
+      "LDR    PC, PAbt_Addr                             \n"
+      "LDR    PC, DAbt_Addr                             \n"
       "NOP                                              \n"
-      "LDR    PC, =IRQ_Handler                          \n"
-      "LDR    PC, =FIQ_Handler                          \n"
+      "LDR    PC, IRQ_Addr                              \n"
+      "LDR    PC, FIQ_Addr                              \n"
+
+      "Reset_Addr: .word Reset_Handler                  \n"
+      "Undef_Addr: .word Undef_Handler                  \n"
+      "SWI_Addr:   .word SWI_Handler                    \n"
+      "PAbt_Addr:  .word PAbt_Handler                   \n"
+      "DAbt_Addr:  .word DAbt_Handler                   \n"
+      "            .word 0                              \n"
+      "IRQ_Addr:   .word IRQ_Handler                    \n"
+      "FIQ_Addr:   .word FIQ_Handler                    \n"
   );
 }
 
@@ -85,7 +94,7 @@ void Reset_Handler(void)
       "LDR    SP, =Image$$ABT_STACK$$ZI$$Limit         \n"
       "MSR    CPSR_c, #0xDB                            \n"
       "LDR    SP, =Image$$UND_STACK$$ZI$$Limit         \n"
-      "MSR    CPSR_c, #0xDF                            \n"
+      "MSR    CPSR_c, #0xD0                            \n"
       "LDR    SP, =Image$$SYS_STACK$$ZI$$Limit         \n"
       // Call __do_reset
       "B      __do_reset                               \n"
