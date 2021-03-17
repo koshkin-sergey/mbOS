@@ -55,6 +55,8 @@
  *  exported functions
  ******************************************************************************/
 
+#pragma GCC target ("arm")
+
 /**
  * @fn          bool IsPrivileged(void)
  * @brief       Check if running Privileged
