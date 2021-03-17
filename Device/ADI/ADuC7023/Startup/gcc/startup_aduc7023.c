@@ -17,21 +17,9 @@
  * limitations under the License.
  */
 
-#include <CMSIS/Core_ARM/cmsis_compiler.h>
-#include <asm/system_aduc7023.h>
+#include "asm/aduc7023.h"
 
 #pragma GCC target ("arm")
-
-/*----------------------------------------------------------------------------
-  Definitions
- *----------------------------------------------------------------------------*/
-#define USR_MODE 0x10            // User mode
-#define FIQ_MODE 0x11            // Fast Interrupt Request mode
-#define IRQ_MODE 0x12            // Interrupt Request mode
-#define SVC_MODE 0x13            // Supervisor mode
-#define ABT_MODE 0x17            // Abort mode
-#define UND_MODE 0x1B            // Undefined Instruction mode
-#define SYS_MODE 0x1F            // System mode
 
 /*----------------------------------------------------------------------------
   Internal References

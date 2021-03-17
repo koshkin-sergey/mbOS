@@ -25,6 +25,7 @@
 #endif /* __cplusplus */
 
 #include "CMSIS/Core_ARM/core_arm.h"
+#include "system_aduc7023.h"
 #include <stdint.h>
 
 /**
