@@ -55,7 +55,9 @@
  *  exported functions
  ******************************************************************************/
 
-#pragma GCC target ("arm")
+#if defined ( __GNUC__ )
+  #pragma GCC target ("arm")
+#endif
 
 /**
  * @fn          bool IsPrivileged(void)
