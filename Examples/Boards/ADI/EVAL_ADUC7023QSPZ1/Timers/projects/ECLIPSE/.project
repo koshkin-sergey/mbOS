@@ -30,9 +30,19 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
+			<name>src/Config</name>
+			<type>2</type>
+			<locationURI>PARENT-3-PROJECT_LOC/Common/Config</locationURI>
+		</link>
+		<link>
 			<name>src/Device</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>src/Kernel</name>
+			<type>2</type>
+			<locationURI>WORKSPACE_LOC/mbOS/Kernel/Source</locationURI>
 		</link>
 		<link>
 			<name>src/main.c</name>

@@ -1,8 +1,6 @@
 /*
- * Copyright (C) 2021 Sergey Koshkin <koshkin.sergey@gmail.com>
- * All rights reserved.
- *
- * SPDX-License-Identifier: Apache-2.0
+ * Copyright (C) 2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
  * not use this file except in compliance with the License.
@@ -15,32 +13,29 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * Project: mbOS real-time kernel
+ * Title:   Kernel Configuration
  */
 
-#include "asm/aduc7023.h"
 #include "Kernel/kernel.h"
 
-int main(void)
+/* OS Idle Thread */
+__WEAK __NO_RETURN
+void osIdleThread(void *argument)
 {
-  osStatus_t status;
+  (void) argument;
 
-  TIM1->LD = 100;
-
-  status = osKernelInitialize();
-  status = osKernelStart();
+  for (;;) {
+    ;
+  }
 }
 
-uint32_t IRQ_GetActiveIRQ(void)
+/* SysTick timer initialization */
+__WEAK
+void osSysTickInit(uint32_t hz)
 {
-  return (0U);
+  (void) hz;
 }
 
-void* IRQ_GetHandler(uint32_t id)
-{
-  return (NULL);
-}
-
-void IRQ_EndOfInterrupt(uint32_t id)
-{
-
-}
+/* ----------------------------- End of file ---------------------------------*/
