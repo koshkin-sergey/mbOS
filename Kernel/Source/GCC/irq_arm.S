@@ -49,6 +49,43 @@ IRQ_PendSV:
                 .cantunwind
 SWI_Handler:
 
+                SUB     SP, SP, #(2*4)              // Make room for stacking SPSR_svc, LR_svc
+                PUSH    {R0-R3, R12, LR}            // Save APCS corruptible registers to SVC stack
+                ADD     R0, SP, #(6*4)              // Adjust SP_svc to R0
+                MOV     R1, LR                      // Move LR_svc to R1
+                MRS     R12, SPSR                   // Move SPSR_svc to R12
+                STMIA   R0, {R1, R12}               // Save SPSR_svc and LR_svc to SVC stack
+
+                LDR     R0, =IRQ_NestLevel
+                LDR     R1, [R0]
+                ADD     R1, R1, #1                  // Increment IRQ nesting level
+                STR     R1, [R0]
+
+SWI_FuncCall:
+                POP     {R0, R1}
+                LDR     R12, [SP, #8]
+
+                MSR     CPSR_c, #MODE_SVC           // Re-enable interrupts
+                MOV     LR, PC
+                BX      R12                         // Branch to SVC function
+                MSR     CPSR_c, #(MODE_SVC | I_BIT) // Disable interrupts
+
+                PUSH    {R0, R1}                    // Push return values to stack
+
+SWI_ContextCheck:
+                BL      ContextSwitch               // Continue in context switcher
+
+                LDR     R0, =IRQ_NestLevel
+                LDR     R1, [R0]
+                SUB     R1, R1, #1                  // Decrement IRQ nesting level
+                STR     R1, [R0]
+
+                MOV     R0, SP                      // Move SP_svc to R0
+                ADD     SP, SP, #(8*4)              // Fake unstacking 8 registers from SP_svc
+                LDR     R1, [R0, #(7*4)]            // Restore SPSR_svc in R1
+                MSR     SPSR_cxsf, R1               // Move R1 to SPSR_svc
+                LDMFD   R0, {R0-R3, R12, LR, PC}^   // Restore stacked APCS registers and return from IRQ handler
+
                 .fnend
                 .size    SWI_Handler, .-SWI_Handler
 
