@@ -18,10 +18,12 @@
  * Title:   Kernel Configuration
  */
 
-#include "Kernel/kernel.h"
+#include "kernel_lib.h"
+
+extern uint32_t SystemCoreClock;
 
 /* OS Idle Thread */
-__NO_RETURN
+__WEAK __NO_RETURN
 void osIdleThread(void *argument)
 {
   (void) argument;
@@ -33,9 +35,10 @@ void osIdleThread(void *argument)
 }
 
 /* SysTick timer initialization */
+__WEAK
 void osSysTickInit(uint32_t hz)
 {
-  (void) hz;
+  SysTick_Config(SystemCoreClock/hz);
 }
 
 /* ----------------------------- End of file ---------------------------------*/
