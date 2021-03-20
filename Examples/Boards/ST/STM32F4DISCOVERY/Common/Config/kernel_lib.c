@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2019-2021 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -20,6 +20,14 @@
 
 #include "Kernel/kernel.h"
 #include "kernel_config.h"
+
+#ifndef __USED
+#if defined(__ICCARM__) && !defined(__ICCARM_V8)
+  #define __USED _Pragma("__root")
+#else
+  #define __USED __attribute__((used))
+#endif
+#endif
 
 /* Idle Thread Control Block */
 static osThread_t os_idle_thread_cb __attribute__((section(".bss.os.thread.cb")));
