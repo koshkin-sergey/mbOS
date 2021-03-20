@@ -31,6 +31,7 @@
  ******************************************************************************/
 
 #define INIT_EXC_RETURN               0xFFFFFFFDUL
+#define OS_TICK_HANDLER               osTick_Handler
 
 /* CPSR bit definitions */
 #define CPSR_I_Pos                    7U

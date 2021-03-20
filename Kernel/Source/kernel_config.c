@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2019-2021 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -20,8 +20,6 @@
 
 #include "kernel_lib.h"
 
-extern uint32_t SystemCoreClock;
-
 /* OS Idle Thread */
 __WEAK __NO_RETURN
 void osIdleThread(void *argument)
@@ -33,12 +31,3 @@ void osIdleThread(void *argument)
     __WFI();
   }
 }
-
-/* SysTick timer initialization */
-__WEAK
-void osSysTickInit(uint32_t hz)
-{
-  SysTick_Config(SystemCoreClock/hz);
-}
-
-/* ----------------------------- End of file ---------------------------------*/

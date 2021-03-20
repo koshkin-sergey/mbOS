@@ -524,8 +524,10 @@ typedef struct osConfig_s {
 
 /* OS Idle Thread */
 extern void osIdleThread(void *argument);
-/* SysTick timer initialization */
-extern void osSysTickInit(uint32_t hz);
+/* OS Exception handlers */
+extern void SVC_Handler(void);
+extern void PendSV_Handler(void);
+extern void SysTick_Handler(void);
 
 /*******************************************************************************
  *  Kernel Information and Control
