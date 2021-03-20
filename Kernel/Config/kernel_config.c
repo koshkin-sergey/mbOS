@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2019-2021 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -13,29 +13,19 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
- * Project: mbOS real-time kernel
- * Title:   Kernel Configuration
  */
 
+#include "CMSIS/Core/cmsis_compiler.h"
 #include "Kernel/kernel.h"
 
 /* OS Idle Thread */
-__WEAK __NO_RETURN
+__NO_RETURN
 void osIdleThread(void *argument)
 {
   (void) argument;
 
   for (;;) {
-    ;
+    /* Wait for interrupt */
+    __WFI();
   }
 }
-
-/* SysTick timer initialization */
-__WEAK
-void osSysTickInit(uint32_t hz)
-{
-  (void) hz;
-}
-
-/* ----------------------------- End of file ---------------------------------*/

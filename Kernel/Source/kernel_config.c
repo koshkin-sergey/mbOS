@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2019-2021 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -18,11 +18,10 @@
  * Title:   Kernel Configuration
  */
 
-#include "asm/RCC_STM32F4xx.h"
-#include "Kernel/kernel.h"
+#include "kernel_lib.h"
 
 /* OS Idle Thread */
-__NO_RETURN
+__WEAK __NO_RETURN
 void osIdleThread(void *argument)
 {
   (void) argument;
@@ -32,13 +31,3 @@ void osIdleThread(void *argument)
     __WFI();
   }
 }
-
-/* SysTick timer initialization */
-void osSysTickInit(uint32_t hz)
-{
-  uint32_t hclk = RCC_GetFreq(RCC_FREQ_AHB);
-
-  SysTick_Config(hclk/hz);
-}
-
-/* ----------------------------- End of file ---------------------------------*/

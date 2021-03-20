@@ -11,6 +11,7 @@
  ******************************************************************************/
 
 #include "asm/GPIO_STM32F4xx.h"
+#include "asm/system_stm32f4xx.h"
 #include "Kernel/kernel.h"
 
 /*******************************************************************************
@@ -145,6 +146,8 @@ static void timer2_func(void *argument)
 
 static void HardwareInit(void)
 {
+  SystemCoreClockUpdate();
+
   if (!GPIO_GetPortClockState(LED_PORT)) {
     GPIO_PortClock(LED_PORT, GPIO_PORT_CLK_ENABLE);
   }
