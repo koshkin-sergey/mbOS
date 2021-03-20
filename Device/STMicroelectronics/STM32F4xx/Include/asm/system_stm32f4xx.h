@@ -18,14 +18,26 @@
 #ifndef SYSTEM_STM32F4XX_H_
 #define SYSTEM_STM32F4XX_H_
 
+#include <stdint.h>
+
 #ifdef __cplusplus
  extern "C" {
 #endif 
 
- /*******************************************************************************
-  *  exported function prototypes
-  ******************************************************************************/
+extern uint32_t SystemCoreClock;    /*!< System Clock Frequency (Core Clock)  */
 
+/*******************************************************************************
+ *  exported function prototypes
+ ******************************************************************************/
+
+/**
+ * @brief       Update SystemCoreClock variable.
+ */
+extern void SystemCoreClockUpdate(void);
+
+/**
+ * @brief       Initialize the System and update the SystemCoreClock variable.
+ */
 extern void SystemInit(void);
 
 #ifdef __cplusplus
