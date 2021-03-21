@@ -20,7 +20,49 @@
 
 #include <stdint.h>
 
-/// Attributes structure for StackInit function.
+/*
+ * Arm Compiler 4/5
+ */
+#if   defined ( __CC_ARM )
+  #if (defined (__TARGET_ARCH_4T ) && (__TARGET_ARCH_4T  == 1))
+    #define __ARM_ARCH_4T__ 1
+  #elif (defined (__TARGET_ARCH_5T ) && (__TARGET_ARCH_5T  == 1))
+    #define __ARM_ARCH_5T__ 1
+  #elif ((defined (__TARGET_ARCH_6_M  ) && (__TARGET_ARCH_6_M   == 1)) || \
+         (defined (__TARGET_ARCH_6S_M ) && (__TARGET_ARCH_6S_M  == 1))   )
+    #define __ARM_ARCH_6M__ 1
+  #elif (defined (__TARGET_ARCH_7_M ) && (__TARGET_ARCH_7_M  == 1))
+    #define __ARM_ARCH_7M__ 1
+  #elif (defined (__TARGET_ARCH_7E_M) && (__TARGET_ARCH_7E_M == 1))
+    #define __ARM_ARCH_7EM__ 1
+  #endif
+
+/*
+ * IAR Compiler
+ */
+#elif defined ( __ICCARM__ )
+  #if defined(__ARM8M_MAINLINE__) || defined(__ARM8EM_MAINLINE__)
+    #define __ARM_ARCH_8M_MAIN__ 1
+  #elif defined(__ARM8M_BASELINE__)
+    #define __ARM_ARCH_8M_BASE__ 1
+  #elif defined(__ARM_ARCH_PROFILE) && __ARM_ARCH_PROFILE == 'M'
+    #if __ARM_ARCH == 6
+      #define __ARM_ARCH_6M__ 1
+    #elif __ARM_ARCH == 7
+      #if __ARM_FEATURE_DSP
+        #define __ARM_ARCH_7EM__ 1
+      #else
+        #define __ARM_ARCH_7M__ 1
+      #endif
+    #endif /* __ARM_ARCH */
+  #elif __ARM_ARCH == 4
+    #define __ARM_ARCH_4T__ 1
+  #elif __ARM_ARCH == 5
+    #define __ARM_ARCH_5T__ 1
+  #endif /* __ARM_ARCH_PROFILE == 'M' */
+#endif
+
+/* Attributes structure for StackInit function */
 typedef struct StackAttr_s {
   uint32_t          func_addr;
   uint32_t         func_param;
@@ -35,15 +77,15 @@ typedef struct StackAttr_s {
        (defined(__ARM_ARCH_8M_BASE__) && (__ARM_ARCH_8M_BASE__ != 0)) ||       \
        (defined(__ARM_ARCH_8M_MAIN__) && (__ARM_ARCH_8M_MAIN__ != 0)))
 
-#include "CMSIS/Core/cmsis_compiler.h"
 #include "arch_cm.h"
 
 #elif ((defined(__ARM_ARCH_4T__)      && (__ARM_ARCH_4T__      != 0)) ||       \
        (defined(__ARM_ARCH_5T__)      && (__ARM_ARCH_5T__      != 0)))
 
-#include "CMSIS/Core_ARM/cmsis_compiler.h"
 #include "arch_arm.h"
 
+#else
+  #error Unknown target.
 #endif
 
 #define FILL_STACK_VALUE              (0xFFFFFFFFU)
