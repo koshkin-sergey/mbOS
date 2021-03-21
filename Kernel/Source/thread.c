@@ -68,6 +68,20 @@ static void ThreadReadyDel(osThread_t *thread)
   }
 }
 
+/**
+ * @brief       OS Idle Thread.
+ * @param[in]   argument
+ */
+__WEAK __NO_RETURN
+void osIdleThread(void *argument)
+{
+  (void) argument;
+
+  for (;;) {
+
+  }
+}
+
 /*******************************************************************************
  *  Service Calls
  ******************************************************************************/

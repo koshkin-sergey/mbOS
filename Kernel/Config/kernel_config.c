@@ -15,7 +15,6 @@
  * limitations under the License.
  */
 
-#include "CMSIS/Core/cmsis_compiler.h"
 #include "Kernel/kernel.h"
 
 /* OS Idle Thread */
@@ -25,7 +24,6 @@ void osIdleThread(void *argument)
   (void) argument;
 
   for (;;) {
-    /* Wait for interrupt */
-    __WFI();
+
   }
 }
