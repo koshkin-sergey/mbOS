@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-#include "systick.h"
+#include "Kernel/os_tick.h"
 #include "kernel_lib.h"
 
 #ifdef  SysTick

@@ -24,9 +24,9 @@
  *
  */
 
-#include "string.h"
+#include <string.h>
 #include "kernel_lib.h"
-#include "systick.h"
+#include "Kernel/os_tick.h"
 
 KernelInfo_t osInfo;
 
