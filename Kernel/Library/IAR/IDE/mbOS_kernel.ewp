@@ -3184,6 +3184,9 @@
             <name>$PROJ_DIR$\..\..\..\Source\system.c</name>
         </file>
         <file>
+            <name>$PROJ_DIR$\..\..\..\Source\systick.c</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\..\..\..\Source\thread.c</name>
         </file>
         <file>
