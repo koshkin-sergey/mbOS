@@ -37,7 +37,7 @@ void SystemCoreClockUpdate(void)
 }
 
 /**
- * @brief       Initialize the System and update the SystemCoreClock variable.
+ * @brief       Initialize the System.
  */
 void SystemInit(void)
 {
@@ -48,5 +48,3 @@ void SystemInit(void)
 
   RCC_ClkReset();
 }
-
-/* ----------------------------- End of file ---------------------------------*/

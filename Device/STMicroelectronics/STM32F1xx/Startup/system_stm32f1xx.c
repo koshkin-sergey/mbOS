@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2019-2021 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -20,20 +20,26 @@
  ******************************************************************************/
 
 #include "asm/system_stm32f1xx.h"
-#include "asm/RCC_STM32F10x.h"
+#include "asm/RCC_STM32F1xx.h"
+
+uint32_t SystemCoreClock;           /*!< System Clock Frequency (Core Clock)  */
 
 /*******************************************************************************
  *  function implementations (scope: module-exported)
  ******************************************************************************/
 
 /**
-  * @brief  Setup the microcontroller system.
-  * @param  None
-  * @retval None
-  */
+ * @brief       Update SystemCoreClock variable.
+ */
+void SystemCoreClockUpdate(void)
+{
+  SystemCoreClock = RCC_GetFreq(RCC_FREQ_AHB);
+}
+
+/**
+ * @brief       Initialize the System.
+ */
 void SystemInit(void)
 {
   RCC_ClkReset();
 }
-
-/* ----------------------------- End of file ---------------------------------*/

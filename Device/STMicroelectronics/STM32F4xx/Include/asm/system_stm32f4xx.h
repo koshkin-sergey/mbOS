@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2019-2021 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -22,7 +22,7 @@
 
 #ifdef __cplusplus
  extern "C" {
-#endif 
+#endif
 
 extern uint32_t SystemCoreClock;    /*!< System Clock Frequency (Core Clock)  */
 
@@ -45,5 +45,3 @@ extern void SystemInit(void);
 #endif
 
 #endif /* SYSTEM_STM32F4XX_H_ */
-
-/* ----------------------------- End of file ---------------------------------*/
