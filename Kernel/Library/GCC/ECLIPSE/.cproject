@@ -428,6 +428,9 @@
 		<configuration configurationName="Cortex_M0">
 			<resource resourceType="PROJECT" workspacePath="/mbOS_kernel"/>
 		</configuration>
+		<configuration configurationName="Arm">
+			<resource resourceType="PROJECT" workspacePath="/mbOS_kernel"/>
+		</configuration>
 		<configuration configurationName="Cortex_M4">
 			<resource resourceType="PROJECT" workspacePath="/mbOS_kernel"/>
 		</configuration>
@@ -435,6 +438,9 @@
 			<resource resourceType="PROJECT" workspacePath="/mbOS_kernel_"/>
 		</configuration>
 		<configuration configurationName="Cortex_M3">
+			<resource resourceType="PROJECT" workspacePath="/mbOS_kernel"/>
+		</configuration>
+		<configuration configurationName="Cortex_M4F">
 			<resource resourceType="PROJECT" workspacePath="/mbOS_kernel"/>
 		</configuration>
 	</storageModule>
