@@ -15,11 +15,29 @@
  * limitations under the License.
  */
 
+/*******************************************************************************
+ *  includes
+ ******************************************************************************/
+
+#include "asm/system_aduc7023.h"
+
+uint32_t SystemCoreClock;           /*!< System Clock Frequency (Core Clock)  */
+
+/*******************************************************************************
+ *  function implementations (scope: module-exported)
+ ******************************************************************************/
+
 /**
-  * @brief  Setup the microcontroller system.
-  * @param  None
-  * @retval None
-  */
+ * @brief       Update SystemCoreClock variable.
+ */
+void SystemCoreClockUpdate(void)
+{
+  SystemCoreClock = 40000000U;
+}
+
+/**
+ * @brief       Initialize the System.
+ */
 void SystemInit(void)
 {
 

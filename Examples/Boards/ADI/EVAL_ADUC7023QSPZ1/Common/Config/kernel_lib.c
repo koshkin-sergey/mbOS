@@ -21,6 +21,14 @@
 #include "Kernel/kernel.h"
 #include "kernel_config.h"
 
+#ifndef __USED
+#if defined(__ICCARM__) && !defined(__ICCARM_V8)
+  #define __USED _Pragma("__root")
+#else
+  #define __USED __attribute__((used))
+#endif
+#endif
+
 /* Idle Thread Control Block */
 static osThread_t os_idle_thread_cb __attribute__((section(".bss.os.thread.cb")));
 

@@ -50,9 +50,19 @@
 			<locationURI>PARENT-2-PROJECT_LOC/main.c</locationURI>
 		</link>
 		<link>
+			<name>src/Device/Drivers</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
 			<name>src/Device/Startup</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>src/Device/Drivers/RTOS_TIMER.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Device/ADI/ADuC7023/Driver/RTOS_TIMER.c</locationURI>
 		</link>
 		<link>
 			<name>src/Device/Startup/startup_aduc7023.c</name>

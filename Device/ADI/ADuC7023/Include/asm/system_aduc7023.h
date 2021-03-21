@@ -18,14 +18,26 @@
 #ifndef SYSTEM_ADUC7023_H_
 #define SYSTEM_ADUC7023_H_
 
+#include <stdint.h>
+
 #ifdef __cplusplus
  extern "C" {
-#endif 
+#endif
+
+extern uint32_t SystemCoreClock;    /*!< System Clock Frequency (Core Clock)  */
 
 /*******************************************************************************
  *  exported function prototypes
  ******************************************************************************/
 
+/**
+ * @brief       Update SystemCoreClock variable.
+ */
+extern void SystemCoreClockUpdate(void);
+
+/**
+ * @brief       Initialize the System and update the SystemCoreClock variable.
+ */
 extern void SystemInit(void);
 
 #ifdef __cplusplus
@@ -33,5 +45,3 @@ extern void SystemInit(void);
 #endif
 
 #endif /* SYSTEM_ADUC7023_H_ */
-
-/* ----------------------------- End of file ---------------------------------*/
