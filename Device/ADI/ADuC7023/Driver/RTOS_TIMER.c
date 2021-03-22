@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-#include "Kernel/os_tick.h"
+#include "Kernel/tick.h"
 #include "asm/aduc7023.h"
 
 /**

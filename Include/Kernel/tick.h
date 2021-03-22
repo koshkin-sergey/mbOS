@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 
-#ifndef OS_TICK_H_
-#define OS_TICK_H_
+#ifndef TICK_H_
+#define TICK_H_
 
 #include <stdint.h>
 
@@ -83,4 +83,4 @@ uint32_t osTickGetCount(void);
  */
 uint32_t osTickGetOverflow(void);
 
-#endif /* OS_TICK_H_ */
+#endif /* TICK_H_ */

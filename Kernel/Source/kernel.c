@@ -26,7 +26,7 @@
 
 #include <string.h>
 #include "kernel_lib.h"
-#include "Kernel/os_tick.h"
+#include "Kernel/tick.h"
 
 KernelInfo_t osInfo;
 
