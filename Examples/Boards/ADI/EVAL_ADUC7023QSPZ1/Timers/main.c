@@ -17,17 +17,20 @@
  * limitations under the License.
  */
 
-#include "asm/aduc7023.h"
+#include "asm/system_aduc7023.h"
 #include "Kernel/kernel.h"
 
 int main(void)
 {
   osStatus_t status;
 
-  TIM1->LD = 100;
+  SystemCoreClockUpdate();
 
   status = osKernelInitialize();
-  status = osKernelStart();
+  if (status == osOK) {
+    /* Start RTOS */
+    osKernelStart();
+  }
 }
 
 uint32_t IRQ_GetActiveIRQ(void)
