@@ -32,18 +32,3 @@ int main(void)
     osKernelStart();
   }
 }
-
-uint32_t IRQ_GetActiveIRQ(void)
-{
-  return (0U);
-}
-
-void* IRQ_GetHandler(uint32_t id)
-{
-  return (NULL);
-}
-
-void IRQ_EndOfInterrupt(uint32_t id)
-{
-
-}

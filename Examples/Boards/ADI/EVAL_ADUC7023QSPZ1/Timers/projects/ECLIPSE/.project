@@ -60,6 +60,11 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
+			<name>src/Device/Drivers/IRQ.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Device/ADI/ADuC7023/Driver/IRQ.c</locationURI>
+		</link>
+		<link>
 			<name>src/Device/Drivers/RTOS_TIMER.c</name>
 			<type>1</type>
 			<locationURI>PARENT-7-PROJECT_LOC/Device/ADI/ADuC7023/Driver/RTOS_TIMER.c</locationURI>

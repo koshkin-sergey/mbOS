@@ -19,6 +19,9 @@
 
 #include "Kernel/tick.h"
 #include "asm/aduc7023.h"
+#include "asm/system_aduc7023.h"
+
+#define TIMER               RTOS_TIMER
 
 /**
  * @brief       Setup OS Tick timer to generate periodic RTOS Kernel Ticks
@@ -28,7 +31,23 @@
  */
 int32_t osTickSetup(uint32_t freq, IRQHandler_t handler)
 {
+  uint32_t load;
 
+  if (freq == 0U) {
+    return (-1);
+  }
+
+  load = SystemCoreClock / freq;
+  if (load > 0xFFFFUL) {
+    return (-1);
+  }
+
+  /* Set periodic mode */
+  RTOS_TIMER->CON = RTOS_TIMER_CON_MODE;
+  /* Set load */
+  RTOS_TIMER->LD = (uint16_t)load;
+
+  return (0);
 }
 
 /**
@@ -36,7 +55,7 @@ int32_t osTickSetup(uint32_t freq, IRQHandler_t handler)
  */
 void osTickEnable(void)
 {
-
+  RTOS_TIMER->CON |= RTOS_TIMER_CON_EN;
 }
 
 /**
@@ -44,7 +63,7 @@ void osTickEnable(void)
  */
 void osTickDisable(void)
 {
-
+  RTOS_TIMER->CON &= ~RTOS_TIMER_CON_EN;
 }
 
 /**
@@ -52,7 +71,7 @@ void osTickDisable(void)
  */
 void osTickAcknowledgeIRQ(void)
 {
-
+  RTOS_TIMER->CLRI = 0U;
 }
 
 /**
@@ -70,7 +89,7 @@ int32_t osTickGetIRQn(void)
  */
 uint32_t osTickGetClock(void)
 {
-
+  return (SystemCoreClock);
 }
 
 /**
@@ -88,7 +107,7 @@ uint32_t osTickGetInterval(void)
  */
 uint32_t osTickGetCount(void)
 {
-
+  return (RTOS_TIMER->VAL);
 }
 
 /**

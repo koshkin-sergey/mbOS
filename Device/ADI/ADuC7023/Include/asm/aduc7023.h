@@ -81,9 +81,9 @@ typedef struct FIQ_s {
 } FIQ_t;
 
 /**
- * @brief Timer 16 bits
+ * @brief RTOS Timer
  */
-typedef struct TIM_16B_s {
+typedef struct RTOS_TIMER_s {
   __IOM uint16_t LD;      /*!< Timer load register                            */
   RESERVED(0, uint16_t);
   __IM  uint16_t VAL;     /*!< Timer value register                           */
@@ -91,19 +91,32 @@ typedef struct TIM_16B_s {
   __IOM uint16_t CON;     /*!< Timer control register                         */
   RESERVED(2, uint16_t);
   __OM  uint8_t  CLRI;    /*!< Timer interrupt clear register                 */
-} TIM_16B_t;
+} RTOS_TIMER_t;
 
 /**
  * @brief Timer 32 bits
  */
-typedef struct TIM_32B_s {
+typedef struct GP_TIMER_s {
   __IOM uint32_t LD;      /*!< Timer load register                            */
   __IM  uint32_t VAL;     /*!< Timer value register                           */
   __IOM uint32_t CON;     /*!< Timer control register                         */
   __OM  uint8_t  CLRI;    /*!< Timer interrupt clear register                 */
   RESERVED(0[3], uint8_t);
   __IM  uint32_t CAP;     /*!< Timer capture register                         */
-} TIM_32B_t;
+} GP_TIMER_t;
+
+/**
+ * @brief RTOS Timer
+ */
+typedef struct WDG_TIMER_s {
+  __IOM uint16_t LD;      /*!< Timer load register                            */
+  RESERVED(0, uint16_t);
+  __IM  uint16_t VAL;     /*!< Timer value register                           */
+  RESERVED(1, uint16_t);
+  __IOM uint16_t CON;     /*!< Timer control register                         */
+  RESERVED(2, uint16_t);
+  __OM  uint8_t  CLRI;    /*!< Timer interrupt clear register                 */
+} WDG_TIMER_t;
 
 #define IRQ_BASE              0xFFFF0000UL  /*!< IRQ Address Base             */
 #define FIQ_BASE              0xFFFF0100UL  /*!< FIQ Address Base             */
@@ -113,9 +126,38 @@ typedef struct TIM_32B_s {
 
 #define IRQ                   ((IRQ_t *) IRQ_BASE)
 #define FIQ                   ((FIQ_t *) FIQ_BASE)
-#define TIM0                  ((TIM_16B_t *) TIMER0_BASE)
-#define TIM1                  ((TIM_32B_t *) TIMER1_BASE)
-#define TIM2                  ((TIM_16B_t *) TIMER2_BASE)
+#define RTOS_TIMER            ((RTOS_TIMER_t *) TIMER0_BASE)
+#define GP_TIMER              ((  GP_TIMER_t *) TIMER1_BASE)
+#define WDG_TIMER             (( WDG_TIMER_t *) TIMER2_BASE)
+
+/*                             RTOS TIMER                                     */
+#define RTOS_TIMER_LD_Pos         (0U)
+#define RTOS_TIMER_LD_Msk         (0xFFFFU << RTOS_TIMER_LD_Pos)
+#define RTOS_TIMER_LD             RTOS_TIMER_LD_Msk
+
+#define RTOS_TIMER_VAL_Pos        (0U)
+#define RTOS_TIMER_VAL_Msk        (0xFFFFU << RTOS_TIMER_VAL_Pos)
+#define RTOS_TIMER_VAL            RTOS_TIMER_VAL_Msk
+
+#define RTOS_TIMER_CON_PSC_Pos    (2U)
+#define RTOS_TIMER_CON_PSC_Msk    (0x3U << RTOS_TIMER_CON_PSC_Pos)
+#define RTOS_TIMER_CON_PSC        RTOS_TIMER_CON_PSC_Msk
+#define RTOS_TIMER_CON_PSC_0      (0x1U << RTOS_TIMER_CON_PSC_Pos)
+#define RTOS_TIMER_CON_PSC_1      (0x2U << RTOS_TIMER_CON_PSC_Pos)
+
+#define RTOS_TIMER_CON_CLK_Pos    (4U)
+#define RTOS_TIMER_CON_CLK_Msk    (0x3U << RTOS_TIMER_CON_CLK_Pos)
+#define RTOS_TIMER_CON_CLK        RTOS_TIMER_CON_CLK_Msk
+#define RTOS_TIMER_CON_CLK_0      (0x1U << RTOS_TIMER_CON_CLK_Pos)
+#define RTOS_TIMER_CON_CLK_1      (0x2U << RTOS_TIMER_CON_CLK_Pos)
+
+#define RTOS_TIMER_CON_MODE_Pos   (6U)
+#define RTOS_TIMER_CON_MODE_Msk   (0x1U << RTOS_TIMER_CON_MODE_Pos)
+#define RTOS_TIMER_CON_MODE       RTOS_TIMER_CON_MODE_Msk
+
+#define RTOS_TIMER_CON_EN_Pos     (7U)
+#define RTOS_TIMER_CON_EN_Msk     (0x1U << RTOS_TIMER_CON_EN_Pos)
+#define RTOS_TIMER_CON_EN         RTOS_TIMER_CON_EN_Msk
 
 #ifdef __cplusplus
 }
