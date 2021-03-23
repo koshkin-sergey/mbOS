@@ -24,9 +24,38 @@
  extern "C" {
 #endif /* __cplusplus */
 
+#include <stdint.h>
 #include "CMSIS/Core_ARM/core_arm.h"
 #include "system_aduc7023.h"
-#include <stdint.h>
+
+/**
+ * @brief Interrupt Number Definition
+ */
+typedef enum {
+  ANY_FIQ_IRQn      = 0,    /*!< All interrupts OR’ed (FIQ only)              */
+  SWI_IRQn          = 1,    /*!< Software Interrupt                           */
+  RTOS_TIMER_IRQn   = 2,    /*!< RTOS Timer Interrupt                         */
+  GP_TIMER_IRQn     = 3,    /*!< General-Purpose Timer Interrupt              */
+  WDG_TIMER_IRQn    = 4,    /*!< Watchdog Timer Interrupt                     */
+  FLASH_IRQn        = 5,    /*!< Flash Interrupt                              */
+  ADC_IRQn          = 6,    /*!< ADC Interrupt                                */
+  PLL_IRQn          = 7,    /*!< PLL Interrupt                                */
+  I2C0_MASTER_IRQn  = 8,    /*!< I2C0 Master Interrupt                        */
+  I2C0_SLAVE_IRQn   = 9,    /*!< I2C0 Slave Interrupt                         */
+  I2C1_MASTER_IRQn  = 10,   /*!< I2C1 Master Interrupt                        */
+  I2C1_SLAVE_IRQn   = 11,   /*!< I2C1 Slave Interrupt                         */
+  SPI_IRQn          = 12,   /*!< SPI Interrupt                                */
+  EXT_IRQ0_IRQn     = 13,   /*!< External IRQ0 Interrupt                      */
+  COMPARATOR_IRQn   = 14,   /*!< Comparator Interrupt                         */
+  PSM_IRQn          = 15,   /*!< PSM Interrupt                                */
+  EXT_IRQ1_IRQn     = 16,   /*!< External IRQ1 Interrupt                      */
+  PLA_IRQ0_IRQn     = 17,   /*!< PLA IRQ0 Interrupt                           */
+  EXT_IRQ2_IRQn     = 18,   /*!< External IRQ2 Interrupt                      */
+  EXT_IRQ3_IRQn     = 19,   /*!< External IRQ3 Interrupt                      */
+  PLA_IRQ1_IRQn     = 20,   /*!< PLA IRQ1 Interrupt                           */
+  PWM_IRQn          = 21,   /*!< PWM Interrupt                                */
+  VECTOR_NUMBER     = 22
+} IRQn_t;
 
 /**
  * @brief Interrupt Controller

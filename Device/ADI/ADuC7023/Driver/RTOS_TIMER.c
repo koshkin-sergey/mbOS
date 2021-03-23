@@ -18,6 +18,7 @@
  */
 
 #include "Kernel/tick.h"
+#include "Kernel/irq.h"
 #include "asm/aduc7023.h"
 #include "asm/system_aduc7023.h"
 

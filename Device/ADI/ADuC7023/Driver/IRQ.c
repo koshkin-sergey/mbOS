@@ -18,6 +18,19 @@
  */
 
 #include "Kernel/irq.h"
+#include "asm/aduc7023.h"
+
+#define VECTOR_TABLE_ATTRIBUTE  __attribute__((aligned (128), section(".isr_vectors")))
+
+/*------------------------------------------------------------------------------
+ * Interrupt Handler Function Prototype
+ *----------------------------------------------------------------------------*/
+typedef void (*IntHandler)(void);
+
+/*------------------------------------------------------------------------------
+ * Interrupt Vector table
+ *----------------------------------------------------------------------------*/
+IntHandler isr_vectors[VECTOR_NUMBER] VECTOR_TABLE_ATTRIBUTE;
 
 /**
  * @brief       Initialize interrupt controller.
