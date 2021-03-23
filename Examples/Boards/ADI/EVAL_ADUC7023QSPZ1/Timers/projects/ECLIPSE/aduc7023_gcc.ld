@@ -170,7 +170,7 @@ SECTIONS
     __zero_table_start__ = .;
     __zero_table_end__ = .;
   } > FLASH
-
+  
   /**
    * Location counter can end up 2byte aligned with narrow Thumb code but
    * __etext is assumed by startup code to be the LMA of a section in RAM
@@ -178,6 +178,18 @@ SECTIONS
    */
   __etext = ALIGN (4);
 
+  .bss :
+  {
+    . = ALIGN(4);
+    __bss_start__ = .;
+    KEEP(*(.bss.isr_vector))
+    *(.bss)
+    *(.bss.*)
+    *(COMMON)
+    . = ALIGN(4);
+    __bss_end__ = .;
+  } > RAM
+  
   .data : AT (__etext)
   {
     __data_start__ = .;
@@ -212,17 +224,6 @@ SECTIONS
     __data_end__ = .;
 
   } > RAM
-
-  .bss :
-  {
-    . = ALIGN(4);
-    __bss_start__ = .;
-    *(.bss)
-    *(.bss.*)
-    *(COMMON)
-    . = ALIGN(4);
-    __bss_end__ = .;
-  } > RAM AT > RAM
 
   .heap (COPY) :
   {

@@ -22,7 +22,7 @@
 #include "asm/aduc7023.h"
 #include "asm/system_aduc7023.h"
 
-#define TIMER               RTOS_TIMER
+#define RTIM_IRQ_PRIORITY           0xFFU
 
 /**
  * @brief       Setup OS Tick timer to generate periodic RTOS Kernel Ticks
@@ -43,10 +43,21 @@ int32_t osTickSetup(uint32_t freq, IRQHandler_t handler)
     return (-1);
   }
 
-  /* Set periodic mode */
+  /* Set periodic mode and disable Timer */
   RTOS_TIMER->CON = RTOS_TIMER_CON_MODE;
-  /* Set load */
+  /* Set load value */
   RTOS_TIMER->LD = (uint16_t)load;
+
+  /* Disable corresponding IRQ */
+  IRQ_Disable     (RTOS_TIMER_IRQn);
+  IRQ_ClearPending(RTOS_TIMER_IRQn);
+
+  /* Set Timer interrupt priority */
+  IRQ_SetPriority(RTOS_TIMER_IRQn, RTIM_IRQ_PRIORITY);
+  /* Register tick interrupt handler function */
+  IRQ_SetHandler(RTOS_TIMER_IRQn, handler);
+  /* Enable corresponding interrupt */
+  IRQ_Enable(RTOS_TIMER_IRQn);
 
   return (0);
 }
