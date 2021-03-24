@@ -17,8 +17,40 @@
  * limitations under the License.
  */
 
+
+#include <stddef.h>
 #include "asm/system_aduc7023.h"
+#include "asm/aduc7023.h"
 #include "Kernel/kernel.h"
+
+#define TIMEOUT                       (250UL)
+#define THREAD_STACK_SIZE             (256U)
+
+static osThreadId_t         threadA;
+static osThread_t           threadA_cb;
+static uint64_t             threadA_stack[THREAD_STACK_SIZE/8U];
+static const osThreadAttr_t threadA_attr = {
+    .name       = NULL,
+    .attr_bits  = 0U,
+    .cb_mem     = &threadA_cb,
+    .cb_size    = sizeof(threadA_cb),
+    .stack_mem  = &threadA_stack[0],
+    .stack_size = sizeof(threadA_stack),
+    .priority   = osPriorityNormal,
+};
+
+__NO_RETURN
+static void threadA_func(void *param)
+{
+  (void) param;
+
+  GPIO0->DAT |= (1UL << 31U);
+
+  for (;;) {
+    GPIO0->DAT ^= (1UL << 23U);
+    osDelay(500);
+  }
+}
 
 int main(void)
 {
@@ -28,7 +60,15 @@ int main(void)
 
   status = osKernelInitialize();
   if (status == osOK) {
+    threadA = osThreadNew(threadA_func, NULL, &threadA_attr);
+    if (threadA == NULL) {
+      goto error;
+    }
+
     /* Start RTOS */
     osKernelStart();
   }
+
+error:
+  return (-1);
 }

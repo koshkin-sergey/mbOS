@@ -55,6 +55,11 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
+			<name>src/Device/Include</name>
+			<type>2</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Device/ADI/ADuC7023/Include</locationURI>
+		</link>
+		<link>
 			<name>src/Device/Startup</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
