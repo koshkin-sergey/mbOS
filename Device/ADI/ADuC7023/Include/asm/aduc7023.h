@@ -147,19 +147,109 @@ typedef struct WDG_TIMER_s {
   __OM  uint8_t  CLRI;    /*!< Timer interrupt clear register                 */
 } WDG_TIMER_t;
 
+typedef struct GPIO0_s {
+  __IOM uint32_t CON;
+  RESERVED(0[7], uint32_t);
+  __IOM uint32_t DAT;
+  __OM  uint32_t SET;
+  __OM  uint32_t CLR;
+  __IOM uint32_t PAR;
+} GPIO0_t;
+
+typedef struct GPIO1_s {
+  __IOM uint32_t CON;
+  RESERVED(0[10], uint32_t);
+  __IOM uint32_t DAT;
+  __OM  uint32_t SET;
+  __OM  uint32_t CLR;
+  __IOM uint32_t PAR;
+} GPIO1_t;
+
+typedef struct GPIO2_s {
+  __IOM uint32_t CON;
+  RESERVED(0[13], uint32_t);
+  __IOM uint32_t DAT;
+  __OM  uint32_t SET;
+  __OM  uint32_t CLR;
+  __IOM uint32_t PAR;
+} GPIO2_t;
+
+typedef struct POW_s {
+  __OM  uint16_t KEY1;
+  RESERVED(0, uint16_t);
+  __IOM uint8_t  CON0;
+  RESERVED(1[3], uint8_t);
+  __OM  uint16_t KEY2;
+  RESERVED(2[9], uint32_t);
+  __OM  uint16_t KEY3;
+  RESERVED(3, uint16_t);
+  __IOM uint16_t CON1;
+  RESERVED(4, uint16_t);
+  __OM  uint16_t KEY4;
+  RESERVED(5, uint16_t);
+  __IOM uint16_t PSMCON;
+  RESERVED(6, uint16_t);
+  __IOM uint16_t CMPCON;
+} POW_t;
+
 #define IRQ_BASE              0xFFFF0000UL  /*!< IRQ Address Base             */
 #define FIQ_BASE              0xFFFF0100UL  /*!< FIQ Address Base             */
 #define TIMER0_BASE           0xFFFF0300UL  /*!< Timer0 Address Base          */
 #define TIMER1_BASE           0xFFFF0320UL  /*!< Timer1 Address Base          */
 #define TIMER2_BASE           0xFFFF0360UL  /*!< Timer2 Address Base          */
+#define POW_BASE              0xFFFF0404UL  /*!< PLL/PSM Base Address         */
+#define GPIO_BASE             0xFFFFF400UL  /*!< GPIO Address Base            */
 
 #define IRQ                   ((IRQ_t *) IRQ_BASE)
 #define FIQ                   ((FIQ_t *) FIQ_BASE)
 #define RTOS_TIMER            ((RTOS_TIMER_t *) TIMER0_BASE)
 #define GP_TIMER              ((  GP_TIMER_t *) TIMER1_BASE)
 #define WDG_TIMER             (( WDG_TIMER_t *) TIMER2_BASE)
+#define GPIO0                 ((GPIO0_t *) GPIO_BASE + 0U)
+#define GPIO1                 ((GPIO1_t *) GPIO_BASE + 4U)
+#define GPIO2                 ((GPIO2_t *) GPIO_BASE + 8U)
+#define POW                   ((POW_t *) POW_BASE)
 
-/*                             RTOS TIMER                                     */
+/*------------------------------------------------------------------------------
+ *                                IRQ
+ *----------------------------------------------------------------------------*/
+#define IRQ_SWICFG_Pos            (1U)
+#define IRQ_SWICFG_Msk            (0x3U << IRQ_SWICFG_Pos)
+#define IRQ_SWICFG                IRQ_SWICFG_Msk
+#define IRQ_SWICFG_0              (0x1U << IRQ_SWICFG_Pos)
+#define IRQ_SWICFG_1              (0x2U << IRQ_SWICFG_Pos)
+
+#define IRQ_BASER_Pos             (0U)
+#define IRQ_BASER_Msk             (0xFFFFU << IRQ_BASER_Pos)
+#define IRQ_BASER                 IRQ_BASER_Msk
+
+#define IRQ_VEC_ID_Pos            (2U)
+#define IRQ_VEC_ID_Msk            (0x1FU << IRQ_VEC_ID_Pos)
+#define IRQ_VEC_ID                IRQ_VEC_ID_Msk
+
+#define IRQ_VEC_BASE_Pos          (7U)
+#define IRQ_VEC_BASE_Msk          (0xFFFFU << IRQ_VEC_BASE_Pos)
+#define IRQ_VEC_BASE              IRQ_VEC_BASE_Msk
+
+#define IRQ_CONN_ENIRQN_Pos       (0U)
+#define IRQ_CONN_ENIRQN_Msk       (0x1U << IRQ_CONN_ENIRQN_Pos)
+#define IRQ_CONN_ENIRQN           IRQ_CONN_ENIRQN_Msk
+
+#define IRQ_CONN_ENFIQN_Pos       (1U)
+#define IRQ_CONN_ENFIQN_Msk       (0x1U << IRQ_CONN_ENFIQN_Pos)
+#define IRQ_CONN_ENFIQN           IRQ_CONN_ENFIQN_Msk
+
+#define FIQ_VEC_ID_Pos            (2U)
+#define FIQ_VEC_ID_Msk            (0x1FU << FIQ_VEC_ID_Pos)
+#define FIQ_VEC_ID                FIQ_VEC_ID_Msk
+
+#define FIQ_VEC_BASE_Pos          (7U)
+#define FIQ_VEC_BASE_Msk          (0xFFFFU << FIQ_VEC_BASE_Pos)
+#define FIQ_VEC_BASE              FIQ_VEC_BASE_Msk
+
+/*------------------------------------------------------------------------------
+ *                             RTOS TIMER
+ *----------------------------------------------------------------------------*/
 #define RTOS_TIMER_LD_Pos         (0U)
 #define RTOS_TIMER_LD_Msk         (0xFFFFU << RTOS_TIMER_LD_Pos)
 #define RTOS_TIMER_LD             RTOS_TIMER_LD_Msk
@@ -187,6 +277,14 @@ typedef struct WDG_TIMER_s {
 #define RTOS_TIMER_CON_EN_Pos     (7U)
 #define RTOS_TIMER_CON_EN_Msk     (0x1U << RTOS_TIMER_CON_EN_Pos)
 #define RTOS_TIMER_CON_EN         RTOS_TIMER_CON_EN_Msk
+
+/*------------------------------------------------------------------------------
+ *                          POWER CONTROL
+ *----------------------------------------------------------------------------*/
+#define POW_KEY1_VALUE            ((uint16_t)0x0001)
+#define POW_KEY2_VALUE            ((uint16_t)0x00F4)
+#define POW_KEY3_VALUE            ((uint16_t)0x0076)
+#define POW_KEY4_VALUE            ((uint16_t)0x00B1)
 
 #ifdef __cplusplus
 }
