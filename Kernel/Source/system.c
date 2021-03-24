@@ -28,6 +28,7 @@
  *  includes
  ******************************************************************************/
 
+#include "Kernel/tick.h"
 #include "kernel_lib.h"
 
 /*******************************************************************************
@@ -84,6 +85,7 @@ void osTick_Handler(void)
   osTimer_t *timer;
   queue_t   *timer_queue;
 
+  osTickAcknowledgeIRQ();
   ++osInfo.kernel.tick;
 
   /* Process Timers */

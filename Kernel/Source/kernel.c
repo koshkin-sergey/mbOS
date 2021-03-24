@@ -98,6 +98,7 @@ static osStatus_t svcKernelStart(void)
   if (osTickSetup(osConfig.tick_freq, OS_TICK_HANDLER) != 0) {
     return (osError);
   }
+  osInfo.tick_irqn = osTickGetIRQn();
 
   /* Enable RTOS Tick */
   osTickEnable();
