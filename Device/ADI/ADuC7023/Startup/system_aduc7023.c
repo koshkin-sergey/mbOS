@@ -20,6 +20,8 @@
  ******************************************************************************/
 
 #include "asm/system_aduc7023.h"
+#include "asm/aduc7023.h"
+#include "Kernel/irq.h"
 
 uint32_t SystemCoreClock;           /*!< System Clock Frequency (Core Clock)  */
 
@@ -32,7 +34,7 @@ uint32_t SystemCoreClock;           /*!< System Clock Frequency (Core Clock)  */
  */
 void SystemCoreClockUpdate(void)
 {
-  SystemCoreClock = 40000000U;
+  SystemCoreClock = 41780000U;
 }
 
 /**
@@ -40,5 +42,9 @@ void SystemCoreClockUpdate(void)
  */
 void SystemInit(void)
 {
+  POW->KEY1 = POW_KEY1_VALUE;
+  POW->CON0 = 0x00;
+  POW->KEY2 = POW_KEY2_VALUE;
 
+  IRQ_Initialize();
 }
