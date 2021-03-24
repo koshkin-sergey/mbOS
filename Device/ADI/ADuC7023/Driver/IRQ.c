@@ -36,7 +36,20 @@ static IRQHandler_t isr_vector[VECTOR_NUMBER] VECTOR_TABLE_ATTRIBUTE = { 0U };
  */
 int32_t IRQ_Initialize(void)
 {
+  uint32_t addr;
+
+  addr = (uint32_t)&isr_vector[0];
+  if ((addr & ~(IRQ_BASER_Msk << 7U)) != 0U) {
+    return (-1);
+  }
+
+  for (uint32_t i = 0; i < VECTOR_NUMBER; ++i) {
+    isr_vector[i] = NULL;
+  }
+
   fiq_mode = 0UL;
+  IRQ->BASE = addr >> 7U;
+  IRQ->CONN = IRQ_CONN_ENIRQN | IRQ_CONN_ENFIQN;
 
   return (0);
 }
@@ -161,7 +174,9 @@ uint32_t IRQ_GetMode(IRQn_ID_t irqn)
  */
 IRQn_ID_t IRQ_GetActiveIRQ(void)
 {
+  uint32_t irqn = (IRQ->VEC & IRQ_VEC_ID_Msk) >> IRQ_VEC_ID_Pos;
 
+  return ((IRQn_ID_t)irqn);
 }
 
 /**
@@ -170,7 +185,9 @@ IRQn_ID_t IRQ_GetActiveIRQ(void)
  */
 IRQn_ID_t IRQ_GetActiveFIQ(void)
 {
+  uint32_t fiqn = (FIQ->VEC & FIQ_VEC_ID_Msk) >> FIQ_VEC_ID_Pos;
 
+  return ((IRQn_ID_t)fiqn);
 }
 
 /**
@@ -183,6 +200,8 @@ int32_t IRQ_EndOfInterrupt(IRQn_ID_t irqn)
   if (irqn < 0 || irqn >= VECTOR_NUMBER) {
     return (-1);
   }
+
+  IRQ->STAN = 0xFF;
 
   return (0);
 }
