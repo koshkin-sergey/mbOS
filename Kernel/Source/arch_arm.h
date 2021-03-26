@@ -51,7 +51,16 @@
 
 #define END_CRITICAL_SECTION          __set_CPSR(cpsr);
 
-#define SVC_INDIRECT_REG              "r12"
+#if defined(__CC_ARM)
+  #define SVC_INDIRECT_REG            r12
+#elif defined(__ICCARM__)
+  #define SVC_FUNC(f)                 __asm (                                  \
+                                        "mov r12,%0\n"                         \
+                                        :: "r"(f): "r12"                       \
+                                      )
+#else
+  #define SVC_INDIRECT_REG            "r12"
+#endif
 
 /*******************************************************************************
  *  exported functions

@@ -31,7 +31,6 @@ I_TICK_IRQN_OFS EQU      24                         ; osInfo.tick_irqn offset
 
 
                 PRESERVE8
-                ARM
 
 
                 SECTION .rodata:DATA:NOROOT(2)
@@ -45,6 +44,7 @@ IRQ_PendSV      DCB      0                          ; Pending SVC flag
 
 
                 SECTION .text:CODE:NOROOT(2)
+                ARM
 
 SWI_Handler
                 EXPORT  SWI_Handler
