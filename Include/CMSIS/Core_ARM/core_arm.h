@@ -113,7 +113,7 @@
 #define     __IM     volatile const      /*!< \brief Defines 'read only' structure member permissions */
 #define     __OM     volatile            /*!< \brief Defines 'write only' structure member permissions */
 #define     __IOM    volatile            /*!< \brief Defines 'read / write' structure member permissions */
-#define RESERVED(N, T) T RESERVED##N;    // placeholder struct members used for "reserved" areas
+#define RESERVED(N, T) T RESERVED##N     // placeholder struct members used for "reserved" areas
 
  /*******************************************************************************
   *                 Register Abstraction
@@ -130,7 +130,7 @@ typedef union
     uint32_t T:1;                        /*!< \brief bit:      5  Thumb execution state bit */
     uint32_t F:1;                        /*!< \brief bit:      6  FIQ mask bit */
     uint32_t I:1;                        /*!< \brief bit:      7  IRQ mask bit */
-    RESERVED(0:20, uint32_t)
+    RESERVED(0:20, uint32_t);
     uint32_t V:1;                        /*!< \brief bit:     28  Overflow condition code flag */
     uint32_t C:1;                        /*!< \brief bit:     29  Carry condition code flag */
     uint32_t Z:1;                        /*!< \brief bit:     30  Zero condition code flag */
