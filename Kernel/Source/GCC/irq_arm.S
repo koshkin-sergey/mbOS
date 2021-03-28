@@ -85,6 +85,7 @@ SWI_FuncCall:
 
                 SUB     SP, SP, #4
                 STM     SP, {SP}^                   // Store SP_usr onto stack
+                NOP
                 POP     {R12}                       // Pop SP_usr into R12
                 SUB     R12, R12, #16               // Adjust pointer to SP_usr
                 LDMDB   R12, {R2,R3}                // Load return values from SVC function
@@ -224,6 +225,7 @@ ContextSave:
                 ADD     R0, R0, #20                 // Adjust SP_svc to R0 of the basic frame
                 SUB     SP, SP, #4
                 STM     SP, {SP}^                   // Save SP_usr to current stack
+                NOP
                 POP     {R1}                        // Pop SP_usr into R1
                 // R0 = SP_svc, R1 = SP_usr
                 SUB     R1, R1, #64                 // Adjust SP_usr to R4 of the basic frame
@@ -287,10 +289,12 @@ ContextRestore:
                 ADD     R12, LR, #32                // Adjust sp and save it into R12
                 PUSH    {R12}                       // Push sp onto stack
                 LDM     SP, {SP}^                   // Restore SP_usr directly
+                NOP
                 ADD     SP, SP, #4                  // Adjust SP_svc
                 LDMIA   LR!, {R0-R3, R12}           // Load user registers R0-R3,R12
                 STMIB   SP!, {R0-R3, R12}           // Store them to SP_svc
                 LDM     LR, {LR}^                   // Restore LR_usr directly
+                NOP
                 LDMIB   LR!, {R0-R1}                // Load user registers PC,CPSR
                 ADD     SP, SP, #4
                 STMIB   SP!, {R0-R1}                // Store them to SP_svc

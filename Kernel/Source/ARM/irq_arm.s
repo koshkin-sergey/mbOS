@@ -28,7 +28,6 @@ I_K_STATE_OFS   EQU      16                         ; osRtxInfo.kernel.state off
 I_TICK_IRQN_OFS EQU      24                         ; osInfo.tick_irqn offset
 
                 PRESERVE8
-                ARM
 
 
                 AREA     |.constdata|, DATA, READONLY
@@ -42,6 +41,7 @@ IRQ_PendSV      DCB      0                          ; Pending SVC flag
 
 
                 AREA     |.text|, CODE, READONLY
+                ARM
 
 SWI_Handler\
                 PROC
@@ -78,10 +78,11 @@ SWI_FuncCall
                 MSR     CPSR_c, #MODE_SVC           ; Re-enable interrupts
                 MOV     LR, PC
                 BX      R12                         ; Branch to SVC function
-                MSR     CPSR_c, #(MODE_SVC | I_BIT) ; Disable interrupts
+                MSR     CPSR_c,#(MODE_SVC:OR:I_BIT) ; Disable interrupts
 
                 SUB     SP, SP, #4
                 STM     SP, {SP}^                   ; Store SP_usr onto stack
+                NOP
                 POP     {R12}                       ; Pop SP_usr into R12
                 SUB     R12, R12, #16               ; Adjust pointer to SP_usr
                 LDMDB   R12, {R2,R3}                ; Load return values from SVC function
@@ -124,14 +125,14 @@ IRQ_Handler\
                 SUB     R0, LR, #4                  ; Put return address in R0
                 MOV     LR, R1                      ; Save R1 in LR_irq
                 MRS     R1, SPSR                    ; Put the SPSR_irq in R1
-                MSR     CPSR_c, #(MODE_SVC | I_BIT) ; Switch to Supervisor mode, IRQ disabled
+                MSR     CPSR_c,#(MODE_SVC:OR:I_BIT) ; Switch to Supervisor mode, IRQ disabled
                 STMFD   SP!, {R0,R1}                ; Save SPSR_irq and LR_irq to SVC stack
                 STMFD   SP!, {R2,R3,R12,LR}         ; Save APCS corruptible registers to SVC stack
                 MOV     R0, SP                      ; Make the SP_svc visible to IRQ mode
                 SUB     SP, SP, #(2*4)              ; Make room for stacking R0, R1
-                MSR     CPSR_c, #(MODE_IRQ | I_BIT) ; Switch to IRQ mode, IRQ disabled
+                MSR     CPSR_c,#(MODE_IRQ:OR:I_BIT) ; Switch to IRQ mode, IRQ disabled
                 STMFD   R0, {SP,LR}                 ; Save R0, R1 to SVC stack
-                MSR     CPSR_c, #(MODE_SVC | I_BIT) ; Switch to Supervisor mode, IRQ disabled
+                MSR     CPSR_c,#(MODE_SVC:OR:I_BIT) ; Switch to Supervisor mode, IRQ disabled
 
                 LDR     R0, =IRQ_NestLevel
                 LDR     R1, [R0]
@@ -157,7 +158,7 @@ IRQ_Handler\
                 MSR     CPSR_c, #MODE_SVC           ; Re-enable interrupts
                 MOV     LR, PC
                 BX      R0                          ; Call IRQ handler
-                MSR     CPSR_c, #(MODE_SVC | I_BIT) ; Disable interrupts
+                MSR     CPSR_c,#(MODE_SVC:OR:I_BIT) ; Disable interrupts
 
 IRQ_End
                 MOV     R0, R4                      ; Move interrupt ID to R0
@@ -222,6 +223,7 @@ ContextSave
                 ADD     R0, R0, #20                 ; Adjust SP_svc to R0 of the basic frame
                 SUB     SP, SP, #4
                 STM     SP, {SP}^                   ; Save SP_usr to current stack
+                NOP
                 POP     {R1}                        ; Pop SP_usr into R1
                 ; R0 = SP_svc, R1 = SP_usr
                 SUB     R1, R1, #64                 ; Adjust SP_usr to R4 of the basic frame
@@ -262,7 +264,7 @@ PendExec
                 LDR     R12, =osPendSV_Handler
                 MOV     LR, PC
                 BX      R12                         ; Post process pending objects
-                MSR     CPSR_c, #(MODE_SVC | I_BIT) ; Disable interrupts
+                MSR     CPSR_c,#(MODE_SVC:OR:I_BIT) ; Disable interrupts
 
 PendCheck
                 LDR     R8, [R11, #4]               ; Load osInfo.thread.run.next
@@ -285,10 +287,12 @@ ContextRestore
                 ADD     R12, LR, #32                ; Adjust sp and save it into R12
                 PUSH    {R12}                       ; Push sp onto stack
                 LDM     SP, {SP}^                   ; Restore SP_usr directly
+                NOP
                 ADD     SP, SP, #4                  ; Adjust SP_svc
                 LDMIA   LR!, {R0-R3, R12}           ; Load user registers R0-R3,R12
                 STMIB   SP!, {R0-R3, R12}           ; Store them to SP_svc
                 LDM     LR, {LR}^                   ; Restore LR_usr directly
+                NOP
                 LDMIB   LR!, {R0-R1}                ; Load user registers PC,CPSR
                 ADD     SP, SP, #4
                 STMIB   SP!, {R0-R1}                ; Store them to SP_svc
