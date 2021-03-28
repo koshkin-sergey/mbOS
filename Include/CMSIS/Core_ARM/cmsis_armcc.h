@@ -33,6 +33,10 @@
   #define __ARM_ARCH_4T__           1
 #endif
 
+#if (defined (__TARGET_ARCH_5T ) && (__TARGET_ARCH_5T  == 1))
+  #define __ARM_ARCH_5T__           1
+#endif
+
 /* CMSIS compiler specific defines */
 #ifndef   __ASM
   #define __ASM                                  __asm
@@ -104,7 +108,13 @@
   \param [in]    value  Value to reverse
   \return               Reversed value
  */
-#ifndef __NO_EMBEDDED_ASM
+#if ((defined (__ARM_ARCH_4T__) && (__ARM_ARCH_4T__ == 1)) || \
+     (defined (__ARM_ARCH_5T__) && (__ARM_ARCH_5T__ == 1))     )
+
+#define __REV16(value) __ROR(__REV(value), 16)
+
+#else
+
 __attribute__((section(".rev16_text"))) __STATIC_INLINE __ASM uint32_t __REV16(uint32_t value)
 {
   rev16 r0, r0
@@ -118,7 +128,13 @@ __attribute__((section(".rev16_text"))) __STATIC_INLINE __ASM uint32_t __REV16(u
   \param [in]    value  Value to reverse
   \return               Reversed value
  */
-#ifndef __NO_EMBEDDED_ASM
+#if ((defined (__ARM_ARCH_4T__) && (__ARM_ARCH_4T__ == 1)) || \
+     (defined (__ARM_ARCH_5T__) && (__ARM_ARCH_5T__ == 1))     )
+
+#define __REVSH(value) (int16_t)__builtin_bswap16(value)
+
+#else
+
 __attribute__((section(".revsh_text"))) __STATIC_INLINE __ASM int16_t __REVSH(int16_t value)
 {
   revsh r0, r0
