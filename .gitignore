@@ -6,6 +6,7 @@
 *.elf
 
 # MDK-ARM Project Files
+*.uvgui.*
 *.uvguix.*
 *.scvd
 DebugConfig/
