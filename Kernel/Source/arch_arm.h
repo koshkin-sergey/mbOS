@@ -66,8 +66,12 @@
  *  exported functions
  ******************************************************************************/
 
-#if defined ( __GNUC__ )
+#if   defined ( __CC_ARM )
+  #pragma arm
+#elif defined ( __GNUC__ )
   #pragma GCC target ("arm")
+#elif defined ( __ICCARM__ )
+  #pragma type_attribute=__arm
 #endif
 
 /**
