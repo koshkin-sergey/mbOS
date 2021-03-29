@@ -167,6 +167,9 @@ __attribute__((section(".revsh_text"))) __STATIC_INLINE __ASM int16_t __REVSH(in
 
 /* ###########################  Core Function Access  ########################### */
 
+#pragma push
+#pragma arm
+
 /** \brief  Get CPSR (Current Program Status Register)
     \return               CPSR Register value
  */
@@ -221,5 +224,7 @@ __STATIC_INLINE __ASM void __set_SP(uint32_t stack)
   MOV  sp, r0
   BX   lr
 }
+
+#pragma pop
 
 #endif /* __CMSIS_ARMCC_H */
