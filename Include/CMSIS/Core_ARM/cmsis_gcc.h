@@ -267,58 +267,78 @@ __STATIC_FORCEINLINE uint8_t __CLZ(uint32_t value)
 
 /* ###########################  Core Function Access  ########################### */
 
+#pragma GCC push_options
+#pragma GCC diagnostic ignored "-Wattributes"
+#pragma GCC target ("arm")
+
 /** \brief  Get CPSR Register
     \return               CPSR Register value
  */
-__STATIC_FORCEINLINE uint32_t __get_CPSR(void)
+__STATIC_INLINE __attribute__((naked))
+uint32_t __get_CPSR(void)
 {
-  uint32_t result;
-  __ASM volatile("MRS %0, cpsr" : "=r" (result) );
-  return(result);
+  __ASM volatile (
+    "MRS R0, CPSR \n"
+    "BX  LR       \n"
+  );
 }
 
 /** \brief  Set CPSR Register
     \param [in]    cpsr  CPSR value to set
  */
-__STATIC_FORCEINLINE void __set_CPSR(uint32_t cpsr)
+__STATIC_INLINE __attribute__((naked))
+void __set_CPSR(uint32_t cpsr)
 {
-__ASM volatile ("MSR cpsr, %0" : : "r" (cpsr) : "cc", "memory");
+  __ASM volatile (
+    "MSR CPSR, R0 \n"
+    "BX  LR       \n"
+  );
 }
 
 /** \brief  Get Mode
     \return                Processor Mode
  */
-__STATIC_FORCEINLINE uint32_t __get_mode(void)
+__STATIC_FORCEINLINE
+uint32_t __get_mode(void)
 {
-    return (__get_CPSR() & 0x1FU);
+  return (__get_CPSR() & 0x1FU);
 }
 
 /** \brief  Set Mode
     \param [in]    mode  Mode value to set
  */
-__STATIC_FORCEINLINE void __set_mode(uint32_t mode)
+__STATIC_INLINE __attribute__((naked))
+void __set_mode(uint32_t mode)
 {
-  __ASM volatile("MSR  cpsr_c, %0" : : "r" (mode) : "memory");
+  __ASM volatile (
+    "MSR CPSR_c, R0 \n"
+    "BX  LR         \n"
+  );
 }
 
 /** \brief  Get Stack Pointer
     \return Stack Pointer value
  */
-__STATIC_FORCEINLINE uint32_t __get_SP(void)
+__STATIC_FORCEINLINE
+uint32_t __get_SP(void)
 {
-  uint32_t result;
-  __ASM volatile("MOV  %0, sp" : "=r" (result) : : "memory");
-  return result;
+  register uint32_t result __ASM("r0");
+
+  __ASM volatile("MOV %0, SP" : "=r" (result) : : "memory");
+
+  return (result);
 }
 
 /** \brief  Set Stack Pointer
     \param [in]    stack  Stack Pointer value to set
  */
-__STATIC_FORCEINLINE void __set_SP(uint32_t stack)
+__STATIC_FORCEINLINE
+void __set_SP(uint32_t stack)
 {
-  __ASM volatile("MOV  sp, %0" : : "r" (stack) : "memory");
+  __ASM volatile("MOV SP, %0" : : "r" (stack) : "memory");
 }
 
+#pragma GCC pop_options
 #pragma GCC diagnostic pop
 
 #endif /* __CMSIS_GCC_H */

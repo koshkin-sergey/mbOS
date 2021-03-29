@@ -47,9 +47,9 @@
 
 
 #define BEGIN_CRITICAL_SECTION        uint32_t cpsr = __get_CPSR(); \
-                                      __set_CPSR(cpsr | CPSR_I_Msk);
+                                      __set_mode(cpsr | CPSR_I_Msk);
 
-#define END_CRITICAL_SECTION          __set_CPSR(cpsr);
+#define END_CRITICAL_SECTION          __set_mode(cpsr);
 
 #if defined(__CC_ARM)
   #define SVC_INDIRECT_REG            r12
@@ -65,14 +65,6 @@
 /*******************************************************************************
  *  exported functions
  ******************************************************************************/
-
-#if   defined ( __CC_ARM )
-  #pragma arm
-#elif defined ( __GNUC__ )
-  #pragma GCC target ("arm")
-#elif defined ( __ICCARM__ )
-  #pragma type_attribute=__arm
-#endif
 
 /**
  * @fn          bool IsPrivileged(void)
@@ -179,6 +171,11 @@ uint32_t StackInit(StackAttr_t *attr, bool privileged)
 
   return ((uint32_t)stk);
 }
+
+#if   defined ( __CC_ARM )
+  #pragma push
+  #pragma arm
+#endif
 
 __STATIC_FORCEINLINE
 uint32_t svc_0(uint32_t func)
@@ -365,5 +362,9 @@ uint32_t svc_4(uint32_t param1, uint32_t param2, uint32_t param3, uint32_t param
 
 #endif
 }
+
+#if   defined ( __CC_ARM )
+  #pragma pop
+#endif
 
 #endif /* ARCH_ARM_H_ */
