@@ -47,9 +47,9 @@
 
 
 #define BEGIN_CRITICAL_SECTION        uint32_t cpsr = __get_CPSR(); \
-                                      __set_mode(cpsr | CPSR_I_Msk);
+                                      __set_CPSR(cpsr | CPSR_I_Msk);
 
-#define END_CRITICAL_SECTION          __set_mode(cpsr);
+#define END_CRITICAL_SECTION          __set_CPSR(cpsr);
 
 #if defined(__CC_ARM)
   #define SVC_INDIRECT_REG            r12
@@ -65,6 +65,12 @@
 /*******************************************************************************
  *  exported functions
  ******************************************************************************/
+
+extern uint32_t __get_CPSR(void);
+extern     void __set_CPSR(uint32_t);
+
+#define __get_mode()      (__get_CPSR() & 0x1FUL)
+#define __set_mode(mode)  (__set_CPSR(mode))
 
 /**
  * @fn          bool IsPrivileged(void)
