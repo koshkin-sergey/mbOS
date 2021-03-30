@@ -307,4 +307,34 @@ ContextExit:
                 .size    ContextSwitch, .-ContextSwitch
 
 
+/*-----------------------------------------------------------------------------
+ * Helper functions
+ *----------------------------------------------------------------------------*/
+
+                .type    __get_CPSR, %function
+                .global  __get_CPSR
+                .fnstart
+                .cantunwind
+__get_CPSR:
+
+                MRS     R0, CPSR
+                BX      LR
+
+                .fnend
+                .size    __get_CPSR, .-__get_CPSR
+
+
+                .type    __set_CPSR, %function
+                .global  __set_CPSR
+                .fnstart
+                .cantunwind
+__set_CPSR:
+
+                MSR     CPSR_c, R0
+                BX      LR
+
+                .fnend
+                .size    __set_CPSR, .-__set_CPSR
+
+
                 .end
