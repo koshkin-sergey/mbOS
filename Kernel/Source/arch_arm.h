@@ -27,6 +27,10 @@
 #include <stdbool.h>
 #include "CMSIS/Core_ARM/cmsis_compiler.h"
 
+extern uint32_t GetModeCPU(void);
+extern uint32_t DisableIRQ(void);
+extern     void RestoreIRQ(uint32_t);
+
 /*******************************************************************************
  *  defines and macros
  ******************************************************************************/
@@ -45,11 +49,12 @@
 #define CPSR_MODE_USER                0x10U
 #define CPSR_MODE_SYSTEM              0x1FU
 
+#define IsIrqMasked()                 false
+#define SystemIsrInit()
+#define setPrivilegedMode(flag)
 
-#define BEGIN_CRITICAL_SECTION        uint32_t cpsr = __get_CPSR(); \
-                                      __set_CPSR(cpsr | CPSR_I_Msk);
-
-#define END_CRITICAL_SECTION          __set_CPSR(cpsr);
+#define BEGIN_CRITICAL_SECTION        uint32_t mode = DisableIRQ();
+#define END_CRITICAL_SECTION          RestoreIRQ(mode);
 
 #if defined(__CC_ARM)
   #define SVC_INDIRECT_REG            r12
@@ -66,12 +71,6 @@
  *  exported functions
  ******************************************************************************/
 
-extern uint32_t __get_CPSR(void);
-extern     void __set_CPSR(uint32_t);
-
-#define __get_mode()      (__get_CPSR() & 0x1FUL)
-#define __set_mode(mode)  (__set_CPSR(mode))
-
 /**
  * @fn          bool IsPrivileged(void)
  * @brief       Check if running Privileged
@@ -81,7 +80,7 @@ extern     void __set_CPSR(uint32_t);
 __STATIC_INLINE
 bool IsPrivileged(void)
 {
-  return (__get_mode() != CPSR_MODE_USER);
+  return (GetModeCPU() != CPSR_MODE_USER);
 }
 
 /**
@@ -92,36 +91,9 @@ bool IsPrivileged(void)
 __STATIC_INLINE
 bool IsIrqMode(void)
 {
-  return ((__get_mode() != CPSR_MODE_USER) && (__get_mode() != CPSR_MODE_SYSTEM));
-}
+  uint32_t mode = GetModeCPU();
 
-/**
- * @fn          bool IsIrqMasked(void)
- * @brief       Check if IRQ is Masked
- * @return      true=masked, false=not masked
- */
-__STATIC_INLINE
-bool IsIrqMasked(void)
-{
-  return (false);
-}
-
-__STATIC_INLINE
-uint32_t SystemIsrInit(void)
-{
-  return (0U);
-}
-
-/**
- * @fn          void setPrivilegedMode(uint32_t)
- * @brief
- *
- * @param       flag
- */
-__STATIC_INLINE
-void setPrivilegedMode(uint32_t flag)
-{
-  (void) flag;
+  return ((mode != CPSR_MODE_USER) && (mode != CPSR_MODE_SYSTEM));
 }
 
 extern uint8_t IRQ_PendSV;

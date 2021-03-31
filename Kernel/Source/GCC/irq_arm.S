@@ -311,30 +311,46 @@ ContextExit:
  * Helper functions
  *----------------------------------------------------------------------------*/
 
-                .type    __get_CPSR, %function
-                .global  __get_CPSR
+                .type    GetModeCPU, %function
+                .global  GetModeCPU
                 .fnstart
                 .cantunwind
-__get_CPSR:
+GetModeCPU:
 
                 MRS     R0, CPSR
+                AND     R0, R0, #0x1F
                 BX      LR
 
                 .fnend
-                .size    __get_CPSR, .-__get_CPSR
+                .size    GetModeCPU, .-GetModeCPU
 
 
-                .type    __set_CPSR, %function
-                .global  __set_CPSR
+                .type    DisableIRQ, %function
+                .global  DisableIRQ
                 .fnstart
                 .cantunwind
-__set_CPSR:
+DisableIRQ:
+
+                MRS     R0, CPSR
+                ORR     R1, R0, #I_BIT
+                MSR     CPSR_c, R1
+                BX      LR
+
+                .fnend
+                .size    DisableIRQ, .-DisableIRQ
+
+
+                .type    RestoreIRQ, %function
+                .global  RestoreIRQ
+                .fnstart
+                .cantunwind
+RestoreIRQ:
 
                 MSR     CPSR_c, R0
                 BX      LR
 
                 .fnend
-                .size    __set_CPSR, .-__set_CPSR
+                .size    RestoreIRQ, .-RestoreIRQ
 
 
                 .end

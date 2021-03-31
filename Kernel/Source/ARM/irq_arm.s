@@ -303,4 +303,41 @@ ContextExit
 
                 ENDP
 
+;/*----------------------------------------------------------------------------
+; * Helper functions
+; *---------------------------------------------------------------------------*/
+
+GetModeCPU\
+                PROC
+                EXPORT  GetModeCPU
+
+                MRS     R0, CPSR
+                AND     R0, R0, #0x1F
+                BX      LR
+
+                ENDP
+
+
+DisableIRQ\
+                PROC
+                EXPORT  DisableIRQ
+
+                MRS     R0, CPSR
+                ORR     R1, R0, #I_BIT
+                MSR     CPSR_c, R1
+                BX      LR
+
+                ENDP
+
+
+RestoreIRQ\
+                PROC
+                EXPORT  RestoreIRQ
+
+                MSR     CPSR_c, R0
+                BX      LR
+
+                ENDP
+
+
                 END
