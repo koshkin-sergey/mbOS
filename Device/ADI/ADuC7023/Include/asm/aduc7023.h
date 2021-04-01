@@ -248,6 +248,114 @@ typedef struct POW_s {
 #define FIQ_VEC_BASE              FIQ_VEC_BASE_Msk
 
 /*------------------------------------------------------------------------------
+ *                               GPIO
+ *----------------------------------------------------------------------------*/
+#define GPIO_CON_P0_Pos           (0U)
+#define GPIO_CON_P0_Msk           (0x3U << GPIO_CON_P0_Pos)
+#define GPIO_CON_P0               GPIO_CON_P0_Msk
+#define GPIO_CON_P0_0             (0x1U << GPIO_CON_P0_Pos)
+#define GPIO_CON_P0_1             (0x2U << GPIO_CON_P0_Pos)
+
+#define GPIO_CON_P1_Pos           (4U)
+#define GPIO_CON_P1_Msk           (0x3U << GPIO_CON_P1_Pos)
+#define GPIO_CON_P1               GPIO_CON_P1_Msk
+#define GPIO_CON_P1_0             (0x1U << GPIO_CON_P1_Pos)
+#define GPIO_CON_P1_1             (0x2U << GPIO_CON_P1_Pos)
+
+#define GPIO_CON_P2_Pos           (8U)
+#define GPIO_CON_P2_Msk           (0x3U << GPIO_CON_P2_Pos)
+#define GPIO_CON_P2               GPIO_CON_P2_Msk
+#define GPIO_CON_P2_0             (0x1U << GPIO_CON_P2_Pos)
+#define GPIO_CON_P2_1             (0x2U << GPIO_CON_P2_Pos)
+
+#define GPIO_CON_P3_Pos           (12U)
+#define GPIO_CON_P3_Msk           (0x3U << GPIO_CON_P3_Pos)
+#define GPIO_CON_P3               GPIO_CON_P3_Msk
+#define GPIO_CON_P3_0             (0x1U << GPIO_CON_P3_Pos)
+#define GPIO_CON_P3_1             (0x2U << GPIO_CON_P3_Pos)
+
+#define GPIO_CON_P4_Pos           (16U)
+#define GPIO_CON_P4_Msk           (0x3U << GPIO_CON_P4_Pos)
+#define GPIO_CON_P4               GPIO_CON_P4_Msk
+#define GPIO_CON_P4_0             (0x1U << GPIO_CON_P4_Pos)
+#define GPIO_CON_P4_1             (0x2U << GPIO_CON_P4_Pos)
+
+#define GPIO_CON_P5_Pos           (20U)
+#define GPIO_CON_P5_Msk           (0x3U << GPIO_CON_P5_Pos)
+#define GPIO_CON_P5               GPIO_CON_P5_Msk
+#define GPIO_CON_P5_0             (0x1U << GPIO_CON_P5_Pos)
+#define GPIO_CON_P5_1             (0x2U << GPIO_CON_P5_Pos)
+
+#define GPIO_CON_P6_Pos           (24U)
+#define GPIO_CON_P6_Msk           (0x3U << GPIO_CON_P6_Pos)
+#define GPIO_CON_P6               GPIO_CON_P6_Msk
+#define GPIO_CON_P6_0             (0x1U << GPIO_CON_P6_Pos)
+#define GPIO_CON_P6_1             (0x2U << GPIO_CON_P6_Pos)
+
+#define GPIO_CON_P7_Pos           (28U)
+#define GPIO_CON_P7_Msk           (0x3U << GPIO_CON_P7_Pos)
+#define GPIO_CON_P7               GPIO_CON_P7_Msk
+#define GPIO_CON_P7_0             (0x1U << GPIO_CON_P7_Pos)
+#define GPIO_CON_P7_1             (0x2U << GPIO_CON_P7_Pos)
+
+#define GPIO_PAR_P0_Pos           (0U)
+#define GPIO_PAR_P0_Msk           (0x7U << GPIO_PAR_P0_Pos)
+#define GPIO_PAR_P0               GPIO_PAR_P0_Msk
+#define GPIO_PAR_P0_0             (0x1U << GPIO_PAR_P0_Pos)
+#define GPIO_PAR_P0_1             (0x2U << GPIO_PAR_P0_Pos)
+#define GPIO_PAR_P0_2             (0x4U << GPIO_PAR_P0_Pos)
+
+#define GPIO_PAR_P1_Pos           (4U)
+#define GPIO_PAR_P1_Msk           (0x7U << GPIO_PAR_P1_Pos)
+#define GPIO_PAR_P1               GPIO_PAR_P1_Msk
+#define GPIO_PAR_P1_0             (0x1U << GPIO_PAR_P1_Pos)
+#define GPIO_PAR_P1_1             (0x2U << GPIO_PAR_P1_Pos)
+#define GPIO_PAR_P1_2             (0x4U << GPIO_PAR_P1_Pos)
+
+#define GPIO_PAR_P2_Pos           (8U)
+#define GPIO_PAR_P2_Msk           (0x7U << GPIO_PAR_P2_Pos)
+#define GPIO_PAR_P2               GPIO_PAR_P2_Msk
+#define GPIO_PAR_P2_0             (0x1U << GPIO_PAR_P2_Pos)
+#define GPIO_PAR_P2_1             (0x2U << GPIO_PAR_P2_Pos)
+#define GPIO_PAR_P2_2             (0x4U << GPIO_PAR_P2_Pos)
+
+#define GPIO_PAR_P3_Pos           (12U)
+#define GPIO_PAR_P3_Msk           (0x7U << GPIO_PAR_P3_Pos)
+#define GPIO_PAR_P3               GPIO_PAR_P3_Msk
+#define GPIO_PAR_P3_0             (0x1U << GPIO_PAR_P3_Pos)
+#define GPIO_PAR_P3_1             (0x2U << GPIO_PAR_P3_Pos)
+#define GPIO_PAR_P3_2             (0x4U << GPIO_PAR_P3_Pos)
+
+#define GPIO_PAR_P4_Pos           (16U)
+#define GPIO_PAR_P4_Msk           (0x7U << GPIO_PAR_P4_Pos)
+#define GPIO_PAR_P4               GPIO_PAR_P4_Msk
+#define GPIO_PAR_P4_0             (0x1U << GPIO_PAR_P4_Pos)
+#define GPIO_PAR_P4_1             (0x2U << GPIO_PAR_P4_Pos)
+#define GPIO_PAR_P4_2             (0x4U << GPIO_PAR_P4_Pos)
+
+#define GPIO_PAR_P5_Pos           (20U)
+#define GPIO_PAR_P5_Msk           (0x7U << GPIO_PAR_P5_Pos)
+#define GPIO_PAR_P5               GPIO_PAR_P5_Msk
+#define GPIO_PAR_P5_0             (0x1U << GPIO_PAR_P5_Pos)
+#define GPIO_PAR_P5_1             (0x2U << GPIO_PAR_P5_Pos)
+#define GPIO_PAR_P5_2             (0x4U << GPIO_PAR_P5_Pos)
+
+#define GPIO_PAR_P6_Pos           (24U)
+#define GPIO_PAR_P6_Msk           (0x7U << GPIO_PAR_P6_Pos)
+#define GPIO_PAR_P6               GPIO_PAR_P6_Msk
+#define GPIO_PAR_P6_0             (0x1U << GPIO_PAR_P6_Pos)
+#define GPIO_PAR_P6_1             (0x2U << GPIO_PAR_P6_Pos)
+#define GPIO_PAR_P6_2             (0x4U << GPIO_PAR_P6_Pos)
+
+#define GPIO_PAR_P7_Pos           (28U)
+#define GPIO_PAR_P7_Msk           (0x7U << GPIO_PAR_P7_Pos)
+#define GPIO_PAR_P7               GPIO_PAR_P7_Msk
+#define GPIO_PAR_P7_0             (0x1U << GPIO_PAR_P7_Pos)
+#define GPIO_PAR_P7_1             (0x2U << GPIO_PAR_P7_Pos)
+#define GPIO_PAR_P7_2             (0x4U << GPIO_PAR_P7_Pos)
+
+
+/*------------------------------------------------------------------------------
  *                             RTOS TIMER
  *----------------------------------------------------------------------------*/
 #define RTOS_TIMER_LD_Pos         (0U)
