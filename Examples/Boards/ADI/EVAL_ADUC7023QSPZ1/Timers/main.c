@@ -20,7 +20,7 @@
 
 #include <stddef.h>
 #include "asm/system_aduc7023.h"
-#include "asm/aduc7023.h"
+#include "asm/Driver_GPIO.h"
 #include "Kernel/kernel.h"
 
 #define TIMEOUT                       (250UL)
@@ -44,10 +44,16 @@ static void threadA_func(void *param)
 {
   (void) param;
 
-  GPIO0->DAT |= (1UL << 31U);
+  const GPIO_PIN_CFG_t pin_cfg = {
+    .mode      = GPIO_MODE_OUTPUT,
+    .pull_mode = GPIO_PULL_DISABLE,
+    .strength  = GPIO_STRENGTH_MEDIUM,
+  };
+
+  DRIVER_GPIO0.PinConfig(GPIO_PIN_7, &pin_cfg);
 
   for (;;) {
-    GPIO0->DAT ^= (1UL << 23U);
+    DRIVER_GPIO0.PinToggle(GPIO_PIN_7);
     osDelay(500);
   }
 }

@@ -192,6 +192,7 @@ typedef struct POW_s {
   __IOM uint16_t CMPCON;
 } POW_t;
 
+
 #define IRQ_BASE              0xFFFF0000UL  /*!< IRQ Address Base             */
 #define FIQ_BASE              0xFFFF0100UL  /*!< FIQ Address Base             */
 #define TIMER0_BASE           0xFFFF0300UL  /*!< Timer0 Address Base          */
@@ -250,6 +251,22 @@ typedef struct POW_s {
 /*------------------------------------------------------------------------------
  *                               GPIO
  *----------------------------------------------------------------------------*/
+#define GP0CON                    (volatile uint32_t *) 0xFFFFF400
+#define GP1CON                    (volatile uint32_t *) 0xFFFFF404
+#define GP2CON                    (volatile uint32_t *) 0xFFFFF408
+#define GP0DAT                    (volatile uint32_t *) 0xFFFFF420
+#define GP0SET                    (volatile uint32_t *) 0xFFFFF424
+#define GP0CLR                    (volatile uint32_t *) 0xFFFFF428
+#define GP0PAR                    (volatile uint32_t *) 0xFFFFF42C
+#define GP1DAT                    (volatile uint32_t *) 0xFFFFF430
+#define GP1SET                    (volatile uint32_t *) 0xFFFFF434
+#define GP1CLR                    (volatile uint32_t *) 0xFFFFF438
+#define GP1PAR                    (volatile uint32_t *) 0xFFFFF43C
+#define GP2DAT                    (volatile uint32_t *) 0xFFFFF440
+#define GP2SET                    (volatile uint32_t *) 0xFFFFF444
+#define GP2CLR                    (volatile uint32_t *) 0xFFFFF448
+#define GP2PAR                    (volatile uint32_t *) 0xFFFFF44C
+
 #define GPIO_CON_P0_Pos           (0U)
 #define GPIO_CON_P0_Msk           (0x3U << GPIO_CON_P0_Pos)
 #define GPIO_CON_P0               GPIO_CON_P0_Msk
@@ -353,6 +370,30 @@ typedef struct POW_s {
 #define GPIO_PAR_P7_0             (0x1U << GPIO_PAR_P7_Pos)
 #define GPIO_PAR_P7_1             (0x2U << GPIO_PAR_P7_Pos)
 #define GPIO_PAR_P7_2             (0x4U << GPIO_PAR_P7_Pos)
+
+#define GPIO_DAT_INPUT_Pos        (0U)
+#define GPIO_DAT_INPUT_Msk        (0xFF << GPIO_DAT_INPUT_Pos)
+#define GPIO_DAT_INPUT            GPIO_DAT_INPUT_Msk
+
+#define GPIO_DAT_RESET_Pos        (8U)
+#define GPIO_DAT_RESET_Msk        (0xFF << GPIO_DAT_RESET_Pos)
+#define GPIO_DAT_RESET            GPIO_DAT_RESET_Msk
+
+#define GPIO_DAT_OUTPUT_Pos       (16U)
+#define GPIO_DAT_OUTPUT_Msk       (0xFF << GPIO_DAT_OUTPUT_Pos)
+#define GPIO_DAT_OUTPUT           GPIO_DAT_OUTPUT_Msk
+
+#define GPIO_DAT_DIR_Pos          (24U)
+#define GPIO_DAT_DIR_Msk          (0xFF << GPIO_DAT_DIR_Pos)
+#define GPIO_DAT_DIR              GPIO_DAT_DIR_Msk
+
+#define GPIO_SET_BIT_Pos          (16U)
+#define GPIO_SET_BIT_Msk          (0xFF << GPIO_SET_BIT_Pos)
+#define GPIO_SET_BIT              GPIO_SET_BIT_Msk
+
+#define GPIO_CLR_BIT_Pos          (16U)
+#define GPIO_CLR_BIT_Msk          (0xFF << GPIO_CLR_BIT_Pos)
+#define GPIO_CLR_BIT              GPIO_CLR_BIT_Msk
 
 
 /*------------------------------------------------------------------------------
