@@ -433,6 +433,11 @@
           <GroupName>Device</GroupName>
           <Files>
             <File>
+              <FileName>Driver_GPIO.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Device\ADI\ADuC7023\Driver\Driver_GPIO.c</FilePath>
+            </File>
+            <File>
               <FileName>IRQ.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\..\..\Device\ADI\ADuC7023\Driver\IRQ.c</FilePath>
