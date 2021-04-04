@@ -303,7 +303,6 @@ ContextExit
 ; *---------------------------------------------------------------------------*/
 
 GetModeCPU
-                PROC
                 EXPORT  GetModeCPU
 
                 MRS     R0, CPSR
@@ -312,7 +311,6 @@ GetModeCPU
 
 
 DisableIRQ
-                PROC
                 EXPORT  DisableIRQ
 
                 MRS     R0, CPSR
@@ -322,7 +320,6 @@ DisableIRQ
 
 
 RestoreIRQ
-                PROC
                 EXPORT  RestoreIRQ
 
                 MSR     CPSR_c, R0
