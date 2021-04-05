@@ -19,7 +19,6 @@
  *  includes
  ******************************************************************************/
 
-#include "asm/system_aduc7023.h"
 #include "asm/aduc7023.h"
 #include "Kernel/irq.h"
 
