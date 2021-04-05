@@ -769,7 +769,7 @@
                 </option>
                 <option>
                     <name>IlinkIcfFile</name>
-                    <state>$PROJ_DIR$\aduc7020.icf</state>
+                    <state>$PROJ_DIR$\aduc7023.icf</state>
                 </option>
                 <option>
                     <name>IlinkIcfFileSlave</name>
@@ -2138,6 +2138,9 @@
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\..\..\..\..\Kernel\Source\kernel.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\Common\Config\kernel_lib.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\..\..\..\..\Kernel\Source\mempool.c</name>
