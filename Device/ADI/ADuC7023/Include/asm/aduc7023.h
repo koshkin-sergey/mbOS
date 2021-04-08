@@ -58,6 +58,20 @@ typedef enum {
 } IRQn_t;
 
 /**
+ * @brief Interrupt Priority Definition
+ */
+typedef enum {
+  IRQ_PriorityRealtime    = 0,
+  IRQ_PriorityAboveHigh   = 1,
+  IRQ_PriorityHigh        = 2,
+  IRQ_PriorityAboveNormal = 3,
+  IRQ_PriorityNormal      = 4,
+  IRQ_PriorityBelowNormal = 5,
+  IRQ_PriorityAboveLow    = 6,
+  IRQ_PriorityLow         = 7,
+} IRQ_Priority_t;
+
+/**
  * @brief Interrupt Controller
  */
 typedef struct IRQ_s {
@@ -73,15 +87,8 @@ typedef struct IRQ_s {
   RESERVED(0, uint32_t);
   __IM  uint32_t VEC;     /*!< This register contains the subroutine address
                                for the currently active IRQ source.           */
-  __IOM uint32_t P0;      /*!< This register contains the interrupt priority
-                               setting for Interrupt Source 1 to Interrupt
-                               Source 7.                                      */
-  __IOM uint32_t P1;      /*!< This register contains the interrupt priority
-                               setting for Interrupt Source 8 to Interrupt
-                               Source 15.                                     */
-  __IOM uint32_t P2;      /*!< This register contains the interrupt priority
-                               setting for Interrupt Source 16 to Interrupt
-                               Source 21.                                     */
+  __IOM uint32_t P[3];    /*!< This register contains the interrupt priority
+                               setting for Interrupt Source.                  */
   RESERVED(1, uint32_t);
   __IOM uint32_t CONN;    /*!< Used to enable IRQ and FIQ interrupt nesting.  */
   __IOM uint32_t CONE;    /*!< This register configures the external interrupt

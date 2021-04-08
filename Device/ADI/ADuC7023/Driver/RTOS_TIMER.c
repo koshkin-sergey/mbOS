@@ -22,7 +22,7 @@
 #include "asm/aduc7023.h"
 #include "asm/system_aduc7023.h"
 
-#define RTIM_IRQ_PRIORITY           (7U)
+#define RTIM_IRQ_PRIORITY           (uint32_t)IRQ_PriorityLow
 
 /**
  * @brief       Setup OS Tick timer to generate periodic RTOS Kernel Ticks
@@ -110,7 +110,7 @@ uint32_t osTickGetClock(void)
  */
 uint32_t osTickGetInterval(void)
 {
-
+  return ((uint32_t)RTOS_TIMER->LD);
 }
 
 /**
@@ -128,5 +128,5 @@ uint32_t osTickGetCount(void)
  */
 uint32_t osTickGetOverflow(void)
 {
-
+  return (0U);
 }

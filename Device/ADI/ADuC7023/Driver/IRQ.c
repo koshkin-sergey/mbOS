@@ -197,10 +197,6 @@ IRQn_ID_t IRQ_GetActiveFIQ(void)
  */
 int32_t IRQ_EndOfInterrupt(IRQn_ID_t irqn)
 {
-  if (irqn < 0 || irqn >= VECTOR_NUMBER) {
-    return (-1);
-  }
-
   IRQ->STAN = 0xFF;
 
   return (0);
@@ -252,9 +248,19 @@ int32_t IRQ_ClearPending(IRQn_ID_t irqn)
  */
 int32_t IRQ_SetPriority(IRQn_ID_t irqn, uint32_t priority)
 {
-  if (irqn < 0 || irqn >= VECTOR_NUMBER) {
+  uint32_t p;
+  uint32_t offset;
+  uint32_t prior;
+
+  if (irqn == 0 || irqn >= VECTOR_NUMBER) {
     return (-1);
   }
+
+  p = irqn >> 3U;
+  offset = (irqn & 7U) << 2U;
+
+  prior = IRQ->P[p] & ~(7U << offset);
+  IRQ->P[p] = prior | (priority << offset);
 
   return (0);
 }

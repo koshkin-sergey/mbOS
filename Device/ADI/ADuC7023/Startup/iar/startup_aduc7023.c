@@ -39,6 +39,6 @@ __arm void __iar_init_core(void)
       "BX     R0                                       \n"
       :
       :
-      : "cc", "r0", "lr"
+      : "memory", "r0", "lr"
   );
 }
