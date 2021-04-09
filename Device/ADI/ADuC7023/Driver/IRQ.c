@@ -21,14 +21,14 @@
 #include "Kernel/irq.h"
 #include "asm/aduc7023.h"
 
-#define VECTOR_TABLE_ATTRIBUTE  __attribute__((aligned(128), section(".bss.isr_vector")))
+#define IRQ_TABLE_ATTRIBUTE  __attribute__((aligned(128), section(".bss.isr_vector")))
 
 static uint32_t fiq_mode;
 
 /*------------------------------------------------------------------------------
  * Interrupt Vector table
  *----------------------------------------------------------------------------*/
-static IRQHandler_t isr_vector[VECTOR_NUMBER] VECTOR_TABLE_ATTRIBUTE = { 0U };
+static IRQHandler_t irq_table[IRQ_VECTOR_COUNT] IRQ_TABLE_ATTRIBUTE = { 0U };
 
 /**
  * @brief       Initialize interrupt controller.
@@ -38,17 +38,30 @@ int32_t IRQ_Initialize(void)
 {
   uint32_t addr;
 
-  addr = (uint32_t)&isr_vector[0];
+  addr = (uint32_t)&irq_table[0];
   if ((addr & ~(IRQ_BASER_Msk << 7U)) != 0U) {
     return (-1);
   }
 
-  for (uint32_t i = 0; i < VECTOR_NUMBER; ++i) {
-    isr_vector[i] = NULL;
+  fiq_mode = 0UL;
+
+  /* Disable all interrupt sources */
+  IRQ->CLR = IRQ_CLR_DEFAULT;
+  FIQ->CLR = FIQ_CLR_DEFAULT;
+
+  /* Set interrupt priorities to highest priority */
+  IRQ->P[0] = IRQ_PRIORITY_DEFAULT;
+  IRQ->P[1] = IRQ_PRIORITY_DEFAULT;
+  IRQ->P[2] = IRQ_PRIORITY_DEFAULT;
+
+  /* Set to NULL all interrupt handlers */
+  for (uint32_t i = 0; i < IRQ_VECTOR_COUNT; ++i) {
+    irq_table[i] = (IRQHandler_t)NULL;
   }
 
-  fiq_mode = 0UL;
   IRQ->BASE = addr >> 7U;
+
+  /* Enable IRQ and FIQ signal lines */
   IRQ->CONN = IRQ_CONN_ENIRQN | IRQ_CONN_ENFIQN;
 
   return (0);
@@ -62,11 +75,11 @@ int32_t IRQ_Initialize(void)
  */
 int32_t IRQ_SetHandler(IRQn_ID_t irqn, IRQHandler_t handler)
 {
-  if (irqn < 0 || irqn >= VECTOR_NUMBER || handler == NULL) {
+  if (irqn < 0 || irqn >= IRQ_VECTOR_COUNT || handler == NULL) {
     return (-1);
   }
 
-  isr_vector[irqn] = handler;
+  irq_table[irqn] = handler;
 
   return (0);
 }
@@ -78,11 +91,11 @@ int32_t IRQ_SetHandler(IRQn_ID_t irqn, IRQHandler_t handler)
  */
 IRQHandler_t IRQ_GetHandler(IRQn_ID_t irqn)
 {
-  if (irqn < 0 || irqn >= VECTOR_NUMBER) {
-    return (NULL);
+  if (irqn < 0 || irqn >= IRQ_VECTOR_COUNT) {
+    return ((IRQHandler_t)NULL);
   }
 
-  return (isr_vector[irqn]);
+  return (irq_table[irqn]);
 }
 
 /**
@@ -92,7 +105,7 @@ IRQHandler_t IRQ_GetHandler(IRQn_ID_t irqn)
  */
 int32_t IRQ_Enable(IRQn_ID_t irqn)
 {
-  if (irqn < 0 || irqn >= VECTOR_NUMBER) {
+  if (irqn < 0 || irqn >= IRQ_VECTOR_COUNT) {
     return (-1);
   }
 
@@ -113,7 +126,7 @@ int32_t IRQ_Enable(IRQn_ID_t irqn)
  */
 int32_t IRQ_Disable(IRQn_ID_t irqn)
 {
-  if (irqn < 0 || irqn >= VECTOR_NUMBER) {
+  if (irqn < 0 || irqn >= IRQ_VECTOR_COUNT) {
     return (-1);
   }
 
@@ -134,16 +147,16 @@ int32_t IRQ_Disable(IRQn_ID_t irqn)
  */
 uint32_t IRQ_GetEnableState(IRQn_ID_t irqn)
 {
-  uint32_t state;
+  uint32_t enable;
 
-  if ((fiq_mode & (1UL << irqn)) == 0UL) {
-    state = (IRQ->EN & (1UL << irqn)) >> irqn;
+  if ((irqn >= 0) && (irqn < IRQ_VECTOR_COUNT)) {
+    enable = ((IRQ->EN >> irqn) | (FIQ->EN >> irqn)) & 1U;
   }
   else {
-    state = (FIQ->EN & (1UL << irqn)) >> irqn;
+    enable = 0U;
   }
 
-  return (state);
+  return (enable);
 }
 
 /**
@@ -209,7 +222,7 @@ int32_t IRQ_EndOfInterrupt(IRQn_ID_t irqn)
  */
 int32_t IRQ_SetPending(IRQn_ID_t irqn)
 {
-  if (irqn < 0 || irqn >= VECTOR_NUMBER) {
+  if (irqn < 0 || irqn >= IRQ_VECTOR_COUNT) {
     return (-1);
   }
 
@@ -233,7 +246,7 @@ uint32_t IRQ_GetPending(IRQn_ID_t irqn)
  */
 int32_t IRQ_ClearPending(IRQn_ID_t irqn)
 {
-  if (irqn < 0 || irqn >= VECTOR_NUMBER) {
+  if (irqn < 0 || irqn >= IRQ_VECTOR_COUNT) {
     return (-1);
   }
 
@@ -248,19 +261,19 @@ int32_t IRQ_ClearPending(IRQn_ID_t irqn)
  */
 int32_t IRQ_SetPriority(IRQn_ID_t irqn, uint32_t priority)
 {
-  uint32_t p;
+  uint32_t idx;
   uint32_t offset;
   uint32_t prior;
 
-  if (irqn == 0 || irqn >= VECTOR_NUMBER) {
+  if (irqn == 0 || irqn >= IRQ_VECTOR_COUNT) {
     return (-1);
   }
 
-  p = irqn >> 3U;
-  offset = (irqn & 7U) << 2U;
+  idx    = IRQ_PRIORITY_IDX(irqn);
+  offset = IRQ_PRIORITY_OFS(irqn);
 
-  prior = IRQ->P[p] & ~(7U << offset);
-  IRQ->P[p] = prior | (priority << offset);
+  prior = IRQ->P[idx] & ~(IRQ_PRIORITY_BIT_Msk << offset);
+  IRQ->P[idx] = prior | (priority << offset);
 
   return (0);
 }
@@ -273,7 +286,20 @@ int32_t IRQ_SetPriority(IRQn_ID_t irqn, uint32_t priority)
  */
 uint32_t IRQ_GetPriority(IRQn_ID_t irqn)
 {
-  return (0U);
+  uint32_t priority;
+  uint32_t idx;
+  uint32_t offset;
+
+  if ((irqn >= 0U) && (irqn < IRQ_VECTOR_COUNT)) {
+    idx    = IRQ_PRIORITY_IDX(irqn);
+    offset = IRQ_PRIORITY_OFS(irqn);
+    priority = (IRQ->P[idx] >> offset) & IRQ_PRIORITY_BIT_Msk;
+  }
+  else {
+    priority = IRQ_PRIORITY_ERROR;
+  }
+
+  return (priority);
 }
 
 /**
@@ -283,7 +309,7 @@ uint32_t IRQ_GetPriority(IRQn_ID_t irqn)
  */
 int32_t IRQ_SetPriorityMask(uint32_t priority)
 {
-  return (0);
+  return (-1);
 }
 
 /**
@@ -293,7 +319,7 @@ int32_t IRQ_SetPriorityMask(uint32_t priority)
  */
 uint32_t IRQ_GetPriorityMask(void)
 {
-  return (0U);
+  return (IRQ_PRIORITY_ERROR);
 }
 
 /// Set priority grouping field split point
@@ -307,7 +333,7 @@ uint32_t IRQ_GetPriorityMask(void)
  */
 int32_t IRQ_SetPriorityGroupBits(uint32_t bits)
 {
-  return (0);
+  return (-1);
 }
 
 /**
@@ -317,5 +343,5 @@ int32_t IRQ_SetPriorityGroupBits(uint32_t bits)
  */
 uint32_t IRQ_GetPriorityGroupBits(void)
 {
-  return (0U);
+  return (IRQ_PRIORITY_ERROR);
 }

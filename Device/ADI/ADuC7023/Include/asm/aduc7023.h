@@ -54,7 +54,7 @@ typedef enum {
   EXT_IRQ3_IRQn     = 19,   /*!< External IRQ3 Interrupt                      */
   PLA_IRQ1_IRQn     = 20,   /*!< PLA IRQ1 Interrupt                           */
   PWM_IRQn          = 21,   /*!< PWM Interrupt                                */
-  VECTOR_NUMBER     = 22
+  IRQ_VECTOR_COUNT  = 22
 } IRQn_t;
 
 /**
@@ -254,6 +254,14 @@ typedef struct POW_s {
 #define FIQ_VEC_BASE_Pos          (7U)
 #define FIQ_VEC_BASE_Msk          (0xFFFFU << FIQ_VEC_BASE_Pos)
 #define FIQ_VEC_BASE              FIQ_VEC_BASE_Msk
+
+#define IRQ_PRIORITY_BIT_Msk      (7U)
+#define IRQ_PRIORITY_IDX(irqn)    (irqn >> 3U)
+#define IRQ_PRIORITY_OFS(irqn)    ((irqn & IRQ_PRIORITY_BIT_Msk) << 2U)
+
+#define IRQ_CLR_DEFAULT           (0xFFFFFFFFUL)
+#define FIQ_CLR_DEFAULT           (0xFFFFFFFFUL)
+#define IRQ_PRIORITY_DEFAULT      (0x00000000UL)
 
 /*------------------------------------------------------------------------------
  *                               GPIO
