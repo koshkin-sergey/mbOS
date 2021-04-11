@@ -6,8 +6,9 @@ With an RTOS core based on the CMSIS-RTOS specification, mbOS supports determini
 Currently mbOS is available for the following architectures:
 
 - ARM Cortex-M cores: Cortex-M0/M0+/M1/M3/M4
+- ARM7, ARM9 and ARM11 processor families (Thumb and ARM Modes)
 
-mbOS is tested across Arm Compiler 5, GCC and IAR compiler.
+mbOS is tested across Arm Compiler 5, Arm Compiler 6, GCC and IAR compiler.
 
 ## License and contributions
 The software is provided under the Apache-2.0 license. Contributions to this project are accepted under the same license. You can use mbOS in commercial and personal projects with confidence.
