@@ -24,42 +24,11 @@
  *
  */
 
-/*******************************************************************************
- *  includes
- ******************************************************************************/
-
-#include "string.h"
+#include <string.h>
 #include "kernel_lib.h"
-
-/*******************************************************************************
- *  external declarations
- ******************************************************************************/
-
-/*******************************************************************************
- *  defines and macros (scope: module-local)
- ******************************************************************************/
-
-/*******************************************************************************
- *  typedefs and structures (scope: module-local)
- ******************************************************************************/
-
-/*******************************************************************************
- *  global variable definitions  (scope: module-exported)
- ******************************************************************************/
+#include "Kernel/tick.h"
 
 KernelInfo_t osInfo;
-
-/*******************************************************************************
- *  global variable definitions (scope: module-local)
- ******************************************************************************/
-
-/*******************************************************************************
- *  function prototypes (scope: module-local)
- ******************************************************************************/
-
-/*******************************************************************************
- *  function implementations (scope: module-local)
- ******************************************************************************/
 
 static osStatus_t svcKernelInitialize(void)
 {
@@ -126,7 +95,13 @@ static osStatus_t svcKernelStart(void)
   SystemIsrInit();
 
   /* Setup RTOS Tick */
-  osSysTickInit(osConfig.tick_freq);
+  if (osTickSetup(osConfig.tick_freq, OS_TICK_HANDLER) != 0) {
+    return (osError);
+  }
+  osInfo.tick_irqn = osTickGetIRQn();
+
+  /* Enable RTOS Tick */
+  osTickEnable();
 
   /* Switch to Ready Thread with highest Priority */
   thread = krnThreadHighestPrioGet();
@@ -415,5 +390,3 @@ uint32_t osKernelGetTickFreq(void)
 
   return (freq);
 }
-
-/*------------------------------ End of file ---------------------------------*/

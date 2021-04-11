@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2019-2021 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -21,18 +21,24 @@
 
 #include "asm/system_stm32f7xx.h"
 
+uint32_t SystemCoreClock;           /*!< System Clock Frequency (Core Clock)  */
+
 /*******************************************************************************
  *  function implementations (scope: module-exported)
  ******************************************************************************/
 
 /**
-  * @brief  Setup the microcontroller system.
-  * @param  None
-  * @retval None
-  */
-void SystemInit(void)
+ * @brief       Update SystemCoreClock variable.
+ */
+void SystemCoreClockUpdate(void)
 {
 
 }
 
-/* ----------------------------- End of file ---------------------------------*/
+/**
+ * @brief       Initialize the System.
+ */
+void SystemInit(void)
+{
+
+}

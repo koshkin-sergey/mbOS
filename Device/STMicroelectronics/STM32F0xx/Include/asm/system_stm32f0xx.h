@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2019-2021 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -18,14 +18,26 @@
 #ifndef SYSTEM_STM32F0XX_H_
 #define SYSTEM_STM32F0XX_H_
 
+#include <stdint.h>
+
 #ifdef __cplusplus
  extern "C" {
-#endif 
+#endif
 
- /*******************************************************************************
-  *  exported function prototypes
-  ******************************************************************************/
+extern uint32_t SystemCoreClock;    /*!< System Clock Frequency (Core Clock)  */
 
+/*******************************************************************************
+ *  exported function prototypes
+ ******************************************************************************/
+
+/**
+ * @brief       Update SystemCoreClock variable.
+ */
+extern void SystemCoreClockUpdate(void);
+
+/**
+ * @brief       Initialize the System and update the SystemCoreClock variable.
+ */
 extern void SystemInit(void);
 
 #ifdef __cplusplus
@@ -33,5 +45,3 @@ extern void SystemInit(void);
 #endif
 
 #endif /* SYSTEM_STM32F0XX_H_ */
-
-/* ----------------------------- End of file ---------------------------------*/

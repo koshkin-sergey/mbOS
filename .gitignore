@@ -6,6 +6,7 @@
 *.elf
 
 # MDK-ARM Project Files
+*.uvgui.*
 *.uvguix.*
 *.scvd
 DebugConfig/
@@ -17,6 +18,7 @@ Packs*.htm
 settings/
 *.dep
 *.ewt
+*.ewd
 
 # SW4STM32 Project Files
 .settings/

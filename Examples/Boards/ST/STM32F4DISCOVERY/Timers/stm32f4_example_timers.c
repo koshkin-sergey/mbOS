@@ -11,6 +11,7 @@
  ******************************************************************************/
 
 #include "asm/GPIO_STM32F4xx.h"
+#include "asm/system_stm32f4xx.h"
 #include "Kernel/kernel.h"
 
 /*******************************************************************************
@@ -100,8 +101,11 @@ static const GPIO_PIN_CFG_t LED_cfg = {
  *  function implementations (scope: module-local)
  ******************************************************************************/
 
+__NO_RETURN
 static void threadA_func(void *param)
 {
+  (void) param;
+
   osTimerStart(timer1, TIMEOUT);
 
   for (;;) {
@@ -111,8 +115,11 @@ static void threadA_func(void *param)
   }
 }
 
+__NO_RETURN
 static void threadB_func(void *param)
 {
+  (void) param;
+
   osDelay(TIMEOUT);
   osTimerStart(timer2, TIMEOUT);
 
@@ -125,16 +132,22 @@ static void threadB_func(void *param)
 
 static void timer1_func(void *argument)
 {
+  (void) argument;
+
   GPIO_PinToggle(LED_PORT, LED_ORANGE);
 }
 
 static void timer2_func(void *argument)
 {
+  (void) argument;
+
   GPIO_PinToggle(LED_PORT, LED_BLUE);
 }
 
 static void HardwareInit(void)
 {
+  SystemCoreClockUpdate();
+
   if (!GPIO_GetPortClockState(LED_PORT)) {
     GPIO_PortClock(LED_PORT, GPIO_PORT_CLK_ENABLE);
   }

@@ -21,30 +21,51 @@
 #define ARCH_ARM_H_
 
 /*******************************************************************************
+ *  includes
+ ******************************************************************************/
+
+#include <stdbool.h>
+#include "CMSIS/Core_ARM/cmsis_compiler.h"
+
+extern uint32_t GetModeCPU(void);
+extern uint32_t DisableIRQ(void);
+extern     void RestoreIRQ(uint32_t);
+
+/*******************************************************************************
  *  defines and macros
  ******************************************************************************/
+
+#define INIT_EXC_RETURN               0xFFFFFFFDUL
+#define OS_TICK_HANDLER               osTick_Handler
 
 /* CPSR bit definitions */
 #define CPSR_I_Pos                    7U
 #define CPSR_I_Msk                    (1UL << CPSR_I_Pos)
 
+#define CPSR_T_Pos                    5U
+#define CPSR_T_Msk                    (1UL << CPSR_T_Pos)
+
 /* CPSR mode bitmasks */
 #define CPSR_MODE_USER                0x10U
 #define CPSR_MODE_SYSTEM              0x1FU
 
+#define IsIrqMasked()                 false
+#define SystemIsrInit()
+#define setPrivilegedMode(flag)
 
-#define BEGIN_CRITICAL_SECTION        uint32_t cpsr = __get_CPSR(); \
-                                      __set_CPSR(cpsr | CPSR_I_Msk);
+#define BEGIN_CRITICAL_SECTION        uint32_t mode = DisableIRQ();
+#define END_CRITICAL_SECTION          RestoreIRQ(mode);
 
-#define END_CRITICAL_SECTION          __set_CPSR(cpsr);
-
-#define SVC_INDIRECT_REG              "r12"
-
-#define SVC_0(func)                                   (uint32_t)svc_0((uint32_t)(func))
-#define SVC_1(param1, func)                           (uint32_t)svc_1((uint32_t)(param1), (uint32_t)(func))
-#define SVC_2(param1, param2, func)                   (uint32_t)svc_2((uint32_t)(param1), (uint32_t)(param2), (uint32_t)(func))
-#define SVC_3(param1, param2, param3, func)           (uint32_t)svc_3((uint32_t)(param1), (uint32_t)(param2), (uint32_t)(param3), (uint32_t)(func))
-#define SVC_4(param1, param2, param3, param4, func)   (uint32_t)svc_4((uint32_t)(param1), (uint32_t)(param2), (uint32_t)(param3), (uint32_t)(param4), (uint32_t)(func))
+#if defined(__CC_ARM)
+  #define SVC_INDIRECT_REG            r12
+#elif defined(__ICCARM__)
+  #define SVC_FUNC(f)                 __asm (                                  \
+                                        "mov r12,%0\n"                         \
+                                        :: "r"(f): "r12"                       \
+                                      )
+#else
+  #define SVC_INDIRECT_REG            "r12"
+#endif
 
 /*******************************************************************************
  *  exported functions
@@ -59,7 +80,7 @@
 __STATIC_INLINE
 bool IsPrivileged(void)
 {
-  return (__get_mode() != CPSR_MODE_USER);
+  return (GetModeCPU() != CPSR_MODE_USER);
 }
 
 /**
@@ -70,43 +91,69 @@ bool IsPrivileged(void)
 __STATIC_INLINE
 bool IsIrqMode(void)
 {
-  return ((__get_mode() != CPSR_MODE_USER) && (__get_mode() != CPSR_MODE_SYSTEM));
+  uint32_t mode = GetModeCPU();
+
+  return ((mode != CPSR_MODE_USER) && (mode != CPSR_MODE_SYSTEM));
 }
+
+extern uint8_t IRQ_PendSV;
 
 /**
- * @fn          bool IsIrqMasked(void)
- * @brief       Check if IRQ is Masked
- * @return      true=masked, false=not masked
+ * @fn          void PendServCallReq(void)
+ * @brief       Set Pending SV (Service Call) Flag.
  */
-__STATIC_INLINE
-bool IsIrqMasked(void)
-{
-  return (false);
-}
-
-__STATIC_INLINE
-uint32_t SystemIsrInit(void)
-{
-  return (0U);
-}
-
-/**
- * @fn          void setPrivilegedMode(uint32_t)
- * @brief
- *
- * @param       flag
- */
-__STATIC_INLINE
-void setPrivilegedMode(uint32_t flag)
-{
-  (void) flag;
-}
-
 __STATIC_FORCEINLINE
-void archSwitchContextRequest(void)
+void PendServCallReq(void)
 {
-
+  IRQ_PendSV = 1U;
 }
+
+__STATIC_INLINE
+uint32_t StackInit(StackAttr_t *attr, bool privileged)
+{
+  uint32_t psr;
+  bool     thumb = (attr->func_addr & 1U) != 0U;
+
+  if (privileged) {
+    if (thumb) {
+      psr = CPSR_MODE_SYSTEM | CPSR_T_Msk;
+    } else {
+      psr = CPSR_MODE_SYSTEM;
+    }
+  } else {
+    if (thumb) {
+      psr = CPSR_MODE_USER   | CPSR_T_Msk;
+    } else {
+      psr = CPSR_MODE_USER;
+    }
+  }
+
+  uint32_t *stk = (uint32_t *)(attr->stk_mem + attr->stk_size);
+
+  *(--stk) = psr;                               //-- xPSR
+  *(--stk) = attr->func_addr;                   //-- Entry Point (PC)
+  *(--stk) = attr->func_exit;                   //-- R14 (LR)
+  *(--stk) = 0x12121212L;                       //-- R12
+  *(--stk) = 0x03030303L;                       //-- R3
+  *(--stk) = 0x02020202L;                       //-- R2
+  *(--stk) = 0x01010101L;                       //-- R1
+  *(--stk) = attr->func_param;                  //-- R0 - thread's function argument
+  *(--stk) = 0x11111111L;                       //-- R11
+  *(--stk) = 0x10101010L;                       //-- R10
+  *(--stk) = 0x09090909L;                       //-- R9
+  *(--stk) = 0x08080808L;                       //-- R8
+  *(--stk) = 0x07070707L;                       //-- R7
+  *(--stk) = 0x06060606L;                       //-- R6
+  *(--stk) = 0x05050505L;                       //-- R5
+  *(--stk) = 0x04040404L;                       //-- R4
+
+  return ((uint32_t)stk);
+}
+
+#if   defined ( __CC_ARM )
+  #pragma push
+  #pragma arm
+#endif
 
 __STATIC_FORCEINLINE
 uint32_t svc_0(uint32_t func)
@@ -293,5 +340,9 @@ uint32_t svc_4(uint32_t param1, uint32_t param2, uint32_t param3, uint32_t param
 
 #endif
 }
+
+#if   defined ( __CC_ARM )
+  #pragma pop
+#endif
 
 #endif /* ARCH_ARM_H_ */
