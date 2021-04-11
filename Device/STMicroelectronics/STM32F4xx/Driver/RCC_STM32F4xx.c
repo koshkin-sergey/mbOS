@@ -112,7 +112,7 @@ void RCC_OscInit(RCC_OscInit_t *init)
     switch (init->HSE_State) {
       case RCC_HSE_BYPASS:
         RCC->CR |= RCC_CR_HSEBYP;
-        /* no break */
+        __attribute__((fallthrough));
 
       case RCC_HSE_ON:
         RCC->CR |= RCC_CR_HSEON;

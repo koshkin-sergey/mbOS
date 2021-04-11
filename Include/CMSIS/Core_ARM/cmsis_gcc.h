@@ -1,9 +1,3 @@
-/**************************************************************************//**
- * @file     cmsis_gcc.h
- * @brief    CMSIS compiler specific macros, functions, instructions
- * @version  V1.0.0
- * @date     18. January 2021
- ******************************************************************************/
 /*
  * Copyright (C) 2021 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
@@ -108,6 +102,54 @@
   #define __COMPILER_BARRIER()                   __ASM volatile("":::"memory")
 #endif
 
+/* #########################  Startup and Lowlevel Init  ######################## */
+
+#ifndef __PROGRAM_START
+
+/**
+  \brief   Initializes data and bss sections
+  \details This default implementations initialized all data and additional bss
+           sections relying on .copy.table and .zero.table specified properly
+           in the used linker script.
+
+ */
+__STATIC_FORCEINLINE __NO_RETURN void __cmsis_start(void)
+{
+  extern void _start(void) __NO_RETURN;
+
+  typedef struct {
+    uint32_t const* src;
+    uint32_t* dest;
+    uint32_t  wlen;
+  } __copy_table_t;
+
+  typedef struct {
+    uint32_t* dest;
+    uint32_t  wlen;
+  } __zero_table_t;
+
+  extern const __copy_table_t __copy_table_start__;
+  extern const __copy_table_t __copy_table_end__;
+  extern const __zero_table_t __zero_table_start__;
+  extern const __zero_table_t __zero_table_end__;
+
+  for (__copy_table_t const* pTable = &__copy_table_start__; pTable < &__copy_table_end__; ++pTable) {
+    for(uint32_t i=0u; i<pTable->wlen; ++i) {
+      pTable->dest[i] = pTable->src[i];
+    }
+  }
+
+  for (__zero_table_t const* pTable = &__zero_table_start__; pTable < &__zero_table_end__; ++pTable) {
+    for(uint32_t i=0u; i<pTable->wlen; ++i) {
+      pTable->dest[i] = 0u;
+    }
+  }
+
+  _start();
+}
+
+#define __PROGRAM_START           __cmsis_start
+#endif
 
 /* ##########################  Core Instruction Access  ######################### */
 /**
@@ -220,61 +262,6 @@ __STATIC_FORCEINLINE uint8_t __CLZ(uint32_t value)
     return 32U;
   }
   return __builtin_clz(value);
-}
-
-
-/* ###########################  Core Function Access  ########################### */
-
-/** \brief  Get CPSR Register
-    \return               CPSR Register value
- */
-__STATIC_FORCEINLINE uint32_t __get_CPSR(void)
-{
-  uint32_t result;
-  __ASM volatile("MRS %0, cpsr" : "=r" (result) );
-  return(result);
-}
-
-/** \brief  Set CPSR Register
-    \param [in]    cpsr  CPSR value to set
- */
-__STATIC_FORCEINLINE void __set_CPSR(uint32_t cpsr)
-{
-__ASM volatile ("MSR cpsr, %0" : : "r" (cpsr) : "cc", "memory");
-}
-
-/** \brief  Get Mode
-    \return                Processor Mode
- */
-__STATIC_FORCEINLINE uint32_t __get_mode(void)
-{
-    return (__get_CPSR() & 0x1FU);
-}
-
-/** \brief  Set Mode
-    \param [in]    mode  Mode value to set
- */
-__STATIC_FORCEINLINE void __set_mode(uint32_t mode)
-{
-  __ASM volatile("MSR  cpsr_c, %0" : : "r" (mode) : "memory");
-}
-
-/** \brief  Get Stack Pointer
-    \return Stack Pointer value
- */
-__STATIC_FORCEINLINE uint32_t __get_SP(void)
-{
-  uint32_t result;
-  __ASM volatile("MOV  %0, sp" : "=r" (result) : : "memory");
-  return result;
-}
-
-/** \brief  Set Stack Pointer
-    \param [in]    stack  Stack Pointer value to set
- */
-__STATIC_FORCEINLINE void __set_SP(uint32_t stack)
-{
-  __ASM volatile("MOV  sp, %0" : : "r" (stack) : "memory");
 }
 
 #pragma GCC diagnostic pop

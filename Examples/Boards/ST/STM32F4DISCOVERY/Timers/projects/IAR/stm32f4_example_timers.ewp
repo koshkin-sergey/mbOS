@@ -143,12 +143,12 @@
                 <option>
                     <name>FPU2</name>
                     <version>0</version>
-                    <state>0</state>
+                    <state>4</state>
                 </option>
                 <option>
                     <name>NrRegs</name>
                     <version>0</version>
-                    <state>0</state>
+                    <state>1</state>
                 </option>
                 <option>
                     <name>NEON</name>
@@ -817,7 +817,7 @@
                 </option>
                 <option>
                     <name>IlinkAdditionalLibs</name>
-                    <state></state>
+                    <state>$PROJ_DIR$\..\..\..\..\..\..\..\Kernel\Library\IAR\Kernel_CM4F.a</state>
                 </option>
                 <option>
                     <name>IlinkOverrideProgramEntryLabel</name>
@@ -1054,36 +1054,33 @@
         </settings>
     </configuration>
     <group>
-        <name>RTOS</name>
-        <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Kernel\Library\IAR\Kernel_CM4.a</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\..\Common\Config\kernel_config.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\..\Common\Config\kernel_lib.c</name>
-        </file>
-    </group>
-    <group>
         <name>src</name>
         <group>
-            <name>Device</name>
+            <name>Config</name>
             <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\..\..\Device\STMicroelectronics\STM32F4xx\Startup\startup_stm32f407xx.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\..\..\Device\STMicroelectronics\STM32F4xx\Startup\system_stm32f4xx.c</name>
+                <name>$PROJ_DIR$\..\..\..\Common\Config\kernel_lib.c</name>
             </file>
         </group>
         <group>
-            <name>driver</name>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\..\..\Device\STMicroelectronics\STM32F4xx\Driver\GPIO_STM32F4xx.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\..\..\Device\STMicroelectronics\STM32F4xx\Driver\RCC_STM32F4xx.c</name>
-            </file>
+            <name>Device</name>
+            <group>
+                <name>Driver</name>
+                <file>
+                    <name>$PROJ_DIR$\..\..\..\..\..\..\..\Device\STMicroelectronics\STM32F4xx\Driver\GPIO_STM32F4xx.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\..\..\..\..\..\..\Device\STMicroelectronics\STM32F4xx\Driver\RCC_STM32F4xx.c</name>
+                </file>
+            </group>
+            <group>
+                <name>Startup</name>
+                <file>
+                    <name>$PROJ_DIR$\..\..\..\..\..\..\..\Device\STMicroelectronics\STM32F4xx\Startup\startup_stm32f407xx.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\..\..\..\..\..\..\Device\STMicroelectronics\STM32F4xx\Startup\system_stm32f4xx.c</name>
+                </file>
+            </group>
         </group>
         <file>
             <name>$PROJ_DIR$\..\..\stm32f4_example_timers.c</name>

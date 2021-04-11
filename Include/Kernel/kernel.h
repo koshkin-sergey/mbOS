@@ -24,8 +24,22 @@
  *  includes
  ******************************************************************************/
 
+#ifndef __NO_RETURN
+#if   defined(__CC_ARM)
+#define __NO_RETURN __declspec(noreturn)
+#elif defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
+#define __NO_RETURN __attribute__((__noreturn__))
+#elif defined(__GNUC__)
+#define __NO_RETURN __attribute__((__noreturn__))
+#elif defined(__ICCARM__)
+#define __NO_RETURN __noreturn
+#else
+#define __NO_RETURN
+#endif
+#endif
+
+#include <stdint.h>
 #include <stddef.h>
-#include "CMSIS/Core/cmsis_compiler.h"
 
 #ifdef  __cplusplus
 extern "C"
@@ -47,7 +61,8 @@ extern "C"
   #pragma clang diagnostic ignored "-Wc11-extensions"
   #pragma clang diagnostic ignored "-Wreserved-id-macro"
 #elif defined (__GNUC__)
-  /* anonymous unions are enabled by default */
+  #pragma GCC diagnostic push
+  #pragma GCC diagnostic ignored "-Wpedantic"
 #elif defined (__TMS470__)
   /* anonymous unions are enabled by default */
 #elif defined (__TASKING__)
@@ -509,8 +524,10 @@ typedef struct osConfig_s {
 
 /* OS Idle Thread */
 extern void osIdleThread(void *argument);
-/* SysTick timer initialization */
-extern void osSysTickInit(uint32_t hz);
+/* OS Exception handlers */
+extern void SVC_Handler(void);
+extern void PendSV_Handler(void);
+extern void SysTick_Handler(void);
 
 /*******************************************************************************
  *  Kernel Information and Control
@@ -1228,7 +1245,7 @@ osStatus_t osMutexDelete(osMutexId_t mutex_id);
 #elif (defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050))
   #pragma clang diagnostic pop
 #elif defined (__GNUC__)
-  /* anonymous unions are enabled by default */
+  #pragma GCC diagnostic pop
 #elif defined (__TMS470__)
   /* anonymous unions are enabled by default */
 #elif defined (__TASKING__)

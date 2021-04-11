@@ -276,7 +276,7 @@ void GPIO_AFConfig(GPIO_PORT_t port, GPIO_PIN_t pin, GPIO_PIN_FUNC_t af_num)
   GPIO_TypeDef *gpio = ports[port];
   volatile uint32_t *pafr = &gpio->AFR[pin >> 3];
 
-  afr = (*pafr & ~(0xF << shift));
+  afr = (*pafr & ~(0xFUL << shift));
   *pafr = (afr | ((uint32_t)af_num << shift));
 }
 
