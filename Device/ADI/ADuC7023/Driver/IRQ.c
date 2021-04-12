@@ -23,7 +23,11 @@
 
 #define IRQ_TABLE_ATTRIBUTE  __attribute__((aligned(128), section(".bss.isr_vector")))
 
-static uint32_t fiq_mode;
+typedef struct IRQ_MODE_INFO_s {
+  uint32_t type;      /* Type of interrupt (IRQ or FIQ) */
+} IRQ_MODE_INFO_t;
+
+static IRQ_MODE_INFO_t irq_mode;
 
 /*------------------------------------------------------------------------------
  * Interrupt Vector table
@@ -43,16 +47,16 @@ int32_t IRQ_Initialize(void)
     return (-1);
   }
 
-  fiq_mode = 0UL;
+  irq_mode.type = 0UL;
 
   /* Disable all interrupt sources */
-  IRQ->CLR = IRQ_CLR_DEFAULT;
-  FIQ->CLR = FIQ_CLR_DEFAULT;
+  IRQ->CLR = IRQ_CLR_DEF_VALUE;
+  FIQ->CLR = FIQ_CLR_DEF_VALUE;
 
   /* Set interrupt priorities to highest priority */
-  IRQ->P[0] = IRQ_PRIORITY_DEFAULT;
-  IRQ->P[1] = IRQ_PRIORITY_DEFAULT;
-  IRQ->P[2] = IRQ_PRIORITY_DEFAULT;
+  IRQ->P[0] = IRQ_PRIO_DEF_VALUE;
+  IRQ->P[1] = IRQ_PRIO_DEF_VALUE;
+  IRQ->P[2] = IRQ_PRIO_DEF_VALUE;
 
   /* Set to NULL all interrupt handlers */
   for (uint32_t i = 0; i < IRQ_VECTOR_COUNT; ++i) {
@@ -75,13 +79,17 @@ int32_t IRQ_Initialize(void)
  */
 int32_t IRQ_SetHandler(IRQn_ID_t irqn, IRQHandler_t handler)
 {
-  if (irqn < 0 || irqn >= IRQ_VECTOR_COUNT || handler == NULL) {
-    return (-1);
+  int32_t status;
+
+  if (irqn >= 0 && irqn < IRQ_VECTOR_COUNT && handler != NULL) {
+    irq_table[irqn] = handler;
+    status = 0;
+  }
+  else {
+    status = -1;
   }
 
-  irq_table[irqn] = handler;
-
-  return (0);
+  return (status);
 }
 
 /**
@@ -91,11 +99,16 @@ int32_t IRQ_SetHandler(IRQn_ID_t irqn, IRQHandler_t handler)
  */
 IRQHandler_t IRQ_GetHandler(IRQn_ID_t irqn)
 {
-  if (irqn < 0 || irqn >= IRQ_VECTOR_COUNT) {
-    return ((IRQHandler_t)NULL);
+  IRQHandler_t handler;
+
+  if (irqn >= 0 && irqn < IRQ_VECTOR_COUNT) {
+    handler = irq_table[irqn];
+  }
+  else {
+    handler = NULL;
   }
 
-  return (irq_table[irqn]);
+  return (handler);
 }
 
 /**
@@ -105,18 +118,26 @@ IRQHandler_t IRQ_GetHandler(IRQn_ID_t irqn)
  */
 int32_t IRQ_Enable(IRQn_ID_t irqn)
 {
-  if (irqn < 0 || irqn >= IRQ_VECTOR_COUNT) {
-    return (-1);
-  }
+   int32_t status;
+  uint32_t irq_msk;
 
-  if ((fiq_mode & (1UL << irqn)) == 0UL) {
-    IRQ->EN = (1UL << irqn);
+  if (irqn >= 0 && irqn < IRQ_VECTOR_COUNT) {
+    irq_msk = 1UL << irqn;
+
+    if ((irq_mode.type & irq_msk) == 0UL) {
+      IRQ->EN = irq_msk;
+    }
+    else {
+      FIQ->EN = irq_msk;
+    }
+
+    status = 0;
   }
   else {
-    FIQ->EN = (1UL << irqn);
+    status = -1;
   }
 
-  return (0);
+  return (status);
 }
 
 /**
@@ -126,18 +147,26 @@ int32_t IRQ_Enable(IRQn_ID_t irqn)
  */
 int32_t IRQ_Disable(IRQn_ID_t irqn)
 {
-  if (irqn < 0 || irqn >= IRQ_VECTOR_COUNT) {
-    return (-1);
-  }
+   int32_t status;
+  uint32_t irq_msk;
 
-  if ((fiq_mode & (1UL << irqn)) == 0UL) {
-    IRQ->CLR = (1UL << irqn);
+  if (irqn >= 0 && irqn < IRQ_VECTOR_COUNT) {
+    irq_msk = 1UL << irqn;
+
+    if ((irq_mode.type & irq_msk) == 0UL) {
+      IRQ->CLR = irq_msk;
+    }
+    else {
+      FIQ->CLR = irq_msk;
+    }
+
+    status = 0;
   }
   else {
-    FIQ->CLR = (1UL << irqn);
+    status = -1;
   }
 
-  return (0);
+  return (status);
 }
 
 /**
@@ -210,6 +239,8 @@ IRQn_ID_t IRQ_GetActiveFIQ(void)
  */
 int32_t IRQ_EndOfInterrupt(IRQn_ID_t irqn)
 {
+  (void) irqn;
+
   IRQ->STAN = 0xFF;
 
   return (0);
@@ -236,6 +267,8 @@ int32_t IRQ_SetPending(IRQn_ID_t irqn)
  */
 uint32_t IRQ_GetPending(IRQn_ID_t irqn)
 {
+  (void) irqn;
+
   return (0U);
 }
 
@@ -246,11 +279,9 @@ uint32_t IRQ_GetPending(IRQn_ID_t irqn)
  */
 int32_t IRQ_ClearPending(IRQn_ID_t irqn)
 {
-  if (irqn < 0 || irqn >= IRQ_VECTOR_COUNT) {
-    return (-1);
-  }
+  (void) irqn;
 
-  return (0);
+  return (-1);
 }
 
 /**

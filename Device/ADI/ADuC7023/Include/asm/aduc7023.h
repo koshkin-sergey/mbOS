@@ -259,9 +259,9 @@ typedef struct POW_s {
 #define IRQ_PRIORITY_IDX(irqn)    (irqn >> 3U)
 #define IRQ_PRIORITY_OFS(irqn)    ((irqn & IRQ_PRIORITY_BIT_Msk) << 2U)
 
-#define IRQ_CLR_DEFAULT           (0xFFFFFFFFUL)
-#define FIQ_CLR_DEFAULT           (0xFFFFFFFFUL)
-#define IRQ_PRIORITY_DEFAULT      (0x00000000UL)
+#define IRQ_CLR_DEF_VALUE         (0xFFFFFFFFUL)
+#define FIQ_CLR_DEF_VALUE         (0xFFFFFFFFUL)
+#define IRQ_PRIO_DEF_VALUE        (0x00000000UL)
 
 /*------------------------------------------------------------------------------
  *                               GPIO
