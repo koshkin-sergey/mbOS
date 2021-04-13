@@ -194,6 +194,7 @@ SECTIONS
   {
     __data_start__ = .;
     *(vtable)
+    *(.ramfunc)
     *(.data)
     *(.data.*)
 
