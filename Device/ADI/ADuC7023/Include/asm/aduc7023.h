@@ -199,6 +199,17 @@ typedef struct POW_s {
   __IOM uint16_t CMPCON;
 } POW_t;
 
+typedef struct FLASH_s {
+  __IM  uint32_t STA;
+  __IOM uint32_t MOD;
+  __IOM uint32_t CON;
+  __IOM uint32_t DAT;
+  __IOM uint32_t ADR;
+  RESERVED(0, uint32_t);
+  __IM  uint32_t SIGN;
+  __IOM uint32_t PRO;
+  __IOM uint32_t HIDE;
+} FLASH_t;
 
 #define IRQ_BASE              0xFFFF0000UL  /*!< IRQ Address Base             */
 #define FIQ_BASE              0xFFFF0100UL  /*!< FIQ Address Base             */
@@ -207,6 +218,7 @@ typedef struct POW_s {
 #define TIMER2_BASE           0xFFFF0360UL  /*!< Timer2 Address Base          */
 #define POW_BASE              0xFFFF0404UL  /*!< PLL/PSM Base Address         */
 #define GPIO_BASE             0xFFFFF400UL  /*!< GPIO Address Base            */
+#define FLASH_BASE            0xFFFFF800UL  /*!< FLASH Address Base           */
 
 #define IRQ                   ((IRQ_t *) IRQ_BASE)
 #define FIQ                   ((FIQ_t *) FIQ_BASE)
@@ -217,6 +229,7 @@ typedef struct POW_s {
 #define GPIO1                 ((GPIO1_t *) GPIO_BASE + 4U)
 #define GPIO2                 ((GPIO2_t *) GPIO_BASE + 8U)
 #define POW                   ((POW_t *) POW_BASE)
+#define FLASH                 ((FLASH_t *) FLASH_BASE)
 
 /*------------------------------------------------------------------------------
  *                                IRQ
@@ -259,9 +272,9 @@ typedef struct POW_s {
 #define IRQ_PRIORITY_IDX(irqn)    (irqn >> 3U)
 #define IRQ_PRIORITY_OFS(irqn)    ((irqn & IRQ_PRIORITY_BIT_Msk) << 2U)
 
-#define IRQ_CLR_DEFAULT           (0xFFFFFFFFUL)
-#define FIQ_CLR_DEFAULT           (0xFFFFFFFFUL)
-#define IRQ_PRIORITY_DEFAULT      (0x00000000UL)
+#define IRQ_CLR_DEF_VALUE         (0xFFFFFFFFUL)
+#define FIQ_CLR_DEF_VALUE         (0xFFFFFFFFUL)
+#define IRQ_PRIO_DEF_VALUE        (0x00000000UL)
 
 /*------------------------------------------------------------------------------
  *                               GPIO
@@ -449,6 +462,63 @@ typedef struct POW_s {
 #define POW_KEY2_VALUE            ((uint16_t)0x00F4)
 #define POW_KEY3_VALUE            ((uint16_t)0x0076)
 #define POW_KEY4_VALUE            ((uint16_t)0x00B1)
+
+/*------------------------------------------------------------------------------
+ *                          FLASH CONTROL
+ *----------------------------------------------------------------------------*/
+
+/********************  Bit definition for FEESTA register  ********************/
+#define FLASH_STA_PASS_Pos        (0U)
+#define FLASH_STA_PASS_Msk        (0x1UL << FLASH_STA_PASS_Pos)
+#define FLASH_STA_PASS            FLASH_STA_PASS_Msk
+#define FLASH_STA_FAIL_Pos        (1U)
+#define FLASH_STA_FAIL_Msk        (0x1UL << FLASH_STA_FAIL_Pos)
+#define FLASH_STA_FAIL            FLASH_STA_FAIL_Msk
+#define FLASH_STA_BUSY_Pos        (2U)
+#define FLASH_STA_BUSY_Msk        (0x1UL << FLASH_STA_BUSY_Pos)
+#define FLASH_STA_BUSY            FLASH_STA_BUSY_Msk
+#define FLASH_STA_INT_Pos         (3U)
+#define FLASH_STA_INT_Msk         (0x1UL << FLASH_STA_INT_Pos)
+#define FLASH_STA_INT             FLASH_STA_INT_Msk
+
+/********************  Bit definition for FEEMOD register  ********************/
+#define FLASH_MOD_DIS_PROT_Pos    (3U)
+#define FLASH_MOD_DIS_PROT_Msk    (0x1UL << FLASH_MOD_DIS_PROT_Pos)
+#define FLASH_MOD_DIS_PROT        FLASH_MOD_DIS_PROT_Msk
+#define FLASH_MOD_INT_EN_Pos      (4U)
+#define FLASH_MOD_INT_EN_Msk      (0x1UL << FLASH_MOD_INT_EN_Pos)
+#define FLASH_MOD_INT_EN          FLASH_MOD_INT_EN_Msk
+
+/********************  Bit definition for FEECON register  ********************/
+#define FLASH_CON_Pos             (0U)
+#define FLASH_CON_Msk             (0xFFUL << FLASH_CON_Pos)
+#define FLASH_CON                 FLASH_CON_Msk
+#define FLASH_CMD_IDLE            ((uint8_t)0x00)
+#define FLASH_CMD_SINGLE_READ     ((uint8_t)0x01)
+#define FLASH_CMD_SINGLE_WRITE    ((uint8_t)0x02)
+#define FLASH_CMD_ERASE_WRITE     ((uint8_t)0x03)
+#define FLASH_CMD_SINGLE_VERIFY   ((uint8_t)0x04)
+#define FLASH_CMD_SINGLE_ERASE    ((uint8_t)0x05)
+#define FLASH_CMD_MASS_ERASE      ((uint8_t)0x06)
+#define FLASH_CMD_SIGNATURE       ((uint8_t)0x0B)
+#define FLASH_CMD_PROTECT         ((uint8_t)0x0C)
+#define FLASH_CMD_PING            ((uint8_t)0x0F)
+
+/********************  Bit definition for FEEDAT register  ********************/
+#define FLASH_DAT_Pos             (0U)
+#define FLASH_DAT_Msk             (0xFFFFUL << FLASH_DAT_Pos)
+#define FLASH_DAT                 FLASH_DAT_Msk
+
+/********************  Bit definition for FEEADR register  ********************/
+#define FLASH_ADR_Pos             (0U)
+#define FLASH_ADR_Msk             (0xFFFFUL << FLASH_ADR_Pos)
+#define FLASH_ADR                 FLASH_ADR_Msk
+
+/********************  Bit definition for FEESIGN register  *******************/
+#define FLASH_SIGN_Pos            (0U)
+#define FLASH_SIGN_Msk            (0xFFFFFFUL << FLASH_SIGN_Pos)
+#define FLASH_SIGN                FLASH_SIGN_Msk
+
 
 #ifdef __cplusplus
 }
