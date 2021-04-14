@@ -513,6 +513,8 @@ typedef struct FLASH_s {
 #define FLASH_ADR_Pos             (0U)
 #define FLASH_ADR_Msk             (0xFFFFUL << FLASH_ADR_Pos)
 #define FLASH_ADR                 FLASH_ADR_Msk
+#define FLASH_ADR_START           (0x80000UL)
+#define FLASH_ADR_END             (0x8F7FFUL)
 
 /********************  Bit definition for FEESIGN register  *******************/
 #define FLASH_SIGN_Pos            (0U)
