@@ -182,8 +182,9 @@ SECTIONS
   {
     . = ALIGN(4);
     __bss_start__ = .;
-    KEEP(*(.bss.isr_vector))
+    KEEP(*(.bss.ram_intvec))
     *(.bss)
+    *(.bss.irq_table)
     *(.bss.*)
     *(COMMON)
     . = ALIGN(4);

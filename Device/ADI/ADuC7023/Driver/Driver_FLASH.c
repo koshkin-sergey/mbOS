@@ -180,7 +180,7 @@ static int32_t FLASH_EraseSector(uint32_t addr)
     return (FLASH_DRIVER_ERROR);
   }
 
-  if (addr < FLASH_ADR_START || addr > FLASH_ADR_END) {
+  if (addr < FLASH_BASE || addr > FLASH_END) {
     return (FLASH_DRIVER_ERROR_PARAMETER);
   }
 
@@ -237,7 +237,7 @@ static int32_t FLASH_ProgramData(uint32_t addr, const void *data, size_t size)
     return (FLASH_DRIVER_ERROR);
   }
 
-  if (addr < FLASH_ADR_START || addr > FLASH_ADR_END) {
+  if (addr < FLASH_BASE || addr > FLASH_END) {
     return (FLASH_DRIVER_ERROR_PARAMETER);
   }
 

@@ -21,7 +21,7 @@
 #include "Kernel/irq.h"
 #include "asm/aduc7023.h"
 
-#define IRQ_TABLE_ATTRIBUTE  __attribute__((aligned(128), section(".bss.isr_vector")))
+#define IRQ_TABLE_ATTR  __attribute__((aligned(128), section(".bss.irq_table")))
 
 typedef struct IRQ_MODE_INFO_s {
   uint32_t type;      /* Type of interrupt (IRQ or FIQ) */
@@ -32,7 +32,7 @@ static IRQ_MODE_INFO_t irq_mode;
 /*------------------------------------------------------------------------------
  * Interrupt Vector table
  *----------------------------------------------------------------------------*/
-static IRQHandler_t irq_table[IRQ_VECTOR_COUNT] IRQ_TABLE_ATTRIBUTE = { 0U };
+static IRQHandler_t irq_table[IRQ_VECTOR_COUNT] IRQ_TABLE_ATTR = { 0U };
 
 /**
  * @brief       Initialize interrupt controller.

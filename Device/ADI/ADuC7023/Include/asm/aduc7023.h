@@ -211,6 +211,10 @@ typedef struct FLASH_s {
   __IOM uint32_t HIDE;
 } FLASH_t;
 
+#define FLASH_BASE            0x00080000UL
+#define FLASH_END             0x0008F7FFUL
+#define RAM_BASE              0x00010000UL
+
 #define IRQ_BASE              0xFFFF0000UL  /*!< IRQ Address Base             */
 #define FIQ_BASE              0xFFFF0100UL  /*!< FIQ Address Base             */
 #define TIMER0_BASE           0xFFFF0300UL  /*!< Timer0 Address Base          */
@@ -218,7 +222,7 @@ typedef struct FLASH_s {
 #define TIMER2_BASE           0xFFFF0360UL  /*!< Timer2 Address Base          */
 #define POW_BASE              0xFFFF0404UL  /*!< PLL/PSM Base Address         */
 #define GPIO_BASE             0xFFFFF400UL  /*!< GPIO Address Base            */
-#define FLASH_BASE            0xFFFFF800UL  /*!< FLASH Address Base           */
+#define FLASH_CTL_BASE        0xFFFFF800UL  /*!< FLASH Address Base           */
 
 #define IRQ                   ((IRQ_t *) IRQ_BASE)
 #define FIQ                   ((FIQ_t *) FIQ_BASE)
@@ -229,7 +233,8 @@ typedef struct FLASH_s {
 #define GPIO1                 ((GPIO1_t *) GPIO_BASE + 4U)
 #define GPIO2                 ((GPIO2_t *) GPIO_BASE + 8U)
 #define POW                   ((POW_t *) POW_BASE)
-#define FLASH                 ((FLASH_t *) FLASH_BASE)
+#define FLASH                 ((FLASH_t *) FLASH_CTL_BASE)
+#define SYS_REMAP             (*(volatile uint32_t *) 0xFFFF0220)
 
 /*------------------------------------------------------------------------------
  *                                IRQ
@@ -513,14 +518,20 @@ typedef struct FLASH_s {
 #define FLASH_ADR_Pos             (0U)
 #define FLASH_ADR_Msk             (0xFFFFUL << FLASH_ADR_Pos)
 #define FLASH_ADR                 FLASH_ADR_Msk
-#define FLASH_ADR_START           (0x80000UL)
-#define FLASH_ADR_END             (0x8F7FFUL)
 
 /********************  Bit definition for FEESIGN register  *******************/
 #define FLASH_SIGN_Pos            (0U)
 #define FLASH_SIGN_Msk            (0xFFFFFFUL << FLASH_SIGN_Pos)
 #define FLASH_SIGN                FLASH_SIGN_Msk
 
+/*------------------------------------------------------------------------------
+ *                          SYSTEM CONTROL
+ *----------------------------------------------------------------------------*/
+
+/********************  Bit definition for REMAP register  *********************/
+#define SYS_REMAP_SRAM_Pos        (0U)
+#define SYS_REMAP_SRAM_Msk        (0x1UL << SYS_REMAP_SRAM_Pos)
+#define SYS_REMAP_SRAM            SYS_REMAP_SRAM_Msk
 
 #ifdef __cplusplus
 }
