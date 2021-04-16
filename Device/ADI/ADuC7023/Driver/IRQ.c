@@ -18,10 +18,13 @@
  */
 
 #include <stddef.h>
+#include <string.h>
 #include "Kernel/irq.h"
 #include "asm/aduc7023.h"
 
-#define IRQ_TABLE_ATTR  __attribute__((aligned(128), section(".bss.irq_table")))
+#define RAM_INTVEC_SIZE   64U
+#define RAM_INTVEC_ATTR   __attribute__((section(".ram_intvec")))
+#define IRQ_TABLE_ATTR    __attribute__((aligned(128), section(".bss.irq_table")))
 
 typedef struct IRQ_MODE_INFO_s {
   uint32_t type;      /* Type of interrupt (IRQ or FIQ) */
@@ -32,6 +35,12 @@ static IRQ_MODE_INFO_t irq_mode;
 /*------------------------------------------------------------------------------
  * Interrupt Vector table
  *----------------------------------------------------------------------------*/
+#if defined (RAM_INTVEC)
+
+static uint8_t ram_intvec[RAM_INTVEC_SIZE] RAM_INTVEC_ATTR = { 0U };
+
+#endif
+
 static IRQHandler_t irq_table[IRQ_VECTOR_COUNT] IRQ_TABLE_ATTR = { 0U };
 
 /**
@@ -57,6 +66,13 @@ int32_t IRQ_Initialize(void)
   IRQ->P[0] = IRQ_PRIO_DEF_VALUE;
   IRQ->P[1] = IRQ_PRIO_DEF_VALUE;
   IRQ->P[2] = IRQ_PRIO_DEF_VALUE;
+
+#if defined (RAM_INTVEC)
+
+  memcpy((void *)ram_intvec, (void *)FLASH_BASE, RAM_INTVEC_SIZE);
+  SYS_REMAP = SYS_REMAP_SRAM;
+
+#endif
 
   /* Set to NULL all interrupt handlers */
   for (uint32_t i = 0; i < IRQ_VECTOR_COUNT; ++i) {
@@ -196,7 +212,25 @@ uint32_t IRQ_GetEnableState(IRQn_ID_t irqn)
  */
 int32_t IRQ_SetMode(IRQn_ID_t irqn, uint32_t mode)
 {
-  return (0);
+   int32_t status;
+  uint32_t val;
+  uint32_t mask;
+
+  status = 0;
+
+  if ((irqn >= 0) && (irqn < IRQ_VECTOR_COUNT)) {
+    /* Check interrupt type */
+    val = mode & IRQ_MODE_TYPE_Msk;
+    mask = 1UL << irqn;
+    if (val == IRQ_MODE_TYPE_IRQ) {
+      irq_mode.type &= ~mask;
+    }
+    else {
+      irq_mode.type |= mask;
+    }
+  }
+
+  return (status);
 }
 
 /**
@@ -207,7 +241,23 @@ int32_t IRQ_SetMode(IRQn_ID_t irqn, uint32_t mode)
  */
 uint32_t IRQ_GetMode(IRQn_ID_t irqn)
 {
-  return (0U);
+  uint32_t mode;
+  uint32_t mask;
+
+  if ((irqn >= 0) && (irqn < IRQ_VECTOR_COUNT)) {
+    mask = 1UL << irqn;
+    if ((irq_mode.type & mask) == 0UL) {
+      mode = IRQ_MODE_TYPE_IRQ;
+    }
+    else {
+      mode = IRQ_MODE_TYPE_FIQ;
+    }
+  }
+  else {
+    mode = IRQ_MODE_ERROR;
+  }
+
+  return (mode);
 }
 
 /**

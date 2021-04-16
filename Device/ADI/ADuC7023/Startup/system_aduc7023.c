@@ -19,19 +19,8 @@
  *  includes
  ******************************************************************************/
 
-#include <string.h>
 #include "asm/aduc7023.h"
 #include "Kernel/irq.h"
-
-#define RAM_INTVEC_SIZE             64U
-#define RAM_INTVEC_ATTR             __attribute__((section(".bss.ram_intvec")))
-#define RAM_INTVEC
-
-#if defined (RAM_INTVEC)
-
-static uint8_t ram_intvec[RAM_INTVEC_SIZE] RAM_INTVEC_ATTR = { 0U };
-
-#endif
 
 uint32_t SystemCoreClock;           /*!< System Clock Frequency (Core Clock)  */
 
@@ -55,13 +44,6 @@ void SystemInit(void)
   POW->KEY1 = POW_KEY1_VALUE;
   POW->CON0 = 0x00;
   POW->KEY2 = POW_KEY2_VALUE;
-
-#if defined (RAM_INTVEC)
-
-  memcpy((void *)ram_intvec, (void *)FLASH_BASE, RAM_INTVEC_SIZE);
-  SYS_REMAP = SYS_REMAP_SRAM;
-
-#endif
 
   IRQ_Initialize();
 }

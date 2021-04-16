@@ -178,19 +178,10 @@ SECTIONS
    */
   __etext = ALIGN (4);
 
-  .bss :
-  {
-    . = ALIGN(4);
-    __bss_start__ = .;
-    KEEP(*(.bss.ram_intvec))
-    *(.bss)
-    *(.bss.irq_table)
-    *(.bss.*)
-    *(COMMON)
-    . = ALIGN(4);
-    __bss_end__ = .;
+  .ram_intvec : {
+    KEEP(*(.ram_intvec))
   } > RAM
-  
+    
   .data : AT (__etext)
   {
     __data_start__ = .;
@@ -226,6 +217,18 @@ SECTIONS
     __data_end__ = .;
 
   } > RAM
+
+  .bss :
+  {
+    . = ALIGN(4);
+    __bss_start__ = .;
+    *(.bss)
+    *(.bss.irq_table)
+    *(.bss.*)
+    *(COMMON)
+    . = ALIGN(4);
+    __bss_end__ = .;
+  } > RAM AT > RAM
 
   .heap (COPY) :
   {
