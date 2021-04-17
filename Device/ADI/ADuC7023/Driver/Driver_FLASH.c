@@ -23,6 +23,7 @@
 
 #include "asm/aduc7023.h"
 #include "asm/Driver_FLASH.h"
+#include "Kernel/irq.h"
 
 /*******************************************************************************
  *  defines and macros (scope: module-local)
@@ -44,16 +45,15 @@
 /**
  * @brief       FLASH Keys
  */
-#define FLASH_KEY1                      ((uint16_t)0xFFC3U)
-#define FLASH_KEY2                      ((uint16_t)0x3CFFU)
+#define FLASH_KEY1                      ((uint16_t)0xFFC3)
+#define FLASH_KEY2                      ((uint16_t)0x3CFF)
 
 /**
  * @brief       Flash Function Mode
  */
 #define FLASH_MODE_NONE                 ((uint8_t)0)
-#define FLASH_MODE_ERASE_SECTOR         ((uint8_t)1)
-#define FLASH_MODE_ERASE_CHIP           ((uint8_t)2)
-#define FLASH_MODE_PROGRAM_PAGE         ((uint8_t)3)
+#define FLASH_MODE_ERASE                ((uint8_t)1)
+#define FLASH_MODE_PROGRAM              ((uint8_t)2)
 
 #define FLASH_SECTOR_INFO(addr,size)    { (addr), (addr)+(size)-1 }
 
@@ -110,11 +110,12 @@ static FLASH_Info_t FLASH_Info;
  *  function implementations (scope: module-local)
  ******************************************************************************/
 
-static void writeflash(FLASH_Info_t *info)
+static void FLASH_IRQHandler(void);
+
+static void ProgramHalfWord(FLASH_Info_t *info)
 {
   FLASH->ADR  = *info->addr++;          // set address
   FLASH->DAT  = *info->data++;          // set data value
-  FLASH->MOD  = 0x18;
   FLASH->CON  = FLASH_CMD_SINGLE_WRITE; // write command
 }
 
@@ -132,8 +133,10 @@ static int32_t FLASH_Initialize(FLASH_SignalEvent_t cb_event)
     return (FLASH_DRIVER_OK);
   }
 
-  /* Enable the erase and write commands */
-  FLASH->MOD = (uint16_t)FLASH_MOD_DIS_PROT;
+  IRQ_SetPriority(FLASH_IRQn, IRQ_PriorityHigh);
+  IRQ_SetHandler(FLASH_IRQn, FLASH_IRQHandler);
+  IRQ_SetMode(FLASH_IRQn, IRQ_MODE_TYPE_IRQ);
+  IRQ_Enable(FLASH_IRQn);
 
   /* Initialize FLASH Run-Time Resources */
   info->cb_event = cb_event;
@@ -162,6 +165,8 @@ static int32_t FLASH_Uninitialize(void)
   /* Protect the Flash */
   FLASH->MOD = (uint16_t)0;
 
+  IRQ_Disable(FLASH_IRQn);
+
   return (FLASH_DRIVER_OK);
 }
 
@@ -184,11 +189,11 @@ static int32_t FLASH_EraseSector(uint32_t addr)
     return (FLASH_DRIVER_ERROR_PARAMETER);
   }
 
-  info->mode = FLASH_MODE_ERASE_SECTOR;
+  info->mode = FLASH_MODE_ERASE;
 
   /* Start Erase Sector Command */
-  FLASH->MOD = (uint16_t)0x18;
-  FLASH->ADR = addr;
+  FLASH->MOD = (uint16_t)(FLASH_MOD_INT_EN | FLASH_MOD_DIS_PROT);
+  FLASH->ADR = (uint16_t)addr;
   FLASH->CON = FLASH_CMD_SINGLE_ERASE;
 
   return (FLASH_DRIVER_OK);
@@ -208,10 +213,10 @@ static int32_t FLASH_EraseChip(void)
     return (FLASH_DRIVER_ERROR);
   }
 
-  info->mode = FLASH_MODE_ERASE_CHIP;
+  info->mode = FLASH_MODE_ERASE;
 
   /* Mass Erase Block */
-  FLASH->MOD = (uint16_t)0x18;
+  FLASH->MOD = (uint16_t)(FLASH_MOD_INT_EN | FLASH_MOD_DIS_PROT);
   FLASH->ADR = FLASH_KEY1;
   FLASH->DAT = FLASH_KEY2;
   FLASH->CON = FLASH_CMD_MASS_ERASE;
@@ -249,15 +254,16 @@ static int32_t FLASH_ProgramData(uint32_t addr, const void *data, size_t size)
   info->data = (const uint16_t *)data;
   /* Adjust size for Half Words */
   info->size = ((size + 1UL) & ~1UL) >> 1UL;
-  info->mode = FLASH_MODE_PROGRAM_PAGE;
+  info->mode = FLASH_MODE_PROGRAM;
 
   /* Start Program Command */
-  writeflash(info);
+  FLASH->MOD = (uint16_t)(FLASH_MOD_INT_EN | FLASH_MOD_DIS_PROT);
+  ProgramHalfWord(info);
 
   return (FLASH_DRIVER_OK);
 }
 
-void FLASH_IRQHandler(void)
+static void FLASH_IRQHandler(void)
 {
   uint32_t event = 0UL;
   FLASH_Info_t *info = &FLASH_Info;
@@ -269,20 +275,16 @@ void FLASH_IRQHandler(void)
   }
   else if (sta & FLASH_STA_PASS) {
     switch (info->mode) {
-      case FLASH_MODE_ERASE_SECTOR:
+      case FLASH_MODE_ERASE:
         info->mode = FLASH_MODE_NONE;
         event = FLASH_EVENT_READY;
         break;
 
-      case FLASH_MODE_ERASE_CHIP:
-        info->mode = FLASH_MODE_NONE;
-        event = FLASH_EVENT_READY;
-        break;
-
-      case FLASH_MODE_PROGRAM_PAGE:
+      case FLASH_MODE_PROGRAM:
         info->size--;
         if (info->size != 0UL) {
-          writeflash(info);
+          ProgramHalfWord(info);
+          return;
         }
         else {
           info->mode = FLASH_MODE_NONE;
@@ -294,6 +296,8 @@ void FLASH_IRQHandler(void)
         break;
     }
   }
+
+  FLASH->MOD = 0UL;
 
   if (event != 0UL && info->cb_event != NULL) {
     info->cb_event(event);
@@ -311,4 +315,3 @@ Driver_FLASH_t Flash = {
   FLASH_EraseChip,
   FLASH_ProgramData,
 };
-
