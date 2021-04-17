@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<device schemaVersion="1.1"
+xmlns:xs="http://www.w3.org/2001/XMLSchema-instance"
+xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
+  <name>ADUC7023</name>
+  <version>1.0</version>
+  <description>ADUC7023</description>
+  <addressUnitBits>8</addressUnitBits>
+  <width>32</width>
+  <!--Register Default Properties-->
+  <size>0x20</size>
+  <resetValue>0x0</resetValue>
+  <resetMask>0xFFFFFFFF</resetMask>
+  <peripherals>
+    <peripheral>
+      <name>FLASH</name>
+      <description>FLASH/EE CONTROL INTERFACE</description>
+      <groupName>FLASH</groupName>
+      <baseAddress>0xFFFFF800</baseAddress>
+      <addressBlock>
+        <offset>0x0</offset>
+        <size>0x20</size>
+        <usage>registers</usage>
+      </addressBlock>
+      
+      <registers>
+      
+        <register>
+          <name>FEESTA</name>
+          <displayName>FEESTA</displayName>
+          <description>Flash/EE status MMR</description>
+          <addressOffset>0x0</addressOffset>
+          <size>0x20</size>
+          <access>read-only</access>
+          <resetValue>0x20</resetValue>
+          <fields>
+            <field>
+              <name>CMD_PASS</name>
+              <description>Command is completed</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>CMD_FAIL</name>
+              <description>Command is not completed</description>
+              <bitOffset>1</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>BUSY</name>
+              <description>Controller busy</description>
+              <bitOffset>2</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>INTERRUPT</name>
+              <description>Set automatically when an interrupt occurs</description>
+              <bitOffset>3</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+        <register>
+          <name>FEEMOD</name>
+          <displayName>FEEMOD</displayName>
+          <description>Flash/EE control MMR</description>
+          <addressOffset>0x4</addressOffset>
+          <size>0x20</size>
+          <access>read-write</access>
+          <resetValue>0x0000</resetValue>
+          <fields>
+            <field>
+              <name>PROTECT</name>
+              <description>Erase/write command protection</description>
+              <bitOffset>3</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>INTEN</name>
+              <description>Flash/EE interrupt enable</description>
+              <bitOffset>4</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+        <register>
+          <name>FEECON</name>
+          <displayName>FEECON</displayName>
+          <description>8-bit command register</description>
+          <addressOffset>0x8</addressOffset>
+          <size>0x20</size>
+          <access>read-write</access>
+          <resetValue>0x07</resetValue>
+          <fields>
+            <field>
+              <name>CMD</name>
+              <description>Command code</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>8</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+        <register>
+          <name>FEEDAT</name>
+          <displayName>FEEDAT</displayName>
+          <description>16-bit data register</description>
+          <addressOffset>0xC</addressOffset>
+          <size>0x20</size>
+          <access>read-write</access>
+          <fields>
+            <field>
+              <name>DAT</name>
+              <description>16-bit data register</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>16</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+        <register>
+          <name>FEEADR</name>
+          <displayName>FEEADR</displayName>
+          <description>16-bit address register</description>
+          <addressOffset>0x10</addressOffset>
+          <size>0x20</size>
+          <access>read-write</access>
+          <resetValue>0x0000</resetValue>
+          <fields>
+            <field>
+              <name>ADR</name>
+              <description>16-bit address register</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>16</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+        <register>
+          <name>FEESIGN</name>
+          <displayName>FEESIGN</displayName>
+          <description>24-bit code signature</description>
+          <addressOffset>0x18</addressOffset>
+          <size>0x20</size>
+          <access>read-only</access>
+          <resetValue>0xFFFFFF</resetValue>
+          <fields>
+            <field>
+              <name>SIGN</name>
+              <description>24-bit code signature</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>24</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+        <register>
+          <name>FEEPRO</name>
+          <displayName>FEEPRO</displayName>
+          <description>Provide protection</description>
+          <addressOffset>0x1C</addressOffset>
+          <size>0x20</size>
+          <access>read-write</access>
+          <resetValue>0x00000000</resetValue>
+          <fields>
+            <field>
+              <name>PRO</name>
+              <description>Provide protection</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>32</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+        <register>
+          <name>FEEHIDE</name>
+          <displayName>FEEHIDE</displayName>
+          <description>Provide immediate protection</description>
+          <addressOffset>0x20</addressOffset>
+          <size>0x20</size>
+          <access>read-write</access>
+          <resetValue>0xFFFFFFFF</resetValue>
+          <fields>
+            <field>
+              <name>HIDE</name>
+              <description>Provide immediate protection</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>32</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+      </registers>
+      
+    </peripheral>
+  </peripherals>
+</device>
