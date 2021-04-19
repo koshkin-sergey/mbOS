@@ -46,6 +46,24 @@
 
 typedef void (*FLASH_SignalEvent_t)(uint32_t event);
 
+/**
+\brief Flash Sector information
+*/
+typedef struct FLASH_SECTOR_s {
+  uint32_t start;                       ///< Sector Start address
+  uint32_t end;                         ///< Sector End address (start+size-1)
+} const FLASH_SECTOR_t;
+
+/**
+\brief Flash memory information
+*/
+typedef struct FLASH_INFO_s {
+  FLASH_SECTOR_t   *sector_info;        ///< Sector layout information (NULL=Uniform sectors)
+  uint32_t          sector_count;       ///< Number of sectors
+  uint32_t          sector_size;        ///< Uniform sector size in bytes (0=sector_info used)
+  uint32_t          program_unit;       ///< Smallest programmable unit in bytes
+} const FLASH_INFO_t;
+
 /*******************************************************************************
  *  exported function prototypes
  ******************************************************************************/
@@ -109,6 +127,7 @@ typedef struct Driver_FLASH_s {
  *  exported global variable
  ******************************************************************************/
 
-extern Driver_FLASH_t Flash;
+extern FLASH_INFO_t   FLASH_Info;
+extern Driver_FLASH_t Driver_Flash0;
 
 #endif /* DRIVER_FLASH_H_ */

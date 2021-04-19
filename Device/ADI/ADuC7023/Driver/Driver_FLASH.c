@@ -61,25 +61,6 @@
  *  typedefs and structures (scope: module-local)
  ******************************************************************************/
 
-
-/**
-\brief Flash Sector information
-*/
-typedef struct FLASH_Sector_s {
-  uint32_t start;                       ///< Sector Start address
-  uint32_t end;                         ///< Sector End address (start+size-1)
-} const FLASH_Sector_t;
-
-/**
-\brief Flash memory information
-*/
-typedef struct FLASH_Mem_Info_s {
-  FLASH_Sector_t   *sector_info;        ///< Sector layout information (NULL=Uniform sectors)
-  uint32_t          sector_count;       ///< Number of sectors
-  uint32_t          sector_size;        ///< Uniform sector size in bytes (0=sector_info used)
-  uint32_t          program_unit;       ///< Smallest programmable unit in bytes
-} const FLASH_Mem_Info_t;
-
 /**
 \brief Flash information
 */
@@ -97,14 +78,7 @@ typedef struct FLASH_Info_s {
  *  global variable definitions (scope: module-local)
  ******************************************************************************/
 
-static FLASH_Mem_Info_t mem_info = {
-  NULL,
-  FLASH_SECTOR_COUNT,
-  FLASH_SECTOR_SIZE,
-  FLASH_PROGRAM_UNIT,
-};
-
-static FLASH_Info_t FLASH_Info;
+static FLASH_Info_t flash_info;
 
 /*******************************************************************************
  *  function implementations (scope: module-local)
@@ -127,7 +101,7 @@ static void ProgramHalfWord(FLASH_Info_t *info)
  */
 static int32_t FLASH_Initialize(FLASH_SignalEvent_t cb_event)
 {
-  FLASH_Info_t *info = &FLASH_Info;
+  FLASH_Info_t *info = &flash_info;
 
   if (info->state == FLASH_INITIALIZED) {
     return (FLASH_DRIVER_OK);
@@ -156,7 +130,7 @@ static int32_t FLASH_Initialize(FLASH_SignalEvent_t cb_event)
  */
 static int32_t FLASH_Uninitialize(void)
 {
-  FLASH_Info_t *info = &FLASH_Info;
+  FLASH_Info_t *info = &flash_info;
 
   /* Uninitialize FLASH Run-Time Resources */
   info->cb_event = NULL;
@@ -178,7 +152,7 @@ static int32_t FLASH_Uninitialize(void)
  */
 static int32_t FLASH_EraseSector(uint32_t addr)
 {
-  FLASH_Info_t *info = &FLASH_Info;
+  FLASH_Info_t *info = &flash_info;
 
   if (((info->state & FLASH_INITIALIZED) == 0UL) ||
        (FLASH->STA  & FLASH_STA_BUSY   ) != 0UL) {
@@ -206,7 +180,7 @@ static int32_t FLASH_EraseSector(uint32_t addr)
  */
 static int32_t FLASH_EraseChip(void)
 {
-  FLASH_Info_t *info = &FLASH_Info;
+  FLASH_Info_t *info = &flash_info;
 
   if (((info->state & FLASH_INITIALIZED) == 0UL) ||
        (FLASH->STA  & FLASH_STA_BUSY   ) != 0UL) {
@@ -235,7 +209,7 @@ static int32_t FLASH_EraseChip(void)
  */
 static int32_t FLASH_ProgramData(uint32_t addr, const void *data, size_t size)
 {
-  FLASH_Info_t *info = &FLASH_Info;
+  FLASH_Info_t *info = &flash_info;
 
   if (((info->state & FLASH_INITIALIZED) == 0UL) ||
        (FLASH->STA  & FLASH_STA_BUSY   ) != 0UL) {
@@ -266,7 +240,7 @@ static int32_t FLASH_ProgramData(uint32_t addr, const void *data, size_t size)
 static void FLASH_IRQHandler(void)
 {
   uint32_t event = 0UL;
-  FLASH_Info_t *info = &FLASH_Info;
+  FLASH_Info_t *info = &flash_info;
   register uint8_t sta = FLASH->STA;
 
   if ((sta & FLASH_STA_FAIL) != 0U) {
@@ -308,7 +282,14 @@ static void FLASH_IRQHandler(void)
  *  global variable definitions (scope: module-exported)
  ******************************************************************************/
 
-Driver_FLASH_t Flash = {
+FLASH_INFO_t FLASH_Info = {
+  NULL,
+  FLASH_SECTOR_COUNT,
+  FLASH_SECTOR_SIZE,
+  FLASH_PROGRAM_UNIT,
+};
+
+Driver_FLASH_t Driver_Flash0 = {
   FLASH_Initialize,
   FLASH_Uninitialize,
   FLASH_EraseSector,
