@@ -211,6 +211,29 @@ typedef struct FLASH_s {
   __IOM uint32_t HIDE;
 } FLASH_t;
 
+typedef struct I2C_s {
+  __IOM uint32_t MCON;
+  __IM  uint32_t MSTA;
+  __IM  uint32_t MRX;
+  __OM  uint32_t MTX;
+  __IOM uint32_t MCNT0;
+  __IM  uint32_t MCNT1;
+  __IOM uint32_t ADR0;
+  __IOM uint32_t ADR1;
+  RESERVED(0, uint32_t);
+  __IOM uint32_t DIV;
+  __IOM uint32_t SCON;
+  __IOM uint32_t SSTA;
+  __IM  uint32_t SRX;
+  __OM  uint32_t STX;
+  __IOM uint32_t ALT;
+  __IOM uint32_t ID0;
+  __IOM uint32_t ID1;
+  __IOM uint32_t ID2;
+  __IOM uint32_t ID3;
+  __IOM uint32_t FSTA;
+} I2C_t;
+
 #define FLASH_BASE            0x00080000UL
 #define FLASH_END             0x0008F7FFUL
 #define RAM_BASE              0x00010000UL
@@ -223,17 +246,22 @@ typedef struct FLASH_s {
 #define POW_BASE              0xFFFF0404UL  /*!< PLL/PSM Base Address         */
 #define GPIO_BASE             0xFFFFF400UL  /*!< GPIO Address Base            */
 #define FLASH_CTL_BASE        0xFFFFF800UL  /*!< FLASH Address Base           */
+#define I2C0_BASE             0xFFFF0800UL  /*!< I2C0 Base Address            */
+#define I2C1_BASE             0xFFFF0900UL  /*!< I2C1 Base Address            */
 
-#define IRQ                   ((IRQ_t *) IRQ_BASE)
-#define FIQ                   ((FIQ_t *) FIQ_BASE)
+#define IRQ                   ((IRQ_t *)        IRQ_BASE)
+#define FIQ                   ((FIQ_t *)        FIQ_BASE)
 #define RTOS_TIMER            ((RTOS_TIMER_t *) TIMER0_BASE)
 #define GP_TIMER              ((  GP_TIMER_t *) TIMER1_BASE)
 #define WDG_TIMER             (( WDG_TIMER_t *) TIMER2_BASE)
-#define GPIO0                 ((GPIO0_t *) GPIO_BASE + 0U)
-#define GPIO1                 ((GPIO1_t *) GPIO_BASE + 4U)
-#define GPIO2                 ((GPIO2_t *) GPIO_BASE + 8U)
-#define POW                   ((POW_t *) POW_BASE)
-#define FLASH                 ((FLASH_t *) FLASH_CTL_BASE)
+#define GPIO0                 ((GPIO0_t *)      GPIO_BASE + 0U)
+#define GPIO1                 ((GPIO1_t *)      GPIO_BASE + 4U)
+#define GPIO2                 ((GPIO2_t *)      GPIO_BASE + 8U)
+#define POW                   ((POW_t *)        POW_BASE)
+#define FLASH                 ((FLASH_t *)      FLASH_CTL_BASE)
+#define I2C0                  ((I2C_t *)        I2C0_BASE)
+#define I2C1                  ((I2C_t *)        I2C1_BASE)
+
 #define SYS_REMAP             (*(volatile uint32_t *) 0xFFFF0220)
 
 /*------------------------------------------------------------------------------

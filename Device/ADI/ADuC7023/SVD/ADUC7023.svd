@@ -12,6 +12,1253 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
   <resetValue>0x0</resetValue>
   <resetMask>0xFFFFFFFF</resetMask>
   <peripherals>
+  
+    <peripheral>
+      <name>I2C0</name>
+      <description>I2C0 peripheral interfaces</description>
+      <groupName>I2C0</groupName>
+      <baseAddress>0xFFFF0800</baseAddress>
+      <addressBlock>
+        <offset>0x0</offset>
+        <size>0x48</size>
+        <usage>registers</usage>
+      </addressBlock>
+      
+      <registers>
+      
+        <register>
+          <name>MCON</name>
+          <displayName>MCON</displayName>
+          <description>Master control register</description>
+          <addressOffset>0x0</addressOffset>
+          <size>0x20</size>
+          <access>read-write</access>
+          <resetValue>0x0000</resetValue>
+          <fields>
+            <field>
+              <name>I2CMCENI</name>
+              <description>Transmission complete interrupt enable bit</description>
+              <bitOffset>8</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CNACKENI</name>
+              <description>No acknowledge received interrupt enable bit</description>
+              <bitOffset>7</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CALENI</name>
+              <description>Arbitration lost interrupt enable bit</description>
+              <bitOffset>6</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CMTENI</name>
+              <description>Transmit interrupt enable bit</description>
+              <bitOffset>5</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CMRENI</name>
+              <description>Receive interrupt enable bit</description>
+              <bitOffset>4</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CILEN</name>
+              <description>Internal loopback enable bit</description>
+              <bitOffset>2</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CBD</name>
+              <description>Master backoff disable bit</description>
+              <bitOffset>1</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CMEN</name>
+              <description>Master enable bit</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+        <register>
+          <name>MSTA</name>
+          <displayName>MSTA</displayName>
+          <description>Master status register</description>
+          <addressOffset>0x4</addressOffset>
+          <size>0x20</size>
+          <access>read-only</access>
+          <resetValue>0x0000</resetValue>
+          <fields>
+            <field>
+              <name>I2CBBUSY</name>
+              <description>Bus busy status bit</description>
+              <bitOffset>10</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CMRxFO</name>
+              <description>Master Rx FIFO overflow</description>
+              <bitOffset>9</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CMTC</name>
+              <description>Transmission complete status bit</description>
+              <bitOffset>8</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CMNA</name>
+              <description>Master no acknowledge data bit</description>
+              <bitOffset>7</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CMBUSY</name>
+              <description>Master busy status bit</description>
+              <bitOffset>6</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CAL</name>
+              <description>Arbitration lost status bit</description>
+              <bitOffset>5</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CMNA</name>
+              <description>Master no acknowledge address bit</description>
+              <bitOffset>4</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CMRXQ</name>
+              <description>Master receive request bit</description>
+              <bitOffset>3</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CMTXQ</name>
+              <description>Master transmit request bit</description>
+              <bitOffset>2</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CMTFSTA</name>
+              <description>Master Tx FIFO status bit</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+        <register>
+          <name>MRX</name>
+          <displayName>MRX</displayName>
+          <description>Master receive register</description>
+          <addressOffset>0x8</addressOffset>
+          <size>0x20</size>
+          <access>read-only</access>
+          <resetValue>0x00</resetValue>
+          <fields>
+            <field>
+              <name>MRX</name>
+              <description>Master receive register</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>8</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+        <register>
+          <name>MTX</name>
+          <displayName>MTX</displayName>
+          <description>Master transmit register</description>
+          <addressOffset>0xC</addressOffset>
+          <size>0x20</size>
+          <access>write-only</access>
+          <resetValue>0x00</resetValue>
+          <fields>
+            <field>
+              <name>MTX</name>
+              <description>Master transmit register</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>8</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+        <register>
+          <name>MCNT0</name>
+          <displayName>MCNT0</displayName>
+          <description>Master read count register</description>
+          <addressOffset>0x10</addressOffset>
+          <size>0x20</size>
+          <access>read-write</access>
+          <resetValue>0x0000</resetValue>
+          <fields>
+            <field>
+              <name>I2CRECNT</name>
+              <description>Master read count register</description>
+              <bitOffset>8</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CRCNT</name>
+              <description>Master read count register</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>8</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+        <register>
+          <name>MCNT1</name>
+          <displayName>MCNT1</displayName>
+          <description>Master current read count register</description>
+          <addressOffset>0x14</addressOffset>
+          <size>0x20</size>
+          <access>read-only</access>
+          <resetValue>0x00</resetValue>
+          <fields>
+            <field>
+              <name>I2CCRCNT</name>
+              <description>Master current read count register</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>8</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+        <register>
+          <name>ADR0</name>
+          <displayName>ADR0</displayName>
+          <description>Address byte register</description>
+          <addressOffset>0x18</addressOffset>
+          <size>0x20</size>
+          <access>read-write</access>
+          <resetValue>0x00</resetValue>
+          <fields>
+            <field>
+              <name>I2CADR</name>
+              <description>Address byte register</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>8</bitWidth>
+            </field>
+          </fields>
+        </register>
+      
+        <register>
+          <name>ADR1</name>
+          <displayName>ADR1</displayName>
+          <description>Address byte register</description>
+          <addressOffset>0x1C</addressOffset>
+          <size>0x20</size>
+          <access>read-write</access>
+          <resetValue>0x00</resetValue>
+          <fields>
+            <field>
+              <name>I2CLADR</name>
+              <description>Address byte register</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>8</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+        <register>
+          <name>DIV</name>
+          <displayName>DIV</displayName>
+          <description>Clock control register</description>
+          <addressOffset>0x24</addressOffset>
+          <size>0x20</size>
+          <access>read-write</access>
+          <resetValue>0x1F1F</resetValue>
+          <fields>
+            <field>
+              <name>DIVH</name>
+              <description>Clock control register</description>
+              <bitOffset>8</bitOffset>
+              <bitWidth>8</bitWidth>
+            </field>
+            <field>
+              <name>DIVL</name>
+              <description>Clock control register</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>8</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+        <register>
+          <name>SCON</name>
+          <displayName>SCON</displayName>
+          <description>Slave control register</description>
+          <addressOffset>0x28</addressOffset>
+          <size>0x20</size>
+          <access>read-write</access>
+          <resetValue>0x0000</resetValue>
+          <fields>
+            <field>
+              <name>I2CSTXENI</name>
+              <description>Slave transmit interrupt enable bit</description>
+              <bitOffset>10</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CSRXENI</name>
+              <description>Slave receive interrupt enable bit</description>
+              <bitOffset>9</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CSSENI</name>
+              <description>Stop condition detected interrupt enable bit</description>
+              <bitOffset>8</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CNACKEN</name>
+              <description>No acknowledge enable bit</description>
+              <bitOffset>7</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CSETEN</name>
+              <description>Early transmit interrupt enable bit</description>
+              <bitOffset>5</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CGCCLR</name>
+              <description>General call status and ID clear bit</description>
+              <bitOffset>4</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CHGCEN</name>
+              <description>Hardware general call enable</description>
+              <bitOffset>3</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CGCEN</name>
+              <description>General call enable</description>
+              <bitOffset>2</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>ADR10EN</name>
+              <description>10-bit address mode</description>
+              <bitOffset>1</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CSEN</name>
+              <description>Slave enable bit</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+        <register>
+          <name>SSTA</name>
+          <displayName>SSTA</displayName>
+          <description>Slave status register</description>
+          <addressOffset>0x2C</addressOffset>
+          <size>0x20</size>
+          <access>read-write</access>
+          <resetValue>0x0000</resetValue>
+          <fields>
+            <field>
+              <name>I2CSTA</name>
+              <description>Start condition followed by a matching address is detected</description>
+              <bitOffset>14</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CREPS</name>
+              <description>Repeated start condition is detected</description>
+              <bitOffset>13</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CID</name>
+              <description>Address matching register</description>
+              <bitOffset>11</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+            <field>
+              <name>I2CSS</name>
+              <description>Stop condition after start detected bit</description>
+              <bitOffset>10</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CGCID</name>
+              <description>General call ID bits</description>
+              <bitOffset>8</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+            <field>
+              <name>I2CGC</name>
+              <description>General call status bit</description>
+              <bitOffset>7</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CSBUSY</name>
+              <description>Slave busy status bit</description>
+              <bitOffset>6</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CSNA</name>
+              <description>Slave no acknowledge data bit</description>
+              <bitOffset>5</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CSRxFO</name>
+              <description>Slave Rx FIFO overflow</description>
+              <bitOffset>4</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CSRXQ</name>
+              <description>Slave receive request bit</description>
+              <bitOffset>3</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CSTXQ</name>
+              <description>Slave transmit request bit</description>
+              <bitOffset>2</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CSTFE</name>
+              <description>Slave FIFO underflow status bit</description>
+              <bitOffset>1</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CETSTA</name>
+              <description>Slave early transmit FIFO status bit</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+        <register>
+          <name>SRX</name>
+          <displayName>SRX</displayName>
+          <description>Slave receive register</description>
+          <addressOffset>0x30</addressOffset>
+          <size>0x20</size>
+          <access>read-only</access>
+          <resetValue>0x00</resetValue>
+          <fields>
+            <field>
+              <name>SRX</name>
+              <description>Slave receive register</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>8</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+        <register>
+          <name>STX</name>
+          <displayName>STX</displayName>
+          <description>Slave transmit register</description>
+          <addressOffset>0x34</addressOffset>
+          <size>0x20</size>
+          <access>write-only</access>
+          <resetValue>0x00</resetValue>
+          <fields>
+            <field>
+              <name>STX</name>
+              <description>Slave transmit register</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>8</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+        <register>
+          <name>ALT</name>
+          <displayName>ALT</displayName>
+          <description>Hardware general call recognition register</description>
+          <addressOffset>0x38</addressOffset>
+          <size>0x20</size>
+          <access>read-write</access>
+          <resetValue>0x00</resetValue>
+          <fields>
+            <field>
+              <name>I2CALT</name>
+              <description>Hardware general call recognition register</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>8</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+        <register>
+          <name>ID0</name>
+          <displayName>ID0</displayName>
+          <description>Slave ID0 register</description>
+          <addressOffset>0x3C</addressOffset>
+          <size>0x20</size>
+          <access>read-write</access>
+          <resetValue>0x00</resetValue>
+          <fields>
+            <field>
+              <name>I2CID0</name>
+              <description>Slave ID0 register</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>8</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+        <register>
+          <name>ID1</name>
+          <displayName>ID1</displayName>
+          <description>Slave ID1 register</description>
+          <addressOffset>0x40</addressOffset>
+          <size>0x20</size>
+          <access>read-write</access>
+          <resetValue>0x00</resetValue>
+          <fields>
+            <field>
+              <name>I2CID1</name>
+              <description>Slave ID1 register</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>8</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+        <register>
+          <name>ID2</name>
+          <displayName>ID2</displayName>
+          <description>Slave ID2 register</description>
+          <addressOffset>0x44</addressOffset>
+          <size>0x20</size>
+          <access>read-write</access>
+          <resetValue>0x00</resetValue>
+          <fields>
+            <field>
+              <name>I2CID2</name>
+              <description>Slave ID2 register</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>8</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+        <register>
+          <name>ID3</name>
+          <displayName>ID3</displayName>
+          <description>Slave ID3 register</description>
+          <addressOffset>0x48</addressOffset>
+          <size>0x20</size>
+          <access>read-write</access>
+          <resetValue>0x00</resetValue>
+          <fields>
+            <field>
+              <name>I2CID3</name>
+              <description>Slave ID3 register</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>8</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+        <register>
+          <name>FSTA</name>
+          <displayName>FSTA</displayName>
+          <description>FIFO status register</description>
+          <addressOffset>0x4C</addressOffset>
+          <size>0x20</size>
+          <access>read-write</access>
+          <resetValue>0x0000</resetValue>
+          <fields>
+            <field>
+              <name>I2CFMTX</name>
+              <description>Flush the master Tx FIFO</description>
+              <bitOffset>9</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CFSTX</name>
+              <description>Flush the slave Tx FIFO</description>
+              <bitOffset>8</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CMRXSTA</name>
+              <description>Master receive FIFO status bits</description>
+              <bitOffset>6</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+            <field>
+              <name>I2CMTXSTA</name>
+              <description>Master transmit FIFO status bits</description>
+              <bitOffset>4</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+            <field>
+              <name>I2CSRXSTA</name>
+              <description>Slave receive FIFO status bits</description>
+              <bitOffset>2</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+            <field>
+              <name>I2CSTXSTA</name>
+              <description>Slave transmit FIFO status bits</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+      </registers>
+      
+    </peripheral>
+    
+    <peripheral>
+      <name>I2C1</name>
+      <description>I2C1 peripheral interfaces</description>
+      <groupName>I2C1</groupName>
+      <baseAddress>0xFFFF0900</baseAddress>
+      <addressBlock>
+        <offset>0x0</offset>
+        <size>0x48</size>
+        <usage>registers</usage>
+      </addressBlock>
+      
+      <registers>
+      
+        <register>
+          <name>MCON</name>
+          <displayName>MCON</displayName>
+          <description>Master control register</description>
+          <addressOffset>0x0</addressOffset>
+          <size>0x20</size>
+          <access>read-write</access>
+          <resetValue>0x0000</resetValue>
+          <fields>
+            <field>
+              <name>I2CMCENI</name>
+              <description>Transmission complete interrupt enable bit</description>
+              <bitOffset>8</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CNACKENI</name>
+              <description>No acknowledge received interrupt enable bit</description>
+              <bitOffset>7</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CALENI</name>
+              <description>Arbitration lost interrupt enable bit</description>
+              <bitOffset>6</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CMTENI</name>
+              <description>Transmit interrupt enable bit</description>
+              <bitOffset>5</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CMRENI</name>
+              <description>Receive interrupt enable bit</description>
+              <bitOffset>4</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CILEN</name>
+              <description>Internal loopback enable bit</description>
+              <bitOffset>2</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CBD</name>
+              <description>Master backoff disable bit</description>
+              <bitOffset>1</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CMEN</name>
+              <description>Master enable bit</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+        <register>
+          <name>MSTA</name>
+          <displayName>MSTA</displayName>
+          <description>Master status register</description>
+          <addressOffset>0x4</addressOffset>
+          <size>0x20</size>
+          <access>read-only</access>
+          <resetValue>0x0000</resetValue>
+          <fields>
+            <field>
+              <name>I2CBBUSY</name>
+              <description>Bus busy status bit</description>
+              <bitOffset>10</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CMRxFO</name>
+              <description>Master Rx FIFO overflow</description>
+              <bitOffset>9</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CMTC</name>
+              <description>Transmission complete status bit</description>
+              <bitOffset>8</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CMNA</name>
+              <description>Master no acknowledge data bit</description>
+              <bitOffset>7</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CMBUSY</name>
+              <description>Master busy status bit</description>
+              <bitOffset>6</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CAL</name>
+              <description>Arbitration lost status bit</description>
+              <bitOffset>5</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CMNA</name>
+              <description>Master no acknowledge address bit</description>
+              <bitOffset>4</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CMRXQ</name>
+              <description>Master receive request bit</description>
+              <bitOffset>3</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CMTXQ</name>
+              <description>Master transmit request bit</description>
+              <bitOffset>2</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CMTFSTA</name>
+              <description>Master Tx FIFO status bit</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+        <register>
+          <name>MRX</name>
+          <displayName>MRX</displayName>
+          <description>Master receive register</description>
+          <addressOffset>0x8</addressOffset>
+          <size>0x20</size>
+          <access>read-only</access>
+          <resetValue>0x00</resetValue>
+          <fields>
+            <field>
+              <name>MRX</name>
+              <description>Master receive register</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>8</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+        <register>
+          <name>MTX</name>
+          <displayName>MTX</displayName>
+          <description>Master transmit register</description>
+          <addressOffset>0xC</addressOffset>
+          <size>0x20</size>
+          <access>write-only</access>
+          <resetValue>0x00</resetValue>
+          <fields>
+            <field>
+              <name>MTX</name>
+              <description>Master transmit register</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>8</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+        <register>
+          <name>MCNT0</name>
+          <displayName>MCNT0</displayName>
+          <description>Master read count register</description>
+          <addressOffset>0x10</addressOffset>
+          <size>0x20</size>
+          <access>read-write</access>
+          <resetValue>0x0000</resetValue>
+          <fields>
+            <field>
+              <name>I2CRECNT</name>
+              <description>Master read count register</description>
+              <bitOffset>8</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CRCNT</name>
+              <description>Master read count register</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>8</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+        <register>
+          <name>MCNT1</name>
+          <displayName>MCNT1</displayName>
+          <description>Master current read count register</description>
+          <addressOffset>0x14</addressOffset>
+          <size>0x20</size>
+          <access>read-only</access>
+          <resetValue>0x00</resetValue>
+          <fields>
+            <field>
+              <name>I2CCRCNT</name>
+              <description>Master current read count register</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>8</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+        <register>
+          <name>ADR0</name>
+          <displayName>ADR0</displayName>
+          <description>Address byte register</description>
+          <addressOffset>0x18</addressOffset>
+          <size>0x20</size>
+          <access>read-write</access>
+          <resetValue>0x00</resetValue>
+          <fields>
+            <field>
+              <name>I2CADR</name>
+              <description>Address byte register</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>8</bitWidth>
+            </field>
+          </fields>
+        </register>
+      
+        <register>
+          <name>ADR1</name>
+          <displayName>ADR1</displayName>
+          <description>Address byte register</description>
+          <addressOffset>0x1C</addressOffset>
+          <size>0x20</size>
+          <access>read-write</access>
+          <resetValue>0x00</resetValue>
+          <fields>
+            <field>
+              <name>I2CLADR</name>
+              <description>Address byte register</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>8</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+        <register>
+          <name>DIV</name>
+          <displayName>DIV</displayName>
+          <description>Clock control register</description>
+          <addressOffset>0x24</addressOffset>
+          <size>0x20</size>
+          <access>read-write</access>
+          <resetValue>0x1F1F</resetValue>
+          <fields>
+            <field>
+              <name>DIVH</name>
+              <description>Clock control register</description>
+              <bitOffset>8</bitOffset>
+              <bitWidth>8</bitWidth>
+            </field>
+            <field>
+              <name>DIVL</name>
+              <description>Clock control register</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>8</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+        <register>
+          <name>SCON</name>
+          <displayName>SCON</displayName>
+          <description>Slave control register</description>
+          <addressOffset>0x28</addressOffset>
+          <size>0x20</size>
+          <access>read-write</access>
+          <resetValue>0x0000</resetValue>
+          <fields>
+            <field>
+              <name>I2CSTXENI</name>
+              <description>Slave transmit interrupt enable bit</description>
+              <bitOffset>10</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CSRXENI</name>
+              <description>Slave receive interrupt enable bit</description>
+              <bitOffset>9</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CSSENI</name>
+              <description>Stop condition detected interrupt enable bit</description>
+              <bitOffset>8</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CNACKEN</name>
+              <description>No acknowledge enable bit</description>
+              <bitOffset>7</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CSETEN</name>
+              <description>Early transmit interrupt enable bit</description>
+              <bitOffset>5</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CGCCLR</name>
+              <description>General call status and ID clear bit</description>
+              <bitOffset>4</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CHGCEN</name>
+              <description>Hardware general call enable</description>
+              <bitOffset>3</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CGCEN</name>
+              <description>General call enable</description>
+              <bitOffset>2</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>ADR10EN</name>
+              <description>10-bit address mode</description>
+              <bitOffset>1</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CSEN</name>
+              <description>Slave enable bit</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+        <register>
+          <name>SSTA</name>
+          <displayName>SSTA</displayName>
+          <description>Slave status register</description>
+          <addressOffset>0x2C</addressOffset>
+          <size>0x20</size>
+          <access>read-write</access>
+          <resetValue>0x0000</resetValue>
+          <fields>
+            <field>
+              <name>I2CSTA</name>
+              <description>Start condition followed by a matching address is detected</description>
+              <bitOffset>14</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CREPS</name>
+              <description>Repeated start condition is detected</description>
+              <bitOffset>13</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CID</name>
+              <description>Address matching register</description>
+              <bitOffset>11</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+            <field>
+              <name>I2CSS</name>
+              <description>Stop condition after start detected bit</description>
+              <bitOffset>10</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CGCID</name>
+              <description>General call ID bits</description>
+              <bitOffset>8</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+            <field>
+              <name>I2CGC</name>
+              <description>General call status bit</description>
+              <bitOffset>7</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CSBUSY</name>
+              <description>Slave busy status bit</description>
+              <bitOffset>6</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CSNA</name>
+              <description>Slave no acknowledge data bit</description>
+              <bitOffset>5</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CSRxFO</name>
+              <description>Slave Rx FIFO overflow</description>
+              <bitOffset>4</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CSRXQ</name>
+              <description>Slave receive request bit</description>
+              <bitOffset>3</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CSTXQ</name>
+              <description>Slave transmit request bit</description>
+              <bitOffset>2</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CSTFE</name>
+              <description>Slave FIFO underflow status bit</description>
+              <bitOffset>1</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CETSTA</name>
+              <description>Slave early transmit FIFO status bit</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+        <register>
+          <name>SRX</name>
+          <displayName>SRX</displayName>
+          <description>Slave receive register</description>
+          <addressOffset>0x30</addressOffset>
+          <size>0x20</size>
+          <access>read-only</access>
+          <resetValue>0x00</resetValue>
+          <fields>
+            <field>
+              <name>SRX</name>
+              <description>Slave receive register</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>8</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+        <register>
+          <name>STX</name>
+          <displayName>STX</displayName>
+          <description>Slave transmit register</description>
+          <addressOffset>0x34</addressOffset>
+          <size>0x20</size>
+          <access>write-only</access>
+          <resetValue>0x00</resetValue>
+          <fields>
+            <field>
+              <name>STX</name>
+              <description>Slave transmit register</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>8</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+        <register>
+          <name>ALT</name>
+          <displayName>ALT</displayName>
+          <description>Hardware general call recognition register</description>
+          <addressOffset>0x38</addressOffset>
+          <size>0x20</size>
+          <access>read-write</access>
+          <resetValue>0x00</resetValue>
+          <fields>
+            <field>
+              <name>I2CALT</name>
+              <description>Hardware general call recognition register</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>8</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+        <register>
+          <name>ID0</name>
+          <displayName>ID0</displayName>
+          <description>Slave ID0 register</description>
+          <addressOffset>0x3C</addressOffset>
+          <size>0x20</size>
+          <access>read-write</access>
+          <resetValue>0x00</resetValue>
+          <fields>
+            <field>
+              <name>I2CID0</name>
+              <description>Slave ID0 register</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>8</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+        <register>
+          <name>ID1</name>
+          <displayName>ID1</displayName>
+          <description>Slave ID1 register</description>
+          <addressOffset>0x40</addressOffset>
+          <size>0x20</size>
+          <access>read-write</access>
+          <resetValue>0x00</resetValue>
+          <fields>
+            <field>
+              <name>I2CID1</name>
+              <description>Slave ID1 register</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>8</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+        <register>
+          <name>ID2</name>
+          <displayName>ID2</displayName>
+          <description>Slave ID2 register</description>
+          <addressOffset>0x44</addressOffset>
+          <size>0x20</size>
+          <access>read-write</access>
+          <resetValue>0x00</resetValue>
+          <fields>
+            <field>
+              <name>I2CID2</name>
+              <description>Slave ID2 register</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>8</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+        <register>
+          <name>ID3</name>
+          <displayName>ID3</displayName>
+          <description>Slave ID3 register</description>
+          <addressOffset>0x48</addressOffset>
+          <size>0x20</size>
+          <access>read-write</access>
+          <resetValue>0x00</resetValue>
+          <fields>
+            <field>
+              <name>I2CID3</name>
+              <description>Slave ID3 register</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>8</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+        <register>
+          <name>FSTA</name>
+          <displayName>FSTA</displayName>
+          <description>FIFO status register</description>
+          <addressOffset>0x4C</addressOffset>
+          <size>0x20</size>
+          <access>read-write</access>
+          <resetValue>0x0000</resetValue>
+          <fields>
+            <field>
+              <name>I2CFMTX</name>
+              <description>Flush the master Tx FIFO</description>
+              <bitOffset>9</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CFSTX</name>
+              <description>Flush the slave Tx FIFO</description>
+              <bitOffset>8</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
+              <name>I2CMRXSTA</name>
+              <description>Master receive FIFO status bits</description>
+              <bitOffset>6</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+            <field>
+              <name>I2CMTXSTA</name>
+              <description>Master transmit FIFO status bits</description>
+              <bitOffset>4</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+            <field>
+              <name>I2CSRXSTA</name>
+              <description>Slave receive FIFO status bits</description>
+              <bitOffset>2</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+            <field>
+              <name>I2CSTXSTA</name>
+              <description>Slave transmit FIFO status bits</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+      </registers>
+      
+    </peripheral>
+  
     <peripheral>
       <name>FLASH</name>
       <description>FLASH/EE CONTROL INTERFACE</description>
