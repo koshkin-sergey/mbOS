@@ -181,23 +181,21 @@ typedef struct GPIO2_s {
   __IOM uint32_t PAR;
 } GPIO2_t;
 
-typedef struct POW_s {
-  __OM  uint16_t KEY1;
-  RESERVED(0, uint16_t);
-  __IOM uint8_t  CON0;
-  RESERVED(1[3], uint8_t);
-  __OM  uint16_t KEY2;
-  RESERVED(2[9], uint32_t);
-  __OM  uint16_t KEY3;
-  RESERVED(3, uint16_t);
-  __IOM uint16_t CON1;
-  RESERVED(4, uint16_t);
-  __OM  uint16_t KEY4;
-  RESERVED(5, uint16_t);
-  __IOM uint16_t PSMCON;
-  RESERVED(6, uint16_t);
-  __IOM uint16_t CMPCON;
-} POW_t;
+/* Power Clock Control */
+typedef struct PCC_s {
+  __OM  uint32_t POWKEY1;
+  __IOM uint32_t POWCON0;
+  __OM  uint32_t POWKEY2;
+  __OM  uint32_t PLLKEY1;
+  __IOM uint32_t PLLCON;
+  __OM  uint32_t PLLKEY2;
+  RESERVED(0[6], uint32_t);
+  __OM  uint32_t POWKEY3;
+  __IOM uint32_t POWCON1;
+  __OM  uint32_t POWKEY4;
+  __IOM uint32_t PSMCON;
+  __IOM uint32_t CMPCON;
+} PCC_t;
 
 typedef struct FLASH_s {
   __IM  uint32_t STA;
@@ -243,7 +241,7 @@ typedef struct I2C_s {
 #define TIMER0_BASE           0xFFFF0300UL  /*!< Timer0 Address Base          */
 #define TIMER1_BASE           0xFFFF0320UL  /*!< Timer1 Address Base          */
 #define TIMER2_BASE           0xFFFF0360UL  /*!< Timer2 Address Base          */
-#define POW_BASE              0xFFFF0404UL  /*!< PLL/PSM Base Address         */
+#define PCC_BASE              0xFFFF0404UL  /*!< PLL/PSM Base Address         */
 #define GPIO_BASE             0xFFFFF400UL  /*!< GPIO Address Base            */
 #define FLASH_CTL_BASE        0xFFFFF800UL  /*!< FLASH Address Base           */
 #define I2C0_BASE             0xFFFF0800UL  /*!< I2C0 Base Address            */
@@ -257,7 +255,7 @@ typedef struct I2C_s {
 #define GPIO0                 ((GPIO0_t *)      GPIO_BASE + 0U)
 #define GPIO1                 ((GPIO1_t *)      GPIO_BASE + 4U)
 #define GPIO2                 ((GPIO2_t *)      GPIO_BASE + 8U)
-#define POW                   ((POW_t *)        POW_BASE)
+#define PCC                   ((PCC_t *)        PCC_BASE)
 #define FLASH                 ((FLASH_t *)      FLASH_CTL_BASE)
 #define I2C0                  ((I2C_t *)        I2C0_BASE)
 #define I2C1                  ((I2C_t *)        I2C1_BASE)
@@ -489,12 +487,14 @@ typedef struct I2C_s {
 #define RTOS_TIMER_CON_EN         RTOS_TIMER_CON_EN_Msk
 
 /*------------------------------------------------------------------------------
- *                          POWER CONTROL
+ *                          POWER CLOCK CONTROL
  *----------------------------------------------------------------------------*/
-#define POW_KEY1_VALUE            ((uint16_t)0x0001)
-#define POW_KEY2_VALUE            ((uint16_t)0x00F4)
-#define POW_KEY3_VALUE            ((uint16_t)0x0076)
-#define POW_KEY4_VALUE            ((uint16_t)0x00B1)
+#define PCC_POWKEY1_VALUE         ((uint16_t)0x0001)
+#define PCC_POWKEY2_VALUE         ((uint16_t)0x00F4)
+#define PCC_POWKEY3_VALUE         ((uint16_t)0x0076)
+#define PCC_POWKEY4_VALUE         ((uint16_t)0x00B1)
+#define PCC_PLLKEY1_VALUE         ((uint16_t)0x00AA)
+#define PCC_PLLKEY2_VALUE         ((uint16_t)0x0055)
 
 /*------------------------------------------------------------------------------
  *                          FLASH CONTROL
