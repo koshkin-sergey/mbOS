@@ -28,6 +28,7 @@
 
 #include "asm/aduc7023.h"
 #include "asm/Driver_GPIO.h"
+#include "asm/Driver_PCC.h"
 
 #include "CMSIS/Driver/Driver_I2C.h"
 
@@ -73,20 +74,20 @@
   #define I2C1_SDA_GPIO_FUNC        DEV_I2C1_SDA_FUNC
 #endif
 
-#define I2Cx_EXPORT_DRIVER(x)                                                                                                                                                                            \
-static int32_t        I2C##x##_Initialize     (ARM_I2C_SignalEvent_t cb_event)                                      { return (I2C_Initialize    (cb_event, &I2C##x##_Resources));                      } \
-static int32_t        I2C##x##_Uninitialize   (void)                                                                { return (I2C_Uninitialize  (&I2C##x##_Resources));                                } \
-static int32_t        I2C##x##_PowerControl   (ARM_POWER_STATE state)                                               { return (I2C_PowerControl  (state, &I2C##x##_Resources));                         } \
-static int32_t        I2C##x##_MasterTransmit (uint32_t addr, const uint8_t *data, uint32_t num, bool xfer_pending) { return (I2C_MasterTransmit(addr, data, num, xfer_pending, &I2C##x##_Resources)); } \
-static int32_t        I2C##x##_MasterReceive  (uint32_t addr,       uint8_t *data, uint32_t num, bool xfer_pending) { return (I2C_MasterReceive (addr, data, num, xfer_pending, &I2C##x##_Resources)); } \
-static int32_t        I2C##x##_SlaveTransmit  (               const uint8_t *data, uint32_t num)                    { return (I2C_SlaveTransmit (data, num, &I2C##x##_Resources));                     } \
-static int32_t        I2C##x##_SlaveReceive   (                     uint8_t *data, uint32_t num)                    { return (I2C_SlaveReceive  (data, num, &I2C##x##_Resources));                     } \
-static int32_t        I2C##x##_GetDataCount   (void)                                                                { return (I2C_GetDataCount  (&I2C##x##_Resources));                                } \
-static int32_t        I2C##x##_Control        (uint32_t control, uint32_t arg)                                      { return (I2C_Control       (control, arg, &I2C##x##_Resources));                  } \
-static ARM_I2C_STATUS I2C##x##_GetStatus      (void)                                                                { return (I2C_GetStatus     (&I2C##x##_Resources));                                } \
-       void           I2C##x##_EV_IRQHandler  (void)                                                                {         I2C_EV_IRQHandler (&I2C##x##_Resources);                                 } \
-       void           I2C##x##_ER_IRQHandler  (void)                                                                {         I2C_ER_IRQHandler (&I2C##x##_Resources);                                 } \
-                                                                                                                                                                                                         \
+#define I2Cx_EXPORT_DRIVER(x)                                                                                                                                                                                 \
+static int32_t        I2C##x##_Initialize       (ARM_I2C_SignalEvent_t cb_event)                                      { return (I2C_Initialize       (cb_event, &I2C##x##_Resources));                      } \
+static int32_t        I2C##x##_Uninitialize     (void)                                                                { return (I2C_Uninitialize     (&I2C##x##_Resources));                                } \
+static int32_t        I2C##x##_PowerControl     (ARM_POWER_STATE state)                                               { return (I2C_PowerControl     (state, &I2C##x##_Resources));                         } \
+static int32_t        I2C##x##_MasterTransmit   (uint32_t addr, const uint8_t *data, uint32_t num, bool xfer_pending) { return (I2C_MasterTransmit   (addr, data, num, xfer_pending, &I2C##x##_Resources)); } \
+static int32_t        I2C##x##_MasterReceive    (uint32_t addr,       uint8_t *data, uint32_t num, bool xfer_pending) { return (I2C_MasterReceive    (addr, data, num, xfer_pending, &I2C##x##_Resources)); } \
+static int32_t        I2C##x##_SlaveTransmit    (               const uint8_t *data, uint32_t num)                    { return (I2C_SlaveTransmit    (data, num, &I2C##x##_Resources));                     } \
+static int32_t        I2C##x##_SlaveReceive     (                     uint8_t *data, uint32_t num)                    { return (I2C_SlaveReceive     (data, num, &I2C##x##_Resources));                     } \
+static int32_t        I2C##x##_GetDataCount     (void)                                                                { return (I2C_GetDataCount     (&I2C##x##_Resources));                                } \
+static int32_t        I2C##x##_Control          (uint32_t control, uint32_t arg)                                      { return (I2C_Control          (control, arg, &I2C##x##_Resources));                  } \
+static ARM_I2C_STATUS I2C##x##_GetStatus        (void)                                                                { return (I2C_GetStatus        (&I2C##x##_Resources));                                } \
+       void           I2C##x##_Master_IRQHandler(void)                                                                {         I2C_Master_IRQHandler(&I2C##x##_Resources);                                 } \
+       void           I2C##x##_Slave_IRQHandler (void)                                                                {         I2C_Slave_IRQHandler (&I2C##x##_Resources);                                 } \
+                                                                                                                                                                                                              \
 ARM_DRIVER_I2C Driver_I2C##x = { \
   I2Cx_GetVersion,               \
   I2Cx_GetCapabilities,          \
@@ -106,6 +107,12 @@ ARM_DRIVER_I2C Driver_I2C##x = { \
 #define I2C_INIT            ((uint8_t)0x01)   // I2C initialized
 #define I2C_POWER           ((uint8_t)0x02)   // I2C powered on
 #define I2C_SETUP           ((uint8_t)0x04)   // I2C Master configured, clock set
+
+#define I2C_MODE_SLAVE      ((uint8_t)0x00)   // Mode: slave
+#define I2C_MODE_MASTER     ((uint8_t)0x01)   // Mode: master
+
+#define I2C_DIR_TX          ((uint8_t)0x00)   // Direction: transmitter
+#define I2C_DIR_RX          ((uint8_t)0x01)   // Direction: receiver
 
 /* Transfer status flags definitions */
 #define XFER_CTRL_RESTART   ((uint8_t)0x01)   // Transfer pending
@@ -153,6 +160,7 @@ typedef struct {
   I2C_t                *reg;                // I2C peripheral register interface
   I2C_IO                io;                 // I2C Input/Output pins
   I2C_INFO             *info;               // Run-Time information
+  PCC_Periph_t          pcc_periph;         // I2C PCC peripheral
   IRQn_t                master_irq_num;     // I2C Master IRQ Number
   IRQn_t                slave_irq_num;      // I2C Slave IRQ Number
 } const I2C_RESOURCES;
