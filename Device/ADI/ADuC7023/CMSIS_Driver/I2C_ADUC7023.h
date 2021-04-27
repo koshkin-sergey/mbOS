@@ -30,6 +30,7 @@
 #include "asm/Driver_GPIO.h"
 #include "asm/Driver_PCC.h"
 
+#include "Kernel/irq.h"
 #include "CMSIS/Driver/Driver_I2C.h"
 
 #include "device_config.h"
@@ -54,6 +55,8 @@
   #define I2C0_SDA_GPIO_PORT        DEV_I2C0_SDA_PORT
   #define I2C0_SDA_GPIO_PIN         DEV_I2C0_SDA_PIN
   #define I2C0_SDA_GPIO_FUNC        DEV_I2C0_SDA_FUNC
+
+  #define I2C0_INT_PRIORITY         DEV_I2C0_INT_PRIO
 #endif
 
 /* I2C1 configuration definitions */
@@ -72,6 +75,8 @@
   #define I2C1_SDA_GPIO_PORT        DEV_I2C1_SDA_PORT
   #define I2C1_SDA_GPIO_PIN         DEV_I2C1_SDA_PIN
   #define I2C1_SDA_GPIO_FUNC        DEV_I2C1_SDA_FUNC
+
+  #define I2C1_INT_PRIORITY         DEV_I2C1_INT_PRIO
 #endif
 
 #define I2Cx_EXPORT_DRIVER(x)                                                                                                                                                                                 \
@@ -155,14 +160,22 @@ typedef struct _I2C_INFO {
   uint8_t               reserved[3];        // Reserved
 } I2C_INFO;
 
+/* I2C IRQ Configuration */
+typedef const struct _I2C_IRQ {
+  IRQ_Priority_t        priority;           // I2C interrupt priority
+  IRQn_t                master_num;         // I2C Master IRQ Number
+  IRQn_t                slave_num;          // I2C Slave IRQ Number
+  IRQHandler_t          master_handler;     // I2C Master IRQ handler
+  IRQHandler_t          slave_handler;      // I2C Slave IRQ handler
+} I2C_IRQ;
+
 /* I2C Resource Configuration */
 typedef struct {
   I2C_t                *reg;                // I2C peripheral register interface
   I2C_IO                io;                 // I2C Input/Output pins
   I2C_INFO             *info;               // Run-Time information
   PCC_Periph_t          pcc_periph;         // I2C PCC peripheral
-  IRQn_t                master_irq_num;     // I2C Master IRQ Number
-  IRQn_t                slave_irq_num;      // I2C Slave IRQ Number
+  I2C_IRQ               irq;                // I2C interrupt information
 } const I2C_RESOURCES;
 
 #endif /* I2C_ADUC7023_H_ */

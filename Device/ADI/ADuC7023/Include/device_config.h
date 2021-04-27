@@ -26,25 +26,28 @@
 // <i> Configuration settings for Driver_I2C0 in component ::CMSIS Driver:I2C
 #define DEV_I2C0                        1
 
-//   <o> I2C0_SCL Pin <0=>P0.4
+//   <o> SCL Pin <0=>P0.4
 #define   DEV_I2C0_SCL_PORT_ID         0
 #if      (DEV_I2C0_SCL_PORT_ID == 0)
   #define DEV_I2C0_SCL_PORT            &DRIVER_GPIO0
   #define DEV_I2C0_SCL_PIN             GPIO_PIN_4
   #define DEV_I2C0_SCL_FUNC            GPIO_PIN_FUNC_1
 #else
-  #error "Invalid I2C0_SCL Pin Configuration!"
+  #error "Invalid I2C0 SCL Pin Configuration!"
 #endif
 
-//   <o> I2C0_SDA Pin <0=>P0.5
+//   <o> SDA Pin <0=>P0.5
 #define   DEV_I2C0_SDA_PORT_ID         0
 #if      (DEV_I2C0_SDA_PORT_ID == 0)
   #define DEV_I2C0_SDA_PORT            &DRIVER_GPIO0
   #define DEV_I2C0_SDA_PIN             GPIO_PIN_5
   #define DEV_I2C0_SDA_FUNC            GPIO_PIN_FUNC_1
 #else
-  #error "Invalid I2C0_SDA Pin Configuration!"
+  #error "Invalid I2C0 SDA Pin Configuration!"
 #endif
+
+//   <o> Interrupt Priority <0=>Realtime <1=>Above High <2=>High <3=>Above Normal <4=>Normal <5=>Below Normal <6=>Above Low <7=>Low
+#define DEV_I2C0_INT_PRIO              4
 
 // </e>
 
@@ -52,7 +55,7 @@
 // <i> Configuration settings for Driver_I2C1 in component ::CMSIS Driver:I2C
 #define DEV_I2C1                        1
 
-//   <o> I2C1_SCL Pin <0=>P0.6 <1=>P1.6
+//   <o> SCL Pin <0=>P0.6 <1=>P1.6
 #define   DEV_I2C1_SCL_PORT_ID         0
 #if      (DEV_I2C1_SCL_PORT_ID == 0)
   #define DEV_I2C1_SCL_PORT            &DRIVER_GPIO0
@@ -63,10 +66,10 @@
   #define DEV_I2C1_SCL_PIN             GPIO_PIN_6
   #define DEV_I2C1_SCL_FUNC            GPIO_PIN_FUNC_1
 #else
-  #error "Invalid I2C1_SCL Pin Configuration!"
+  #error "Invalid I2C1 SCL Pin Configuration!"
 #endif
 
-//   <o> I2C1_SDA Pin <0=>P0.7 <1=>P1.7
+//   <o> SDA Pin <0=>P0.7 <1=>P1.7
 #define   DEV_I2C1_SDA_PORT_ID         0
 #if      (DEV_I2C1_SDA_PORT_ID == 0)
   #define DEV_I2C1_SDA_PORT            &DRIVER_GPIO0
@@ -77,8 +80,11 @@
   #define DEV_I2C1_SDA_PIN             GPIO_PIN_7
   #define DEV_I2C1_SDA_FUNC            GPIO_PIN_FUNC_1
 #else
-  #error "Invalid I2C1_SDA Pin Configuration!"
+  #error "Invalid I2C1 SDA Pin Configuration!"
 #endif
+
+//   <o> Interrupt Priority <0=>Realtime <1=>Above High <2=>High <3=>Above Normal <4=>Normal <5=>Below Normal <6=>Above Low <7=>Low
+#define DEV_I2C1_INT_PRIO              4
 
 // </e>
 

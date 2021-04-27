@@ -68,6 +68,9 @@ static I2C_PIN I2C0_sda = {
     I2C0_SDA_GPIO_PORT, I2C0_SDA_GPIO_PIN, I2C0_SDA_GPIO_FUNC
 };
 
+static void I2C0_Master_IRQHandler(void);
+static void I2C0_Slave_IRQHandler(void);
+
 /* I2C0 Resources */
 static I2C_RESOURCES I2C0_Resources = {
   I2C0,
@@ -77,8 +80,13 @@ static I2C_RESOURCES I2C0_Resources = {
   },
   &I2C0_Info,
   PCC_PERIPH_I2C0,
-  I2C0_MASTER_IRQn,
-  I2C0_SLAVE_IRQn,
+  {
+    I2C0_INT_PRIORITY,
+    I2C0_MASTER_IRQn,
+    I2C0_SLAVE_IRQn,
+    I2C0_Master_IRQHandler,
+    I2C0_Slave_IRQHandler,
+  }
 };
 #endif /* USE_I2C0 */
 
@@ -94,6 +102,9 @@ static I2C_PIN I2C1_sda = {
     I2C1_SDA_GPIO_PORT, I2C1_SDA_GPIO_PIN, I2C1_SDA_GPIO_FUNC
 };
 
+static void I2C1_Master_IRQHandler(void);
+static void I2C1_Slave_IRQHandler(void);
+
 /* I2C1 Resources */
 static I2C_RESOURCES I2C1_Resources = {
   I2C1,
@@ -103,8 +114,13 @@ static I2C_RESOURCES I2C1_Resources = {
   },
   &I2C1_Info,
   PCC_PERIPH_I2C1,
-  I2C1_MASTER_IRQn,
-  I2C1_SLAVE_IRQn,
+  {
+    I2C1_INT_PRIORITY,
+    I2C1_MASTER_IRQn,
+    I2C1_SLAVE_IRQn,
+    I2C1_Master_IRQHandler,
+    I2C1_Slave_IRQHandler,
+  }
 };
 #endif /* USE_I2C1 */
 
@@ -145,15 +161,14 @@ static
 int32_t I2C_Initialize(ARM_I2C_SignalEvent_t cb_event, I2C_RESOURCES *i2c)
 {
   I2C_IO         *io;
-  I2C_INFO       *info;
   GPIO_PIN_CFG_t  pin_cfg;
+  I2C_INFO       *info = i2c->info;
 
   if (info->flags & I2C_INIT) {
     return (ARM_DRIVER_OK);
   }
 
   io      = &i2c->io;
-  info    = i2c->info;
   pin_cfg = in_pin_cfg;
 
   /* Configure SCL Pin */
@@ -203,8 +218,9 @@ int32_t I2C_Uninitialize(I2C_RESOURCES *i2c)
 static
 int32_t I2C_PowerControl(ARM_POWER_STATE state, I2C_RESOURCES *i2c)
 {
-  I2C_INFO *info = i2c->info;
-  I2C_t    *reg  = i2c->reg;
+  I2C_INFO *info =  i2c->info;
+  I2C_IRQ  *irq  = &i2c->irq;
+  I2C_t    *reg  =  i2c->reg;
 
   switch (state) {
     case ARM_POWER_OFF:
@@ -216,6 +232,8 @@ int32_t I2C_PowerControl(ARM_POWER_STATE state, I2C_RESOURCES *i2c)
       PCC_DisablePeriph(i2c->pcc_periph);
 
       /* Disable I2C IRQ */
+      IRQ_Disable(irq->master_num);
+      IRQ_Disable(irq->slave_num);
 
       info->status.busy             = 0U;
       info->status.mode             = 0U;
@@ -239,15 +257,19 @@ int32_t I2C_PowerControl(ARM_POWER_STATE state, I2C_RESOURCES *i2c)
       /* Enable I2C peripheral clock */
       PCC_EnablePeriph(i2c->pcc_periph);
 
-      /* Clear and Enable I2C IRQ */
+      /* Enable I2C IRQ */
+      IRQ_SetPriority(irq->master_num, irq->priority);
+      IRQ_SetPriority(irq->slave_num, irq->priority);
+      IRQ_SetHandler(irq->master_num, irq->master_handler);
+      IRQ_SetHandler(irq->slave_num, irq->slave_handler);
+      IRQ_SetMode(irq->master_num, IRQ_MODE_TYPE_IRQ);
+      IRQ_SetMode(irq->slave_num, IRQ_MODE_TYPE_IRQ);
+      IRQ_Enable(irq->master_num);
+      IRQ_Enable(irq->slave_num);
 
       /* Initial peripheral setup */
       reg->MCON = 0U;
       reg->SCON = 0U;
-
-      /* Enable IRQ/DMA rx/tx requests */
-
-      /* Apply setup and enable peripheral */
 
       /* Ready for operation */
       info->flags |= I2C_POWER;
