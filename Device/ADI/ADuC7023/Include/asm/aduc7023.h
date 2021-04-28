@@ -582,7 +582,208 @@ typedef struct I2C_s {
 #define I2CMCON_MCENI             I2CMCON_MCENI_Msk
 
 /*******************  Bit definition for I2CMSTA register  ********************/
+#define I2CMSTA_MTFSTA_Pos        (0U)
+#define I2CMSTA_MTFSTA_Msk        (0x3UL << I2CMSTA_MTFSTA_Pos)
+#define I2CMSTA_MTFSTA            I2CMSTA_MTFSTA_Msk
+#define I2CMSTA_MTFSTA_0          (0x1UL << I2CMSTA_MTFSTA_Pos)
+#define I2CMSTA_MTFSTA_1          (0x2UL << I2CMSTA_MTFSTA_Pos)
+#define I2CMSTA_MTXQ_Pos          (2U)
+#define I2CMSTA_MTXQ_Msk          (0x1UL << I2CMSTA_MTXQ_Pos)
+#define I2CMSTA_MTXQ              I2CMSTA_MTXQ_Msk
+#define I2CMSTA_MRXQ_Pos          (3U)
+#define I2CMSTA_MRXQ_Msk          (0x1UL << I2CMSTA_MRXQ_Pos)
+#define I2CMSTA_MRXQ              I2CMSTA_MRXQ_Msk
+#define I2CMSTA_MNA_Pos           (4U)
+#define I2CMSTA_MNA_Msk           (0x1UL << I2CMSTA_MNA_Pos)
+#define I2CMSTA_MNA               I2CMSTA_MNA_Msk
+#define I2CMSTA_AL_Pos            (5U)
+#define I2CMSTA_AL_Msk            (0x1UL << I2CMSTA_AL_Pos)
+#define I2CMSTA_AL                I2CMSTA_AL_Msk
+#define I2CMSTA_MBUSY_Pos         (6U)
+#define I2CMSTA_MBUSY_Msk         (0x1UL << I2CMSTA_MBUSY_Pos)
+#define I2CMSTA_MBUSY             I2CMSTA_MBUSY_Msk
+#define I2CMSTA_MNACK_Pos         (7U)
+#define I2CMSTA_MNACK_Msk         (0x1UL << I2CMSTA_MNACK_Pos)
+#define I2CMSTA_MNACK             I2CMSTA_MNACK_Msk
+#define I2CMSTA_MTC_Pos           (8U)
+#define I2CMSTA_MTC_Msk           (0x1UL << I2CMSTA_MTC_Pos)
+#define I2CMSTA_MTC               I2CMSTA_MTC_Msk
+#define I2CMSTA_MRXFO_Pos         (9U)
+#define I2CMSTA_MRXFO_Msk         (0x1UL << I2CMSTA_MRXFO_Pos)
+#define I2CMSTA_MRXFO             I2CMSTA_MRXFO_Msk
+#define I2CMSTA_BBUSY_Pos         (10U)
+#define I2CMSTA_BBUSY_Msk         (0x1UL << I2CMSTA_BBUSY_Pos)
+#define I2CMSTA_BBUSY             I2CMSTA_BBUSY_Msk
 
+/*******************  Bit definition for I2CMRX register  *********************/
+#define I2CMRX_Pos                (0U)
+#define I2CMRX_Msk                (0xFFUL << I2CMRX_Pos)
+#define I2CMRX                    I2CMRX_Msk
+
+/*******************  Bit definition for I2CMTX register  *********************/
+#define I2CMTX_Pos                (0U)
+#define I2CMTX_Msk                (0xFFUL << I2CMTX_Pos)
+#define I2CMTX                    I2CMTX_Msk
+
+/*******************  Bit definition for I2CMCNT0 register  *******************/
+#define I2CMCNT0_RCNT_Pos         (0U)
+#define I2CMCNT0_RCNT_Msk         (0xFFUL << I2CMCNT0_RCNT_Pos)
+#define I2CMCNT0_RCNT             I2CMCNT0_RCNT_Msk
+
+/*******************  Bit definition for I2CMCNT1 register  *******************/
+#define I2CMCNT1_Pos              (0U)
+#define I2CMCNT1_Msk              (0xFFUL << I2CMCNT1_Pos)
+#define I2CMCNT1                  I2CMCNT1_Msk
+
+/*******************  Bit definition for I2CADR0 register  ********************/
+#define I2CADR0_Pos               (0U)
+#define I2CADR0_Msk               (0xFFUL << I2CADR0_Pos)
+#define I2CADR0                   I2CADR0_Msk
+
+/*******************  Bit definition for I2CADR1 register  ********************/
+#define I2CADR1_Pos               (0U)
+#define I2CADR1_Msk               (0xFFUL << I2CADR1_Pos)
+#define I2CADR1                   I2CADR1_Msk
+
+/*******************  Bit definition for I2CDIV register  *********************/
+#define I2CDIV_DIVL_Pos           (0U)
+#define I2CDIV_DIVL_Msk           (0xFFUL << I2CDIV_DIVL_Pos)
+#define I2CDIV_DIVL               I2CDIV_DIVL_Msk
+#define I2CDIV_DIVH_Pos           (8U)
+#define I2CDIV_DIVH_Msk           (0xFFUL << I2CDIV_DIVH_Pos)
+#define I2CDIV_DIVH               I2CDIV_DIVH_Msk
+
+/*******************  Bit definition for I2CSCON register  ********************/
+#define I2CSCON_SEN_Pos           (0U)
+#define I2CSCON_SEN_Msk           (0x1UL << I2CSCON_SEN_Pos)
+#define I2CSCON_SEN               I2CSCON_SEN_Msk
+#define I2CSCON_ADR10EN_Pos       (1U)
+#define I2CSCON_ADR10EN_Msk       (0x1UL << I2CSCON_ADR10EN_Pos)
+#define I2CSCON_ADR10EN           I2CSCON_ADR10EN_Msk
+#define I2CSCON_GCEN_Pos          (2U)
+#define I2CSCON_GCEN_Msk          (0x1UL << I2CSCON_GCEN_Pos)
+#define I2CSCON_GCEN              I2CSCON_GCEN_Msk
+#define I2CSCON_HGCEN_Pos         (3U)
+#define I2CSCON_HGCEN_Msk         (0x1UL << I2CSCON_HGCEN_Pos)
+#define I2CSCON_HGCEN             I2CSCON_HGCEN_Msk
+#define I2CSCON_GCCLR_Pos         (4U)
+#define I2CSCON_GCCLR_Msk         (0x1UL << I2CSCON_GCCLR_Pos)
+#define I2CSCON_GCCLR             I2CSCON_GCCLR_Msk
+#define I2CSCON_SETEN_Pos         (5U)
+#define I2CSCON_SETEN_Msk         (0x1UL << I2CSCON_SETEN_Pos)
+#define I2CSCON_SETEN             I2CSCON_SETEN_Msk
+#define I2CSCON_NACKEN_Pos        (7U)
+#define I2CSCON_NACKEN_Msk        (0x1UL << I2CSCON_NACKEN_Pos)
+#define I2CSCON_NACKEN            I2CSCON_NACKEN_Msk
+#define I2CSCON_SSENI_Pos         (8U)
+#define I2CSCON_SSENI_Msk         (0x1UL << I2CSCON_SSENI_Pos)
+#define I2CSCON_SSENI             I2CSCON_SSENI_Msk
+#define I2CSCON_SRXENI_Pos        (9U)
+#define I2CSCON_SRXENI_Msk        (0x1UL << I2CSCON_SRXENI_Pos)
+#define I2CSCON_SRXENI            I2CSCON_SRXENI_Msk
+#define I2CSCON_STXENI_Pos        (10U)
+#define I2CSCON_STXENI_Msk        (0x1UL << I2CSCON_STXENI_Pos)
+#define I2CSCON_STXENI            I2CSCON_STXENI_Msk
+
+/*******************  Bit definition for I2CSSTA register  ********************/
+#define I2CSSTA_ETSTA_Pos         (0U)
+#define I2CSSTA_ETSTA_Msk         (0x1UL << I2CSSTA_ETSTA_Pos)
+#define I2CSSTA_ETSTA             I2CSSTA_ETSTA_Msk
+#define I2CSSTA_STFE_Pos          (1U)
+#define I2CSSTA_STFE_Msk          (0x1UL << I2CSSTA_STFE_Pos)
+#define I2CSSTA_STFE              I2CSSTA_STFE_Msk
+#define I2CSSTA_STXQ_Pos          (2U)
+#define I2CSSTA_STXQ_Msk          (0x1UL << I2CSSTA_STXQ_Pos)
+#define I2CSSTA_STXQ              I2CSSTA_STXQ_Msk
+#define I2CSSTA_SRXQ_Pos          (3U)
+#define I2CSSTA_SRXQ_Msk          (0x1UL << I2CSSTA_SRXQ_Pos)
+#define I2CSSTA_SRXQ              I2CSSTA_SRXQ_Msk
+#define I2CSSTA_SRXFO_Pos         (4U)
+#define I2CSSTA_SRXFO_Msk         (0x1UL << I2CSSTA_SRXFO_Pos)
+#define I2CSSTA_SRXFO             I2CSSTA_SRXFO_Msk
+#define I2CSSTA_SNACK_Pos         (5U)
+#define I2CSSTA_SNACK_Msk         (0x1UL << I2CSSTA_SNACK_Pos)
+#define I2CSSTA_SNACK             I2CSSTA_SNACK_Msk
+#define I2CSSTA_SBUSY_Pos         (6U)
+#define I2CSSTA_SBUSY_Msk         (0x1UL << I2CSSTA_SBUSY_Pos)
+#define I2CSSTA_SBUSY             I2CSSTA_SBUSY_Msk
+#define I2CSSTA_GC_Pos            (7U)
+#define I2CSSTA_GC_Msk            (0x1UL << I2CSSTA_GC_Pos)
+#define I2CSSTA_GC                I2CSSTA_GC_Msk
+#define I2CSSTA_GCID_Pos          (8U)
+#define I2CSSTA_GCID_Msk          (0x3UL << I2CSSTA_GCID_Pos)
+#define I2CSSTA_GCID              I2CSSTA_GCID_Msk
+#define I2CSSTA_GCID_0            (0x1UL << I2CSSTA_GCID_Pos)
+#define I2CSSTA_GCID_1            (0x2UL << I2CSSTA_GCID_Pos)
+#define I2CSSTA_SS_Pos            (10U)
+#define I2CSSTA_SS_Msk            (0x1UL << I2CSSTA_SS_Pos)
+#define I2CSSTA_SS                I2CSSTA_SS_Msk
+#define I2CSSTA_ID_Pos            (11U)
+#define I2CSSTA_ID_Msk            (0x3UL << I2CSSTA_ID_Pos)
+#define I2CSSTA_ID                I2CSSTA_ID_Msk
+#define I2CSSTA_ID_0              (0x1UL << I2CSSTA_ID_Pos)
+#define I2CSSTA_ID_1              (0x2UL << I2CSSTA_ID_Pos)
+#define I2CSSTA_REPS_Pos          (13U)
+#define I2CSSTA_REPS_Msk          (0x1UL << I2CSSTA_REPS_Pos)
+#define I2CSSTA_REPS              I2CSSTA_REPS_Msk
+#define I2CSSTA_STA_Pos           (14U)
+#define I2CSSTA_STA_Msk           (0x1UL << I2CSSTA_STA_Pos)
+#define I2CSSTA_STA               I2CSSTA_STA_Msk
+
+/*******************  Bit definition for I2CSRX register  *********************/
+#define I2CSRX_Pos                (0U)
+#define I2CSRX_Msk                (0xFFUL << I2CSRX_Pos)
+#define I2CSRX                    I2CSRX_Msk
+
+/*******************  Bit definition for I2CSTX register  *********************/
+#define I2CSTX_Pos                (0U)
+#define I2CSTX_Msk                (0xFFUL << I2CSTX_Pos)
+#define I2CSTX                    I2CSTX_Msk
+
+/*******************  Bit definition for I2CALT register  *********************/
+#define I2CALT_Pos                (0U)
+#define I2CALT_Msk                (0xFFUL << I2CALT_Pos)
+#define I2CALT                    I2CALT_Msk
+
+/*******************  Bit definition for I2CID0 register  *********************/
+#define I2CID0_Pos                (0U)
+#define I2CID0_Msk                (0xFFUL << I2CID0_Pos)
+#define I2CID0                    I2CID0_Msk
+
+/*******************  Bit definition for I2CID1 register  *********************/
+#define I2CID1_Pos                (0U)
+#define I2CID1_Msk                (0xFFUL << I2CID1_Pos)
+#define I2CID1                    I2CID1_Msk
+
+/*******************  Bit definition for I2CID2 register  *********************/
+#define I2CID2_Pos                (0U)
+#define I2CID2_Msk                (0xFFUL << I2CID2_Pos)
+#define I2CID2                    I2CID2_Msk
+
+/*******************  Bit definition for I2CID3 register  *********************/
+#define I2CID3_Pos                (0U)
+#define I2CID3_Msk                (0xFFUL << I2CID3_Pos)
+#define I2CID3                    I2CID3_Msk
+
+/*******************  Bit definition for I2CFSTA register  ********************/
+#define I2CFSTA_STXSTA_Pos        (0U)
+#define I2CFSTA_STXSTA_Msk        (0x3UL << I2CFSTA_STXSTA_Pos)
+#define I2CFSTA_STXSTA            I2CFSTA_STXSTA_Msk
+#define I2CFSTA_SRXSTA_Pos        (2U)
+#define I2CFSTA_SRXSTA_Msk        (0x3UL << I2CFSTA_SRXSTA_Pos)
+#define I2CFSTA_SRXSTA            I2CFSTA_SRXSTA_Msk
+#define I2CFSTA_MTXSTA_Pos        (4U)
+#define I2CFSTA_MTXSTA_Msk        (0x3UL << I2CFSTA_MTXSTA_Pos)
+#define I2CFSTA_MTXSTA            I2CFSTA_MTXSTA_Msk
+#define I2CFSTA_MRXSTA_Pos        (6U)
+#define I2CFSTA_MRXSTA_Msk        (0x3UL << I2CFSTA_MRXSTA_Pos)
+#define I2CFSTA_MRXSTA            I2CFSTA_MRXSTA_Msk
+#define I2CFSTA_FSTX_Pos          (8U)
+#define I2CFSTA_FSTX_Msk          (0x3UL << I2CFSTA_FSTX_Pos)
+#define I2CFSTA_FSTX              I2CFSTA_FSTX_Msk
+#define I2CFSTA_FMTX_Pos          (9U)
+#define I2CFSTA_FMTX_Msk          (0x3UL << I2CFSTA_FMTX_Pos)
+#define I2CFSTA_FMTX              I2CFSTA_FMTX_Msk
 
 /*------------------------------------------------------------------------------
  *                          SYSTEM CONTROL
