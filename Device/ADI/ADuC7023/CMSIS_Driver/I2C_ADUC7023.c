@@ -666,13 +666,38 @@ static
 void I2C_Slave_IRQHandler(I2C_RESOURCES *i2c)
 {
   uint32_t           status;
-  uint32_t           event = 0;
+  uint32_t           event = 0U;
   I2C_TRANSFER_INFO *xfer  = &i2c->info->xfer;
   I2C_INFO          *info  = i2c->info;
   I2C_t             *reg   = i2c->reg;
 
   status = reg->SSTA;
 
+  if ((xfer->ctrl & XFER_CTRL_ADDR_DONE) != 0U) {
+    if ((status & I2CSSTA_STXQ) != 0U) {
+
+    }
+    else if ((status & I2CSSTA_SRXQ) != 0U) {
+
+    }
+    else if ((status & I2CSSTA_SS) != 0U) {
+
+    }
+  }
+  else {
+    if ((status & I2CSSTA_STXQ) != 0U) {
+      info->status.direction = I2C_DIR_TX;
+      event = ARM_I2C_EVENT_SLAVE_TRANSMIT;
+    }
+    else if ((status & I2CSSTA_SRXQ) != 0U) {
+      info->status.direction = I2C_DIR_RX;
+      event = ARM_I2C_EVENT_SLAVE_RECEIVE;
+    }
+
+    if (xfer->data == NULL) {
+
+    }
+  }
 
   /* Send events */
   if ((event) && (info->cb_event)) {
