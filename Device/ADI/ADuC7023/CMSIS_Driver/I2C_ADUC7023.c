@@ -31,6 +31,11 @@
  *  defines and macros (scope: module-local)
  ******************************************************************************/
 
+#define I2CCLK_100K_DIVL    ((uint16_t) (0xCFU << 0U))
+#define I2CCLK_100K_DIVH    ((uint16_t) (0xCFU << 8U))
+#define I2CCLK_400K_DIVL    ((uint16_t) (0x3CU << 0U))
+#define I2CCLK_400K_DIVH    ((uint16_t) (0x28U << 8U))
+
 #define ARM_I2C_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(1,0) /* driver version */
 
 /*******************************************************************************
@@ -526,7 +531,7 @@ int32_t I2C_Control(uint32_t control, uint32_t arg, I2C_RESOURCES *i2c)
 {
   I2C_INFO *info = i2c->info;
   I2C_t    *reg  = i2c->reg;
-  uint32_t val;
+  uint32_t  val;
 
   if ((info->flags & I2C_POWER) == 0U) {
     /* I2C not powered */
@@ -537,36 +542,47 @@ int32_t I2C_Control(uint32_t control, uint32_t arg, I2C_RESOURCES *i2c)
     case ARM_I2C_OWN_ADDRESS:
       if (arg == 0) {
         /* Disable slave */
+        val = 0U;
       }
       else {
+        /* Enable slave */
+        val = I2CSCON_STXENI | I2CSCON_SRXENI | I2CSCON_SSENI | I2CSCON_SETEN |
+              I2CSCON_SEN;
+
         if (arg & ARM_I2C_ADDRESS_GC) {
           /* Enable general call */
-        } else {
-          /* Disable general call */
+          val |= I2CSCON_GCEN;
         }
 
         if (arg & ARM_I2C_ADDRESS_10BIT) {
-
-        } else {
-
+          /* Enable 10-bit address mode */
+          val |= I2CSCON_ADR10EN;
         }
       }
+
+      reg->ID0  = ((arg << 1U) & 0xFF);
+      reg->SCON = (uint16_t)val;
       break;
 
     case ARM_I2C_BUS_SPEED:
       switch (arg) {
         case ARM_I2C_BUS_SPEED_STANDARD:
+          val = I2CCLK_100K_DIVH | I2CCLK_100K_DIVL;
           break;
 
         case ARM_I2C_BUS_SPEED_FAST:
-          break;
-
-        case ARM_I2C_BUS_SPEED_FAST_PLUS:
+          val = I2CCLK_400K_DIVH | I2CCLK_400K_DIVL;
           break;
 
         default:
           return (ARM_DRIVER_ERROR_UNSUPPORTED);
       }
+
+      /* Configure period of SCL */
+      reg->DIV  = (uint16_t)val;
+      /* Enable master */
+      reg->MCON = (uint16_t)(I2CMCON_MCENI | I2CMCON_NACKENI | I2CMCON_ALENI | I2CMCON_MEN);
+
       /* Master configured, clock set */
       info->flags |= I2C_SETUP;
       break;
@@ -649,10 +665,14 @@ void I2C_Master_IRQHandler(I2C_RESOURCES *i2c)
 static
 void I2C_Slave_IRQHandler(I2C_RESOURCES *i2c)
 {
+  uint32_t           status;
   uint32_t           event = 0;
   I2C_TRANSFER_INFO *xfer  = &i2c->info->xfer;
   I2C_INFO          *info  = i2c->info;
   I2C_t             *reg   = i2c->reg;
+
+  status = reg->SSTA;
+
 
   /* Send events */
   if ((event) && (info->cb_event)) {
