@@ -673,30 +673,44 @@ void I2C_Slave_IRQHandler(I2C_RESOURCES *i2c)
 
   status = reg->SSTA;
 
-  if ((xfer->ctrl & XFER_CTRL_ADDR_DONE) != 0U) {
-    if ((status & I2CSSTA_STXQ) != 0U) {
-
-    }
-    else if ((status & I2CSSTA_SRXQ) != 0U) {
-
-    }
-    else if ((status & I2CSSTA_SS) != 0U) {
-
-    }
-  }
-  else {
-    if ((status & I2CSSTA_STXQ) != 0U) {
+  if ((status & I2CSSTA_STXQ) != 0U) {
+    if ((xfer->ctrl & XFER_CTRL_ADDR_DONE) == 0U) {
       info->status.direction = I2C_DIR_TX;
       event = ARM_I2C_EVENT_SLAVE_TRANSMIT;
+
+      if ((status & I2CSSTA_GC) == 0U) {
+        info->status.general_call = 0U;
+      }
+      else {
+        info->status.general_call = 1U;
+      }
+
+      if (xfer->data == NULL) {
+
+      }
     }
-    else if ((status & I2CSSTA_SRXQ) != 0U) {
+  }
+
+  if ((status & I2CSSTA_SRXQ) != 0U) {
+    if ((xfer->ctrl & XFER_CTRL_ADDR_DONE) == 0U) {
       info->status.direction = I2C_DIR_RX;
       event = ARM_I2C_EVENT_SLAVE_RECEIVE;
-    }
 
-    if (xfer->data == NULL) {
+      if ((status & I2CSSTA_GC) == 0U) {
+        info->status.general_call = 0U;
+      }
+      else {
+        info->status.general_call = 1U;
+      }
 
+      if (xfer->data == NULL) {
+
+      }
     }
+  }
+
+  if ((status & I2CSSTA_SS) != 0U) {
+
   }
 
   /* Send events */
