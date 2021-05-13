@@ -305,8 +305,7 @@ static
 int32_t I2C_MasterTransmit(uint32_t addr, const uint8_t *data, uint32_t num,
     bool xfer_pending, I2C_RESOURCES *i2c)
 {
-  bool      restart;
-  I2C_INFO *info    = i2c->info;
+  I2C_INFO *info = i2c->info;
 
   if ((data == NULL) || (num == 0U)) {
     return (ARM_DRIVER_ERROR_PARAMETER);
@@ -316,7 +315,7 @@ int32_t I2C_MasterTransmit(uint32_t addr, const uint8_t *data, uint32_t num,
     return (ARM_DRIVER_ERROR_PARAMETER);
   }
 
-  if (!(info->flags & I2C_SETUP)) {
+  if ((info->flags & I2C_SETUP) == 0U) {
     /* Driver not yet configured */
     return (ARM_DRIVER_ERROR);
   }
@@ -325,25 +324,24 @@ int32_t I2C_MasterTransmit(uint32_t addr, const uint8_t *data, uint32_t num,
     return (ARM_DRIVER_ERROR_BUSY);
   }
 
-  restart = (info->xfer.ctrl & XFER_CTRL_RESTART) != 0U;
-
-  if (!restart) {
+  if ((info->ctrl & XFER_CTRL_XPENDING) == 0U) {
     /* New transfer */
   }
 
   info->status.busy             = 1U;
-  info->status.mode             = 1U;
-  info->status.direction        = 0U;
+  info->status.mode             = I2C_MODE_MASTER;
+  info->status.direction        = I2C_DIR_TX;
   info->status.bus_error        = 0U;
   info->status.arbitration_lost = 0U;
 
-  info->xfer.num  = num;
-  info->xfer.cnt  = 0;
-  info->xfer.data = (uint8_t *)data;
-  info->xfer.ctrl = 0U;
+  info->tx.data = (uint8_t *)data;
+  info->tx.num  = num;
+  info->tx.cnt  = 0U;
+
+  info->ctrl = 0U;
 
   if (xfer_pending) {
-    info->xfer.ctrl = XFER_CTRL_RESTART;
+    info->ctrl |= XFER_CTRL_XPENDING;
   }
 
   /* Set slave address and transfer direction */
@@ -375,9 +373,8 @@ int32_t I2C_MasterTransmit(uint32_t addr, const uint8_t *data, uint32_t num,
  */
 static
 int32_t I2C_MasterReceive(uint32_t addr, uint8_t *data, uint32_t num,
-    bool xfer_pending, I2C_RESOURCES *i2c)
+                          bool xfer_pending, I2C_RESOURCES *i2c)
 {
-  bool restart;
   I2C_INFO *info = i2c->info;
   I2C_t *i2c_reg = i2c->reg;
 
@@ -389,7 +386,7 @@ int32_t I2C_MasterReceive(uint32_t addr, uint8_t *data, uint32_t num,
     return (ARM_DRIVER_ERROR_PARAMETER);
   }
 
-  if (!(info->flags & I2C_SETUP)) {
+  if ((info->flags & I2C_SETUP) == 0U) {
     /* Driver not yet configured */
     return (ARM_DRIVER_ERROR);
   }
@@ -398,25 +395,24 @@ int32_t I2C_MasterReceive(uint32_t addr, uint8_t *data, uint32_t num,
     return (ARM_DRIVER_ERROR_BUSY);
   }
 
-  restart = (info->xfer.ctrl & XFER_CTRL_RESTART) != 0U;
-
-  if (!restart) {
+  if ((info->ctrl & XFER_CTRL_XPENDING) == 0U) {
     /* New transfer */
   }
 
   info->status.busy             = 1U;
-  info->status.mode             = 1U;
-  info->status.direction        = 1U;
+  info->status.mode             = I2C_MODE_MASTER;
+  info->status.direction        = I2C_DIR_RX;
   info->status.bus_error        = 0U;
   info->status.arbitration_lost = 0U;
 
-  info->xfer.num  = num;
-  info->xfer.cnt  = 0;
-  info->xfer.data = (uint8_t *)data;
-  info->xfer.ctrl = 0U;
+  info->tx.data = data;
+  info->tx.num  = num;
+  info->tx.cnt  = 0U;
+
+  info->ctrl = 0U;
 
   if (xfer_pending) {
-    info->xfer.ctrl = XFER_CTRL_RESTART;
+    info->ctrl |= XFER_CTRL_XPENDING;
   }
 
   /* Set slave address and transfer direction */
@@ -449,7 +445,7 @@ int32_t I2C_SlaveTransmit(const uint8_t *data, uint32_t num, I2C_RESOURCES *i2c)
   I2C_t    *i2c_reg = i2c->reg;
 
   if ((data == NULL) || (num == 0U)) {
-    return ARM_DRIVER_ERROR_PARAMETER;
+    return (ARM_DRIVER_ERROR_PARAMETER);
   }
 
   if (info->status.busy) {
@@ -459,12 +455,11 @@ int32_t I2C_SlaveTransmit(const uint8_t *data, uint32_t num, I2C_RESOURCES *i2c)
   info->status.bus_error    = 0U;
   info->status.general_call = 0U;
 
-  info->xfer.num  = num;
-  info->xfer.cnt  = -1;
-  info->xfer.data = (uint8_t *)data;
-  info->xfer.ctrl = 0U;
+  info->tx.data = (uint8_t *)data;
+  info->tx.num  = num;
+  info->tx.cnt  = 0U;
 
-  /* Set number of bytes to transfer */
+  info->ctrl = XFER_CTRL_XSET;
 
   return (ARM_DRIVER_OK);
 }
@@ -495,12 +490,11 @@ int32_t I2C_SlaveReceive(uint8_t *data, uint32_t num, I2C_RESOURCES *i2c)
   info->status.bus_error    = 0U;
   info->status.general_call = 0U;
 
-  info->xfer.num  = num;
-  info->xfer.cnt  = -1;
-  info->xfer.data = data;
-  info->xfer.ctrl = 0U;
+  info->rx.data = data;
+  info->rx.num  = num;
+  info->rx.cnt  = 0U;
 
-  /* Set number of bytes to transfer */
+  info->ctrl = XFER_CTRL_XSET;
 
   return (ARM_DRIVER_OK);
 }
@@ -515,7 +509,22 @@ int32_t I2C_SlaveReceive(uint8_t *data, uint32_t num, I2C_RESOURCES *i2c)
 static
 int32_t I2C_GetDataCount(I2C_RESOURCES *i2c)
 {
-  return (i2c->info->xfer.cnt);
+  int32_t   val;
+  I2C_INFO *info = i2c->info;
+
+  if ((info->status.mode == I2C_MODE_SLAVE) && ((info->ctrl & XFER_CTRL_ADDR_DONE) == 0U)) {
+    /* Slave is not addressed */
+    val = -1;
+  }
+  else {
+    if (info->status.direction == I2C_DIR_TX) {
+      val = (int32_t)info->tx.cnt;
+    } else {
+      val = (int32_t)info->rx.cnt;
+    }
+  }
+
+  return (val);
 }
 
 /**
@@ -591,7 +600,7 @@ int32_t I2C_Control(uint32_t control, uint32_t arg, I2C_RESOURCES *i2c)
       return (ARM_DRIVER_ERROR_UNSUPPORTED);
 
     case ARM_I2C_ABORT_TRANSFER:
-      /* Disable DMA requests and peripheral interrupts */
+      /* Disable peripheral interrupts */
 
       if (info->status.mode != 0U) {
         /* Master generates stop after the current byte transfer */
@@ -600,10 +609,12 @@ int32_t I2C_Control(uint32_t control, uint32_t arg, I2C_RESOURCES *i2c)
         /* Slave receiver will send NACK */
       }
 
-      info->xfer.num                = 0U;
-      info->xfer.cnt                = 0U;
-      info->xfer.data               = NULL;
-      info->xfer.ctrl               = 0U;
+      info->rx.num                  = 0U;
+      info->rx.cnt                  = 0U;
+      info->tx.num                  = 0U;
+      info->tx.cnt                  = 0U;
+
+      info->ctrl                    = 0U;
 
       info->status.busy             = 0U;
       info->status.mode             = 0U;
@@ -646,10 +657,9 @@ ARM_I2C_STATUS I2C_GetStatus(I2C_RESOURCES *i2c)
 static
 void I2C_Master_IRQHandler(I2C_RESOURCES *i2c)
 {
-  uint32_t           event = 0;
-  I2C_TRANSFER_INFO *xfer  = &i2c->info->xfer;
-  I2C_INFO          *info  = i2c->info;
-  I2C_t             *reg   = i2c->reg;
+  uint32_t  event = 0;
+  I2C_INFO *info  = i2c->info;
+  I2C_t    *reg   = i2c->reg;
 
   /* Send events */
   if ((event) && (info->cb_event)) {
@@ -667,14 +677,13 @@ void I2C_Slave_IRQHandler(I2C_RESOURCES *i2c)
 {
   uint32_t           status;
   uint32_t           event = 0U;
-  I2C_TRANSFER_INFO *xfer  = &i2c->info->xfer;
   I2C_INFO          *info  = i2c->info;
   I2C_t             *reg   = i2c->reg;
 
   status = reg->SSTA;
 
   if ((status & I2CSSTA_STXQ) != 0U) {
-    if ((xfer->ctrl & XFER_CTRL_ADDR_DONE) == 0U) {
+    if ((info->ctrl & XFER_CTRL_ADDR_DONE) == 0U) {
       info->status.direction = I2C_DIR_TX;
       event = ARM_I2C_EVENT_SLAVE_TRANSMIT;
 
@@ -685,14 +694,14 @@ void I2C_Slave_IRQHandler(I2C_RESOURCES *i2c)
         info->status.general_call = 1U;
       }
 
-      if (xfer->data == NULL) {
+      if (info->ctrl != XFER_CTRL_XSET) {
 
       }
     }
   }
 
   if ((status & I2CSSTA_SRXQ) != 0U) {
-    if ((xfer->ctrl & XFER_CTRL_ADDR_DONE) == 0U) {
+    if ((info->ctrl & XFER_CTRL_ADDR_DONE) == 0U) {
       info->status.direction = I2C_DIR_RX;
       event = ARM_I2C_EVENT_SLAVE_RECEIVE;
 
@@ -703,7 +712,7 @@ void I2C_Slave_IRQHandler(I2C_RESOURCES *i2c)
         info->status.general_call = 1U;
       }
 
-      if (xfer->data == NULL) {
+      if (info->ctrl != XFER_CTRL_XSET) {
 
       }
     }
