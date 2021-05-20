@@ -460,6 +460,8 @@ int32_t I2C_SlaveTransmit(const uint8_t *data, uint32_t num, I2C_RESOURCES *i2c)
 
   info->slave = SLAVE_STATE_TX;
 
+  i2c->reg->SCON |= I2CSCON_STXENI;
+
   return (ARM_DRIVER_OK);
 }
 
@@ -494,6 +496,8 @@ int32_t I2C_SlaveReceive(uint8_t *data, uint32_t num, I2C_RESOURCES *i2c)
   info->rx.cnt  = 0U;
 
   info->slave = SLAVE_STATE_RX;
+
+  i2c->reg->SCON |= I2CSCON_SRXENI;
 
   return (ARM_DRIVER_OK);
 }
@@ -694,15 +698,19 @@ void I2C_Slave_IRQHandler(I2C_RESOURCES *i2c)
         info->status.general_call = 1U;
       }
 
-      if (tx->cnt == tx->num && info->cb_event != NULL) {
-        event = ARM_I2C_EVENT_SLAVE_TRANSMIT;
+      if (tx->cnt == tx->num) {
+        reg->SCON &= ~I2CSCON_STXENI;
 
-        if (info->status.general_call == 1U) {
-          event |= ARM_I2C_EVENT_GENERAL_CALL;
+        if (info->cb_event != NULL) {
+          event = ARM_I2C_EVENT_SLAVE_TRANSMIT;
+
+          if (info->status.general_call == 1U) {
+            event |= ARM_I2C_EVENT_GENERAL_CALL;
+          }
+
+          info->status.busy = 0U;
+          info->cb_event(event);
         }
-
-        info->status.busy = 0U;
-        info->cb_event(event);
       }
 
       info->ctrl |= XFER_CTRL_ADDR_DONE;
@@ -713,12 +721,12 @@ void I2C_Slave_IRQHandler(I2C_RESOURCES *i2c)
       reg->STX = tx->data[tx->cnt++];
 
       if (tx->cnt == tx->num) {
-        info->ctrl |= XFER_CTRL_XDONE;
         reg->SCON &= ~I2CSCON_STXENI;
+        info->ctrl |= XFER_CTRL_XDONE;
         info->status.busy = 0U;
         /* Transfer completed */
         if (info->cb_event != NULL) {
-          event = ARM_I2C_EVENT_TRANSFER_DONE;
+          event = ARM_I2C_EVENT_SLAVE_TRANSMIT;
 
           if (info->status.general_call == 1U) {
             event |= ARM_I2C_EVENT_GENERAL_CALL;
@@ -729,58 +737,86 @@ void I2C_Slave_IRQHandler(I2C_RESOURCES *i2c)
       }
     }
   }
-
-  if ((status & I2CSSTA_SRXQ) != 0U) {
+  else if ((status & I2CSSTA_SRXQ) != 0U) {
     uint8_t data = (uint8_t)reg->SRX;
 
-    if ((info->ctrl & XFER_CTRL_ADDR_DONE) == 0U) {
-      info->status.direction = I2C_DIR_RX;
+    if ((status & I2CSSTA_STA) != 0U) {
+      if ((info->ctrl & XFER_CTRL_ADDR_DONE) == 0U) {
+        info->status.direction = I2C_DIR_RX;
 
-      if ((status & I2CSSTA_GC) == 0U) {
-        info->status.general_call = 0U;
-      }
-      else {
-        info->status.general_call = 1U;
-      }
-
-      if (rx->cnt == rx->num && info->cb_event != NULL) {
-        event = ARM_I2C_EVENT_SLAVE_RECEIVE;
-
-        if (info->status.general_call == 1U) {
-          event |= ARM_I2C_EVENT_GENERAL_CALL;
+        if ((status & I2CSSTA_GC) == 0U) {
+          info->status.general_call = 0U;
+        }
+        else {
+          info->status.general_call = 1U;
         }
 
-        info->status.busy = 0U;
-        info->cb_event(event);
+        if (rx->num == 0U) {
+          reg->SCON &= ~I2CSCON_SRXENI;
+
+          if (info->cb_event != NULL) {
+            event = ARM_I2C_EVENT_SLAVE_RECEIVE;
+
+            if (info->status.general_call == 1U) {
+              event |= ARM_I2C_EVENT_GENERAL_CALL;
+            }
+
+            info->status.busy = 0U;
+            info->cb_event(event);
+          }
+        }
+
+        info->ctrl |= XFER_CTRL_ADDR_DONE;
+        info->status.busy = 1U;
       }
 
-      info->ctrl |= XFER_CTRL_ADDR_DONE;
-      info->status.busy = 1U;
-    }
+      if (rx->num-- > 0U) {
+        rx->data[rx->cnt++] = data;
 
-    if (rx->cnt < rx->num) {
-      rx->data[rx->cnt++] = data;
+        if (rx->num == 0U) {
+          reg->SCON &= ~I2CSCON_SRXENI;
+          info->ctrl |= XFER_CTRL_XDONE;
+          info->status.busy = 0U;
+          /* Transfer completed */
+          if (info->cb_event != NULL) {
+            event = ARM_I2C_EVENT_TRANSFER_DONE;
 
-      if (rx->cnt == rx->num) {
-        info->ctrl |= XFER_CTRL_XDONE;
-        reg->SCON &= ~I2CSCON_SRXENI;
-        info->status.busy = 0U;
-        /* Transfer completed */
-        if (info->cb_event != NULL) {
-          event = ARM_I2C_EVENT_TRANSFER_DONE;
+            if (info->status.general_call == 1U) {
+              event |= ARM_I2C_EVENT_GENERAL_CALL;
+            }
 
-          if (info->status.general_call == 1U) {
-            event |= ARM_I2C_EVENT_GENERAL_CALL;
+            info->cb_event(event);
           }
-
-          info->cb_event(event);
         }
       }
     }
   }
 
   if ((status & I2CSSTA_SS) != 0U) {
+    /* Enable slave request interrupts */
+    reg->SCON |= I2CSCON_STXENI | I2CSCON_SRXENI;
 
+    if ((info->ctrl & XFER_CTRL_ADDR_DONE) != 0U) {
+      info->status.busy = 0U;
+      rx->num = 0U;
+      tx->num = 0U;
+
+      if (info->cb_event != NULL) {
+        event = ARM_I2C_EVENT_TRANSFER_DONE;
+
+        if (info->status.general_call == 1U) {
+          event |= ARM_I2C_EVENT_GENERAL_CALL;
+        }
+
+        if ((info->ctrl & XFER_CTRL_XDONE) == 0U) {
+          event |= ARM_I2C_EVENT_TRANSFER_INCOMPLETE;
+        }
+
+        info->cb_event(event);
+      }
+
+      info->ctrl = 0U;
+    }
   }
 }
 
