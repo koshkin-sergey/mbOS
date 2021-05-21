@@ -22,9 +22,9 @@
 #include "Kernel/irq.h"
 #include "asm/aduc7023.h"
 
-#define RAM_INTVEC_SIZE   64U
-#define RAM_INTVEC_ATTR   __attribute__((section(".ram_intvec")))
-#define IRQ_TABLE_ATTR    __attribute__((aligned(128), section(".bss.irq_table")))
+#define RAM_INTVEC_SIZE   16U
+#define RAM_INTVEC_ATTR   __attribute__((used, section(".ram_intvec")))
+#define IRQ_TABLE_ATTR    __attribute__((used, aligned(128), section(".bss.irq_table")))
 
 typedef struct IRQ_MODE_INFO_s {
   uint32_t type;      /* Type of interrupt (IRQ or FIQ) */
@@ -37,7 +37,7 @@ static IRQ_MODE_INFO_t irq_mode;
  *----------------------------------------------------------------------------*/
 #if defined (RAM_INTVEC)
 
-static uint8_t ram_intvec[RAM_INTVEC_SIZE] RAM_INTVEC_ATTR = { 0U };
+static uint32_t ram_intvec[RAM_INTVEC_SIZE] RAM_INTVEC_ATTR = { 0U };
 
 #endif
 
@@ -69,7 +69,12 @@ int32_t IRQ_Initialize(void)
 
 #if defined (RAM_INTVEC)
 
-  memcpy((void *)ram_intvec, (void *)FLASH_BASE, RAM_INTVEC_SIZE);
+  uint32_t *flash_ptr = (uint32_t *)FLASH_BASE;
+
+  for (uint32_t i = 0; i < RAM_INTVEC_SIZE; ++i) {
+    ram_intvec[i] = flash_ptr[i];
+  }
+
   SYS_REMAP = SYS_REMAP_SRAM;
 
 #endif
