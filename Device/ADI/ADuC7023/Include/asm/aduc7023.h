@@ -779,10 +779,10 @@ typedef struct I2C_s {
 #define I2CFSTA_MRXSTA_Msk        (0x3UL << I2CFSTA_MRXSTA_Pos)
 #define I2CFSTA_MRXSTA            I2CFSTA_MRXSTA_Msk
 #define I2CFSTA_FSTX_Pos          (8U)
-#define I2CFSTA_FSTX_Msk          (0x3UL << I2CFSTA_FSTX_Pos)
+#define I2CFSTA_FSTX_Msk          (0x1UL << I2CFSTA_FSTX_Pos)
 #define I2CFSTA_FSTX              I2CFSTA_FSTX_Msk
 #define I2CFSTA_FMTX_Pos          (9U)
-#define I2CFSTA_FMTX_Msk          (0x3UL << I2CFSTA_FMTX_Pos)
+#define I2CFSTA_FMTX_Msk          (0x1UL << I2CFSTA_FMTX_Pos)
 #define I2CFSTA_FMTX              I2CFSTA_FMTX_Msk
 
 /*------------------------------------------------------------------------------
