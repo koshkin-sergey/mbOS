@@ -44,8 +44,11 @@ static void post_queue_put(osObject_t *object)
 {
   BEGIN_CRITICAL_SECTION
 
-  /* Add the object to the end of post ISR queue */
-  QueueAppend(&osInfo.post_process.queue, &object->post_queue);
+  if ((object->flags & FLAGS_POST_PROC) == 0U) {
+    object->flags |= FLAGS_POST_PROC;
+    /* Add the object to the end of post ISR queue */
+    QueueAppend(&osInfo.post_process.queue, &object->post_queue);
+  }
 
   END_CRITICAL_SECTION
 }
@@ -64,6 +67,7 @@ static osObject_t* post_queue_get(void)
 
   if (!isQueueEmpty(que)) {
     obj = GetObjectByQueue(QueueExtract(que));
+    obj->flags &= ~FLAGS_POST_PROC;
   }
   else {
     obj = NULL;
