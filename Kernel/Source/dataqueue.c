@@ -39,8 +39,7 @@ static bool DataPut(osDataQueue_t *dq, const void *data_ptr)
 {
   bool status = false;
 
-  if (dq->data_count != dq->max_data_count)
-  {
+  if (dq->data_count != dq->max_data_count) {
     BEGIN_CRITICAL_SECTION
 
     memcpy(&dq->dq_mem[dq->head], data_ptr, dq->data_size);
@@ -48,11 +47,11 @@ static bool DataPut(osDataQueue_t *dq, const void *data_ptr)
     if (dq->head >= dq->data_limit) {
       dq->head = 0U;
     }
-
     dq->data_count++;
-    status = true;
 
     END_CRITICAL_SECTION
+
+    status = true;
   }
 
   return (status);
@@ -62,8 +61,7 @@ static bool DataGet(osDataQueue_t *dq, void *data_ptr)
 {
   bool status = false;
 
-  if (dq->data_count != 0U)
-  {
+  if (dq->data_count != 0U) {
     BEGIN_CRITICAL_SECTION
 
     memcpy(data_ptr, &dq->dq_mem[dq->tail], dq->data_size);
@@ -74,6 +72,8 @@ static bool DataGet(osDataQueue_t *dq, void *data_ptr)
     }
 
     END_CRITICAL_SECTION
+
+    status = true;
   }
 
   return (status);

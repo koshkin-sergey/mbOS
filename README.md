@@ -1,5 +1,5 @@
 # mbOS
-mbOS is a free, open-source embedded operating system. It includes all the features you need to develop a connected product based on an Arm Cortex-M microcontroller, including connectivity, an RTOS and drivers for sensors and I/O devices.
+mbOS is a free, open-source embedded operating system. It includes all the features you need to develop a connected product based on an Arm microcontroller, including connectivity, an RTOS and drivers for sensors and I/O devices.
 
 With an RTOS core based on the CMSIS-RTOS specification, mbOS supports deterministic, multithreaded real time software execution. The RTOS primitives are always available, allowing drivers and applications to rely on features such as threads, semaphores and mutexes.
 

@@ -30,21 +30,24 @@
  ******************************************************************************/
 
 /* Kernel Information */
-#define osVersionAPI         20010003         ///< API version (2.1.3)
-#define osVersionKernel      10000000         ///< Kernel version (1.0.0)
-#define osKernelId           "Kernel V1.0.0"  ///< Kernel identification string
+#define osVersionAPI         020010003        ///< API version (2.1.3)
+#define osVersionKernel      010000001        ///< Kernel version (1.0.0)
+#define osKernelId           "Kernel V1.0.1"  ///< Kernel identification string
 
 /* Object Identifier definitions */
-#define ID_INVALID                  0x00
-#define ID_THREAD                   0x47
-#define ID_SEMAPHORE                0x6F
-#define ID_EVENT_FLAGS              0x5E
-#define ID_MEMORYPOOL               0x26
-#define ID_MUTEX                    0x17
-#define ID_TIMER                    0x7A
-#define ID_MESSAGE_QUEUE            0x1C
-#define ID_MESSAGE                  0x1D
-#define ID_DATA_QUEUE               0x1E
+#define ID_INVALID                  (uint8_t)0x00
+#define ID_THREAD                   (uint8_t)0x47
+#define ID_SEMAPHORE                (uint8_t)0x6F
+#define ID_EVENT_FLAGS              (uint8_t)0x5E
+#define ID_MEMORYPOOL               (uint8_t)0x26
+#define ID_MUTEX                    (uint8_t)0x17
+#define ID_TIMER                    (uint8_t)0x7A
+#define ID_MESSAGE_QUEUE            (uint8_t)0x1C
+#define ID_MESSAGE                  (uint8_t)0x1D
+#define ID_DATA_QUEUE               (uint8_t)0x1E
+
+/* Object Flags definitions */
+#define FLAGS_POST_PROC             (uint8_t)(1U << 0U)
 
 /* Thread State definitions */
 #define ThreadStateInactive         ((uint8_t)osThreadInactive)
