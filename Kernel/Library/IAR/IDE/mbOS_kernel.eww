@@ -3,5 +3,29 @@
     <project>
         <path>$WS_DIR$\mbOS_kernel.ewp</path>
     </project>
-    <batchBuild />
+    <batchBuild>
+        <batchDefinition>
+            <name>mbOS_kernel</name>
+            <member>
+                <project>mbOS_kernel</project>
+                <configuration>ARM16</configuration>
+            </member>
+            <member>
+                <project>mbOS_kernel</project>
+                <configuration>ARM32</configuration>
+            </member>
+            <member>
+                <project>mbOS_kernel</project>
+                <configuration>CM0</configuration>
+            </member>
+            <member>
+                <project>mbOS_kernel</project>
+                <configuration>CM3</configuration>
+            </member>
+            <member>
+                <project>mbOS_kernel</project>
+                <configuration>CM4F</configuration>
+            </member>
+        </batchDefinition>
+    </batchBuild>
 </workspace>
