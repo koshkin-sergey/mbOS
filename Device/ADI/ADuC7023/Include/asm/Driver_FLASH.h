@@ -58,6 +58,7 @@ typedef struct FLASH_SECTOR_s {
 \brief Flash memory information
 */
 typedef struct FLASH_INFO_s {
+  uint32_t          flash_base;         ///< Flash Base Address
   FLASH_SECTOR_t   *sector_info;        ///< Sector layout information (NULL=Uniform sectors)
   uint32_t          sector_count;       ///< Number of sectors
   uint32_t          sector_size;        ///< Uniform sector size in bytes (0=sector_info used)

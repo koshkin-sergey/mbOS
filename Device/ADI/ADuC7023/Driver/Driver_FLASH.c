@@ -283,6 +283,7 @@ static void FLASH_IRQHandler(void)
  ******************************************************************************/
 
 FLASH_INFO_t FLASH_Info = {
+  FLASH_BASE,
   NULL,
   FLASH_SECTOR_COUNT,
   FLASH_SECTOR_SIZE,

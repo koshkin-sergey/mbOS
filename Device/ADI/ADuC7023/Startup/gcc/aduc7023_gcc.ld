@@ -178,10 +178,11 @@ SECTIONS
    */
   __etext = ALIGN (4);
 
-  .ram_intvec : {
-    KEEP(*(.ram_intvec))
+  .vectors_ram (COPY) :
+  {
+    KEEP(*(.vectors_ram))
   } > RAM
-    
+  
   .data : AT (__etext)
   {
     __data_start__ = .;
