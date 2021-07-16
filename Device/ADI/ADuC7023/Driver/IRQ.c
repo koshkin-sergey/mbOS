@@ -23,7 +23,7 @@
 #include "asm/aduc7023.h"
 
 #define RAM_INTVEC_SIZE   16U
-#define RAM_INTVEC_ATTR   __attribute__((used, section(".ram_intvec")))
+#define RAM_INTVEC_ATTR   __attribute__((used, section(".vectors_ram")))
 #define IRQ_TABLE_ATTR    __attribute__((used, aligned(128), section(".bss.irq_table")))
 
 typedef struct IRQ_MODE_INFO_s {
@@ -37,7 +37,7 @@ static IRQ_MODE_INFO_t irq_mode;
  *----------------------------------------------------------------------------*/
 #if defined (RAM_INTVEC)
 
-static uint32_t ram_intvec[RAM_INTVEC_SIZE] RAM_INTVEC_ATTR = { 0U };
+static uint32_t ram_intvec[RAM_INTVEC_SIZE] RAM_INTVEC_ATTR;
 
 #endif
 

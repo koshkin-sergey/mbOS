@@ -109,9 +109,9 @@ ARM_DRIVER_I2C Driver_I2C##x = { \
 }
 
 /* Current driver status flag definition */
-#define I2C_INIT              ((uint8_t)0x01)     // I2C initialized
-#define I2C_POWER             ((uint8_t)0x02)     // I2C powered on
-#define I2C_SETUP             ((uint8_t)0x04)     // I2C Master configured, clock set
+#define I2C_INIT              ((uint16_t)0x01)    // I2C initialized
+#define I2C_POWER             ((uint16_t)0x02)    // I2C powered on
+#define I2C_SETUP             ((uint16_t)0x04)    // I2C Master configured, clock set
 
 #define I2C_MODE_SLAVE        ((uint8_t)0x00)     // Mode: slave
 #define I2C_MODE_MASTER       ((uint8_t)0x01)     // Mode: master
@@ -120,17 +120,12 @@ ARM_DRIVER_I2C Driver_I2C##x = { \
 #define I2C_DIR_RX            ((uint8_t)0x01)     // Direction: receiver
 
 /* Transfer status flags definitions */
-#define XFER_CTRL_XPENDING    ((uint16_t)0x0001)  // Transfer pending
-#define XFER_CTRL_XDONE       ((uint16_t)0x0002)  // Transfer done (all data transferred)
-#define XFER_CTRL_RSTART      ((uint16_t)0x0004)  // Generate repeated start and readdress
-#define XFER_CTRL_ADDR_NACK   ((uint16_t)0x0008)  // Slave address not acknowledged
-#define XFER_CTRL_ADDR_DONE   ((uint16_t)0x0010)  // Addressing done
-
-/* Transfer slave state definitions */
-#define SLAVE_STATE_IDLE      ((uint8_t)0x00)
-#define SLAVE_STATE_ADDR      ((uint8_t)0x01)
-#define SLAVE_STATE_RX        ((uint8_t)0x02)
-#define SLAVE_STATE_TX        ((uint8_t)0x03)
+#define XFER_CTRL_XSET        ((uint16_t)0x0001)  // Transfer is set
+#define XFER_CTRL_XPENDING    ((uint16_t)0x0002)  // Transfer pending
+#define XFER_CTRL_XDONE       ((uint16_t)0x0004)  // Transfer done (all data transferred)
+#define XFER_CTRL_RSTART      ((uint16_t)0x0008)  // Generate repeated start and readdress
+#define XFER_CTRL_ADDR_NACK   ((uint16_t)0x0010)  // Slave address not acknowledged
+#define XFER_CTRL_ADDR_DONE   ((uint16_t)0x0020)  // Addressing done
 
 /*******************************************************************************
  *  typedefs and structures (scope: module-local)
@@ -149,21 +144,28 @@ typedef const struct _I2C_IO {
   I2C_PIN               *sda;               // Pointer to SDA pin configuration
 } I2C_IO;
 
-/* I2C Transfer Information (Run-Time) */
-typedef struct _I2C_TRANSFER_INFO {
+/* I2C RX Transfer Information (Run-Time) */
+typedef struct _I2C_RX_XFER_INFO {
   uint8_t              *data;               // Data pointer
-  uint32_t              num;                // Number of data to transfer
-  uint32_t              cnt;                // Data transfer counter
-} I2C_TRANSFER_INFO;
+   int32_t              num;                // Number of data to transfer
+   int32_t              cnt;                // Data transfer counter
+} I2C_RX_XFER_INFO;
+
+/* I2C TX Transfer Information (Run-Time) */
+typedef struct _I2C_TX_XFER_INFO {
+  uint8_t              *data;               // Data pointer
+   int32_t              num;                // Number of data to transfer
+   int32_t              cnt;                // Data transfer counter
+   uint32_t             dummy_cnt;          // Dummy byte counter
+} I2C_TX_XFER_INFO;
 
 /* I2C Information (Run-Time) */
 typedef struct _I2C_INFO {
   ARM_I2C_SignalEvent_t cb_event;           // Event Callback
   ARM_I2C_STATUS        status;             // Status flags
-  I2C_TRANSFER_INFO     rx;                 // Rx transfer information
-  I2C_TRANSFER_INFO     tx;                 // Tx transfer information
-  uint8_t               flags;              // Current I2C state flags
-  uint8_t               slave;              // Transfer slave state
+  I2C_RX_XFER_INFO      rx;                 // RX transfer information
+  I2C_TX_XFER_INFO      tx;                 // TX transfer information
+  uint16_t              flags;              // Current I2C state flags
   uint16_t              ctrl;               // Transfer control (current)
 } I2C_INFO;
 
