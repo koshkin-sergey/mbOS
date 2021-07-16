@@ -88,7 +88,7 @@ static void FLASH_IRQHandler(void);
 
 static void ProgramHalfWord(FLASH_Info_t *info)
 {
-  FLASH->ADR  = *info->addr++;          // set address
+  FLASH->ADR  = (uint32_t)info->addr++; // set address
   FLASH->DAT  = *info->data++;          // set data value
   FLASH->CON  = FLASH_CMD_SINGLE_WRITE; // write command
 }
@@ -283,6 +283,7 @@ static void FLASH_IRQHandler(void)
  ******************************************************************************/
 
 FLASH_INFO_t FLASH_Info = {
+  FLASH_BASE,
   NULL,
   FLASH_SECTOR_COUNT,
   FLASH_SECTOR_SIZE,

@@ -58,17 +58,15 @@ typedef struct FLASH_SECTOR_s {
 \brief Flash memory information
 */
 typedef struct FLASH_INFO_s {
+  uint32_t          flash_base;         ///< Flash Base Address
   FLASH_SECTOR_t   *sector_info;        ///< Sector layout information (NULL=Uniform sectors)
   uint32_t          sector_count;       ///< Number of sectors
   uint32_t          sector_size;        ///< Uniform sector size in bytes (0=sector_info used)
   uint32_t          program_unit;       ///< Smallest programmable unit in bytes
 } const FLASH_INFO_t;
 
-/*******************************************************************************
- *  exported function prototypes
- ******************************************************************************/
+/* Function documentation */
 
-// Function documentation
 /**
  * @fn          int32_t Initialize(FLASH_SignalEvent_t cb_event)
  * @brief       Initialize FLASH Interface.
