@@ -147,20 +147,26 @@ SECTIONS
     *(.ARM.extab* .gnu.linkonce.armextab.*)
   } > FLASH
 
-  __exidx_start = .;
   .ARM.exidx :
   {
+    __exidx_start = .;
     *(.ARM.exidx* .gnu.linkonce.armexidx.*)
+    __exidx_end = .;
   } > FLASH
-  __exidx_end = .;
 
   .copy.table :
   {
     . = ALIGN(4);
     __copy_table_start__ = .;
-    LONG (__etext)
+    
+    LONG (LOADADDR(.fastcode))
+    LONG (__fastcode_start__)
+    LONG ((__fastcode_end__ - __fastcode_start__) / 4)
+    
+    LONG (LOADADDR(.data))
     LONG (__data_start__)
     LONG ((__data_end__ - __data_start__) / 4)
+    
     __copy_table_end__ = .;
   } > FLASH
 
@@ -170,7 +176,7 @@ SECTIONS
     __zero_table_start__ = .;
     __zero_table_end__ = .;
   } > FLASH
-  
+    
   /**
    * Location counter can end up 2byte aligned with narrow Thumb code but
    * __etext is assumed by startup code to be the LMA of a section in RAM
@@ -178,16 +184,26 @@ SECTIONS
    */
   __etext = ALIGN (4);
 
-  .vectors_ram (COPY) :
+  .vectors_ram (NOLOAD) :
   {
     KEEP(*(.vectors_ram))
+    . = ALIGN(4);
   } > RAM
-  
-  .data : AT (__etext)
+
+  .fastcode :
+  {
+    __fastcode_start__ = .;
+    *(.glue_7)
+    *(.glue_7t)
+    *(.fastcode)
+    . = ALIGN(4);
+    __fastcode_end__ = .;
+  } > RAM AT > FLASH
+
+  .data :
   {
     __data_start__ = .;
     *(vtable)
-    *(.ramfunc)
     *(.data)
     *(.data.*)
 
@@ -204,7 +220,6 @@ SECTIONS
     KEEP(*(.init_array))
     PROVIDE_HIDDEN (__init_array_end = .);
 
-
     . = ALIGN(4);
     /* finit data */
     PROVIDE_HIDDEN (__fini_array_start = .);
@@ -217,7 +232,7 @@ SECTIONS
     /* All data end */
     __data_end__ = .;
 
-  } > RAM
+  } > RAM AT > FLASH
 
   .bss :
   {
@@ -229,9 +244,9 @@ SECTIONS
     *(COMMON)
     . = ALIGN(4);
     __bss_end__ = .;
-  } > RAM AT > RAM
+  } > RAM
 
-  .heap (COPY) :
+  .heap (NOLOAD) :
   {
     . = ALIGN(8);
     __end__ = .;

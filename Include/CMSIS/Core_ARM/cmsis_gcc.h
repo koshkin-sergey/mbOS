@@ -64,6 +64,9 @@
 #ifndef   __PACKED_STRUCT
   #define __PACKED_STRUCT                        struct __attribute__((packed, aligned(1)))
 #endif
+#ifndef   __FAST_CODE
+  #define __FAST_CODE                            __attribute__((section(".fastcode")))
+#endif
 #ifndef   __UNALIGNED_UINT16_WRITE
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wpacked"
@@ -118,13 +121,13 @@ __STATIC_FORCEINLINE __NO_RETURN void __cmsis_start(void)
   extern void _start(void) __NO_RETURN;
 
   typedef struct {
-    uint32_t const* src;
-    uint32_t* dest;
-    uint32_t  wlen;
+    uint32_t const *src;
+    uint32_t       *dest;
+    uint32_t        wlen;
   } __copy_table_t;
 
   typedef struct {
-    uint32_t* dest;
+    uint32_t *dest;
     uint32_t  wlen;
   } __zero_table_t;
 
@@ -134,13 +137,13 @@ __STATIC_FORCEINLINE __NO_RETURN void __cmsis_start(void)
   extern const __zero_table_t __zero_table_end__;
 
   for (__copy_table_t const* pTable = &__copy_table_start__; pTable < &__copy_table_end__; ++pTable) {
-    for(uint32_t i=0u; i<pTable->wlen; ++i) {
+    for (uint32_t i=0u; i<pTable->wlen; ++i) {
       pTable->dest[i] = pTable->src[i];
     }
   }
 
   for (__zero_table_t const* pTable = &__zero_table_start__; pTable < &__zero_table_end__; ++pTable) {
-    for(uint32_t i=0u; i<pTable->wlen; ++i) {
+    for (uint32_t i=0u; i<pTable->wlen; ++i) {
       pTable->dest[i] = 0u;
     }
   }
@@ -161,12 +164,12 @@ __STATIC_FORCEINLINE __NO_RETURN void __cmsis_start(void)
 __STATIC_FORCEINLINE  uint32_t __REV(uint32_t value)
 {
 #if (__GNUC__ > 4) || (__GNUC__ == 4 && __GNUC_MINOR__ >= 5)
-  return __builtin_bswap32(value);
+  return (__builtin_bswap32(value));
 #else
   uint32_t result;
 
   __ASM ("rev %0, %1" : "=r" (result) : "r" (value) );
-  return result;
+  return (result);
 #endif
 }
 
@@ -180,7 +183,7 @@ __STATIC_FORCEINLINE uint32_t __REV16(uint32_t value)
 {
   uint32_t result;
   __ASM ("rev16 %0, %1" : "=r" (result) : "r" (value));
-  return result;
+  return (result);
 }
 
 /**
@@ -192,12 +195,12 @@ __STATIC_FORCEINLINE uint32_t __REV16(uint32_t value)
 __STATIC_FORCEINLINE  int16_t __REVSH(int16_t value)
 {
 #if (__GNUC__ > 4) || (__GNUC__ == 4 && __GNUC_MINOR__ >= 8)
-  return (int16_t)__builtin_bswap16(value);
+  return ((int16_t)__builtin_bswap16(value));
 #else
   int16_t result;
 
   __ASM ("revsh %0, %1" : "=r" (result) : "r" (value) );
-  return result;
+  return (result);
 #endif
 }
 
@@ -212,9 +215,9 @@ __STATIC_FORCEINLINE  uint32_t __ROR(uint32_t op1, uint32_t op2)
 {
   op2 %= 32U;
   if (op2 == 0U) {
-    return op1;
+    return (op1);
   }
-  return (op1 >> op2) | (op1 << (32U - op2));
+  return ((op1 >> op2) | (op1 << (32U - op2)));
 }
 
 /**
@@ -238,7 +241,7 @@ __STATIC_FORCEINLINE  uint32_t __RBIT(uint32_t value)
   }
   result <<= s;                        /* shift when v's highest bits are zero */
 
-  return result;
+  return (result);
 }
 
 /**
@@ -259,9 +262,9 @@ __STATIC_FORCEINLINE uint8_t __CLZ(uint32_t value)
    */
   if (value == 0U)
   {
-    return 32U;
+    return (32U);
   }
-  return __builtin_clz(value);
+  return (__builtin_clz(value));
 }
 
 #pragma GCC diagnostic pop
