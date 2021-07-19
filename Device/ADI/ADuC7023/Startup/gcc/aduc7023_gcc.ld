@@ -130,18 +130,6 @@ SECTIONS
     KEEP(*(.eh_frame*))
   } > FLASH
 
-  /*
-   * SG veneers:
-   * All SG veneers are placed in the special output section .gnu.sgstubs. Its start address
-   * must be set, either with the command line option �--section-start� or in a linker script,
-   * to indicate where to place these veneers in memory.
-   */
-/*
-  .gnu.sgstubs :
-  {
-    . = ALIGN(32);
-  } > FLASH
-*/
   .ARM.extab :
   {
     *(.ARM.extab* .gnu.linkonce.armextab.*)
@@ -187,14 +175,12 @@ SECTIONS
   .vectors_ram (NOLOAD) :
   {
     KEEP(*(.vectors_ram))
-    . = ALIGN(4);
   } > RAM
 
   .fastcode :
   {
+    . = ALIGN(4);
     __fastcode_start__ = .;
-    *(.glue_7)
-    *(.glue_7t)
     *(.fastcode)
     . = ALIGN(4);
     __fastcode_end__ = .;
@@ -202,6 +188,7 @@ SECTIONS
 
   .data :
   {
+    . = ALIGN(4);
     __data_start__ = .;
     *(vtable)
     *(.data)
@@ -244,7 +231,7 @@ SECTIONS
     *(COMMON)
     . = ALIGN(4);
     __bss_end__ = .;
-  } > RAM
+  } > RAM AT > RAM
 
   .heap (NOLOAD) :
   {
@@ -256,9 +243,8 @@ SECTIONS
     __HeapLimit = .;
   } > RAM
 
-  .stack (COPY):
+  .stack (ORIGIN(RAM) + LENGTH(RAM) - __STACK_SIZE - __FIQ_STACK_SIZE - __IRQ_STACK_SIZE - __SVC_STACK_SIZE - __ABT_STACK_SIZE - __UND_STACK_SIZE) (NOLOAD):
   {
-    . = ORIGIN(RAM) + LENGTH(RAM) - __STACK_SIZE - __FIQ_STACK_SIZE - __IRQ_STACK_SIZE - __SVC_STACK_SIZE - __ABT_STACK_SIZE - __UND_STACK_SIZE;
     . = ALIGN(8);
 
     __StackTop = .;
