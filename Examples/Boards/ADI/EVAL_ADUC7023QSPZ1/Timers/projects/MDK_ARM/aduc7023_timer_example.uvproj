@@ -149,7 +149,7 @@
             <RestoreSysVw>1</RestoreSysVw>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
-          <TargetSelection>18</TargetSelection>
+          <TargetSelection>16</TargetSelection>
           <SimDlls>
             <CpuDll></CpuDll>
             <CpuDllArguments></CpuDllArguments>
@@ -163,7 +163,7 @@
             <PeripheralDll></PeripheralDll>
             <PeripheralDllArguments></PeripheralDllArguments>
             <InitializationFile></InitializationFile>
-            <Driver>Segger\JLTAgdi.dll</Driver>
+            <Driver>BIN\UL2ARM.DLL</Driver>
           </TargetDlls>
         </DebugOption>
         <Utilities>
@@ -456,6 +456,11 @@
               <FileName>startup_aduc7023.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\..\..\Device\ADI\ADuC7023\Startup\arm\startup_aduc7023.c</FilePath>
+            </File>
+            <File>
+              <FileName>Driver_PCC.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Device\ADI\ADuC7023\Driver\Driver_PCC.c</FilePath>
             </File>
           </Files>
         </Group>
