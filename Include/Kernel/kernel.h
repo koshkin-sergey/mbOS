@@ -608,6 +608,27 @@ uint32_t osKernelGetTickCount(void);
  */
 uint32_t osKernelGetTickFreq(void);
 
+/**
+ * @fn          uint32_t osKernelGetSysTimerCount(void)
+ * @brief       Get the RTOS kernel system timer count.
+ * @return      RTOS kernel current system timer count as 32-bit value.
+ */
+uint32_t osKernelGetSysTimerCount(void);
+
+/**
+ * @fn          uint32_t osKernelGetSysTimerFreq(void)
+ * @brief       Get the RTOS kernel system timer frequency.
+ * @return      frequency of the system timer in hertz, i.e. timer ticks per second.
+ */
+uint32_t osKernelGetSysTimerFreq(void);
+
+/**
+ * @brief       Convert a microseconds value to a RTOS kernel system timer value.
+ * @param       microsec  time value in microseconds.
+ * @return      RTOS kernel system timer value.
+ */
+#define osKernelSysTickMicroSec(microsec) (((uint64_t)microsec *  osKernelGetSysTimerFreq()) / 1000000)
+
 /*******************************************************************************
  *  Timer Management
  ******************************************************************************/
