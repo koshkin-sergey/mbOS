@@ -75,7 +75,7 @@ int32_t IRQ_Initialize(void)
     ram_intvec[i] = flash_ptr[i];
   }
 
-  SYS_REMAP = SYS_REMAP_SRAM;
+  SYS->REMAP = SYS_REMAP_SRAM;
 
 #endif
 

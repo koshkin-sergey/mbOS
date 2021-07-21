@@ -117,6 +117,24 @@ typedef struct FIQ_s {
 } FIQ_t;
 
 /**
+ * @brief System Control
+ */
+typedef struct SYS_s {
+  __IOM uint32_t REMAP;   /*!< Remap control register. */
+  RESERVED(0[3], uint32_t);
+  __IOM uint32_t RSTSTA;  /*!< RSTSTA status MMR. */
+  __OM  uint32_t RSTCLR;  /*!< RSTCLR MMR for clearing RSTSTA register. */
+  RESERVED(1[4], uint32_t);
+  __OM  uint32_t RSTKEY1; /*!< 0x76 should be written to this register before
+                               writing to RSTCFG. */
+  __IOM uint32_t RSTCFG;  /*!< This register allows the DAC and GPIO outputs to
+                               retain state after a watchdog or software
+                               reset. */
+  __OM  uint32_t RSTKEY2; /*!< 0xB1 should be written to this register after
+                               writing to RSTCFG. */
+} SYS_t;
+
+/**
  * @brief RTOS Timer
  */
 typedef struct RTOS_TIMER_s {
@@ -238,6 +256,7 @@ typedef struct I2C_s {
 
 #define IRQ_BASE              0xFFFF0000UL  /*!< IRQ Address Base             */
 #define FIQ_BASE              0xFFFF0100UL  /*!< FIQ Address Base             */
+#define SYS_BASE              0xFFFF0220UL  /*!< SYS Address Base             */
 #define TIMER0_BASE           0xFFFF0300UL  /*!< Timer0 Address Base          */
 #define TIMER1_BASE           0xFFFF0320UL  /*!< Timer1 Address Base          */
 #define TIMER2_BASE           0xFFFF0360UL  /*!< Timer2 Address Base          */
@@ -249,6 +268,7 @@ typedef struct I2C_s {
 
 #define IRQ                   ((IRQ_t *)        IRQ_BASE)
 #define FIQ                   ((FIQ_t *)        FIQ_BASE)
+#define SYS                   ((SYS_t *)        SYS_BASE)
 #define RTOS_TIMER            ((RTOS_TIMER_t *) TIMER0_BASE)
 #define GP_TIMER              ((  GP_TIMER_t *) TIMER1_BASE)
 #define WDG_TIMER             (( WDG_TIMER_t *) TIMER2_BASE)
@@ -259,8 +279,6 @@ typedef struct I2C_s {
 #define FLASH                 ((FLASH_t *)      FLASH_CTL_BASE)
 #define I2C0                  ((I2C_t *)        I2C0_BASE)
 #define I2C1                  ((I2C_t *)        I2C1_BASE)
-
-#define SYS_REMAP             (*(volatile uint32_t *) 0xFFFF0220)
 
 /*------------------------------------------------------------------------------
  *                                IRQ
@@ -306,6 +324,54 @@ typedef struct I2C_s {
 #define IRQ_CLR_DEF_VALUE         (0xFFFFFFFFUL)
 #define FIQ_CLR_DEF_VALUE         (0xFFFFFFFFUL)
 #define IRQ_PRIO_DEF_VALUE        (0x00000000UL)
+
+/*------------------------------------------------------------------------------
+ *                          SYSTEM CONTROL
+ *----------------------------------------------------------------------------*/
+
+/********************  Bit definition for REMAP register  *********************/
+#define SYS_REMAP_SRAM_Pos        (0U)
+#define SYS_REMAP_SRAM_Msk        (0x1UL << SYS_REMAP_SRAM_Pos)
+#define SYS_REMAP_SRAM            SYS_REMAP_SRAM_Msk
+
+/********************  Bit definition for RSTSTA register  ********************/
+#define SYS_RSTSTA_POR_Pos        (0U)
+#define SYS_RSTSTA_POR_Msk        (0x1UL << SYS_RSTSTA_POR_Pos)
+#define SYS_RSTSTA_POR            SYS_RSTSTA_POR_Msk
+
+#define SYS_RSTSTA_WDR_Pos        (1U)
+#define SYS_RSTSTA_WDR_Msk        (0x1UL << SYS_RSTSTA_WDR_Pos)
+#define SYS_RSTSTA_WDR            SYS_RSTSTA_WDR_Msk
+
+#define SYS_RSTSTA_SWR_Pos        (2U)
+#define SYS_RSTSTA_SWR_Msk        (0x1UL << SYS_RSTSTA_SWR_Pos)
+#define SYS_RSTSTA_SWR            SYS_RSTSTA_SWR_Msk
+
+/********************  Bit definition for RSTCLR register  ********************/
+#define SYS_RSTCLR_POR_Pos        (0U)
+#define SYS_RSTCLR_POR_Msk        (0x1UL << SYS_RSTCLR_POR_Pos)
+#define SYS_RSTCLR_POR            SYS_RSTCLR_POR_Msk
+
+#define SYS_RSTCLR_WDR_Pos        (1U)
+#define SYS_RSTCLR_WDR_Msk        (0x1UL << SYS_RSTCLR_WDR_Pos)
+#define SYS_RSTCLR_WDR            SYS_RSTCLR_WDR_Msk
+
+#define SYS_RSTCLR_SWR_Pos        (2U)
+#define SYS_RSTCLR_SWR_Msk        (0x1UL << SYS_RSTCLR_SWR_Pos)
+#define SYS_RSTCLR_SWR            SYS_RSTCLR_SWR_Msk
+
+/********************  Bit definition for RSTCFG register  ********************/
+#define SYS_RSTCFG_GPIO_HOLD_Pos  (0U)
+#define SYS_RSTCFG_GPIO_HOLD_Msk  (0x1UL << SYS_RSTCFG_GPIO_HOLD_Pos)
+#define SYS_RSTCFG_GPIO_HOLD      SYS_RSTCFG_GPIO_HOLD_Msk
+
+#define SYS_RSTCFG_DAC_HOLD_Pos   (2U)
+#define SYS_RSTCFG_DAC_HOLD_Msk   (0x1UL << SYS_RSTCFG_DAC_HOLD_Pos)
+#define SYS_RSTCFG_DAC_HOLD       SYS_RSTCFG_DAC_HOLD_Msk
+
+/********************  Bit definition for RSTKEY registers ********************/
+#define SYS_RSTKEY1_VALUE         (0x76UL)
+#define SYS_RSTKEY2_VALUE         (0xB1UL)
 
 /*------------------------------------------------------------------------------
  *                               GPIO
@@ -784,15 +850,6 @@ typedef struct I2C_s {
 #define I2CFSTA_FMTX_Pos          (9U)
 #define I2CFSTA_FMTX_Msk          (0x1UL << I2CFSTA_FMTX_Pos)
 #define I2CFSTA_FMTX              I2CFSTA_FMTX_Msk
-
-/*------------------------------------------------------------------------------
- *                          SYSTEM CONTROL
- *----------------------------------------------------------------------------*/
-
-/********************  Bit definition for REMAP register  *********************/
-#define SYS_REMAP_SRAM_Pos        (0U)
-#define SYS_REMAP_SRAM_Msk        (0x1UL << SYS_REMAP_SRAM_Pos)
-#define SYS_REMAP_SRAM            SYS_REMAP_SRAM_Msk
 
 #ifdef __cplusplus
 }

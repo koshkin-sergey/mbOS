@@ -56,7 +56,7 @@ __ASM void Vectors(void)
   LDR    PC, =SWI_Handler
   LDR    PC, =PAbt_Handler
   LDR    PC, =DAbt_Handler
-  NOP
+  DCD    0xFFFFFFFF
   LDR    PC, =IRQ_Handler
   LDR    PC, =FIQ_Handler
 }
