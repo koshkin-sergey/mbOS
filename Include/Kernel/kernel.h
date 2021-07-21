@@ -78,6 +78,14 @@ extern "C"
 #define osFlagsWaitAll                0x00000001U ///< Wait for all flags.
 #define osFlagsNoClear                0x00000002U ///< Do not clear flags which have been specified to wait for.
 
+/* Flags errors (returned by osEventFlagsXxxx) */
+#define osFlagsError                  0x80000000U ///< Error indicator.
+#define osFlagsErrorUnknown           0xFFFFFFFFU ///< osError (-1).
+#define osFlagsErrorTimeout           0xFFFFFFFEU ///< osErrorTimeout (-2).
+#define osFlagsErrorResource          0xFFFFFFFDU ///< osErrorResource (-3).
+#define osFlagsErrorParameter         0xFFFFFFFCU ///< osErrorParameter (-4).
+#define osFlagsErrorISR               0xFFFFFFFAU ///< osErrorISR (-6).
+
 /* Thread attributes (attr_bits in \ref osThreadAttr_t) */
 #define osThreadDetached              0x00000000U ///< Thread created in detached mode (default)
 #define osThreadJoinable              0x00000001U ///< Thread created in joinable mode
