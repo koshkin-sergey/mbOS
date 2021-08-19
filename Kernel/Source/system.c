@@ -124,6 +124,10 @@ void osPendSV_Handler(void)
     }
 
     switch (object->id) {
+      case ID_THREAD:
+        krnThreadFlagsPostProcess(object);
+        break;
+
       case ID_SEMAPHORE:
         krnSemaphorePostProcess((osSemaphore_t *)object);
         break;

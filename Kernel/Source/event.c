@@ -35,6 +35,7 @@
  ******************************************************************************/
 
 #define osEventFlagsLimit     31U    ///< number of Event Flags available per object
+#define osEventFlagsMask      ((1UL << osEventFlagsLimit) - 1UL)
 
 /*******************************************************************************
  *  Helper functions
@@ -114,6 +115,7 @@ static osEventFlagsId_t svcEventFlagsNew(const osEventFlagsAttr_t *attr)
   evf->event_flags = 0U;
 
   QueueReset(&evf->wait_queue);
+  QueueReset(&evf->post_queue);
 
   return (evf);
 }
@@ -140,7 +142,7 @@ static uint32_t svcEventFlagsSet(osEventFlagsId_t ef_id, uint32_t flags)
 
   /* Check parameters */
   if ((evf == NULL) || (evf->id != ID_EVENT_FLAGS) ||
-      (flags == 0U) || ((flags & (1UL << osEventFlagsLimit)) != 0U))
+      (flags == 0U) || ((flags & ~osEventFlagsMask) != 0U))
   {
     return ((uint32_t)osErrorParameter);
   }
@@ -178,7 +180,7 @@ static uint32_t svcEventFlagsClear(osEventFlagsId_t ef_id, uint32_t flags)
 
   /* Check parameters */
   if ((evf == NULL) || (evf->id != ID_EVENT_FLAGS) ||
-      (flags == 0U) || ((flags & (1UL << osEventFlagsLimit)) != 0U))
+      (flags == 0U) || ((flags & ~osEventFlagsMask) != 0U))
   {
     return ((uint32_t)osErrorParameter);
   }
@@ -209,12 +211,12 @@ static uint32_t svcEventFlagsWait(osEventFlagsId_t ef_id, uint32_t flags, uint32
 {
   osEventFlags_t *evf = (osEventFlags_t *)ef_id;
   osThread_t *thread;
-  winfo_event_t *winfo;
+  winfo_flags_t *winfo;
   uint32_t event_flags;
 
   /* Check parameters */
   if ((evf == NULL) || (evf->id != ID_EVENT_FLAGS) ||
-      (flags == 0U) || ((flags & (1UL << osEventFlagsLimit)) != 0U))
+      (flags == 0U) || ((flags & ~osEventFlagsMask) != 0U))
   {
     return ((uint32_t)osErrorParameter);
   }
@@ -269,7 +271,7 @@ uint32_t isrEventFlagsSet(osEventFlagsId_t ef_id, uint32_t flags)
 
   /* Check parameters */
   if ((evf == NULL) || (evf->id != ID_EVENT_FLAGS) ||
-      (flags == 0U) || ((flags & (1UL << osEventFlagsLimit)) != 0U))
+      (flags == 0U) || ((flags & ~osEventFlagsMask) != 0U))
   {
     return ((uint32_t)osErrorParameter);
   }
@@ -291,7 +293,7 @@ uint32_t isrEventFlagsWait(osEventFlagsId_t ef_id, uint32_t flags, uint32_t opti
 
   /* Check parameters */
   if ((evf == NULL) || (evf->id != ID_EVENT_FLAGS) || (timeout != 0U) ||
-      (flags == 0U) || ((flags & (1UL << osEventFlagsLimit)) != 0U))
+      (flags == 0U) || ((flags & ~osEventFlagsMask) != 0U))
   {
     return ((uint32_t)osErrorParameter);
   }

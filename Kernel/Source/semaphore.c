@@ -119,6 +119,7 @@ static osSemaphoreId_t svcSemaphoreNew(uint32_t max_count, uint32_t initial_coun
   sem->max_count  = (uint16_t)max_count;
 
   QueueReset(&sem->wait_queue);
+  QueueReset(&sem->post_queue);
 
   return (sem);
 }

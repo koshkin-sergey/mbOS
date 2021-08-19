@@ -235,24 +235,24 @@ typedef struct queue_s {
 } queue_t;
 
 /* Timer Function Information */
-typedef struct osTimerFinfo_s {
+typedef struct osTimerFinfo {
   osTimerFunc_t                  func;  ///< Function Pointer
   void                           *arg;  ///< Function Argument
 } osTimerFinfo_t;
 
-typedef struct winfo_msgque_s {
+typedef struct winfo_msgque {
   void     *msg;
   uint32_t  msg_prio;
 } winfo_msgque_t;
 
-typedef struct winfo_dataque_s {
+typedef struct winfo_dataque {
   uint32_t  data_ptr;
 } winfo_dataque_t;
 
-typedef struct winfo_event_s {
+typedef struct winfo_flags {
   uint32_t flags;
   uint32_t options;
-} winfo_event_t;
+} winfo_flags_t;
 
 /*
  * Definition of wait information in thread control block
@@ -261,7 +261,8 @@ typedef struct winfo_s {
   union {
     winfo_msgque_t  msgque;
     winfo_dataque_t dataque;
-    winfo_event_t   event;
+    winfo_flags_t   event;
+    winfo_flags_t   thread;
   };
   uint32_t ret_val;
 } winfo_t;
@@ -296,16 +297,21 @@ typedef struct osThread_s {
   uint32_t                 exc_return;
   queue_t                  thread_que;  ///< Queue is used to include thread in ready/wait lists
   queue_t                   mutex_que;  ///< List of all mutexes that tack locked
+  queue_t                   delay_que;  ///< Queue is used to include thread id delay list
+  uint32_t                      delay;  ///< Delay Time
   void                       *stk_mem;  ///< Base address of thread's stack space
   uint32_t                   stk_size;  ///< Task's stack size (in bytes)
   int8_t                base_priority;  ///< Task base priority
   int8_t                     priority;  ///< Task current priority
+  uint16_t                   reserved;
   uint8_t                          id;  ///< ID for verification(is it a thread or another object?)
   uint8_t                       state;  ///< Task state
-  const char                    *name;  ///< Object Name
+  uint8_t                       flags;  ///< Object Flags
+  uint8_t                        attr;  ///< Object Attributes
+  queue_t                  post_queue;  ///< Post Processing queue
   winfo_t                       winfo;  ///< Wait information
-  queue_t                   delay_que;  ///< Queue is used to include thread id delay list
-  uint32_t                      delay;  ///< Delay Time
+  uint32_t               thread_flags;  ///< Thread Flags
+  const char                    *name;  ///< Object Name
 } osThread_t;
 
 /* Semaphore Control Block */
@@ -314,11 +320,11 @@ typedef struct osSemaphore_s {
   uint8_t              reserved_state;  ///< Object State (not used)
   uint8_t                       flags;  ///< Object Flags
   uint8_t                    reserved;
-  const char                    *name;  ///< Object Name
   queue_t                  post_queue;  ///< Post Processing queue
   queue_t                  wait_queue;  ///< Waiting Threads queue
   uint16_t                      count;  ///< Current number of tokens
   uint16_t                  max_count;  ///< Maximum number of tokens
+  const char                    *name;  ///< Object Name
 } osSemaphore_t;
 
 /* Event Flags Control Block */
@@ -327,10 +333,10 @@ typedef struct osEventFlags_s {
   uint8_t              reserved_state;  ///< Object State (not used)
   uint8_t                       flags;  ///< Object Flags
   uint8_t                    reserved;
-  const char                    *name;  ///< Object Name
   queue_t                  post_queue;  ///< Post Processing queue
   queue_t                  wait_queue;  ///< Waiting Threads queue
   uint32_t                event_flags;  ///< Initial value of the eventflag bit pattern
+  const char                    *name;  ///< Object Name
 } osEventFlags_t;
 
 /* - Memory Pool definitions   -----------------------------------------------*/
@@ -351,10 +357,10 @@ typedef struct osMemoryPool_s {
   uint8_t              reserved_state;  ///< Object State (not used)
   uint8_t                       flags;  ///< Object Flags
   uint8_t                    reserved;
-  const char                    *name;  ///< Object Name
   queue_t                  post_queue;  ///< Post Processing queue
   queue_t                  wait_queue;  ///< Waiting Threads queue
   osMemoryPoolInfo_t             info;  ///< Memory Pool Info
+  const char                    *name;  ///< Object Name
 } osMemoryPool_t;
 
 /* - Message Queue definitions   -----------------------------------------------*/
@@ -374,7 +380,6 @@ typedef struct osMessageQueue_s {
   uint8_t              reserved_state;  ///< Object State (not used)
   uint8_t                       flags;  ///< Object Flags
   uint8_t                    reserved;
-  const char                    *name;  ///< Object Name
   queue_t                  post_queue;  ///< Post Processing queue
   queue_t              wait_put_queue;  ///< Queue of threads waiting to send a message
   queue_t              wait_get_queue;  ///< Queue of threads waiting to receive a message
@@ -382,6 +387,7 @@ typedef struct osMessageQueue_s {
   uint32_t                   msg_size;  ///< Message size in bytes
   uint32_t                  msg_count;  ///< Number of queued Messages
   queue_t                   msg_queue;  ///< List of all queued Messages
+  const char                    *name;  ///< Object Name
 } osMessageQueue_t;
 
 /* Data Queue Control Block */
@@ -390,7 +396,6 @@ typedef struct osDataQueue_s {
   uint8_t              reserved_state;  ///< Object State (not used)
   uint8_t                       flags;  ///< Object Flags
   uint8_t                    reserved;
-  const char                    *name;  ///< Object Name
   queue_t                  post_queue;  ///< Post Processing queue
   queue_t              wait_put_queue;  ///< Queue of threads waiting to send a data
   queue_t              wait_get_queue;  ///< Queue of threads waiting to receive a data
@@ -401,6 +406,7 @@ typedef struct osDataQueue_s {
   uint32_t                       head;
   uint32_t                       tail;
   uint8_t                     *dq_mem;  ///< Data Memory Address
+  const char                    *name;  ///< Object Name
 } osDataQueue_t;
 
 /* Mutex Control Block */
@@ -409,12 +415,12 @@ typedef struct osMutex_s {
   uint8_t              reserved_state;  ///< Object State (not used)
   uint8_t                       flags;  ///< Object Flags
   uint8_t                        attr;  ///< Object Attributes
-  const char                    *name;  ///< Object Name
   queue_t                  post_queue;  ///< Post Processing queue
   queue_t                    wait_que;  ///< List of tasks that wait a mutex
   queue_t                   mutex_que;  ///< To include in thread's locked mutexes list (if any)
   osThread_t                  *holder;  ///< Current mutex owner(thread that locked mutex)
   uint32_t                        cnt;  ///< Lock counter
+  const char                    *name;  ///< Object Name
 } osMutex_t;
 
 /* Timer Control Block */
@@ -807,6 +813,44 @@ uint32_t osThreadGetCount(void);
  * @return      number of enumerated threads or 0 in case of an error.
  */
 uint32_t osThreadEnumerate(osThreadId_t *thread_array, uint32_t array_items);
+
+/*******************************************************************************
+ *  Thread Flags Functions
+ ******************************************************************************/
+
+/**
+ * @fn          uint32_t osThreadFlagsSet(osThreadId_t thread_id, uint32_t flags)
+ * @brief       Set the specified Thread Flags of a thread.
+ * @param[in]   thread_id  thread ID obtained by \ref osThreadNew or \ref osThreadGetId.
+ * @param[in]   flags      specifies the flags of the thread that shall be set.
+ * @return      thread flags after setting or error code if highest bit set.
+ */
+uint32_t osThreadFlagsSet(osThreadId_t thread_id, uint32_t flags);
+
+/**
+ * @fn          uint32_t osThreadFlagsClear(uint32_t flags)
+ * @brief       Clear the specified Thread Flags of current running thread.
+ * @param[in]   flags  specifies the flags of the thread that shall be cleared.
+ * @return      thread flags before clearing or error code if highest bit set.
+ */
+uint32_t osThreadFlagsClear(uint32_t flags);
+
+/**
+ * @fn          uint32_t osThreadFlagsGet(void)
+ * @brief       Get the current Thread Flags of current running thread.
+ * @return      current thread flags.
+ */
+uint32_t osThreadFlagsGet(void);
+
+/**
+ * @fn          uint32_t osThreadFlagsWait(uint32_t flags, uint32_t options, uint32_t timeout)
+ * @brief       Wait for one or more Thread Flags of the current running thread to become signaled.
+ * @param[in]   flags    specifies the flags to wait for.
+ * @param[in]   options  specifies flags options (osFlagsXxxx).
+ * @param[in]   timeout  \ref CMSIS_RTOS_TimeOutValue or 0 in case of no time-out.
+ * @return      thread flags before clearing or error code if highest bit set.
+ */
+uint32_t osThreadFlagsWait(uint32_t flags, uint32_t options, uint32_t timeout);
 
 /*******************************************************************************
  *  Generic Wait Functions

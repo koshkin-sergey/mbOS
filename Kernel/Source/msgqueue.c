@@ -150,6 +150,7 @@ static osMessageQueueId_t svcMessageQueueNew(uint32_t msg_count, uint32_t msg_si
   QueueReset(&mq->wait_put_queue);
   QueueReset(&mq->wait_get_queue);
   QueueReset(&mq->msg_queue);
+  QueueReset(&mq->post_queue);
   krnMemoryPoolInit(msg_count, block_size, mq_mem, &mq->mp_info);
 
   return (mq);
