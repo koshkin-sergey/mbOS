@@ -31,8 +31,61 @@
 #include "kernel_lib.h"
 
 /*******************************************************************************
+ *  defines and macros (scope: module-local)
+ ******************************************************************************/
+
+#define osThreadFlagsLimit    31U    ///< number of Thread Flags available per object
+#define osThreadFlagsMask     ((1UL << osThreadFlagsLimit) - 1UL)
+
+/*******************************************************************************
  *  Helper functions
  ******************************************************************************/
+
+static uint32_t ThreadFlagsSet(osThread_t *thread, uint32_t flags)
+{
+  uint32_t thread_flags;
+
+  BEGIN_CRITICAL_SECTION
+
+  thread->thread_flags |= flags;
+  thread_flags = thread->thread_flags;
+
+  END_CRITICAL_SECTION
+
+  return (thread_flags);
+}
+
+static uint32_t ThreadFlagsCheck(osThread_t *thread, uint32_t flags, uint32_t options)
+{
+  uint32_t pattern;
+
+  if ((options & osFlagsNoClear) == 0U) {
+    BEGIN_CRITICAL_SECTION
+
+    pattern = thread->thread_flags;
+    if ((((options & osFlagsWaitAll) != 0U) && ((pattern & flags) != flags)) ||
+        (((options & osFlagsWaitAll) == 0U) && ((pattern & flags) == 0U)))
+    {
+      pattern = 0U;
+    }
+    else {
+      thread->thread_flags &= ~flags;
+    }
+
+    END_CRITICAL_SECTION
+  }
+  else {
+    pattern = thread->thread_flags;
+
+    if ((((options & osFlagsWaitAll) != 0U) && ((pattern & flags) != flags)) ||
+        (((options & osFlagsWaitAll) == 0U) && ((pattern & flags) == 0U)))
+    {
+      pattern = 0U;
+    }
+  }
+
+  return (pattern);
+}
 
 /**
  * @brief       Adds thread to the end of ready queue for current priority
@@ -125,12 +178,16 @@ static osThreadId_t svcThreadNew(osThreadFunc_t func, void *argument, const osTh
   thread->base_priority = (int8_t)priority;
   thread->priority      = (int8_t)priority;
   thread->id            = ID_THREAD;
-  thread->name          = attr->name;
+  thread->flags         = 0U;
+  thread->attr          = attr->attr_bits;
   thread->delay         = 0U;
+  thread->thread_flags  = 0U;
+  thread->name          = attr->name;
 
   QueueReset(&thread->thread_que);
   QueueReset(&thread->delay_que);
   QueueReset(&thread->mutex_que);
+  QueueReset(&thread->post_queue);
 
   /* Fill all thread stack space by FILL_STACK_VAL */
   uint32_t *ptr = stack_mem;
@@ -452,6 +509,133 @@ static uint32_t svcThreadEnumerate(osThreadId_t *thread_array, uint32_t array_it
 
   return (0U);
 }
+
+static uint32_t svcThreadFlagsSet(osThreadId_t thread_id, uint32_t flags)
+{
+  osThread_t *thread = thread_id;
+  uint32_t    thread_flags;
+  uint32_t    pattern;
+
+  /* Check parameters */
+  if (thread == NULL || thread->id != ID_THREAD) {
+    return (osFlagsErrorParameter);
+  }
+
+  /* Set Thread Flags */
+  thread_flags = ThreadFlagsSet(thread, flags);
+
+  /* Check Thread Flags */
+  pattern = ThreadFlagsCheck(thread, thread->winfo.thread.flags, thread->winfo.thread.options);
+  if (pattern != 0U) {
+    if ((thread->winfo.thread.options & osFlagsNoClear) == 0U) {
+      thread_flags = pattern & ~thread->winfo.thread.flags;
+    }
+    else {
+      thread_flags = pattern;
+    }
+    krnThreadWaitExit(thread, pattern, DISPATCH_YES);
+  }
+
+  return (thread_flags);
+}
+
+static uint32_t svcThreadFlagsClear(uint32_t flags)
+{
+  uint32_t    thread_flags;
+  osThread_t *thread;
+
+  thread = ThreadGetRunning();
+
+  BEGIN_CRITICAL_SECTION
+
+  thread_flags = thread->thread_flags;
+  thread->thread_flags &= ~flags;
+
+  END_CRITICAL_SECTION
+
+  return (thread_flags);
+}
+
+static uint32_t svcThreadFlagsGet(void)
+{
+  return (ThreadGetRunning()->thread_flags);
+}
+
+static uint32_t svcThreadFlagsWait(uint32_t flags, uint32_t options, uint32_t timeout)
+{
+  uint32_t       thread_flags;
+  osThread_t    *thread;
+  winfo_flags_t *winfo;
+
+  thread = ThreadGetRunning();
+
+  /* Check Thread Flags */
+  thread_flags = ThreadFlagsCheck(thread, flags, options);
+  if (thread_flags == 0U) {
+    if (timeout != 0U) {
+      thread_flags = (uint32_t)krnThreadWaitEnter(thread, NULL, timeout);
+      if (thread_flags != (uint32_t)osErrorTimeout) {
+        winfo = &thread->winfo.thread;
+        winfo->options = options;
+        winfo->flags = flags;
+      }
+    }
+    else {
+      thread_flags = osFlagsErrorResource;
+    }
+  }
+
+  return (thread_flags);
+}
+
+/*******************************************************************************
+ *  ISR Calls
+ ******************************************************************************/
+
+__STATIC_INLINE
+uint32_t isrThreadFlagsSet(osThreadId_t thread_id, uint32_t flags)
+{
+  osThread_t *thread = thread_id;
+  uint32_t    thread_flags;
+
+  /* Check parameters */
+  if (thread == NULL || thread->id != ID_THREAD) {
+    return (osFlagsErrorParameter);
+  }
+
+  /* Set Thread Flags */
+  thread_flags = ThreadFlagsSet(thread, flags);
+
+  /* Register post ISR processing */
+  krnPostProcess((osObject_t *)&thread->id);
+
+  return (thread_flags);
+}
+
+/*******************************************************************************
+ *  Post ISR processing
+ ******************************************************************************/
+
+/**
+ * @fn          void krnThreadFlagsPostProcess(osObject_t *obj)
+ * @brief       Thread Flags post ISR processing.
+ * @param[in]   obj  object.
+ */
+void krnThreadFlagsPostProcess(osObject_t *obj)
+{
+  osThread_t *thread;
+  uint32_t    pattern;
+
+  /* Get Thread */
+  thread = GetThreadByObject(obj);
+
+  /* Check Thread Flags */
+  pattern = ThreadFlagsCheck(thread, thread->winfo.thread.flags, thread->winfo.thread.options);
+  if (pattern != 0U) {
+    krnThreadWaitExit(thread, pattern, DISPATCH_NO);
+  }
+}
+
 
 /*******************************************************************************
  *  Library functions
@@ -942,6 +1126,100 @@ uint32_t osThreadEnumerate(osThreadId_t *thread_array, uint32_t array_items)
   }
 
   return (count);
+}
+
+/**
+ * @fn          uint32_t osThreadFlagsSet(osThreadId_t thread_id, uint32_t flags)
+ * @brief       Set the specified Thread Flags of a thread.
+ * @param[in]   thread_id  thread ID obtained by \ref osThreadNew or \ref osThreadGetId.
+ * @param[in]   flags      specifies the flags of the thread that shall be set.
+ * @return      thread flags after setting or error code if highest bit set.
+ */
+uint32_t osThreadFlagsSet(osThreadId_t thread_id, uint32_t flags)
+{
+  uint32_t thread_flags;
+
+  /* Check parameters */
+  if (flags == 0U || (flags & ~osThreadFlagsMask) != 0U) {
+    return (osFlagsErrorParameter);
+  }
+
+  if (IsIrqMode() || IsIrqMasked()) {
+    thread_flags = isrThreadFlagsSet(thread_id, flags);
+  }
+  else {
+    thread_flags = SVC_2(thread_id, flags, svcThreadFlagsSet);
+  }
+
+  return (thread_flags);
+}
+
+/**
+ * @fn          uint32_t osThreadFlagsClear(uint32_t flags)
+ * @brief       Clear the specified Thread Flags of current running thread.
+ * @param[in]   flags  specifies the flags of the thread that shall be cleared.
+ * @return      thread flags before clearing or error code if highest bit set.
+ */
+uint32_t osThreadFlagsClear(uint32_t flags)
+{
+  /* Check parameters */
+  if (flags == 0U || (flags & ~osThreadFlagsMask) != 0U) {
+    return (osFlagsErrorParameter);
+  }
+
+  if (IsIrqMode() || IsIrqMasked()) {
+    return (osFlagsErrorISR);
+  }
+
+  return (SVC_1(flags, svcThreadFlagsClear));
+}
+
+/**
+ * @fn          uint32_t osThreadFlagsGet(void)
+ * @brief       Get the current Thread Flags of current running thread.
+ * @return      current thread flags.
+ */
+uint32_t osThreadFlagsGet(void)
+{
+  uint32_t thread_flags;
+
+  if (IsIrqMode() || IsIrqMasked()) {
+    thread_flags = 0U;
+  }
+  else {
+    thread_flags = SVC_0(svcThreadFlagsGet);
+  }
+
+  return (thread_flags);
+}
+
+/**
+ * @fn          uint32_t osThreadFlagsWait(uint32_t flags, uint32_t options, uint32_t timeout)
+ * @brief       Wait for one or more Thread Flags of the current running thread to become signaled.
+ * @param[in]   flags    specifies the flags to wait for.
+ * @param[in]   options  specifies flags options (osFlagsXxxx).
+ * @param[in]   timeout  \ref CMSIS_RTOS_TimeOutValue or 0 in case of no time-out.
+ * @return      thread flags before clearing or error code if highest bit set.
+ */
+uint32_t osThreadFlagsWait(uint32_t flags, uint32_t options, uint32_t timeout)
+{
+  uint32_t thread_flags;
+
+  /* Check parameters */
+  if (flags == 0U || (flags & ~osThreadFlagsMask) != 0U) {
+    return (osFlagsErrorParameter);
+  }
+
+  if (IsIrqMode() || IsIrqMasked()) {
+    return (osFlagsErrorISR);
+  }
+
+  thread_flags = SVC_3(flags, options, timeout, svcThreadFlagsWait);
+  if ((int32_t)thread_flags == osThreadWait) {
+    thread_flags = ThreadGetRunning()->winfo.ret_val;
+  }
+
+  return (thread_flags);
 }
 
 /* ----------------------------- End of file ---------------------------------*/

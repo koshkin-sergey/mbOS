@@ -130,6 +130,7 @@ static osDataQueueId_t svcDataQueueNew(uint32_t data_count, uint32_t data_size, 
 
   QueueReset(&dq->wait_put_queue);
   QueueReset(&dq->wait_get_queue);
+  QueueReset(&dq->post_queue);
 
   return (dq);
 }

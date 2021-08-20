@@ -126,6 +126,7 @@ static osMutexId_t svcMutexNew(const osMutexAttr_t *attr)
   mutex->cnt    = 0U;
   QueueReset(&mutex->wait_que);
   QueueReset(&mutex->mutex_que);
+  QueueReset(&mutex->post_queue);
 
   return (mutex);
 }
