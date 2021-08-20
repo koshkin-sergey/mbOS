@@ -144,7 +144,7 @@ static uint32_t svcEventFlagsSet(osEventFlagsId_t ef_id, uint32_t flags)
   if ((evf == NULL) || (evf->id != ID_EVENT_FLAGS) ||
       (flags == 0U) || ((flags & ~osEventFlagsMask) != 0U))
   {
-    return ((uint32_t)osErrorParameter);
+    return (osFlagsErrorParameter);
   }
 
   /* Set Event Flags */
@@ -182,7 +182,7 @@ static uint32_t svcEventFlagsClear(osEventFlagsId_t ef_id, uint32_t flags)
   if ((evf == NULL) || (evf->id != ID_EVENT_FLAGS) ||
       (flags == 0U) || ((flags & ~osEventFlagsMask) != 0U))
   {
-    return ((uint32_t)osErrorParameter);
+    return (osFlagsErrorParameter);
   }
 
   BEGIN_CRITICAL_SECTION
@@ -218,7 +218,7 @@ static uint32_t svcEventFlagsWait(osEventFlagsId_t ef_id, uint32_t flags, uint32
   if ((evf == NULL) || (evf->id != ID_EVENT_FLAGS) ||
       (flags == 0U) || ((flags & ~osEventFlagsMask) != 0U))
   {
-    return ((uint32_t)osErrorParameter);
+    return (osFlagsErrorParameter);
   }
 
   event_flags = EventFlagsCheck(evf, flags, options);
@@ -234,7 +234,7 @@ static uint32_t svcEventFlagsWait(osEventFlagsId_t ef_id, uint32_t flags, uint32
       }
     }
     else {
-      event_flags = (uint32_t)osErrorResource;
+      event_flags = osFlagsErrorResource;
     }
   }
 
@@ -273,7 +273,7 @@ uint32_t isrEventFlagsSet(osEventFlagsId_t ef_id, uint32_t flags)
   if ((evf == NULL) || (evf->id != ID_EVENT_FLAGS) ||
       (flags == 0U) || ((flags & ~osEventFlagsMask) != 0U))
   {
-    return ((uint32_t)osErrorParameter);
+    return (osFlagsErrorParameter);
   }
 
   /* Set Event Flags */
@@ -295,13 +295,13 @@ uint32_t isrEventFlagsWait(osEventFlagsId_t ef_id, uint32_t flags, uint32_t opti
   if ((evf == NULL) || (evf->id != ID_EVENT_FLAGS) || (timeout != 0U) ||
       (flags == 0U) || ((flags & ~osEventFlagsMask) != 0U))
   {
-    return ((uint32_t)osErrorParameter);
+    return (osFlagsErrorParameter);
   }
 
   /* Check Event Flags */
   event_flags = EventFlagsCheck(evf, flags, options);
   if (event_flags == 0U) {
-    event_flags = (uint32_t)osErrorResource;
+    event_flags = osFlagsErrorResource;
   }
 
   return (event_flags);
