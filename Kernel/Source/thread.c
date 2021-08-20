@@ -517,7 +517,7 @@ static uint32_t svcThreadFlagsSet(osThreadId_t thread_id, uint32_t flags)
   uint32_t    pattern;
 
   /* Check parameters */
-  if (thread->id != ID_THREAD) {
+  if (thread == NULL || thread->id != ID_THREAD) {
     return (osFlagsErrorParameter);
   }
 
@@ -599,7 +599,7 @@ uint32_t isrThreadFlagsSet(osThreadId_t thread_id, uint32_t flags)
   uint32_t    thread_flags;
 
   /* Check parameters */
-  if (thread->id != ID_THREAD) {
+  if (thread == NULL || thread->id != ID_THREAD) {
     return (osFlagsErrorParameter);
   }
 
@@ -1139,12 +1139,13 @@ uint32_t osThreadFlagsSet(osThreadId_t thread_id, uint32_t flags)
 {
   uint32_t thread_flags;
 
-  if ((thread_id == NULL) || (flags == 0U) || ((flags & ~osThreadFlagsMask) != 0U)) {
+  /* Check parameters */
+  if (flags == 0U || (flags & ~osThreadFlagsMask) != 0U) {
     return (osFlagsErrorParameter);
   }
 
   if (IsIrqMode() || IsIrqMasked()) {
-    thread_flags = isrThreadFlagsSet(thread_id, flags);return (osFlagsErrorParameter);
+    thread_flags = isrThreadFlagsSet(thread_id, flags);
   }
   else {
     thread_flags = SVC_2(thread_id, flags, svcThreadFlagsSet);
@@ -1162,7 +1163,7 @@ uint32_t osThreadFlagsSet(osThreadId_t thread_id, uint32_t flags)
 uint32_t osThreadFlagsClear(uint32_t flags)
 {
   /* Check parameters */
-  if ((flags == 0U) || ((flags & ~osThreadFlagsMask) != 0U)) {
+  if (flags == 0U || (flags & ~osThreadFlagsMask) != 0U) {
     return (osFlagsErrorParameter);
   }
 
@@ -1205,7 +1206,7 @@ uint32_t osThreadFlagsWait(uint32_t flags, uint32_t options, uint32_t timeout)
   uint32_t thread_flags;
 
   /* Check parameters */
-  if ((flags == 0U) || ((flags & ~osThreadFlagsMask) != 0U)) {
+  if (flags == 0U || (flags & ~osThreadFlagsMask) != 0U) {
     return (osFlagsErrorParameter);
   }
 
