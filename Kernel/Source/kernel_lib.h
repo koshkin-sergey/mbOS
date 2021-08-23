@@ -31,8 +31,8 @@
 
 /* Kernel Information */
 #define osVersionAPI         020010003        ///< API version (2.1.3)
-#define osVersionKernel      010000001        ///< Kernel version (1.0.0)
-#define osKernelId           "Kernel V1.0.1"  ///< Kernel identification string
+#define osVersionKernel      010010000        ///< Kernel version (1.1.0)
+#define osKernelId           "Kernel V1.1.0"  ///< Kernel identification string
 
 /* Object Identifier definitions */
 #define ID_INVALID                  (uint8_t)0x00
@@ -60,6 +60,7 @@
 
 #define GetThreadByQueue(que)       container_of(que, osThread_t, thread_que)
 #define GetThreadByDelayQueue(que)  container_of(que, osThread_t, delay_que)
+#define GetThreadByObject(obj)      container_of(obj, osThread_t, id)
 #define GetMutexByQueque(que)       container_of(que, osMutex_t, mutex_que)
 #define GetTimerByQueue(que)        container_of(que, osTimer_t, timer_que)
 #define GetMessageByQueue(que)      container_of(que, osMessage_t, msg_que)
@@ -109,7 +110,6 @@ typedef struct osObject_s {
   uint8_t                       state;  ///< Object State
   uint8_t                       flags;  ///< Object Flags
   uint8_t                    reserved;
-  const char                    *name;  ///< Object Name
   queue_t                  post_queue;  ///< Post Processing queue
 } osObject_t;
 
@@ -290,6 +290,12 @@ osStatus_t krnMemoryPoolFree(osMemoryPoolInfo_t *mp_info, void *block);
 /*******************************************************************************
  *  Post ISR processing functions
  ******************************************************************************/
+
+/**
+ * @brief       Thread Flags post ISR processing.
+ * @param[in]   obj  object.
+ */
+void krnThreadFlagsPostProcess(osObject_t *obj);
 
 /**
  * @brief       Semaphore post ISR processing.

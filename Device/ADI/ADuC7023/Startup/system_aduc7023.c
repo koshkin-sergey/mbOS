@@ -19,7 +19,7 @@
  *  includes
  ******************************************************************************/
 
-#include "asm/aduc7023.h"
+#include "asm/Driver_PCC.h"
 #include "Kernel/irq.h"
 
 uint32_t SystemCoreClock;           /*!< System Clock Frequency (Core Clock)  */
@@ -41,9 +41,6 @@ void SystemCoreClockUpdate(void)
  */
 void SystemInit(void)
 {
-  POW->KEY1 = POW_KEY1_VALUE;
-  POW->CON0 = 0x00;
-  POW->KEY2 = POW_KEY2_VALUE;
-
+  PCC_ClkReset();
   IRQ_Initialize();
 }

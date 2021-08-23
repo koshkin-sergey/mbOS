@@ -212,6 +212,29 @@ static uint32_t svcKernelGetTickFreq(void)
   return (osConfig.tick_freq);
 }
 
+static uint32_t svcKernelGetSysTimerCount(void)
+{
+  uint32_t tick;
+  uint32_t count;
+
+  tick  = osInfo.kernel.tick;
+  count = osTickGetCount();
+  if (osTickGetOverflow() != 0U) {
+    count = osTickGetCount();
+    tick++;
+  }
+  count += tick * osTickGetInterval();
+
+  return (count);
+}
+
+static uint32_t svcKernelGetSysTimerFreq(void)
+{
+  uint32_t freq = osTickGetClock();
+
+  return (freq);
+}
+
 /*******************************************************************************
  *  function implementations (scope: module-exported)
  ******************************************************************************/
@@ -386,6 +409,42 @@ uint32_t osKernelGetTickFreq(void)
   }
   else {
     freq = SVC_0(svcKernelGetTickFreq);
+  }
+
+  return (freq);
+}
+
+/**
+ * @fn          uint32_t osKernelGetSysTimerCount(void)
+ * @brief       Get the RTOS kernel system timer count.
+ * @return      RTOS kernel current system timer count as 32-bit value.
+ */
+uint32_t osKernelGetSysTimerCount(void)
+{
+  uint32_t count;
+
+  if (IsIrqMode() || IsIrqMasked()) {
+    count = svcKernelGetSysTimerCount();
+  } else {
+    count = SVC_0(svcKernelGetSysTimerCount);
+  }
+
+  return (count);
+}
+
+/**
+ * @fn          uint32_t osKernelGetSysTimerFreq(void)
+ * @brief       Get the RTOS kernel system timer frequency.
+ * @return      frequency of the system timer in hertz, i.e. timer ticks per second.
+ */
+uint32_t osKernelGetSysTimerFreq(void)
+{
+  uint32_t freq;
+
+  if (IsIrqMode() || IsIrqMasked()) {
+    freq = svcKernelGetSysTimerFreq();
+  } else {
+    freq =  SVC_0(svcKernelGetSysTimerFreq);
   }
 
   return (freq);

@@ -22,6 +22,9 @@
 
 #include <stdint.h>
 
+/*
+ * Pin Number
+ */
 typedef enum {
   GPIO_PIN_0    = 0,
   GPIO_PIN_1    = 1,
@@ -34,22 +37,34 @@ typedef enum {
   GPIO_PIN_Reserved = 0x7FFFFFFF,
 } GPIO_PIN_t;
 
+/*
+ * Pin Output Value
+ */
 typedef enum {
   GPIO_PIN_OUT_LOW  = 0,
   GPIO_PIN_OUT_HIGH = 1,
 } GPIO_PIN_OUT_t;
 
+/*
+ * Pin Pull Up
+ */
 typedef enum {
   GPIO_PULL_UP      = 0,
   GPIO_PULL_DISABLE = 1,
 } GPIO_PULL_t;
 
+/*
+ * Pin Strength
+ */
 typedef enum {
   GPIO_STRENGTH_MEDIUM  = 0x00,
   GPIO_STRENGTH_LOW     = 0x02,
   GPIO_STRENGTH_HIGH    = 0x04,
 } GPIO_STRENGTH_t;
 
+/*
+ * Pin Function
+ */
 typedef enum {
   GPIO_PIN_FUNC_0 = 0,
   GPIO_PIN_FUNC_1 = 1,
@@ -60,14 +75,17 @@ typedef enum {
 
 /**
  * Pin Mode
- * PP = push-pull, OD = open-drain, AF = alternate function.
  */
 typedef enum {
   GPIO_MODE_INPUT   = 0x0000,  //!< General-purpose Input
   GPIO_MODE_OUTPUT  = 0x0001,  //!< General-purpose Output push-pull
 } GPIO_MODE_t;
 
+/*
+ * Pin Configuration
+ */
 typedef struct _GPIO_PIN_CFG {
+  GPIO_PIN_FUNC_t      func;
   GPIO_MODE_t          mode;
   GPIO_PULL_t     pull_mode;
   GPIO_STRENGTH_t  strength;
@@ -79,11 +97,6 @@ typedef struct _GPIO_PIN_CFG {
  * @param[in]   pin   Port pin number (0..7)
  * @param[in]   cfg   Pointer to a GPIO_PIN_CFG_t structure that contains the
  *                    configuration information for the specified pin.
-
- * @fn          void AFConfig(GPIO_PIN_t pin, GPIO_PIN_FUNC_t af_num)
- * @brief       Configure alternate functions
- * @param[in]   pin     Port pin number (0..7)
- * @param[in]   af_num  Alternate function number
 
  * @fn          uint8_t PortRead(void)
  * @brief       Read port pins
@@ -110,7 +123,6 @@ typedef struct _GPIO_PIN_CFG {
 
 typedef struct _DRIVER_GPIO {
   void      (*PinConfig)  (GPIO_PIN_t pin, const GPIO_PIN_CFG_t *cfg);
-  void      (*AFConfig)   (GPIO_PIN_t pin, GPIO_PIN_FUNC_t af_num);
   uint8_t   (*PortRead)   (void);
   void      (*PortWrite)  (uint8_t value);
   uint32_t  (*PinRead)    (GPIO_PIN_t pin);

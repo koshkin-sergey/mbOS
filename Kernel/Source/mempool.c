@@ -179,6 +179,7 @@ static osMemoryPoolId_t svcMemoryPoolNew(uint32_t block_count, uint32_t block_si
   mp->flags = 0U;
   mp->name = attr->name;
   QueueReset(&mp->wait_queue);
+  QueueReset(&mp->post_queue);
   krnMemoryPoolInit(block_count, block_size, mp_mem, &mp->info);
 
   return (mp);

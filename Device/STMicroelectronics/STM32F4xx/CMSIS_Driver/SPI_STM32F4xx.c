@@ -23,7 +23,7 @@
 
 #include "SPI_STM32F4xx.h"
 
-#if defined(USE_SPI1) || defined(USE_SPI2) || defined(USE_SPI3) \
+#if defined(USE_SPI1) || defined(USE_SPI2) || defined(USE_SPI3) || \
     defined(USE_SPI4) || defined(USE_SPI5) || defined(USE_SPI6)
 
 /*******************************************************************************

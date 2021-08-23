@@ -49,7 +49,7 @@ void Vectors(void)
       "LDR    PC, =SWI_Handler                          \n"
       "LDR    PC, =PAbt_Handler                         \n"
       "LDR    PC, =DAbt_Handler                         \n"
-      "NOP                                              \n"
+      ".long  0xFFFFFFFF                                \n"
       "LDR    PC, =IRQ_Handler                          \n"
       "LDR    PC, =FIQ_Handler                          \n"
   );

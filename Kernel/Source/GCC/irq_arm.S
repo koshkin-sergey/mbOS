@@ -43,7 +43,7 @@ IRQ_PendSV:
 
 
                 .arm
-                .section ".text"
+                .section ".text.os.handlers"
                 .align   4
 
 
@@ -310,6 +310,9 @@ ContextExit:
 /*-----------------------------------------------------------------------------
  * Helper functions
  *----------------------------------------------------------------------------*/
+
+                .arm
+                .section ".text"
 
                 .type    GetModeCPU, %function
                 .global  GetModeCPU

@@ -56,6 +56,8 @@ int32_t osTickSetup(uint32_t freq, IRQHandler_t handler)
   IRQ_SetPriority(RTOS_TIMER_IRQn, RTIM_IRQ_PRIORITY);
   /* Register tick interrupt handler function */
   IRQ_SetHandler(RTOS_TIMER_IRQn, handler);
+  /* Set IRQ type interrupt */
+  IRQ_SetMode(RTOS_TIMER_IRQn, IRQ_MODE_TYPE_IRQ);
   /* Enable corresponding interrupt */
   IRQ_Enable(RTOS_TIMER_IRQn);
 

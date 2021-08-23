@@ -50,6 +50,11 @@
 			<locationURI>PARENT-2-PROJECT_LOC/main.c</locationURI>
 		</link>
 		<link>
+			<name>src/Device/CMSIS_Driver</name>
+			<type>2</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Device/ADI/ADuC7023/CMSIS_Driver</locationURI>
+		</link>
+		<link>
 			<name>src/Device/Driver</name>
 			<type>2</type>
 			<locationURI>PARENT-7-PROJECT_LOC/Device/ADI/ADuC7023/Driver</locationURI>
