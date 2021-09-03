@@ -21,9 +21,9 @@
  *  includes
  ******************************************************************************/
 
-#include "asm/aduc7023.h"
-#include "asm/Driver_FLASH.h"
-#include "Kernel/irq.h"
+#include <asm/aduc7023.h>
+#include <Kernel/irq.h>
+#include <Driver/FLASH_ADUC7023.h>
 
 /*******************************************************************************
  *  defines and macros (scope: module-local)

@@ -26,14 +26,13 @@
 
 #include <stdbool.h>
 
-#include "asm/aduc7023.h"
-#include "asm/Driver_GPIO.h"
-#include "asm/Driver_PCC.h"
+#include <asm/aduc7023.h>
+#include <Kernel/irq.h>
+#include <CMSIS/Driver/Driver_I2C.h>
 
-#include "Kernel/irq.h"
-#include "CMSIS/Driver/Driver_I2C.h"
-
-#include "device_config.h"
+#include <device_config.h>
+#include <Driver/GPIO_ADUC7023.h>
+#include <Driver/PCC_ADUC7023.h>
 
 /*******************************************************************************
  *  defines and macros (scope: module-local)
@@ -120,12 +119,7 @@ ARM_DRIVER_I2C Driver_I2C##x = { \
 #define I2C_DIR_RX            ((uint8_t)0x01)     // Direction: receiver
 
 /* Transfer status flags definitions */
-#define XFER_CTRL_XSET        ((uint16_t)0x0001)  // Transfer is set
-#define XFER_CTRL_XPENDING    ((uint16_t)0x0002)  // Transfer pending
-#define XFER_CTRL_XDONE       ((uint16_t)0x0004)  // Transfer done (all data transferred)
-#define XFER_CTRL_RSTART      ((uint16_t)0x0008)  // Generate repeated start and readdress
-#define XFER_CTRL_ADDR_NACK   ((uint16_t)0x0010)  // Slave address not acknowledged
-#define XFER_CTRL_ADDR_DONE   ((uint16_t)0x0020)  // Addressing done
+#define XFER_CTRL_XPENDING    ((uint16_t)0x0001)  // Transfer pending
 
 /*******************************************************************************
  *  typedefs and structures (scope: module-local)

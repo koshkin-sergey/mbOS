@@ -19,8 +19,8 @@
  *  includes
  ******************************************************************************/
 
-#include "asm/Driver_PCC.h"
-#include "Kernel/irq.h"
+#include <Kernel/irq.h>
+#include <Driver/PCC_ADUC7023.h>
 
 uint32_t SystemCoreClock;           /*!< System Clock Frequency (Core Clock)  */
 

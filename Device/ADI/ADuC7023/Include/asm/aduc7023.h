@@ -648,35 +648,35 @@ typedef struct I2C_s {
 #define I2CMCON_MCENI             I2CMCON_MCENI_Msk
 
 /*******************  Bit definition for I2CMSTA register  ********************/
-#define I2CMSTA_MTFSTA_Pos        (0U)
-#define I2CMSTA_MTFSTA_Msk        (0x3UL << I2CMSTA_MTFSTA_Pos)
-#define I2CMSTA_MTFSTA            I2CMSTA_MTFSTA_Msk
-#define I2CMSTA_MTFSTA_0          (0x1UL << I2CMSTA_MTFSTA_Pos)
-#define I2CMSTA_MTFSTA_1          (0x2UL << I2CMSTA_MTFSTA_Pos)
-#define I2CMSTA_MTXQ_Pos          (2U)
-#define I2CMSTA_MTXQ_Msk          (0x1UL << I2CMSTA_MTXQ_Pos)
-#define I2CMSTA_MTXQ              I2CMSTA_MTXQ_Msk
-#define I2CMSTA_MRXQ_Pos          (3U)
-#define I2CMSTA_MRXQ_Msk          (0x1UL << I2CMSTA_MRXQ_Pos)
-#define I2CMSTA_MRXQ              I2CMSTA_MRXQ_Msk
-#define I2CMSTA_MNA_Pos           (4U)
-#define I2CMSTA_MNA_Msk           (0x1UL << I2CMSTA_MNA_Pos)
-#define I2CMSTA_MNA               I2CMSTA_MNA_Msk
+#define I2CMSTA_TFSTA_Pos         (0U)
+#define I2CMSTA_TFSTA_Msk         (0x3UL << I2CMSTA_TFSTA_Pos)
+#define I2CMSTA_TFSTA             I2CMSTA_TFSTA_Msk
+#define I2CMSTA_TFSTA_0           (0x1UL << I2CMSTA_TFSTA_Pos)
+#define I2CMSTA_TFSTA_1           (0x2UL << I2CMSTA_TFSTA_Pos)
+#define I2CMSTA_TXQ_Pos           (2U)
+#define I2CMSTA_TXQ_Msk           (0x1UL << I2CMSTA_TXQ_Pos)
+#define I2CMSTA_TXQ               I2CMSTA_TXQ_Msk
+#define I2CMSTA_RXQ_Pos           (3U)
+#define I2CMSTA_RXQ_Msk           (0x1UL << I2CMSTA_RXQ_Pos)
+#define I2CMSTA_RXQ               I2CMSTA_RXQ_Msk
+#define I2CMSTA_NADDR_Pos         (4U)
+#define I2CMSTA_NADDR_Msk         (0x1UL << I2CMSTA_NADDR_Pos)
+#define I2CMSTA_NADDR             I2CMSTA_NADDR_Msk
 #define I2CMSTA_AL_Pos            (5U)
 #define I2CMSTA_AL_Msk            (0x1UL << I2CMSTA_AL_Pos)
 #define I2CMSTA_AL                I2CMSTA_AL_Msk
-#define I2CMSTA_MBUSY_Pos         (6U)
-#define I2CMSTA_MBUSY_Msk         (0x1UL << I2CMSTA_MBUSY_Pos)
-#define I2CMSTA_MBUSY             I2CMSTA_MBUSY_Msk
-#define I2CMSTA_MNACK_Pos         (7U)
-#define I2CMSTA_MNACK_Msk         (0x1UL << I2CMSTA_MNACK_Pos)
-#define I2CMSTA_MNACK             I2CMSTA_MNACK_Msk
-#define I2CMSTA_MTC_Pos           (8U)
-#define I2CMSTA_MTC_Msk           (0x1UL << I2CMSTA_MTC_Pos)
-#define I2CMSTA_MTC               I2CMSTA_MTC_Msk
-#define I2CMSTA_MRXFO_Pos         (9U)
-#define I2CMSTA_MRXFO_Msk         (0x1UL << I2CMSTA_MRXFO_Pos)
-#define I2CMSTA_MRXFO             I2CMSTA_MRXFO_Msk
+#define I2CMSTA_BUSY_Pos          (6U)
+#define I2CMSTA_BUSY_Msk          (0x1UL << I2CMSTA_BUSY_Pos)
+#define I2CMSTA_BUSY              I2CMSTA_BUSY_Msk
+#define I2CMSTA_NDATA_Pos         (7U)
+#define I2CMSTA_NDATA_Msk         (0x1UL << I2CMSTA_NDATA_Pos)
+#define I2CMSTA_NDATA             I2CMSTA_NDATA_Msk
+#define I2CMSTA_TC_Pos            (8U)
+#define I2CMSTA_TC_Msk            (0x1UL << I2CMSTA_TC_Pos)
+#define I2CMSTA_TC                I2CMSTA_TC_Msk
+#define I2CMSTA_RXFO_Pos          (9U)
+#define I2CMSTA_RXFO_Msk          (0x1UL << I2CMSTA_RXFO_Pos)
+#define I2CMSTA_RXFO              I2CMSTA_RXFO_Msk
 #define I2CMSTA_BBUSY_Pos         (10U)
 #define I2CMSTA_BBUSY_Msk         (0x1UL << I2CMSTA_BBUSY_Pos)
 #define I2CMSTA_BBUSY             I2CMSTA_BBUSY_Msk
@@ -695,6 +695,10 @@ typedef struct I2C_s {
 #define I2CMCNT0_RCNT_Pos         (0U)
 #define I2CMCNT0_RCNT_Msk         (0xFFUL << I2CMCNT0_RCNT_Pos)
 #define I2CMCNT0_RCNT             I2CMCNT0_RCNT_Msk
+
+#define I2CMCNT0_RECNT_Pos        (8U)
+#define I2CMCNT0_RECNT_Msk        (0x1UL << I2CMCNT0_RECNT_Pos)
+#define I2CMCNT0_RECNT            I2CMCNT0_RECNT_Msk
 
 /*******************  Bit definition for I2CMCNT1 register  *******************/
 #define I2CMCNT1_Pos              (0U)

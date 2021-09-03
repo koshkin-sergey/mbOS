@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 
-#include <asm/Driver_GPIO.h>
 #include <stddef.h>
-#include "asm/aduc7023.h"
+#include <asm/aduc7023.h>
+#include <Driver/GPIO_ADUC7023.h>
 
 typedef const struct _GPIO_RESOURCES {
   __IOM uint32_t *CON;
