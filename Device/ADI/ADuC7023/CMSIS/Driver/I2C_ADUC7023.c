@@ -55,9 +55,9 @@ static const ARM_I2C_CAPABILITIES DriverCapabilities = {
   0,           /* supports 10-bit addressing */
 };
 
-static const GPIO_PIN_CFG_t out_pin_cfg = {
-    GPIO_PIN_FUNC_0, GPIO_MODE_OUTPUT, GPIO_PULL_DISABLE, GPIO_STRENGTH_MEDIUM
-};
+//static const GPIO_PIN_CFG_t out_pin_cfg = {
+//    GPIO_PIN_FUNC_0, GPIO_MODE_OUTPUT, GPIO_PULL_DISABLE, GPIO_STRENGTH_MEDIUM
+//};
 
 static const GPIO_PIN_CFG_t in_pin_cfg = {
     GPIO_PIN_FUNC_0, GPIO_MODE_INPUT, GPIO_PULL_DISABLE, GPIO_STRENGTH_MEDIUM
@@ -65,12 +65,12 @@ static const GPIO_PIN_CFG_t in_pin_cfg = {
 
 #if defined(USE_I2C0)
 /* I2C0 Information (Run-Time) */
-static I2C_INFO      I2C0_Info;
-static I2C_RESOURCES I2C0_Resources;
+static I2C_INFO I2C0_Info;
 
 static I2C_PIN I2C0_scl = {
     I2C0_SCL_GPIO_PORT, I2C0_SCL_GPIO_PIN, I2C0_SCL_GPIO_FUNC
 };
+
 static I2C_PIN I2C0_sda = {
     I2C0_SDA_GPIO_PORT, I2C0_SDA_GPIO_PIN, I2C0_SDA_GPIO_FUNC
 };
@@ -99,12 +99,12 @@ static I2C_RESOURCES I2C0_Resources = {
 
 #if defined(USE_I2C1)
 /* I2C1 Information (Run-Time) */
-static I2C_INFO      I2C1_Info;
-static I2C_RESOURCES I2C1_Resources;
+static I2C_INFO I2C1_Info;
 
 static I2C_PIN I2C1_scl = {
     I2C1_SCL_GPIO_PORT, I2C1_SCL_GPIO_PIN, I2C1_SCL_GPIO_FUNC
 };
+
 static I2C_PIN I2C1_sda = {
     I2C1_SDA_GPIO_PORT, I2C1_SDA_GPIO_PIN, I2C1_SDA_GPIO_FUNC
 };
@@ -474,9 +474,9 @@ int32_t I2C_MasterReceive(uint32_t       addr,
   info->status.bus_error        = 0U;
   info->status.arbitration_lost = 0U;
 
-  info->tx.data                 = data;
-  info->tx.num                  = (int32_t)num;
-  info->tx.cnt                  = 0U;
+  info->rx.data                 = data;
+  info->rx.num                  = (int32_t)num;
+  info->rx.cnt                  = 0U;
 
   info->ctrl                    = 0U;
 
@@ -687,14 +687,16 @@ int32_t I2C_Control(uint32_t control, uint32_t arg, I2C_RESOURCES *i2c)
       return (ARM_DRIVER_ERROR_UNSUPPORTED);
 
     case ARM_I2C_ABORT_TRANSFER:
-      /* Disable peripheral interrupts */
+      /* Disable peripheral (I2C lines will be released */
+      val = reg->MCON;
+      reg->MCON = 0U;
+      (void)reg->MSTA;
+      reg->MCON = val;
 
-      if (info->status.mode != 0U) {
-        /* Master generates stop after the current byte transfer */
-      }
-      else {
-        /* Slave receiver will send NACK */
-      }
+      val = reg->SCON;
+      reg->SCON = 0U;
+      (void)reg->SSTA;
+      reg->SCON = val;
 
       info->rx.num                  = 0;
       info->rx.cnt                  = 0;
@@ -709,12 +711,6 @@ int32_t I2C_Control(uint32_t control, uint32_t arg, I2C_RESOURCES *i2c)
       info->status.general_call     = 0U;
       info->status.arbitration_lost = 0U;
       info->status.bus_error        = 0U;
-
-      /* Disable peripheral (I2C lines will be released */
-
-      /* Clear pending interrupts */
-
-      /* Restore settings and enable peripheral */
       break;
 
     default:
@@ -760,8 +756,14 @@ void I2C_Master_IRQHandler(I2C_RESOURCES *i2c)
       if (tx->cnt < tx->num) {
         reg->MTX = tx->data[tx->cnt++];
       }
+      else if (tx->dummy_cnt == 0U) {
+        reg->MTX = DUMMY_BYTE;
+        tx->dummy_cnt++;
+      }
       else {
         reg->MCON &= ~I2CMCON_MTENI;
+        reg->FSTA = I2CFSTA_FMTX;
+        tx->dummy_cnt = 0U;
         if ((info->ctrl & XFER_CTRL_XPENDING) != 0U) {
           info->status.busy = 0U;
           event = ARM_I2C_EVENT_TRANSFER_DONE;
@@ -788,7 +790,7 @@ void I2C_Master_IRQHandler(I2C_RESOURCES *i2c)
       fifo_cnt = GetFifoCntMasterTx(reg);
       if (fifo_cnt != 0U) {
         reg->FSTA = I2CFSTA_FMTX;
-        tx->cnt -= fifo_cnt;
+        tx->cnt -= (fifo_cnt - tx->dummy_cnt);
       }
     }
     else if ((status & I2CMSTA_AL) != 0U) {
