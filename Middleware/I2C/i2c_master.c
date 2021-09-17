@@ -1,16 +1,25 @@
-/**
- * Copyright (C) 2021 Sergey Koshkin <skoshkin@neoros.ru>
- * All rights reserved
+/*
+ * Copyright (C) 2021 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * All rights reserved.
  *
- * File Name  : i2c_master.c
- * Description: Definitions for I2C Interface
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * Licensed under the Apache License, Version 2.0 (the License); you may
+ * not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an AS IS BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 /*******************************************************************************
  *  includes
  ******************************************************************************/
-
-#include <Kernel/kernel.h>
 
 #include "i2c_master.h"
 
@@ -171,10 +180,15 @@ int32_t WaitOperation(I2C_PortResources_t *port, int32_t err, uint32_t timeout)
  *  function implementations (scope: module-exported)
  ******************************************************************************/
 
-int32_t I2C_OpenPort(uint32_t port_num)
+/**
+ * @brief       Open I2C Port
+ * @param[in]   port_num  port number (hardware specific)
+ * @return      I2C_OK              - Operation succeeded
+ *              I2C_ERROR_RESOURCE  - Resource error
+ *              I2C_ERROR_PARAMETER - Parameter error
+ */
+int32_t I2C_PortOpen(uint32_t port_num)
 {
-  osSemaphoreAttr_t    sem_attr;
-  osEventFlagsAttr_t   evf_attr;
   I2C_PortResources_t *port;
 
   port = GetPort(port_num);
@@ -188,19 +202,23 @@ int32_t I2C_OpenPort(uint32_t port_num)
   }
 
   /* Create Access Semaphore */
-  sem_attr.name      = NULL;
-  sem_attr.attr_bits = 0U;
-  sem_attr.cb_mem    = &port->info->access_sem;
-  sem_attr.cb_size   = sizeof(port->info->access_sem);
+  osSemaphoreAttr_t sem_attr = {
+    .name      = NULL,
+    .attr_bits = 0U,
+    .cb_mem    = &port->info->access_sem,
+    .cb_size   = sizeof(port->info->access_sem),
+  };
   if (osSemaphoreNew(1U, 0U, &sem_attr) == NULL) {
     return (I2C_ERROR_RESOURCE);
   }
 
   /* Create Event Flags */
-  evf_attr.name      = NULL;
-  evf_attr.attr_bits = 0U;
-  evf_attr.cb_mem    = &port->info->event_flags;
-  evf_attr.cb_size   = sizeof(port->info->event_flags);
+  osEventFlagsAttr_t evf_attr = {
+    .name      = NULL,
+    .attr_bits = 0U,
+    .cb_mem    = &port->info->event_flags,
+    .cb_size   = sizeof(port->info->event_flags),
+  };
   if (osEventFlagsNew(&evf_attr) == NULL) {
     return (I2C_ERROR_RESOURCE);
   }
@@ -210,12 +228,19 @@ int32_t I2C_OpenPort(uint32_t port_num)
 
   port->info->curr_com    = NULL;
   port->info->status.open = 1U;
+
   osSemaphoreRelease(&port->info->access_sem);
 
   return (I2C_OK);
 }
 
-int32_t I2C_ClosePort(uint32_t port_num)
+/**
+ * @brief       Close I2C Port
+ * @param[in]   port_num  port number (hardware specific)
+ * @return      I2C_OK              - Operation succeeded
+ *              I2C_ERROR_PARAMETER - Parameter error
+ */
+int32_t I2C_PortClose(uint32_t port_num)
 {
   I2C_PortResources_t *port;
 
@@ -239,8 +264,20 @@ int32_t I2C_ClosePort(uint32_t port_num)
   return (I2C_OK);
 }
 
-int32_t I2C_CreateCom(uint32_t        port_num,
-                      I2C_Com_t      *com,
+/**
+ * @brief       Create Communication on I2C port
+ * @param[in]   com         COM handle pointer
+ * @param[in]   port_num    Port number (hardware specific)
+ * @param[in]   bus_speed   Bus Speed
+ * @param[in]   slave_addr  Slave address
+ * @param[in]   timeout     Timeout for performing an operation in OS ticks
+ * @return      I2C_OK              - Operation succeeded
+ *              I2C_ERROR           - Unspecified error
+ *              I2C_ERROR_RESOURCE  - Resource error
+ *              I2C_ERROR_PARAMETER - Parameter error
+ */
+int32_t I2C_ComCreate(I2C_Com_t      *com,
+                      uint32_t        port_num,
                       I2C_BusSpeed_t  bus_speed,
                       uint32_t        slave_addr,
                       uint32_t        timeout)
@@ -297,7 +334,52 @@ int32_t I2C_CreateCom(uint32_t        port_num,
   return (rc);
 }
 
-int32_t I2C_Write(I2C_Com_t *com, uint8_t *buf, uint32_t buf_size)
+/**
+ * @brief       Lock Communication on I2C port
+ * @param[in]   com   COM handle pointer
+ * @return      I2C_OK              - Operation succeeded
+ *              I2C_ERROR_RESOURCE  - Resource error
+ */
+int32_t I2C_ComLock(I2C_Com_t *com)
+{
+  int32_t rc = I2C_OK;
+
+  if (osSemaphoreAcquire(&com->access_sem, osWaitForever) != osOK) {
+    rc = I2C_ERROR_RESOURCE;
+  }
+
+  return (rc);
+}
+
+/**
+ * @brief       Unlock Communication on I2C port
+ * @param[in]   com   COM handle pointer
+ * @return      I2C_OK              - Operation succeeded
+ *              I2C_ERROR_RESOURCE  - Resource error
+ */
+int32_t I2C_ComUnLock(I2C_Com_t *com)
+{
+  int32_t rc = I2C_OK;
+
+  if (osSemaphoreRelease(&com->access_sem) != osOK) {
+    rc = I2C_ERROR_RESOURCE;
+  }
+
+  return (rc);
+}
+
+/**
+ * @brief       Write buffer on I2C COM
+ * @param[in]   com       COM handle pointer
+ * @param[in]   buf       Pointer to buffer to write
+ * @param[in]   buf_size  Bytes to write
+ * @return      I2C_OK              - Operation succeeded
+ *              I2C_ERROR           - Unspecified error
+ *              I2C_ERROR_RESOURCE  - Resource error
+ *              I2C_ERROR_PARAMETER - Parameter error
+ *              I2C_ERROR_TIMEOUT   - Timeout occurred
+ */
+int32_t I2C_Write(I2C_Com_t *com, const uint8_t *buf, uint32_t buf_size)
 {
    int32_t rc;
    int32_t err;
@@ -305,10 +387,6 @@ int32_t I2C_Write(I2C_Com_t *com, uint8_t *buf, uint32_t buf_size)
 
   if (com == NULL || buf == NULL || buf_size == 0U) {
     return (I2C_ERROR_PARAMETER);
-  }
-
-  if (osSemaphoreAcquire(&com->access_sem, osWaitForever) != osOK) {
-    return (I2C_ERROR_RESOURCE);
   }
 
   I2C_PortResources_t *port = GetPort(com->port_num);
@@ -345,11 +423,22 @@ int32_t I2C_Write(I2C_Com_t *com, uint8_t *buf, uint32_t buf_size)
     rc = I2C_ERROR_RESOURCE;
   }
 
-  osSemaphoreRelease(&com->access_sem);
-
   return (rc);
 }
 
+/**
+ * @brief       Read buffer on I2C COM
+ * @param[in]   com         COM handle pointer
+ * @param[in]   addr        Peripheral start address
+ * @param[in]   addr_size   Number of bytes of start address
+ * @param[out]  buf         Pointer to buffer to fill
+ * @param[out   buf_size    Bytes to receive
+ * @return      I2C_OK              - Operation succeeded
+ *              I2C_ERROR           - Unspecified error
+ *              I2C_ERROR_RESOURCE  - Resource error
+ *              I2C_ERROR_PARAMETER - Parameter error
+ *              I2C_ERROR_TIMEOUT   - Timeout occurred
+ */
 int32_t I2C_Read(I2C_Com_t *com,
                  uint32_t   addr,
                  uint32_t   addr_size,
@@ -363,10 +452,6 @@ int32_t I2C_Read(I2C_Com_t *com,
 
   if (com == NULL || buf == NULL || buf_size == 0U || addr_size > 4U) {
     return (I2C_ERROR_PARAMETER);
-  }
-
-  if (osSemaphoreAcquire(&com->access_sem, osWaitForever) != osOK) {
-    return (I2C_ERROR);
   }
 
   I2C_PortResources_t *port = GetPort(com->port_num);
@@ -416,8 +501,6 @@ int32_t I2C_Read(I2C_Com_t *com,
   else {
     rc = I2C_ERROR;
   }
-
-  osSemaphoreRelease(&com->access_sem);
 
   return (rc);
 }
