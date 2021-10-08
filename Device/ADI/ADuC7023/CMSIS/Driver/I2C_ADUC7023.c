@@ -873,8 +873,9 @@ void I2C_Slave_IRQHandler(I2C_RESOURCES *i2c)
           info->status.direction = I2C_DIR_TX;
           info->status.busy = 1U;
         }
-
-        reg->STX = tx->data[tx->cnt++];
+        else {
+          reg->STX = tx->data[tx->cnt++];
+        }
       }
       else if (tx->dummy_cnt == 0U) {
         reg->STX = DUMMY_BYTE;
