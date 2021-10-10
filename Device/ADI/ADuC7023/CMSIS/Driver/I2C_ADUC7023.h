@@ -112,11 +112,13 @@ ARM_DRIVER_I2C Driver_I2C##x = { \
 #define I2C_POWER             ((uint16_t)0x02)    // I2C powered on
 #define I2C_SETUP             ((uint16_t)0x04)    // I2C Master configured, clock set
 
-#define I2C_MODE_SLAVE        ((uint8_t)0x00)     // Mode: slave
-#define I2C_MODE_MASTER       ((uint8_t)0x01)     // Mode: master
-
-#define I2C_DIR_TX            ((uint8_t)0x00)     // Direction: transmitter
-#define I2C_DIR_RX            ((uint8_t)0x01)     // Direction: receiver
+/* I2C status flags definitions */
+#define I2C_BUSY              (1UL << 0U)
+#define I2C_MASTER            (1UL << 1U)
+#define I2C_RECEIVER          (1UL << 2U)
+#define I2C_GENERAL_CALL      (1UL << 3U)
+#define I2C_ARBITRATION_LOST  (1UL << 4U)
+#define I2C_BUS_ERROR         (1UL << 5U)
 
 /* Transfer status flags definitions */
 #define XFER_CTRL_XPENDING    ((uint16_t)0x0001)  // Transfer pending
@@ -157,7 +159,7 @@ typedef struct _I2C_TX_XFER_INFO {
 /* I2C Information (Run-Time) */
 typedef struct _I2C_INFO {
   ARM_I2C_SignalEvent_t cb_event;           // Event Callback
-  ARM_I2C_STATUS        status;             // Status flags
+  uint32_t              status;             // Status flags
   I2C_RX_XFER_INFO      rx;                 // RX transfer information
   I2C_TX_XFER_INFO      tx;                 // TX transfer information
   uint16_t              flags;              // Current I2C state flags
