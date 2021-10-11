@@ -35,7 +35,6 @@
 #define I2CCLK_400K_DIVL    ((uint16_t) (0x3CU << 0U))
 #define I2CCLK_400K_DIVH    ((uint16_t) (0x28U << 8U))
 
-#define FIFO_SIZE           (2U)
 #define DUMMY_BYTE          ((uint8_t)0xFF)
 
 #define ARM_I2C_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(1,0) /* driver version */
@@ -516,10 +515,17 @@ int32_t I2C_SlaveTransmit(const uint8_t *data, uint32_t num, I2C_RESOURCES *i2c)
 
   /* Flush the Slave TX FIFO */
   reg->FSTA = I2CFSTA_FSTX;
+
   /* Fill the Slave TX FIFO */
-  while (tx->cnt < tx->num && tx->cnt < FIFO_SIZE) {
+  reg->STX = tx->data[tx->cnt++];
+  if (tx->cnt == tx->num) {
+    reg->STX = DUMMY_BYTE;
+    tx->dummy_cnt++;
+  }
+  else {
     reg->STX = tx->data[tx->cnt++];
   }
+
   /* Enable TX interrupt */
   reg->SCON |= I2CSCON_STXENI;
 
@@ -858,14 +864,18 @@ void I2C_Slave_IRQHandler(I2C_RESOURCES *i2c)
         if (info->cb_event != NULL) {
           info->cb_event(ARM_I2C_EVENT_SLAVE_TRANSMIT);
         }
+
+        if (tx->num == 0U) {
+          return;
+        }
       }
 
-      if (tx->cnt < tx->num) {
-        if ((info->xfer_ctrl & XFER_CTRL_ADDR_DONE) == 0U) {
-          info->xfer_ctrl |= XFER_CTRL_ADDR_DONE;
-          info->status    |= I2C_BUSY;
-        }
+      if ((info->xfer_ctrl & XFER_CTRL_ADDR_DONE) == 0U) {
+        info->xfer_ctrl |= XFER_CTRL_ADDR_DONE;
+        info->status    |= I2C_BUSY;
+      }
 
+      if (tx->cnt != tx->num) {
         reg->STX = tx->data[tx->cnt++];
       }
       else if (tx->dummy_cnt == 0U) {
