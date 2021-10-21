@@ -210,7 +210,7 @@ static void *svcMemoryPoolAlloc(osMemoryPoolId_t mp_id, uint32_t timeout)
   /* Allocate memory */
   block = krnMemoryPoolAlloc(&mp->info);
   if (block == NULL && timeout != 0U) {
-    block = (void *)krnThreadWaitEnter(&mp->wait_queue, timeout);
+    block = (void *)krnThreadWaitEnter(ThreadWaitingMemoryPool, &mp->wait_queue, timeout);
     if (block == (void *)osErrorTimeout) {
       block = NULL;
     }

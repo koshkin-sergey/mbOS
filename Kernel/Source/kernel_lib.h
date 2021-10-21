@@ -50,11 +50,22 @@
 #define FLAGS_POST_PROC             (uint8_t)(1U << 0U)
 
 /* Thread State definitions */
-#define ThreadStateInactive         ((uint8_t)osThreadInactive)
-#define ThreadStateReady            ((uint8_t)osThreadReady)
-#define ThreadStateRunning          ((uint8_t)osThreadRunning)
-#define ThreadStateBlocked          ((uint8_t)osThreadBlocked)
-#define ThreadStateTerminated       ((uint8_t)osThreadTerminated)
+#define ThreadStateMask             (0x0FU)
+
+#define ThreadInactive              ((uint8_t)osThreadInactive)
+#define ThreadReady                 ((uint8_t)osThreadReady)
+#define ThreadRunning               ((uint8_t)osThreadRunning)
+#define ThreadBlocked               ((uint8_t)osThreadBlocked)
+#define ThreadTerminated            ((uint8_t)osThreadTerminated)
+
+#define ThreadWaitingThreadFlags    ((uint8_t)(ThreadBlocked | 0x10U))
+#define ThreadWaitingEventFlags     ((uint8_t)(ThreadBlocked | 0x20U))
+#define ThreadWaitingMutex          ((uint8_t)(ThreadBlocked | 0x30U))
+#define ThreadWaitingSemaphore      ((uint8_t)(ThreadBlocked | 0x40U))
+#define ThreadWaitingMemoryPool     ((uint8_t)(ThreadBlocked | 0x50U))
+#define ThreadWaitingQueueGet       ((uint8_t)(ThreadBlocked | 0x60U))
+#define ThreadWaitingQueuePut       ((uint8_t)(ThreadBlocked | 0x70U))
+#define ThreadWaitingDelay          ((uint8_t)(ThreadBlocked | 0x80U))
 
 #define container_of(ptr, type, member) ((type *)(void *)((uint8_t *)(ptr) - offsetof(type, member)))
 
@@ -141,10 +152,11 @@ void krnThreadWaitExit(osThread_t *thread, uint32_t ret_val, dispatch_t dispatch
 
 /**
  * @brief       Enter Thread wait state.
+ * @param[in]   state     New thread state.
  * @param[out]  wait_que  Pointer to wait queue.
  * @param[in]   timeout   Timeout
  */
-osStatus_t krnThreadWaitEnter(queue_t *wait_que, uint32_t timeout);
+osStatus_t krnThreadWaitEnter(uint8_t state, queue_t *wait_que, uint32_t timeout);
 
 /**
  * @brief

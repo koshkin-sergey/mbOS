@@ -150,7 +150,7 @@ static osStatus_t svcSemaphoreAcquire(osSemaphoreId_t semaphore_id, uint32_t tim
   status = SemaphoreTokenDecrement(sem);
   if ((status == osErrorResource) && (timeout != 0U)) {
     /* No token available */
-    status = krnThreadWaitEnter(&sem->wait_queue, timeout);
+    status = krnThreadWaitEnter(ThreadWaitingSemaphore, &sem->wait_queue, timeout);
   }
 
   return (status);

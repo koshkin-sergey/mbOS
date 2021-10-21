@@ -218,7 +218,7 @@ static uint32_t svcEventFlagsWait(osEventFlagsId_t ef_id, uint32_t flags, uint32
 
   if (event_flags == 0U) {
     if (timeout != 0U) {
-      event_flags = (uint32_t)krnThreadWaitEnter(&evf->wait_queue, timeout);
+      event_flags = (uint32_t)krnThreadWaitEnter(ThreadWaitingEventFlags, &evf->wait_queue, timeout);
       if (event_flags != (uint32_t)osErrorTimeout) {
         winfo          = &ThreadGetRunning()->winfo.event;
         winfo->options = options;

@@ -98,7 +98,7 @@ static void ThreadReadyAdd(osThread_t *thread)
   /* Remove the thread from any queue */
   QueueRemoveEntry(&thread->thread_que);
 
-  thread->state = ThreadStateReady;
+  thread->state = ThreadReady;
   /* Add the thread to the end of ready queue */
   QueueAppend(&osInfo.ready_list[priority], &thread->thread_que);
   osInfo.ready_to_run_bmp |= (1UL << priority);
@@ -247,7 +247,7 @@ osThreadState_t svcThreadGetState(osThreadId_t thread_id)
     return (osThreadError);
   }
 
-  return ((osThreadState_t)thread->state);
+  return ((osThreadState_t)(thread->state & ThreadStateMask));
 }
 
 static
@@ -296,7 +296,7 @@ static osStatus_t svcThreadSetPriority(osThreadId_t thread_id, osPriority_t prio
   }
 
   /* Check object state */
-  if (thread->state == ThreadStateTerminated) {
+  if (thread->state == ThreadTerminated) {
     return (osErrorResource);
   }
 
@@ -319,7 +319,7 @@ static osPriority_t svcThreadGetPriority(osThreadId_t thread_id)
   }
 
   /* Check object state */
-  if (thread->state == ThreadStateTerminated) {
+  if (thread->state == ThreadTerminated) {
     return (osPriorityError);
   }
 
@@ -341,7 +341,7 @@ static osStatus_t svcThreadYield(void)
     QueueRemoveEntry(&thread_running->thread_que);
 
     if (!isQueueEmpty(que)) {
-      thread_running->state = ThreadStateReady;
+      thread_running->state = ThreadReady;
       krnThreadSwitch(GetThreadByQueue(que->next));
     }
 
@@ -363,34 +363,34 @@ osStatus_t svcThreadSuspend(osThreadId_t thread_id)
     return (osErrorParameter);
   }
 
-  switch (thread->state) {
-    case ThreadStateRunning:
+  switch (thread->state & ThreadStateMask) {
+    case ThreadRunning:
       if (osInfo.kernel.state != osKernelRunning ||
           osInfo.ready_to_run_bmp == 0U) {
         status = osErrorResource;
       }
       else {
         ThreadReadyDel(thread);
-        thread->state = ThreadStateBlocked;
+        thread->state = ThreadBlocked;
         thread = krnThreadHighestPrioGet();
         krnThreadSwitch(thread);
       }
       break;
 
-    case ThreadStateReady:
+    case ThreadReady:
       ThreadReadyDel(thread);
-      thread->state = ThreadStateBlocked;
+      thread->state = ThreadBlocked;
       break;
 
-    case ThreadStateBlocked:
+    case ThreadBlocked:
       /* Remove the thread from delay queue */
       QueueRemoveEntry(&thread->delay_que);
       /* Remove the thread from wait queue */
       QueueRemoveEntry(&thread->thread_que);
       break;
 
-    case ThreadStateTerminated:
-    case ThreadStateInactive:
+    case ThreadTerminated:
+    case ThreadInactive:
     default:
       status = osErrorResource;
       break;
@@ -409,7 +409,7 @@ static osStatus_t svcThreadResume(osThreadId_t thread_id)
   }
 
   /* Check object state */
-  if (thread->state != ThreadStateBlocked) {
+  if ((thread->state & ThreadStateMask) != ThreadBlocked) {
     return (osErrorResource);
   }
 
@@ -435,7 +435,7 @@ static void svcThreadExit(void)
 
   ThreadReadyDel(thread);
   krnThreadSwitch(krnThreadHighestPrioGet());
-  thread->state = ThreadStateInactive;
+  thread->state = ThreadInactive;
   thread->id = ID_INVALID;
 }
 
@@ -450,8 +450,8 @@ static osStatus_t svcThreadTerminate(osThreadId_t thread_id)
   }
 
   /* Check object state */
-  switch (thread->state) {
-    case ThreadStateRunning:
+  switch (thread->state & ThreadStateMask) {
+    case ThreadRunning:
       if (osInfo.kernel.state != osKernelRunning ||
           osInfo.ready_to_run_bmp == 0U) {
         status = osErrorResource;
@@ -461,19 +461,19 @@ static osStatus_t svcThreadTerminate(osThreadId_t thread_id)
       }
       break;
 
-    case ThreadStateReady:
+    case ThreadReady:
       ThreadReadyDel(thread);
       break;
 
-    case ThreadStateBlocked:
+    case ThreadBlocked:
       /* Remove the thread from delay queue */
       QueueRemoveEntry(&thread->delay_que);
       /* Remove the thread from wait queue */
       QueueRemoveEntry(&thread->thread_que);
       break;
 
-    case ThreadStateInactive:
-    case ThreadStateTerminated:
+    case ThreadInactive:
+    case ThreadTerminated:
     default:
       status = osErrorResource;
       break;
@@ -483,14 +483,14 @@ static osStatus_t svcThreadTerminate(osThreadId_t thread_id)
     /* Release owned Mutexes */
     krnMutexOwnerRelease(&thread->mutex_que);
 
-    if (thread->state == ThreadStateRunning) {
+    if (thread->state == ThreadRunning) {
       krnThreadSwitch(krnThreadHighestPrioGet());
     }
     else {
       krnThreadDispatch(NULL);
     }
 
-    thread->state = ThreadStateInactive;
+    thread->state = ThreadInactive;
     thread->id = ID_INVALID;
   }
 
@@ -521,19 +521,27 @@ static uint32_t svcThreadFlagsSet(osThreadId_t thread_id, uint32_t flags)
     return (osFlagsErrorParameter);
   }
 
+  /* Check object state */
+  if (thread->state == ThreadTerminated) {
+    return ((uint32_t)osErrorResource);
+  }
+
   /* Set Thread Flags */
   thread_flags = ThreadFlagsSet(thread, flags);
 
-  /* Check Thread Flags */
-  pattern = ThreadFlagsCheck(thread, thread->winfo.thread.flags, thread->winfo.thread.options);
-  if (pattern != 0U) {
-    if ((thread->winfo.thread.options & osFlagsNoClear) == 0U) {
-      thread_flags = pattern & ~thread->winfo.thread.flags;
+  /* Check if Thread is waiting for Thread Flags */
+  if (thread->state == ThreadWaitingThreadFlags) {
+    /* Check Thread Flags */
+    pattern = ThreadFlagsCheck(thread, thread->winfo.thread.flags, thread->winfo.thread.options);
+    if (pattern != 0U) {
+      if ((thread->winfo.thread.options & osFlagsNoClear) == 0U) {
+        thread_flags = pattern & ~thread->winfo.thread.flags;
+      }
+      else {
+        thread_flags = pattern;
+      }
+      krnThreadWaitExit(thread, pattern, DISPATCH_YES);
     }
-    else {
-      thread_flags = pattern;
-    }
-    krnThreadWaitExit(thread, pattern, DISPATCH_YES);
   }
 
   return (thread_flags);
@@ -573,7 +581,7 @@ static uint32_t svcThreadFlagsWait(uint32_t flags, uint32_t options, uint32_t ti
   thread_flags = ThreadFlagsCheck(thread, flags, options);
   if (thread_flags == 0U) {
     if (timeout != 0U) {
-      thread_flags = (uint32_t)krnThreadWaitEnter(NULL, timeout);
+      thread_flags = (uint32_t)krnThreadWaitEnter(ThreadWaitingThreadFlags, NULL, timeout);
       if (thread_flags != (uint32_t)osErrorTimeout) {
         winfo          = &thread->winfo.thread;
         winfo->options = options;
@@ -629,10 +637,13 @@ void krnThreadFlagsPostProcess(osObject_t *obj)
   /* Get Thread */
   thread = GetThreadByObject(obj);
 
-  /* Check Thread Flags */
-  pattern = ThreadFlagsCheck(thread, thread->winfo.thread.flags, thread->winfo.thread.options);
-  if (pattern != 0U) {
-    krnThreadWaitExit(thread, pattern, DISPATCH_NO);
+  /* Check if Thread is waiting for Thread Flags */
+  if (thread->state == ThreadWaitingThreadFlags) {
+    /* Check Thread Flags */
+    pattern = ThreadFlagsCheck(thread, thread->winfo.thread.flags, thread->winfo.thread.options);
+    if (pattern != 0U) {
+      krnThreadWaitExit(thread, pattern, DISPATCH_NO);
+    }
   }
 }
 
@@ -687,10 +698,11 @@ void krnThreadWaitExit(osThread_t *thread, uint32_t ret_val, dispatch_t dispatch
 
 /**
  * @brief       Enter Thread wait state.
+ * @param[in]   state     New thread state.
  * @param[out]  wait_que  Pointer to wait queue.
  * @param[in]   timeout   Timeout
  */
-osStatus_t krnThreadWaitEnter(queue_t *wait_que, uint32_t timeout)
+osStatus_t krnThreadWaitEnter(uint8_t state, queue_t *wait_que, uint32_t timeout)
 {
   queue_t    *que;
   queue_t    *delay_queue;
@@ -704,7 +716,7 @@ osStatus_t krnThreadWaitEnter(queue_t *wait_que, uint32_t timeout)
 
   ThreadReadyDel(thread);
 
-  thread->state = ThreadStateBlocked;
+  thread->state = state;
 
   /* Add to the wait queue */
   if (wait_que != NULL) {
@@ -778,7 +790,7 @@ bool krnThreadDelayTick(void)
 void krnThreadSetPriority(osThread_t *thread, int8_t priority)
 {
   if (thread->priority != priority) {
-    if (thread->state == ThreadStateBlocked) {
+    if ((thread->state & ThreadStateMask) == ThreadBlocked) {
       thread->priority = priority;
     }
     else {
@@ -806,7 +818,7 @@ osThread_t *krnThreadHighestPrioGet(void)
 
 void krnThreadSwitch(osThread_t *thread)
 {
-  thread->state = ThreadStateRunning;
+  thread->state = ThreadRunning;
   osInfo.thread.run.next = thread;
 }
 
@@ -829,7 +841,7 @@ void krnThreadDispatch(osThread_t *thread)
       (thread_running != NULL) &&
       (thread->priority > thread_running->priority)) {
     /* Preempt running Thread */
-    thread_running->state = ThreadStateReady;
+    thread_running->state = ThreadReady;
     krnThreadSwitch(thread);
   }
 }

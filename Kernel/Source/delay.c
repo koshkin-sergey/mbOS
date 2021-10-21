@@ -37,7 +37,7 @@
 static osStatus_t Delay(uint32_t ticks)
 {
   if (ticks != 0U) {
-    krnThreadWaitEnter(NULL, ticks);
+    krnThreadWaitEnter(ThreadWaitingDelay, NULL, ticks);
   }
 
   return (osOK);
@@ -52,7 +52,7 @@ static osStatus_t DelayUntil(uint32_t ticks)
   }
 
   if (ticks != 0U) {
-    krnThreadWaitEnter(NULL, ticks);
+    krnThreadWaitEnter(ThreadWaitingDelay, NULL, ticks);
   }
 
   return (osOK);
