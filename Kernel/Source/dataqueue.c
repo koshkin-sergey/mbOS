@@ -97,23 +97,25 @@ static void DataReset(osDataQueue_t *dq)
 static osDataQueueId_t svcDataQueueNew(uint32_t data_count, uint32_t data_size, const osDataQueueAttr_t *attr)
 {
   osDataQueue_t *dq;
-  void          *dq_mem;
   uint32_t       data_limit;
 
   /* Check parameters */
-  if ((data_count == 0U) || (data_size  == 0U) || (attr == NULL)) {
+  if (data_size == 0U || attr == NULL || (__CLZ(data_count) + __CLZ(data_size)) < 32U) {
     return (NULL);
   }
 
   dq         = attr->cb_mem;
-  dq_mem     = attr->dq_mem;
   data_limit = data_count * data_size;
 
   /* Check parameters */
-  if (((__CLZ(data_count) + __CLZ(data_size)) < 32U) ||
-      (dq == NULL) || (((uint32_t)dq & 3U) != 0U) || (attr->cb_size < sizeof(osDataQueue_t)) ||
-      (dq_mem == NULL) || (attr->dq_size < data_limit)) {
+  if (dq == NULL || ((uint32_t)dq & 3U) != 0U || attr->cb_size < sizeof(osDataQueue_t)) {
     return (NULL);
+  }
+
+  if (data_count != 0U) {
+    if (attr->dq_mem == NULL || attr->dq_size < data_limit) {
+      return (NULL);
+    }
   }
 
   /* Initialize control block */
@@ -126,7 +128,7 @@ static osDataQueueId_t svcDataQueueNew(uint32_t data_count, uint32_t data_size, 
   dq->data_limit     = data_limit;
   dq->head           = 0U;
   dq->tail           = 0U;
-  dq->dq_mem         = dq_mem;
+  dq->dq_mem         = attr->dq_mem;
 
   QueueReset(&dq->wait_put_queue);
   QueueReset(&dq->wait_get_queue);
