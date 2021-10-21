@@ -141,11 +141,10 @@ void krnThreadWaitExit(osThread_t *thread, uint32_t ret_val, dispatch_t dispatch
 
 /**
  * @brief       Enter Thread wait state.
- * @param[out]  thread    thread object.
  * @param[out]  wait_que  Pointer to wait queue.
  * @param[in]   timeout   Timeout
  */
-osStatus_t krnThreadWaitEnter(osThread_t *thread, queue_t *wait_que, uint32_t timeout);
+osStatus_t krnThreadWaitEnter(queue_t *wait_que, uint32_t timeout);
 
 /**
  * @brief

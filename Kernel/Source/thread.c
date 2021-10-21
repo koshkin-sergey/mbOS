@@ -573,11 +573,11 @@ static uint32_t svcThreadFlagsWait(uint32_t flags, uint32_t options, uint32_t ti
   thread_flags = ThreadFlagsCheck(thread, flags, options);
   if (thread_flags == 0U) {
     if (timeout != 0U) {
-      thread_flags = (uint32_t)krnThreadWaitEnter(thread, NULL, timeout);
+      thread_flags = (uint32_t)krnThreadWaitEnter(NULL, timeout);
       if (thread_flags != (uint32_t)osErrorTimeout) {
-        winfo = &thread->winfo.thread;
+        winfo          = &thread->winfo.thread;
         winfo->options = options;
-        winfo->flags = flags;
+        winfo->flags   = flags;
       }
     }
     else {
@@ -687,18 +687,20 @@ void krnThreadWaitExit(osThread_t *thread, uint32_t ret_val, dispatch_t dispatch
 
 /**
  * @brief       Enter Thread wait state.
- * @param[out]  thread    thread object.
  * @param[out]  wait_que  Pointer to wait queue.
  * @param[in]   timeout   Timeout
  */
-osStatus_t krnThreadWaitEnter(osThread_t *thread, queue_t *wait_que, uint32_t timeout)
+osStatus_t krnThreadWaitEnter(queue_t *wait_que, uint32_t timeout)
 {
-  queue_t *que;
-  queue_t *delay_queue;
+  queue_t    *que;
+  queue_t    *delay_queue;
+  osThread_t *thread;
 
   if (osInfo.kernel.state != osKernelRunning) {
     return (osErrorTimeout);
   }
+
+  thread = ThreadGetRunning();
 
   ThreadReadyDel(thread);
 

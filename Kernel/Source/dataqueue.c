@@ -175,10 +175,9 @@ static osStatus_t svcDataQueuePut(osDataQueueId_t dq_id, const void *data_ptr, u
       /* No memory available */
       if (timeout != 0U) {
         /* Suspend current Thread */
-        thread = ThreadGetRunning();
-        status = krnThreadWaitEnter(thread, &dq->wait_put_queue, timeout);
+        status = krnThreadWaitEnter(&dq->wait_put_queue, timeout);
         if (status != osErrorTimeout) {
-          thread->winfo.dataque.data_ptr = (uint32_t)data_ptr;
+          ThreadGetRunning()->winfo.dataque.data_ptr = (uint32_t)data_ptr;
         }
       }
       else {
@@ -219,10 +218,9 @@ static osStatus_t svcDataQueueGet(osDataQueueId_t dq_id, void *data_ptr, uint32_
     /* No Message available */
     if (timeout != 0U) {
       /* Suspend current Thread */
-      thread = ThreadGetRunning();
-      status = krnThreadWaitEnter(thread, &dq->wait_get_queue, timeout);
+      status = krnThreadWaitEnter(&dq->wait_get_queue, timeout);
       if (status != osErrorTimeout) {
-        thread->winfo.dataque.data_ptr = (uint32_t)data_ptr;
+        ThreadGetRunning()->winfo.dataque.data_ptr = (uint32_t)data_ptr;
       }
     }
     else {
