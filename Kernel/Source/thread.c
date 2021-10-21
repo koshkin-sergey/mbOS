@@ -611,6 +611,11 @@ uint32_t isrThreadFlagsSet(osThreadId_t thread_id, uint32_t flags)
     return (osFlagsErrorParameter);
   }
 
+  /* Check object state */
+  if (thread->state == ThreadTerminated) {
+    return ((uint32_t)osErrorResource);
+  }
+
   /* Set Thread Flags */
   thread_flags = ThreadFlagsSet(thread, flags);
 
