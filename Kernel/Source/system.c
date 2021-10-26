@@ -63,6 +63,8 @@ static osObject_t* post_queue_get(void)
   queue_t    *que;
   osObject_t *obj;
 
+  BEGIN_CRITICAL_SECTION
+
   que = &osInfo.post_process.queue;
 
   if (!isQueueEmpty(que)) {
@@ -72,6 +74,8 @@ static osObject_t* post_queue_get(void)
   else {
     obj = NULL;
   }
+
+  END_CRITICAL_SECTION
 
   return (obj);
 }
