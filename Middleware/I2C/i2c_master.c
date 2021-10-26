@@ -126,7 +126,7 @@ static void I2C0_SignalEvent(uint32_t event)
 
 #endif
 
-#if defined (USE_I2C0)
+#if defined (USE_I2C1)
 
 static void I2C1_SignalEvent(uint32_t event)
 {
