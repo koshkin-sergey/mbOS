@@ -39,20 +39,19 @@ static bool DataPut(osDataQueue_t *dq, const void *data_ptr)
 {
   bool status = false;
 
-  if (dq->data_count != dq->max_data_count) {
-    BEGIN_CRITICAL_SECTION
+  BEGIN_CRITICAL_SECTION
 
+  if (dq->data_count != dq->max_data_count) {
     memcpy(&dq->dq_mem[dq->head], data_ptr, dq->data_size);
     dq->head += dq->data_size;
     if (dq->head >= dq->data_limit) {
       dq->head = 0U;
     }
     dq->data_count++;
-
-    END_CRITICAL_SECTION
-
     status = true;
   }
+
+  END_CRITICAL_SECTION
 
   return (status);
 }
@@ -61,20 +60,19 @@ static bool DataGet(osDataQueue_t *dq, void *data_ptr)
 {
   bool status = false;
 
-  if (dq->data_count != 0U) {
-    BEGIN_CRITICAL_SECTION
+  BEGIN_CRITICAL_SECTION
 
+  if (dq->data_count != 0U) {
     memcpy(data_ptr, &dq->dq_mem[dq->tail], dq->data_size);
     dq->data_count--;
     dq->tail += dq->data_size;
     if (dq->tail >= dq->data_limit) {
       dq->tail = 0U;
     }
-
-    END_CRITICAL_SECTION
-
     status = true;
   }
+
+  END_CRITICAL_SECTION
 
   return (status);
 }
@@ -100,7 +98,8 @@ static osDataQueueId_t svcDataQueueNew(uint32_t data_count, uint32_t data_size, 
   uint32_t       data_limit;
 
   /* Check parameters */
-  if (data_size == 0U || attr == NULL || (__CLZ(data_count) + __CLZ(data_size)) < 32U) {
+  if (data_count == 0U || data_size == 0U || attr == NULL ||
+      (__CLZ(data_count) + __CLZ(data_size)) < 32U) {
     return (NULL);
   }
 
@@ -108,14 +107,9 @@ static osDataQueueId_t svcDataQueueNew(uint32_t data_count, uint32_t data_size, 
   data_limit = data_count * data_size;
 
   /* Check parameters */
-  if (dq == NULL || ((uint32_t)dq & 3U) != 0U || attr->cb_size < sizeof(osDataQueue_t)) {
+  if (dq == NULL || ((uint32_t)dq & 3U) != 0U || attr->cb_size < sizeof(osDataQueue_t) ||
+      attr->dq_mem == NULL || attr->dq_size < data_limit) {
     return (NULL);
-  }
-
-  if (data_count != 0U) {
-    if (attr->dq_mem == NULL || attr->dq_size < data_limit) {
-      return (NULL);
-    }
   }
 
   /* Initialize control block */
