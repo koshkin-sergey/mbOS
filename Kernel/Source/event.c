@@ -206,7 +206,6 @@ static uint32_t svcEventFlagsGet(osEventFlagsId_t ef_id)
 static uint32_t svcEventFlagsWait(osEventFlagsId_t ef_id, uint32_t flags, uint32_t options, uint32_t timeout)
 {
   osEventFlags_t *evf = (osEventFlags_t *)ef_id;
-  osThread_t     *thread;
   winfo_flags_t  *winfo;
   uint32_t        event_flags;
 
@@ -219,12 +218,11 @@ static uint32_t svcEventFlagsWait(osEventFlagsId_t ef_id, uint32_t flags, uint32
 
   if (event_flags == 0U) {
     if (timeout != 0U) {
-      thread = ThreadGetRunning();
-      event_flags = (uint32_t)krnThreadWaitEnter(thread, &evf->wait_queue, timeout);
+      event_flags = (uint32_t)krnThreadWaitEnter(ThreadWaitingEventFlags, &evf->wait_queue, timeout);
       if (event_flags != (uint32_t)osErrorTimeout) {
-        winfo = &thread->winfo.event;
+        winfo          = &ThreadGetRunning()->winfo.event;
         winfo->options = options;
-        winfo->flags = flags;
+        winfo->flags   = flags;
       }
     }
     else {

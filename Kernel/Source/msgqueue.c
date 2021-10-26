@@ -203,10 +203,9 @@ static osStatus_t svcMessageQueuePut(osMessageQueueId_t mq_id, const void *msg_p
       /* No memory available */
       if (timeout != 0U) {
         /* Suspend current Thread */
-        thread = ThreadGetRunning();
-        status = krnThreadWaitEnter(thread, &mq->wait_put_queue, timeout);
+        status = krnThreadWaitEnter(ThreadWaitingQueuePut, &mq->wait_put_queue, timeout);
         if (status != osErrorTimeout) {
-          winfo = &thread->winfo.msgque;
+          winfo           = &ThreadGetRunning()->winfo.msgque;
           winfo->msg      = (void *)msg_ptr;
           winfo->msg_prio = (uint32_t)msg_prio;
         }
@@ -255,10 +254,9 @@ static osStatus_t svcMessageQueueGet(osMessageQueueId_t mq_id, void *msg_ptr, ui
     /* No Message available */
     if (timeout != 0U) {
       /* Suspend current Thread */
-      thread = ThreadGetRunning();
-      status = krnThreadWaitEnter(thread, &mq->wait_get_queue, timeout);
+      status = krnThreadWaitEnter(ThreadWaitingQueueGet, &mq->wait_get_queue, timeout);
       if (status != osErrorTimeout) {
-        winfo = &thread->winfo.msgque;
+        winfo           = &ThreadGetRunning()->winfo.msgque;
         winfo->msg      = msg_ptr;
         winfo->msg_prio = (uint32_t)msg_prio;
       }

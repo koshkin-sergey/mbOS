@@ -39,20 +39,19 @@ static bool DataPut(osDataQueue_t *dq, const void *data_ptr)
 {
   bool status = false;
 
-  if (dq->data_count != dq->max_data_count) {
-    BEGIN_CRITICAL_SECTION
+  BEGIN_CRITICAL_SECTION
 
+  if (dq->data_count != dq->max_data_count) {
     memcpy(&dq->dq_mem[dq->head], data_ptr, dq->data_size);
     dq->head += dq->data_size;
     if (dq->head >= dq->data_limit) {
       dq->head = 0U;
     }
     dq->data_count++;
-
-    END_CRITICAL_SECTION
-
     status = true;
   }
+
+  END_CRITICAL_SECTION
 
   return (status);
 }
@@ -61,20 +60,19 @@ static bool DataGet(osDataQueue_t *dq, void *data_ptr)
 {
   bool status = false;
 
-  if (dq->data_count != 0U) {
-    BEGIN_CRITICAL_SECTION
+  BEGIN_CRITICAL_SECTION
 
+  if (dq->data_count != 0U) {
     memcpy(data_ptr, &dq->dq_mem[dq->tail], dq->data_size);
     dq->data_count--;
     dq->tail += dq->data_size;
     if (dq->tail >= dq->data_limit) {
       dq->tail = 0U;
     }
-
-    END_CRITICAL_SECTION
-
     status = true;
   }
+
+  END_CRITICAL_SECTION
 
   return (status);
 }
@@ -97,22 +95,20 @@ static void DataReset(osDataQueue_t *dq)
 static osDataQueueId_t svcDataQueueNew(uint32_t data_count, uint32_t data_size, const osDataQueueAttr_t *attr)
 {
   osDataQueue_t *dq;
-  void          *dq_mem;
   uint32_t       data_limit;
 
   /* Check parameters */
-  if ((data_count == 0U) || (data_size  == 0U) || (attr == NULL)) {
+  if (data_count == 0U || data_size == 0U || attr == NULL ||
+      (__CLZ(data_count) + __CLZ(data_size)) < 32U) {
     return (NULL);
   }
 
   dq         = attr->cb_mem;
-  dq_mem     = attr->dq_mem;
   data_limit = data_count * data_size;
 
   /* Check parameters */
-  if (((__CLZ(data_count) + __CLZ(data_size)) < 32U) ||
-      (dq == NULL) || (((uint32_t)dq & 3U) != 0U) || (attr->cb_size < sizeof(osDataQueue_t)) ||
-      (dq_mem == NULL) || (attr->dq_size < data_limit)) {
+  if (dq == NULL || ((uint32_t)dq & 3U) != 0U || attr->cb_size < sizeof(osDataQueue_t) ||
+      attr->dq_mem == NULL || attr->dq_size < data_limit) {
     return (NULL);
   }
 
@@ -126,7 +122,7 @@ static osDataQueueId_t svcDataQueueNew(uint32_t data_count, uint32_t data_size, 
   dq->data_limit     = data_limit;
   dq->head           = 0U;
   dq->tail           = 0U;
-  dq->dq_mem         = dq_mem;
+  dq->dq_mem         = attr->dq_mem;
 
   QueueReset(&dq->wait_put_queue);
   QueueReset(&dq->wait_get_queue);
@@ -149,9 +145,9 @@ static const char *svcDataQueueGetName(osDataQueueId_t dq_id)
 
 static osStatus_t svcDataQueuePut(osDataQueueId_t dq_id, const void *data_ptr, uint32_t timeout)
 {
-  osDataQueue_t    *dq = dq_id;
-  osThread_t       *thread;
-  osStatus_t        status;
+  osStatus_t     status;
+  osThread_t    *thread;
+  osDataQueue_t *dq = dq_id;
 
   /* Check parameters */
   if ((dq == NULL) || (dq->id != ID_DATA_QUEUE) || (data_ptr == NULL)) {
@@ -175,10 +171,9 @@ static osStatus_t svcDataQueuePut(osDataQueueId_t dq_id, const void *data_ptr, u
       /* No memory available */
       if (timeout != 0U) {
         /* Suspend current Thread */
-        thread = ThreadGetRunning();
-        status = krnThreadWaitEnter(thread, &dq->wait_put_queue, timeout);
+        status = krnThreadWaitEnter(ThreadWaitingQueuePut, &dq->wait_put_queue, timeout);
         if (status != osErrorTimeout) {
-          thread->winfo.dataque.data_ptr = (uint32_t)data_ptr;
+          ThreadGetRunning()->winfo.dataque.data_ptr = (uint32_t)data_ptr;
         }
       }
       else {
@@ -219,10 +214,9 @@ static osStatus_t svcDataQueueGet(osDataQueueId_t dq_id, void *data_ptr, uint32_
     /* No Message available */
     if (timeout != 0U) {
       /* Suspend current Thread */
-      thread = ThreadGetRunning();
-      status = krnThreadWaitEnter(thread, &dq->wait_get_queue, timeout);
+      status = krnThreadWaitEnter(ThreadWaitingQueueGet, &dq->wait_get_queue, timeout);
       if (status != osErrorTimeout) {
-        thread->winfo.dataque.data_ptr = (uint32_t)data_ptr;
+        ThreadGetRunning()->winfo.dataque.data_ptr = (uint32_t)data_ptr;
       }
     }
     else {

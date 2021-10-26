@@ -190,7 +190,7 @@ static osStatus_t svcMutexAcquire(osMutexId_t mutex_id, uint32_t timeout)
           }
         }
         /* Suspend current Thread */
-        status = krnThreadWaitEnter(running_thread, &mutex->wait_que, timeout);
+        status = krnThreadWaitEnter(ThreadWaitingMutex, &mutex->wait_que, timeout);
       }
       else {
         status = osErrorResource;
