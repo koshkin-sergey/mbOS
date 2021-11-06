@@ -29,6 +29,34 @@
 #include "system_aduc7023.h"
 
 /**
+ * @brief General-Purpose Timer 32 bits
+ */
+typedef struct GP_TIMER_s {
+  __IOM uint32_t LD;      /*!< Timer load register                            */
+  __IM  uint32_t VAL;     /*!< Timer value register                           */
+  __IOM uint32_t CON;     /*!< Timer control register                         */
+  __OM  uint8_t  CLRI;    /*!< Timer interrupt clear register                 */
+  RESERVED(0[3], uint8_t);
+  __IM  uint32_t CAP;     /*!< Timer capture register                         */
+} GP_TIMER_t;
+
+/**
+ * @brief WatchDog Timer
+ */
+typedef struct WDG_TIMER_s {
+  __IOM uint16_t LD;      /*!< Timer load register                            */
+  RESERVED(0, uint16_t);
+  __IM  uint16_t VAL;     /*!< Timer value register                           */
+  RESERVED(1, uint16_t);
+  __IOM uint16_t CON;     /*!< Timer control register                         */
+  RESERVED(2, uint16_t);
+  __OM  uint8_t  CLRI;    /*!< Timer interrupt clear register                 */
+} WDG_TIMER_t;
+
+/*------------------------------------------------------------------------------
+ *                                IRQ
+ *----------------------------------------------------------------------------*/
+/**
  * @brief Interrupt Number Definition
  */
 typedef enum {
@@ -101,188 +129,6 @@ typedef struct IRQ_s {
                                exception.                                     */
 } IRQ_t;
 
-/**
- * @brief Fast Interrupt Controller
- */
-typedef struct FIQ_s {
-  __IM  uint32_t STA;     /*!< Active FIQ source */
-  __IM  uint32_t SIG;     /*!< Current state of all FIQ sources
-                               (enabled and disabled)                         */
-  __IOM uint32_t EN;      /*!< Enabled FIQ sources. */
-  __OM  uint32_t CLR;     /*!< Disable FIQ sources */
-  RESERVED(0[4], uint32_t);
-  __IM  uint32_t VEC;     /*!< FIQ interrupt vector.                          */
-  __IOM uint32_t STAN;    /*!< This register indicates the priority level of
-                               an FIQ that has just caused an FIQ exception.  */
-} FIQ_t;
-
-/**
- * @brief System Control
- */
-typedef struct SYS_s {
-  __IOM uint32_t REMAP;   /*!< Remap control register. */
-  RESERVED(0[3], uint32_t);
-  __IOM uint32_t RSTSTA;  /*!< RSTSTA status MMR. */
-  __OM  uint32_t RSTCLR;  /*!< RSTCLR MMR for clearing RSTSTA register. */
-  RESERVED(1[4], uint32_t);
-  __OM  uint32_t RSTKEY1; /*!< 0x76 should be written to this register before
-                               writing to RSTCFG. */
-  __IOM uint32_t RSTCFG;  /*!< This register allows the DAC and GPIO outputs to
-                               retain state after a watchdog or software
-                               reset. */
-  __OM  uint32_t RSTKEY2; /*!< 0xB1 should be written to this register after
-                               writing to RSTCFG. */
-} SYS_t;
-
-/**
- * @brief RTOS Timer
- */
-typedef struct RTOS_TIMER_s {
-  __IOM uint16_t LD;      /*!< Timer load register                            */
-  RESERVED(0, uint16_t);
-  __IM  uint16_t VAL;     /*!< Timer value register                           */
-  RESERVED(1, uint16_t);
-  __IOM uint16_t CON;     /*!< Timer control register                         */
-  RESERVED(2, uint16_t);
-  __OM  uint8_t  CLRI;    /*!< Timer interrupt clear register                 */
-} RTOS_TIMER_t;
-
-/**
- * @brief Timer 32 bits
- */
-typedef struct GP_TIMER_s {
-  __IOM uint32_t LD;      /*!< Timer load register                            */
-  __IM  uint32_t VAL;     /*!< Timer value register                           */
-  __IOM uint32_t CON;     /*!< Timer control register                         */
-  __OM  uint8_t  CLRI;    /*!< Timer interrupt clear register                 */
-  RESERVED(0[3], uint8_t);
-  __IM  uint32_t CAP;     /*!< Timer capture register                         */
-} GP_TIMER_t;
-
-/**
- * @brief RTOS Timer
- */
-typedef struct WDG_TIMER_s {
-  __IOM uint16_t LD;      /*!< Timer load register                            */
-  RESERVED(0, uint16_t);
-  __IM  uint16_t VAL;     /*!< Timer value register                           */
-  RESERVED(1, uint16_t);
-  __IOM uint16_t CON;     /*!< Timer control register                         */
-  RESERVED(2, uint16_t);
-  __OM  uint8_t  CLRI;    /*!< Timer interrupt clear register                 */
-} WDG_TIMER_t;
-
-typedef struct GPIO0_s {
-  __IOM uint32_t CON;
-  RESERVED(0[7], uint32_t);
-  __IOM uint32_t DAT;
-  __OM  uint32_t SET;
-  __OM  uint32_t CLR;
-  __IOM uint32_t PAR;
-} GPIO0_t;
-
-typedef struct GPIO1_s {
-  __IOM uint32_t CON;
-  RESERVED(0[10], uint32_t);
-  __IOM uint32_t DAT;
-  __OM  uint32_t SET;
-  __OM  uint32_t CLR;
-  __IOM uint32_t PAR;
-} GPIO1_t;
-
-typedef struct GPIO2_s {
-  __IOM uint32_t CON;
-  RESERVED(0[13], uint32_t);
-  __IOM uint32_t DAT;
-  __OM  uint32_t SET;
-  __OM  uint32_t CLR;
-  __IOM uint32_t PAR;
-} GPIO2_t;
-
-/* Power Clock Control */
-typedef struct PCC_s {
-  __OM  uint32_t POWKEY1;
-  __IOM uint32_t POWCON0;
-  __OM  uint32_t POWKEY2;
-  __OM  uint32_t PLLKEY1;
-  __IOM uint32_t PLLCON;
-  __OM  uint32_t PLLKEY2;
-  RESERVED(0[6], uint32_t);
-  __OM  uint32_t POWKEY3;
-  __IOM uint32_t POWCON1;
-  __OM  uint32_t POWKEY4;
-  __IOM uint32_t PSMCON;
-  __IOM uint32_t CMPCON;
-} PCC_t;
-
-typedef struct FLASH_s {
-  __IM  uint32_t STA;
-  __IOM uint32_t MOD;
-  __IOM uint32_t CON;
-  __IOM uint32_t DAT;
-  __IOM uint32_t ADR;
-  RESERVED(0, uint32_t);
-  __IM  uint32_t SIGN;
-  __IOM uint32_t PRO;
-  __IOM uint32_t HIDE;
-} FLASH_t;
-
-typedef struct I2C_s {
-  __IOM uint32_t MCON;
-  __IM  uint32_t MSTA;
-  __IM  uint32_t MRX;
-  __OM  uint32_t MTX;
-  __IOM uint32_t MCNT0;
-  __IM  uint32_t MCNT1;
-  __IOM uint32_t ADR0;
-  __IOM uint32_t ADR1;
-  RESERVED(0, uint32_t);
-  __IOM uint32_t DIV;
-  __IOM uint32_t SCON;
-  __IOM uint32_t SSTA;
-  __IM  uint32_t SRX;
-  __OM  uint32_t STX;
-  __IOM uint32_t ALT;
-  __IOM uint32_t ID0;
-  __IOM uint32_t ID1;
-  __IOM uint32_t ID2;
-  __IOM uint32_t ID3;
-  __IOM uint32_t FSTA;
-} I2C_t;
-
-#define FLASH_BASE            0x00080000UL
-#define FLASH_END             0x0008F7FFUL
-#define RAM_BASE              0x00010000UL
-
-#define IRQ_BASE              0xFFFF0000UL  /*!< IRQ Address Base             */
-#define FIQ_BASE              0xFFFF0100UL  /*!< FIQ Address Base             */
-#define SYS_BASE              0xFFFF0220UL  /*!< SYS Address Base             */
-#define TIMER0_BASE           0xFFFF0300UL  /*!< Timer0 Address Base          */
-#define TIMER1_BASE           0xFFFF0320UL  /*!< Timer1 Address Base          */
-#define TIMER2_BASE           0xFFFF0360UL  /*!< Timer2 Address Base          */
-#define PCC_BASE              0xFFFF0404UL  /*!< PLL/PSM Base Address         */
-#define GPIO_BASE             0xFFFFF400UL  /*!< GPIO Address Base            */
-#define FLASH_CTL_BASE        0xFFFFF800UL  /*!< FLASH Address Base           */
-#define I2C0_BASE             0xFFFF0800UL  /*!< I2C0 Base Address            */
-#define I2C1_BASE             0xFFFF0900UL  /*!< I2C1 Base Address            */
-
-#define IRQ                   ((IRQ_t *)        IRQ_BASE)
-#define FIQ                   ((FIQ_t *)        FIQ_BASE)
-#define SYS                   ((SYS_t *)        SYS_BASE)
-#define RTOS_TIMER            ((RTOS_TIMER_t *) TIMER0_BASE)
-#define GP_TIMER              ((  GP_TIMER_t *) TIMER1_BASE)
-#define WDG_TIMER             (( WDG_TIMER_t *) TIMER2_BASE)
-#define GPIO0                 ((GPIO0_t *)      GPIO_BASE + 0U)
-#define GPIO1                 ((GPIO1_t *)      GPIO_BASE + 4U)
-#define GPIO2                 ((GPIO2_t *)      GPIO_BASE + 8U)
-#define PCC                   ((PCC_t *)        PCC_BASE)
-#define FLASH                 ((FLASH_t *)      FLASH_CTL_BASE)
-#define I2C0                  ((I2C_t *)        I2C0_BASE)
-#define I2C1                  ((I2C_t *)        I2C1_BASE)
-
-/*------------------------------------------------------------------------------
- *                                IRQ
- *----------------------------------------------------------------------------*/
 #define IRQ_SWICFG_Pos            (1U)
 #define IRQ_SWICFG_Msk            (0x3U << IRQ_SWICFG_Pos)
 #define IRQ_SWICFG                IRQ_SWICFG_Msk
@@ -309,6 +155,21 @@ typedef struct I2C_s {
 #define IRQ_CONN_ENFIQN_Msk       (0x1U << IRQ_CONN_ENFIQN_Pos)
 #define IRQ_CONN_ENFIQN           IRQ_CONN_ENFIQN_Msk
 
+/**
+ * @brief Fast Interrupt Controller
+ */
+typedef struct FIQ_s {
+  __IM  uint32_t STA;     /*!< Active FIQ source */
+  __IM  uint32_t SIG;     /*!< Current state of all FIQ sources
+                               (enabled and disabled)                         */
+  __IOM uint32_t EN;      /*!< Enabled FIQ sources. */
+  __OM  uint32_t CLR;     /*!< Disable FIQ sources */
+  RESERVED(0[4], uint32_t);
+  __IM  uint32_t VEC;     /*!< FIQ interrupt vector.                          */
+  __IOM uint32_t STAN;    /*!< This register indicates the priority level of
+                               an FIQ that has just caused an FIQ exception.  */
+} FIQ_t;
+
 #define FIQ_VEC_ID_Pos            (2U)
 #define FIQ_VEC_ID_Msk            (0x1FU << FIQ_VEC_ID_Pos)
 #define FIQ_VEC_ID                FIQ_VEC_ID_Msk
@@ -328,6 +189,23 @@ typedef struct I2C_s {
 /*------------------------------------------------------------------------------
  *                          SYSTEM CONTROL
  *----------------------------------------------------------------------------*/
+/**
+ * @brief System Control
+ */
+typedef struct SYS_s {
+  __IOM uint32_t REMAP;   /*!< Remap control register. */
+  RESERVED(0[3], uint32_t);
+  __IOM uint32_t RSTSTA;  /*!< RSTSTA status MMR. */
+  __OM  uint32_t RSTCLR;  /*!< RSTCLR MMR for clearing RSTSTA register. */
+  RESERVED(1[4], uint32_t);
+  __OM  uint32_t RSTKEY1; /*!< 0x76 should be written to this register before
+                               writing to RSTCFG. */
+  __IOM uint32_t RSTCFG;  /*!< This register allows the DAC and GPIO outputs to
+                               retain state after a watchdog or software
+                               reset. */
+  __OM  uint32_t RSTKEY2; /*!< 0xB1 should be written to this register after
+                               writing to RSTCFG. */
+} SYS_t;
 
 /********************  Bit definition for REMAP register  *********************/
 #define SYS_REMAP_SRAM_Pos        (0U)
@@ -524,6 +402,19 @@ typedef struct I2C_s {
 /*------------------------------------------------------------------------------
  *                             RTOS TIMER
  *----------------------------------------------------------------------------*/
+/**
+ * @brief RTOS Timer
+ */
+typedef struct RTOS_TIMER_s {
+  __IOM uint16_t LD;      /*!< Timer load register                            */
+  RESERVED(0, uint16_t);
+  __IM  uint16_t VAL;     /*!< Timer value register                           */
+  RESERVED(1, uint16_t);
+  __IOM uint16_t CON;     /*!< Timer control register                         */
+  RESERVED(2, uint16_t);
+  __OM  uint8_t  CLRI;    /*!< Timer interrupt clear register                 */
+} RTOS_TIMER_t;
+
 #define RTOS_TIMER_LD_Pos         (0U)
 #define RTOS_TIMER_LD_Msk         (0xFFFFU << RTOS_TIMER_LD_Pos)
 #define RTOS_TIMER_LD             RTOS_TIMER_LD_Msk
@@ -555,6 +446,24 @@ typedef struct I2C_s {
 /*------------------------------------------------------------------------------
  *                          POWER CLOCK CONTROL
  *----------------------------------------------------------------------------*/
+/**
+ * @brief Power Clock Control
+ */
+typedef struct PCC_s {
+  __OM  uint32_t POWKEY1;
+  __IOM uint32_t POWCON0;
+  __OM  uint32_t POWKEY2;
+  __OM  uint32_t PLLKEY1;
+  __IOM uint32_t PLLCON;
+  __OM  uint32_t PLLKEY2;
+  RESERVED(0[6], uint32_t);
+  __OM  uint32_t POWKEY3;
+  __IOM uint32_t POWCON1;
+  __OM  uint32_t POWKEY4;
+  __IOM uint32_t PSMCON;
+  __IOM uint32_t CMPCON;
+} PCC_t;
+
 #define PCC_POWKEY1_VALUE         ((uint16_t)0x0001)
 #define PCC_POWKEY2_VALUE         ((uint16_t)0x00F4)
 #define PCC_POWKEY3_VALUE         ((uint16_t)0x0076)
@@ -563,8 +472,239 @@ typedef struct I2C_s {
 #define PCC_PLLKEY2_VALUE         ((uint16_t)0x0055)
 
 /*------------------------------------------------------------------------------
+ *                          BAND GAP REFERENCE
+ *----------------------------------------------------------------------------*/
+/**
+ * @brief Band Gap Reference
+ */
+typedef struct REF {
+  __IOM uint32_t CON;     /*!< Reference control register                     */
+} REF_t;
+
+/********************  Bit definition for REFCON register  ********************/
+#define REFCON_OUT_EN_Pos         (0U)
+#define REFCON_OUT_EN_Msk         (0x1UL << REFCON_OUT_EN_Pos)
+#define REFCON_OUT_EN             REFCON_OUT_EN_Msk
+
+/*------------------------------------------------------------------------------
+ *                          ANALOG-TO-DIGITAL CONVERTER
+ *----------------------------------------------------------------------------*/
+/**
+ * @brief The analog-to-digital converter (ADC)
+ */
+typedef struct ADC {
+  __IOM uint32_t CON;     /*!< ADC control register                           */
+  __IOM uint32_t CP;      /*!< ADC positive channel selection register        */
+  __IOM uint32_t CN;      /*!< ADC negative channel selection register        */
+  __IM  uint32_t STA;     /*!< ADC status register                            */
+  __IM  uint32_t DAT;     /*!< ADC  data output register                      */
+  __IOM uint32_t RST;     /*!< ADC reset register                             */
+  RESERVED(0[6], uint32_t);
+  __IOM uint32_t GN;      /*!< ADC gain calibration register                  */
+  __IOM uint32_t OF;      /*!< ADC offset calibration register                */
+  RESERVED(1[3], uint32_t);
+  __IOM uint32_t TSCON;   /*!< Temperature sensor chopping enable register    */
+  __IOM uint32_t TEMPREF; /*!< Temperature sensor reference value             */
+} ADC_t;
+
+/********************  Bit definition for ADCCON register  ********************/
+#define ADCCON_CONV_TYPE_Pos      (0U)
+#define ADCCON_CONV_TYPE_Msk      (0x7UL << ADCCON_CONV_TYPE_Pos)
+#define ADCCON_CONV_TYPE          ADCCON_CONV_TYPE_Msk
+/* ADC conversion type */
+#define ADCCON_CONV_TYPE_PIN      (0x0UL << ADCCON_CONV_TYPE_Pos)
+#define ADCCON_CONV_TYPE_TMR1     (0x1UL << ADCCON_CONV_TYPE_Pos)
+#define ADCCON_CONV_TYPE_TMR0     (0x2UL << ADCCON_CONV_TYPE_Pos)
+#define ADCCON_CONV_TYPE_SINGLE   (0x3UL << ADCCON_CONV_TYPE_Pos)
+#define ADCCON_CONV_TYPE_CONT     (0x4UL << ADCCON_CONV_TYPE_Pos)
+#define ADCCON_CONV_TYPE_PLA      (0x5UL << ADCCON_CONV_TYPE_Pos)
+
+#define ADCCON_CONV_MODE_Pos      (3U)
+#define ADCCON_CONV_MODE_Msk      (0x3UL << ADCCON_CONV_MODE_Pos)
+#define ADCCON_CONV_MODE          ADCCON_CONV_MODE_Msk
+/* ADC conversion mode */
+#define ADCCON_CONV_MODE_SE       (0x0UL << ADCCON_CONV_MODE_Pos)
+#define ADCCON_CONV_MODE_DIF      (0x1UL << ADCCON_CONV_MODE_Pos)
+
+#define ADCCON_PWR_UP_Pos         (5U)
+#define ADCCON_PWR_UP_Msk         (0x1UL << ADCCON_PWR_UP_Pos)
+#define ADCCON_PWR_UP             ADCCON_PWR_UP_Msk
+
+#define ADCCON_CONV_START_Pos     (7U)
+#define ADCCON_CONV_START_Msk     (0x1UL << ADCCON_CONV_START_Pos)
+#define ADCCON_CONV_START         ADCCON_CONV_START_Msk
+
+#define ADCCON_ACQ_TIME_Pos       (8U)
+#define ADCCON_ACQ_TIME_Msk       (0x3UL << ADCCON_ACQ_TIME_Pos)
+#define ADCCON_ACQ_TIME           ADCCON_ACQ_TIME_Msk
+/* ADC acquisition time */
+#define ADCCON_ACQ_TIME_2C        (0x0UL << ADCCON_ACQ_TIME_Pos)
+#define ADCCON_ACQ_TIME_4C        (0x1UL << ADCCON_ACQ_TIME_Pos)
+#define ADCCON_ACQ_TIME_8C        (0x2UL << ADCCON_ACQ_TIME_Pos)
+#define ADCCON_ACQ_TIME_16C       (0x3UL << ADCCON_ACQ_TIME_Pos)
+
+#define ADCCON_CLK_DIV_Pos        (10U)
+#define ADCCON_CLK_DIV_Msk        (0x7UL << ADCCON_CLK_DIV_Pos)
+#define ADCCON_CLK_DIV            ADCCON_CLK_DIV_Msk
+/* ADC clock speed */
+#define ADCCON_CLK_DIV_1          (0x0UL << ADCCON_CLK_DIV_Pos)
+#define ADCCON_CLK_DIV_2          (0x1UL << ADCCON_CLK_DIV_Pos)
+#define ADCCON_CLK_DIV_4          (0x2UL << ADCCON_CLK_DIV_Pos)
+#define ADCCON_CLK_DIV_8          (0x3UL << ADCCON_CLK_DIV_Pos)
+#define ADCCON_CLK_DIV_16         (0x4UL << ADCCON_CLK_DIV_Pos)
+#define ADCCON_CLK_DIV_32         (0x5UL << ADCCON_CLK_DIV_Pos)
+
+#define ADCCON_CONV_TEMP_Pos      (13U)
+#define ADCCON_CONV_TEMP_Msk      (0x1UL << ADCCON_CONV_TEMP_Pos)
+#define ADCCON_CONV_TEMP          ADCCON_CONV_TEMP_Msk
+
+/********************  Bit definition for ADCCP  register  ********************/
+#define ADCCP_SEL_CHN_P_Pos       (0U)
+#define ADCCP_SEL_CHN_P_Msk       (0x1FUL << ADCCP_SEL_CHN_P_Pos)
+#define ADCCP_SEL_CHN_P           ADCCP_SEL_CHN_P_Msk
+/* Positive channel selection bits */
+#define ADCCP_SEL_CHN_P_ADC0      (0x00UL << ADCCP_SEL_CHN_P_Pos)
+#define ADCCP_SEL_CHN_P_ADC1      (0x01UL << ADCCP_SEL_CHN_P_Pos)
+#define ADCCP_SEL_CHN_P_ADC2      (0x02UL << ADCCP_SEL_CHN_P_Pos)
+#define ADCCP_SEL_CHN_P_ADC3      (0x03UL << ADCCP_SEL_CHN_P_Pos)
+#define ADCCP_SEL_CHN_P_ADC4      (0x04UL << ADCCP_SEL_CHN_P_Pos)
+#define ADCCP_SEL_CHN_P_ADC5      (0x05UL << ADCCP_SEL_CHN_P_Pos)
+#define ADCCP_SEL_CHN_P_ADC6      (0x06UL << ADCCP_SEL_CHN_P_Pos)
+#define ADCCP_SEL_CHN_P_ADC7      (0x07UL << ADCCP_SEL_CHN_P_Pos)
+#define ADCCP_SEL_CHN_P_ADC8      (0x08UL << ADCCP_SEL_CHN_P_Pos)
+#define ADCCP_SEL_CHN_P_ADC9      (0x09UL << ADCCP_SEL_CHN_P_Pos)
+#define ADCCP_SEL_CHN_P_ADC10     (0x0AUL << ADCCP_SEL_CHN_P_Pos)
+#define ADCCP_SEL_CHN_P_ADC12     (0x0CUL << ADCCP_SEL_CHN_P_Pos)
+#define ADCCP_SEL_CHN_P_DAC0      (0x0EUL << ADCCP_SEL_CHN_P_Pos)
+#define ADCCP_SEL_CHN_P_DAC1      (0x0FUL << ADCCP_SEL_CHN_P_Pos)
+#define ADCCP_SEL_CHN_P_TEMP      (0x10UL << ADCCP_SEL_CHN_P_Pos)
+#define ADCCP_SEL_CHN_P_AGND      (0x11UL << ADCCP_SEL_CHN_P_Pos)
+#define ADCCP_SEL_CHN_P_IREF      (0x12UL << ADCCP_SEL_CHN_P_Pos)
+#define ADCCP_SEL_CHN_P_AVDD      (0x13UL << ADCCP_SEL_CHN_P_Pos)
+
+/********************  Bit definition for ADCCN  register  ********************/
+#define ADCCP_SEL_CHN_N_Pos       (0U)
+#define ADCCP_SEL_CHN_N_Msk       (0x1FUL << ADCCP_SEL_CHN_N_Pos)
+#define ADCCP_SEL_CHN_N           ADCCP_SEL_CHN_N_Msk
+/* Negative channel selection bits */
+#define ADCCP_SEL_CHN_N_ADC0      (0x00UL << ADCCP_SEL_CHN_N_Pos)
+#define ADCCP_SEL_CHN_N_ADC1      (0x01UL << ADCCP_SEL_CHN_N_Pos)
+#define ADCCP_SEL_CHN_N_ADC2      (0x02UL << ADCCP_SEL_CHN_N_Pos)
+#define ADCCP_SEL_CHN_N_ADC3      (0x03UL << ADCCP_SEL_CHN_N_Pos)
+#define ADCCP_SEL_CHN_N_ADC4      (0x04UL << ADCCP_SEL_CHN_N_Pos)
+#define ADCCP_SEL_CHN_N_ADC5      (0x05UL << ADCCP_SEL_CHN_N_Pos)
+#define ADCCP_SEL_CHN_N_ADC6      (0x06UL << ADCCP_SEL_CHN_N_Pos)
+#define ADCCP_SEL_CHN_N_ADC7      (0x07UL << ADCCP_SEL_CHN_N_Pos)
+#define ADCCP_SEL_CHN_N_ADC8      (0x08UL << ADCCP_SEL_CHN_N_Pos)
+#define ADCCP_SEL_CHN_N_ADC9      (0x09UL << ADCCP_SEL_CHN_N_Pos)
+#define ADCCP_SEL_CHN_N_ADC10     (0x0AUL << ADCCP_SEL_CHN_N_Pos)
+#define ADCCP_SEL_CHN_N_ADC12     (0x0CUL << ADCCP_SEL_CHN_N_Pos)
+#define ADCCP_SEL_CHN_N_DAC1      (0x0FUL << ADCCP_SEL_CHN_N_Pos)
+#define ADCCP_SEL_CHN_N_TEMP      (0x10UL << ADCCP_SEL_CHN_N_Pos)
+#define ADCCP_SEL_CHN_N_AGND      (0x11UL << ADCCP_SEL_CHN_N_Pos)
+#define ADCCP_SEL_CHN_N_IREF      (0x12UL << ADCCP_SEL_CHN_N_Pos)
+
+/********************  Bit definition for ADCSTA register  ********************/
+#define ADCSTA_READY_Pos          (0U)
+#define ADCSTA_READY_Msk          (0x1UL << ADCSTA_READY_Pos)
+#define ADCSTA_READY              ADCSTA_READY_Msk
+
+/********************  Bit definition for ADCDAT register  ********************/
+#define ADCDAT_DATA_Pos           (16U)
+#define ADCDAT_DATA_Msk           (0xFFFFUL << ADCDAT_DATA_Pos)
+#define ADCDAT_DATA               ADCDAT_DATA_Msk
+
+/********************  Bit definition for ADCRST register  ********************/
+#define ADCRST_VALUE_Pos          (0U)
+#define ADCRST_VALUE_Msk          (0xFFU << ADCRST_VALUE_Pos)
+#define ADCRST_VALUE              ADCRST_VALUE_Msk
+
+/*------------------------------------------------------------------------------
+ *                          DIGITAL-TO-ANALOG CONVERTER
+ *----------------------------------------------------------------------------*/
+/**
+ * @brief The digital-to-analog converter (DAC)
+ */
+typedef struct DAC {
+  __IOM uint32_t CON;     /*!< DAC control register                           */
+  __IOM uint32_t DAT;     /*!< DAC data register                              */
+} DAC_t;
+
+/********************  Bit definition for DACCON register  ********************/
+#define DACCON_RANGE_Pos          (0U)
+#define DACCON_RANGE_Msk          (0x3UL << DACCON_RANGE_Pos)
+#define DACCON_RANGE              DACCON_RANGE_Msk
+/* DAC range */
+#define DACCON_RANGE_TRIS         (0x0UL << DACCON_RANGE_Pos)
+#define DACCON_RANGE_VREF         (0x2UL << DACCON_RANGE_Pos)
+#define DACCON_RANGE_AVDD         (0x3UL << DACCON_RANGE_Pos)
+
+#define DACCON_CLR_Pos            (4U)
+#define DACCON_CLR_Msk            (0x1UL << DACCON_CLR_Pos)
+#define DACCON_CLR                DACCON_CLR_Msk
+
+#define DACCON_CLK_Pos            (5U)
+#define DACCON_CLK_Msk            (0x1UL << DACCON_CLK_Pos)
+#define DACCON_CLK                DACCON_CLK_Msk
+
+#define DACCON_BYPASS_Pos         (6U)
+#define DACCON_BYPASS_Msk         (0x1UL << DACCON_BYPASS_Pos)
+#define DACCON_BYPASS             DACCON_BYPASS_Msk
+
+/********************  Bit definition for DACDAT register  ********************/
+#define DACDAT_DATA_Pos           (16U)
+#define DACDAT_DATA_Msk           (0xFFFUL << DACDAT_DATA_Pos)
+#define DACDAT_DATA               DACDAT_DATA_Msk
+
+/**
+ * @brief DAC Buffers in Operational Amplifier Mode
+ */
+typedef struct DACB {
+  __OM  uint32_t KEY0;    /*!< DAC KEY0 register                              */
+  __IOM uint32_t CFG;     /*!< DAC configuration register                     */
+  __OM  uint32_t KEY1;    /*!< DAC KEY1 register                              */
+} DACB_t;
+
+/********************  Bit definition for DACBKEY0 register  ******************/
+#define DACBKEY0_VALUE            ((uint16_t)0x9AU)
+
+/********************  Bit definition for DACBCFG  register  ******************/
+#define DACBCFG_DAC0_Pos          (0U)
+#define DACBCFG_DAC0_Msk          (0x1UL << DACBCFG_DAC0_Pos)
+#define DACBCFG_DAC0              DACBCFG_DAC0_Msk
+
+#define DACBCFG_DAC1_Pos          (1U)
+#define DACBCFG_DAC1_Msk          (0x1UL << DACBCFG_DAC1_Pos)
+#define DACBCFG_DAC1              DACBCFG_DAC1_Msk
+
+#define DACBCFG_DAC2_Pos          (2U)
+#define DACBCFG_DAC2_Msk          (0x1UL << DACBCFG_DAC2_Pos)
+#define DACBCFG_DAC2              DACBCFG_DAC2_Msk
+
+#define DACBCFG_DAC3_Pos          (3U)
+#define DACBCFG_DAC3_Msk          (0x1UL << DACBCFG_DAC3_Pos)
+#define DACBCFG_DAC3              DACBCFG_DAC3_Msk
+
+/********************  Bit definition for DACBKEY1 register  ******************/
+#define DACBKEY1_VALUE            ((uint16_t)0x0CU)
+
+/*------------------------------------------------------------------------------
  *                          FLASH CONTROL
  *----------------------------------------------------------------------------*/
+/**
+ * @brief Flash Memory
+ */
+typedef struct FLASH_s {
+  __IM  uint32_t STA;
+  __IOM uint32_t MOD;
+  __IOM uint32_t CON;
+  __IOM uint32_t DAT;
+  __IOM uint32_t ADR;
+  RESERVED(0, uint32_t);
+  __IM  uint32_t SIGN;
+  __IOM uint32_t PRO;
+  __IOM uint32_t HIDE;
+} FLASH_t;
 
 /********************  Bit definition for FEESTA register  ********************/
 #define FLASH_STA_PASS_Pos        (0U)
@@ -621,6 +761,32 @@ typedef struct I2C_s {
 /*------------------------------------------------------------------------------
  *                               I2C
  *----------------------------------------------------------------------------*/
+/**
+ * @brief I2C
+ */
+typedef struct I2C_s {
+  __IOM uint32_t MCON;
+  __IM  uint32_t MSTA;
+  __IM  uint32_t MRX;
+  __OM  uint32_t MTX;
+  __IOM uint32_t MCNT0;
+  __IM  uint32_t MCNT1;
+  __IOM uint32_t ADR0;
+  __IOM uint32_t ADR1;
+  RESERVED(0, uint32_t);
+  __IOM uint32_t DIV;
+  __IOM uint32_t SCON;
+  __IOM uint32_t SSTA;
+  __IM  uint32_t SRX;
+  __OM  uint32_t STX;
+  __IOM uint32_t ALT;
+  __IOM uint32_t ID0;
+  __IOM uint32_t ID1;
+  __IOM uint32_t ID2;
+  __IOM uint32_t ID3;
+  __IOM uint32_t FSTA;
+} I2C_t;
+
 /*******************  Bit definition for I2CMCON register  ********************/
 #define I2CMCON_MEN_Pos           (0U)
 #define I2CMCON_MEN_Msk           (0x1UL << I2CMCON_MEN_Pos)
@@ -854,6 +1020,46 @@ typedef struct I2C_s {
 #define I2CFSTA_FMTX_Pos          (9U)
 #define I2CFSTA_FMTX_Msk          (0x1UL << I2CFSTA_FMTX_Pos)
 #define I2CFSTA_FMTX              I2CFSTA_FMTX_Msk
+
+#define FLASH_BASE            0x00080000UL
+#define FLASH_END             0x0008F7FFUL
+#define RAM_BASE              0x00010000UL
+
+#define IRQ_BASE              0xFFFF0000UL  /*!< IRQ Address Base             */
+#define FIQ_BASE              0xFFFF0100UL  /*!< FIQ Address Base             */
+#define SYS_BASE              0xFFFF0220UL  /*!< SYS Address Base             */
+#define TIMER0_BASE           0xFFFF0300UL  /*!< Timer0 Address Base          */
+#define TIMER1_BASE           0xFFFF0320UL  /*!< Timer1 Address Base          */
+#define TIMER2_BASE           0xFFFF0360UL  /*!< Timer2 Address Base          */
+#define PCC_BASE              0xFFFF0404UL  /*!< PLL/PSM Base Address         */
+#define REF_BASE              0xFFFF048CUL  /*!< REF Address Base             */
+#define ADC_BASE              0xFFFF0500UL  /*!< ADC Address Base             */
+#define DAC0_BASE             0xFFFF0600UL  /*!< DAC0 Address Base            */
+#define DAC1_BASE             0xFFFF0608UL  /*!< DAC1 Address Base            */
+#define DAC2_BASE             0xFFFF0610UL  /*!< DAC2 Address Base            */
+#define DAC3_BASE             0xFFFF0618UL  /*!< DAC3 Address Base            */
+#define DACB_BASE             0xFFFF0650UL  /*!< DACB Address Base            */
+#define I2C0_BASE             0xFFFF0800UL  /*!< I2C0 Base Address            */
+#define I2C1_BASE             0xFFFF0900UL  /*!< I2C1 Base Address            */
+#define FLASH_CTL_BASE        0xFFFFF800UL  /*!< FLASH Address Base           */
+
+#define IRQ                   ((IRQ_t *)        IRQ_BASE)
+#define FIQ                   ((FIQ_t *)        FIQ_BASE)
+#define SYS                   ((SYS_t *)        SYS_BASE)
+#define RTOS_TIMER            ((RTOS_TIMER_t *) TIMER0_BASE)
+#define GP_TIMER              ((  GP_TIMER_t *) TIMER1_BASE)
+#define WDG_TIMER             (( WDG_TIMER_t *) TIMER2_BASE)
+#define PCC                   ((PCC_t *)        PCC_BASE)
+#define REF                   ((REF_t *)        REF_BASE)
+#define ADC                   ((ADC_t *)        ADC_BASE)
+#define DAC0                  ((DAC_t *)        DAC0_BASE)
+#define DAC1                  ((DAC_t *)        DAC1_BASE)
+#define DAC2                  ((DAC_t *)        DAC2_BASE)
+#define DAC3                  ((DAC_t *)        DAC3_BASE)
+#define DACB                  ((DACB_t *)       DACB_BASE)
+#define I2C0                  ((I2C_t *)        I2C0_BASE)
+#define I2C1                  ((I2C_t *)        I2C1_BASE)
+#define FLASH                 ((FLASH_t *)      FLASH_CTL_BASE)
 
 #ifdef __cplusplus
 }
