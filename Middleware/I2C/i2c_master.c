@@ -373,7 +373,7 @@ int32_t I2C_ComUnLock(I2C_Com_t *com)
  * @param[in]   com       COM handle pointer
  * @param[in]   buf       Pointer to buffer to write
  * @param[in]   buf_size  Bytes to write
- * @return      I2C_OK              - Operation succeeded
+ * @return      number of data bytes transferred  or error code if highest bit set
  *              I2C_ERROR           - Unspecified error
  *              I2C_ERROR_RESOURCE  - Resource error
  *              I2C_ERROR_PARAMETER - Parameter error
@@ -433,7 +433,7 @@ int32_t I2C_Write(I2C_Com_t *com, const uint8_t *buf, uint32_t buf_size)
  * @param[in]   addr_size   Number of bytes of start address
  * @param[out]  buf         Pointer to buffer to fill
  * @param[out   buf_size    Bytes to receive
- * @return      I2C_OK              - Operation succeeded
+ * @return      number of data bytes transferred  or error code if highest bit set
  *              I2C_ERROR           - Unspecified error
  *              I2C_ERROR_RESOURCE  - Resource error
  *              I2C_ERROR_PARAMETER - Parameter error
@@ -494,6 +494,7 @@ int32_t I2C_Read(I2C_Com_t *com,
 
     if (rc == I2C_ERROR_TIMEOUT) {
       port->driver->Control(ARM_I2C_ABORT_TRANSFER, 0U);
+      port->driver->Control(ARM_I2C_BUS_CLEAR, 0U);
     }
 
     osSemaphoreRelease(&port->info->access_sem);
