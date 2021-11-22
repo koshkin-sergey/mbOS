@@ -8,11 +8,683 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
   <addressUnitBits>8</addressUnitBits>
   <width>32</width>
   <!--Register Default Properties-->
-  <size>0x20</size>
+  <size>32</size>
+  <access>read-write</access>
   <resetValue>0x0</resetValue>
   <resetMask>0xFFFFFFFF</resetMask>
   <peripherals>
-  
+    
+    <peripheral>
+      <name>IC</name>
+      <description>NTERRUPT CONTROLLER</description>
+      <groupName>IC</groupName>
+      <baseAddress>0xFFFF0000</baseAddress>
+      <addressBlock>
+        <offset>0x0</offset>
+        <size>0x140</size>
+        <usage>registers</usage>
+      </addressBlock>
+      
+      <registers>
+      
+      
+      
+      </registers>
+      
+    </peripheral>
+    
+    <peripheral>
+      <name>RSC</name>
+      <description>REMAP AND SYSTEM CONTROL</description>
+      <groupName>RSC</groupName>
+      <baseAddress>0xFFFF0220</baseAddress>
+      <addressBlock>
+        <offset>0x0</offset>
+        <size>0x18</size>
+        <usage>registers</usage>
+      </addressBlock>
+      
+      <registers>
+      
+      
+      
+      </registers>
+      
+    </peripheral>
+    
+    <peripheral>
+      <name>TIMER0</name>
+      <description>TIMER0</description>
+      <groupName>TIMER0</groupName>
+      <baseAddress>0xFFFF0300</baseAddress>
+      <addressBlock>
+        <offset>0x0</offset>
+        <size>0x10</size>
+        <usage>registers</usage>
+      </addressBlock>
+      
+      <registers>
+      
+      
+      
+      </registers>
+      
+    </peripheral>
+    
+    <peripheral>
+      <name>GPT</name>
+      <description>GENERAL-PURPOSE TIMER</description>
+      <groupName>GPT</groupName>
+      <baseAddress>0xFFFF0320</baseAddress>
+      <addressBlock>
+        <offset>0x0</offset>
+        <size>0x14</size>
+        <usage>registers</usage>
+      </addressBlock>
+      
+      <registers>
+      
+      
+      
+      </registers>
+      
+    </peripheral>
+    
+    <peripheral>
+      <name>WDT</name>
+      <description>WATCHDOG TIMER</description>
+      <groupName>WDT</groupName>
+      <baseAddress>0xFFFF0360</baseAddress>
+      <addressBlock>
+        <offset>0x0</offset>
+        <size>0x10</size>
+        <usage>registers</usage>
+      </addressBlock>
+      
+      <registers>
+      
+      
+      
+      </registers>
+      
+    </peripheral>
+    
+    <peripheral>
+      <name>PLL</name>
+      <description>PLL AND OSCILLATOR CONTROL</description>
+      <groupName>PLL</groupName>
+      <baseAddress>0xFFFF0404</baseAddress>
+      <addressBlock>
+        <offset>0x0</offset>
+        <size>0x1C</size>
+        <usage>registers</usage>
+      </addressBlock>
+      
+      <registers>
+      
+      
+      
+      </registers>
+      
+    </peripheral>
+    
+    <peripheral>
+      <name>PSM</name>
+      <description>POWER SUPPLY MONITOR</description>
+      <groupName>PSM</groupName>
+      <baseAddress>0xFFFF0440</baseAddress>
+      <addressBlock>
+        <offset>0x0</offset>
+        <size>0x08</size>
+        <usage>registers</usage>
+      </addressBlock>
+      <registers>
+        <register>
+          <name>PSMCON</name>
+          <description>Power supply monitor control register</description>
+          <addressOffset>0x0</addressOffset>
+          <size>16</size>
+          <access>read-write</access>
+          <resetValue>0x0008</resetValue>
+          <fields>
+            
+          </fields>
+        </register>
+
+        <register>
+          <name>CMPCON</name>
+          <description>Comparator control register</description>
+          <addressOffset>0x4</addressOffset>
+          <size>16</size>
+          <access>read-write</access>
+          <resetValue>0x0000</resetValue>
+          <fields>
+            
+          </fields>
+        </register>
+
+      </registers>
+    </peripheral>
+    
+    <peripheral>
+      <name>REF</name>
+      <description>BAND GAP REFERENCE</description>
+      <groupName>REF</groupName>
+      <baseAddress>0xFFFF048C</baseAddress>
+      <addressBlock>
+        <offset>0x0</offset>
+        <size>0x04</size>
+        <usage>registers</usage>
+      </addressBlock>
+      <registers>
+        <register>
+          <name>REFCON</name>
+          <description>Band gap reference control register</description>
+          <addressOffset>0x0</addressOffset>
+          <size>8</size>
+          <access>read-write</access>
+          <resetValue>0x00</resetValue>
+          <fields>
+            <field>
+              <name>REFOUT</name>
+              <description>Internal reference output enable bit</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+          </fields>
+        </register>
+      </registers>
+    </peripheral>
+    
+    <peripheral>
+      <name>ADC</name>
+      <description>Analog-to-Digital Converter</description>
+      <groupName>ADC</groupName>
+      <baseAddress>0xFFFF0500</baseAddress>
+      <addressBlock>
+        <offset>0x0</offset>
+        <size>0x5C</size>
+        <usage>registers</usage>
+      </addressBlock>
+      <registers>
+        <register>
+          <name>ADCCON</name>
+          <description>ADC control register</description>
+          <addressOffset>0x0</addressOffset>
+          <size>16</size>
+          <access>read-write</access>
+          <resetValue>0x0600</resetValue>
+          <fields>
+            <field>
+              <name>ADCCTYPE</name>
+              <description>ADC Conversion type bits</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>3</bitWidth>
+            </field>
+
+            <field>
+              <name>ADCCMODE</name>
+              <description>ADC Conversion mode bits</description>
+              <bitOffset>3</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+
+            <field>
+              <name>ADCPUP</name>
+              <description>ADC Power Up bit</description>
+              <bitOffset>5</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+
+            <field>
+              <name>ADCSTART</name>
+              <description>ADC Start bit</description>
+              <bitOffset>7</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+
+            <field>
+              <name>ADCACQTIME</name>
+              <description>ADC acquisition time bits</description>
+              <bitOffset>8</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+
+            <field>
+              <name>ADCCLK</name>
+              <description>ADC clock speed bits</description>
+              <bitOffset>10</bitOffset>
+              <bitWidth>3</bitWidth>
+            </field>
+
+            <field>
+              <name>TSCONV</name>
+              <description>Temperature sensor conversion enable bit</description>
+              <bitOffset>13</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+        <register>
+          <name>ADCCP</name>
+          <description>ADC positive channel selection register</description>
+          <addressOffset>0x4</addressOffset>
+          <size>8</size>
+          <access>read-write</access>
+          <resetValue>0x00</resetValue>
+          <fields>
+            <field>
+              <name>ADCSEL</name>
+              <description>Positive channel selection bits</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>5</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+        <register>
+          <name>ADCCN</name>
+          <description>ADC negative channel selection register</description>
+          <addressOffset>0x8</addressOffset>
+          <size>8</size>
+          <access>read-write</access>
+          <resetValue>0x01</resetValue>
+          <fields>
+            <field>
+              <name>ADCSEL</name>
+              <description>Negative channel selection bits</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>5</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+        <register>
+          <name>ADCSTA</name>
+          <description>ADC status register</description>
+          <addressOffset>0xC</addressOffset>
+          <size>8</size>
+          <access>read-only</access>
+          <resetValue>0x00</resetValue>
+          <fields>
+            <field>
+              <name>ADCREADY</name>
+              <description>ADC conversion result is ready bit</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+        <register>
+          <name>ADCDAT</name>
+          <description>ADC data result register</description>
+          <addressOffset>0x10</addressOffset>
+          <size>32</size>
+          <access>read-only</access>
+          <resetValue>0x00000000</resetValue>
+          <fields>
+            <field>
+              <name>ADCRES</name>
+              <description>ADC data result bits</description>
+              <bitOffset>16</bitOffset>
+              <bitWidth>12</bitWidth>
+            </field>
+
+            <field>
+              <name>ADCSIGN</name>
+              <description>ADC data sign bits</description>
+              <bitOffset>28</bitOffset>
+              <bitWidth>4</bitWidth>
+            </field>
+          </fields>
+        </register>
+        
+        <register>
+          <name>ADCRST</name>
+          <description>Resets the digital interface of the ADC</description>
+          <addressOffset>0x14</addressOffset>
+          <size>8</size>
+          <access>read-write</access>
+          <resetValue>0x00</resetValue>
+        </register>
+        
+        <register>
+          <name>ADCGN</name>
+          <description>ADC gain calibration register</description>
+          <addressOffset>0x30</addressOffset>
+          <size>16</size>
+          <access>read-write</access>
+          <resetValue>0x0000</resetValue>
+        </register>
+        
+        <register>
+          <name>ADCOF</name>
+          <description>ADC offset calibration register</description>
+          <addressOffset>0x34</addressOffset>
+          <size>16</size>
+          <access>read-write</access>
+          <resetValue>0x0000</resetValue>
+        </register>
+
+        <register>
+          <name>TSCON</name>
+          <description>Temperature sensor chopping enable register</description>
+          <addressOffset>0x44</addressOffset>
+          <size>8</size>
+          <access>read-write</access>
+          <resetValue>0x00</resetValue>
+          <fields>
+            <field>
+              <name>TSEN</name>
+              <description>Temperature sensor chop enable bit</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+          </fields>
+        </register>
+
+        <register>
+          <name>TEMPREF</name>
+          <description>Temperature sensor reference value</description>
+          <addressOffset>0x48</addressOffset>
+          <size>16</size>
+          <access>read-write</access>
+          <resetValue>0x0000</resetValue>
+        </register>
+      </registers>  
+    </peripheral>
+    
+    <peripheral>
+      <name>DAC</name>
+      <description>Digital-to-Analog Converter</description>
+      <groupName>DAC</groupName>
+      <baseAddress>0xFFFF0600</baseAddress>
+      <addressBlock>
+        <offset>0x0</offset>
+        <size>0x6C</size>
+        <usage>registers</usage>
+      </addressBlock>      
+      <registers>
+        <register>
+          <name>DAC0CON</name>
+          <description>DAC0 control register</description>
+          <addressOffset>0x00</addressOffset>
+          <size>8</size>
+          <access>read-write</access>
+          <resetValue>0x00</resetValue>
+          <fields>
+            <field>
+              <name>DACRN</name>
+              <description>DAC range bits</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+
+            <field>
+              <name>DACCLR</name>
+              <description>DAC clear bit</description>
+              <bitOffset>4</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+
+            <field>
+              <name>DACCLK</name>
+              <description>DAC update rate</description>
+              <bitOffset>5</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+
+            <field>
+              <name>DACBY</name>
+              <description>DAC bypass the output buffer bit</description>
+              <bitOffset>6</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+          </fields>
+        </register>
+
+        <register>
+          <name>DAC0DAT</name>
+          <description>DAC0 data register</description>
+          <addressOffset>0x04</addressOffset>
+          <size>32</size>
+          <access>read-write</access>
+          <resetValue>0x00000000</resetValue>
+          <fields>
+            <field>
+              <name>DACDAT</name>
+              <description>12-bit data for DAC</description>
+              <bitOffset>16</bitOffset>
+              <bitWidth>12</bitWidth>
+            </field>
+          </fields>
+        </register>
+
+        <register>
+          <name>DAC1CON</name>
+          <description>DAC1 control register</description>
+          <addressOffset>0x08</addressOffset>
+          <size>8</size>
+          <access>read-write</access>
+          <resetValue>0x00</resetValue>
+          <fields>
+            <field>
+              <name>DACRN</name>
+              <description>DAC range bits</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+
+            <field>
+              <name>DACCLR</name>
+              <description>DAC clear bit</description>
+              <bitOffset>4</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+
+            <field>
+              <name>DACCLK</name>
+              <description>DAC update rate</description>
+              <bitOffset>5</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+
+            <field>
+              <name>DACBY</name>
+              <description>DAC bypass the output buffer bit</description>
+              <bitOffset>6</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+          </fields>
+        </register>
+
+        <register>
+          <name>DAC1DAT</name>
+          <description>DAC1 data register</description>
+          <addressOffset>0x0C</addressOffset>
+          <size>32</size>
+          <access>read-write</access>
+          <resetValue>0x00000000</resetValue>
+          <fields>
+            <field>
+              <name>DACDAT</name>
+              <description>12-bit data for DAC</description>
+              <bitOffset>16</bitOffset>
+              <bitWidth>12</bitWidth>
+            </field>
+          </fields>
+        </register>
+
+        <register>
+          <name>DAC2CON</name>
+          <description>DAC2 control register</description>
+          <addressOffset>0x10</addressOffset>
+          <size>8</size>
+          <access>read-write</access>
+          <resetValue>0x00</resetValue>
+          <fields>
+            <field>
+              <name>DACRN</name>
+              <description>DAC range bits</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+
+            <field>
+              <name>DACCLR</name>
+              <description>DAC clear bit</description>
+              <bitOffset>4</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+
+            <field>
+              <name>DACCLK</name>
+              <description>DAC update rate</description>
+              <bitOffset>5</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+
+            <field>
+              <name>DACBY</name>
+              <description>DAC bypass the output buffer bit</description>
+              <bitOffset>6</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+          </fields>
+        </register>
+
+        <register>
+          <name>DAC2DAT</name>
+          <description>DAC2 data register</description>
+          <addressOffset>0x14</addressOffset>
+          <size>32</size>
+          <access>read-write</access>
+          <resetValue>0x00000000</resetValue>
+          <fields>
+            <field>
+              <name>DACDAT</name>
+              <description>12-bit data for DAC</description>
+              <bitOffset>16</bitOffset>
+              <bitWidth>12</bitWidth>
+            </field>
+          </fields>
+        </register>
+
+        <register>
+          <name>DAC3CON</name>
+          <description>DAC3 control register</description>
+          <addressOffset>0x18</addressOffset>
+          <size>8</size>
+          <access>read-write</access>
+          <resetValue>0x00</resetValue>
+          <fields>
+            <field>
+              <name>DACRN</name>
+              <description>DAC range bits</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+
+            <field>
+              <name>DACCLR</name>
+              <description>DAC clear bit</description>
+              <bitOffset>4</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+
+            <field>
+              <name>DACCLK</name>
+              <description>DAC update rate</description>
+              <bitOffset>5</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+
+            <field>
+              <name>DACBY</name>
+              <description>DAC bypass the output buffer bit</description>
+              <bitOffset>6</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+          </fields>
+        </register>
+
+        <register>
+          <name>DAC3DAT</name>
+          <description>DAC3 data register</description>
+          <addressOffset>0x1C</addressOffset>
+          <size>32</size>
+          <access>read-write</access>
+          <resetValue>0x00000000</resetValue>
+          <fields>
+            <field>
+              <name>DACDAT</name>
+              <description>12-bit data for DAC</description>
+              <bitOffset>16</bitOffset>
+              <bitWidth>12</bitWidth>
+            </field>
+          </fields>
+        </register>
+
+        <register>
+          <name>DACBKEY0</name>
+          <description>DAC Key0 register</description>
+          <addressOffset>0x50</addressOffset>
+          <size>16</size>
+          <access>write-only</access>
+          <resetValue>0x0000</resetValue>
+        </register>
+
+        <register>
+          <name>DACBCFG</name>
+          <description>DAC Configuration register</description>
+          <addressOffset>0x54</addressOffset>
+          <size>8</size>
+          <access>read-write</access>
+          <resetValue>0x00</resetValue>
+          <fields>
+            <field>
+              <name>DAC0BUF</name>
+              <description>DAC0 output buffer in op amp mode bit</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+
+            <field>
+              <name>DAC1BUF</name>
+              <description>DAC1 output buffer in op amp mode bit</description>
+              <bitOffset>1</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+
+            <field>
+              <name>DAC2BUF</name>
+              <description>DAC2 output buffer in op amp mode bit</description>
+              <bitOffset>2</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+
+            <field>
+              <name>DAC3BUF</name>
+              <description>DAC3 output buffer in op amp mode bit</description>
+              <bitOffset>3</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+          </fields>
+        </register>
+
+        <register>
+          <name>DACBKEY1</name>
+          <description>DAC Key1 register</description>
+          <addressOffset>0x58</addressOffset>
+          <size>16</size>
+          <access>write-only</access>
+          <resetValue>0x0000</resetValue>
+        </register>
+      </registers>
+    </peripheral>
+    
     <peripheral>
       <name>I2C0</name>
       <description>I2C0 peripheral interfaces</description>
@@ -1258,6 +1930,82 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
       </registers>
       
     </peripheral>
+    
+    <peripheral>
+      <name>SPI</name>
+      <description>SERIAL PERIPHERAL INTERFACE</description>
+      <groupName>SPI</groupName>
+      <baseAddress>0xFFFF0A00</baseAddress>
+      <addressBlock>
+        <offset>0x0</offset>
+        <size>0x14</size>
+        <usage>registers</usage>
+      </addressBlock>
+      
+      <registers>
+      
+      
+      
+      </registers>
+      
+    </peripheral>
+    
+    <peripheral>
+      <name>PLA</name>
+      <description>PROGRAMMABLE LOGIC ARRAY</description>
+      <groupName>PLA</groupName>
+      <baseAddress>0xFFFF0B00</baseAddress>
+      <addressBlock>
+        <offset>0x0</offset>
+        <size>0x54</size>
+        <usage>registers</usage>
+      </addressBlock>
+      
+      <registers>
+      
+      
+      
+      </registers>
+      
+    </peripheral>
+    
+    <peripheral>
+      <name>PWM</name>
+      <description>PROGRAMMABLE LOGIC ARRAY</description>
+      <groupName>PWM</groupName>
+      <baseAddress>0xFFFF0F80</baseAddress>
+      <addressBlock>
+        <offset>0x0</offset>
+        <size>0x3F</size>
+        <usage>registers</usage>
+      </addressBlock>
+      
+      <registers>
+      
+      
+      
+      </registers>
+      
+    </peripheral>
+    
+    <peripheral>
+      <name>GPIO</name>
+      <description>GENERAL-PURPOSE INPUT/OUTPUT</description>
+      <groupName>GPIO</groupName>
+      <baseAddress>0xFFFFF400</baseAddress>
+      <addressBlock>
+        <offset>0x0</offset>
+        <size>0x6C</size>
+        <usage>registers</usage>
+      </addressBlock>
+      
+      <registers>
+      
+      
+      
+      </registers>
+      
+    </peripheral>
   
     <peripheral>
       <name>FLASH</name>
@@ -1442,5 +2190,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
       </registers>
       
     </peripheral>
+    
   </peripherals>
+  
 </device>
