@@ -22,9 +22,106 @@
 #ifndef __DEVICE_CONFIG_H
 #define __DEVICE_CONFIG_H
 
+// <e> ADC (Analog-To-Digital Converter) [Driver_ADC]
+// <i> Configuration settings for Driver_ADC
+#define DEV_ADC                        0
+
+//   <e> ADC4
+//     <o1> Pin <0=>P1.2
+//   </e>
+#define DEV_ADC_IN4                    0
+#define DEV_ADC_IN4_ID                 0
+#if    (DEV_ADC_IN4_ID == 0)
+  #define DEV_ADC_IN4_PORT             &DRIVER_GPIO1
+  #define DEV_ADC_IN4_PIN              GPIO_PIN_2
+  #define DEV_ADC_IN4_FUNC             GPIO_PIN_FUNC_1
+#endif
+
+//   <e> ADC5
+//     <o1> Pin <0=>P1.3
+//   </e>
+#define DEV_ADC_IN5                    0
+#define DEV_ADC_IN5_ID                 0
+#if    (DEV_ADC_IN5_ID == 0)
+  #define DEV_ADC_IN5_PORT             &DRIVER_GPIO1
+  #define DEV_ADC_IN5_PIN              GPIO_PIN_3
+  #define DEV_ADC_IN5_FUNC             GPIO_PIN_FUNC_1
+#endif
+
+//   <e> ADC6
+//     <o1> Pin <0=>P1.5
+//   </e>
+#define DEV_ADC_IN6                    0
+#define DEV_ADC_IN6_ID                 0
+#if    (DEV_ADC_IN6_ID == 0)
+  #define DEV_ADC_IN6_PORT             &DRIVER_GPIO1
+  #define DEV_ADC_IN6_PIN              GPIO_PIN_5
+  #define DEV_ADC_IN6_FUNC             GPIO_PIN_FUNC_1
+#endif
+
+//   <e> ADC7
+//     <o1> Pin <0=>P2.2
+//   </e>
+#define DEV_ADC_IN7                    0
+#define DEV_ADC_IN7_ID                 0
+#if    (DEV_ADC_IN7_ID == 0)
+  #define DEV_ADC_IN7_PORT             &DRIVER_GPIO2
+  #define DEV_ADC_IN7_PIN              GPIO_PIN_2
+  #define DEV_ADC_IN7_FUNC             GPIO_PIN_FUNC_1
+#endif
+
+//   <e> ADC8
+//     <o1> Pin <0=>P2.3
+//   </e>
+#define DEV_ADC_IN8                    0
+#define DEV_ADC_IN8_ID                 0
+#if    (DEV_ADC_IN8_ID == 0)
+  #define DEV_ADC_IN8_PORT             &DRIVER_GPIO2
+  #define DEV_ADC_IN8_PIN              GPIO_PIN_3
+  #define DEV_ADC_IN8_FUNC             GPIO_PIN_FUNC_1
+#endif
+
+//   <e> ADC9
+//     <o1> Pin <0=>P2.4
+//   </e>
+#define DEV_ADC_IN9                    0
+#define DEV_ADC_IN9_ID                 0
+#if    (DEV_ADC_IN9_ID == 0)
+  #define DEV_ADC_IN9_PORT             &DRIVER_GPIO2
+  #define DEV_ADC_IN9_PIN              GPIO_PIN_4
+  #define DEV_ADC_IN9_FUNC             GPIO_PIN_FUNC_1
+#endif
+
+//   <e> ADC10
+//     <o1> Pin <0=>P1.4
+//   </e>
+#define DEV_ADC_IN10                   0
+#define DEV_ADC_IN10_ID                0
+#if    (DEV_ADC_IN10_ID == 0)
+  #define DEV_ADC_IN10_PORT            &DRIVER_GPIO1
+  #define DEV_ADC_IN10_PIN             GPIO_PIN_4
+  #define DEV_ADC_IN10_FUNC            GPIO_PIN_FUNC_1
+#endif
+
+//   <e> ADC12
+//     <o1> Pin <0=>P2.0
+//   </e>
+#define DEV_ADC_IN12                   0
+#define DEV_ADC_IN12_ID                0
+#if    (DEV_ADC_IN12_ID == 0)
+  #define DEV_ADC_IN12_PORT            &DRIVER_GPIO2
+  #define DEV_ADC_IN12_PIN             GPIO_PIN_0
+  #define DEV_ADC_IN12_FUNC            GPIO_PIN_FUNC_1
+#endif
+
+//   <o> Interrupt Priority <0=>Realtime <1=>Above High <2=>High <3=>Above Normal <4=>Normal <5=>Below Normal <6=>Above Low <7=>Low
+#define DEV_ADC_INT_PRIO               4
+
+// </e>
+
 // <e> I2C0 (Inter-integrated Circuit Interface) [Driver_I2C0]
 // <i> Configuration settings for Driver_I2C0 in component ::CMSIS Driver:I2C
-#define DEV_I2C0                        1
+#define DEV_I2C0                       0
 
 //   <o> SCL Pin <0=>P0.4
 #define   DEV_I2C0_SCL_PORT_ID         0
@@ -53,10 +150,10 @@
 
 // <e> I2C1 (Inter-integrated Circuit Interface) [Driver_I2C1]
 // <i> Configuration settings for Driver_I2C1 in component ::CMSIS Driver:I2C
-#define DEV_I2C1                        1
+#define DEV_I2C1                        0
 
 //   <o> SCL Pin <0=>P0.6 <1=>P1.6
-#define   DEV_I2C1_SCL_PORT_ID         0
+#define   DEV_I2C1_SCL_PORT_ID         1
 #if      (DEV_I2C1_SCL_PORT_ID == 0)
   #define DEV_I2C1_SCL_PORT            &DRIVER_GPIO0
   #define DEV_I2C1_SCL_PIN             GPIO_PIN_6
@@ -70,7 +167,7 @@
 #endif
 
 //   <o> SDA Pin <0=>P0.7 <1=>P1.7
-#define   DEV_I2C1_SDA_PORT_ID         0
+#define   DEV_I2C1_SDA_PORT_ID         1
 #if      (DEV_I2C1_SDA_PORT_ID == 0)
   #define DEV_I2C1_SDA_PORT            &DRIVER_GPIO0
   #define DEV_I2C1_SDA_PIN             GPIO_PIN_7
