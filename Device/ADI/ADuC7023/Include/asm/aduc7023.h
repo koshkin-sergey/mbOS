@@ -1061,6 +1061,10 @@ typedef struct I2C_s {
 #define I2C1                  ((I2C_t *)        I2C1_BASE)
 #define FLASH                 ((FLASH_t *)      FLASH_CTL_BASE)
 
+#define WRITE_REG(REG, VAL)   ((REG) = (VAL))
+#define READ_REG(REG)         ((REG))
+#define MODIFY_REG(REG, CLEARMASK, SETMASK)  WRITE_REG((REG), (((READ_REG(REG)) & (~(CLEARMASK))) | (SETMASK)))
+
 #ifdef __cplusplus
 }
 #endif
