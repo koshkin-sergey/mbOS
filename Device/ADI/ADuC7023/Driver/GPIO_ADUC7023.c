@@ -80,15 +80,13 @@ void GPIO_PinConfig(GPIO_PIN_t pin, const GPIO_PIN_CFG_t *cfg, const GPIO_RESOUR
   con = *gpio->CON & ~(3UL << pin_pos);
   *gpio->CON = con | (cfg->func << pin_pos);
 
-  if (cfg->func == GPIO_PIN_FUNC_0) {
-    dat_pos = GPIO_DAT_DIR_Pos + pin;
+  dat_pos = GPIO_DAT_DIR_Pos + pin;
 
-    par = *gpio->PAR & ~(7UL << pin_pos);
-    dat = *gpio->DAT & ~(1UL << dat_pos);
+  par = *gpio->PAR & ~(7UL << pin_pos);
+  dat = *gpio->DAT & ~(1UL << dat_pos);
 
-    *gpio->PAR = par | ((cfg->pull_mode | cfg->strength) << pin_pos);
-    *gpio->DAT = dat | (cfg->mode << dat_pos);
-  }
+  *gpio->PAR = par | ((cfg->pull_mode | cfg->strength) << pin_pos);
+  *gpio->DAT = dat | (cfg->mode << dat_pos);
 }
 
 /**
