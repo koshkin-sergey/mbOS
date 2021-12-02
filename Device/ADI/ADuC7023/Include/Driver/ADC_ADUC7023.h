@@ -111,22 +111,22 @@
 #endif
 
 /****** ADC error codes *****/
-#define ADC_DRIVER_OK                 0         ///< Operation succeeded
-#define ADC_DRIVER_ERROR             -1         ///< Unspecified error
-#define ADC_DRIVER_ERROR_BUSY        -2         ///< Driver is busy
-#define ADC_DRIVER_ERROR_TIMEOUT     -3         ///< Timeout occurred
-#define ADC_DRIVER_ERROR_UNSUPPORTED -4         ///< Operation not supported
-#define ADC_DRIVER_ERROR_PARAMETER   -5         ///< Parameter error
+#define ADC_DRIVER_OK                 0                                         ///< Operation succeeded
+#define ADC_DRIVER_ERROR             -1                                         ///< Unspecified error
+#define ADC_DRIVER_ERROR_BUSY        -2                                         ///< Driver is busy
+#define ADC_DRIVER_ERROR_TIMEOUT     -3                                         ///< Timeout occurred
+#define ADC_DRIVER_ERROR_UNSUPPORTED -4                                         ///< Operation not supported
+#define ADC_DRIVER_ERROR_PARAMETER   -5                                         ///< Parameter error
 
 /****** ADC Event *****/
-#define ADC_EVENT_ACQ_COMPLETE      (1UL << 0)  ///< Acquisition completed
-#define ADC_EVENT_DATA_OVERFLOW     (1UL << 1)  ///< ADC data overflow
+#define ADC_EVENT_ACQ_COMPLETE      (1UL << 0)                                  ///< Acquisition completed
+#define ADC_EVENT_DATA_OVERFLOW     (1UL << 1)                                  ///< ADC data overflow
 
 /****** Current driver status flag definition *****/
-#define ADC_FLAG_INITIALIZED        (1UL << 0)  ///< ADC initialized
-#define ADC_FLAG_POWERED            (1UL << 1)  ///< ADC powered on
-#define ADC_FLAG_CONFIGURED         (1UL << 2)  ///< ADC is configured
-#define ADC_FLAG_ENABLE             (1UL << 3)  ///< ADC is enabled
+#define ADC_FLAG_INITIALIZED        (1UL << 0)                                  ///< ADC initialized
+#define ADC_FLAG_POWERED            (1UL << 1)                                  ///< ADC powered on
+#define ADC_FLAG_CONFIGURED         (1UL << 2)                                  ///< ADC is configured
+#define ADC_FLAG_ENABLE             (1UL << 3)                                  ///< ADC is enabled
 
 /****** ADC Control Codes *****/
 #define ADC_CONTROL_Msk             (0xFFUL)
@@ -143,10 +143,10 @@
 /*----- ADC Control Codes: Configuration Parameters: Conversion Trigger Type -----*/
 #define ADC_TRG_Pos                  9
 #define ADC_TRG_Msk                 (7UL << ADC_TRG_Pos)
-#define ADC_TRG_CS_PIN              (0UL << ADC_TRG_Pos)                       ///< CONVSTART pin as a conversion input (default)
-#define ADC_TRG_TIMER1              (1UL << ADC_TRG_Pos)                       ///< Timer1 as a conversion input
-#define ADC_TRG_TIMER0              (2UL << ADC_TRG_Pos)                       ///< Timer0 as a conversion input
-#define ADC_TRG_PLA                 (5UL << ADC_TRG_Pos)                       ///< PLA conversion
+#define ADC_TRG_CS_PIN              (0UL << ADC_TRG_Pos)                        ///< CONVSTART pin as a conversion input (default)
+#define ADC_TRG_TIMER1              (1UL << ADC_TRG_Pos)                        ///< Timer1 as a conversion input
+#define ADC_TRG_TIMER0              (2UL << ADC_TRG_Pos)                        ///< Timer0 as a conversion input
+#define ADC_TRG_PLA                 (5UL << ADC_TRG_Pos)                        ///< PLA conversion
 
 /*----- ADC Control Codes: Configuration Parameters: Acquisition time -----*/
 #define ADC_ACQ_TIME_Pos             12
@@ -166,8 +166,19 @@
 #define ADC_CLK_DIV_16              (4UL << ADC_CLK_DIV_Pos)                    ///< ADC Freq = UCLK/16
 #define ADC_CLK_DIV_32              (5UL << ADC_CLK_DIV_Pos)                    ///< ADC Freq = UCLK/32
 
-/*----- ADC Control Codes: Configuration Parameters: ADC positive channel selection -----*/
-#define ADC_P_CNL_SEL_Pos            17
+
+/****** ADC Configuration (arg) *****/
+
+/*----- ADC Configuration (arg): Conversion type -----*/
+#define ADC_CONV_Pos                 0
+#define ADC_CONV_Msk                (3UL << ADC_CONV_Pos)
+#define ADC_CONV_STOP               (0UL << ADC_CONV_Pos)
+#define ADC_CONV_TRIGGER            (1UL << ADC_CONV_Pos)
+#define ADC_CONV_SOFT_SINGLE        (2UL << ADC_CONV_Pos)
+#define ADC_CONV_SOFT_CONT          (3UL << ADC_CONV_Pos)
+
+/*----- ADC Configuration (arg): ADC positive channel selection -----*/
+#define ADC_P_CNL_SEL_Pos            0
 #define ADC_P_CNL_SEL_Msk           (0x1FUL << ADC_P_CNL_SEL_Pos)
 #define ADC_P_CNL_SEL_IN0           (0x00UL << ADC_P_CNL_SEL_Pos)               ///< ADC0 (default)
 #define ADC_P_CNL_SEL_IN1           (0x01UL << ADC_P_CNL_SEL_Pos)               ///< ADC1
@@ -188,8 +199,8 @@
 #define ADC_P_CNL_SEL_IREF          (0x12UL << ADC_P_CNL_SEL_Pos)               ///< Internal reference (self-diagnostic feature)
 #define ADC_P_CNL_SEL_AVDD          (0x13UL << ADC_P_CNL_SEL_Pos)               ///< AVDD/2
 
-/*----- ADC Control Codes: Configuration Parameters: ADC negative channel selection -----*/
-#define ADC_N_CNL_SEL_Pos            22
+/*----- ADC Configuration (arg): ADC negative channel selection -----*/
+#define ADC_N_CNL_SEL_Pos            5
 #define ADC_N_CNL_SEL_Msk           (0x1FUL << ADC_N_CNL_SEL_Pos)
 #define ADC_N_CNL_SEL_IN0           (0x00UL << ADC_N_CNL_SEL_Pos)               ///< ADC0 (default)
 #define ADC_N_CNL_SEL_IN1           (0x01UL << ADC_N_CNL_SEL_Pos)               ///< ADC1
@@ -207,16 +218,6 @@
 #define ADC_N_CNL_SEL_TS            (0x10UL << ADC_N_CNL_SEL_Pos)               ///< Temperature sensor
 #define ADC_N_CNL_SEL_AGND          (0x11UL << ADC_N_CNL_SEL_Pos)               ///< AGND (self-diagnostic feature)
 #define ADC_N_CNL_SEL_IREF          (0x12UL << ADC_N_CNL_SEL_Pos)               ///< Internal reference (self-diagnostic feature)
-
-/****** ADC Configuration (arg) *****/
-
-/*----- ADC Configuration (arg): Conversion type -----*/
-#define ADC_CONV_Pos                 0
-#define ADC_CONV_Msk                (3UL << ADC_CONV_Pos)
-#define ADC_CONV_STOP               (0UL << ADC_CONV_Pos)
-#define ADC_CONV_TRIGGER            (1UL << ADC_CONV_Pos)
-#define ADC_CONV_SOFT_SINGLE        (2UL << ADC_CONV_Pos)
-#define ADC_CONV_SOFT_CONT          (3UL << ADC_CONV_Pos)
 
 /*******************************************************************************
  *  typedefs and structures

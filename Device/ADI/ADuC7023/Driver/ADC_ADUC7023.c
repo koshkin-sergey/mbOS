@@ -287,10 +287,10 @@ static int32_t ADC_Control(uint32_t control, uint32_t arg)
 
     case ADC_CHANNEL_SELECT:
       /* Configure ADC Channel Select */
-      value = (control & ADC_P_CNL_SEL_Msk) >> ADC_P_CNL_SEL_Pos;
+      value = (arg & ADC_P_CNL_SEL_Msk) >> ADC_P_CNL_SEL_Pos;
       MODIFY_REG(reg->CP, ADCCP_SEL_CHN_P_Msk, value << ADCCP_SEL_CHN_P_Pos);
 
-      value = (control & ADC_N_CNL_SEL_Msk) >> ADC_N_CNL_SEL_Pos;
+      value = (arg & ADC_N_CNL_SEL_Msk) >> ADC_N_CNL_SEL_Pos;
       MODIFY_REG(reg->CN, ADCCP_SEL_CHN_N_Msk, value << ADCCP_SEL_CHN_N_Pos);
       break;
 
