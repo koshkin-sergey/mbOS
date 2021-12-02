@@ -122,7 +122,7 @@ static int32_t ADC_Initialize(ADC_SignalEvent_t cb_event)
     .strength  = GPIO_STRENGTH_MEDIUM,
   };
 
-  for (uint32_t i = 0U; i < sizeof(ADC_NUM_PINS); ++i) {
+  for (uint32_t i = 0U; i < ADC_PIN_NUM; ++i) {
     if (io->pin[i] != NULL) {
       ADC_PIN *adc_pin = io->pin[i];
       pin_cfg.func = adc_pin->func;
@@ -153,7 +153,7 @@ static int32_t ADC_Uninitialize(void)
     .strength  = GPIO_STRENGTH_MEDIUM,
   };
 
-  for (uint32_t i = 0U; i < sizeof(ADC_NUM_PINS); ++i) {
+  for (uint32_t i = 0U; i < ADC_PIN_NUM; ++i) {
     if (io->pin[i] != NULL) {
       ADC_PIN *adc_pin = io->pin[i];
       adc_pin->gpio->PinConfig(adc_pin->pin, &pin_cfg);
@@ -181,6 +181,7 @@ static int32_t ADC_PowerControl(ADC_POWER_STATE state)
     case ADC_POWER_OFF:
       /* Disable peripheral */
       reg->CON &= ~ADCCON_PWR_UP;
+      REF->CON &= ~REFCON_OUT_EN;
 
       /* Disable ADC IRQ */
       IRQ_Disable(irq->num);
@@ -205,6 +206,7 @@ static int32_t ADC_PowerControl(ADC_POWER_STATE state)
 
       /* Initial peripheral setup */
       reg->CON |= ADCCON_PWR_UP;
+      REF->CON |= REFCON_OUT_EN;
 
       /* Ready for operation */
       info->flags |= ADC_FLAG_POWERED;

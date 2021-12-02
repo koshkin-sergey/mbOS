@@ -36,8 +36,11 @@
  *  defines and macros
  ******************************************************************************/
 
-/* ADC Number Pins */
-#define ADC_NUM_PINS                (8U)
+#define ADC_RESOLUTION              (12U)
+#define ADC_MAX_LSB                 ((1UL << ADC_RESOLUTION) - 1UL)
+
+/* The number of ADC pins. */
+#define ADC_PIN_NUM                 (8U)
 
 /* ADC configuration definitions */
 #if defined (DEV_ADC) && (DEV_ADC == 1)
@@ -253,7 +256,7 @@ typedef const struct _ADC_PIN {
 
 /* ADC Input/Output Configuration */
 typedef const struct _ADC_IO {
-  ADC_PIN              *pin[ADC_NUM_PINS];  // ADC Input pins
+  ADC_PIN              *pin[ADC_PIN_NUM];  // ADC Input pins
 } ADC_IO;
 
 /* ADC Acquire Information (Run-Time) */
