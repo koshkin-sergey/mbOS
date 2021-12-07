@@ -181,6 +181,7 @@ static int32_t ADC_PowerControl(ADC_POWER_STATE state)
     case ADC_POWER_OFF:
       /* Disable peripheral */
       reg->CON &= ~ADCCON_PWR_UP;
+      reg->TSCON &= ~TSCON_EN;
       REF->CON &= ~REFCON_OUT_EN;
 
       /* Disable ADC IRQ */
@@ -205,8 +206,10 @@ static int32_t ADC_PowerControl(ADC_POWER_STATE state)
       IRQ_Enable(irq->num);
 
       /* Initial peripheral setup */
-      reg->CON |= ADCCON_PWR_UP;
       REF->CON |= REFCON_OUT_EN;
+      reg->TSCON |= TSCON_EN;
+      reg->CON |= ADCCON_PWR_UP;
+
 
       /* Ready for operation */
       info->flags |= ADC_FLAG_POWERED;
