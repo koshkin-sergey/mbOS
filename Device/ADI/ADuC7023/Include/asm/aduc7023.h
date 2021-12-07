@@ -619,6 +619,20 @@ typedef struct ADC {
 #define ADCRST_VALUE_Msk          (0xFFU << ADCRST_VALUE_Pos)
 #define ADCRST_VALUE              ADCRST_VALUE_Msk
 
+/********************  Bit definition for TSCON register  *********************/
+#define TSCON_EN_Pos              (0U)
+#define TSCON_EN_Msk              (0x1U << TSCON_EN_Pos)
+#define TSCON_EN                  TSCON_EN_Msk
+
+/********************  Bit definition for TEMPREF register  *******************/
+#define TEMPREF_OFFSET_Pos        (0U)
+#define TEMPREF_OFFSET_Msk        (0xFFU << TEMPREF_OFFSET_Pos)
+#define TEMPREF_OFFSET            TEMPREF_OFFSET_Msk
+
+#define TEMPREF_SIGN_Pos          (8U)
+#define TEMPREF_SIGN_Msk          (0x1U << TEMPREF_SIGN_Pos)
+#define TEMPREF_SIGN              TEMPREF_SIGN_Msk
+
 /*------------------------------------------------------------------------------
  *                          DIGITAL-TO-ANALOG CONVERTER
  *----------------------------------------------------------------------------*/
