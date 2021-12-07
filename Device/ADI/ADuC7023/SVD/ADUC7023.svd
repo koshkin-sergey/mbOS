@@ -195,7 +195,8 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
         </register>
       </registers>
     </peripheral>
-    
+
+    <!-- ADC -->
     <peripheral>
       <name>ADC</name>
       <description>Analog-to-Digital Converter</description>
@@ -395,7 +396,8 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
         </register>
       </registers>  
     </peripheral>
-    
+
+    <!-- DAC -->
     <peripheral>
       <name>DAC</name>
       <description>Digital-to-Analog Converter</description>
@@ -1988,6 +1990,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
       
     </peripheral>
     
+    <!-- GPIO -->
     <peripheral>
       <name>GPIO</name>
       <description>GENERAL-PURPOSE INPUT/OUTPUT</description>
@@ -1995,16 +1998,811 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
       <baseAddress>0xFFFFF400</baseAddress>
       <addressBlock>
         <offset>0x0</offset>
-        <size>0x6C</size>
+        <size>0x50</size>
         <usage>registers</usage>
       </addressBlock>
-      
       <registers>
-      
-      
-      
+        <register>
+          <name>GP0CON</name>
+          <displayName>GP0CON</displayName>
+          <description>GPIO Port0 control register</description>
+          <addressOffset>0x0</addressOffset>
+          <size>32</size>
+          <access>read-write</access>
+          <resetValue>0x00001111</resetValue>
+          <fields>
+            <field>
+              <name>CON0</name>
+              <description>Select function of P0.0 pin</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+
+            <field>
+              <name>CON1</name>
+              <description>Select function of P0.1 pin</description>
+              <bitOffset>4</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+
+            <field>
+              <name>CON2</name>
+              <description>Select function of P0.2 pin</description>
+              <bitOffset>8</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+
+            <field>
+              <name>CON3</name>
+              <description>Select function of P0.3 pin</description>
+              <bitOffset>12</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+
+            <field>
+              <name>CON4</name>
+              <description>Select function of P0.4 pin</description>
+              <bitOffset>16</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+
+            <field>
+              <name>CON5</name>
+              <description>Select function of P0.5 pin</description>
+              <bitOffset>20</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+
+            <field>
+              <name>CON6</name>
+              <description>Select function of P0.6 pin</description>
+              <bitOffset>24</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+
+            <field>
+              <name>CON7</name>
+              <description>Select function of P0.7 pin</description>
+              <bitOffset>28</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+          </fields>
+        </register>
+
+        <register>
+          <name>GP0DAT</name>
+          <displayName>GP0DAT</displayName>
+          <description>GPIO Port0 data control register</description>
+          <addressOffset>0x20</addressOffset>
+          <size>32</size>
+          <access>read-write</access>
+          <resetValue>0x00000000</resetValue>
+          <fields>
+            <field>
+              <name>IN</name>
+              <description>Port data input</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>8</bitWidth>
+              <access>read-only</access>
+            </field>
+
+            <field>
+              <name>RESET_STATE</name>
+              <description>Reflect the state of Port pins at reset</description>
+              <bitOffset>8</bitOffset>
+              <bitWidth>8</bitWidth>
+              <access>read-only</access>
+            </field>
+
+            <field>
+              <name>OUT</name>
+              <description>Port data output</description>
+              <bitOffset>16</bitOffset>
+              <bitWidth>8</bitWidth>
+            </field>
+
+            <field>
+              <name>DIR</name>
+              <description>Direction of the data</description>
+              <bitOffset>24</bitOffset>
+              <bitWidth>8</bitWidth>
+            </field>
+          </fields>
+        </register>
+
+        <register>
+          <name>GP0SET</name>
+          <displayName>GP0SET</displayName>
+          <description>GPIO Port0 data set register</description>
+          <addressOffset>0x24</addressOffset>
+          <size>32</size>
+          <access>write-only</access>
+          <resetValue>0x00000000</resetValue>
+          <fields>
+            <field>
+              <name>SET</name>
+              <description>Data port set bit</description>
+              <bitOffset>16</bitOffset>
+              <bitWidth>8</bitWidth>
+            </field>
+          </fields>
+        </register>
+
+        <register>
+          <name>GP0CLR</name>
+          <displayName>GP0CLR</displayName>
+          <description>GPIO Port0 data clear register</description>
+          <addressOffset>0x28</addressOffset>
+          <size>32</size>
+          <access>write-only</access>
+          <resetValue>0x00000000</resetValue>
+          <fields>
+            <field>
+              <name>CLR</name>
+              <description>Data port clear bit</description>
+              <bitOffset>16</bitOffset>
+              <bitWidth>8</bitWidth>
+            </field>
+          </fields>
+        </register>
+
+        <register>
+          <name>GP0PAR</name>
+          <displayName>GP0PAR</displayName>
+          <description>GPIO Port0 pull-up disable register</description>
+          <addressOffset>0x2C</addressOffset>
+          <size>32</size>
+          <access>read-write</access>
+          <resetValue>0x22220000</resetValue>
+          <fields>
+            <field>
+              <name>PULLUP</name>
+              <description>Pull-up disable P0.0 bit</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+
+            <field>
+              <name>STRENGTH</name>
+              <description>Drive strength P0.0 bit</description>
+              <bitOffset>1</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+
+            <field>
+              <name>PULLUP</name>
+              <description>Pull-up disable P0.1 bit</description>
+              <bitOffset>4</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+
+            <field>
+              <name>STRENGTH</name>
+              <description>Drive strength P0.1 bit</description>
+              <bitOffset>5</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+
+            <field>
+              <name>PULLUP</name>
+              <description>Pull-up disable P0.2 bit</description>
+              <bitOffset>8</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+
+            <field>
+              <name>STRENGTH</name>
+              <description>Drive strength P0.2 bit</description>
+              <bitOffset>9</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+
+            <field>
+              <name>PULLUP</name>
+              <description>Pull-up disable P0.3 bit</description>
+              <bitOffset>12</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+
+            <field>
+              <name>STRENGTH</name>
+              <description>Drive strength P0.3 bit</description>
+              <bitOffset>13</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+
+            <field>
+              <name>PULLUP</name>
+              <description>Pull-up disable P0.4 bit</description>
+              <bitOffset>16</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+
+            <field>
+              <name>STRENGTH</name>
+              <description>Drive strength P0.4 bit</description>
+              <bitOffset>17</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+
+            <field>
+              <name>PULLUP</name>
+              <description>Pull-up disable P0.5 bit</description>
+              <bitOffset>20</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+
+            <field>
+              <name>STRENGTH</name>
+              <description>Drive strength P0.5 bit</description>
+              <bitOffset>21</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+
+            <field>
+              <name>PULLUP</name>
+              <description>Pull-up disable P0.6 bit</description>
+              <bitOffset>24</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+
+            <field>
+              <name>STRENGTH</name>
+              <description>Drive strength P0.6 bit</description>
+              <bitOffset>25</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+
+            <field>
+              <name>PULLUP</name>
+              <description>Pull-up disable P0.7 bit</description>
+              <bitOffset>28</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+
+            <field>
+              <name>STRENGTH</name>
+              <description>Drive strength P0.7 bit</description>
+              <bitOffset>29</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+          </fields>
+        </register>
+
+        <register>
+          <name>GP1CON</name>
+          <displayName>GP1CON</displayName>
+          <description>GPIO Port1 control register</description>
+          <addressOffset>0x4</addressOffset>
+          <size>32</size>
+          <access>read-write</access>
+          <resetValue>0x00000000</resetValue>
+          <fields>
+            <field>
+              <name>CON0</name>
+              <description>Select function of P1.0 pin</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+
+            <field>
+              <name>CON1</name>
+              <description>Select function of P1.1 pin</description>
+              <bitOffset>4</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+
+            <field>
+              <name>CON2</name>
+              <description>Select function of P1.2 pin</description>
+              <bitOffset>8</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+
+            <field>
+              <name>CON3</name>
+              <description>Select function of P1.3 pin</description>
+              <bitOffset>12</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+
+            <field>
+              <name>CON4</name>
+              <description>Select function of P1.4 pin</description>
+              <bitOffset>16</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+
+            <field>
+              <name>CON5</name>
+              <description>Select function of P1.5 pin</description>
+              <bitOffset>20</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+
+            <field>
+              <name>CON6</name>
+              <description>Select function of P1.6 pin</description>
+              <bitOffset>24</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+
+            <field>
+              <name>CON7</name>
+              <description>Select function of P1.7 pin</description>
+              <bitOffset>28</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+          </fields>
+        </register>
+
+        <register>
+          <name>GP1DAT</name>
+          <displayName>GP1DAT</displayName>
+          <description>GPIO Port1 data control register</description>
+          <addressOffset>0x30</addressOffset>
+          <size>32</size>
+          <access>read-write</access>
+          <resetValue>0x00000000</resetValue>
+          <fields>
+            <field>
+              <name>IN</name>
+              <description>Port data input</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>8</bitWidth>
+              <access>read-only</access>
+            </field>
+
+            <field>
+              <name>RESET_STATE</name>
+              <description>Reflect the state of Port pins at reset</description>
+              <bitOffset>8</bitOffset>
+              <bitWidth>8</bitWidth>
+              <access>read-only</access>
+            </field>
+
+            <field>
+              <name>OUT</name>
+              <description>Port data output</description>
+              <bitOffset>16</bitOffset>
+              <bitWidth>8</bitWidth>
+            </field>
+
+            <field>
+              <name>DIR</name>
+              <description>Direction of the data</description>
+              <bitOffset>24</bitOffset>
+              <bitWidth>8</bitWidth>
+            </field>
+          </fields>
+        </register>
+
+        <register>
+          <name>GP1SET</name>
+          <displayName>GP1SET</displayName>
+          <description>GPIO Port1 data set register</description>
+          <addressOffset>0x34</addressOffset>
+          <size>32</size>
+          <access>write-only</access>
+          <resetValue>0x00000000</resetValue>
+          <fields>
+            <field>
+              <name>SET</name>
+              <description>Data port set bit</description>
+              <bitOffset>16</bitOffset>
+              <bitWidth>8</bitWidth>
+            </field>
+          </fields>
+        </register>
+
+        <register>
+          <name>GP1CLR</name>
+          <displayName>GP1CLR</displayName>
+          <description>GPIO Port1 data clear register</description>
+          <addressOffset>0x38</addressOffset>
+          <size>32</size>
+          <access>write-only</access>
+          <resetValue>0x00000000</resetValue>
+          <fields>
+            <field>
+              <name>CLR</name>
+              <description>Data port clear bit</description>
+              <bitOffset>16</bitOffset>
+              <bitWidth>8</bitWidth>
+            </field>
+          </fields>
+        </register>
+
+        <register>
+          <name>GP1PAR</name>
+          <displayName>GP1PAR</displayName>
+          <description>GPIO Port1 pull-up disable register</description>
+          <addressOffset>0x3C</addressOffset>
+          <size>32</size>
+          <access>read-write</access>
+          <resetValue>0x22000022</resetValue>
+          <fields>
+            <field>
+              <name>PULLUP</name>
+              <description>Pull-up disable P1.0 bit</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+
+            <field>
+              <name>STRENGTH</name>
+              <description>Drive strength P1.0 bit</description>
+              <bitOffset>1</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+
+            <field>
+              <name>PULLUP</name>
+              <description>Pull-up disable P1.1 bit</description>
+              <bitOffset>4</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+
+            <field>
+              <name>STRENGTH</name>
+              <description>Drive strength P1.1 bit</description>
+              <bitOffset>5</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+
+            <field>
+              <name>PULLUP</name>
+              <description>Pull-up disable P1.2 bit</description>
+              <bitOffset>8</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+
+            <field>
+              <name>STRENGTH</name>
+              <description>Drive strength P1.2 bit</description>
+              <bitOffset>9</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+
+            <field>
+              <name>PULLUP</name>
+              <description>Pull-up disable P1.3 bit</description>
+              <bitOffset>12</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+
+            <field>
+              <name>STRENGTH</name>
+              <description>Drive strength P1.3 bit</description>
+              <bitOffset>13</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+
+            <field>
+              <name>PULLUP</name>
+              <description>Pull-up disable P1.4 bit</description>
+              <bitOffset>16</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+
+            <field>
+              <name>STRENGTH</name>
+              <description>Drive strength P1.4 bit</description>
+              <bitOffset>17</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+
+            <field>
+              <name>PULLUP</name>
+              <description>Pull-up disable P1.5 bit</description>
+              <bitOffset>20</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+
+            <field>
+              <name>STRENGTH</name>
+              <description>Drive strength P1.5 bit</description>
+              <bitOffset>21</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+
+            <field>
+              <name>PULLUP</name>
+              <description>Pull-up disable P1.6 bit</description>
+              <bitOffset>24</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+
+            <field>
+              <name>STRENGTH</name>
+              <description>Drive strength P1.6 bit</description>
+              <bitOffset>25</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+
+            <field>
+              <name>PULLUP</name>
+              <description>Pull-up disable P1.7 bit</description>
+              <bitOffset>28</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+
+            <field>
+              <name>STRENGTH</name>
+              <description>Drive strength P1.7 bit</description>
+              <bitOffset>29</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+          </fields>
+        </register>
+
+        <register>
+          <name>GP2CON</name>
+          <displayName>GP2CON</displayName>
+          <description>GPIO Port2 control register</description>
+          <addressOffset>0x8</addressOffset>
+          <size>32</size>
+          <access>read-write</access>
+          <resetValue>0x00000000</resetValue>
+          <fields>
+            <field>
+              <name>CON0</name>
+              <description>Select function of P2.0 pin</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+
+            <field>
+              <name>CON1</name>
+              <description>Select function of P2.1 pin</description>
+              <bitOffset>4</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+
+            <field>
+              <name>CON2</name>
+              <description>Select function of P2.2 pin</description>
+              <bitOffset>8</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+
+            <field>
+              <name>CON3</name>
+              <description>Select function of P2.3 pin</description>
+              <bitOffset>12</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+
+            <field>
+              <name>CON4</name>
+              <description>Select function of P2.4 pin</description>
+              <bitOffset>16</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+
+            <field>
+              <name>CON5</name>
+              <description>Select function of P2.5 pin</description>
+              <bitOffset>20</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+
+            <field>
+              <name>CON6</name>
+              <description>Select function of P2.6 pin</description>
+              <bitOffset>24</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+
+            <field>
+              <name>CON7</name>
+              <description>Select function of P2.7 pin</description>
+              <bitOffset>28</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+          </fields>
+        </register>
+
+        <register>
+          <name>GP2DAT</name>
+          <displayName>GP2DAT</displayName>
+          <description>GPIO Port2 data control register</description>
+          <addressOffset>0x40</addressOffset>
+          <size>32</size>
+          <access>read-write</access>
+          <resetValue>0x00000000</resetValue>
+          <fields>
+            <field>
+              <name>IN</name>
+              <description>Port data input</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>8</bitWidth>
+              <access>read-only</access>
+            </field>
+
+            <field>
+              <name>RESET_STATE</name>
+              <description>Reflect the state of Port pins at reset</description>
+              <bitOffset>8</bitOffset>
+              <bitWidth>8</bitWidth>
+              <access>read-only</access>
+            </field>
+
+            <field>
+              <name>OUT</name>
+              <description>Port data output</description>
+              <bitOffset>16</bitOffset>
+              <bitWidth>8</bitWidth>
+            </field>
+
+            <field>
+              <name>DIR</name>
+              <description>Direction of the data</description>
+              <bitOffset>24</bitOffset>
+              <bitWidth>8</bitWidth>
+            </field>
+          </fields>
+        </register>
+
+        <register>
+          <name>GP2SET</name>
+          <displayName>GP2SET</displayName>
+          <description>GPIO Port2 data set register</description>
+          <addressOffset>0x44</addressOffset>
+          <size>32</size>
+          <access>write-only</access>
+          <resetValue>0x00000000</resetValue>
+          <fields>
+            <field>
+              <name>SET</name>
+              <description>Data port set bit</description>
+              <bitOffset>16</bitOffset>
+              <bitWidth>8</bitWidth>
+            </field>
+          </fields>
+        </register>
+
+        <register>
+          <name>GP2CLR</name>
+          <displayName>GP2CLR</displayName>
+          <description>GPIO Port2 data clear register</description>
+          <addressOffset>0x48</addressOffset>
+          <size>32</size>
+          <access>write-only</access>
+          <resetValue>0x00000000</resetValue>
+          <fields>
+            <field>
+              <name>CLR</name>
+              <description>Data port clear bit</description>
+              <bitOffset>16</bitOffset>
+              <bitWidth>8</bitWidth>
+            </field>
+          </fields>
+        </register>
+
+        <register>
+          <name>GP2PAR</name>
+          <displayName>GP2PAR</displayName>
+          <description>GPIO Port2 pull-up disable register</description>
+          <addressOffset>0x4C</addressOffset>
+          <size>32</size>
+          <access>read-write</access>
+          <resetValue>0x00000000</resetValue>
+          <fields>
+            <field>
+              <name>PULLUP</name>
+              <description>Pull-up disable P2.0 bit</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+
+            <field>
+              <name>STRENGTH</name>
+              <description>Drive strength P2.0 bit</description>
+              <bitOffset>1</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+
+            <field>
+              <name>PULLUP</name>
+              <description>Pull-up disable P2.1 bit</description>
+              <bitOffset>4</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+
+            <field>
+              <name>STRENGTH</name>
+              <description>Drive strength P2.1 bit</description>
+              <bitOffset>5</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+
+            <field>
+              <name>PULLUP</name>
+              <description>Pull-up disable P2.2 bit</description>
+              <bitOffset>8</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+
+            <field>
+              <name>STRENGTH</name>
+              <description>Drive strength P2.2 bit</description>
+              <bitOffset>9</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+
+            <field>
+              <name>PULLUP</name>
+              <description>Pull-up disable P2.3 bit</description>
+              <bitOffset>12</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+
+            <field>
+              <name>STRENGTH</name>
+              <description>Drive strength P2.3 bit</description>
+              <bitOffset>13</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+
+            <field>
+              <name>PULLUP</name>
+              <description>Pull-up disable P2.4 bit</description>
+              <bitOffset>16</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+
+            <field>
+              <name>STRENGTH</name>
+              <description>Drive strength P2.4 bit</description>
+              <bitOffset>17</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+
+            <field>
+              <name>PULLUP</name>
+              <description>Pull-up disable P2.5 bit</description>
+              <bitOffset>20</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+
+            <field>
+              <name>STRENGTH</name>
+              <description>Drive strength P2.5 bit</description>
+              <bitOffset>21</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+
+            <field>
+              <name>PULLUP</name>
+              <description>Pull-up disable P2.6 bit</description>
+              <bitOffset>24</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+
+            <field>
+              <name>STRENGTH</name>
+              <description>Drive strength P2.6 bit</description>
+              <bitOffset>25</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+
+            <field>
+              <name>PULLUP</name>
+              <description>Pull-up disable P2.7 bit</description>
+              <bitOffset>28</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+
+            <field>
+              <name>STRENGTH</name>
+              <description>Drive strength P2.7 bit</description>
+              <bitOffset>29</bitOffset>
+              <bitWidth>2</bitWidth>
+            </field>
+          </fields>
+        </register>
       </registers>
-      
     </peripheral>
   
     <peripheral>
