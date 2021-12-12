@@ -165,7 +165,7 @@ __STATIC_FORCEINLINE  uint32_t __REV(uint32_t value)
 {
 #if (__GNUC__ > 4) || (__GNUC__ == 4 && __GNUC_MINOR__ >= 5)
   return (__builtin_bswap32(value));
-#else
+#elif defined(__ARM_ARCH_6__)
   uint32_t result;
 
   __ASM ("rev %0, %1" : "=r" (result) : "r" (value) );
@@ -173,6 +173,7 @@ __STATIC_FORCEINLINE  uint32_t __REV(uint32_t value)
 #endif
 }
 
+#if defined(__ARM_ARCH_6__)
 /**
   \brief   Reverse byte order (16 bit)
   \details Reverses the byte order within each halfword of a word. For example, 0x12345678 becomes 0x34127856.
@@ -185,6 +186,7 @@ __STATIC_FORCEINLINE uint32_t __REV16(uint32_t value)
   __ASM ("rev16 %0, %1" : "=r" (result) : "r" (value));
   return (result);
 }
+#endif
 
 /**
   \brief   Reverse byte order (16 bit)
@@ -196,7 +198,7 @@ __STATIC_FORCEINLINE  int16_t __REVSH(int16_t value)
 {
 #if (__GNUC__ > 4) || (__GNUC__ == 4 && __GNUC_MINOR__ >= 8)
   return ((int16_t)__builtin_bswap16(value));
-#else
+#elif defined(__ARM_ARCH_6__)
   int16_t result;
 
   __ASM ("revsh %0, %1" : "=r" (result) : "r" (value) );
@@ -231,6 +233,30 @@ __STATIC_FORCEINLINE  uint32_t __RBIT(uint32_t value)
   uint32_t result;
 
   int32_t s = (4U /*sizeof(v)*/ * 8U) - 1U; /* extra shift needed at end */
+
+  result = value;                      /* r will be reversed bits of v; first get LSB of v */
+  for (value >>= 1U; value; value >>= 1U)
+  {
+    result <<= 1U;
+    result |= value & 1U;
+    s--;
+  }
+  result <<= s;                        /* shift when v's highest bits are zero */
+
+  return (result);
+}
+
+/**
+ * @brief       Reverse bit order of value
+ * @details     Reverses the bit order of the given value.
+ * @param[in]   value  Value to reverse
+ * @return      Reversed value
+ */
+__STATIC_FORCEINLINE uint16_t __RBIT16(uint16_t value)
+{
+  uint16_t result;
+
+  int32_t s = (sizeof(value) * 8U) - 1U; /* extra shift needed at end */
 
   result = value;                      /* r will be reversed bits of v; first get LSB of v */
   for (value >>= 1U; value; value >>= 1U)
