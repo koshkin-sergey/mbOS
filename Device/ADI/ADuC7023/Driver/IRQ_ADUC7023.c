@@ -408,9 +408,6 @@ uint32_t IRQ_GetPriorityMask(void)
   return (IRQ_PRIORITY_ERROR);
 }
 
-/// Set priority grouping field split point
-/// \param[in]     bits          number of MSB bits included in the group priority field comparison
-/// \return 0 on success, -1 on error.
 /**
  * @brief       Set priority grouping field split point
  * @param[in]   bits    number of MSB bits included in the group priority field

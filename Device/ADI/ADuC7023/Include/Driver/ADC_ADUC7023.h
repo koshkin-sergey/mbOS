@@ -255,11 +255,6 @@ typedef const struct _ADC_PIN {
   GPIO_PIN_FUNC_t       func;               // AF pin configuration
 } ADC_PIN;
 
-/* ADC Input/Output Configuration */
-typedef const struct _ADC_IO {
-  ADC_PIN              *pin[ADC_PIN_NUM];  // ADC Input pins
-} ADC_IO;
-
 /* ADC Acquire Information (Run-Time) */
 typedef struct _ADC_ACQ_INFO {
   uint32_t              num;                // Total number of data to be acquired
@@ -284,10 +279,10 @@ typedef const struct _ADC_IRQ {
 
 /* ADC Resource Configuration */
 typedef struct {
-  ADC_t                *reg;                // ADC peripheral register interface
-  ADC_IO                io;                 // ADC Input pins
+  ADC_t                 *reg;               // ADC peripheral register interface
+  ADC_PIN  *pin[ADC_PIN_NUM];               // ADC Input pins
   ADC_INFO             *info;               // Run-Time information
-  ADC_IRQ               irq;                // ADC interrupt information
+  ADC_IRQ                irq;               // ADC interrupt information
 } const ADC_RESOURCES;
 
 /**

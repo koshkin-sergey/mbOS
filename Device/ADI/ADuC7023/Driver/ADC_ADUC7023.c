@@ -108,7 +108,7 @@ static ADC_RESOURCES ADC_Resources = {
  */
 static int32_t ADC_Initialize(ADC_SignalEvent_t cb_event)
 {
-  ADC_IO   *io   = &ADC_Resources.io;
+  ADC_PIN  *adc_pin;
   ADC_INFO *info = ADC_Resources.info;
 
   if ((info->flags & ADC_FLAG_INITIALIZED) != 0U) {
@@ -123,8 +123,8 @@ static int32_t ADC_Initialize(ADC_SignalEvent_t cb_event)
   };
 
   for (uint32_t i = 0U; i < ADC_PIN_NUM; ++i) {
-    if (io->pin[i] != NULL) {
-      ADC_PIN *adc_pin = io->pin[i];
+    if (ADC_Resources.pin[i] != NULL) {
+      adc_pin = ADC_Resources.pin[i];
       pin_cfg.func = adc_pin->func;
       adc_pin->gpio->PinConfig(adc_pin->pin, &pin_cfg);
     }
@@ -142,7 +142,7 @@ static int32_t ADC_Initialize(ADC_SignalEvent_t cb_event)
  */
 static int32_t ADC_Uninitialize(void)
 {
-  ADC_IO   *io   = &ADC_Resources.io;
+  ADC_PIN  *adc_pin;
   ADC_INFO *info = ADC_Resources.info;
 
   /* Unconfigure ADC Pins */
@@ -154,8 +154,8 @@ static int32_t ADC_Uninitialize(void)
   };
 
   for (uint32_t i = 0U; i < ADC_PIN_NUM; ++i) {
-    if (io->pin[i] != NULL) {
-      ADC_PIN *adc_pin = io->pin[i];
+    if (ADC_Resources.pin[i] != NULL) {
+      adc_pin = ADC_Resources.pin[i];
       adc_pin->gpio->PinConfig(adc_pin->pin, &pin_cfg);
     }
   }
