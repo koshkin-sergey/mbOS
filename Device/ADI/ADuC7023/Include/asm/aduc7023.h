@@ -119,11 +119,13 @@ typedef struct IRQ_s {
                                setting for Interrupt Source.                  */
   RESERVED(1, uint32_t);
   __IOM uint32_t CONN;    /*!< Used to enable IRQ and FIQ interrupt nesting.  */
-  __IOM uint32_t CONE;    /*!< This register configures the external interrupt
+  struct EXT_IRQ {
+    __IOM uint32_t CONE;  /*!< This register configures the external interrupt
                                sources as rising edge, falling edge, or level
                                triggered.                                     */
-  __IOM uint32_t CLRE;    /*!< Used to clear an edge level triggered interrupt
+    __IOM uint32_t CLRE;  /*!< Used to clear an edge level triggered interrupt
                                source.                                        */
+  } EXT_IRQ;
   __IOM uint32_t STAN;    /*!< This register indicates the priority level of
                                an interrupt that has just caused an interrupt
                                exception.                                     */
