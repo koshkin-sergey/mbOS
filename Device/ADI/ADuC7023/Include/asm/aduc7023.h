@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2021-2022 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -156,6 +156,56 @@ typedef struct IRQ_s {
 #define IRQ_CONN_ENFIQN_Pos       (1U)
 #define IRQ_CONN_ENFIQN_Msk       (0x1U << IRQ_CONN_ENFIQN_Pos)
 #define IRQ_CONN_ENFIQN           IRQ_CONN_ENFIQN_Msk
+
+/********************  Bit definition for IRQCONE register  *******************/
+#define IRQ_CONE_IRQ0SRC_Pos      (0U)
+#define IRQ_CONE_IRQ0SRC_Msk      (0x3U << IRQ_CONE_IRQ0SRC_Pos)
+#define IRQ_CONE_IRQ0SRC          IRQ_CONE_IRQ0SRC_Msk
+
+#define IRQ_CONE_IRQ1SRC_Pos      (2U)
+#define IRQ_CONE_IRQ1SRC_Msk      (0x3U << IRQ_CONE_IRQ1SRC_Pos)
+#define IRQ_CONE_IRQ1SRC          IRQ_CONE_IRQ1SRC_Msk
+
+#define IRQ_CONE_PLA0SRC_Pos      (4U)
+#define IRQ_CONE_PLA0SRC_Msk      (0x3U << IRQ_CONE_PLA0SRC_Pos)
+#define IRQ_CONE_PLA0SRC          IRQ_CONE_PLA0SRC_Msk
+
+#define IRQ_CONE_IRQ2SRC_Pos      (6U)
+#define IRQ_CONE_IRQ2SRC_Msk      (0x3U << IRQ_CONE_IRQ2SRC_Pos)
+#define IRQ_CONE_IRQ2SRC          IRQ_CONE_IRQ2SRC_Msk
+
+#define IRQ_CONE_IRQ3SRC_Pos      (8U)
+#define IRQ_CONE_IRQ3SRC_Msk      (0x3U << IRQ_CONE_IRQ3SRC_Pos)
+#define IRQ_CONE_IRQ3SRC          IRQ_CONE_IRQ3SRC_Msk
+
+#define IRQ_CONE_PLA1SRC_Pos      (10U)
+#define IRQ_CONE_PLA1SRC_Msk      (0x3U << IRQ_CONE_PLA1SRC_Pos)
+#define IRQ_CONE_PLA1SRC          IRQ_CONE_PLA1SRC_Msk
+
+/********************  Bit definition for IRQCLRE register  *******************/
+#define IRQ_CLRE_IRQ0CLRI_Pos     (13U)
+#define IRQ_CLRE_IRQ0CLRI_Msk     (0x1U << IRQ_CLRE_IRQ0CLRI_Pos)
+#define IRQ_CLRE_IRQ0CLRI         IRQ_CLRE_IRQ0CLRI_Msk
+
+#define IRQ_CLRE_IRQ1CLRI_Pos     (16U)
+#define IRQ_CLRE_IRQ1CLRI_Msk     (0x1U << IRQ_CLRE_IRQ1CLRI_Pos)
+#define IRQ_CLRE_IRQ1CLRI         IRQ_CLRE_IRQ1CLRI_Msk
+
+#define IRQ_CLRE_PLA0CLRI_Pos     (17U)
+#define IRQ_CLRE_PLA0CLRI_Msk     (0x1U << IRQ_CLRE_PLA0CLRI_Pos)
+#define IRQ_CLRE_PLA0CLRI         IRQ_CLRE_PLA0CLRI_Msk
+
+#define IRQ_CLRE_IRQ2CLRI_Pos     (18U)
+#define IRQ_CLRE_IRQ2CLRI_Msk     (0x1U << IRQ_CLRE_IRQ2CLRI_Pos)
+#define IRQ_CLRE_IRQ2CLRI         IRQ_CLRE_IRQ2CLRI_Msk
+
+#define IRQ_CLRE_IRQ3CLRI_Pos     (19U)
+#define IRQ_CLRE_IRQ3CLRI_Msk     (0x1U << IRQ_CLRE_IRQ3CLRI_Pos)
+#define IRQ_CLRE_IRQ3CLRI         IRQ_CLRE_IRQ3CLRI_Msk
+
+#define IRQ_CLRE_PLA1CLRI_Pos     (20U)
+#define IRQ_CLRE_PLA1CLRI_Msk     (0x1U << IRQ_CLRE_PLA1CLRI_Pos)
+#define IRQ_CLRE_PLA1CLRI         IRQ_CLRE_PLA1CLRI_Msk
 
 /**
  * @brief Fast Interrupt Controller
