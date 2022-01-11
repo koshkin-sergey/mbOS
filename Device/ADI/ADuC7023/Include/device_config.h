@@ -119,6 +119,42 @@
 
 // </e>
 
+// <e> DAC0 (Digital-To-Analog Converter) [Driver_DAC0]
+// <i> Configuration settings for Driver_DAC0
+#define DEV_DAC0                       0
+
+//   <o> Output Range <0=>VREF <1=> AVDD
+#define DEV_DAC0_OUTPUT_RANGE          0
+
+// </e>
+
+// <e> DAC1 (Digital-To-Analog Converter) [Driver_DAC1]
+// <i> Configuration settings for Driver_DAC1
+#define DEV_DAC1                       0
+
+//   <o> Output Range <0=>VREF <1=> AVDD
+#define DEV_DAC1_OUTPUT_RANGE          0
+
+// </e>
+
+// <e> DAC2 (Digital-To-Analog Converter) [Driver_DAC2]
+// <i> Configuration settings for Driver_DAC2
+#define DEV_DAC2                       0
+
+//   <o> Output Range <0=>VREF <1=> AVDD
+#define DEV_DAC2_OUTPUT_RANGE          0
+
+// </e>
+
+// <e> DAC3 (Digital-To-Analog Converter) [Driver_DAC3]
+// <i> Configuration settings for Driver_DAC3
+#define DEV_DAC3                       0
+
+//   <o> Output Range <0=>VREF <1=> AVDD
+#define DEV_DAC3_OUTPUT_RANGE          0
+
+// </e>
+
 // <e> I2C0 (Inter-integrated Circuit Interface) [Driver_I2C0]
 // <i> Configuration settings for Driver_I2C0 in component ::CMSIS Driver:I2C
 #define DEV_I2C0                       0
