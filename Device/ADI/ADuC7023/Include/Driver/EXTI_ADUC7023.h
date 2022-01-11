@@ -36,7 +36,7 @@
  *  defines and macros
  ******************************************************************************/
 
-/* ADC configuration definitions */
+/* EXTI configuration definitions */
 #if defined (DEV_EXTI) && (DEV_EXTI == 1)
   #if defined (DEV_EXTI_IRQ0) && (DEV_EXTI_IRQ0 == 1)
     #define USE_EXTI_IRQ0
@@ -135,15 +135,15 @@ typedef const struct _EXTI_PIN {
 
 /* EXT IRQ Configuration */
 typedef const struct _EXTI_IRQ {
-  IRQ_Priority_t          priority;        // ADC interrupt priority
-  IRQn_t                       num;        // ADC IRQ Number
-  IRQHandler_t             handler;        // ADC IRQ handler
+  IRQ_Priority_t          priority;        // EXTI interrupt priority
+  IRQn_t                       num;        // EXTI IRQ Number
+  IRQHandler_t             handler;        // EXTI IRQ handler
 } EXTI_IRQ;
 
 /* EXTI Information (Run-Time) */
 typedef struct _EXTI_INFO {
   EXTI_SignalEvent_t      cb_event;        // Event Callback
-  uint32_t                   flags;        // Current ADC state flags
+  uint32_t                   flags;        // Current state flags
 } EXTI_INFO;
 
 /* EXTI Resource Configuration */

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2021-2022 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -182,7 +182,6 @@ static int32_t ADC_PowerControl(ADC_POWER_STATE state)
       /* Disable peripheral */
       reg->CON &= ~ADCCON_PWR_UP;
       reg->TSCON &= ~TSCON_EN;
-      REF->CON &= ~REFCON_OUT_EN;
 
       /* Disable ADC IRQ */
       IRQ_Disable(irq->num);
@@ -206,9 +205,9 @@ static int32_t ADC_PowerControl(ADC_POWER_STATE state)
       IRQ_Enable(irq->num);
 
       /* Initial peripheral setup */
-      REF->CON |= REFCON_OUT_EN;
+      REF->CON   |= REFCON_OUT_EN;
       reg->TSCON |= TSCON_EN;
-      reg->CON |= ADCCON_PWR_UP;
+      reg->CON   |= ADCCON_PWR_UP;
 
 
       /* Ready for operation */
