@@ -31,6 +31,9 @@
  *  defines and macros
  ******************************************************************************/
 
+#define DAC_RESOLUTION              (12U)
+#define DAC_MAX_LSB                 ((1UL << DAC_RESOLUTION) - 1UL)
+
 /* DAC0 configuration definitions */
 #if defined (DEV_DAC0) && (DEV_DAC0 == 1)
   #define USE_DAC0

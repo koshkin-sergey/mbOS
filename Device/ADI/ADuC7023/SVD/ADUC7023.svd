@@ -13,24 +13,238 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
   <resetValue>0x0</resetValue>
   <resetMask>0xFFFFFFFF</resetMask>
   <peripherals>
-    
+    <!-- IRQ -->
     <peripheral>
-      <name>IC</name>
+      <name>IRQ</name>
       <description>NTERRUPT CONTROLLER</description>
-      <groupName>IC</groupName>
+      <groupName>IRQ</groupName>
       <baseAddress>0xFFFF0000</baseAddress>
       <addressBlock>
         <offset>0x0</offset>
         <size>0x140</size>
         <usage>registers</usage>
       </addressBlock>
-      
       <registers>
+        <register>
+          <name>IRQSTA</name>
+          <description>Active IRQ source register</description>
+          <addressOffset>0x0</addressOffset>
+          <size>32</size>
+          <access>read-only</access>
+          <resetValue>0x00000000</resetValue>
+          <fields>
+          </fields>
+        </register>
       
-      
-      
+        <register>
+          <name>IRQSIG</name>
+          <description>Current state of all IRQ sources register</description>
+          <addressOffset>0x4</addressOffset>
+          <size>32</size>
+          <access>read-only</access>
+          <resetValue>0x00000000</resetValue>
+          <fields>
+          </fields>
+        </register>
+
+        <register>
+          <name>IRQEN</name>
+          <description>Enabled IRQ sources register</description>
+          <addressOffset>0x8</addressOffset>
+          <size>32</size>
+          <access>read-write</access>
+          <resetValue>0x00000000</resetValue>
+          <fields>
+          </fields>
+        </register>
+
+        <register>
+          <name>IRQCLR</name>
+          <description>Register to disable IRQ sources</description>
+          <addressOffset>0xC</addressOffset>
+          <size>32</size>
+          <access>write-only</access>
+          <resetValue>0x00000000</resetValue>
+          <fields>
+          </fields>
+        </register>
+
+        <register>
+          <name>SWICFG</name>
+          <description>Software interrupt configuration register</description>
+          <addressOffset>0x10</addressOffset>
+          <size>32</size>
+          <access>write-only</access>
+          <resetValue>0x00000000</resetValue>
+          <fields>
+          </fields>
+        </register>
+
+        <register>
+          <name>IRQBASE</name>
+          <description>Base address of all vectors register</description>
+          <addressOffset>0x14</addressOffset>
+          <size>32</size>
+          <access>read-write</access>
+          <resetValue>0x00000000</resetValue>
+          <fields>
+          </fields>
+        </register>
+
+        <register>
+          <name>IRQVEC</name>
+          <description>Currently active IRQ source register</description>
+          <addressOffset>0x1C</addressOffset>
+          <size>32</size>
+          <access>read-only</access>
+          <resetValue>0x00000000</resetValue>
+          <fields>
+          </fields>
+        </register>
+
+        <register>
+          <name>IRQP0</name>
+          <description>Interrupt priority setting register</description>
+          <addressOffset>0x20</addressOffset>
+          <size>32</size>
+          <access>read-write</access>
+          <resetValue>0x00000000</resetValue>
+          <fields>
+          </fields>
+        </register>
+
+        <register>
+          <name>IRQP1</name>
+          <description>Interrupt priority setting register</description>
+          <addressOffset>0x24</addressOffset>
+          <size>32</size>
+          <access>read-write</access>
+          <resetValue>0x00000000</resetValue>
+          <fields>
+          </fields>
+        </register>
+
+        <register>
+          <name>IRQP2</name>
+          <description>Interrupt priority setting register</description>
+          <addressOffset>0x28</addressOffset>
+          <size>32</size>
+          <access>read-write</access>
+          <resetValue>0x00000000</resetValue>
+          <fields>
+          </fields>
+        </register>
+
+        <register>
+          <name>IRQCONN</name>
+          <description>IRQ and FIQ interrupt nesting register</description>
+          <addressOffset>0x30</addressOffset>
+          <size>32</size>
+          <access>read-write</access>
+          <resetValue>0x00000000</resetValue>
+          <fields>
+          </fields>
+        </register>
+
+        <register>
+          <name>IRQCONE</name>
+          <description>External interrupt sources register</description>
+          <addressOffset>0x34</addressOffset>
+          <size>32</size>
+          <access>read-write</access>
+          <resetValue>0x00000000</resetValue>
+          <fields>
+          </fields>
+        </register>
+
+        <register>
+          <name>IRQCLRE</name>
+          <description>Clear an edge level triggered interrupt source register</description>
+          <addressOffset>0x38</addressOffset>
+          <size>32</size>
+          <access>read-write</access>
+          <resetValue>0x00000000</resetValue>
+          <fields>
+          </fields>
+        </register>
+
+        <register>
+          <name>IRQSTAN</name>
+          <description>Register indicates the priority level of an interrupt</description>
+          <addressOffset>0x3C</addressOffset>
+          <size>32</size>
+          <access>read-write</access>
+          <resetValue>0x00000000</resetValue>
+          <fields>
+          </fields>
+        </register>
+
+        <register>
+          <name>FIQSTA</name>
+          <description>Active FIQ source register</description>
+          <addressOffset>0x100</addressOffset>
+          <size>32</size>
+          <access>read-only</access>
+          <resetValue>0x00000000</resetValue>
+          <fields>
+          </fields>
+        </register>
+
+        <register>
+          <name>FIQSIG</name>
+          <description>Current state of all FIQ sources register</description>
+          <addressOffset>0x104</addressOffset>
+          <size>32</size>
+          <access>read-only</access>
+          <resetValue>0x00000000</resetValue>
+          <fields>
+          </fields>
+        </register>
+
+        <register>
+          <name>FIQEN</name>
+          <description>Enabled FIQ sources register</description>
+          <addressOffset>0x108</addressOffset>
+          <size>32</size>
+          <access>read-write</access>
+          <resetValue>0x00000000</resetValue>
+          <fields>
+          </fields>
+        </register>
+
+        <register>
+          <name>FIQCLR</name>
+          <description>Register to disable FIQ sources</description>
+          <addressOffset>0x10C</addressOffset>
+          <size>32</size>
+          <access>write-only</access>
+          <resetValue>0x00000000</resetValue>
+          <fields>
+          </fields>
+        </register>
+
+        <register>
+          <name>FIQVEC</name>
+          <description>FIQ interrupt vector register</description>
+          <addressOffset>0x11C</addressOffset>
+          <size>32</size>
+          <access>read-only</access>
+          <resetValue>0x00000000</resetValue>
+          <fields>
+          </fields>
+        </register>
+
+        <register>
+          <name>FIQSTAN</name>
+          <description>Register indicates the priority level of an FIQ</description>
+          <addressOffset>0x13C</addressOffset>
+          <size>32</size>
+          <access>read-write</access>
+          <resetValue>0x00000000</resetValue>
+          <fields>
+          </fields>
+        </register>
       </registers>
-      
     </peripheral>
     
     <peripheral>

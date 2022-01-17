@@ -28,31 +28,6 @@
 #include "CMSIS/Core_ARM/core_arm.h"
 #include "system_aduc7023.h"
 
-/**
- * @brief General-Purpose Timer 32 bits
- */
-typedef struct GP_TIMER_s {
-  __IOM uint32_t LD;      /*!< Timer load register                            */
-  __IM  uint32_t VAL;     /*!< Timer value register                           */
-  __IOM uint32_t CON;     /*!< Timer control register                         */
-  __OM  uint8_t  CLRI;    /*!< Timer interrupt clear register                 */
-  RESERVED(0[3], uint8_t);
-  __IM  uint32_t CAP;     /*!< Timer capture register                         */
-} GP_TIMER_t;
-
-/**
- * @brief WatchDog Timer
- */
-typedef struct WDG_TIMER_s {
-  __IOM uint16_t LD;      /*!< Timer load register                            */
-  RESERVED(0, uint16_t);
-  __IM  uint16_t VAL;     /*!< Timer value register                           */
-  RESERVED(1, uint16_t);
-  __IOM uint16_t CON;     /*!< Timer control register                         */
-  RESERVED(2, uint16_t);
-  __OM  uint8_t  CLRI;    /*!< Timer interrupt clear register                 */
-} WDG_TIMER_t;
-
 /*------------------------------------------------------------------------------
  *                                IRQ
  *----------------------------------------------------------------------------*/
@@ -494,6 +469,105 @@ typedef struct RTOS_TIMER_s {
 #define RTOS_TIMER_CON_EN_Pos     (7U)
 #define RTOS_TIMER_CON_EN_Msk     (0x1U << RTOS_TIMER_CON_EN_Pos)
 #define RTOS_TIMER_CON_EN         RTOS_TIMER_CON_EN_Msk
+
+/**
+ * @brief General-Purpose Timer 32 bits
+ */
+typedef struct TIMER1 {
+  __IOM uint32_t LD;      /*!< Timer load register                            */
+  __IM  uint32_t VAL;     /*!< Timer value register                           */
+  __IOM uint32_t CON;     /*!< Timer control register                         */
+  __OM  uint8_t  CLRI;    /*!< Timer interrupt clear register                 */
+  RESERVED(0[3], uint8_t);
+  __IM  uint32_t CAP;     /*!< Timer capture register                         */
+} TIMER1_t;
+
+#define TIMER1_CON_SRCCLK_Pos     (0U)
+#define TIMER1_CON_SRCCLK_Msk     (0xFU << TIMER1_CON_SRCCLK_Pos)
+#define TIMER1_CON_SRCCLK_1       (0x0U << TIMER1_CON_SRCCLK_Pos)
+#define TIMER1_CON_SRCCLK_16      (0x4U << TIMER1_CON_SRCCLK_Pos)
+#define TIMER1_CON_SRCCLK_256     (0x8U << TIMER1_CON_SRCCLK_Pos)
+#define TIMER1_CON_SRCCLK_32768   (0xFU << TIMER1_CON_SRCCLK_Pos)
+
+#define TIMER1_CON_FORMAT_Pos     (4U)
+#define TIMER1_CON_FORMAT_Msk     (0x3U << TIMER1_CON_FORMAT_Pos)
+#define TIMER1_CON_FORMAT_BIN     (0x0U << TIMER1_CON_FORMAT_Pos)
+#define TIMER1_CON_FORMAT_HMS1    (0x2U << TIMER1_CON_FORMAT_Pos)
+#define TIMER1_CON_FORMAT_HMS2    (0x3U << TIMER1_CON_FORMAT_Pos)
+
+#define TIMER1_CON_FORMAT_Pos     (4U)
+#define TIMER1_CON_FORMAT_Msk     (0x3U << TIMER1_CON_FORMAT_Pos)
+
+#define TIMER1_CON_PER_MODE_Pos   (6U)
+#define TIMER1_CON_PER_MODE_Msk   (0x1U << TIMER1_CON_PER_MODE_Pos)
+#define TIMER1_CON_PER_MODE       TIMER1_CON_PER_MODE_Msk
+
+#define TIMER1_CON_ENABLE_Pos     (7U)
+#define TIMER1_CON_ENABLE_Msk     (0x1U << TIMER1_CON_ENABLE_Pos)
+#define TIMER1_CON_ENABLE         TIMER1_CON_ENABLE_Msk
+
+#define TIMER1_CON_CNT_UP_Pos     (8U)
+#define TIMER1_CON_CNT_UP_Msk     (0x1U << TIMER1_CON_CNT_UP_Pos)
+#define TIMER1_CON_CNT_UP         TIMER1_CON_CNT_UP_Msk
+
+#define TIMER1_CON_CLKSEL_Pos     (9U)
+#define TIMER1_CON_CLKSEL_Msk     (0x7U << TIMER1_CON_CLKSEL_Pos)
+#define TIMER1_CON_CLKSEL_HCLK    (0x0U << TIMER1_CON_CLKSEL_Pos)
+#define TIMER1_CON_CLKSEL_32K     (0x1U << TIMER1_CON_CLKSEL_Pos)
+#define TIMER1_CON_CLKSEL_UCLK    (0x2U << TIMER1_CON_CLKSEL_Pos)
+#define TIMER1_CON_CLKSEL_P1      (0x3U << TIMER1_CON_CLKSEL_Pos)
+
+#define TIMER1_CON_EV_RANGE_Pos   (12U)
+#define TIMER1_CON_EV_RANGE_Msk   (0x1FU << TIMER1_CON_EV_RANGE_Pos)
+#define TIMER1_CON_EV_RANGE       TIMER1_CON_EV_RANGE_Msk
+
+#define TIMER1_CON_EV_SEL_Pos     (17U)
+#define TIMER1_CON_EV_SEL_Msk     (0x1U << TIMER1_CON_EV_SEL_Pos)
+#define TIMER1_CON_EV_SEL         TIMER1_CON_EV_SEL_Msk
+
+/**
+ * @brief WatchDog Timer (Timer2)
+ */
+typedef struct TIMER2 {
+  __IOM uint16_t LD;      /*!< Timer load register                            */
+  RESERVED(0, uint16_t);
+  __IM  uint16_t VAL;     /*!< Timer value register                           */
+  RESERVED(1, uint16_t);
+  __IOM uint16_t CON;     /*!< Timer control register                         */
+  RESERVED(2, uint16_t);
+  __OM  uint8_t  CLRI;    /*!< Timer interrupt clear register                 */
+  RESERVED(3[3], uint8_t);
+} TIMER2_t;
+
+#define TIMER2_CON_WDGIRQ_Pos     (1U)
+#define TIMER2_CON_WDGIRQ_Msk     (0x1U << TIMER2_CON_WDGIRQ_Pos)
+#define TIMER2_CON_WDGIRQ         TIMER2_CON_WDGIRQ_Msk
+
+#define TIMER2_CON_CLKDIV_Pos     (2U)
+#define TIMER2_CON_CLKDIV_Msk     (0x3U << TIMER2_CON_CLKDIV_Pos)
+#define TIMER2_CON_CLKDIV_1       (0x0U << TIMER2_CON_CLKDIV_Pos)
+#define TIMER2_CON_CLKDIV_16      (0x1U << TIMER2_CON_CLKDIV_Pos)
+#define TIMER2_CON_CLKDIV_256     (0x2U << TIMER2_CON_CLKDIV_Pos)
+
+#define TIMER2_CON_SECURE_Pos     (4U)
+#define TIMER2_CON_SECURE_Msk     (0x1U << TIMER2_CON_SECURE_Pos)
+#define TIMER2_CON_SECURE         TIMER2_CON_SECURE_Msk
+
+#define TIMER2_CON_WDGMODE_Pos    (5U)
+#define TIMER2_CON_WDGMODE_Msk    (0x1U << TIMER2_CON_WDGMODE_Pos)
+#define TIMER2_CON_WDGMODE        TIMER2_CON_WDGMODE_Msk
+
+#define TIMER2_CON_PER_MODE_Pos   (6U)
+#define TIMER2_CON_PER_MODE_Msk   (0x1U << TIMER2_CON_PER_MODE_Pos)
+#define TIMER2_CON_PER_MODE       TIMER2_CON_PER_MODE_Msk
+
+#define TIMER2_CON_ENABLE_Pos     (7U)
+#define TIMER2_CON_ENABLE_Msk     (0x1U << TIMER2_CON_ENABLE_Pos)
+#define TIMER2_CON_ENABLE         TIMER2_CON_ENABLE_Msk
+
+#define TIMER2_CON_CNT_UP_Pos     (8U)
+#define TIMER2_CON_CNT_UP_Msk     (0x1U << TIMER2_CON_CNT_UP_Pos)
+#define TIMER2_CON_CNT_UP         TIMER2_CON_CNT_UP_Msk
 
 /*------------------------------------------------------------------------------
  *                          POWER CLOCK CONTROL
@@ -1113,8 +1187,8 @@ typedef struct I2C_s {
 #define FIQ                   ((FIQ_t *)        FIQ_BASE)
 #define SYS                   ((SYS_t *)        SYS_BASE)
 #define RTOS_TIMER            ((RTOS_TIMER_t *) TIMER0_BASE)
-#define GP_TIMER              ((  GP_TIMER_t *) TIMER1_BASE)
-#define WDG_TIMER             (( WDG_TIMER_t *) TIMER2_BASE)
+#define TIM1                  ((TIMER1_t *)     TIMER1_BASE)
+#define TIM2                  ((TIMER2_t *)     TIMER2_BASE)
 #define PCC                   ((PCC_t *)        PCC_BASE)
 #define REF                   ((REF_t *)        REF_BASE)
 #define ADC                   ((ADC_t *)        ADC_BASE)

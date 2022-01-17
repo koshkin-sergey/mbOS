@@ -279,4 +279,13 @@
 
 // </e>
 
+// <e> WDG (Watchdog Timer) [Driver_WDG]
+// <i> Configuration settings for Driver_WDG
+#define DEV_WDG                        0
+
+//   <o> Timer Clock, Hz <0=>32768 <1=>2048 <2=>128
+#define DEV_WDG_CLK                    0
+
+// </e>
+
 #endif  /* __DEVICE_CONFIG_H */
