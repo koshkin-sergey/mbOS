@@ -227,10 +227,12 @@
 
 //   <e> IRQ0
 //     <o1> Pin <0=>P0.4
-//     <o2> Interrupt Priority <0=>Realtime <1=>Above High <2=>High <3=>Above Normal <4=>Normal <5=>Below Normal <6=>Above Low <7=>Low
+//     <o2> Internal Pull-Up Resistor <0=>Enable <1=>Disable
+//     <o3> Interrupt Priority <0=>Realtime <1=>Above High <2=>High <3=>Above Normal <4=>Normal <5=>Below Normal <6=>Above Low <7=>Low
 //   </e>
 #define   DEV_EXTI_IRQ0                0
 #define   DEV_EXTI_IRQ0_ID             0
+#define   DEV_EXTI_IRQ0_PULL_UP        0
 #define   DEV_EXTI_IRQ0_INT_PRIO       4
 #if      (DEV_EXTI_IRQ0_ID == 0)
   #define DEV_EXTI_IRQ0_PORT           &DRIVER_GPIO0
@@ -240,10 +242,12 @@
 
 //   <e> IRQ1
 //     <o1> Pin <0=>P1.1
-//     <o2> Interrupt Priority <0=>Realtime <1=>Above High <2=>High <3=>Above Normal <4=>Normal <5=>Below Normal <6=>Above Low <7=>Low
+//     <o2> Internal Pull-Up Resistor <0=>Enable <1=>Disable
+//     <o3> Interrupt Priority <0=>Realtime <1=>Above High <2=>High <3=>Above Normal <4=>Normal <5=>Below Normal <6=>Above Low <7=>Low
 //   </e>
 #define   DEV_EXTI_IRQ1                0
 #define   DEV_EXTI_IRQ1_ID             0
+#define   DEV_EXTI_IRQ1_PULL_UP        0
 #define   DEV_EXTI_IRQ1_INT_PRIO       4
 #if      (DEV_EXTI_IRQ1_ID == 0)
   #define DEV_EXTI_IRQ1_PORT           &DRIVER_GPIO1
@@ -253,10 +257,12 @@
 
 //   <e> IRQ2
 //     <o1> Pin <0=>P1.2
-//     <o2> Interrupt Priority <0=>Realtime <1=>Above High <2=>High <3=>Above Normal <4=>Normal <5=>Below Normal <6=>Above Low <7=>Low
+//     <o2> Internal Pull-Up Resistor <0=>Enable <1=>Disable
+//     <o3> Interrupt Priority <0=>Realtime <1=>Above High <2=>High <3=>Above Normal <4=>Normal <5=>Below Normal <6=>Above Low <7=>Low
 //   </e>
 #define   DEV_EXTI_IRQ2                0
 #define   DEV_EXTI_IRQ2_ID             0
+#define   DEV_EXTI_IRQ2_PULL_UP        0
 #define   DEV_EXTI_IRQ2_INT_PRIO       4
 #if      (DEV_EXTI_IRQ2_ID == 0)
   #define DEV_EXTI_IRQ2_PORT           &DRIVER_GPIO1
@@ -266,10 +272,12 @@
 
 //   <e> IRQ3
 //     <o1> Pin <0=>P1.3
-//     <o2> Interrupt Priority <0=>Realtime <1=>Above High <2=>High <3=>Above Normal <4=>Normal <5=>Below Normal <6=>Above Low <7=>Low
+//     <o2> Internal Pull-Up Resistor <0=>Enable <1=>Disable
+//     <o3> Interrupt Priority <0=>Realtime <1=>Above High <2=>High <3=>Above Normal <4=>Normal <5=>Below Normal <6=>Above Low <7=>Low
 //   </e>
 #define   DEV_EXTI_IRQ3                0
 #define   DEV_EXTI_IRQ3_ID             0
+#define   DEV_EXTI_IRQ3_PULL_UP        0
 #define   DEV_EXTI_IRQ3_INT_PRIO       4
 #if      (DEV_EXTI_IRQ3_ID == 0)
   #define DEV_EXTI_IRQ3_PORT           &DRIVER_GPIO1

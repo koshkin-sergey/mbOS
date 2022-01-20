@@ -43,6 +43,7 @@
     #define EXTI_IRQ0_GPIO_PORT     DEV_EXTI_IRQ0_PORT
     #define EXTI_IRQ0_GPIO_PIN      DEV_EXTI_IRQ0_PIN
     #define EXTI_IRQ0_GPIO_FUNC     DEV_EXTI_IRQ0_FUNC
+    #define EXTI_IRQ0_PULL_UP       DEV_EXTI_IRQ0_PULL_UP
     #define EXTI_IRQ0_INT_PRIO      DEV_EXTI_IRQ0_INT_PRIO
   #endif
 
@@ -51,6 +52,7 @@
     #define EXTI_IRQ1_GPIO_PORT     DEV_EXTI_IRQ1_PORT
     #define EXTI_IRQ1_GPIO_PIN      DEV_EXTI_IRQ1_PIN
     #define EXTI_IRQ1_GPIO_FUNC     DEV_EXTI_IRQ1_FUNC
+    #define EXTI_IRQ1_PULL_UP       DEV_EXTI_IRQ1_PULL_UP
     #define EXTI_IRQ1_INT_PRIO      DEV_EXTI_IRQ1_INT_PRIO
   #endif
 
@@ -59,6 +61,7 @@
     #define EXTI_IRQ2_GPIO_PORT     DEV_EXTI_IRQ2_PORT
     #define EXTI_IRQ2_GPIO_PIN      DEV_EXTI_IRQ2_PIN
     #define EXTI_IRQ2_GPIO_FUNC     DEV_EXTI_IRQ2_FUNC
+    #define EXTI_IRQ2_PULL_UP       DEV_EXTI_IRQ2_PULL_UP
     #define EXTI_IRQ2_INT_PRIO      DEV_EXTI_IRQ2_INT_PRIO
   #endif
 
@@ -67,6 +70,7 @@
     #define EXTI_IRQ3_GPIO_PORT     DEV_EXTI_IRQ3_PORT
     #define EXTI_IRQ3_GPIO_PIN      DEV_EXTI_IRQ3_PIN
     #define EXTI_IRQ3_GPIO_FUNC     DEV_EXTI_IRQ3_FUNC
+    #define EXTI_IRQ3_PULL_UP       DEV_EXTI_IRQ3_PULL_UP
     #define EXTI_IRQ3_INT_PRIO      DEV_EXTI_IRQ3_INT_PRIO
   #endif
 #endif
@@ -131,6 +135,7 @@ typedef const struct _EXTI_PIN {
   DRIVER_GPIO                *gpio;        // Pointer to GPIO driver
   GPIO_PIN_t                   pin;        // IO pin
   GPIO_PIN_FUNC_t             func;        // AF pin configuration
+  GPIO_PULL_t               pullup;        // Pin Pull Up
 } EXTI_PIN;
 
 /* EXT IRQ Configuration */

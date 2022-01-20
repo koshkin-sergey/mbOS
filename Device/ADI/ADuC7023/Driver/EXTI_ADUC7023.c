@@ -59,22 +59,22 @@ static EXTI_RESOURCES EXTI_Resources = {
   /* Pin Configuration */
   {
 #if defined(USE_EXTI_IRQ0)
-    &(EXTI_PIN){EXTI_IRQ0_GPIO_PORT, EXTI_IRQ0_GPIO_PIN, EXTI_IRQ0_GPIO_FUNC},
+    &(EXTI_PIN){EXTI_IRQ0_GPIO_PORT, EXTI_IRQ0_GPIO_PIN, EXTI_IRQ0_GPIO_FUNC, EXTI_IRQ0_PULL_UP},
 #else
     NULL,
 #endif
 #if defined(USE_EXTI_IRQ1)
-    &(EXTI_PIN){EXTI_IRQ1_GPIO_PORT, EXTI_IRQ1_GPIO_PIN, EXTI_IRQ1_GPIO_FUNC},
+    &(EXTI_PIN){EXTI_IRQ1_GPIO_PORT, EXTI_IRQ1_GPIO_PIN, EXTI_IRQ1_GPIO_FUNC, EXTI_IRQ1_PULL_UP},
 #else
     NULL,
 #endif
 #if defined(USE_EXTI_IRQ2)
-    &(EXTI_PIN){EXTI_IRQ2_GPIO_PORT, EXTI_IRQ2_GPIO_PIN, EXTI_IRQ2_GPIO_FUNC},
+    &(EXTI_PIN){EXTI_IRQ2_GPIO_PORT, EXTI_IRQ2_GPIO_PIN, EXTI_IRQ2_GPIO_FUNC, EXTI_IRQ2_PULL_UP},
 #else
     NULL,
 #endif
 #if defined(USE_EXTI_IRQ3)
-    &(EXTI_PIN){EXTI_IRQ3_GPIO_PORT, EXTI_IRQ3_GPIO_PIN, EXTI_IRQ3_GPIO_FUNC},
+    &(EXTI_PIN){EXTI_IRQ3_GPIO_PORT, EXTI_IRQ3_GPIO_PIN, EXTI_IRQ3_GPIO_FUNC, EXTI_IRQ3_PULL_UP},
 #else
     NULL,
 #endif
@@ -122,7 +122,6 @@ static int32_t EXTI_Initialize(EXTI_SignalEvent_t cb_event)
   /* Configure EXTI Pins */
   GPIO_PIN_CFG_t pin_cfg = {
     .mode      = GPIO_MODE_INPUT,
-    .pull_mode = GPIO_PULL_DISABLE,
     .strength  = GPIO_STRENGTH_MEDIUM,
   };
 
@@ -130,6 +129,7 @@ static int32_t EXTI_Initialize(EXTI_SignalEvent_t cb_event)
     if (EXTI_Resources.pin[i] != NULL) {
       exti_pin = EXTI_Resources.pin[i];
       pin_cfg.func = exti_pin->func;
+      pin_cfg.pull_mode = exti_pin->pullup;
       exti_pin->gpio->PinConfig(exti_pin->pin, &pin_cfg);
     }
 
@@ -156,14 +156,13 @@ static int32_t EXTI_Uninitialize(void)
   GPIO_PIN_CFG_t pin_cfg = {
     .func      = GPIO_PIN_FUNC_0,
     .mode      = GPIO_MODE_INPUT,
-    .pull_mode = GPIO_PULL_DISABLE,
+    .pull_mode = GPIO_PULL_UP,
     .strength  = GPIO_STRENGTH_MEDIUM,
   };
 
   for (uint32_t i = 0U; i < EXT_IRQ_NUM; ++i) {
     if (EXTI_Resources.pin[i] != NULL) {
       exti_pin = EXTI_Resources.pin[i];
-      pin_cfg.func = exti_pin->func;
       exti_pin->gpio->PinConfig(exti_pin->pin, &pin_cfg);
     }
   }
