@@ -829,76 +829,6 @@ typedef struct DACB {
 #define DACBKEY1_VALUE            ((uint16_t)0x0CU)
 
 /*------------------------------------------------------------------------------
- *                          FLASH CONTROL
- *----------------------------------------------------------------------------*/
-/**
- * @brief Flash Memory
- */
-typedef struct FLASH_s {
-  __IM  uint32_t STA;
-  __IOM uint32_t MOD;
-  __IOM uint32_t CON;
-  __IOM uint32_t DAT;
-  __IOM uint32_t ADR;
-  RESERVED(0, uint32_t);
-  __IM  uint32_t SIGN;
-  __IOM uint32_t PRO;
-  __IOM uint32_t HIDE;
-} FLASH_t;
-
-/********************  Bit definition for FEESTA register  ********************/
-#define FLASH_STA_PASS_Pos        (0U)
-#define FLASH_STA_PASS_Msk        (0x1UL << FLASH_STA_PASS_Pos)
-#define FLASH_STA_PASS            FLASH_STA_PASS_Msk
-#define FLASH_STA_FAIL_Pos        (1U)
-#define FLASH_STA_FAIL_Msk        (0x1UL << FLASH_STA_FAIL_Pos)
-#define FLASH_STA_FAIL            FLASH_STA_FAIL_Msk
-#define FLASH_STA_BUSY_Pos        (2U)
-#define FLASH_STA_BUSY_Msk        (0x1UL << FLASH_STA_BUSY_Pos)
-#define FLASH_STA_BUSY            FLASH_STA_BUSY_Msk
-#define FLASH_STA_INT_Pos         (3U)
-#define FLASH_STA_INT_Msk         (0x1UL << FLASH_STA_INT_Pos)
-#define FLASH_STA_INT             FLASH_STA_INT_Msk
-
-/********************  Bit definition for FEEMOD register  ********************/
-#define FLASH_MOD_DIS_PROT_Pos    (3U)
-#define FLASH_MOD_DIS_PROT_Msk    (0x1UL << FLASH_MOD_DIS_PROT_Pos)
-#define FLASH_MOD_DIS_PROT        FLASH_MOD_DIS_PROT_Msk
-#define FLASH_MOD_INT_EN_Pos      (4U)
-#define FLASH_MOD_INT_EN_Msk      (0x1UL << FLASH_MOD_INT_EN_Pos)
-#define FLASH_MOD_INT_EN          FLASH_MOD_INT_EN_Msk
-
-/********************  Bit definition for FEECON register  ********************/
-#define FLASH_CON_Pos             (0U)
-#define FLASH_CON_Msk             (0xFFUL << FLASH_CON_Pos)
-#define FLASH_CON                 FLASH_CON_Msk
-#define FLASH_CMD_IDLE            ((uint8_t)0x00)
-#define FLASH_CMD_SINGLE_READ     ((uint8_t)0x01)
-#define FLASH_CMD_SINGLE_WRITE    ((uint8_t)0x02)
-#define FLASH_CMD_ERASE_WRITE     ((uint8_t)0x03)
-#define FLASH_CMD_SINGLE_VERIFY   ((uint8_t)0x04)
-#define FLASH_CMD_SINGLE_ERASE    ((uint8_t)0x05)
-#define FLASH_CMD_MASS_ERASE      ((uint8_t)0x06)
-#define FLASH_CMD_SIGNATURE       ((uint8_t)0x0B)
-#define FLASH_CMD_PROTECT         ((uint8_t)0x0C)
-#define FLASH_CMD_PING            ((uint8_t)0x0F)
-
-/********************  Bit definition for FEEDAT register  ********************/
-#define FLASH_DAT_Pos             (0U)
-#define FLASH_DAT_Msk             (0xFFFFUL << FLASH_DAT_Pos)
-#define FLASH_DAT                 FLASH_DAT_Msk
-
-/********************  Bit definition for FEEADR register  ********************/
-#define FLASH_ADR_Pos             (0U)
-#define FLASH_ADR_Msk             (0xFFFFUL << FLASH_ADR_Pos)
-#define FLASH_ADR                 FLASH_ADR_Msk
-
-/********************  Bit definition for FEESIGN register  *******************/
-#define FLASH_SIGN_Pos            (0U)
-#define FLASH_SIGN_Msk            (0xFFFFFFUL << FLASH_SIGN_Pos)
-#define FLASH_SIGN                FLASH_SIGN_Msk
-
-/*------------------------------------------------------------------------------
  *                               I2C
  *----------------------------------------------------------------------------*/
 /**
@@ -1161,6 +1091,130 @@ typedef struct I2C_s {
 #define I2CFSTA_FMTX_Msk          (0x1UL << I2CFSTA_FMTX_Pos)
 #define I2CFSTA_FMTX              I2CFSTA_FMTX_Msk
 
+/*------------------------------------------------------------------------------
+ *                               PLA
+ *----------------------------------------------------------------------------*/
+
+/**
+ * @brief PROGRAMMABLE LOGIC ARRAY (PLA)
+ */
+typedef struct PLA {
+  __IOM uint16_t PLAELM0;   // PLA Element 0 control register.
+  RESERVED(0, uint16_t);
+  __IOM uint16_t PLAELM1;   // PLA Element 1 control register.
+  RESERVED(1, uint16_t);
+  __IOM uint16_t PLAELM2;   // PLA Element 2 control register.
+  RESERVED(2, uint16_t);
+  __IOM uint16_t PLAELM3;   // PLA Element 3 control register.
+  RESERVED(3, uint16_t);
+  __IOM uint16_t PLAELM4;   // PLA Element 4 control register.
+  RESERVED(4, uint16_t);
+  __IOM uint16_t PLAELM5;   // PLA Element 5 control register.
+  RESERVED(5, uint16_t);
+  __IOM uint16_t PLAELM6;   // PLA Element 6 control register.
+  RESERVED(6, uint16_t);
+  __IOM uint16_t PLAELM7;   // PLA Element 7 control register.
+  RESERVED(7, uint16_t);
+  __IOM uint16_t PLAELM8;   // PLA Element 8 control register.
+  RESERVED(8, uint16_t);
+  __IOM uint16_t PLAELM9;   // PLA Element 9 control register.
+  RESERVED(9, uint16_t);
+  __IOM uint16_t PLAELM10;  // PLA Element 10 control register.
+  RESERVED(10, uint16_t);
+  __IOM uint16_t PLAELM11;  // PLA Element 11 control register.
+  RESERVED(11, uint16_t);
+  __IOM uint16_t PLAELM12;  // PLA Element 12 control register.
+  RESERVED(12, uint16_t);
+  __IOM uint16_t PLAELM13;  // PLA Element 13 control register.
+  RESERVED(13, uint16_t);
+  __IOM uint16_t PLAELM14;  // PLA Element 14 control register.
+  RESERVED(14, uint16_t);
+  __IOM uint16_t PLAELM15;  // PLA Element 15 control register.
+  RESERVED(15, uint16_t);
+  __IOM uint8_t  PLACLK;    // PLA clock select register.
+  RESERVED(16[3], uint8_t);
+  __IOM uint32_t PLAIRQ;    // PLA interrupt control register.
+  __IOM uint32_t PLAADC;    // PLA ADC trigger control register.
+  __IOM uint32_t PLADIN;    // PLA data in register.
+  __IM  uint32_t PLADOUT;   // PLA data out register.
+  __OM  uint8_t  PLALCK;    // PLA lock register.
+  RESERVED(17[3], uint8_t);
+} PLA_t;
+
+/*------------------------------------------------------------------------------
+ *                          FLASH CONTROL
+ *----------------------------------------------------------------------------*/
+/**
+ * @brief Flash Memory
+ */
+typedef struct FLASH_s {
+  __IM  uint32_t STA;
+  __IOM uint32_t MOD;
+  __IOM uint32_t CON;
+  __IOM uint32_t DAT;
+  __IOM uint32_t ADR;
+  RESERVED(0, uint32_t);
+  __IM  uint32_t SIGN;
+  __IOM uint32_t PRO;
+  __IOM uint32_t HIDE;
+} FLASH_t;
+
+/********************  Bit definition for FEESTA register  ********************/
+#define FLASH_STA_PASS_Pos        (0U)
+#define FLASH_STA_PASS_Msk        (0x1UL << FLASH_STA_PASS_Pos)
+#define FLASH_STA_PASS            FLASH_STA_PASS_Msk
+#define FLASH_STA_FAIL_Pos        (1U)
+#define FLASH_STA_FAIL_Msk        (0x1UL << FLASH_STA_FAIL_Pos)
+#define FLASH_STA_FAIL            FLASH_STA_FAIL_Msk
+#define FLASH_STA_BUSY_Pos        (2U)
+#define FLASH_STA_BUSY_Msk        (0x1UL << FLASH_STA_BUSY_Pos)
+#define FLASH_STA_BUSY            FLASH_STA_BUSY_Msk
+#define FLASH_STA_INT_Pos         (3U)
+#define FLASH_STA_INT_Msk         (0x1UL << FLASH_STA_INT_Pos)
+#define FLASH_STA_INT             FLASH_STA_INT_Msk
+
+/********************  Bit definition for FEEMOD register  ********************/
+#define FLASH_MOD_DIS_PROT_Pos    (3U)
+#define FLASH_MOD_DIS_PROT_Msk    (0x1UL << FLASH_MOD_DIS_PROT_Pos)
+#define FLASH_MOD_DIS_PROT        FLASH_MOD_DIS_PROT_Msk
+#define FLASH_MOD_INT_EN_Pos      (4U)
+#define FLASH_MOD_INT_EN_Msk      (0x1UL << FLASH_MOD_INT_EN_Pos)
+#define FLASH_MOD_INT_EN          FLASH_MOD_INT_EN_Msk
+
+/********************  Bit definition for FEECON register  ********************/
+#define FLASH_CON_Pos             (0U)
+#define FLASH_CON_Msk             (0xFFUL << FLASH_CON_Pos)
+#define FLASH_CON                 FLASH_CON_Msk
+#define FLASH_CMD_IDLE            ((uint8_t)0x00)
+#define FLASH_CMD_SINGLE_READ     ((uint8_t)0x01)
+#define FLASH_CMD_SINGLE_WRITE    ((uint8_t)0x02)
+#define FLASH_CMD_ERASE_WRITE     ((uint8_t)0x03)
+#define FLASH_CMD_SINGLE_VERIFY   ((uint8_t)0x04)
+#define FLASH_CMD_SINGLE_ERASE    ((uint8_t)0x05)
+#define FLASH_CMD_MASS_ERASE      ((uint8_t)0x06)
+#define FLASH_CMD_SIGNATURE       ((uint8_t)0x0B)
+#define FLASH_CMD_PROTECT         ((uint8_t)0x0C)
+#define FLASH_CMD_PING            ((uint8_t)0x0F)
+
+/********************  Bit definition for FEEDAT register  ********************/
+#define FLASH_DAT_Pos             (0U)
+#define FLASH_DAT_Msk             (0xFFFFUL << FLASH_DAT_Pos)
+#define FLASH_DAT                 FLASH_DAT_Msk
+
+/********************  Bit definition for FEEADR register  ********************/
+#define FLASH_ADR_Pos             (0U)
+#define FLASH_ADR_Msk             (0xFFFFUL << FLASH_ADR_Pos)
+#define FLASH_ADR                 FLASH_ADR_Msk
+
+/********************  Bit definition for FEESIGN register  *******************/
+#define FLASH_SIGN_Pos            (0U)
+#define FLASH_SIGN_Msk            (0xFFFFFFUL << FLASH_SIGN_Pos)
+#define FLASH_SIGN                FLASH_SIGN_Msk
+
+/*------------------------------------------------------------------------------
+ *                          MEMORY MAP
+ *----------------------------------------------------------------------------*/
+
 #define FLASH_BASE            0x00080000UL
 #define FLASH_END             0x0008F7FFUL
 #define RAM_BASE              0x00010000UL
@@ -1181,6 +1235,8 @@ typedef struct I2C_s {
 #define DACB_BASE             0xFFFF0650UL  /*!< DACB Address Base            */
 #define I2C0_BASE             0xFFFF0800UL  /*!< I2C0 Base Address            */
 #define I2C1_BASE             0xFFFF0900UL  /*!< I2C1 Base Address            */
+#define SPI_BASE              0xFFFF0A00UL  /*!< SPI Base Address             */
+#define PLA_BASE              0xFFFF0B00UL  /*!< PLA Base Address             */
 #define FLASH_CTL_BASE        0xFFFFF800UL  /*!< FLASH Address Base           */
 
 #define IRQ                   ((IRQ_t *)        IRQ_BASE)
@@ -1199,6 +1255,7 @@ typedef struct I2C_s {
 #define DACB                  ((DACB_t *)       DACB_BASE)
 #define I2C0                  ((I2C_t *)        I2C0_BASE)
 #define I2C1                  ((I2C_t *)        I2C1_BASE)
+#define PLA                   ((PLA_t *)        PLA_BASE)
 #define FLASH                 ((FLASH_t *)      FLASH_CTL_BASE)
 
 #define WRITE_REG(REG, VAL)   ((REG) = (VAL))
