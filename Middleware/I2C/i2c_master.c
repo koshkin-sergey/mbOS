@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2021-2022 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -164,8 +164,11 @@ int32_t WaitOperation(I2C_PortResources_t *port, int32_t err, uint32_t timeout)
       if (flags & ARM_I2C_EVENT_ADDRESS_NACK) {
         rc = I2C_ERROR_ADDRESS_NACK;
       }
+      else if (flags & ARM_I2C_EVENT_TRANSFER_INCOMPLETE) {
+        rc = I2C_ERROR;
+      }
       else {
-        rc = port->driver->GetDataCount();
+        rc = I2C_OK;
       }
     }
   }
@@ -373,8 +376,8 @@ int32_t I2C_ComUnLock(I2C_Com_t *com)
  * @param[in]   com       COM handle pointer
  * @param[in]   buf       Pointer to buffer to write
  * @param[in]   buf_size  Bytes to write
- * @return      number of data bytes transferred  or error code if highest bit set
- *              I2C_ERROR           - Unspecified error
+ * @return      I2C_OK              - Operation succeeded
+ *              I2C_ERROR           - Not all data bytes transferred or unspecified error
  *              I2C_ERROR_RESOURCE  - Resource error
  *              I2C_ERROR_PARAMETER - Parameter error
  *              I2C_ERROR_TIMEOUT   - Timeout occurred
@@ -411,7 +414,7 @@ int32_t I2C_Write(I2C_Com_t *com, const uint8_t *buf, uint32_t buf_size)
       else {
         break;
       }
-    } while (time_after(timeout, osKernelGetTickCount()));
+    } while (time_before(osKernelGetTickCount(), timeout));
 
     if (rc == I2C_ERROR_TIMEOUT) {
       port->driver->Control(ARM_I2C_ABORT_TRANSFER, 0U);
@@ -433,8 +436,8 @@ int32_t I2C_Write(I2C_Com_t *com, const uint8_t *buf, uint32_t buf_size)
  * @param[in]   addr_size   Number of bytes of start address
  * @param[out]  buf         Pointer to buffer to fill
  * @param[out   buf_size    Bytes to receive
- * @return      number of data bytes transferred  or error code if highest bit set
- *              I2C_ERROR           - Unspecified error
+ * @return      I2C_OK              - Operation succeeded
+ *              I2C_ERROR           - Not all data bytes transferred or unspecified error
  *              I2C_ERROR_RESOURCE  - Resource error
  *              I2C_ERROR_PARAMETER - Parameter error
  *              I2C_ERROR_TIMEOUT   - Timeout occurred
@@ -477,7 +480,7 @@ int32_t I2C_Read(I2C_Com_t *com,
           continue;
         }
 
-        if (rc != addr_size) {
+        if (rc != I2C_OK) {
           break;
         }
       }
@@ -490,7 +493,7 @@ int32_t I2C_Read(I2C_Com_t *com,
       else {
         break;
       }
-    } while (time_after(timeout, osKernelGetTickCount()));
+    } while (time_before(osKernelGetTickCount(), timeout));
 
     if (rc == I2C_ERROR_TIMEOUT) {
       port->driver->Control(ARM_I2C_ABORT_TRANSFER, 0U);
