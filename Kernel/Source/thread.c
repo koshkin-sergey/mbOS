@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2021 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2017-2022 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -88,51 +88,13 @@ static uint32_t ThreadFlagsCheck(osThread_t *thread, uint32_t flags, uint32_t op
 }
 
 /**
- * @brief       Adds thread to the end of ready queue for current priority
- * @param[in]   thread
- */
-static void ThreadReadyAdd(osThread_t *thread)
-{
-  int8_t priority = thread->priority - 1;
-
-  /* Remove the thread from any queue */
-  QueueRemoveEntry(&thread->thread_que);
-
-  thread->state = ThreadReady;
-  /* Add the thread to the end of ready queue */
-  QueueAppend(&osInfo.ready_list[priority], &thread->thread_que);
-  osInfo.ready_to_run_bmp |= (1UL << priority);
-}
-
-/**
- * @brief       Deletes thread from the ready queue for current priority
- * @param[in]   thread
- */
-static void ThreadReadyDel(osThread_t *thread)
-{
-  int8_t priority = thread->priority - 1;
-
-  /* Remove the thread from ready queue */
-  QueueRemoveEntry(&thread->thread_que);
-
-  if (isQueueEmpty(&osInfo.ready_list[priority])) {
-    /* No ready threads for the current priority */
-    osInfo.ready_to_run_bmp &= ~(1UL << priority);
-  }
-}
-
-/**
  * @brief       OS Idle Thread.
  * @param[in]   argument
  */
-__WEAK __NO_RETURN
+__WEAK
 void osIdleThread(void *argument)
 {
   (void) argument;
-
-  for (;;) {
-
-  }
 }
 
 /*******************************************************************************
@@ -150,17 +112,20 @@ static osThreadId_t svcThreadNew(osThreadFunc_t func, void *argument, const osTh
     return (NULL);
   }
 
-  thread = attr->cb_mem;
-  stack_mem = attr->stack_mem;
+  thread     = attr->cb_mem;
+  stack_mem  = attr->stack_mem;
   stack_size = attr->stack_size;
-  priority = attr->priority;
+  priority   = attr->priority;
 
   if ((thread == NULL) || (attr->cb_size < sizeof(osThread_t))) {
     return (NULL);
   }
 
-  if ((stack_mem == NULL) || (((uint32_t)stack_mem & 7U) != 0U) ||
-      (stack_size < MIN_THREAD_STK_SIZE)  || ((stack_size & 7U) != 0U)            ) {
+  if ((stack_mem == NULL)                ||
+      (((uint32_t)stack_mem & 7U) != 0U) ||
+      (stack_size < MIN_THREAD_STK_SIZE) ||
+      ((stack_size & 7U) != 0U))
+  {
     return (NULL);
   }
 
@@ -203,13 +168,11 @@ static osThreadId_t svcThreadNew(osThreadFunc_t func, void *argument, const osTh
       .stk_mem    = (uint32_t)stack_mem,
       .stk_size   = stack_size,
   };
-  thread->stk = StackInit(
-      &stack_attr,
-      (osConfig.flags & osConfigPrivilegedMode) != 0U
-  );
+  thread->stk = StackInit(&stack_attr,
+                          (osConfig.flags & osConfigPrivilegedMode) != 0U);
 
-  ThreadReadyAdd(thread);
-  krnThreadDispatch(thread);
+  SchedThreadReadyAdd(thread);
+  SchedDispatch(thread);
 
   return (thread);
 }
@@ -330,23 +293,13 @@ static osPriority_t svcThreadGetPriority(osThreadId_t thread_id)
 
 static osStatus_t svcThreadYield(void)
 {
-  queue_t    *que;
-  osThread_t *thread_running;
+  osThread_t *thread;
 
   if (osInfo.kernel.state == osKernelRunning) {
-    thread_running = ThreadGetRunning();
-    que = &osInfo.ready_list[thread_running->priority - 1];
-
-    /* Remove the running thread from ready queue */
-    QueueRemoveEntry(&thread_running->thread_que);
-
-    if (!isQueueEmpty(que)) {
-      thread_running->state = ThreadReady;
-      krnThreadSwitch(GetThreadByQueue(que->next));
-    }
-
-    /* Add the running thread to the end of ready queue */
-    QueueAppend(que, &thread_running->thread_que);
+    thread = ThreadGetRunning();
+    SchedThreadReadyDel(thread, ThreadReady);
+    SchedThreadReadyAdd(thread);
+    SchedDispatch(NULL);
   }
 
   return (osOK);
@@ -366,20 +319,17 @@ osStatus_t svcThreadSuspend(osThreadId_t thread_id)
   switch (thread->state & ThreadStateMask) {
     case ThreadRunning:
       if (osInfo.kernel.state != osKernelRunning ||
-          osInfo.ready_to_run_bmp == 0U) {
+          osInfo.thread.idle  == thread) {
         status = osErrorResource;
       }
       else {
-        ThreadReadyDel(thread);
-        thread->state = ThreadBlocked;
-        thread = krnThreadHighestPrioGet();
-        krnThreadSwitch(thread);
+        SchedThreadReadyDel(thread, ThreadBlocked);
+        SchedDispatch(NULL);
       }
       break;
 
     case ThreadReady:
-      ThreadReadyDel(thread);
-      thread->state = ThreadBlocked;
+      SchedThreadReadyDel(thread, ThreadBlocked);
       break;
 
     case ThreadBlocked:
@@ -423,20 +373,23 @@ static void svcThreadExit(void)
 {
   osThread_t *thread;
 
-  if (osInfo.kernel.state != osKernelRunning ||
-      osInfo.ready_to_run_bmp == 0U) {
+  if (osInfo.kernel.state != osKernelRunning) {
     return;
   }
 
   thread = ThreadGetRunning();
 
+  if (osInfo.thread.idle == thread) {
+    return;
+  }
+
   /* Release owned Mutexes */
   krnMutexOwnerRelease(&thread->mutex_que);
 
-  ThreadReadyDel(thread);
-  krnThreadSwitch(krnThreadHighestPrioGet());
-  thread->state = ThreadInactive;
+  SchedThreadReadyDel(thread, ThreadInactive);
   thread->id = ID_INVALID;
+
+  SchedDispatch(NULL);
 }
 
 static osStatus_t svcThreadTerminate(osThreadId_t thread_id)
@@ -453,16 +406,16 @@ static osStatus_t svcThreadTerminate(osThreadId_t thread_id)
   switch (thread->state & ThreadStateMask) {
     case ThreadRunning:
       if (osInfo.kernel.state != osKernelRunning ||
-          osInfo.ready_to_run_bmp == 0U) {
+          osInfo.thread.idle  == thread) {
         status = osErrorResource;
       }
       else {
-        ThreadReadyDel(thread);
+        SchedThreadReadyDel(thread, ThreadInactive);
       }
       break;
 
     case ThreadReady:
-      ThreadReadyDel(thread);
+      SchedThreadReadyDel(thread, ThreadInactive);
       break;
 
     case ThreadBlocked:
@@ -483,15 +436,9 @@ static osStatus_t svcThreadTerminate(osThreadId_t thread_id)
     /* Release owned Mutexes */
     krnMutexOwnerRelease(&thread->mutex_que);
 
-    if (thread->state == ThreadRunning) {
-      krnThreadSwitch(krnThreadHighestPrioGet());
-    }
-    else {
-      krnThreadDispatch(NULL);
-    }
-
-    thread->state = ThreadInactive;
     thread->id = ID_INVALID;
+
+    SchedDispatch(NULL);
   }
 
   return (status);
@@ -695,9 +642,9 @@ void krnThreadWaitExit(osThread_t *thread, uint32_t ret_val, dispatch_t dispatch
 
   /* Remove the thread from delay queue */
   QueueRemoveEntry(&thread->delay_que);
-  ThreadReadyAdd(thread);
+  SchedThreadReadyAdd(thread);
   if (dispatch != DISPATCH_NO) {
-    krnThreadDispatch(thread);
+    SchedDispatch(thread);
   }
 }
 
@@ -718,10 +665,7 @@ osStatus_t krnThreadWaitEnter(uint8_t state, queue_t *wait_que, uint32_t timeout
   }
 
   thread = ThreadGetRunning();
-
-  ThreadReadyDel(thread);
-
-  thread->state = state;
+  SchedThreadReadyDel(thread, state);
 
   /* Add to the wait queue */
   if (wait_que != NULL) {
@@ -746,8 +690,7 @@ osStatus_t krnThreadWaitEnter(uint8_t state, queue_t *wait_que, uint32_t timeout
     QueueAppend(que, &thread->delay_que);
   }
 
-  thread = krnThreadHighestPrioGet();
-  krnThreadSwitch(thread);
+  SchedDispatch(NULL);
 
   return ((osStatus_t)osThreadWait);
 }
@@ -761,13 +704,14 @@ void krnThreadWaitDelete(queue_t *wait_que)
   while (!isQueueEmpty(wait_que)) {
     krnThreadWaitExit(GetThreadByQueue(wait_que->next), (uint32_t)osErrorResource, DISPATCH_NO);
   }
-  krnThreadDispatch(NULL);
+
+  SchedDispatch(NULL);
 }
 
 /**
  * @brief       Process Thread Delay Tick (executed each System Tick).
  */
-bool krnThreadDelayTick(void)
+void krnThreadDelayTick(void)
 {
   osThread_t *thread;
   bool        result = false;
@@ -784,7 +728,9 @@ bool krnThreadDelayTick(void)
     }
   }
 
-  return (result);
+  if (result != false) {
+    SchedDispatch(NULL);
+  }
 }
 
 /**
@@ -795,59 +741,15 @@ bool krnThreadDelayTick(void)
 void krnThreadSetPriority(osThread_t *thread, int8_t priority)
 {
   if (thread->priority != priority) {
-    if ((thread->state & ThreadStateMask) == ThreadBlocked) {
+    if (thread->state == ThreadReady || thread->state == ThreadRunning) {
+      SchedThreadReadyDel(thread, ThreadReady);
       thread->priority = priority;
+      SchedThreadReadyAdd(thread);
+      SchedDispatch(NULL);
     }
     else {
-      ThreadReadyDel(thread);
       thread->priority = priority;
-      ThreadReadyAdd(thread);
     }
-  }
-}
-
-osThread_t *krnThreadHighestPrioGet(void)
-{
-  int8_t priority;
-  osThread_t *thread;
-
-  if (osInfo.ready_to_run_bmp == 0U) {
-    return (NULL);
-  }
-
-  priority = (int8_t)((NUM_PRIORITY - 1U) - __CLZ(osInfo.ready_to_run_bmp));
-  thread = GetThreadByQueue(osInfo.ready_list[priority].next);
-
-  return (thread);
-}
-
-void krnThreadSwitch(osThread_t *thread)
-{
-  thread->state = ThreadRunning;
-  osInfo.thread.run.next = thread;
-}
-
-/**
- * @brief       Dispatch specified Thread or Ready Thread with Highest Priority.
- * @param[in]   thread  thread object or NULL.
- */
-void krnThreadDispatch(osThread_t *thread)
-{
-  osThread_t *thread_running;
-
-  if (thread == NULL) {
-    thread = krnThreadHighestPrioGet();
-  }
-
-  thread_running = ThreadGetRunning();
-
-  if ((osInfo.kernel.state == osKernelRunning) &&
-      (thread != NULL) &&
-      (thread_running != NULL) &&
-      (thread->priority > thread_running->priority)) {
-    /* Preempt running Thread */
-    thread_running->state = ThreadReady;
-    krnThreadSwitch(thread);
   }
 }
 

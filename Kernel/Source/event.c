@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2021 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2017-2022 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -166,7 +166,7 @@ static uint32_t svcEventFlagsSet(osEventFlagsId_t ef_id, uint32_t flags)
     }
   }
 
-  krnThreadDispatch(NULL);
+  SchedDispatch(NULL);
 
   return (event_flags);
 }

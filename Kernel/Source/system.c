@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2021-2022 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -108,9 +108,7 @@ void osTick_Handler(void)
   }
 
   /* Process Thread Delays */
-  if (krnThreadDelayTick() == true) {
-    krnThreadDispatch(NULL);
-  }
+  krnThreadDelayTick();
 }
 
 /**
@@ -157,7 +155,7 @@ void osPendSV_Handler(void)
     }
   }
 
-  krnThreadDispatch(NULL);
+  SchedDispatch(NULL);
 }
 
 /**

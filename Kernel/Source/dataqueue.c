@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2021 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2019-2022 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -301,7 +301,8 @@ static osStatus_t svcDataQueueReset(osDataQueueId_t dq_id)
       /* Wakeup waiting Thread with highest Priority */
       krnThreadWaitExit(thread, (uint32_t)osOK, DISPATCH_NO);
     } while(!isQueueEmpty(&dq->wait_put_queue));
-    krnThreadDispatch(NULL);
+
+    SchedDispatch(NULL);
   }
 
   return (osOK);
