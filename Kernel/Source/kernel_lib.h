@@ -165,11 +165,6 @@ osStatus_t krnThreadWaitEnter(uint8_t state, queue_t *wait_que, uint32_t timeout
 void krnThreadWaitDelete(queue_t *que);
 
 /**
- * @brief       Process Thread Delay Tick (executed each System Tick).
- */
-void krnThreadDelayTick(void);
-
-/**
  * @brief       Change priority of a thread.
  * @param[in]   thread    thread object.
  * @param[in]   priority  new priority value for the thread.

@@ -90,17 +90,18 @@ static osObject_t* post_queue_get(void)
  */
 void osTick_Handler(void)
 {
-  osTimer_t *timer;
-  queue_t   *timer_queue;
+  osTimer_t  *timer;
+  osThread_t *thread;
+  queue_t    *que;
 
   osTickAcknowledgeIRQ();
   ++osInfo.kernel.tick;
 
   /* Process Timers */
   if (osInfo.timer_semaphore != NULL) {
-    timer_queue = &osInfo.timer_queue;
-    if (!isQueueEmpty(timer_queue)) {
-      timer = GetTimerByQueue(timer_queue->next);
+    que = &osInfo.timer_queue;
+    if (!isQueueEmpty(que)) {
+      timer = GetTimerByQueue(que->next);
       if (time_before_eq(timer->time, osInfo.kernel.tick)) {
         osSemaphoreRelease(osInfo.timer_semaphore);
       }
@@ -108,7 +109,29 @@ void osTick_Handler(void)
   }
 
   /* Process Thread Delays */
-  krnThreadDelayTick();
+  que = &osInfo.delay_queue;
+  while (!isQueueEmpty(que)) {
+    thread = GetThreadByDelayQueue(que->next);
+    if (time_after(thread->delay, osInfo.kernel.tick)) {
+      break;
+    }
+    else {
+      krnThreadWaitExit(thread, (uint32_t)osErrorTimeout, DISPATCH_NO);
+    }
+  }
+
+  /* Check Round Robin timeout */
+  if (osConfig.robin_timeout != 0U) {
+    thread = ThreadGetRunning();
+    thread->time_slice++;
+    if (thread->time_slice > osConfig.robin_timeout) {
+      thread->time_slice = 0U;
+      SchedThreadReadyDel(thread, ThreadReady);
+      SchedThreadReadyAdd(thread);
+    }
+  }
+
+  SchedDispatch(NULL);
 }
 
 /**

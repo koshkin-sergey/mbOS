@@ -140,6 +140,7 @@ static osThreadId_t svcThreadNew(osThreadFunc_t func, void *argument, const osTh
   thread->exc_return    = INIT_EXC_RETURN;
   thread->stk_mem       = stack_mem;
   thread->stk_size      = stack_size;
+  thread->time_slice    = 0U;
   thread->base_priority = (int8_t)priority;
   thread->priority      = (int8_t)priority;
   thread->id            = ID_THREAD;
@@ -706,31 +707,6 @@ void krnThreadWaitDelete(queue_t *wait_que)
   }
 
   SchedDispatch(NULL);
-}
-
-/**
- * @brief       Process Thread Delay Tick (executed each System Tick).
- */
-void krnThreadDelayTick(void)
-{
-  osThread_t *thread;
-  bool        result = false;
-  queue_t    *delay_queue = &osInfo.delay_queue;
-
-  while (!isQueueEmpty(delay_queue)) {
-    thread = GetThreadByDelayQueue(delay_queue->next);
-    if (time_after(thread->delay, osInfo.kernel.tick)) {
-      break;
-    }
-    else {
-      krnThreadWaitExit(thread, (uint32_t)osErrorTimeout, DISPATCH_NO);
-      result = true;
-    }
-  }
-
-  if (result != false) {
-    SchedDispatch(NULL);
-  }
 }
 
 /**
