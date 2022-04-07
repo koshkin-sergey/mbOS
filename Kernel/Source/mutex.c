@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2021 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2017-2022 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -250,7 +250,7 @@ static osStatus_t svcMutexRelease(osMutexId_t mutex_id)
       QueueAppend(&thread->mutex_que, &mutex->mutex_que);
     }
 
-    krnThreadDispatch(NULL);
+    SchedDispatch(NULL);
   }
 
   return (osOK);
@@ -294,7 +294,7 @@ static osStatus_t svcMutexDelete(osMutexId_t mutex_id)
     /* Unblock waiting threads */
     krnThreadWaitDelete(&mutex->wait_que);
 
-    krnThreadDispatch(NULL);
+    SchedDispatch(NULL);
   }
 
   /* Mutex not exists now */

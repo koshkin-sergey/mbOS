@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2021 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2017-2022 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -165,26 +165,30 @@ osStatus_t krnThreadWaitEnter(uint8_t state, queue_t *wait_que, uint32_t timeout
 void krnThreadWaitDelete(queue_t *que);
 
 /**
- * @brief       Process Thread Delay Tick (executed each System Tick).
- */
-bool krnThreadDelayTick(void);
-
-/**
  * @brief       Change priority of a thread.
  * @param[in]   thread    thread object.
  * @param[in]   priority  new priority value for the thread.
  */
 void krnThreadSetPriority(osThread_t *thread, int8_t priority);
 
-osThread_t *krnThreadHighestPrioGet(void);
-
-void krnThreadSwitch(osThread_t *thread);
-
 /**
  * @brief       Dispatch specified Thread or Ready Thread with Highest Priority.
  * @param[in]   thread  thread object or NULL.
  */
-void krnThreadDispatch(osThread_t *thread);
+void SchedDispatch(osThread_t *thread);
+
+/**
+ * @brief       Adds thread to the end of ready queue for current priority
+ * @param[in]   thread  Thread object
+ */
+void SchedThreadReadyAdd(osThread_t *thread);
+
+/**
+ * @brief       Deletes thread from the ready queue for current priority
+ * @param[in]   thread        Thread object
+ * @param[in]   thread_state  New thread state
+ */
+void SchedThreadReadyDel(osThread_t *thread, uint8_t thread_state);
 
 __STATIC_FORCEINLINE
 osThread_t *ThreadGetRunning(void)

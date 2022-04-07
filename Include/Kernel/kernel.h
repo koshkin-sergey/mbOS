@@ -301,9 +301,9 @@ typedef struct osThread_s {
   uint32_t                      delay;  ///< Delay Time
   void                       *stk_mem;  ///< Base address of thread's stack space
   uint32_t                   stk_size;  ///< Task's stack size (in bytes)
+  uint32_t                 time_slice;  ///< Task time slice
   int8_t                base_priority;  ///< Task base priority
   int8_t                     priority;  ///< Task current priority
-  uint16_t                   reserved;
   uint8_t                          id;  ///< ID for verification(is it a thread or another object?)
   uint8_t                       state;  ///< Task state
   uint8_t                       flags;  ///< Object Flags
