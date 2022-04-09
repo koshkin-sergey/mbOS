@@ -80,8 +80,30 @@ void SchedDispatch(osThread_t *thread)
 }
 
 /**
+ * @brief       The function passes control to the next thread with the same
+ *              priority that is in the READY state.
+ * @param[in]   thread  Thread object
+ */
+void SchedYield(osThread_t *thread)
+{
+  queue_t *que;
+  int8_t  priority;
+
+  priority = thread->priority - 1;
+  que = &osInfo.ready_list[priority];
+
+  if (!isQueueEmpty(que) && que->next->next != que) {
+    /* Remove the thread from ready queue */
+    QueueRemoveEntry(&thread->thread_que);
+    thread->state = ThreadReady;
+    /* Add the thread to the end of ready queue */
+    QueueAppend(que, &thread->thread_que);
+  }
+}
+
+/**
  * @brief       Adds thread to the end of ready queue for current priority
- * @param[in]   thread
+ * @param[in]   thread  Thread object
  */
 void SchedThreadReadyAdd(osThread_t *thread)
 {

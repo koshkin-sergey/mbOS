@@ -126,8 +126,7 @@ void osTick_Handler(void)
     thread->time_slice++;
     if (thread->time_slice > osConfig.robin_timeout) {
       thread->time_slice = 0U;
-      SchedThreadReadyDel(thread, ThreadReady);
-      SchedThreadReadyAdd(thread);
+      SchedYield(thread);
     }
   }
 

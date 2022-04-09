@@ -294,12 +294,8 @@ static osPriority_t svcThreadGetPriority(osThreadId_t thread_id)
 
 static osStatus_t svcThreadYield(void)
 {
-  osThread_t *thread;
-
   if (osInfo.kernel.state == osKernelRunning) {
-    thread = ThreadGetRunning();
-    SchedThreadReadyDel(thread, ThreadReady);
-    SchedThreadReadyAdd(thread);
+    SchedYield(ThreadGetRunning());
     SchedDispatch(NULL);
   }
 

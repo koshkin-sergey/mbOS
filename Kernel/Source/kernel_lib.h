@@ -178,6 +178,13 @@ void krnThreadSetPriority(osThread_t *thread, int8_t priority);
 void SchedDispatch(osThread_t *thread);
 
 /**
+ * @brief       The function passes control to the next thread with the same
+ *              priority that is in the READY state.
+ * @param[in]   thread  Thread object
+ */
+void SchedYield(osThread_t *thread);
+
+/**
  * @brief       Adds thread to the end of ready queue for current priority
  * @param[in]   thread  Thread object
  */
