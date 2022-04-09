@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>STM32F429DISC_timers</name>
+	<name>STM32F429DISC_Round_Robin</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -32,7 +32,7 @@
 		<link>
 			<name>src/Config</name>
 			<type>2</type>
-			<locationURI>$%7BSTM32F429IDISCOVERY%7D/Common/Config</locationURI>
+			<locationURI>PARENT-3-PROJECT_LOC/Common/Config</locationURI>
 		</link>
 		<link>
 			<name>src/Device</name>
@@ -40,9 +40,9 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>src/stm32f429_example_timers.c</name>
+			<name>src/stm32f429_example.c</name>
 			<type>1</type>
-			<locationURI>$%7BSTM32F429IDISCOVERY%7D/Timers/stm32f429_example_timers.c</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/stm32f429_example.c</locationURI>
 		</link>
 		<link>
 			<name>src/Device/Drivers</name>
@@ -76,10 +76,6 @@
 		</link>
 	</linkedResources>
 	<variableList>
-		<variable>
-			<name>STM32F429IDISCOVERY</name>
-			<value>$%7BmbOS%7D/Examples/Boards/ST/STM32F429IDISCOVERY</value>
-		</variable>
 		<variable>
 			<name>STM32F4xx</name>
 			<value>$%7BmbOS%7D/Device/STMicroelectronics/STM32F4xx</value>
