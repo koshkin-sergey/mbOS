@@ -48,6 +48,7 @@
 
 /* Object Flags definitions */
 #define FLAGS_POST_PROC             (uint8_t)(1U << 0U)
+#define FLAGS_TIMER_PROC            (uint8_t)(1U << 1U)
 
 /* Thread State definitions */
 #define ThreadStateMask             (0x0FU)
@@ -102,7 +103,6 @@ typedef struct KernelInfo_s {
   queue_t             ready_list[NUM_PRIORITY];   ///< all ready to run(RUNNABLE) tasks
   queue_t                          timer_queue;
   queue_t                          delay_queue;
-  osSemaphoreId_t              timer_semaphore;
   struct {                                        ///< ISR Post Processing functions
     queue_t                              queue;
     void       (*event_flags)(osEventFlags_t*);   ///< Event Flags Post Processing function

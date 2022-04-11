@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011-2021 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2011-2022 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -100,13 +100,8 @@ void krnTimerThread(void *argument)
   (void)          argument;
   osTimerFinfo_t *timer_finfo;
 
-  osInfo.timer_semaphore = osSemaphoreNew(1U, 0U, osConfig.timer_semaphore_attr);
-  if (osInfo.timer_semaphore == NULL) {
-    return;
-  }
-
   for (;;) {
-    osSemaphoreAcquire(osInfo.timer_semaphore, osWaitForever);
+    osThreadFlagsWait(FLAGS_TIMER_PROC, osFlagsWaitAny, osWaitForever);
 
     while ((timer_finfo = (osTimerFinfo_t *)SVC_0(TimerGetFinfo)) != NULL) {
       (timer_finfo->func)(timer_finfo->arg);
@@ -174,13 +169,8 @@ static osStatus_t svcTimerStart(osTimerId_t timer_id, uint32_t ticks)
     krnTimerRemove(timer);
   }
   else {
-    if (osInfo.timer_semaphore == NULL) {
-      return (osErrorResource);
-    }
-    else {
-      timer->state = osTimerRunning;
-      timer->load  = ticks;
-    }
+    timer->state = osTimerRunning;
+    timer->load  = ticks;
   }
 
   krnTimerInsert(timer, ticks);

@@ -98,13 +98,11 @@ void osTick_Handler(void)
   ++osInfo.kernel.tick;
 
   /* Process Timers */
-  if (osInfo.timer_semaphore != NULL) {
-    que = &osInfo.timer_queue;
-    if (!isQueueEmpty(que)) {
-      timer = GetTimerByQueue(que->next);
-      if (time_before_eq(timer->time, osInfo.kernel.tick)) {
-        osSemaphoreRelease(osInfo.timer_semaphore);
-      }
+  que = &osInfo.timer_queue;
+  if (!isQueueEmpty(que)) {
+    timer = GetTimerByQueue(que->next);
+    if (time_before_eq(timer->time, osInfo.kernel.tick)) {
+      osThreadFlagsSet(osInfo.thread.timer, FLAGS_TIMER_PROC);
     }
   }
 

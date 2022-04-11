@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2021 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2017-2022 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -304,6 +304,7 @@ typedef struct osThread_s {
   uint32_t                 time_slice;  ///< Task time slice
   int8_t                base_priority;  ///< Task base priority
   int8_t                     priority;  ///< Task current priority
+  uint16_t                   reserved;
   uint8_t                          id;  ///< ID for verification(is it a thread or another object?)
   uint8_t                       state;  ///< Task state
   uint8_t                       flags;  ///< Object Flags
@@ -524,8 +525,6 @@ typedef struct osConfig_s {
   osThreadAttr_t           *idle_thread_attr;   ///< Idle Thread Attributes
   const
   osThreadAttr_t          *timer_thread_attr;   ///< Timer Thread Attributes
-  const
-  osSemaphoreAttr_t    *timer_semaphore_attr;   ///< Timer Semaphore Attributes
 } osConfig_t;
 
 /*******************************************************************************
