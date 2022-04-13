@@ -55,7 +55,7 @@ void ThreadSwitch(osThread_t *thread)
  */
 void SchedDispatch(osThread_t *thread)
 {
-  osThread_t *thread_running;
+  osThread_t *thread_next;
 
   if (osInfo.kernel.state == osKernelRunning) {
     if (thread == NULL) {
@@ -65,15 +65,15 @@ void SchedDispatch(osThread_t *thread)
       }
     }
 
-    thread_running = ThreadGetRunning();
-    if (thread_running == NULL || thread_running->state != ThreadRunning) {
+    thread_next = osInfo.thread.run.next;
+    if (thread_next == NULL || thread_next->state != ThreadRunning) {
       ThreadSwitch(thread);
       return;
     }
 
-    if (thread->priority > thread_running->priority) {
+    if (thread->priority > thread_next->priority) {
       /* Preempt running Thread */
-      thread_running->state = ThreadReady;
+      thread_next->state = ThreadReady;
       ThreadSwitch(thread);
     }
   }
