@@ -93,6 +93,7 @@ void osTick_Handler(void)
   osTimer_t  *timer;
   osThread_t *thread;
   queue_t    *que;
+  bool        dispatch = false;
 
   osTickAcknowledgeIRQ();
   ++osInfo.kernel.tick;
@@ -115,6 +116,7 @@ void osTick_Handler(void)
     }
     else {
       krnThreadWaitExit(thread, (uint32_t)osErrorTimeout, DISPATCH_NO);
+      dispatch = true;
     }
   }
 
@@ -125,10 +127,13 @@ void osTick_Handler(void)
     if (thread->time_slice > osConfig.robin_timeout) {
       thread->time_slice = 0U;
       SchedYield(thread);
+      dispatch = true;
     }
   }
 
-  SchedDispatch(NULL);
+  if (dispatch != false) {
+    SchedDispatch(NULL);
+  }
 }
 
 /**
