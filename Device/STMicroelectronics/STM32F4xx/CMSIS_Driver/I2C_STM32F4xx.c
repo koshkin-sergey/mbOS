@@ -893,8 +893,10 @@ void I2Cx_EV_IRQHandler(I2C_RESOURCES *i2c)
               }
 
               /* Read data N-1 and N */
-              tr->data[tr->cnt++] = (uint8_t)i2c->reg->DR;
-              tr->data[tr->cnt++] = (uint8_t)i2c->reg->DR;
+              tr->data[tr->cnt] = (uint8_t)i2c->reg->DR;
+              tr->cnt++;
+              tr->data[tr->cnt] = (uint8_t)i2c->reg->DR;
+              tr->cnt++;
 
               tr->data  = NULL;
               tr->ctrl &= ~XFER_CTRL_XACTIVE;
@@ -912,12 +914,14 @@ void I2Cx_EV_IRQHandler(I2C_RESOURCES *i2c)
               /* Three bytes remaining */
               i2c->reg->CR1 &= ~I2C_CR1_ACK;
               /* Read data N-2 */
-              tr->data[tr->cnt++] = (uint8_t)i2c->reg->DR;
+              tr->data[tr->cnt] = (uint8_t)i2c->reg->DR;
+              tr->cnt++;
             }
           }
         }
         else {
-          tr->data[tr->cnt++] = (uint8_t)i2c->reg->DR;
+          tr->data[tr->cnt] = (uint8_t)i2c->reg->DR;
+          tr->cnt++;
 
           if (tr->num == 1U) {
             /* Single byte transfer completed */
