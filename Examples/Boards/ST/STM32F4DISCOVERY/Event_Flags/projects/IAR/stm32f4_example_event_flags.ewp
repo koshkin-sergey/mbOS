@@ -2109,9 +2109,6 @@
         <group>
             <name>Config</name>
             <file>
-                <name>$PROJ_DIR$\..\..\..\Common\Config\kernel_config.c</name>
-            </file>
-            <file>
                 <name>$PROJ_DIR$\..\..\..\Common\Config\kernel_lib.c</name>
             </file>
         </group>
