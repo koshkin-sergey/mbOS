@@ -458,6 +458,11 @@
               <FilePath>..\..\..\Source\mutex.c</FilePath>
             </File>
             <File>
+              <FileName>scheduler.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Source\scheduler.c</FilePath>
+            </File>
+            <File>
               <FileName>semaphore.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\Source\semaphore.c</FilePath>
@@ -1075,6 +1080,11 @@
               <FileName>mutex.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\Source\mutex.c</FilePath>
+            </File>
+            <File>
+              <FileName>scheduler.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Source\scheduler.c</FilePath>
             </File>
             <File>
               <FileName>semaphore.c</FileName>
@@ -1696,6 +1706,11 @@
               <FilePath>..\..\..\Source\mutex.c</FilePath>
             </File>
             <File>
+              <FileName>scheduler.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Source\scheduler.c</FilePath>
+            </File>
+            <File>
               <FileName>semaphore.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\Source\semaphore.c</FilePath>
@@ -2315,6 +2330,11 @@
               <FilePath>..\..\..\Source\mutex.c</FilePath>
             </File>
             <File>
+              <FileName>scheduler.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Source\scheduler.c</FilePath>
+            </File>
+            <File>
               <FileName>semaphore.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\Source\semaphore.c</FilePath>
@@ -2932,6 +2952,11 @@
               <FileName>mutex.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\Source\mutex.c</FilePath>
+            </File>
+            <File>
+              <FileName>scheduler.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Source\scheduler.c</FilePath>
             </File>
             <File>
               <FileName>semaphore.c</FileName>

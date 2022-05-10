@@ -31,8 +31,8 @@
 
 /* Kernel Information */
 #define osVersionAPI         020010003        ///< API version (2.1.3)
-#define osVersionKernel      010010001        ///< Kernel version (1.1.1)
-#define osKernelId           "Kernel V1.1.1"  ///< Kernel identification string
+#define osVersionKernel      010020000        ///< Kernel version (1.2.0)
+#define osKernelId           "Kernel V1.2.0"  ///< Kernel identification string
 
 /* Object Identifier definitions */
 #define ID_INVALID                  (uint8_t)0x00
