@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2021 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2019-2022 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -63,18 +63,7 @@ static const osThreadAttr_t os_timer_thread_attr = {
   osPriorityISR,
 };
 
-/* Timer Semaphore Control Block */
-static osSemaphore_t os_timer_semaphore_cb __attribute__((section(".bss.os.semaphore.cb")));
-
-/* Timer Semaphore Attributes */
-static const osSemaphoreAttr_t os_timer_semaphore_attr = {
-  NULL,
-  0U,
-  &os_timer_semaphore_cb,
-  (uint32_t)sizeof(os_timer_semaphore_cb)
-};
-
-const osConfig_t osConfig __USED __attribute__((section(".rodata"))) = {
+const osConfig_t osConfig __attribute__((section(".rodata"))) = {
   0U     // Flags
 #if (OS_PRIVILEGE_MODE != 0)
   | osConfigPrivilegedMode
@@ -94,7 +83,6 @@ const osConfig_t osConfig __USED __attribute__((section(".rodata"))) = {
 #endif
   &os_idle_thread_attr,
   &os_timer_thread_attr,
-  &os_timer_semaphore_attr
 };
 
 /* Non weak reference to library irq module */

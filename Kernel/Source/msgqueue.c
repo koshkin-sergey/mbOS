@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2021 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2013-2022 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -203,10 +203,9 @@ static osStatus_t svcMessageQueuePut(osMessageQueueId_t mq_id, const void *msg_p
       /* No memory available */
       if (timeout != 0U) {
         /* Suspend current Thread */
-        thread = ThreadGetRunning();
-        status = krnThreadWaitEnter(thread, &mq->wait_put_queue, timeout);
+        status = krnThreadWaitEnter(ThreadWaitingQueuePut, &mq->wait_put_queue, timeout);
         if (status != osErrorTimeout) {
-          winfo = &thread->winfo.msgque;
+          winfo           = &ThreadGetRunning()->winfo.msgque;
           winfo->msg      = (void *)msg_ptr;
           winfo->msg_prio = (uint32_t)msg_prio;
         }
@@ -255,10 +254,9 @@ static osStatus_t svcMessageQueueGet(osMessageQueueId_t mq_id, void *msg_ptr, ui
     /* No Message available */
     if (timeout != 0U) {
       /* Suspend current Thread */
-      thread = ThreadGetRunning();
-      status = krnThreadWaitEnter(thread, &mq->wait_get_queue, timeout);
+      status = krnThreadWaitEnter(ThreadWaitingQueueGet, &mq->wait_get_queue, timeout);
       if (status != osErrorTimeout) {
-        winfo = &thread->winfo.msgque;
+        winfo           = &ThreadGetRunning()->winfo.msgque;
         winfo->msg      = msg_ptr;
         winfo->msg_prio = (uint32_t)msg_prio;
       }
@@ -347,7 +345,8 @@ static osStatus_t svcMessageQueueReset(osMessageQueueId_t mq_id)
       /* Wakeup waiting Thread with highest Priority */
       krnThreadWaitExit(thread, (uint32_t)osOK, DISPATCH_NO);
     } while (!isQueueEmpty(&mq->wait_put_queue));
-    krnThreadDispatch(NULL);
+
+    SchedDispatch(NULL);
   }
 
   return (osOK);

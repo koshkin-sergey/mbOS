@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2021-2022 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -63,6 +63,8 @@ static osObject_t* post_queue_get(void)
   queue_t    *que;
   osObject_t *obj;
 
+  BEGIN_CRITICAL_SECTION
+
   que = &osInfo.post_process.queue;
 
   if (!isQueueEmpty(que)) {
@@ -72,6 +74,8 @@ static osObject_t* post_queue_get(void)
   else {
     obj = NULL;
   }
+
+  END_CRITICAL_SECTION
 
   return (obj);
 }
@@ -86,26 +90,49 @@ static osObject_t* post_queue_get(void)
  */
 void osTick_Handler(void)
 {
-  osTimer_t *timer;
-  queue_t   *timer_queue;
+  osTimer_t  *timer;
+  osThread_t *thread;
+  queue_t    *que;
+  bool        dispatch = false;
 
   osTickAcknowledgeIRQ();
   ++osInfo.kernel.tick;
 
   /* Process Timers */
-  if (osInfo.timer_semaphore != NULL) {
-    timer_queue = &osInfo.timer_queue;
-    if (!isQueueEmpty(timer_queue)) {
-      timer = GetTimerByQueue(timer_queue->next);
-      if (time_before_eq(timer->time, osInfo.kernel.tick)) {
-        osSemaphoreRelease(osInfo.timer_semaphore);
-      }
+  que = &osInfo.timer_queue;
+  if (!isQueueEmpty(que)) {
+    timer = GetTimerByQueue(que->next);
+    if (time_before_eq(timer->time, osInfo.kernel.tick)) {
+      osThreadFlagsSet(osInfo.thread.timer, FLAGS_TIMER_PROC);
     }
   }
 
   /* Process Thread Delays */
-  if (krnThreadDelayTick() == true) {
-    krnThreadDispatch(NULL);
+  que = &osInfo.delay_queue;
+  while (!isQueueEmpty(que)) {
+    thread = GetThreadByDelayQueue(que->next);
+    if (time_after(thread->delay, osInfo.kernel.tick)) {
+      break;
+    }
+    else {
+      krnThreadWaitExit(thread, (uint32_t)osErrorTimeout, DISPATCH_NO);
+      dispatch = true;
+    }
+  }
+
+  /* Check Round Robin timeout */
+  if (osConfig.robin_timeout != 0U) {
+    thread = ThreadGetRunning();
+    thread->time_slice++;
+    if (thread->time_slice > osConfig.robin_timeout) {
+      thread->time_slice = 0U;
+      SchedYield(thread);
+      dispatch = true;
+    }
+  }
+
+  if (dispatch != false) {
+    SchedDispatch(NULL);
   }
 }
 
@@ -153,7 +180,7 @@ void osPendSV_Handler(void)
     }
   }
 
-  krnThreadDispatch(NULL);
+  SchedDispatch(NULL);
 }
 
 /**

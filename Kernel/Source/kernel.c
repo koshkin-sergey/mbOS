@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2021 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2017-2022 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -80,8 +80,6 @@ static osKernelState_t svcKernelGetState(void)
 
 static osStatus_t svcKernelStart(void)
 {
-  osThread_t *thread;
-
   if (osInfo.kernel.state != osKernelReady) {
     return (osError);
   }
@@ -103,16 +101,12 @@ static osStatus_t svcKernelStart(void)
   /* Enable RTOS Tick */
   osTickEnable();
 
-  /* Switch to Ready Thread with highest Priority */
-  thread = krnThreadHighestPrioGet();
-  if (thread == NULL) {
-    return (osError);
-  }
-  krnThreadSwitch(thread);
-
   setPrivilegedMode(osConfig.flags & osConfigPrivilegedMode);
 
   osInfo.kernel.state = osKernelRunning;
+
+  /* Switch to Ready Thread with highest Priority */
+  SchedDispatch(NULL);
 
   return (osOK);
 }

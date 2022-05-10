@@ -126,7 +126,7 @@ typedef const struct _I2C_IO {
 /* I2C Transfer Information (Run-Time) */
 typedef struct _I2C_TRANSFER_INFO {
   uint32_t              num;                // Number of data to transfer
-  int32_t               cnt;                // Data transfer counter
+  uint32_t              cnt;                // Data transfer counter
   uint8_t              *data;               // Data pointer
   uint16_t              addr;               // Device address
   uint8_t               ctrl;               // Transfer control flags

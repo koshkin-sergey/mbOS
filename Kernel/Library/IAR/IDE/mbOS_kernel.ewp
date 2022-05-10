@@ -5280,6 +5280,9 @@
             <name>$PROJ_DIR$\..\..\..\Source\mutex.c</name>
         </file>
         <file>
+            <name>$PROJ_DIR$\..\..\..\Source\scheduler.c</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\..\..\..\Source\semaphore.c</name>
         </file>
         <file>

@@ -2112,9 +2112,6 @@
                 <name>$PROJ_DIR$\..\..\..\..\..\..\..\Kernel\Library\IAR\Kernel_CM0.a</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\..\..\Common\Config\kernel_config.c</name>
-            </file>
-            <file>
                 <name>$PROJ_DIR$\..\..\..\Common\Config\kernel_lib.c</name>
             </file>
         </group>

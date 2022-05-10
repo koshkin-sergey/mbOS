@@ -11,6 +11,7 @@
  ******************************************************************************/
 
 #include "asm/GPIO_STM32F0xx.h"
+#include "asm/system_stm32f0xx.h"
 #include "Kernel/kernel.h"
 
 /*******************************************************************************
@@ -121,6 +122,8 @@ static void threadB_func(void *param)
 
 static void HardwareInit(void)
 {
+  SystemCoreClockUpdate();
+
   if (!GPIO_GetPortClockState(LED_PORT)) {
     GPIO_PortClock(LED_PORT, GPIO_PORT_CLK_ENABLE);
   }

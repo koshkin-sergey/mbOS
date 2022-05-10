@@ -26,14 +26,13 @@
 
 #include <stdbool.h>
 
-#include "asm/aduc7023.h"
-#include "asm/Driver_GPIO.h"
-#include "asm/Driver_PCC.h"
+#include <asm/aduc7023.h>
+#include <Kernel/irq.h>
+#include <CMSIS/Driver/Driver_I2C.h>
 
-#include "Kernel/irq.h"
-#include "CMSIS/Driver/Driver_I2C.h"
-
-#include "device_config.h"
+#include <device_config.h>
+#include <Driver/GPIO_ADUC7023.h>
+#include <Driver/PCC_ADUC7023.h>
 
 /*******************************************************************************
  *  defines and macros (scope: module-local)
@@ -113,19 +112,17 @@ ARM_DRIVER_I2C Driver_I2C##x = { \
 #define I2C_POWER             ((uint16_t)0x02)    // I2C powered on
 #define I2C_SETUP             ((uint16_t)0x04)    // I2C Master configured, clock set
 
-#define I2C_MODE_SLAVE        ((uint8_t)0x00)     // Mode: slave
-#define I2C_MODE_MASTER       ((uint8_t)0x01)     // Mode: master
-
-#define I2C_DIR_TX            ((uint8_t)0x00)     // Direction: transmitter
-#define I2C_DIR_RX            ((uint8_t)0x01)     // Direction: receiver
+/* I2C status flags definitions */
+#define I2C_BUSY              (1UL << 0U)
+#define I2C_MASTER            (1UL << 1U)
+#define I2C_RECEIVER          (1UL << 2U)
+#define I2C_GENERAL_CALL      (1UL << 3U)
+#define I2C_ARBITRATION_LOST  (1UL << 4U)
+#define I2C_BUS_ERROR         (1UL << 5U)
 
 /* Transfer status flags definitions */
-#define XFER_CTRL_XSET        ((uint16_t)0x0001)  // Transfer is set
-#define XFER_CTRL_XPENDING    ((uint16_t)0x0002)  // Transfer pending
-#define XFER_CTRL_XDONE       ((uint16_t)0x0004)  // Transfer done (all data transferred)
-#define XFER_CTRL_RSTART      ((uint16_t)0x0008)  // Generate repeated start and readdress
-#define XFER_CTRL_ADDR_NACK   ((uint16_t)0x0010)  // Slave address not acknowledged
-#define XFER_CTRL_ADDR_DONE   ((uint16_t)0x0020)  // Addressing done
+#define XFER_CTRL_XPENDING    ((uint16_t)0x0001)  // Transfer pending
+#define XFER_CTRL_ADDR_DONE   ((uint16_t)0x0002)  // Addressing done
 
 /*******************************************************************************
  *  typedefs and structures (scope: module-local)
@@ -140,33 +137,33 @@ typedef const struct _I2C_PIN {
 
 /* I2C Input/Output Configuration */
 typedef const struct _I2C_IO {
-  I2C_PIN               *scl;               // Pointer to SCL pin configuration
-  I2C_PIN               *sda;               // Pointer to SDA pin configuration
+  I2C_PIN              *scl;                // Pointer to SCL pin configuration
+  I2C_PIN              *sda;                // Pointer to SDA pin configuration
 } I2C_IO;
 
 /* I2C RX Transfer Information (Run-Time) */
 typedef struct _I2C_RX_XFER_INFO {
   uint8_t              *data;               // Data pointer
-   int32_t              num;                // Number of data to transfer
-   int32_t              cnt;                // Data transfer counter
+  uint32_t              num;                // Number of data to transfer
+  uint32_t              cnt;                // Data transfer counter
 } I2C_RX_XFER_INFO;
 
 /* I2C TX Transfer Information (Run-Time) */
 typedef struct _I2C_TX_XFER_INFO {
-  uint8_t              *data;               // Data pointer
-   int32_t              num;                // Number of data to transfer
-   int32_t              cnt;                // Data transfer counter
-   uint32_t             dummy_cnt;          // Dummy byte counter
+  const uint8_t        *data;               // Data pointer
+  uint32_t              num;                // Number of data to transfer
+  uint32_t              cnt;                // Data transfer counter
+  uint32_t              dummy_cnt;          // Dummy byte counter
 } I2C_TX_XFER_INFO;
 
 /* I2C Information (Run-Time) */
 typedef struct _I2C_INFO {
   ARM_I2C_SignalEvent_t cb_event;           // Event Callback
-  ARM_I2C_STATUS        status;             // Status flags
+  uint32_t              status;             // Status flags
   I2C_RX_XFER_INFO      rx;                 // RX transfer information
   I2C_TX_XFER_INFO      tx;                 // TX transfer information
   uint16_t              flags;              // Current I2C state flags
-  uint16_t              ctrl;               // Transfer control (current)
+  uint16_t              xfer_ctrl;          // Transfer control (current)
 } I2C_INFO;
 
 /* I2C IRQ Configuration */

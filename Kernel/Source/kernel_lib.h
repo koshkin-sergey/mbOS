@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2021 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2017-2022 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -31,8 +31,8 @@
 
 /* Kernel Information */
 #define osVersionAPI         020010003        ///< API version (2.1.3)
-#define osVersionKernel      010010000        ///< Kernel version (1.1.0)
-#define osKernelId           "Kernel V1.1.0"  ///< Kernel identification string
+#define osVersionKernel      010020000        ///< Kernel version (1.2.0)
+#define osKernelId           "Kernel V1.2.0"  ///< Kernel identification string
 
 /* Object Identifier definitions */
 #define ID_INVALID                  (uint8_t)0x00
@@ -48,13 +48,25 @@
 
 /* Object Flags definitions */
 #define FLAGS_POST_PROC             (uint8_t)(1U << 0U)
+#define FLAGS_TIMER_PROC            (uint8_t)(1U << 1U)
 
 /* Thread State definitions */
-#define ThreadStateInactive         ((uint8_t)osThreadInactive)
-#define ThreadStateReady            ((uint8_t)osThreadReady)
-#define ThreadStateRunning          ((uint8_t)osThreadRunning)
-#define ThreadStateBlocked          ((uint8_t)osThreadBlocked)
-#define ThreadStateTerminated       ((uint8_t)osThreadTerminated)
+#define ThreadStateMask             (0x0FU)
+
+#define ThreadInactive              ((uint8_t)osThreadInactive)
+#define ThreadReady                 ((uint8_t)osThreadReady)
+#define ThreadRunning               ((uint8_t)osThreadRunning)
+#define ThreadBlocked               ((uint8_t)osThreadBlocked)
+#define ThreadTerminated            ((uint8_t)osThreadTerminated)
+
+#define ThreadWaitingThreadFlags    ((uint8_t)(ThreadBlocked | 0x10U))
+#define ThreadWaitingEventFlags     ((uint8_t)(ThreadBlocked | 0x20U))
+#define ThreadWaitingMutex          ((uint8_t)(ThreadBlocked | 0x30U))
+#define ThreadWaitingSemaphore      ((uint8_t)(ThreadBlocked | 0x40U))
+#define ThreadWaitingMemoryPool     ((uint8_t)(ThreadBlocked | 0x50U))
+#define ThreadWaitingQueueGet       ((uint8_t)(ThreadBlocked | 0x60U))
+#define ThreadWaitingQueuePut       ((uint8_t)(ThreadBlocked | 0x70U))
+#define ThreadWaitingDelay          ((uint8_t)(ThreadBlocked | 0x80U))
 
 #define container_of(ptr, type, member) ((type *)(void *)((uint8_t *)(ptr) - offsetof(type, member)))
 
@@ -91,7 +103,6 @@ typedef struct KernelInfo_s {
   queue_t             ready_list[NUM_PRIORITY];   ///< all ready to run(RUNNABLE) tasks
   queue_t                          timer_queue;
   queue_t                          delay_queue;
-  osSemaphoreId_t              timer_semaphore;
   struct {                                        ///< ISR Post Processing functions
     queue_t                              queue;
     void       (*event_flags)(osEventFlags_t*);   ///< Event Flags Post Processing function
@@ -117,8 +128,7 @@ typedef struct osObject_s {
  *  exported variables
  ******************************************************************************/
 
-extern KernelInfo_t osInfo;               ///< Kernel Runtime Information
-extern const osConfig_t osConfig;         ///< Kernel Configuration
+extern KernelInfo_t osInfo;             ///< Kernel Runtime Information
 
 /*******************************************************************************
  *  exported function prototypes
@@ -141,11 +151,11 @@ void krnThreadWaitExit(osThread_t *thread, uint32_t ret_val, dispatch_t dispatch
 
 /**
  * @brief       Enter Thread wait state.
- * @param[out]  thread    thread object.
+ * @param[in]   state     New thread state.
  * @param[out]  wait_que  Pointer to wait queue.
  * @param[in]   timeout   Timeout
  */
-osStatus_t krnThreadWaitEnter(osThread_t *thread, queue_t *wait_que, uint32_t timeout);
+osStatus_t krnThreadWaitEnter(uint8_t state, queue_t *wait_que, uint32_t timeout);
 
 /**
  * @brief
@@ -154,26 +164,37 @@ osStatus_t krnThreadWaitEnter(osThread_t *thread, queue_t *wait_que, uint32_t ti
 void krnThreadWaitDelete(queue_t *que);
 
 /**
- * @brief       Process Thread Delay Tick (executed each System Tick).
- */
-bool krnThreadDelayTick(void);
-
-/**
  * @brief       Change priority of a thread.
  * @param[in]   thread    thread object.
  * @param[in]   priority  new priority value for the thread.
  */
 void krnThreadSetPriority(osThread_t *thread, int8_t priority);
 
-osThread_t *krnThreadHighestPrioGet(void);
-
-void krnThreadSwitch(osThread_t *thread);
-
 /**
  * @brief       Dispatch specified Thread or Ready Thread with Highest Priority.
  * @param[in]   thread  thread object or NULL.
  */
-void krnThreadDispatch(osThread_t *thread);
+void SchedDispatch(osThread_t *thread);
+
+/**
+ * @brief       The function passes control to the next thread with the same
+ *              priority that is in the READY state.
+ * @param[in]   thread  Thread object
+ */
+void SchedYield(osThread_t *thread);
+
+/**
+ * @brief       Adds thread to the end of ready queue for current priority
+ * @param[in]   thread  Thread object
+ */
+void SchedThreadReadyAdd(osThread_t *thread);
+
+/**
+ * @brief       Deletes thread from the ready queue for current priority
+ * @param[in]   thread        Thread object
+ * @param[in]   thread_state  New thread state
+ */
+void SchedThreadReadyDel(osThread_t *thread, uint8_t thread_state);
 
 __STATIC_FORCEINLINE
 osThread_t *ThreadGetRunning(void)

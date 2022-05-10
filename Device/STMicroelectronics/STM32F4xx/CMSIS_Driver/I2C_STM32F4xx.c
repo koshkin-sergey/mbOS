@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2020 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2018-2022 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -632,12 +632,14 @@ ARM_I2C_STATUS I2Cx_GetStatus(I2C_RESOURCES *i2c)
 static
 void I2Cx_EV_IRQHandler(I2C_RESOURCES *i2c)
 {
-  I2C_TRANSFER_INFO *tr = &i2c->info->xfer;
+  I2C_INFO volatile *info = i2c->info;
+  I2C_TRANSFER_INFO volatile *tr = &info->xfer;
+  I2C_TypeDef *reg = i2c->reg;
   uint8_t  data;
   uint16_t sr1, sr2;
   uint32_t event;
 
-  sr1 = (uint16_t)i2c->reg->SR1;
+  sr1 = (uint16_t)reg->SR1;
 
   if (sr1 & I2C_SR1_SB) {
     /* (EV5): start bit generated, send address */
@@ -649,15 +651,15 @@ void I2Cx_EV_IRQHandler(I2C_RESOURCES *i2c)
     else {
       /* 7-bit addressing mode */
       data  = (uint8_t)tr->addr << 1;
-      data |= (uint8_t)i2c->info->status.direction;
+      data |= (uint8_t)info->status.direction;
     }
-    i2c->reg->DR = data;
+    reg->DR = data;
   }
   else if (sr1 & I2C_SR1_ADD10) {
     /* (EV9): 10-bit address header sent, send device address LSB */
-    i2c->reg->DR = (uint8_t)tr->addr;
+    reg->DR = (uint8_t)tr->addr;
 
-    if (i2c->info->status.direction) {
+    if (info->status.direction) {
       /* Master receiver generates repeated start in 10-bit addressing mode */
       tr->ctrl |= XFER_CTRL_RSTART;
     }
@@ -666,7 +668,7 @@ void I2Cx_EV_IRQHandler(I2C_RESOURCES *i2c)
     /* (EV6): addressing complete */
     if (tr->ctrl & XFER_CTRL_ADDR_DONE) {
       /* Restart condition, end previous transfer */
-      i2c->info->status.busy = 0U;
+      info->status.busy = 0U;
 
       event = ARM_I2C_EVENT_TRANSFER_DONE;
 
@@ -674,39 +676,39 @@ void I2Cx_EV_IRQHandler(I2C_RESOURCES *i2c)
         event |= ARM_I2C_EVENT_TRANSFER_INCOMPLETE;
       }
 
-      if (i2c->info->status.general_call) {
+      if (info->status.general_call) {
         event |= ARM_I2C_EVENT_GENERAL_CALL;
       }
 
-      if (i2c->info->cb_event != NULL) {
-        i2c->info->cb_event (event);
+      if (info->cb_event != NULL) {
+        info->cb_event(event);
       }
     }
 
-    if ((i2c->info->status.mode != 0U) && (i2c->info->status.direction != 0U)) {
+    if ((info->status.mode != 0U) && (info->status.direction != 0U)) {
       /* Master mode, receiver */
       if (tr->num == 1U) {
-        i2c->reg->CR1 &= ~I2C_CR1_ACK;
+        reg->CR1 &= ~I2C_CR1_ACK;
       }
 
       /* Clear ADDR flag */
-      i2c->reg->SR1;
-      i2c->reg->SR2;
+      reg->SR1;
+      reg->SR2;
 
       if (tr->ctrl & XFER_CTRL_RSTART) {
         tr->ctrl &= ~XFER_CTRL_RSTART;
         /* Generate repeated start */
-        i2c->reg->CR1 |= I2C_CR1_START;
+        reg->CR1 |= I2C_CR1_START;
       }
       else {
         if (tr->num == 1U) {
           if ((tr->ctrl & XFER_CTRL_XPENDING) == 0U) {
-            i2c->reg->CR1 |= I2C_CR1_STOP;
+            reg->CR1 |= I2C_CR1_STOP;
           }
         }
         else if (tr->num == 2U) {
-          i2c->reg->CR1 &= ~I2C_CR1_ACK;
-          i2c->reg->CR1 |= I2C_CR1_POS;
+          reg->CR1 &= ~I2C_CR1_ACK;
+          reg->CR1 |= I2C_CR1_POS;
 
           /* Wait until BTF == 1 */
           tr->ctrl |= XFER_CTRL_WAIT_BTF;
@@ -721,27 +723,27 @@ void I2Cx_EV_IRQHandler(I2C_RESOURCES *i2c)
     }
     else {
       /* Master transmitter or slave mode */
-      sr2 = (uint16_t)i2c->reg->SR2;
+      sr2 = (uint16_t)reg->SR2;
 
-      if (i2c->info->status.mode == 0U) {
+      if (info->status.mode == 0U) {
         /* Slave mode */
 
         if (sr2 & I2C_SR2_GENCALL) {
-          i2c->info->status.general_call = 1U;
+          info->status.general_call = 1U;
         } else {
-          i2c->info->status.general_call = 0U;
+          info->status.general_call = 0U;
         }
 
         if (sr2 & I2C_SR2_TRA) {
-          i2c->info->status.direction = 0U;
+          info->status.direction = 0U;
         } else {
-          i2c->info->status.direction = 1U;
+          info->status.direction = 1U;
         }
 
         event = 0U;
 
         if (tr->data == NULL) {
-          if (i2c->info->status.direction) {
+          if (info->status.direction) {
             event |= ARM_I2C_EVENT_SLAVE_RECEIVE;
           }
           else {
@@ -749,28 +751,22 @@ void I2Cx_EV_IRQHandler(I2C_RESOURCES *i2c)
           }
         }
 
-        if (i2c->info->status.general_call) {
+        if (info->status.general_call) {
           event |= ARM_I2C_EVENT_GENERAL_CALL;
         }
 
-        if ((event != 0U) && (i2c->info->cb_event != NULL)) {
-          i2c->info->cb_event (event);
+        if ((event != 0U) && (info->cb_event != NULL)) {
+          info->cb_event(event);
         }
 
-        i2c->info->status.busy = 1U;
+        info->status.busy = 1U;
       }
     }
 
     tr->ctrl |= XFER_CTRL_ADDR_DONE | XFER_CTRL_XACTIVE;
 
-    if ((i2c->dma_rx != NULL) && (i2c->dma_tx != NULL)) {
-      /* Enable DMA data transfer */
-      i2c->reg->CR2 |= I2C_CR2_DMAEN;
-    }
-    else {
-      /* Enable IRQ data transfer */
-      i2c->reg->CR2 |= I2C_CR2_ITBUFEN;
-    }
+    /* Enable IRQ data transfer */
+    reg->CR2 |= I2C_CR2_ITBUFEN;
 
   }
   else if (sr1 & I2C_SR1_STOPF) {
@@ -779,74 +775,74 @@ void I2Cx_EV_IRQHandler(I2C_RESOURCES *i2c)
     tr->ctrl = 0U;
 
     /* Reenable ACK */
-    i2c->reg->CR1 |= I2C_CR1_ACK;
+    reg->CR1 |= I2C_CR1_ACK;
 
-    i2c->info->status.busy = 0U;
+    info->status.busy = 0U;
 
     event = ARM_I2C_EVENT_TRANSFER_DONE;
     if (tr->cnt < tr->num) {
       event |= ARM_I2C_EVENT_TRANSFER_INCOMPLETE;
     }
-    if (i2c->info->status.general_call) {
+    if (info->status.general_call) {
       event |= ARM_I2C_EVENT_GENERAL_CALL;
     }
 
-    if (i2c->info->cb_event) {
-      i2c->info->cb_event (event);
+    if (info->cb_event) {
+      info->cb_event(event);
     }
   }
   else if (tr->ctrl & XFER_CTRL_XACTIVE) {
     /* BTF, RxNE or TxE interrupt */
     if (tr->ctrl & XFER_CTRL_DMA_DONE) {
       /* BTF triggered this event */
-      if (i2c->info->status.mode) {
-        if (i2c->info->xfer.ctrl & XFER_CTRL_XPENDING) {
+      if (info->status.mode) {
+        if (tr->ctrl & XFER_CTRL_XPENDING) {
           /* Disable event interrupt */
-          i2c->reg->CR2 &= ~I2C_CR2_ITEVTEN;
+          reg->CR2 &= ~I2C_CR2_ITEVTEN;
         }
         else {
           /* Generate stop condition */
-          i2c->reg->CR1 |= I2C_CR1_STOP;
+          reg->CR1 |= I2C_CR1_STOP;
         }
         tr->data  =  NULL;
         tr->ctrl &= ~XFER_CTRL_XACTIVE;
 
-        i2c->info->status.busy = 0U;
-        i2c->info->status.mode = 0U;
+        info->status.busy = 0U;
+        info->status.mode = 0U;
 
-        if (i2c->info->cb_event) {
-          i2c->info->cb_event (ARM_I2C_EVENT_TRANSFER_DONE);
+        if (info->cb_event) {
+          info->cb_event(ARM_I2C_EVENT_TRANSFER_DONE);
         }
       }
     }
     else if (sr1 & I2C_SR1_TXE) {
-      if (i2c->info->status.mode) {
+      if (info->status.mode) {
         /* Master transmitter */
         if (tr->ctrl & XFER_CTRL_WAIT_BTF) {
           if (sr1 & I2C_SR1_BTF) {
             /* End master transmit operation */
-            i2c->reg->CR2 &= ~I2C_CR2_ITBUFEN;
+            reg->CR2 &= ~I2C_CR2_ITBUFEN;
 
             if (tr->ctrl & XFER_CTRL_XPENDING) {
-              i2c->reg->CR2 &= ~I2C_CR2_ITEVTEN;
+              reg->CR2 &= ~I2C_CR2_ITEVTEN;
             }
             else {
-              i2c->reg->CR1 |= I2C_CR1_STOP;
+              reg->CR1 |= I2C_CR1_STOP;
             }
 
             tr->data  = NULL;
             tr->ctrl &= ~XFER_CTRL_XACTIVE;
 
-            i2c->info->status.busy = 0U;
-            i2c->info->status.mode = 0U;
+            info->status.busy = 0U;
+            info->status.mode = 0U;
 
-            if (i2c->info->cb_event) {
-              i2c->info->cb_event (ARM_I2C_EVENT_TRANSFER_DONE);
+            if (info->cb_event) {
+              info->cb_event(ARM_I2C_EVENT_TRANSFER_DONE);
             }
           }
         }
         else {
-          i2c->reg->DR = tr->data[tr->cnt];
+          reg->DR = tr->data[tr->cnt];
 
           tr->cnt++;
           if (tr->cnt == tr->num) {
@@ -857,13 +853,13 @@ void I2Cx_EV_IRQHandler(I2C_RESOURCES *i2c)
       else {
         /* Slave transmitter */
         if (tr->data == NULL) {
-          if (i2c->info->cb_event) {
-            i2c->info->cb_event (ARM_I2C_EVENT_SLAVE_TRANSMIT);
+          if (info->cb_event) {
+            info->cb_event(ARM_I2C_EVENT_SLAVE_TRANSMIT);
           }
         }
 
         if (tr->data) {
-          i2c->reg->DR = tr->data[tr->cnt];
+          reg->DR = tr->data[tr->cnt];
 
           tr->cnt++;
           if (tr->cnt == tr->num) {
@@ -872,76 +868,76 @@ void I2Cx_EV_IRQHandler(I2C_RESOURCES *i2c)
         }
         else {
           /* Master requests more data as we have */
-          i2c->reg->DR = (uint8_t)0xFF;
+          reg->DR = (uint8_t)0xFF;
         }
       }
     }
     else if (sr1 & I2C_SR1_RXNE) {
-      if (i2c->info->status.mode) {
+      if (info->status.mode) {
         /* Master receiver */
         if (tr->ctrl & XFER_CTRL_WAIT_BTF) {
           if (sr1 & I2C_SR1_BTF) {
             if ((tr->num == 2U) || (tr->cnt == (tr->num - 2U))) {
               /* Two bytes remaining */
-              i2c->reg->CR2 &= ~I2C_CR2_ITBUFEN;
+              reg->CR2 &= ~I2C_CR2_ITBUFEN;
 
               if (tr->ctrl & XFER_CTRL_XPENDING) {
-                i2c->reg->CR2 &= ~I2C_CR2_ITEVTEN;
+                reg->CR2 &= ~I2C_CR2_ITEVTEN;
               }
               else {
-                i2c->reg->CR1 |= I2C_CR1_STOP;
+                reg->CR1 |= I2C_CR1_STOP;
               }
 
               /* Read data N-1 and N */
-              tr->data[tr->cnt++] = (uint8_t)i2c->reg->DR;
-              tr->data[tr->cnt++] = (uint8_t)i2c->reg->DR;
+              tr->data[tr->cnt++] = (uint8_t)reg->DR;
+              tr->data[tr->cnt++] = (uint8_t)reg->DR;
 
               tr->data  = NULL;
               tr->ctrl &= ~XFER_CTRL_XACTIVE;
 
-              i2c->info->status.busy = 0U;
-              i2c->info->status.mode = 0U;
+              info->status.busy = 0U;
+              info->status.mode = 0U;
 
-              i2c->reg->CR1 &= ~I2C_CR1_POS;
+              reg->CR1 &= ~I2C_CR1_POS;
 
-              if (i2c->info->cb_event) {
-                i2c->info->cb_event (ARM_I2C_EVENT_TRANSFER_DONE);
+              if (info->cb_event) {
+                info->cb_event(ARM_I2C_EVENT_TRANSFER_DONE);
               }
             }
             else {
               /* Three bytes remaining */
-              i2c->reg->CR1 &= ~I2C_CR1_ACK;
+              reg->CR1 &= ~I2C_CR1_ACK;
               /* Read data N-2 */
-              tr->data[tr->cnt++] = (uint8_t)i2c->reg->DR;
+              tr->data[tr->cnt++] = (uint8_t)reg->DR;
             }
           }
         }
         else {
-          tr->data[tr->cnt++] = (uint8_t)i2c->reg->DR;
+          tr->data[tr->cnt++] = (uint8_t)reg->DR;
 
           if (tr->num == 1U) {
             /* Single byte transfer completed */
-            i2c->reg->CR2 &= ~I2C_CR2_ITBUFEN;
+            reg->CR2 &= ~I2C_CR2_ITBUFEN;
 
             if (tr->ctrl & XFER_CTRL_XPENDING) {
-              i2c->reg->CR2 &= ~I2C_CR2_ITEVTEN;
+              reg->CR2 &= ~I2C_CR2_ITEVTEN;
             }
             /* (STOP was already sent during ADDR phase) */
 
             tr->data  = NULL;
             tr->ctrl &= ~XFER_CTRL_XACTIVE;
 
-            i2c->info->status.busy = 0U;
-            i2c->info->status.mode = 0U;
+            info->status.busy = 0U;
+            info->status.mode = 0U;
 
-            if (i2c->info->cb_event) {
-              i2c->info->cb_event (ARM_I2C_EVENT_TRANSFER_DONE);
+            if (info->cb_event) {
+              info->cb_event(ARM_I2C_EVENT_TRANSFER_DONE);
             }
           }
           else {
             if (tr->cnt == (tr->num - 3U)) {
               /* N > 2 byte reception, begin N-2 data reception */
-              i2c->reg->CR2 &= ~I2C_CR2_ITBUFEN;
+              reg->CR2 &= ~I2C_CR2_ITBUFEN;
               /* Wait until BTF == 1 */
               tr->ctrl |= XFER_CTRL_WAIT_BTF;
             }
@@ -950,11 +946,11 @@ void I2Cx_EV_IRQHandler(I2C_RESOURCES *i2c)
       }
       else {
         /* Slave receiver */
-        data = (uint8_t)i2c->reg->DR;
+        data = (uint8_t)reg->DR;
 
         if (tr->data == NULL) {
           /* Receive buffer full: Disable ACK */
-          i2c->reg->CR1 &= ~I2C_CR1_ACK;
+          reg->CR1 &= ~I2C_CR1_ACK;
         }
         else {
           if (tr->cnt < tr->num) {

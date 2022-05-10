@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 
-#include "asm/aduc7023.h"
-#include "asm/Driver_PCC.h"
+#include <asm/aduc7023.h>
+#include <Driver/PCC_ADUC7023.h>
 
 /**
  * @brief
