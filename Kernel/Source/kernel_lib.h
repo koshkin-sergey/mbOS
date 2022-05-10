@@ -128,8 +128,7 @@ typedef struct osObject_s {
  *  exported variables
  ******************************************************************************/
 
-extern KernelInfo_t osInfo;               ///< Kernel Runtime Information
-extern const osConfig_t osConfig;         ///< Kernel Configuration
+extern KernelInfo_t osInfo;             ///< Kernel Runtime Information
 
 /*******************************************************************************
  *  exported function prototypes
