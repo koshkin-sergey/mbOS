@@ -21,14 +21,6 @@
 #include "Kernel/kernel.h"
 #include "kernel_config.h"
 
-#ifndef __USED
-#if defined(__ICCARM__) && !defined(__ICCARM_V8)
-  #define __USED _Pragma("__root")
-#else
-  #define __USED __attribute__((used))
-#endif
-#endif
-
 /* Idle Thread Control Block */
 static osThread_t os_idle_thread_cb __attribute__((section(".bss.os.thread.cb")));
 
@@ -71,7 +63,7 @@ static const osThreadAttr_t os_timer_thread_attr = {
   osPriorityISR,
 };
 
-const osConfig_t osConfig __USED __attribute__((section(".rodata"))) = {
+const osConfig_t osConfig __attribute__((section(".rodata"))) = {
   0U     // Flags
 #if (OS_PRIVILEGE_MODE != 0)
   | osConfigPrivilegedMode
