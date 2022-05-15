@@ -197,10 +197,14 @@ int32_t IRQ_Disable(IRQn_ID_t irqn)
  */
 uint32_t IRQ_GetEnableState(IRQn_ID_t irqn)
 {
+  uint32_t irq;
+  uint32_t fiq;
   uint32_t enable;
 
   if ((irqn >= 0) && (irqn < IRQ_VECTOR_COUNT)) {
-    enable = ((IRQ->EN >> irqn) | (FIQ->EN >> irqn)) & 1U;
+    irq = IRQ->EN >> irqn;
+    fiq = FIQ->EN >> irqn;
+    enable = (irq | fiq) & 1U;
   }
   else {
     enable = 0U;
@@ -376,7 +380,7 @@ uint32_t IRQ_GetPriority(IRQn_ID_t irqn)
   uint32_t idx;
   uint32_t offset;
 
-  if ((irqn >= 0U) && (irqn < IRQ_VECTOR_COUNT)) {
+  if ((irqn >= 0) && (irqn < IRQ_VECTOR_COUNT)) {
     idx    = IRQ_PRIORITY_IDX(irqn);
     offset = IRQ_PRIORITY_OFS(irqn);
     priority = (IRQ->P[idx] >> offset) & IRQ_PRIORITY_BIT_Msk;

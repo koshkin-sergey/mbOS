@@ -85,7 +85,7 @@ void GPIO_PinConfig(GPIO_PIN_t pin, const GPIO_PIN_CFG_t *cfg, const GPIO_RESOUR
   par = *gpio->PAR & ~(7UL << pin_pos);
   dat = *gpio->DAT & ~(1UL << dat_pos);
 
-  *gpio->PAR = par | ((cfg->pull_mode | cfg->strength) << pin_pos);
+  *gpio->PAR = par | (((uint32_t)cfg->pull_mode | (uint32_t)cfg->strength) << pin_pos);
   *gpio->DAT = dat | (cfg->mode << dat_pos);
 }
 
