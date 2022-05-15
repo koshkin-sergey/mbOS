@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2022 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -20,7 +20,7 @@
 
 #include <stddef.h>
 #include "asm/system_aduc7023.h"
-#include "asm/Driver_GPIO.h"
+#include "Driver/GPIO_ADUC7023.h"
 #include "Kernel/kernel.h"
 
 #define TIMEOUT                       (250UL)
