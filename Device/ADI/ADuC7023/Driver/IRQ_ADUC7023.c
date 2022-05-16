@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2021-2022 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -197,10 +197,14 @@ int32_t IRQ_Disable(IRQn_ID_t irqn)
  */
 uint32_t IRQ_GetEnableState(IRQn_ID_t irqn)
 {
+  uint32_t irq;
+  uint32_t fiq;
   uint32_t enable;
 
   if ((irqn >= 0) && (irqn < IRQ_VECTOR_COUNT)) {
-    enable = ((IRQ->EN >> irqn) | (FIQ->EN >> irqn)) & 1U;
+    irq = IRQ->EN >> irqn;
+    fiq = FIQ->EN >> irqn;
+    enable = (irq | fiq) & 1U;
   }
   else {
     enable = 0U;
@@ -376,7 +380,7 @@ uint32_t IRQ_GetPriority(IRQn_ID_t irqn)
   uint32_t idx;
   uint32_t offset;
 
-  if ((irqn >= 0U) && (irqn < IRQ_VECTOR_COUNT)) {
+  if ((irqn >= 0) && (irqn < IRQ_VECTOR_COUNT)) {
     idx    = IRQ_PRIORITY_IDX(irqn);
     offset = IRQ_PRIORITY_OFS(irqn);
     priority = (IRQ->P[idx] >> offset) & IRQ_PRIORITY_BIT_Msk;
@@ -395,6 +399,8 @@ uint32_t IRQ_GetPriority(IRQn_ID_t irqn)
  */
 int32_t IRQ_SetPriorityMask(uint32_t priority)
 {
+  (void) priority;
+
   return (-1);
 }
 
@@ -416,6 +422,8 @@ uint32_t IRQ_GetPriorityMask(void)
  */
 int32_t IRQ_SetPriorityGroupBits(uint32_t bits)
 {
+  (void) bits;
+
   return (-1);
 }
 

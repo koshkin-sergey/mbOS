@@ -433,21 +433,6 @@
           <GroupName>Device</GroupName>
           <Files>
             <File>
-              <FileName>Driver_GPIO.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Device\ADI\ADuC7023\Driver\Driver_GPIO.c</FilePath>
-            </File>
-            <File>
-              <FileName>IRQ.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Device\ADI\ADuC7023\Driver\IRQ.c</FilePath>
-            </File>
-            <File>
-              <FileName>RTOS_TIMER.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Device\ADI\ADuC7023\Driver\RTOS_TIMER.c</FilePath>
-            </File>
-            <File>
               <FileName>system_aduc7023.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\..\..\Device\ADI\ADuC7023\Startup\system_aduc7023.c</FilePath>
@@ -458,9 +443,24 @@
               <FilePath>..\..\..\..\..\..\..\Device\ADI\ADuC7023\Startup\arm\startup_aduc7023.c</FilePath>
             </File>
             <File>
-              <FileName>Driver_PCC.c</FileName>
+              <FileName>GPIO_ADUC7023.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Device\ADI\ADuC7023\Driver\Driver_PCC.c</FilePath>
+              <FilePath>..\..\..\..\..\..\..\Device\ADI\ADuC7023\Driver\GPIO_ADUC7023.c</FilePath>
+            </File>
+            <File>
+              <FileName>PCC_ADUC7023.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Device\ADI\ADuC7023\Driver\PCC_ADUC7023.c</FilePath>
+            </File>
+            <File>
+              <FileName>IRQ_ADUC7023.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Device\ADI\ADuC7023\Driver\IRQ_ADUC7023.c</FilePath>
+            </File>
+            <File>
+              <FileName>RTOS_TIMER_ADUC7023.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Device\ADI\ADuC7023\Driver\RTOS_TIMER_ADUC7023.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -468,74 +468,14 @@
           <GroupName>Kernel</GroupName>
           <Files>
             <File>
+              <FileName>Kernel_ARM16.lib</FileName>
+              <FileType>4</FileType>
+              <FilePath>..\..\..\..\..\..\..\Kernel\Library\ARM\Kernel_ARM16.lib</FilePath>
+            </File>
+            <File>
               <FileName>kernel_lib.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\Common\Config\kernel_lib.c</FilePath>
-            </File>
-            <File>
-              <FileName>dataqueue.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Kernel\Source\dataqueue.c</FilePath>
-            </File>
-            <File>
-              <FileName>delay.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Kernel\Source\delay.c</FilePath>
-            </File>
-            <File>
-              <FileName>event.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Kernel\Source\event.c</FilePath>
-            </File>
-            <File>
-              <FileName>kernel.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Kernel\Source\kernel.c</FilePath>
-            </File>
-            <File>
-              <FileName>mempool.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Kernel\Source\mempool.c</FilePath>
-            </File>
-            <File>
-              <FileName>msgqueue.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Kernel\Source\msgqueue.c</FilePath>
-            </File>
-            <File>
-              <FileName>mutex.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Kernel\Source\mutex.c</FilePath>
-            </File>
-            <File>
-              <FileName>semaphore.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Kernel\Source\semaphore.c</FilePath>
-            </File>
-            <File>
-              <FileName>system.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Kernel\Source\system.c</FilePath>
-            </File>
-            <File>
-              <FileName>systick.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Kernel\Source\systick.c</FilePath>
-            </File>
-            <File>
-              <FileName>thread.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Kernel\Source\thread.c</FilePath>
-            </File>
-            <File>
-              <FileName>timer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Kernel\Source\timer.c</FilePath>
-            </File>
-            <File>
-              <FileName>irq_arm.s</FileName>
-              <FileType>2</FileType>
-              <FilePath>..\..\..\..\..\..\..\Kernel\Source\ARM\irq_arm.s</FilePath>
             </File>
           </Files>
         </Group>

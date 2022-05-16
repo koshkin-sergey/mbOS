@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2021-2022 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -283,8 +283,9 @@ int32_t I2C_PowerControl(ARM_POWER_STATE state, I2C_RESOURCES *i2c)
   switch (state) {
     case ARM_POWER_OFF:
       /* Disable I2C peripheral */
-      reg->MCON = 0U;
+      reg->MCON = 1U;
       reg->SCON = 0U;
+      reg->MCON = 0U;
 
       /* Disable I2C peripheral clock */
       PCC_DisablePeriph(i2c->pcc_periph);

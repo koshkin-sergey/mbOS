@@ -2107,13 +2107,16 @@
     <group>
         <name>Device</name>
         <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Device\ADI\ADuC7023\Driver\Driver_GPIO.c</name>
+            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Device\ADI\ADuC7023\Driver\GPIO_ADUC7023.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Device\ADI\ADuC7023\Driver\IRQ.c</name>
+            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Device\ADI\ADuC7023\Driver\IRQ_ADUC7023.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Device\ADI\ADuC7023\Driver\RTOS_TIMER.c</name>
+            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Device\ADI\ADuC7023\Driver\PCC_ADUC7023.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Device\ADI\ADuC7023\Driver\RTOS_TIMER_ADUC7023.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\..\..\..\..\Device\ADI\ADuC7023\Startup\iar\startup_aduc7023.c</name>
@@ -2125,46 +2128,10 @@
     <group>
         <name>Kernel</name>
         <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Kernel\Source\dataqueue.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Kernel\Source\delay.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Kernel\Source\event.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Kernel\Source\IAR\irq_arm.s</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Kernel\Source\kernel.c</name>
+            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Kernel\Library\IAR\Kernel_ARM16.a</name>
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\Common\Config\kernel_lib.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Kernel\Source\mempool.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Kernel\Source\msgqueue.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Kernel\Source\mutex.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Kernel\Source\semaphore.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Kernel\Source\system.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Kernel\Source\systick.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Kernel\Source\thread.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Kernel\Source\timer.c</name>
         </file>
     </group>
     <group>
