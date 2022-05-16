@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2021-2022 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -147,12 +147,12 @@ void GPIO_PinToggle(GPIO_PIN_t pin, const GPIO_RESOURCES *gpio)
   *gpio->DAT ^= (1UL << GPIO_DAT_OUTPUT_Pos) << pin;
 }
 
-static void      GPIO0_PinConfig(GPIO_PIN_t pin, const GPIO_PIN_CFG_t *cfg)  {         GPIO_PinConfig(pin, cfg, &GPIO0_Resources);   };
-static uint8_t   GPIO0_PortRead(void)                                        { return (GPIO_PortRead(&GPIO0_Resources));             };
-static void      GPIO0_PortWrite(uint8_t value)                              {         GPIO_PortWrite(value, &GPIO0_Resources);      };
-static uint32_t  GPIO0_PinRead(GPIO_PIN_t pin)                               { return (GPIO_PinRead(pin, &GPIO0_Resources));         };
-static void      GPIO0_PinWrite(GPIO_PIN_t pin, GPIO_PIN_OUT_t value)        {         GPIO_PinWrite(pin, value, &GPIO0_Resources);  };
-static void      GPIO0_PinToggle(GPIO_PIN_t pin)                             {         GPIO_PinToggle(pin, &GPIO0_Resources);        };
+static void      GPIO0_PinConfig(GPIO_PIN_t pin, const GPIO_PIN_CFG_t *cfg)  {         GPIO_PinConfig(pin, cfg, &GPIO0_Resources);   }
+static uint8_t   GPIO0_PortRead(void)                                        { return (GPIO_PortRead(&GPIO0_Resources));             }
+static void      GPIO0_PortWrite(uint8_t value)                              {         GPIO_PortWrite(value, &GPIO0_Resources);      }
+static uint32_t  GPIO0_PinRead(GPIO_PIN_t pin)                               { return (GPIO_PinRead(pin, &GPIO0_Resources));         }
+static void      GPIO0_PinWrite(GPIO_PIN_t pin, GPIO_PIN_OUT_t value)        {         GPIO_PinWrite(pin, value, &GPIO0_Resources);  }
+static void      GPIO0_PinToggle(GPIO_PIN_t pin)                             {         GPIO_PinToggle(pin, &GPIO0_Resources);        }
 
 DRIVER_GPIO DRIVER_GPIO0 = {
   GPIO0_PinConfig,
@@ -163,12 +163,12 @@ DRIVER_GPIO DRIVER_GPIO0 = {
   GPIO0_PinToggle,
 };
 
-static void      GPIO1_PinConfig(GPIO_PIN_t pin, const GPIO_PIN_CFG_t *cfg)  {         GPIO_PinConfig(pin, cfg, &GPIO1_Resources);   };
-static uint8_t   GPIO1_PortRead(void)                                        { return (GPIO_PortRead(&GPIO1_Resources));             };
-static void      GPIO1_PortWrite(uint8_t value)                              {         GPIO_PortWrite(value, &GPIO1_Resources);      };
-static uint32_t  GPIO1_PinRead(GPIO_PIN_t pin)                               { return (GPIO_PinRead(pin, &GPIO1_Resources));         };
-static void      GPIO1_PinWrite(GPIO_PIN_t pin, GPIO_PIN_OUT_t value)        {         GPIO_PinWrite(pin, value, &GPIO1_Resources);  };
-static void      GPIO1_PinToggle(GPIO_PIN_t pin)                             {         GPIO_PinToggle(pin, &GPIO1_Resources);        };
+static void      GPIO1_PinConfig(GPIO_PIN_t pin, const GPIO_PIN_CFG_t *cfg)  {         GPIO_PinConfig(pin, cfg, &GPIO1_Resources);   }
+static uint8_t   GPIO1_PortRead(void)                                        { return (GPIO_PortRead(&GPIO1_Resources));             }
+static void      GPIO1_PortWrite(uint8_t value)                              {         GPIO_PortWrite(value, &GPIO1_Resources);      }
+static uint32_t  GPIO1_PinRead(GPIO_PIN_t pin)                               { return (GPIO_PinRead(pin, &GPIO1_Resources));         }
+static void      GPIO1_PinWrite(GPIO_PIN_t pin, GPIO_PIN_OUT_t value)        {         GPIO_PinWrite(pin, value, &GPIO1_Resources);  }
+static void      GPIO1_PinToggle(GPIO_PIN_t pin)                             {         GPIO_PinToggle(pin, &GPIO1_Resources);        }
 
 DRIVER_GPIO DRIVER_GPIO1 = {
   GPIO1_PinConfig,
@@ -179,12 +179,12 @@ DRIVER_GPIO DRIVER_GPIO1 = {
   GPIO1_PinToggle,
 };
 
-static void      GPIO2_PinConfig(GPIO_PIN_t pin, const GPIO_PIN_CFG_t *cfg)  {         GPIO_PinConfig(pin, cfg, &GPIO2_Resources);   };
-static uint8_t   GPIO2_PortRead(void)                                        { return (GPIO_PortRead(&GPIO2_Resources));             };
-static void      GPIO2_PortWrite(uint8_t value)                              {         GPIO_PortWrite(value, &GPIO2_Resources);      };
-static uint32_t  GPIO2_PinRead(GPIO_PIN_t pin)                               { return (GPIO_PinRead(pin, &GPIO2_Resources));         };
-static void      GPIO2_PinWrite(GPIO_PIN_t pin, GPIO_PIN_OUT_t value)        {         GPIO_PinWrite(pin, value, &GPIO2_Resources);  };
-static void      GPIO2_PinToggle(GPIO_PIN_t pin)                             {         GPIO_PinToggle(pin, &GPIO2_Resources);        };
+static void      GPIO2_PinConfig(GPIO_PIN_t pin, const GPIO_PIN_CFG_t *cfg)  {         GPIO_PinConfig(pin, cfg, &GPIO2_Resources);   }
+static uint8_t   GPIO2_PortRead(void)                                        { return (GPIO_PortRead(&GPIO2_Resources));             }
+static void      GPIO2_PortWrite(uint8_t value)                              {         GPIO_PortWrite(value, &GPIO2_Resources);      }
+static uint32_t  GPIO2_PinRead(GPIO_PIN_t pin)                               { return (GPIO_PinRead(pin, &GPIO2_Resources));         }
+static void      GPIO2_PinWrite(GPIO_PIN_t pin, GPIO_PIN_OUT_t value)        {         GPIO_PinWrite(pin, value, &GPIO2_Resources);  }
+static void      GPIO2_PinToggle(GPIO_PIN_t pin)                             {         GPIO_PinToggle(pin, &GPIO2_Resources);        }
 
 DRIVER_GPIO DRIVER_GPIO2 = {
   GPIO2_PinConfig,

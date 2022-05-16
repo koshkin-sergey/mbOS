@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2021-2022 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -399,6 +399,8 @@ uint32_t IRQ_GetPriority(IRQn_ID_t irqn)
  */
 int32_t IRQ_SetPriorityMask(uint32_t priority)
 {
+  (void) priority;
+
   return (-1);
 }
 
@@ -420,6 +422,8 @@ uint32_t IRQ_GetPriorityMask(void)
  */
 int32_t IRQ_SetPriorityGroupBits(uint32_t bits)
 {
+  (void) bits;
+
   return (-1);
 }
 
