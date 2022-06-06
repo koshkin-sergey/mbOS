@@ -49,7 +49,7 @@ static osStatus_t svcKernelInitialize(void)
 
   QueueReset(&osInfo.timer_queue);
   QueueReset(&osInfo.delay_queue);
-  QueueReset(&osInfo.post_process.queue);
+  QueueReset(&osInfo.post_queue);
 
   osInfo.kernel.state = osKernelReady;
 

@@ -1,5 +1,5 @@
 ;/*
-; * Copyright (C) 2021 Sergey Koshkin <koshkin.sergey@gmail.com>
+; * Copyright (C) 2021-2022 Sergey Koshkin <koshkin.sergey@gmail.com>
 ; * All rights reserved
 ; *
 ; * Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,7 +26,7 @@ I_BIT           EQU      0x80                       ; When I bit is set, IRQ is 
 F_BIT           EQU      0x40                       ; When F bit is set, FIQ is disabled
 
 K_STATE_RUNNING EQU      2                          ; osKernelState_t::osKernelRunning
-I_K_STATE_OFS   EQU      16                         ; osRtxInfo.kernel.state offset
+I_K_STATE_OFS   EQU      16                         ; osInfo.kernel.state offset
 I_TICK_IRQN_OFS EQU      24                         ; osInfo.tick_irqn offset
 
 
@@ -65,7 +65,7 @@ SWI_Handler
                 STR     R1, [R0]
 
                 LDR     R0, =osInfo
-                LDR     R1, [R0, #I_K_STATE_OFS]    ; Load RTX5 kernel state
+                LDR     R1, [R0, #I_K_STATE_OFS]    ; Load kernel state
                 CMP     R1, #K_STATE_RUNNING        ; Check osKernelRunning
                 BLT     SWI_FuncCall                ; Continue if kernel is not running
                 LDR     R0, [R0, #I_TICK_IRQN_OFS]  ; Load OS Tick irqn
@@ -91,7 +91,7 @@ SWI_FuncCall
                 PUSH    {R0-R3}                     ; Push return values to stack
 
                 LDR     R0, =osInfo
-                LDR     R1, [R0, #I_K_STATE_OFS]    ; Load RTX5 kernel state
+                LDR     R1, [R0, #I_K_STATE_OFS]    ; Load kernel state
                 CMP     R1, #K_STATE_RUNNING        ; Check osKernelRunning
                 BLT     SWI_ContextCheck            ; Continue if kernel is not running
                 LDR     R0, [R0, #I_TICK_IRQN_OFS]  ; Load OS Tick irqn
@@ -245,7 +245,7 @@ PostProcess
                 SUB     SP, SP, R4                  ; Adjust stack
 
                 ; Disable OS Tick
-                LDR     R5, =osInfo                 ; Load address of osRtxInfo
+                LDR     R5, =osInfo                 ; Load address of osInfo
                 LDR     R5, [R5, #I_TICK_IRQN_OFS]  ; Load OS Tick irqn
                 MOV     R0, R5                      ; Set it as function parameter
                 LDR     R12, =IRQ_Disable
