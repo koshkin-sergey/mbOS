@@ -49,9 +49,6 @@
 #ifndef   __NO_RETURN
   #define __NO_RETURN                            __attribute__((__noreturn__))
 #endif
-#ifndef   CMSIS_DEPRECATED
- #define  CMSIS_DEPRECATED                       __attribute__((deprecated))
-#endif
 #ifndef   __USED
   #define __USED                                 __attribute__((used))
 #endif
@@ -63,9 +60,6 @@
 #endif
 #ifndef   __PACKED_STRUCT
   #define __PACKED_STRUCT                        struct __attribute__((packed, aligned(1)))
-#endif
-#ifndef   __FAST_CODE
-  #define __FAST_CODE                            __attribute__((section(".fastcode"), target("arm")))
 #endif
 #ifndef   __UNALIGNED_UINT16_WRITE
   #pragma GCC diagnostic push
@@ -105,7 +99,7 @@
   #define __COMPILER_BARRIER()                   __ASM volatile("":::"memory")
 #endif
 
-/* #########################  Startup and Lowlevel Init  ######################## */
+/***********************  Startup and Lowlevel Init  **************************/
 
 #ifndef __PROGRAM_START
 
@@ -154,7 +148,73 @@ __STATIC_FORCEINLINE __NO_RETURN void __cmsis_start(void)
 #define __PROGRAM_START           __cmsis_start
 #endif
 
-/* ##########################  Core Instruction Access  ######################### */
+/************************  Core Instruction Access  ***************************/
+
+/**
+ * @brief     Enable IRQ Interrupts
+ * @details   Enables IRQ interrupts by setting the IE-bit in the PSW.
+ */
+__STATIC_FORCEINLINE void __enable_irq(void)
+{
+  __ASM volatile ("sst 0x10" : : : "memory");
+}
+
+
+/**
+ * @brief     Disable IRQ Interrupts
+ * @details   Disables IRQ interrupts by clearing the IE-bit in the PSW.
+ */
+__STATIC_FORCEINLINE void __disable_irq(void)
+{
+  __ASM volatile ("cst 0x10" : : : "memory");
+}
+
+/**
+ * @brief       Get CPU Register
+ * @details     Returns the content of the CPU Register.
+ * @param[in]   addr  CPU Register address
+ * @return      CPU Register value
+ */
+#define __get_CpuReg(addr)                                                     \
+__extension__ (                                                                \
+{                                                                              \
+  uint32_t result;                                                             \
+  __ASM volatile ("mfprs %0, r%1" : "=r" (result) : "n" (addr));               \
+  result;                                                                      \
+})
+
+/**
+ * @brief       Set CPU Register
+ * @details     Writes the given value to the CPU Register.
+ * @param[in]   addr  CPU Register address
+ * @param[in]   data  CPU Register value to set
+ */
+#define __set_CpuReg(addr, data)                                               \
+  __ASM volatile ("mtprs r%0, %1" : : "n" (addr), "r" (data))
+
+/**
+ * @brief       Get Peripheral Register
+ * @details     Returns the content of the Peripheral Register.
+ * @param[in]   addr  Peripheral Register address
+ * @return      Peripheral Register value
+ */
+#define __get_PeriphReg(addr)                                                  \
+__extension__ (                                                                \
+{                                                                              \
+  uint32_t result;                                                             \
+  __ASM volatile ("mfpr %0, r%1" : "=r" (result) : "n" (addr));                \
+  result;                                                                      \
+})
+
+/**
+ * @brief       Set Peripheral Register
+ * @details     Writes the given value to the Peripheral Register.
+ * @param[in]   addr  Peripheral Register address
+ * @param[in]   data  Peripheral Register value to set
+ */
+#define __set_PeriphReg(addr, data)                                            \
+  __ASM volatile ("mtpr r%0, %1" : : "n" (addr), "r" (data))
+
 /**
   \brief   Reverse byte order (32 bit)
   \details Reverses the byte order in unsigned integer value. For example, 0x12345678 becomes 0x78563412.
@@ -164,17 +224,6 @@ __STATIC_FORCEINLINE __NO_RETURN void __cmsis_start(void)
 __STATIC_FORCEINLINE  uint32_t __REV(uint32_t value)
 {
   return (__builtin_bswap32(value));
-}
-
-/**
-  \brief   Reverse byte order (16 bit)
-  \details Reverses the byte order in a 16-bit value and returns the signed 16-bit result. For example, 0x0080 becomes 0x8000.
-  \param [in]    value  Value to reverse
-  \return               Reversed value
- */
-__STATIC_FORCEINLINE  int16_t __REVSH(int16_t value)
-{
-  return ((int16_t)__builtin_bswap16(value));
 }
 
 /**
