@@ -45,5 +45,5 @@ void SystemCoreClockUpdate(void)
  */
 void SystemInit(void)
 {
-  IRQ_Initialize();
+//  IRQ_Initialize();
 }
