@@ -62,6 +62,7 @@ typedef enum {
 
 #include <stdint.h>
 #include <CMSIS/Core/Kmx32/core_kmx32.h>
+#include "system_krechet1.h"
 
 /**
  * @brief CPU Register Address

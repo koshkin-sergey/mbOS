@@ -110,9 +110,9 @@
            in the used linker script.
 
  */
-__STATIC_FORCEINLINE __NO_RETURN void __cmsis_start(void)
+__STATIC_FORCEINLINE void __cmsis_start(void)
 {
-  extern void _start(void) __NO_RETURN;
+  extern int main(void);
 
   typedef struct {
     uint32_t const *src;
@@ -142,7 +142,7 @@ __STATIC_FORCEINLINE __NO_RETURN void __cmsis_start(void)
     }
   }
 
-  _start();
+  main();
 }
 
 #define __PROGRAM_START           __cmsis_start
