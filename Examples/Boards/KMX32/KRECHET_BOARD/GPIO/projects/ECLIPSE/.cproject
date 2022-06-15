@@ -22,7 +22,7 @@
 							<tool id="ru.kmx.toolchain.as.1320127459" name="KMX Assembler" superClass="ru.kmx.toolchain.as"/>
 							<tool id="ru.kmx.toolchain.ld.993862269" name="KMX Linker" superClass="ru.kmx.toolchain.ld">
 								<option id="ru.kmx.toolchain.linker.c.linkerscript.477756109" name="Linker Script" superClass="ru.kmx.toolchain.linker.c.linkerscript" value="../krechet1.ld" valueType="string"/>
-								<option id="ru.kmx.toolchain.c.link.option.ldflags.1199181072" name="Linker flags" superClass="ru.kmx.toolchain.c.link.option.ldflags" value="-Wl,-Map=Debug.map" valueType="string"/>
+								<option id="ru.kmx.toolchain.c.link.option.ldflags.1199181072" name="Linker flags" superClass="ru.kmx.toolchain.c.link.option.ldflags" value="-Wl,-Map=${ProjName}.map" valueType="string"/>
 								<option id="ru.kmx.toolchain.c.link.option.noshared.536262909" name="No shared libraries (-static)" superClass="ru.kmx.toolchain.c.link.option.noshared" value="false" valueType="boolean"/>
 								<option id="ru.kmx.toolchain.c.link.option.nostart.1987869770" name="Do not use standard start files (-nostartfiles)" superClass="ru.kmx.toolchain.c.link.option.nostart" value="true" valueType="boolean"/>
 								<inputType id="ru.kmx.toolchain.inputType.ld.715556804" superClass="ru.kmx.toolchain.inputType.ld">
@@ -31,7 +31,7 @@
 								</inputType>
 							</tool>
 							<tool id="ru.kmx.toolchain.c.compiler.ctype.1771233988" name="KMX C Compiler" superClass="ru.kmx.toolchain.c.compiler.ctype">
-								<option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.option.optimization.level.976033840" name="Optimization Level" superClass="gnu.c.compiler.option.optimization.level" value="gnu.c.optimization.level.size" valueType="enumerated"/>
+								<option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.option.optimization.level.976033840" name="Optimization Level" superClass="gnu.c.compiler.option.optimization.level" value="gnu.c.optimization.level.none" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.debugging.level.1458180842" name="Debug Level" superClass="gnu.c.compiler.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.warnings.extrawarn.1726569020" name="Extra warnings (-Wextra)" superClass="gnu.c.compiler.option.warnings.extrawarn" value="true" valueType="boolean"/>
 								<option id="gnu.c.compiler.option.warnings.pedantic.1599403453" name="Pedantic (-pedantic)" superClass="gnu.c.compiler.option.warnings.pedantic" value="true" valueType="boolean"/>
@@ -46,7 +46,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -63,7 +63,7 @@
 		</scannerConfigBuildInfo>
 	</storageModule>
 	<storageModule moduleId="refreshScope" versionNumber="1">
-		<resource resourceType="PROJECT" workspacePath="/test"/>
+		<resource resourceType="PROJECT" workspacePath="/Krechet_Board_GPIO"/>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 </cproject>
