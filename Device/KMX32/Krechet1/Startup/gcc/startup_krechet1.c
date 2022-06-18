@@ -22,7 +22,7 @@
 /*----------------------------------------------------------------------------
   Internal References
  *----------------------------------------------------------------------------*/
-void Default_Handler (void) __attribute__ ((fast_interrupt));
+void Default_Handler (void) __attribute__ ((interrupt));
 void Vectors         (void) __attribute__ ((naked, section(".vectors")));
 void __do_reset      (void);
 
@@ -30,25 +30,25 @@ void __do_reset      (void);
   Interrupt Handler
  *----------------------------------------------------------------------------*/
 void Reset_Handler    (void) __attribute__ ((naked));
-void SysErr_Handler   (void) __attribute__ ((weak, fast_interrupt, alias("Default_Handler")));
-void WDT_Handler      (void) __attribute__ ((weak, fast_interrupt, alias("Default_Handler")));
-void DMA_EV_Handler   (void) __attribute__ ((weak, fast_interrupt, alias("Default_Handler")));
-void DMA_ER_Handler   (void) __attribute__ ((weak, fast_interrupt, alias("Default_Handler")));
-void GPIO_Handler     (void) __attribute__ ((weak, fast_interrupt, alias("Default_Handler")));
-void SPI0_Handler     (void) __attribute__ ((weak, fast_interrupt, alias("Default_Handler")));
-void SPI1_Handler     (void) __attribute__ ((weak, fast_interrupt, alias("Default_Handler")));
-void I2C0_Handler     (void) __attribute__ ((weak, fast_interrupt, alias("Default_Handler")));
-void I2C1_Handler     (void) __attribute__ ((weak, fast_interrupt, alias("Default_Handler")));
-void UART0_Handler    (void) __attribute__ ((weak, fast_interrupt, alias("Default_Handler")));
-void UART1_Handler    (void) __attribute__ ((weak, fast_interrupt, alias("Default_Handler")));
-void UART2_Handler    (void) __attribute__ ((weak, fast_interrupt, alias("Default_Handler")));
-void UART3_Handler    (void) __attribute__ ((weak, fast_interrupt, alias("Default_Handler")));
-void TIM0_Handler     (void) __attribute__ ((weak, fast_interrupt, alias("Default_Handler")));
-void TIM1_Handler     (void) __attribute__ ((weak, fast_interrupt, alias("Default_Handler")));
-void PWM0_CNT_Handler (void) __attribute__ ((weak, fast_interrupt, alias("Default_Handler")));
-void PWM0_CAP_Handler (void) __attribute__ ((weak, fast_interrupt, alias("Default_Handler")));
-void PWM1_CNT_Handler (void) __attribute__ ((weak, fast_interrupt, alias("Default_Handler")));
-void PWM1_CAP_Handler (void) __attribute__ ((weak, fast_interrupt, alias("Default_Handler")));
+void SysErr_Handler   (void) __attribute__ ((weak, interrupt, alias("Default_Handler")));
+void WDT_Handler      (void) __attribute__ ((weak, interrupt, alias("Default_Handler")));
+void DMA_EV_Handler   (void) __attribute__ ((weak, interrupt, alias("Default_Handler")));
+void DMA_ER_Handler   (void) __attribute__ ((weak, interrupt, alias("Default_Handler")));
+void GPIO_Handler     (void) __attribute__ ((weak, interrupt, alias("Default_Handler")));
+void SPI0_Handler     (void) __attribute__ ((weak, interrupt, alias("Default_Handler")));
+void SPI1_Handler     (void) __attribute__ ((weak, interrupt, alias("Default_Handler")));
+void I2C0_Handler     (void) __attribute__ ((weak, interrupt, alias("Default_Handler")));
+void I2C1_Handler     (void) __attribute__ ((weak, interrupt, alias("Default_Handler")));
+void UART0_Handler    (void) __attribute__ ((weak, interrupt, alias("Default_Handler")));
+void UART1_Handler    (void) __attribute__ ((weak, interrupt, alias("Default_Handler")));
+void UART2_Handler    (void) __attribute__ ((weak, interrupt, alias("Default_Handler")));
+void UART3_Handler    (void) __attribute__ ((weak, interrupt, alias("Default_Handler")));
+void TIM0_Handler     (void) __attribute__ ((weak, interrupt, alias("Default_Handler")));
+void TIM1_Handler     (void) __attribute__ ((weak, interrupt, alias("Default_Handler")));
+void PWM0_CNT_Handler (void) __attribute__ ((weak, interrupt, alias("Default_Handler")));
+void PWM0_CAP_Handler (void) __attribute__ ((weak, interrupt, alias("Default_Handler")));
+void PWM1_CNT_Handler (void) __attribute__ ((weak, interrupt, alias("Default_Handler")));
+void PWM1_CAP_Handler (void) __attribute__ ((weak, interrupt, alias("Default_Handler")));
 
 /*----------------------------------------------------------------------------
   Interrupt Vector Table

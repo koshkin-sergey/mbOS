@@ -286,6 +286,39 @@ typedef enum {
 #define PWM1_CMP_B_REG            10U
 #define PWM1_CMP_C_REG            11U
 
+/*------------------------------------------------------------------------------
+ *                                TIMER
+ *----------------------------------------------------------------------------*/
+/********************  Bit definition for TIM_CFG register  *******************/
+#define TIM_CFG_IE_Pos            (0U)
+#define TIM_CFG_IE_Msk            (0x1UL << TIM_CFG_IE_Pos)
+#define TIM_CFG_IE                TIM_CFG_IE_Msk
+
+#define TIM_CFG_CPS_Pos           (1U)
+#define TIM_CFG_CPS_Msk           (0x3UL << TIM_CFG_CPS_Pos)
+#define TIM_CFG_CPS               TIM_CFG_CPS_Msk
+
+#define TIM_CFG_CPE_Pos           (3U)
+#define TIM_CFG_CPE_Msk           (0x1UL << TIM_CFG_CPE_Pos)
+#define TIM_CFG_CPE               TIM_CFG_CPE_Msk
+
+/********************  Bit definition for TIM_CON register  *******************/
+#define TIM_CON_ST_Pos            (0U)
+#define TIM_CON_ST_Msk            (0x1UL << TIM_CON_ST_Pos)
+#define TIM_CON_ST                TIM_CON_ST_Msk
+
+#define TIM_CON_SUSP_Pos          (1U)
+#define TIM_CON_SUSP_Msk          (0x1UL << TIM_CON_SUSP_Pos)
+#define TIM_CON_SUSP              TIM_CON_SUSP_Msk
+
+#define TIM_CON_IF_Pos            (2U)
+#define TIM_CON_IF_Msk            (0x1UL << TIM_CON_IF_Pos)
+#define TIM_CON_IF                TIM_CON_IF_Msk
+
+#define TIM_CON_ERR_Pos           (3U)
+#define TIM_CON_ERR_Msk           (0x1UL << TIM_CON_ERR_Pos)
+#define TIM_CON_ERR               TIM_CON_ERR_Msk
+
 #ifdef __cplusplus
 }
 #endif

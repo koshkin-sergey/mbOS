@@ -26,7 +26,7 @@
  ******************************************************************************/
 
 /*!< System Clock Frequency (Core Clock)  */
-uint32_t SystemCoreClock = 15000000U;
+uint32_t SystemCoreClock = 12000000U;
 
 /*******************************************************************************
  *  function implementations (scope: module-exported)
@@ -37,7 +37,7 @@ uint32_t SystemCoreClock = 15000000U;
  */
 void SystemCoreClockUpdate(void)
 {
-  SystemCoreClock = 15000000U;
+  SystemCoreClock = 12000000U;
 }
 
 /**
