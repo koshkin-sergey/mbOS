@@ -86,14 +86,39 @@
 			<locationURI>PARENT-2-PROJECT_LOC/src</locationURI>
 		</link>
 		<link>
-			<name>src/startup_krechet1.c</name>
-			<type>1</type>
-			<locationURI>PARENT-7-PROJECT_LOC/Device/KMX32/Krechet1/Startup/gcc/startup_krechet1.c</locationURI>
+			<name>src/Device</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>src/system_krechet1.c</name>
-			<type>1</type>
-			<locationURI>PARENT-7-PROJECT_LOC/Device/KMX32/Krechet1/Startup/system_krechet1.c</locationURI>
+			<name>src/Kernel</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>src/Device/Driver</name>
+			<type>2</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Device/KMX32/Krechet1/Driver</locationURI>
+		</link>
+		<link>
+			<name>src/Device/Include</name>
+			<type>2</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Device/KMX32/Krechet1/Include</locationURI>
+		</link>
+		<link>
+			<name>src/Device/Startup</name>
+			<type>2</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Device/KMX32/Krechet1/Startup</locationURI>
+		</link>
+		<link>
+			<name>src/Kernel/Config</name>
+			<type>2</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Kernel/Config</locationURI>
+		</link>
+		<link>
+			<name>src/Kernel/Source</name>
+			<type>2</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Kernel/Source</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

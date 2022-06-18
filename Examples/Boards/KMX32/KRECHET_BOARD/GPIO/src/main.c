@@ -18,6 +18,7 @@
  */
 
 #include <asm/krechet1.h>
+#include <Kernel/tick.h>
 
 #define LED0_R                    (1UL << 24U)
 #define LED0_G                    (1UL << 25U)
@@ -25,6 +26,8 @@
 #define LED1_R                    (1UL << 27U)
 #define LED1_G                    (1UL << 28U)
 #define LED1_B                    (1UL << 29U)
+
+static uint32_t i;
 
 static void GPIO_Init(void)
 {
@@ -42,17 +45,27 @@ static void GPIO_PinToggle(void)
   __set_PeriphReg(GPIO_OUT_REG, __get_PeriphReg(GPIO_OUT_REG) ^ (LED0_R | LED0_B | LED1_R | LED1_B));
 }
 
+__INTERRUPT
+void TIM0_Handler(void)
+{
+  osTickAcknowledgeIRQ();
+
+  if (--i == 0U) {
+    i = 1000U;
+    GPIO_PinToggle();
+  }
+}
+
 int main(void)
 {
-  volatile uint32_t i;
+  i = 1000U;
 
   GPIO_Init();
+  osTickSetup(1000, 0U);
+  osTickEnable();
+  __enable_irq();
 
-  for (;;) {
-      i = 100000U;
-      while (--i);
-      GPIO_PinToggle();
-  }
+  for (;;);
 
   return (-1);
 }
