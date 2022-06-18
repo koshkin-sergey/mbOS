@@ -55,6 +55,12 @@
 #ifndef   __WEAK
   #define __WEAK                                 __attribute__((weak))
 #endif
+#ifndef   __INTERRUPT
+  #define __INTERRUPT                            __attribute__((interrupt))
+#endif
+#ifndef   __FAST_INTERRUPT
+  #define __FAST_INTERRUPT                       __attribute__((fast_interrupt))
+#endif
 #ifndef   __PACKED
   #define __PACKED                               __attribute__((packed, aligned(1)))
 #endif
