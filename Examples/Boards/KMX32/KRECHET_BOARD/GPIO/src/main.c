@@ -18,16 +18,30 @@
  */
 
 #include <asm/krechet1.h>
-#include <Kernel/tick.h>
+#include <Kernel/kernel.h>
 
-#define LED0_R                    (1UL << 24U)
-#define LED0_G                    (1UL << 25U)
-#define LED0_B                    (1UL << 26U)
-#define LED1_R                    (1UL << 27U)
-#define LED1_G                    (1UL << 28U)
-#define LED1_B                    (1UL << 29U)
+#define LED0_R                        (1UL << 24U)
+#define LED0_G                        (1UL << 25U)
+#define LED0_B                        (1UL << 26U)
+#define LED1_R                        (1UL << 27U)
+#define LED1_G                        (1UL << 28U)
+#define LED1_B                        (1UL << 29U)
 
-static uint32_t i;
+#define TIMEOUT                       (250UL)
+#define THREAD_STACK_SIZE             (256U)
+
+static osThreadId_t         threadA;
+static osThread_t           threadA_cb;
+static uint64_t             threadA_stack[THREAD_STACK_SIZE/8U];
+static const osThreadAttr_t threadA_attr = {
+    .name       = NULL,
+    .attr_bits  = 0U,
+    .cb_mem     = &threadA_cb,
+    .cb_size    = sizeof(threadA_cb),
+    .stack_mem  = &threadA_stack[0],
+    .stack_size = sizeof(threadA_stack),
+    .priority   = osPriorityNormal,
+};
 
 static void GPIO_Init(void)
 {
@@ -45,27 +59,36 @@ static void GPIO_PinToggle(void)
   __set_PeriphReg(GPIO_OUT_REG, __get_PeriphReg(GPIO_OUT_REG) ^ (LED0_R | LED0_B | LED1_R | LED1_B));
 }
 
-__INTERRUPT
-void TIM0_Handler(void)
+__NO_RETURN
+static void threadA_func(void *param)
 {
-  osTickAcknowledgeIRQ();
+  (void) param;
 
-  if (--i == 0U) {
-    i = 1000U;
+  GPIO_Init();
+
+  for (;;) {
     GPIO_PinToggle();
+    osDelay(500);
   }
 }
 
 int main(void)
 {
-  i = 1000U;
+  osStatus_t status;
 
-  GPIO_Init();
-  osTickSetup(1000, 0U);
-  osTickEnable();
-  __enable_irq();
+  SystemCoreClockUpdate();
 
-  for (;;);
+  status = osKernelInitialize();
+  if (status == osOK) {
+    threadA = osThreadNew(threadA_func, NULL, &threadA_attr);
+    if (threadA == NULL) {
+      goto error;
+    }
 
+    /* Start RTOS */
+    osKernelStart();
+  }
+
+error:
   return (-1);
 }
