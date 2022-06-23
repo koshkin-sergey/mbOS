@@ -38,16 +38,12 @@ extern     void RestoreIRQ(uint32_t);
 #define INIT_EXC_RETURN               0xFFFFFFFDUL
 #define OS_TICK_HANDLER               osTick_Handler
 
-/* CPSR bit definitions */
-#define CPSR_I_Pos                    7U
-#define CPSR_I_Msk                    (1UL << CPSR_I_Pos)
+/* PSW bit definitions */
+#define PSW_IL_Pos                    8U
+#define PSW_IL_Msk                    (3UL << PSW_IL_Pos)
 
-#define CPSR_T_Pos                    5U
-#define CPSR_T_Msk                    (1UL << CPSR_T_Pos)
-
-/* CPSR mode bitmasks */
-#define CPSR_MODE_USER                0x10U
-#define CPSR_MODE_SYSTEM              0x1FU
+#define PSW_UM_Pos                    7U
+#define PSW_UM_Msk                    (1UL << PSW_UM_Pos)
 
 #define IsIrqMasked()                 false
 #define SystemIsrInit()
@@ -69,7 +65,7 @@ extern     void RestoreIRQ(uint32_t);
 __STATIC_INLINE
 bool IsPrivileged(void)
 {
-  return (GetModeCPU() != CPSR_MODE_USER);
+  return ((GetModeCPU() & PSW_UM_Msk) == 0U);
 }
 
 /**
@@ -82,7 +78,7 @@ bool IsIrqMode(void)
 {
   uint32_t mode = GetModeCPU();
 
-  return ((mode != CPSR_MODE_USER) && (mode != CPSR_MODE_SYSTEM));
+  return ((mode & PSW_IL_Msk) != 0U);
 }
 
 extern uint8_t IRQ_PendSV;
@@ -100,41 +96,57 @@ void PendServCallReq(void)
 __STATIC_INLINE
 uint32_t StackInit(StackAttr_t *attr, bool privileged)
 {
-  uint32_t psr;
-  bool     thumb = (attr->func_addr & 1U) != 0U;
-
-  if (privileged) {
-    if (thumb) {
-      psr = CPSR_MODE_SYSTEM | CPSR_T_Msk;
-    } else {
-      psr = CPSR_MODE_SYSTEM;
-    }
-  } else {
-    if (thumb) {
-      psr = CPSR_MODE_USER   | CPSR_T_Msk;
-    } else {
-      psr = CPSR_MODE_USER;
-    }
-  }
-
+  (void) privileged;
+  uint32_t fa_base;
+  uint32_t fb_base;
   uint32_t *stk = (uint32_t *)(attr->stk_mem + attr->stk_size);
 
-  *(--stk) = psr;                               //-- xPSR
-  *(--stk) = attr->func_addr;                   //-- Entry Point (PC)
-  *(--stk) = attr->func_exit;                   //-- R14 (LR)
-  *(--stk) = 0x12121212L;                       //-- R12
-  *(--stk) = 0x03030303L;                       //-- R3
-  *(--stk) = 0x02020202L;                       //-- R2
-  *(--stk) = 0x01010101L;                       //-- R1
-  *(--stk) = attr->func_param;                  //-- R0 - thread's function argument
-  *(--stk) = 0x11111111L;                       //-- R11
-  *(--stk) = 0x10101010L;                       //-- R10
-  *(--stk) = 0x09090909L;                       //-- R9
-  *(--stk) = 0x08080808L;                       //-- R8
-  *(--stk) = 0x07070707L;                       //-- R7
-  *(--stk) = 0x06060606L;                       //-- R6
-  *(--stk) = 0x05050505L;                       //-- R5
-  *(--stk) = 0x04040404L;                       //-- R4
+  *(--stk) = 0xB7B7B7B7UL;                      //-- b7
+  *(--stk) = 0xB6B6B6B6UL;                      //-- b6
+  *(--stk) = 0xB5B5B5B5UL;                      //-- b5
+  *(--stk) = 0xB4B4B4B4UL;                      //-- b4
+  *(--stk) = 0xB3B3B3B3UL;                      //-- b3
+  *(--stk) = 0xB2B2B2B2UL;                      //-- b2
+  *(--stk) = 0xB1B1B1B1UL;                      //-- b1
+  *(--stk) = 0xB0B0B0B0UL;                      //-- b0
+  fb_base  = (uint32_t)stk;
+
+  *(--stk) = 0xA7A7A7A7UL;                      //-- a7
+  *(--stk) = 0xA6A6A6A6UL;                      //-- a6
+  *(--stk) = 0xA5A5A5A5UL;                      //-- a5
+  *(--stk) = 0xA4A4A4A4UL;                      //-- a4
+  *(--stk) = 0xA3A3A3A3UL;                      //-- a3
+  *(--stk) = 0xA2A2A2A2UL;                      //-- a2
+  *(--stk) = 0xA1A1A1A1UL;                      //-- a1
+  *(--stk) = attr->func_param;                  //-- a0 - thread's function argument
+  fa_base  = (uint32_t)stk;
+
+  *(--stk) = 1UL;                               //-- LC
+  *(--stk) = 1UL;                               //-- SMC
+  *(--stk) = attr->func_exit;                   //-- CLR
+  *(--stk) = 0UL;                               //-- PRW
+  *(--stk) = 0UL;                               //-- DP2
+  *(--stk) = 0UL;                               //-- DP1
+  *(--stk) = attr->func_addr;                   //-- ILR_PC
+  *(--stk) = 0x10UL;                            //-- ILR_PSW
+  *(--stk) = fb_base;
+  *(--stk) = 0xB7B7B7B7UL;                      //-- b7
+  *(--stk) = 0xB6B6B6B6UL;                      //-- b6
+  *(--stk) = 0xB5B5B5B5UL;                      //-- b5
+  *(--stk) = 0xB4B4B4B4UL;                      //-- b4
+  *(--stk) = 0xB3B3B3B3UL;                      //-- b3
+  *(--stk) = 0xB2B2B2B2UL;                      //-- b2
+  *(--stk) = 0xB1B1B1B1UL;                      //-- b1
+  *(--stk) = 0xB0B0B0B0UL;                      //-- b0
+  *(--stk) = fa_base;
+  *(--stk) = 0xA7A7A7A7UL;                      //-- a7
+  *(--stk) = 0xA6A6A6A6UL;                      //-- a6
+  *(--stk) = 0xA5A5A5A5UL;                      //-- a5
+  *(--stk) = 0xA4A4A4A4UL;                      //-- a4
+  *(--stk) = 0xA3A3A3A3UL;                      //-- a3
+  *(--stk) = 0xA2A2A2A2UL;                      //-- a2
+  *(--stk) = 0xA1A1A1A1UL;                      //-- a1
+  *(--stk) = 0xA0A0A0A0UL;                      //-- a0
 
   return ((uint32_t)stk);
 }
@@ -142,31 +154,74 @@ uint32_t StackInit(StackAttr_t *attr, bool privileged)
 __STATIC_FORCEINLINE
 uint32_t svc_0(uint32_t func)
 {
-  return (0U);
+  register uint32_t __r0 __ASM("a0");
+  register uint32_t __rf __ASM("a4") = func;
+
+  __ASM volatile ("trap 0" : "=r" (__r0) : "r" (__rf));
+
+  return (__r0);
 }
 
 __STATIC_FORCEINLINE
 uint32_t svc_1(uint32_t param1, uint32_t func)
 {
-  return (0U);
+  register uint32_t __r0 __ASM("a0") = param1;
+  register uint32_t __rf __ASM("a4") = func;
+
+  __ASM volatile ("trap 0\n"
+                 :"=r"(__r0)
+                 :"r"(__rf),"r"(__r0)
+  );
+
+  return (__r0);
 }
 
 __STATIC_FORCEINLINE
 uint32_t svc_2(uint32_t param1, uint32_t param2, uint32_t func)
 {
-  return (0U);
+  register uint32_t __r0 __ASM("a0") = param1;
+  register uint32_t __r1 __ASM("a1") = param2;
+  register uint32_t __rf __ASM("a4") = func;
+
+  __ASM volatile ("trap 0\n"
+                 :"=r"(__r0)
+                 :"r"(__rf),"r"(__r0),"r"(__r1)
+  );
+
+  return (__r0);
 }
 
 __STATIC_FORCEINLINE
 uint32_t svc_3(uint32_t param1, uint32_t param2, uint32_t param3, uint32_t func)
 {
-  return (0U);
+  register uint32_t __r0 __ASM("a0") = param1;
+  register uint32_t __r1 __ASM("a1") = param2;
+  register uint32_t __r2 __ASM("a2") = param3;
+  register uint32_t __rf __ASM("a4") = func;
+
+  __ASM volatile ("trap 0\n"
+                 :"=r"(__r0)
+                 :"r"(__rf),"r"(__r0),"r"(__r1),"r"(__r2)
+  );
+
+  return (__r0);
 }
 
 __STATIC_FORCEINLINE
 uint32_t svc_4(uint32_t param1, uint32_t param2, uint32_t param3, uint32_t param4, uint32_t func)
 {
-  return (0U);
+  register uint32_t __r0 __ASM("a0") = param1;
+  register uint32_t __r1 __ASM("a1") = param2;
+  register uint32_t __r2 __ASM("a2") = param3;
+  register uint32_t __r3 __ASM("a3") = param4;
+  register uint32_t __rf __ASM("a4") = func;
+
+  __ASM volatile ("trap 0\n"
+                 :"=r"(__r0)
+                 :"r"(__rf),"r"(__r0),"r"(__r1),"r"(__r2),"r"(__r3)
+  );
+
+  return (__r0);
 }
 
 #endif /* ARCH_KMX32_H_ */

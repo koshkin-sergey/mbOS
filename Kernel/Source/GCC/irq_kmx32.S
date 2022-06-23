@@ -24,6 +24,7 @@
                 .equ   I_TICK_IRQN_OFS, 24          // osInfo.tick_irqn offset
 
                 .section ".rodata"
+
                 .global  irqLib                     // Non weak library reference
 irqLib:
                 .byte    0
@@ -36,6 +37,72 @@ IRQ_PendSV:
                 .byte    0                          // Pending SVC flag
 
 
+                .section ".text.os.handlers"
+
+                .type   SWI_Handler, %function
+                .global SWI_Handler
+SWI_Handler:
+                rsfa    8
+                pushr   CLR
+                push    c0
+                mov     c0, a4
+                ijsr    c0
+                pop     c0
+                popr    CLR
+                srfa    8
+                rts
+                .size   SWI_Handler, .-SWI_Handler
+
+
+                .type   SysTick_Handler, %function
+                .global SysTick_Handler
+SysTick_Handler:
+                pushr   CLR
+                jsr     osTick_Handler              // Call osTick_Handler
+                popr    CLR
+                rts
+                .size   SysTick_Handler, .-SysTick_Handler
+
+
+                .type   ContextSwitch, %function
+                .global ContextSwitch
+ContextSwitch:
+                lda     DP1, osInfo                 // Load osInfo.thread.run.curr to DP1
+                lda     DP2, osInfo + 4             // Load osInfo.thread.run.next to DP2
+                lda     a0, IRQ_PendSV              // Load IRQ_PendSV to a0
+
+                cmp     DP1, DP2                    // Check if context switch is required
+                bne     ContextCheck                // Not equal, check if context save required
+                cmpl    a0, 1                       // Compare IRQ_PendSV value
+                bne     ContextExit                 // No post processing (and no context switch requested)
+ContextCheck:
+                cmpl    DP1, 0                      // Is osInfo.thread.run.curr == 0
+                beq     PostProcess                 // Current thread deleted, skip context save
+ContextSave:
+                srfb    8
+                pushc   7
+                pushr   CLR
+                mfprs   a1, ILR_PSW
+                mfprs   a2, ILR_PC
+                push    a1
+                push    a2
+                mov     c6, DP1
+                std     (c6), c7
+PostProcess:
+                sta     osInfo, DP2
+ContextRestore:
+                mov     c6, DP2
+                ldd     c7, (c6)
+;                pop     a2
+;                pop     a1
+;                mtprs   ILR_PC, a2
+;                mtprs   ILR_PSW, a1
+;                popr    CLR
+;                popc    7
+;                rsfb    8
+ContextExit:
+                rts
+                .size   ContextSwitch, .-ContextSwitch
 
 /*-----------------------------------------------------------------------------
  * Helper functions
@@ -46,31 +113,29 @@ IRQ_PendSV:
                 .type   GetModeCPU, %function
                 .global GetModeCPU
 GetModeCPU:
-                MFPRS   A0, PSW
-                MOVLL   A1, 0x300
-                AND     A0, A1
-                RTS
+                mfprs   a0, PSW
+                rts
                 .size   GetModeCPU, .-GetModeCPU
 
 
                 .type   DisableIRQ, %function
                 .global DisableIRQ
 DisableIRQ:
-                MFPRS   A0, PSW
-                CST     IE_BIT
-                RTS
+                mfprs   a0, PSW
+                cst     IE_BIT
+                rts
                 .size   DisableIRQ, .-DisableIRQ
 
 
                 .type   RestoreIRQ, %function
                 .global RestoreIRQ
 RestoreIRQ:
-                MOVLS   A1, IE_BIT
-                AND     A0, A1
-                BEQ     1$
-                SST     IE_BIT
+                movls   a1, IE_BIT
+                and     a0, a1
+                beq     1$
+                sst     IE_BIT
 1$:
-                RTS
+                rts
                 .size   RestoreIRQ, .-RestoreIRQ
 
 
