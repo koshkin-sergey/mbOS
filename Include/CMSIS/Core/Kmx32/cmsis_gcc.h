@@ -176,6 +176,20 @@ __STATIC_FORCEINLINE void __disable_irq(void)
 }
 
 /**
+ * @brief       Push Unprotected CPU Register onto the stack.
+ * @param[in]   addr  CPU Register address
+ */
+#define __push_CpuReg(addr)                                                    \
+  __ASM volatile ("pushr r%0" : : "n" (addr))
+
+/**
+ * @brief       Pop Unprotected CPU Register from the stack.
+ * @param[in]   addr  CPU Register address
+ */
+#define __pop_CpuReg(addr)                                                    \
+  __ASM volatile ("popr r%0" : : "n" (addr))
+
+/**
  * @brief       Get CPU Register
  * @details     Returns the content of the CPU Register.
  * @param[in]   addr  CPU Register address

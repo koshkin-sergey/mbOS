@@ -59,7 +59,7 @@ MEMORY
   RAM   (rw)  : ORIGIN = 0x00000000, LENGTH = 0x00008000
 }
 
-ENTRY(Reset_Handler)
+ENTRY(_Reset_Handler)
 
 SECTIONS
 {

@@ -67,6 +67,7 @@ typedef enum {
 /**
  * @brief CPU Register Address
  */
+/****** Unprotected KMX32 Processor Registers *********************************/
 #define CPU_FA_REG                0U
 #define CPU_FB_REG                1U
 #define CPU_LC_REG                3U
@@ -76,6 +77,7 @@ typedef enum {
 #define CPU_PSW_REG               7U
 #define CPU_CLR_REG               8U
 #define CPU_PRW_REG               10U
+/****** Protected KMX32 Processor Registers ***********************************/
 #define CPU_CMBB_REG              16U
 #define CPU_CMFB_REG              17U
 #define CPU_DMBB_REG              18U
