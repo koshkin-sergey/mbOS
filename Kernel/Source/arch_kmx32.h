@@ -130,23 +130,14 @@ uint32_t StackInit(StackAttr_t *attr, bool privileged)
   *(--stk) = attr->func_addr;                   //-- ILR_PC
   *(--stk) = 0x10UL;                            //-- ILR_PSW
   *(--stk) = fb_base;
-  *(--stk) = 0xB7B7B7B7UL;                      //-- b7
-  *(--stk) = 0xB6B6B6B6UL;                      //-- b6
-  *(--stk) = 0xB5B5B5B5UL;                      //-- b5
-  *(--stk) = 0xB4B4B4B4UL;                      //-- b4
-  *(--stk) = 0xB3B3B3B3UL;                      //-- b3
-  *(--stk) = 0xB2B2B2B2UL;                      //-- b2
-  *(--stk) = 0xB1B1B1B1UL;                      //-- b1
-  *(--stk) = 0xB0B0B0B0UL;                      //-- b0
   *(--stk) = fa_base;
-  *(--stk) = 0xA7A7A7A7UL;                      //-- a7
-  *(--stk) = 0xA6A6A6A6UL;                      //-- a6
-  *(--stk) = 0xA5A5A5A5UL;                      //-- a5
-  *(--stk) = 0xA4A4A4A4UL;                      //-- a4
-  *(--stk) = 0xA3A3A3A3UL;                      //-- a3
-  *(--stk) = 0xA2A2A2A2UL;                      //-- a2
-  *(--stk) = 0xA1A1A1A1UL;                      //-- a1
-  *(--stk) = 0xA0A0A0A0UL;                      //-- a0
+  *(--stk) = 0xC6C6C6C6UL;                      //-- c6
+  *(--stk) = 0xC5C5C5C5UL;                      //-- c5
+  *(--stk) = 0xC4C4C4C4UL;                      //-- c4
+  *(--stk) = 0xC3C3C3C3UL;                      //-- c3
+  *(--stk) = 0xC2C2C2C2UL;                      //-- c2
+  *(--stk) = 0xC1C1C1C1UL;                      //-- c1
+  *(--stk) = 0xC0C0C0C0UL;                      //-- c0
 
   return ((uint32_t)stk);
 }

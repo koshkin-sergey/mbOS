@@ -20,6 +20,7 @@
 #include <asm/krechet1.h>
 
 #define isr_prologue()            __ASM volatile(                  \
+                                    "cst    0x10                \n"\
                                     "pushr  LC                  \n"\
                                     "pushr  SMC                 \n"\
                                     "pushr  CLR                 \n"\
@@ -30,14 +31,16 @@
                                     "mfprs  DP1, ILR_PSW        \n"\
                                     "push   DP2                 \n"\
                                     "push   DP1                 \n"\
-                                    "srfb   8                   \n"\
-                                    "srfa   8                   \n"\
+                                    "pushr  FB                  \n"\
+                                    "pushr  FA                  \n"\
+                                    "ldrzs  FB, lo(__FB_base)   \n"\
+                                    "ldrzs  FA, lo(__FA_base)   \n"\
                                   )
 
 #define isr_epilogue()            __ASM volatile(                  \
                                     "jsr    ContextSwitch       \n"\
-                                    "rsfa   8                   \n"\
-                                    "rsfb   8                   \n"\
+                                    "popr   FA                  \n"\
+                                    "popr   FB                  \n"\
                                     "pop    DP1                 \n"\
                                     "pop    DP2                 \n"\
                                     "mtprs  ILR_PSW, DP1        \n"\
@@ -48,6 +51,7 @@
                                     "popr   CLR                 \n"\
                                     "popr   SMC                 \n"\
                                     "popr   LC                  \n"\
+                                    "sst    0x10                \n"\
                                   )
 
 /*----------------------------------------------------------------------------

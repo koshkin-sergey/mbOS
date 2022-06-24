@@ -42,14 +42,20 @@ IRQ_PendSV:
                 .type   SWI_Handler, %function
                 .global SWI_Handler
 SWI_Handler:
-                rsfa    8
-                pushr   CLR
                 push    c0
-                mov     c0, a4
-                ijsr    c0
-                pop     c0
+                push    c1
+                lds     c0, 2
+                lddo    a0, (c0), 0
+                lddo    a1, (c0), 4
+                lddo    a2, (c0), 8
+                lddo    a3, (c0), 12
+                lddo    c1, (c0), 16
+                pushr   CLR
+                ijsr    c1
+                std     (c0), a0
                 popr    CLR
-                srfa    8
+                pop     c1
+                pop     c0
                 rts
                 .size   SWI_Handler, .-SWI_Handler
 
@@ -69,23 +75,17 @@ SysTick_Handler:
 ContextSwitch:
                 lda     DP1, osInfo                 // Load osInfo.thread.run.curr to DP1
                 lda     DP2, osInfo + 4             // Load osInfo.thread.run.next to DP2
-                lda     a0, IRQ_PendSV              // Load IRQ_PendSV to a0
+                lda     a7, IRQ_PendSV              // Load IRQ_PendSV to a0
 
                 cmp     DP1, DP2                    // Check if context switch is required
                 bne     ContextCheck                // Not equal, check if context save required
-                cmpl    a0, 1                       // Compare IRQ_PendSV value
+                cmpl    a7, 1                       // Compare IRQ_PendSV value
                 bne     ContextExit                 // No post processing (and no context switch requested)
 ContextCheck:
                 cmpl    DP1, 0                      // Is osInfo.thread.run.curr == 0
                 beq     PostProcess                 // Current thread deleted, skip context save
 ContextSave:
-                srfb    8
                 pushc   7
-                pushr   CLR
-                mfprs   a1, ILR_PSW
-                mfprs   a2, ILR_PC
-                push    a1
-                push    a2
                 mov     c6, DP1
                 std     (c6), c7
 PostProcess:
@@ -93,13 +93,7 @@ PostProcess:
 ContextRestore:
                 mov     c6, DP2
                 ldd     c7, (c6)
-;                pop     a2
-;                pop     a1
-;                mtprs   ILR_PC, a2
-;                mtprs   ILR_PSW, a1
-;                popr    CLR
-;                popc    7
-;                rsfb    8
+                popc    7
 ContextExit:
                 rts
                 .size   ContextSwitch, .-ContextSwitch
