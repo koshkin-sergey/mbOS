@@ -333,6 +333,76 @@ __STATIC_FORCEINLINE uint8_t __CLZ(uint32_t value)
   return (__builtin_clz(value));
 }
 
+__STATIC_FORCEINLINE void __isr_prologue(void)
+{
+  __ASM volatile (
+    "pushr  LC                    \n"
+    "pushr  SMC                   \n"
+    "pushr  CLR                   \n"
+    "pushr  PRW                   \n"
+    "push   DP2                   \n"
+    "push   DP1                   \n"
+    "mfprs  DP2, ILR_PC           \n"
+    "mfprs  DP1, ILR_PSW          \n"
+    "push   DP2                   \n"
+    "push   DP1                   \n"
+    "pushr  FB                    \n"
+    "pushr  FA                    \n"
+    "ldrzs  FB, lo(__IRQ_FB_Base) \n"
+    "ldrzs  FA, lo(__IRQ_FA_Base) \n"
+
+    /* Increment IRQ nesting level */
+    "lda    a0, IRQ_NestLevel     \n"
+    "addl   a0, 1                 \n"
+    "sta    IRQ_NestLevel, a0     \n"
+
+    /* Adjust stack to ensure 8-byte alignment */
+    "mov    a0, c7                \n"
+    "movl   a1, 4                 \n"
+    "and    a0, a1                \n"
+    "sub    c7, a0                \n"
+    "push   a1                    \n"
+    "push   a0                    \n"
+
+    /* Re-enable interrupts */
+    "sst    0x10                  \n"
+  );
+}
+
+__STATIC_FORCEINLINE void __isr_epilogue(void)
+{
+  __ASM volatile(
+    /* Disable interrupts */
+    "cst    0x10                \n"
+
+    /* Unadjust stack */
+    "pop    a0                  \n"
+    "pop    a1                  \n"
+    "add    c7, a0              \n"
+
+    /* Continue in context switcher */
+    "jsr    ContextSwitch       \n"
+
+    /* Decrement IRQ nesting level */
+    "lda    a0, IRQ_NestLevel   \n"
+    "subl   a0, 1               \n"
+    "sta    IRQ_NestLevel, a0   \n"
+
+    "popr   FA                  \n"
+    "popr   FB                  \n"
+    "pop    DP1                 \n"
+    "pop    DP2                 \n"
+    "mtprs  ILR_PSW, DP1        \n"
+    "mtprs  ILR_PC,  DP2        \n"
+    "pop    DP1                 \n"
+    "pop    DP2                 \n"
+    "popr   PRW                 \n"
+    "popr   CLR                 \n"
+    "popr   SMC                 \n"
+    "popr   LC                  \n"
+  );
+}
+
 #pragma GCC diagnostic pop
 
 #endif /* __CMSIS_GCC_H */

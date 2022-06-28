@@ -43,11 +43,16 @@ __ROM_SIZE = 0x00010000;
 //    </h>
 //  </h>
  -----------------------------------------------------------------------------*/
-__RAM_BASE    = 0x00000000;
-__RAM_SIZE    = 0x00008000;
+__RAM_BASE          = 0x00000000;
+__RAM_SIZE          = 0x00008000;
 
-__STACK_SIZE  = 0x00000100;
-__HEAP_SIZE   = 0x00000000;
+__STACK_SIZE        = 0x00000100;
+__HEAP_SIZE         = 0x00000000;
+
+__IRQ_FA_STACK_SIZE = 0x00000020;
+__IRQ_FB_STACK_SIZE = 0x00000020;
+__SWI_FA_STACK_SIZE = 0x00000020;
+__SWI_FB_STACK_SIZE = 0x00000020;
 
 /*------------------------------------------------------------------------------
 //                    <<< end of configuration section >>>
@@ -59,7 +64,7 @@ MEMORY
   RAM   (rw)  : ORIGIN = 0x00000000, LENGTH = 0x00008000
 }
 
-ENTRY(_Reset_Handler)
+ENTRY(Reset_Handler)
 
 SECTIONS
 {
@@ -130,6 +135,8 @@ SECTIONS
     . = ALIGN(4);
     __bss_start__ = .;
     *(.bss)
+    . = ALIGN(8);
+    *(.bss.os.thread.stack)
     *(.bss.*)
     *(COMMON)
     . = ALIGN(4);
@@ -146,17 +153,31 @@ SECTIONS
     __HeapLimit = .;
   } > RAM
 
-  .stack (ORIGIN(RAM) + LENGTH(RAM) - __STACK_SIZE - 64) (NOLOAD) :
+  .stack (ORIGIN(RAM) + LENGTH(RAM) -  __STACK_SIZE -
+          __IRQ_FA_STACK_SIZE - __IRQ_FB_STACK_SIZE -
+          __SWI_FA_STACK_SIZE - __SWI_FB_STACK_SIZE) (NOLOAD) :
   {
     . = ALIGN(8);
     
     __StackLimit = .;
-    . = . + __STACK_SIZE;
+    . += __STACK_SIZE;
     __StackTop = .;
     
-    __FA_base = .;
-    . = . + 32;
-    __FB_base = .;
+    __IRQ_FA_Base = .;
+    . += __IRQ_FA_STACK_SIZE;
+    __IRQ_FA_Limit = .;
+    
+    __IRQ_FB_Base = .;
+    . += __IRQ_FB_STACK_SIZE;
+    __IRQ_FB_Limit = .;
+    
+    __SWI_FA_Base = .;
+    . += __SWI_FA_STACK_SIZE;
+    __SWI_FA_Limit = .;
+    
+    __SWI_FB_Base = .;
+    . += __SWI_FB_STACK_SIZE;
+    __SWI_FB_Limit = .;
   } > RAM
   PROVIDE(__stack = __StackTop);
 

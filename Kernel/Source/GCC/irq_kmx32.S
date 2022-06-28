@@ -30,9 +30,12 @@ irqLib:
                 .byte    0
 
                 .section ".data"
-                .global  IRQ_PendSV
+
+                .global  IRQ_NestLevel
 IRQ_NestLevel:
-                .word    0                          // IRQ nesting level counter
+                .long    0                          // IRQ nesting level counter
+
+                .global  IRQ_PendSV
 IRQ_PendSV:
                 .byte    0                          // Pending SVC flag
 
@@ -42,6 +45,26 @@ IRQ_PendSV:
                 .type   SWI_Handler, %function
                 .global SWI_Handler
 SWI_Handler:
+                cst     0x10                        // Disable interrupts
+                pushr   LC
+                pushr   SMC
+                pushr   CLR
+                pushr   PRW
+                push    DP2
+                push    DP1
+                mfprs   DP2, ILR_PC
+                mfprs   DP1, ILR_PSW
+                push    DP2
+                push    DP1
+                pushr   FB
+                pushr   FA
+                ldrzs   FB, lo(__SWI_FB_Base)
+                ldrzs   FA, lo(__SWI_FA_Base)
+
+                lda     a0, IRQ_NestLevel
+                addl    a0, 1                       // Increment IRQ nesting level
+                sta     IRQ_NestLevel, a0
+
                 push    c0
                 push    c1
                 lds     c0, 2
@@ -56,42 +79,116 @@ SWI_Handler:
                 popr    CLR
                 pop     c1
                 pop     c0
-                rts
+
+                jsr     ContextSwitch               // Continue in context switcher
+
+                lda     a0, IRQ_NestLevel
+                subl    a0, 1                       // Decrement IRQ nesting level
+                sta     IRQ_NestLevel, a0
+
+                popr    FA
+                popr    FB
+                pop     DP1
+                pop     DP2
+                mtprs   ILR_PSW, DP1
+                mtprs   ILR_PC,  DP2
+                pop     DP1
+                pop     DP2
+                popr    PRW
+                popr    CLR
+                popr    SMC
+                popr    LC
+                rti
                 .size   SWI_Handler, .-SWI_Handler
 
 
                 .type   SysTick_Handler, %function
                 .global SysTick_Handler
 SysTick_Handler:
+                pushr   LC
+                pushr   SMC
+                pushr   CLR
+                pushr   PRW
+                push    DP2
+                push    DP1
+                mfprs   DP2, ILR_PC
+                mfprs   DP1, ILR_PSW
+                push    DP2
+                push    DP1
+                pushr   FB
+                pushr   FA
+                ldrzs   FB, lo(__IRQ_FB_Base)
+                ldrzs   FA, lo(__IRQ_FA_Base)
+
+                lda     a0, IRQ_NestLevel
+                addl    a0, 1                       // Increment IRQ nesting level
+                sta     IRQ_NestLevel, a0
+
+                mov     a0, c7
+                movl    a1, 4
+                and     a0, a1
+                sub     c7, a0                      // Adjust stack to ensure 8-byte alignment
+                push    a1
+                push    a0
+
                 pushr   CLR
                 jsr     osTick_Handler              // Call osTick_Handler
                 popr    CLR
-                rts
+
+                pop     a0
+                pop     a1
+                add     c7, a0                      // Unadjust stack
+
+                sst     0x10                        // Re-enable interrupts
+                jsr     ContextSwitch               // Continue in context switcher
+                cst     0x10                        // Disable interrupts
+
+                lda     a0, IRQ_NestLevel
+                subl    a0, 1                       // Decrement IRQ nesting level
+                sta     IRQ_NestLevel, a0
+
+                popr    FA
+                popr    FB
+                pop     DP1
+                pop     DP2
+                mtprs   ILR_PSW, DP1
+                mtprs   ILR_PC,  DP2
+                pop     DP1
+                pop     DP2
+                popr    PRW
+                popr    CLR
+                popr    SMC
+                popr    LC
+                rti
                 .size   SysTick_Handler, .-SysTick_Handler
 
 
                 .type   ContextSwitch, %function
                 .global ContextSwitch
 ContextSwitch:
-                lda     DP1, osInfo                 // Load osInfo.thread.run.curr to DP1
-                lda     DP2, osInfo + 4             // Load osInfo.thread.run.next to DP2
-                lda     a7, IRQ_PendSV              // Load IRQ_PendSV to a0
+                lda     a0, IRQ_NestLevel
+                cmpl    a0, 1
+                bne     ContextExit
 
-                cmp     DP1, DP2                    // Check if context switch is required
+                lda     a0, osInfo                  // Load osInfo.thread.run.curr to a0
+                lda     a1, osInfo + 4              // Load osInfo.thread.run.next to a1
+                lda     a2, IRQ_PendSV              // Load IRQ_PendSV to a2
+
+                cmp     a0, a1                      // Check if context switch is required
                 bne     ContextCheck                // Not equal, check if context save required
-                cmpl    a7, 1                       // Compare IRQ_PendSV value
+                cmpl    a2, 1                       // Compare IRQ_PendSV value
                 bne     ContextExit                 // No post processing (and no context switch requested)
 ContextCheck:
-                cmpl    DP1, 0                      // Is osInfo.thread.run.curr == 0
+                cmpl    a0, 0                       // Is osInfo.thread.run.curr == 0
                 beq     PostProcess                 // Current thread deleted, skip context save
 ContextSave:
                 pushc   7
-                mov     c6, DP1
+                mov     c6, a0
                 std     (c6), c7
 PostProcess:
-                sta     osInfo, DP2
+                sta     osInfo, a1
 ContextRestore:
-                mov     c6, DP2
+                mov     c6, a1
                 ldd     c7, (c6)
                 popc    7
 ContextExit:

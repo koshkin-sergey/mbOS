@@ -30,9 +30,9 @@
 #define TIMEOUT                       (250UL)
 #define THREAD_STACK_SIZE             (256U)
 
-static osThreadId_t         threadA;
-static osThread_t           threadA_cb;
-static uint64_t             threadA_stack[THREAD_STACK_SIZE/8U];
+static osThreadId_t threadA;
+static osThread_t   threadA_cb;
+static uint64_t     threadA_stack[THREAD_STACK_SIZE/8U] __attribute__((section(".bss.os.thread.stack")));
 static const osThreadAttr_t threadA_attr = {
     .name       = NULL,
     .attr_bits  = 0U,
