@@ -1193,7 +1193,14 @@ typedef struct PWM {
 
 #define PWMCON1_PWMCP_Pos         (6U)
 #define PWMCON1_PWMCP_Msk         (0x7UL << PWMCON1_PWMCP_Pos)
-#define PWMCON1_PWMCP             PWMCON1_PWMCP_Msk
+#define PWMCON1_PWMCP_DIV_2       (0x0UL << PWMCON1_PWMCP_Pos)
+#define PWMCON1_PWMCP_DIV_4       (0x1UL << PWMCON1_PWMCP_Pos)
+#define PWMCON1_PWMCP_DIV_8       (0x2UL << PWMCON1_PWMCP_Pos)
+#define PWMCON1_PWMCP_DIV_16      (0x3UL << PWMCON1_PWMCP_Pos)
+#define PWMCON1_PWMCP_DIV_32      (0x4UL << PWMCON1_PWMCP_Pos)
+#define PWMCON1_PWMCP_DIV_64      (0x5UL << PWMCON1_PWMCP_Pos)
+#define PWMCON1_PWMCP_DIV_128     (0x6UL << PWMCON1_PWMCP_Pos)
+#define PWMCON1_PWMCP_DIV_256     (0x7UL << PWMCON1_PWMCP_Pos)
 
 #define PWMCON1_ENA_Pos           (9U)
 #define PWMCON1_ENA_Msk           (0x1UL << PWMCON1_ENA_Pos)

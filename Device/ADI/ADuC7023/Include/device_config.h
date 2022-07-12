@@ -186,7 +186,7 @@
 
 // <e> I2C1 (Inter-integrated Circuit Interface) [Driver_I2C1]
 // <i> Configuration settings for Driver_I2C1 in component ::CMSIS Driver:I2C
-#define DEV_I2C1                        0
+#define DEV_I2C1                       0
 
 //   <o> SCL Pin <0=>P0.6 <1=>P1.6
 #define   DEV_I2C1_SCL_PORT_ID         1
@@ -286,6 +286,97 @@
 #endif
 
 // </e>
+
+
+// <e> PWM (Pulse-Width Modulator) [Driver_PWM]
+// <i> Configuration settings for Driver_PWM
+#define DEV_PWM                        0
+
+//   <e> Output 0
+//     <o1> Pin <0=>P1.0
+//   </e>
+#define   DEV_PWM_OUT0                 0
+#define   DEV_PWM_OUT0_ID              0
+#if      (DEV_PWM_OUT0_ID == 0)
+  #define DEV_PWM_OUT0_PORT            &DRIVER_GPIO1
+  #define DEV_PWM_OUT0_PIN             GPIO_PIN_0
+  #define DEV_PWM_OUT0_FUNC            GPIO_PIN_FUNC_2
+#endif
+
+//   <e> Output 1
+//     <o1> Pin <0=>P1.1
+//   </e>
+#define   DEV_PWM_OUT1                 0
+#define   DEV_PWM_OUT1_ID              0
+#if      (DEV_PWM_OUT1_ID == 0)
+  #define DEV_PWM_OUT1_PORT            &DRIVER_GPIO1
+  #define DEV_PWM_OUT1_PIN             GPIO_PIN_1
+  #define DEV_PWM_OUT1_FUNC            GPIO_PIN_FUNC_2
+#endif
+
+//   <e> Output 2
+//     <o1> Pin <0=>P1.6
+//   </e>
+#define   DEV_PWM_OUT2                 0
+#define   DEV_PWM_OUT2_ID              0
+#if      (DEV_PWM_OUT2_ID == 0)
+  #define DEV_PWM_OUT2_PORT            &DRIVER_GPIO1
+  #define DEV_PWM_OUT2_PIN             GPIO_PIN_6
+  #define DEV_PWM_OUT2_FUNC            GPIO_PIN_FUNC_2
+#endif
+
+//   <e> Output 3
+//     <o1> Pin <0=>P1.7
+//   </e>
+#define   DEV_PWM_OUT3                 0
+#define   DEV_PWM_OUT3_ID              0
+#if      (DEV_PWM_OUT3_ID == 0)
+  #define DEV_PWM_OUT3_PORT            &DRIVER_GPIO1
+  #define DEV_PWM_OUT3_PIN             GPIO_PIN_7
+  #define DEV_PWM_OUT3_FUNC            GPIO_PIN_FUNC_2
+#endif
+
+//   <e> Output 4
+//     <o1> Pin <0=>P2.0
+//   </e>
+#define   DEV_PWM_OUT4                 0
+#define   DEV_PWM_OUT4_ID              0
+#if      (DEV_PWM_OUT4_ID == 0)
+  #define DEV_PWM_OUT4_PORT            &DRIVER_GPIO2
+  #define DEV_PWM_OUT4_PIN             GPIO_PIN_0
+  #define DEV_PWM_OUT4_FUNC            GPIO_PIN_FUNC_2
+#endif
+
+//   <e> Trip Input
+//     <o1> Pin <0=>P1.5
+//   </e>
+#define   DEV_PWM_TRIP                 0
+#define   DEV_PWM_TRIP_ID              0
+#if      (DEV_PWM_TRIP_ID == 0)
+  #define DEV_PWM_TRIP_PORT            &DRIVER_GPIO1
+  #define DEV_PWM_TRIP_PIN             GPIO_PIN_5
+  #define DEV_PWM_TRIP_FUNC            GPIO_PIN_FUNC_2
+#endif
+
+//   <e> Sync Input
+//     <o1> Pin <0=>P2.2
+//   </e>
+#define   DEV_PWM_SYNC                 0
+#define   DEV_PWM_SYNC_ID              0
+#if      (DEV_PWM_SYNC_ID == 0)
+  #define DEV_PWM_SYNC_PORT            &DRIVER_GPIO2
+  #define DEV_PWM_SYNC_PIN             GPIO_PIN_2
+  #define DEV_PWM_SYNC_FUNC            GPIO_PIN_FUNC_2
+#endif
+
+//   <o> Clock Prescaler <0=>UCLK/2 <1=>UCLK/4 <2=>UCLK/8 <3=>UCLK/16 <4=>UCLK/32 <5=>UCLK/64 <6=>UCLK/128 <7=>UCLK/256
+#define DEV_PWM_CLK_PSC                0
+
+//   <o> Interrupt Priority <0=>Realtime <1=>Above High <2=>High <3=>Above Normal <4=>Normal <5=>Below Normal <6=>Above Low <7=>Low
+#define DEV_PWM_INT_PRIO               4
+
+// </e>
+
 
 // <e> WDG (Watchdog Timer) [Driver_WDG]
 // <i> Configuration settings for Driver_WDG

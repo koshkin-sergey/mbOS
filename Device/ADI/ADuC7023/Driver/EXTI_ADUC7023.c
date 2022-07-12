@@ -53,7 +53,7 @@ static void EXT_IRQ3Handler(void);
 /* EXTI Information (Run-Time) */
 static EXTI_INFO EXTI_Info;
 
-/* ADC Resources */
+/* EXTI Resources */
 static EXTI_RESOURCES EXTI_Resources = {
   &IRQ->EXT_IRQ,
   /* Pin Configuration */

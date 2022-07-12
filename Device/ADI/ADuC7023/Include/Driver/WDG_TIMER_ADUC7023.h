@@ -59,11 +59,11 @@
 /**
  * Function documentation
  *
- * @fn          int32_t WDG_Initialize(uint16_t cnt)
+ * @fn          void WDG_Initialize(uint16_t cnt)
  * @brief       Initialize and start Watchdog Timer.
  * @param[in]   cnt  Value that is loaded into the counter.
  *
- * @fn          int32_t WDG_Reload(void)
+ * @fn          void WDG_Reload(void)
  * @brief       Reload Watchdog Timer.
  */
 
