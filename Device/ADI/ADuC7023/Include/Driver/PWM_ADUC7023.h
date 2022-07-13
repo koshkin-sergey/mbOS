@@ -28,6 +28,7 @@
 
 #include <asm/aduc7023.h>
 #include <device_config.h>
+#include <Driver/PCC_ADUC7023.h>
 #include <Driver/GPIO_ADUC7023.h>
 
 /*******************************************************************************
@@ -128,11 +129,40 @@
 #define PWM_FLAG_INITIALIZED          (1UL << 0)                                ///< PWM initialized
 #define PWM_FLAG_POWERED              (1UL << 1)                                ///< PWM powered on
 #define PWM_FLAG_CONFIGURED           (1UL << 2)                                ///< PWM is configured
-#define PWM_FLAG_ENABLE               (1UL << 3)                                ///< PWM is enabled
+
+/****** PWM Control Codes *****/
+
+#define PWM_CONTROL_Msk             (0xFFUL)
+#define PWM_CONFIGURE               (0x01UL)                                    ///< Configure PWM; arg provide additional configuration
+#define PWM_CONTROL                 (0x02UL)                                    ///< Control   PWM; arg provide additional configuration
+
+/*----- PWM Control Codes: Configuration Parameters: Compare Value -----*/
+#define PWM_COMPARE_Pos              8
+#define PWM_COMPARE_Msk             (15UL << PWM_COMPARE_Pos)
+#define PWM0_COMPARE0               ( 0UL << PWM_COMPARE_Pos)
+#define PWM0_COMPARE1               ( 1UL << PWM_COMPARE_Pos)
+#define PWM0_COMPARE2               ( 2UL << PWM_COMPARE_Pos)
+#define PWM0_LENGTH                 ( 3UL << PWM_COMPARE_Pos)
+#define PWM1_COMPARE0               ( 4UL << PWM_COMPARE_Pos)
+#define PWM1_COMPARE1               ( 5UL << PWM_COMPARE_Pos)
+#define PWM1_COMPARE2               ( 6UL << PWM_COMPARE_Pos)
+#define PWM1_LENGTH                 ( 7UL << PWM_COMPARE_Pos)
+#define PWM2_COMPARE0               ( 8UL << PWM_COMPARE_Pos)
+#define PWM2_COMPARE1               ( 9UL << PWM_COMPARE_Pos)
+#define PWM2_LENGTH                 (10UL << PWM_COMPARE_Pos)
 
 /*******************************************************************************
  *  typedefs and structures
  ******************************************************************************/
+
+/**
+ * @brief General power states
+ */
+typedef enum _PWM_POWER_STATE {
+  PWM_POWER_OFF,                        ///< Power off: no operation possible
+  PWM_POWER_LOW,                        ///< Low Power mode: retain state, detect and signal wake-up events
+  PWM_POWER_FULL                        ///< Power on: full operation at maximum performance
+} PWM_POWER_STATE;
 
 /* PWM Pin */
 typedef const struct _PWM_PIN {
@@ -143,7 +173,7 @@ typedef const struct _PWM_PIN {
 
 /* PWM Information (Run-Time) */
 typedef struct _PWM_INFO {
-  uint32_t              flags;              // Current state flags
+  uint32_t             flags;               // Current state flags
 } PWM_INFO;
 
 /* PWM Resource Configuration */
@@ -151,6 +181,7 @@ typedef struct {
   PWM_t                 *reg;               // PWM peripheral register interface
   PWM_PIN  *pin[PWM_PIN_NUM];               // PWM pins
   PWM_INFO             *info;               // Run-Time information
+  PCC_Periph_t    pcc_periph;               // PWM PCC peripheral
 } const PWM_RESOURCES;
 
 /**
@@ -160,6 +191,20 @@ typedef struct {
  * @brief       Initialize Pulse-Width Modulator.
  * @return      Execution status
  *
+ * @fn          int32_t PWM_Uninitialize(void)
+ * @brief       De-initialize Pulse-Width Modulator.
+ * @return      Execution status
+ *
+ * @fn          int32_t PWM_PowerControl(PWM_POWER_STATE state)
+ * @brief       Control PWM Interface Power.
+ * @param[in]   state  Power state
+ * @return      Execution status
+ *
+ * @fn          int32_t PWM_Control(uint32_t control, uint32_t arg)
+ * @brief       Control PWM Interface.
+ * @param[in]   control  Operation
+ * @param[in]   arg      Argument of operation (optional)
+ * @return      Common execution status and driver specific execution status
  */
 
 /**
@@ -168,6 +213,7 @@ typedef struct {
 typedef struct Driver_PWM {
   int32_t (*Initialize)   (void);
   int32_t (*Uninitialize) (void);
+  int32_t (*PowerControl) (PWM_POWER_STATE state);
   int32_t (*Control)      (uint32_t control, uint32_t arg);
 } const Driver_PWM_t;
 
