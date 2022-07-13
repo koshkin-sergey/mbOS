@@ -290,12 +290,12 @@
 
 // <e> PWM (Pulse-Width Modulator) [Driver_PWM]
 // <i> Configuration settings for Driver_PWM
-#define DEV_PWM                        0
+#define DEV_PWM                        1
 
 //   <e> Output 0
 //     <o1> Pin <0=>P1.0
 //   </e>
-#define   DEV_PWM_OUT0                 0
+#define   DEV_PWM_OUT0                 1
 #define   DEV_PWM_OUT0_ID              0
 #if      (DEV_PWM_OUT0_ID == 0)
   #define DEV_PWM_OUT0_PORT            &DRIVER_GPIO1
