@@ -46,7 +46,6 @@ static const osThreadAttr_t thread_attr = {
 
 static void SetDuty(float duty)
 {
-  pwm->Control(PWM_CONFIGURE | PWM0_COMPARE0, 0U);
   pwm->Control(PWM_CONFIGURE | PWM0_COMPARE1, PWM_LENGTH / 100UL * duty);
 }
 
@@ -68,6 +67,7 @@ static void thread_func(void *param)
   pwm->Initialize();
   pwm->PowerControl(PWM_POWER_FULL);
   pwm->Control(PWM_CONFIGURE | PWM0_LENGTH, PWM_LENGTH);
+  pwm->Control(PWM_CONFIGURE | PWM0_COMPARE0, 0U);
   pwm->Control(PWM_CONTROL, 1U);
 
   for (;;) {
