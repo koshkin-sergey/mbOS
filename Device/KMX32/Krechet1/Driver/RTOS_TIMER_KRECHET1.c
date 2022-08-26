@@ -18,9 +18,8 @@
  */
 
 #include "Kernel/tick.h"
-#include "Kernel/irq.h"
+//#include "Kernel/irq.h"
 #include "asm/krechet1.h"
-#include "asm/system_krechet1.h"
 
 /**
  * @brief       Setup OS Tick timer to generate periodic RTOS Kernel Ticks
@@ -67,21 +66,32 @@ void osTickDisable(void)
 }
 
 /**
+ * @brief       Enable generation of RTOS Kernel Tick interrupts
+ *              without changing the operating mode of the OS Tick timer
+ */
+void osTickEnableIRQ(void)
+{
+  __set_CpuReg(CPU_PRW_REG, PRW_TMR0);
+  __set_PeriphReg(TMR0_CFG_REG, __get_PeriphReg(TMR0_CFG_REG) | TIM_CFG_IE);
+}
+
+/**
+ * @brief       Disable generation of RTOS Kernel Tick interrupts
+ *              without changing the operating mode of the OS Tick timer
+ */
+void osTickDisableIRQ(void)
+{
+  __set_CpuReg(CPU_PRW_REG, PRW_TMR0);
+  __set_PeriphReg(TMR0_CFG_REG, __get_PeriphReg(TMR0_CFG_REG) & ~TIM_CFG_IE);
+}
+
+/**
  * @brief       Acknowledge execution of OS Tick timer interrupt
  */
 void osTickAcknowledgeIRQ(void)
 {
   __set_CpuReg(CPU_PRW_REG, PRW_TMR0);
   __set_PeriphReg(TMR0_CON_REG, __get_PeriphReg(TMR0_CON_REG));
-}
-
-/**
- * @brief       Get OS Tick timer IRQ number
- * @return      OS Tick IRQ number
- */
-int32_t osTickGetIRQn(void)
-{
-  return ((int32_t)TIM0_IRQn);
 }
 
 /**
