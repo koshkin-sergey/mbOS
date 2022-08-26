@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2021-2022 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -83,7 +83,7 @@ __WEAK void osTickEnable(void)
     SCB->ICSR = SCB_ICSR_PENDSTSET_Msk;
   }
 
-  SysTick->CTRL |=  SysTick_CTRL_ENABLE_Msk;
+  SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk;
 }
 
 /**
@@ -105,15 +105,6 @@ __WEAK void osTickDisable(void)
 __WEAK void osTickAcknowledgeIRQ(void)
 {
   (void)SysTick->CTRL;
-}
-
-/**
- * @brief       Get OS Tick timer IRQ number
- * @return      OS Tick IRQ number
- */
-__WEAK int32_t osTickGetIRQn(void)
-{
-  return ((int32_t)SysTick_IRQn);
 }
 
 /**

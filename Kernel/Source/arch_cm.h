@@ -195,8 +195,6 @@ typedef struct
 #define SysTick_CALIB_TENMS_Pos             0U                                            /*!< SysTick CALIB: TENMS Position */
 #define SysTick_CALIB_TENMS_Msk            (0xFFFFFFUL /*<< SysTick_CALIB_TENMS_Pos*/)    /*!< SysTick CALIB: TENMS Mask */
 
-#define SysTick_IRQn                       (-1)
-
 /*******************************************************************************
  *  exported functions
  ******************************************************************************/

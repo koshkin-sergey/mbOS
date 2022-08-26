@@ -25,7 +25,6 @@ F_BIT           EQU      0x40                       ; When F bit is set, FIQ is 
 
 K_STATE_RUNNING EQU      2                          ; osKernelState_t::osKernelRunning
 I_K_STATE_OFS   EQU      16                         ; osInfo.kernel.state offset
-I_TICK_IRQN_OFS EQU      24                         ; osInfo.tick_irqn offset
 
                 PRESERVE8
 
@@ -46,8 +45,8 @@ IRQ_PendSV      DCB      0                          ; Pending SVC flag
 SWI_Handler\
                 PROC
                 EXPORT  SWI_Handler
-                IMPORT  IRQ_Disable
-                IMPORT  IRQ_Enable
+                IMPORT  osTickDisableIRQ
+                IMPORT  osTickEnableIRQ
                 IMPORT  osInfo
 
                 SUB     SP, SP, #(2*4)              ; Make room for stacking SPSR_svc, LR_svc
@@ -66,8 +65,7 @@ SWI_Handler\
                 LDR     R1, [R0, #I_K_STATE_OFS]    ; Load kernel state
                 CMP     R1, #K_STATE_RUNNING        ; Check osKernelRunning
                 BLT     SWI_FuncCall                ; Continue if kernel is not running
-                LDR     R0, [R0, #I_TICK_IRQN_OFS]  ; Load OS Tick irqn
-                LDR     R12, =IRQ_Disable
+                LDR     R12, =osTickDisableIRQ
                 MOV     LR, PC
                 BX      R12                         ; Disable OS Tick interrupt
 
@@ -92,8 +90,7 @@ SWI_FuncCall
                 LDR     R1, [R0, #I_K_STATE_OFS]    ; Load kernel state
                 CMP     R1, #K_STATE_RUNNING        ; Check osKernelRunning
                 BLT     SWI_ContextCheck            ; Continue if kernel is not running
-                LDR     R0, [R0, #I_TICK_IRQN_OFS]  ; Load OS Tick irqn
-                LDR     R12, =IRQ_Enable
+                LDR     R12, =osTickEnableIRQ
                 MOV     LR, PC
                 BX      R12                         ; Enable OS Tick interrupt
 
@@ -190,8 +187,8 @@ ContextSwitch\
                 EXPORT  ContextSwitch
                 IMPORT  osPendSV_Handler
                 IMPORT  osInfo
-                IMPORT  IRQ_Disable
-                IMPORT  IRQ_Enable
+                IMPORT  osTickDisableIRQ
+                IMPORT  osTickEnableIRQ
 
                 PUSH    {LR}
 
@@ -249,10 +246,7 @@ PostProcess
                 SUB     SP, SP, R4                  ; Adjust stack
 
                 ; Disable OS Tick
-                LDR     R5, =osInfo                 ; Load address of osInfo
-                LDR     R5, [R5, #I_TICK_IRQN_OFS]  ; Load OS Tick irqn
-                MOV     R0, R5                      ; Set it as function parameter
-                LDR     R12, =IRQ_Disable
+                LDR     R12, =osTickDisableIRQ
                 MOV     LR, PC
                 BX      R12                         ; Disable OS Tick interrupt
                 MOV     R6, #0                      ; Set PendSV clear value
@@ -274,8 +268,7 @@ PendCheck
                 BEQ     PendExec                    ; Branch to PendExec if PendSV is set
 
                 ; Re-enable OS Tick
-                MOV     R0, R5                      ; Restore irqn as function parameter
-                LDR     R12, =IRQ_Enable
+                LDR     R12, =osTickEnableIRQ
                 MOV     LR, PC
                 BX      R12                         ; Enable OS Tick interrupt
 

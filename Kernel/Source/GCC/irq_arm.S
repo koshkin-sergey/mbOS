@@ -27,7 +27,6 @@
 
                 .equ   K_STATE_RUNNING, 2           // osKernelState_t::osKernelRunning
                 .equ   I_K_STATE_OFS,   16          // osInfo.kernel.state offset
-                .equ   I_TICK_IRQN_OFS, 24          // osInfo.tick_irqn offset
 
                 .section ".rodata"
                 .global  irqLib                     // Non weak library reference
@@ -69,8 +68,7 @@ SWI_Handler:
                 LDR     R1, [R0, #I_K_STATE_OFS]    // Load kernel state
                 CMP     R1, #K_STATE_RUNNING        // Check osKernelRunning
                 BLT     SWI_FuncCall                // Continue if kernel is not running
-                LDR     R0, [R0, #I_TICK_IRQN_OFS]  // Load OS Tick irqn
-                LDR     R12, =IRQ_Disable
+                LDR     R12, =osTickDisableIRQ
                 MOV     LR, PC
                 BX      R12                         // Disable OS Tick interrupt
 
@@ -95,8 +93,7 @@ SWI_FuncCall:
                 LDR     R1, [R0, #I_K_STATE_OFS]    // Load kernel state
                 CMP     R1, #K_STATE_RUNNING        // Check osKernelRunning
                 BLT     SWI_ContextCheck            // Continue if kernel is not running
-                LDR     R0, [R0, #I_TICK_IRQN_OFS]  // Load OS Tick irqn
-                LDR     R12, =IRQ_Enable
+                LDR     R12, =osTickEnableIRQ
                 MOV     LR, PC
                 BX      R12                         // Enable OS Tick interrupt
 
@@ -251,10 +248,7 @@ PostProcess:
                 SUB     SP, SP, R4                  // Adjust stack
 
                 // Disable OS Tick
-                LDR     R5, =osInfo                 // Load address of osInfo
-                LDR     R5, [R5, #I_TICK_IRQN_OFS]  // Load OS Tick irqn
-                MOV     R0, R5                      // Set it as function parameter
-                LDR     R12, =IRQ_Disable
+                LDR     R12, =osTickDisableIRQ
                 MOV     LR, PC
                 BX      R12                         // Disable OS Tick interrupt
                 MOV     R6, #0                      // Set PendSV clear value
@@ -276,8 +270,7 @@ PendCheck:
                 BEQ     PendExec                    // Branch to PendExec if PendSV is set
 
                 // Re-enable OS Tick
-                MOV     R0, R5                      // Restore irqn as function parameter
-                LDR     R12, =IRQ_Enable
+                LDR     R12, =osTickEnableIRQ
                 MOV     LR, PC
                 BX      R12                         // Enable OS Tick interrupt
 

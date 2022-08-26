@@ -98,7 +98,6 @@ typedef struct KernelInfo_s {
     osKernelState_t                      state;   ///< State
     uint32_t                              tick;
   } kernel;
-  int32_t                            tick_irqn;   ///< Tick Timer IRQ Number
   uint32_t                    ready_to_run_bmp;
   queue_t             ready_list[NUM_PRIORITY];   ///< all ready to run(RUNNABLE) tasks
   queue_t                          timer_queue;

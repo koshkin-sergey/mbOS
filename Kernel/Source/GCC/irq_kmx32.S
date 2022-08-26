@@ -21,7 +21,6 @@
 
                 .equ   K_STATE_RUNNING, 2           // osKernelState_t::osKernelRunning
                 .equ   I_K_STATE_OFS,   16          // osInfo.kernel.state offset
-                .equ   I_TICK_IRQN_OFS, 24          // osInfo.tick_irqn offset
 
                 .section ".rodata"
 
