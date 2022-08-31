@@ -72,21 +72,14 @@ SWI_Handler
                 BX      R12                         ; Disable OS Tick interrupt
 
 SWI_FuncCall
-                POP     {R0-R3}
-                LDR     R12, [SP]
+                LDM     SP, {R0-R3, R12}
 
                 MSR     CPSR_c, #MODE_SVC           ; Re-enable interrupts
                 MOV     LR, PC
                 BX      R12                         ; Branch to SVC function
                 MSR     CPSR_c, #(MODE_SVC | I_BIT) ; Disable interrupts
 
-                SUB     SP, SP, #4
-                STM     SP, {SP}^                   ; Store SP_usr onto stack
-                NOP
-                POP     {R12}                       ; Pop SP_usr into R12
-                SUB     R12, R12, #16               ; Adjust pointer to SP_usr
-                LDMDB   R12, {R2,R3}                ; Load return values from SVC function
-                PUSH    {R0-R3}                     ; Push return values to stack
+                STR     R0, [SP]                    ; Store function return value
 
                 LDR     R0, =osInfo
                 LDR     R1, [R0, #I_K_STATE_OFS]    ; Load kernel state

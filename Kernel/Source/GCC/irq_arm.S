@@ -80,7 +80,7 @@ SWI_FuncCall:
                 BX      R12                         // Branch to SVC function
                 MSR     CPSR_c, #(MODE_SVC | I_BIT) // Disable interrupts
 
-                STR     r0, [sp]                    // Store function return value
+                STR     R0, [SP]                    // Store function return value
 
                 LDR     R0, =osInfo
                 LDR     R1, [R0, #I_K_STATE_OFS]    // Load kernel state
