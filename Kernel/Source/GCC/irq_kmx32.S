@@ -178,6 +178,8 @@ SysTick_Handler:
                 .type   ContextSwitch, %function
                 .global ContextSwitch
 ContextSwitch:
+                mfprs   a6, CLR
+
                 lda     a0, IRQ_NestLevel           // Load IRQ nesting level
                 cmpl    a0, 1                       // Check interrupt nesting level
                 bne     ContextExit                 // Nesting interrupts, exit context switcher
@@ -229,6 +231,7 @@ PendCheck:
                 beq     PendExec                    // Branch to PendExec if PendSV is set
 
                 jsr     osTickEnableIRQ             // Enable OS Tick interrupt
+
                 add     c7, a3                      // Restore stack adjustment
 
 ContextRestore:
@@ -237,6 +240,7 @@ ContextRestore:
                 popc    7
 
 ContextExit:
+                mtprs   CLR, a6
                 rts
                 .size   ContextSwitch, .-ContextSwitch
 
