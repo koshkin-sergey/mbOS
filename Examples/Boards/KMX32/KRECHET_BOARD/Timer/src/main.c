@@ -83,8 +83,8 @@ static void GPIO_Init(void)
   __set_PeriphReg(ADSU_GATE_REG, __get_PeriphReg(ADSU_GATE_REG) | 0x00010000);
 
   __set_CpuReg(CPU_PRW_REG, PRW_GPIO);
-  __set_PeriphReg(GPIO_DIR_REG, LED0_R | LED0_B | LED1_R | LED1_B);
-  __set_PeriphReg(GPIO_OUT_REG, LED0_R | LED1_B);
+  __set_PeriphReg(GPIO_DIR_REG, LED0_R | LED0_B | LED1_G);
+  __set_PeriphReg(GPIO_OUT_REG, LED0_R);
 }
 
 static void init_proc(void *param)
@@ -110,7 +110,7 @@ static void timer2_func(void *argument)
   (void) argument;
 
   __set_CpuReg(CPU_PRW_REG, PRW_GPIO);
-  __set_PeriphReg(GPIO_OUT_REG, __get_PeriphReg(GPIO_OUT_REG) ^ (LED1_R | LED1_B));
+  __set_PeriphReg(GPIO_OUT_REG, __get_PeriphReg(GPIO_OUT_REG) ^ LED1_G);
 }
 
 int main(void)
