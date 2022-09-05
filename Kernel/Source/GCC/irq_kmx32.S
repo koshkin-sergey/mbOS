@@ -138,20 +138,16 @@ SysTick_Handler:
                 addl    a0, 1                       // Increment IRQ nesting level
                 sta     IRQ_NestLevel, a0
 
-                mov     a0, c7
+                mov     b0, c7
                 movl    a1, 4
-                and     a0, a1
-                sub     c7, a0                      // Adjust stack to ensure 8-byte alignment
-                push    a1
-                push    a0
+                and     b0, a1
+                sub     c7, b0                      // Adjust stack to ensure 8-byte alignment
 
                 sst     IE_BIT                      // Re-enable interrupts
                 jsr     osTick_Handler              // Call osTick_Handler
                 cst     IE_BIT                      // Disable interrupts
 
-                pop     a0
-                pop     a1
-                add     c7, a0                      // Unadjust stack
+                add     c7, b0                      // Unadjust stack
 
                 jsr     ContextSwitch               // Continue in context switcher
 
@@ -178,8 +174,6 @@ SysTick_Handler:
                 .type   ContextSwitch, %function
                 .global ContextSwitch
 ContextSwitch:
-                mfprs   a6, CLR
-
                 lda     a0, IRQ_NestLevel           // Load IRQ nesting level
                 cmpl    a0, 1                       // Check interrupt nesting level
                 bne     ContextExit                 // Nesting interrupts, exit context switcher
@@ -207,10 +201,13 @@ PostProcess:
                 cmpl    a2, 1                       // Compare IRQ_PendSV value
                 bne     ContextRestore              // Skip post processing if not pending
 
-                mov     a3, c7
+                pushr   CLR
+                push    b0
+
+                mov     b0, c7
                 movl    a4, 4
-                and     a3, a4
-                sub     c7, a3                      // Adjust stack to ensure 8-byte alignment
+                and     b0, a4
+                sub     c7, b0                      // Adjust stack to ensure 8-byte alignment
 
                 jsr     osTickDisableIRQ            // Disable OS Tick interrupt
 
@@ -232,15 +229,17 @@ PendCheck:
 
                 jsr     osTickEnableIRQ             // Enable OS Tick interrupt
 
-                add     c7, a3                      // Restore stack adjustment
+                add     c7, b0                      // Restore stack adjustment
+
+                pop     b0
+                popr    CLR
 
 ContextRestore:
-                mov     c6, a1
+                lda     c6, osInfo + 4              // Load osInfo.thread.run.next to c6
                 ldd     c7, (c6)
                 popc    7
 
 ContextExit:
-                mtprs   CLR, a6
                 rts
                 .size   ContextSwitch, .-ContextSwitch
 
