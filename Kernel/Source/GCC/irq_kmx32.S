@@ -62,20 +62,20 @@ SWI_Handler:
                 push    DP1
                 pushr   FB
                 pushr   FA
-                ldrzs   FB, lo(__SWI_FB_Base)
-                ldrzs   FA, lo(__SWI_FA_Base)
 
                 mtprs   USP, c7
-                lda     a0, CurrentMode
-                sta     OldMode, a0
+                lda     DP1, CurrentMode
+                sta     OldMode, DP1
 
-                cmpl    a0, ModeHandler
+                cmpl    DP1, ModeHandler
                 beq     1$
                 lda     c7, MSP                     // Switch to Main Stack
-                movl    a0, ModeHandler
-                sta     CurrentMode, a0
+                movl    DP1, ModeHandler
+                sta     CurrentMode, DP1
 
 1$:
+                srfa    8
+
                 lda     a0, IRQ_NestLevel
                 addl    a0, 1                       // Increment IRQ nesting level
                 sta     IRQ_NestLevel, a0
@@ -117,8 +117,12 @@ SWI_ContextCheck:
                 subl    a0, 1                       // Decrement IRQ nesting level
                 sta     IRQ_NestLevel, a0
 
-                lda     a0, OldMode
-                sta     CurrentMode, a0
+                rsfa    8
+
+                lda     DP1, OldMode
+                sta     CurrentMode, DP1
+
+                sta     MSP, c7
                 mfprs   c7, USP
 
                 popr    FA
@@ -153,34 +157,27 @@ SysTick_Handler:
                 push    DP1
                 pushr   FB
                 pushr   FA
-                ldrzs   FB, lo(__IRQ_FB_Base)
-                ldrzs   FA, lo(__IRQ_FA_Base)
 
                 mtprs   USP, c7
+                lda     DP1, CurrentMode
+                sta     OldMode, DP1
 
-                lda     a0, CurrentMode
-                sta     OldMode, a0
-                cmpl    a0, ModeHandler
+                cmpl    DP1, ModeHandler
                 beq     1$
                 lda     c7, MSP                     // Switch to Main Stack
-                movl    a0, ModeHandler
-                sta     CurrentMode, a0
+                movl    DP1, ModeHandler
+                sta     CurrentMode, DP1
 
 1$:
+                srfa    8
+
                 lda     a0, IRQ_NestLevel
                 addl    a0, 1                       // Increment IRQ nesting level
                 sta     IRQ_NestLevel, a0
 
-                mov     b0, c7
-                movl    a1, 4
-                and     b0, a1
-                sub     c7, b0                      // Adjust stack to ensure 8-byte alignment
-
 ;                sst     IE_BIT                      // Re-enable interrupts
                 jsr     osTick_Handler              // Call osTick_Handler
 ;                cst     IE_BIT                      // Disable interrupts
-
-                add     c7, b0                      // Unadjust stack
 
                 jsr     ContextSwitch               // Continue in context switcher
 
@@ -188,8 +185,12 @@ SysTick_Handler:
                 subl    a0, 1                       // Decrement IRQ nesting level
                 sta     IRQ_NestLevel, a0
 
-                lda     a0, OldMode
-                sta     CurrentMode, a0
+                rsfa    8
+
+                lda     DP1, OldMode
+                sta     CurrentMode, DP1
+
+                sta     MSP, c7
                 mfprs   c7, USP
 
                 popr    FA
@@ -292,7 +293,6 @@ ContextRestore:
 
                 movl    a0, ModeThread
                 sta     OldMode, a0
-                sta     MSP, c7
 
 ContextExit:
                 rts

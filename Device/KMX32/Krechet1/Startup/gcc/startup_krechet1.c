@@ -97,8 +97,10 @@ void Reset_Handler(void)
       "ldrsl  DP1ID,  0x0001                             \n"
       "ldrsl  DP2ID,  0x0001                             \n"
       "movl   c7,     lit(__stack)                       \n"
-      "ldrzs  FA,     lo(__IRQ_FA_Base)                  \n"
-      "ldrzs  FB,     lo(__IRQ_FB_Base)                  \n"
+      "subl   c7,     0x20                               \n"
+      "mtprs  FB,     c7                                 \n"
+      "subl   c7,     0x20                               \n"
+      "mtprs  FA,     c7                                 \n"
       "jmp    __do_reset                                 \n"
   );
 }
