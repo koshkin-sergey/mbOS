@@ -22,21 +22,25 @@
                 .equ   K_STATE_RUNNING, 2           // osKernelState_t::osKernelRunning
                 .equ   I_K_STATE_OFS,   16          // osInfo.kernel.state offset
 
+                .equ   ModeHandler,     0
+                .equ   ModeThread,      1
+
+
                 .section ".rodata"
 
                 .global  irqLib                     // Non weak library reference
 irqLib:
                 .byte    0
 
+
                 .section ".data"
 
-                .global  IRQ_NestLevel
-IRQ_NestLevel:
-                .long    0                          // IRQ nesting level counter
-
                 .global  IRQ_PendSV
-IRQ_PendSV:
-                .long    0                          // Pending SVC flag
+IRQ_PendSV:     .long    0                          // Pending SVC flag
+IRQ_NestLevel:  .long    0                          // IRQ nesting level counter
+MSP:            .long    0
+OldMode:        .long    0
+CurrentMode:    .long    0
 
 
                 .section ".text.os.handlers"
@@ -45,6 +49,7 @@ IRQ_PendSV:
                 .global SWI_Handler
 SWI_Handler:
                 cst     IE_BIT                      // Disable interrupts
+
                 pushr   LC
                 pushr   SMC
                 pushr   CLR
@@ -60,6 +65,17 @@ SWI_Handler:
                 ldrzs   FB, lo(__SWI_FB_Base)
                 ldrzs   FA, lo(__SWI_FA_Base)
 
+                mtprs   USP, c7
+                lda     a0, CurrentMode
+                sta     OldMode, a0
+
+                cmpl    a0, ModeHandler
+                beq     1$
+                lda     c7, MSP                     // Switch to Main Stack
+                movl    a0, ModeHandler
+                sta     CurrentMode, a0
+
+1$:
                 lda     a0, IRQ_NestLevel
                 addl    a0, 1                       // Increment IRQ nesting level
                 sta     IRQ_NestLevel, a0
@@ -72,7 +88,8 @@ SWI_Handler:
 SWI_FuncCall:
                 push    c0
                 push    c1
-                lds     c0, 2
+                mfprs   c0, USP
+                ldd     c0, (c0)
                 lddo    a0, (c0), 0
                 lddo    a1, (c0), 4
                 lddo    a2, (c0), 8
@@ -100,6 +117,10 @@ SWI_ContextCheck:
                 subl    a0, 1                       // Decrement IRQ nesting level
                 sta     IRQ_NestLevel, a0
 
+                lda     a0, OldMode
+                sta     CurrentMode, a0
+                mfprs   c7, USP
+
                 popr    FA
                 popr    FB
                 pop     DP1
@@ -112,6 +133,7 @@ SWI_ContextCheck:
                 popr    CLR
                 popr    SMC
                 popr    LC
+
                 rti
                 .size   SWI_Handler, .-SWI_Handler
 
@@ -134,6 +156,17 @@ SysTick_Handler:
                 ldrzs   FB, lo(__IRQ_FB_Base)
                 ldrzs   FA, lo(__IRQ_FA_Base)
 
+                mtprs   USP, c7
+
+                lda     a0, CurrentMode
+                sta     OldMode, a0
+                cmpl    a0, ModeHandler
+                beq     1$
+                lda     c7, MSP                     // Switch to Main Stack
+                movl    a0, ModeHandler
+                sta     CurrentMode, a0
+
+1$:
                 lda     a0, IRQ_NestLevel
                 addl    a0, 1                       // Increment IRQ nesting level
                 sta     IRQ_NestLevel, a0
@@ -143,9 +176,9 @@ SysTick_Handler:
                 and     b0, a1
                 sub     c7, b0                      // Adjust stack to ensure 8-byte alignment
 
-                sst     IE_BIT                      // Re-enable interrupts
+;                sst     IE_BIT                      // Re-enable interrupts
                 jsr     osTick_Handler              // Call osTick_Handler
-                cst     IE_BIT                      // Disable interrupts
+;                cst     IE_BIT                      // Disable interrupts
 
                 add     c7, b0                      // Unadjust stack
 
@@ -154,6 +187,10 @@ SysTick_Handler:
                 lda     a0, IRQ_NestLevel
                 subl    a0, 1                       // Decrement IRQ nesting level
                 sta     IRQ_NestLevel, a0
+
+                lda     a0, OldMode
+                sta     CurrentMode, a0
+                mfprs   c7, USP
 
                 popr    FA
                 popr    FB
@@ -193,9 +230,16 @@ ContextCheck:
                 beq     PostProcess                 // Current thread deleted, skip context save
 
 ContextSave:
-                pushc   7
-                mov     c6, a0
-                std     (c6), c7
+                pushu   c6
+                pushu   c5
+                pushu   c4
+                pushu   c3
+                pushu   c2
+                pushu   c1
+                pushu   c0
+                mov     c0, a0
+                mfprs   c1, USP
+                std     (c0), c1
 
 PostProcess:
                 cmpl    a2, 1                       // Compare IRQ_PendSV value
@@ -235,9 +279,20 @@ PendCheck:
                 popr    CLR
 
 ContextRestore:
-                lda     c6, osInfo + 4              // Load osInfo.thread.run.next to c6
-                ldd     c7, (c6)
-                popc    7
+                lda     c0, osInfo + 4              // Load osInfo.thread.run.next to c6
+                ldd     c1, (c0)
+                mtprs   USP, c1
+                popu    c0
+                popu    c1
+                popu    c2
+                popu    c3
+                popu    c4
+                popu    c5
+                popu    c6
+
+                movl    a0, ModeThread
+                sta     OldMode, a0
+                sta     MSP, c7
 
 ContextExit:
                 rts
