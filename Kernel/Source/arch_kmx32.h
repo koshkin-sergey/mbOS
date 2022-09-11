@@ -131,6 +131,7 @@ uint32_t StackInit(StackAttr_t *attr, bool privileged)
   *(--stk) = 0x10UL;                            //-- ILR_PSW
   *(--stk) = fb_base;                           //-- FB
   *(--stk) = fa_base;                           //-- FA
+  *(--stk) = 0xC7C7C7C7UL;                      //-- c7
   *(--stk) = 0xC6C6C6C6UL;                      //-- c6
   *(--stk) = 0xC5C5C5C5UL;                      //-- c5
   *(--stk) = 0xC4C4C4C4UL;                      //-- c4

@@ -44,7 +44,7 @@ __ROM_SIZE = 0x00010000;
 //  </h>
  -----------------------------------------------------------------------------*/
 __RAM_BASE          = 0x00000000;
-__RAM_SIZE          = 0x00008000;
+__RAM_SIZE          = 0x00010000;
 
 __STACK_SIZE        = 0x00000100;
 __HEAP_SIZE         = 0x00000000;
@@ -56,7 +56,7 @@ __HEAP_SIZE         = 0x00000000;
 MEMORY
 {
   FLASH (rx)  : ORIGIN = 0x80001000, LENGTH = 0x00010000
-  RAM   (rw)  : ORIGIN = 0x00000000, LENGTH = 0x00008000
+  RAM   (rw)  : ORIGIN = 0x00000000, LENGTH = 0x00010000
 }
 
 ENTRY(Reset_Handler)
@@ -148,7 +148,7 @@ SECTIONS
     __HeapLimit = .;
   } > RAM
 
-  .stack (ORIGIN(RAM) + LENGTH(RAM) -  __STACK_SIZE) (NOLOAD) :
+  .stack (ORIGIN(RAM) + LENGTH(RAM) - __STACK_SIZE) (NOLOAD) :
   {
     . = ALIGN(8);
     

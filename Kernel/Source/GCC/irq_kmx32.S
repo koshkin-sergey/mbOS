@@ -175,9 +175,13 @@ SysTick_Handler:
                 addl    a0, 1                       // Increment IRQ nesting level
                 sta     IRQ_NestLevel, a0
 
-;                sst     IE_BIT                      // Re-enable interrupts
+                jsr     osTickDisableIRQ            // Disable OS Tick interrupt
+
+                sst     IE_BIT                      // Re-enable interrupts
                 jsr     osTick_Handler              // Call osTick_Handler
-;                cst     IE_BIT                      // Disable interrupts
+                cst     IE_BIT                      // Disable interrupts
+
+                jsr     osTickEnableIRQ             // Enable OS Tick interrupt
 
                 jsr     ContextSwitch               // Continue in context switcher
 
@@ -231,6 +235,7 @@ ContextCheck:
                 beq     PostProcess                 // Current thread deleted, skip context save
 
 ContextSave:
+                pushu   c7
                 pushu   c6
                 pushu   c5
                 pushu   c4
@@ -239,8 +244,8 @@ ContextSave:
                 pushu   c1
                 pushu   c0
                 mov     c0, a0
-                mfprs   c1, USP
-                std     (c0), c1
+                mfprs   dp1, USP
+                std     (c0), dp1
 
 PostProcess:
                 cmpl    a2, 1                       // Compare IRQ_PendSV value
@@ -281,8 +286,8 @@ PendCheck:
 
 ContextRestore:
                 lda     c0, osInfo + 4              // Load osInfo.thread.run.next to c6
-                ldd     c1, (c0)
-                mtprs   USP, c1
+                ldd     dp1, (c0)
+                mtprs   USP, dp1
                 popu    c0
                 popu    c1
                 popu    c2
@@ -290,6 +295,8 @@ ContextRestore:
                 popu    c4
                 popu    c5
                 popu    c6
+                addl    dp1, 0x20
+                mtprs   USP, dp1
 
                 movl    a0, ModeThread
                 sta     OldMode, a0
