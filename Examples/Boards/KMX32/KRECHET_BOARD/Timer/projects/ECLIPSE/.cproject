@@ -22,7 +22,7 @@
 							<tool id="ru.kmx.toolchain.as.1320127459" name="KMX Assembler" superClass="ru.kmx.toolchain.as"/>
 							<tool id="ru.kmx.toolchain.ld.993862269" name="KMX Linker" superClass="ru.kmx.toolchain.ld">
 								<option id="ru.kmx.toolchain.linker.c.linkerscript.477756109" name="Linker Script" superClass="ru.kmx.toolchain.linker.c.linkerscript" value="../krechet1.ld" valueType="string"/>
-								<option id="ru.kmx.toolchain.c.link.option.ldflags.1199181072" name="Linker flags" superClass="ru.kmx.toolchain.c.link.option.ldflags" value="-Wl,-Map=${ProjName}.map" valueType="string"/>
+								<option id="ru.kmx.toolchain.c.link.option.ldflags.1199181072" name="Linker flags" superClass="ru.kmx.toolchain.c.link.option.ldflags" value="-Wl,-Map=&quot;${ProjName}.map&quot;" valueType="string"/>
 								<option id="ru.kmx.toolchain.c.link.option.noshared.536262909" name="No shared libraries (-static)" superClass="ru.kmx.toolchain.c.link.option.noshared" value="false" valueType="boolean"/>
 								<option id="ru.kmx.toolchain.c.link.option.nostart.1987869770" name="Do not use standard start files (-nostartfiles)" superClass="ru.kmx.toolchain.c.link.option.nostart" value="true" valueType="boolean"/>
 								<option id="ru.kmx.toolchain.c.link.option.other.945332895" name="Other options (-Xlinker [option])" superClass="ru.kmx.toolchain.c.link.option.other" valueType="stringList">
@@ -38,7 +38,7 @@
 								<option id="gnu.c.compiler.option.debugging.level.1458180842" name="Debug Level" superClass="gnu.c.compiler.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.warnings.extrawarn.1726569020" name="Extra warnings (-Wextra)" superClass="gnu.c.compiler.option.warnings.extrawarn" value="true" valueType="boolean"/>
 								<option id="gnu.c.compiler.option.warnings.pedantic.1599403453" name="Pedantic (-pedantic)" superClass="gnu.c.compiler.option.warnings.pedantic" value="true" valueType="boolean"/>
-								<option id="gnu.c.compiler.option.misc.other.2035638513" name="Other flags" superClass="gnu.c.compiler.option.misc.other" value="-c -fmessage-length=0 -mclr -std=gnu99 -Wa,-adhlns=&quot;$@.lst&quot;" valueType="string"/>
+								<option id="gnu.c.compiler.option.misc.other.2035638513" name="Other flags" superClass="gnu.c.compiler.option.misc.other" value="-c -fmessage-length=0 -mclr -std=c99 -Wa,-adhlns=&quot;$@.lst&quot; -ffunction-sections -fdata-sections" valueType="string"/>
 								<option id="gnu.c.compiler.option.include.paths.183908372" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="../../../../../../../../Include"/>
 									<listOptionValue builtIn="false" value="../../../../../../../../Device/KMX32/Krechet1/Include"/>
