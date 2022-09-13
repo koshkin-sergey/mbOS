@@ -149,7 +149,11 @@ uint32_t svc_0(uint32_t func)
   register uint32_t __r0 __ASM("a0");
   register uint32_t __rf __ASM("a4") = func;
 
-  __ASM volatile ("trap 0" : "=r" (__r0) : "r" (__rf));
+  __ASM volatile ("trap 0\n\t"
+                  "mov  a0, a0"
+                 :"=r"(__r0)
+                 :"r"(__rf)
+  );
 
   return (__r0);
 }
@@ -160,7 +164,8 @@ uint32_t svc_1(uint32_t param1, uint32_t func)
   register uint32_t __r0 __ASM("a0") = param1;
   register uint32_t __rf __ASM("a4") = func;
 
-  __ASM volatile ("trap 0\n"
+  __ASM volatile ("trap 0\n\t"
+                  "mov  a0, a0"
                  :"=r"(__r0)
                  :"r"(__rf),"r"(__r0)
   );
@@ -175,7 +180,8 @@ uint32_t svc_2(uint32_t param1, uint32_t param2, uint32_t func)
   register uint32_t __r1 __ASM("a1") = param2;
   register uint32_t __rf __ASM("a4") = func;
 
-  __ASM volatile ("trap 0\n"
+  __ASM volatile ("trap 0\n\t"
+                  "mov  a0, a0"
                  :"=r"(__r0)
                  :"r"(__rf),"r"(__r0),"r"(__r1)
   );
@@ -191,7 +197,8 @@ uint32_t svc_3(uint32_t param1, uint32_t param2, uint32_t param3, uint32_t func)
   register uint32_t __r2 __ASM("a2") = param3;
   register uint32_t __rf __ASM("a4") = func;
 
-  __ASM volatile ("trap 0\n"
+  __ASM volatile ("trap 0\n\t"
+                  "mov  a0, a0"
                  :"=r"(__r0)
                  :"r"(__rf),"r"(__r0),"r"(__r1),"r"(__r2)
   );
@@ -208,7 +215,8 @@ uint32_t svc_4(uint32_t param1, uint32_t param2, uint32_t param3, uint32_t param
   register uint32_t __r3 __ASM("a3") = param4;
   register uint32_t __rf __ASM("a4") = func;
 
-  __ASM volatile ("trap 0\n"
+  __ASM volatile ("trap 0\n\t"
+                  "mov  a0, a0"
                  :"=r"(__r0)
                  :"r"(__rf),"r"(__r0),"r"(__r1),"r"(__r2),"r"(__r3)
   );
