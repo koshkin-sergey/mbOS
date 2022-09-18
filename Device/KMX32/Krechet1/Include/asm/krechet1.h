@@ -289,6 +289,167 @@ typedef enum {
 #define PWM1_CMP_C_REG            11U
 
 /*------------------------------------------------------------------------------
+ *                                ADSU
+ *----------------------------------------------------------------------------*/
+/********************  Bit definition for ADSU_ClkCon register  ***************/
+#define ADSU_ClkCon_EnRCOsc_Pos   (0U)
+#define ADSU_ClkCon_EnRCOsc_Msk   (0x1UL << ADSU_ClkCon_EnRCOsc_Pos)
+#define ADSU_ClkCon_EnRCOsc                 ADSU_ClkCon_EnRCOsc_Msk
+
+#define ADSU_ClkCon_EnXTOsc_Pos   (1U)
+#define ADSU_ClkCon_EnXTOsc_Msk   (0x1UL << ADSU_ClkCon_EnXTOsc_Pos)
+#define ADSU_ClkCon_EnXTOsc                 ADSU_ClkCon_EnXTOsc_Msk
+
+#define ADSU_ClkCon_EnHRCOsc_Pos  (2U)
+#define ADSU_ClkCon_EnHRCOsc_Msk  (0x1UL << ADSU_ClkCon_EnHRCOsc_Pos)
+#define ADSU_ClkCon_EnHRCOsc                ADSU_ClkCon_EnHRCOsc_Msk
+
+/********************  Bit definition for ADSU_ClkCfg register  ***************/
+#define ADSU_ClkCfg_Osc_Pos       (0U)
+#define ADSU_ClkCfg_Osc_Msk       (0x3UL << ADSU_ClkCfg_Osc_Pos)
+#define ADSU_ClkCfg_Osc_RC        (0x0UL << ADSU_ClkCfg_Osc_Pos)
+#define ADSU_ClkCfg_Osc_XT        (0x1UL << ADSU_ClkCfg_Osc_Pos)
+#define ADSU_ClkCfg_Osc_HRC       (0x2UL << ADSU_ClkCfg_Osc_Pos)
+
+#define ADSU_ClkCfg_DivOsc_Pos    (2U)
+#define ADSU_ClkCfg_DivOsc_Msk    (0x7UL << ADSU_ClkCfg_DivOsc_Pos)
+#define ADSU_ClkCfg_DivOsc_1      (0x0UL << ADSU_ClkCfg_DivOsc_Pos)
+#define ADSU_ClkCfg_DivOsc_2      (0x1UL << ADSU_ClkCfg_DivOsc_Pos)
+#define ADSU_ClkCfg_DivOsc_4      (0x2UL << ADSU_ClkCfg_DivOsc_Pos)
+#define ADSU_ClkCfg_DivOsc_8      (0x3UL << ADSU_ClkCfg_DivOsc_Pos)
+#define ADSU_ClkCfg_DivOsc_16     (0x4UL << ADSU_ClkCfg_DivOsc_Pos)
+
+#define ADSU_ClkCfg_EnCLK_OUT_Pos (5U)
+#define ADSU_ClkCfg_EnCLK_OUT_Msk (0x1UL << ADSU_ClkCfg_EnCLK_OUT_Pos)
+#define ADSU_ClkCfg_EnCLK_OUT               ADSU_ClkCfg_EnCLK_OUT_Msk
+
+/********************  Bit definition for ADSU_Gate register  *****************/
+#define ADSU_Gate_FMCU_Pos        (3U)
+#define ADSU_Gate_FMCU_Msk        (0x1UL << ADSU_Gate_FMCU_Pos)
+#define ADSU_Gate_FMCU                      ADSU_Gate_FMCU_Msk
+
+#define ADSU_Gate_TMR0_Pos        (12U)
+#define ADSU_Gate_TMR0_Msk        (0x1UL << ADSU_Gate_TMR0_Pos)
+#define ADSU_Gate_TMR0                      ADSU_Gate_TMR0_Msk
+
+#define ADSU_Gate_TMR1_Pos        (13U)
+#define ADSU_Gate_TMR1_Msk        (0x1UL << ADSU_Gate_TMR1_Pos)
+#define ADSU_Gate_TMR1                      ADSU_Gate_TMR1_Msk
+
+#define ADSU_Gate_PWM0_Pos        (14U)
+#define ADSU_Gate_PWM0_Msk        (0x1UL << ADSU_Gate_PWM0_Pos)
+#define ADSU_Gate_PWM0                      ADSU_Gate_PWM0_Msk
+
+#define ADSU_Gate_PWM1_Pos        (15U)
+#define ADSU_Gate_PWM1_Msk        (0x1UL << ADSU_Gate_PWM1_Pos)
+#define ADSU_Gate_PWM1                      ADSU_Gate_PWM1_Msk
+
+#define ADSU_Gate_GPIO_Pos        (16U)
+#define ADSU_Gate_GPIO_Msk        (0x1UL << ADSU_Gate_GPIO_Pos)
+#define ADSU_Gate_GPIO                      ADSU_Gate_GPIO_Msk
+
+#define ADSU_Gate_SPI0_Pos        (23U)
+#define ADSU_Gate_SPI0_Msk        (0x1UL << ADSU_Gate_SPI0_Pos)
+#define ADSU_Gate_SPI0                      ADSU_Gate_SPI0_Msk
+
+#define ADSU_Gate_SPI1_Pos        (24U)
+#define ADSU_Gate_SPI1_Msk        (0x1UL << ADSU_Gate_SPI1_Pos)
+#define ADSU_Gate_SPI1                      ADSU_Gate_SPI1_Msk
+
+#define ADSU_Gate_UART0_Pos       (25U)
+#define ADSU_Gate_UART0_Msk       (0x1UL << ADSU_Gate_UART0_Pos)
+#define ADSU_Gate_UART0                     ADSU_Gate_UART0_Msk
+
+#define ADSU_Gate_UART1_Pos       (26U)
+#define ADSU_Gate_UART1_Msk       (0x1UL << ADSU_Gate_UART1_Pos)
+#define ADSU_Gate_UART1                     ADSU_Gate_UART1_Msk
+
+#define ADSU_Gate_I2C0_Pos        (27U)
+#define ADSU_Gate_I2C0_Msk        (0x1UL << ADSU_Gate_I2C0_Pos)
+#define ADSU_Gate_I2C0                      ADSU_Gate_I2C0_Msk
+
+#define ADSU_Gate_I2C1_Pos        (28U)
+#define ADSU_Gate_I2C1_Msk        (0x1UL << ADSU_Gate_I2C1_Pos)
+#define ADSU_Gate_I2C1                      ADSU_Gate_I2C1_Msk
+
+#define ADSU_Gate_UART2_Pos       (29U)
+#define ADSU_Gate_UART2_Msk       (0x1UL << ADSU_Gate_UART2_Pos)
+#define ADSU_Gate_UART2                     ADSU_Gate_UART2_Msk
+
+#define ADSU_Gate_UART3_Pos       (30U)
+#define ADSU_Gate_UART3_Msk       (0x1UL << ADSU_Gate_UART3_Pos)
+#define ADSU_Gate_UART3                     ADSU_Gate_UART3_Msk
+
+#define ADSU_Gate_ChIN_Pos        (31U)
+#define ADSU_Gate_ChIN_Msk        (0x1UL << ADSU_Gate_ChIN_Pos)
+#define ADSU_Gate_ChIN                      ADSU_Gate_ChIN_Msk
+
+/********************  Bit definition for ADSU_WakeCfg register  **************/
+#define ADSU_WakeCfg_Delay_Pos    (0U)
+#define ADSU_WakeCfg_Delay_Msk    (0xFFFFUL << ADSU_WakeCfg_Delay_Pos)
+
+/********************  Bit definition for ADSU_MaxLoad register  **************/
+#define ADSU_MaxLoad_JTAG_Pos     (1U)
+#define ADSU_MaxLoad_JTAG_Msk     (0x1UL << ADSU_MaxLoad_JTAG_Pos)
+#define ADSU_MaxLoad_JTAG                   ADSU_MaxLoad_JTAG_Msk
+
+#define ADSU_MaxLoad_SPI0_Pos     (2U)
+#define ADSU_MaxLoad_SPI0_Msk     (0x1UL << ADSU_MaxLoad_SPI0_Pos)
+#define ADSU_MaxLoad_SPI0                   ADSU_MaxLoad_SPI0_Msk
+
+#define ADSU_MaxLoad_SPI1_Pos     (3U)
+#define ADSU_MaxLoad_SPI1_Msk     (0x1UL << ADSU_MaxLoad_SPI1_Pos)
+#define ADSU_MaxLoad_SPI1                   ADSU_MaxLoad_SPI1_Msk
+
+#define ADSU_MaxLoad_I2C0_Pos     (4U)
+#define ADSU_MaxLoad_I2C0_Msk     (0x1UL << ADSU_MaxLoad_I2C0_Pos)
+#define ADSU_MaxLoad_I2C0                   ADSU_MaxLoad_I2C0_Msk
+
+#define ADSU_MaxLoad_I2C1_Pos     (5U)
+#define ADSU_MaxLoad_I2C1_Msk     (0x1UL << ADSU_MaxLoad_I2C1_Pos)
+#define ADSU_MaxLoad_I2C1                   ADSU_MaxLoad_I2C1_Msk
+
+#define ADSU_MaxLoad_UART0_Pos    (6U)
+#define ADSU_MaxLoad_UART0_Msk    (0x1UL << ADSU_MaxLoad_UART0_Pos)
+#define ADSU_MaxLoad_UART0                  ADSU_MaxLoad_UART0_Msk
+
+#define ADSU_MaxLoad_UART1_Pos    (7U)
+#define ADSU_MaxLoad_UART1_Msk    (0x1UL << ADSU_MaxLoad_UART1_Pos)
+#define ADSU_MaxLoad_UART1                  ADSU_MaxLoad_UART1_Msk
+
+#define ADSU_MaxLoad_UART2_Pos    (8U)
+#define ADSU_MaxLoad_UART2_Msk    (0x1UL << ADSU_MaxLoad_UART2_Pos)
+#define ADSU_MaxLoad_UART2                  ADSU_MaxLoad_UART2_Msk
+
+#define ADSU_MaxLoad_UART3_Pos    (9U)
+#define ADSU_MaxLoad_UART3_Msk    (0x1UL << ADSU_MaxLoad_UART3_Pos)
+#define ADSU_MaxLoad_UART3                  ADSU_MaxLoad_UART3_Msk
+
+#define ADSU_MaxLoad_GP30_Pos     (10U)
+#define ADSU_MaxLoad_GP30_Msk     (0x1UL << ADSU_MaxLoad_GP30_Pos)
+#define ADSU_MaxLoad_GP30                   ADSU_MaxLoad_GP30_Msk
+
+#define ADSU_MaxLoad_GP31_Pos     (11U)
+#define ADSU_MaxLoad_GP31_Msk     (0x1UL << ADSU_MaxLoad_GP31_Pos)
+#define ADSU_MaxLoad_GP31                   ADSU_MaxLoad_GP31_Msk
+
+#define ADSU_MaxLoad_PWM0_Pos     (12U)
+#define ADSU_MaxLoad_PWM0_Msk     (0x1UL << ADSU_MaxLoad_PWM0_Pos)
+#define ADSU_MaxLoad_PWM0                   ADSU_MaxLoad_PWM0_Msk
+
+#define ADSU_MaxLoad_PWM1_Pos     (13U)
+#define ADSU_MaxLoad_PWM1_Msk     (0x1UL << ADSU_MaxLoad_PWM1_Pos)
+#define ADSU_MaxLoad_PWM1                   ADSU_MaxLoad_PWM1_Msk
+
+/********************  Bit definition for ADSU_Trim register  *****************/
+#define ADSU_Trim_Clk_Pos         (12U)
+#define ADSU_Trim_Clk_Msk         (0xFUL << ADSU_Trim_Clk_Pos)
+
+#define ADSU_Trim_VRef_Pos        (24U)
+#define ADSU_Trim_VRef_Msk        (0xFFUL << ADSU_Trim_VRef_Pos)
+
+
+/*------------------------------------------------------------------------------
  *                                TIMER
  *----------------------------------------------------------------------------*/
 /********************  Bit definition for TIM_CFG register  *******************/
