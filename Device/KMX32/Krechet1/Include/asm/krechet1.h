@@ -450,6 +450,113 @@ typedef enum {
 
 
 /*------------------------------------------------------------------------------
+ *                                 I2C
+ *----------------------------------------------------------------------------*/
+/********************  Bit definition for I2C_Cfg register  *******************/
+#define I2C_Cfg_Adr7_Pos          (0U)
+#define I2C_Cfg_Adr7_Msk          (0x7FUL << I2C_Cfg_Adr7_Pos)
+
+#define I2C_Cfg_Adr10_Pos         (7U)
+#define I2C_Cfg_Adr10_Msk         (0x7UL << I2C_Cfg_Adr10_Pos)
+
+#define I2C_Cfg_AMode_Pos         (11U)
+#define I2C_Cfg_AMode_Msk         (0x3UL << I2C_Cfg_AMode_Pos)
+
+#define I2C_Cfg_EnMTS_Pos         (13U)
+#define I2C_Cfg_EnMTS_Msk         (0x1UL << I2C_Cfg_EnMTS_Pos)
+#define I2C_Cfg_EnMTS                       I2C_Cfg_EnMTS_Msk
+
+#define I2C_Cfg_On_Pos            (15U)
+#define I2C_Cfg_On_Msk            (0x1UL << I2C_Cfg_On_Pos)
+#define I2C_Cfg_On                          I2C_Cfg_On_Msk
+
+#define I2C_Cfg_SCP_Pos           (16U)
+#define I2C_Cfg_SCP_Msk           (0xFFFUL << I2C_Cfg_SCP_Pos)
+
+#define I2C_Cfg_EnSRd_Pos         (28U)
+#define I2C_Cfg_EnSRd_Msk         (0x1UL << I2C_Cfg_EnSRd_Pos)
+#define I2C_Cfg_EnSRd                       I2C_Cfg_EnSRd_Msk
+
+#define I2C_Cfg_EnSWr_Pos         (29U)
+#define I2C_Cfg_EnSWr_Msk         (0x1UL << I2C_Cfg_EnSWr_Pos)
+#define I2C_Cfg_EnSWr                       I2C_Cfg_EnSWr_Msk
+
+#define I2C_Cfg_PullUp_Pos        (31U)
+#define I2C_Cfg_PullUp_Msk        (0x1UL << I2C_Cfg_PullUp_Pos)
+#define I2C_Cfg_PullUp                      I2C_Cfg_PullUp_Msk
+
+/********************  Bit definition for I2C_Int register  *******************/
+#define I2C_Cfg_ArbErrIE_Pos      (0U)
+#define I2C_Cfg_ArbErrIE_Msk      (0x1UL << I2C_Cfg_ArbErrIE_Pos)
+#define I2C_Cfg_ArbErrIE                    I2C_Cfg_ArbErrIE_Msk
+
+#define I2C_Cfg_DatErrIE_Pos      (1U)
+#define I2C_Cfg_DatErrIE_Msk      (0x1UL << I2C_Cfg_DatErrIE_Pos)
+#define I2C_Cfg_DatErrIE                    I2C_Cfg_DatErrIE_Msk
+
+#define I2C_Cfg_AdrErrIE_Pos      (2U)
+#define I2C_Cfg_AdrErrIE_Msk      (0x1UL << I2C_Cfg_AdrErrIE_Pos)
+#define I2C_Cfg_AdrErrIE                    I2C_Cfg_AdrErrIE_Msk
+
+#define I2C_Cfg_RxIE_Pos          (3U)
+#define I2C_Cfg_RxIE_Msk          (0x1UL << I2C_Cfg_RxIE_Pos)
+#define I2C_Cfg_RxIE                        I2C_Cfg_RxIE_Msk
+
+#define I2C_Cfg_TxIE_Pos          (4U)
+#define I2C_Cfg_TxIE_Msk          (0x1UL << I2C_Cfg_TxIE_Pos)
+#define I2C_Cfg_TxIE                        I2C_Cfg_TxIE_Msk
+
+#define I2C_Cfg_RxOvfIE_Pos       (5U)
+#define I2C_Cfg_RxOvfIE_Msk       (0x1UL << I2C_Cfg_RxOvfIE_Pos)
+#define I2C_Cfg_RxOvfIE                     I2C_Cfg_RxOvfIE_Msk
+
+#define I2C_Cfg_GenCIE_Pos        (6U)
+#define I2C_Cfg_GenCIE_Msk        (0x1UL << I2C_Cfg_GenCIE_Pos)
+#define I2C_Cfg_GenCIE                      I2C_Cfg_GenCIE_Msk
+
+#define I2C_Cfg_StBytIE_Pos       (7U)
+#define I2C_Cfg_StBytIE_Msk       (0x1UL << I2C_Cfg_StBytIE_Pos)
+#define I2C_Cfg_StBytIE                     I2C_Cfg_StBytIE_Msk
+
+#define I2C_Cfg_CBusIE_Pos        (8U)
+#define I2C_Cfg_CBusIE_Msk        (0x1UL << I2C_Cfg_CBusIE_Pos)
+#define I2C_Cfg_CBusIE                      I2C_Cfg_CBusIE_Msk
+
+#define I2C_Cfg_HSIE_Pos          (9U)
+#define I2C_Cfg_HSIE_Msk          (0x1UL << I2C_Cfg_HSIE_Pos)
+#define I2C_Cfg_HSIE                        I2C_Cfg_HSIE_Msk
+
+#define I2C_Cfg_SlvAdrIE_Pos      (10U)
+#define I2C_Cfg_SlvAdrIE_Msk      (0x1UL << I2C_Cfg_SlvAdrIE_Pos)
+#define I2C_Cfg_SlvAdrIE                    I2C_Cfg_SlvAdrIE_Msk
+
+#define I2C_Cfg_Master_Pos        (11U)
+#define I2C_Cfg_Master_Msk        (0x1UL << I2C_Cfg_Master_Pos)
+#define I2C_Cfg_Master                      I2C_Cfg_Master_Msk
+
+#define I2C_Cfg_DMARqEn_Pos       (12U)
+#define I2C_Cfg_DMARqEn_Msk       (0x1UL << I2C_Cfg_DMARqEn_Pos)
+#define I2C_Cfg_DMARqEn                     I2C_Cfg_DMARqEn_Msk
+
+#define I2C_Cfg_TxDMARq_Pos       (13U)
+#define I2C_Cfg_TxDMARq_Msk       (0x1UL << I2C_Cfg_TxDMARq_Pos)
+#define I2C_Cfg_TxDMARq                     I2C_Cfg_TxDMARq_Msk
+
+/********************  Bit definition for I2C_FIFO register  ******************/
+#define I2C_FIFO_RxCntLim_Pos     (0U)
+#define I2C_FIFO_RxCntLim_Msk     (0xFUL << I2C_FIFO_RxCntLim_Pos)
+
+#define I2C_FIFO_TxCntLim_Pos     (4U)
+#define I2C_FIFO_TxCntLim_Msk     (0xFUL << I2C_FIFO_TxCntLim_Pos)
+
+/********************  Bit definition for I2C_Flags register  *****************/
+/********************  Bit definition for I2C_Con register  *******************/
+/********************  Bit definition for I2C_Stat register  ******************/
+/********************  Bit definition for I2C_TDat register  ******************/
+/********************  Bit definition for I2C_RDat register  *******************/
+
+
+/*------------------------------------------------------------------------------
  *                                TIMER
  *----------------------------------------------------------------------------*/
 /********************  Bit definition for TIM_CFG register  *******************/
