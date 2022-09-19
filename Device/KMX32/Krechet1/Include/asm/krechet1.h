@@ -550,10 +550,172 @@ typedef enum {
 #define I2C_FIFO_TxCntLim_Msk     (0xFUL << I2C_FIFO_TxCntLim_Pos)
 
 /********************  Bit definition for I2C_Flags register  *****************/
+#define I2C_Flags_Attentn_Pos     (0U)
+#define I2C_Flags_Attentn_Msk     (0x1UL << I2C_Flags_Attentn_Pos)
+#define I2C_Flags_Attentn                   I2C_Flags_Attentn_Msk
+
+#define I2C_Flags_StartErrIF_Pos  (1U)
+#define I2C_Flags_StartErrIF_Msk  (0x1UL << I2C_Flags_StartErrIF_Pos)
+#define I2C_Flags_StartErrIF                I2C_Flags_StartErrIF_Msk
+
+#define I2C_Flags_SDAErrIF_Pos    (2U)
+#define I2C_Flags_SDAErrIF_Msk    (0x1UL << I2C_Flags_SDAErrIF_Pos)
+#define I2C_Flags_SDAErrIF                  I2C_Flags_SDAErrIF_Msk
+
+#define I2C_Flags_OddStopIF_Pos   (3U)
+#define I2C_Flags_OddStopIF_Msk   (0x1UL << I2C_Flags_OddStopIF_Pos)
+#define I2C_Flags_OddStopIF                 I2C_Flags_OddStopIF_Msk
+
+#define I2C_Flags_StopErrIF_Pos   (4U)
+#define I2C_Flags_StopErrIF_Msk   (0x1UL << I2C_Flags_StopErrIF_Pos)
+#define I2C_Flags_StopErrIF                 I2C_Flags_StopErrIF_Msk
+
+#define I2C_Flags_DatErrIF_Pos    (5U)
+#define I2C_Flags_DatErrIF_Msk    (0x1UL << I2C_Flags_DatErrIF_Pos)
+#define I2C_Flags_DatErrIF                  I2C_Flags_DatErrIF_Msk
+
+#define I2C_Flags_AdrErrIF_Pos    (6U)
+#define I2C_Flags_AdrErrIF_Msk    (0x1UL << I2C_Flags_AdrErrIF_Pos)
+#define I2C_Flags_AdrErrIF                  I2C_Flags_AdrErrIF_Msk
+
+#define I2C_Flags_RxIF_Pos        (7U)
+#define I2C_Flags_RxIF_Msk        (0x1UL << I2C_Flags_RxIF_Pos)
+#define I2C_Flags_RxIF                      I2C_Flags_RxIF_Msk
+
+#define I2C_Flags_TxIF_Pos        (8U)
+#define I2C_Flags_TxIF_Msk        (0x1UL << I2C_Flags_TxIF_Pos)
+#define I2C_Flags_TxIF                      I2C_Flags_TxIF_Msk
+
+#define I2C_Flags_RxOvfIF_Pos     (9U)
+#define I2C_Flags_RxOvfIF_Msk     (0x1UL << I2C_Flags_RxOvfIF_Pos)
+#define I2C_Flags_RxOvfIF                   I2C_Flags_RxOvfIF_Msk
+
+#define I2C_Flags_GenCIF_Pos      (10U)
+#define I2C_Flags_GenCIF_Msk      (0x1UL << I2C_Flags_GenCIF_Pos)
+#define I2C_Flags_GenCIF                    I2C_Flags_GenCIF_Msk
+
+#define I2C_Flags_StBytIF_Pos     (11U)
+#define I2C_Flags_StBytIF_Msk     (0x1UL << I2C_Flags_StBytIF_Pos)
+#define I2C_Flags_StBytIF                   I2C_Flags_StBytIF_Msk
+
+#define I2C_Flags_CBusIF_Pos      (12U)
+#define I2C_Flags_CBusIF_Msk      (0x1UL << I2C_Flags_CBusIF_Pos)
+#define I2C_Flags_CBusIF                    I2C_Flags_CBusIF_Msk
+
+#define I2C_Flags_HSIF_Pos        (13U)
+#define I2C_Flags_HSIF_Msk        (0x1UL << I2C_Flags_HSIF_Pos)
+#define I2C_Flags_HSIF                      I2C_Flags_HSIF_Msk
+
+#define I2C_Flags_SlvAdrIF_Pos    (14U)
+#define I2C_Flags_SlvAdrIF_Msk    (0x1UL << I2C_Flags_SlvAdrIF_Pos)
+#define I2C_Flags_SlvAdrIF                  I2C_Flags_SlvAdrIF_Msk
+
+#define I2C_Flags_SlvNoAckIF_Pos  (15U)
+#define I2C_Flags_SlvNoAckIF_Msk  (0x1UL << I2C_Flags_SlvNoAckIF_Pos)
+#define I2C_Flags_SlvNoAckIF                I2C_Flags_SlvNoAckIF_Msk
+
 /********************  Bit definition for I2C_Con register  *******************/
+#define I2C_Con_StartTx_Pos       (0U)
+#define I2C_Con_StartTx_Msk       (0x1UL << I2C_Con_StartTx_Pos)
+#define I2C_Con_StartTx                     I2C_Con_StartTx_Msk
+
+#define I2C_Con_StartErrIF_Pos    (1U)
+#define I2C_Con_StartErrIF_Msk    (0x1UL << I2C_Con_StartErrIF_Pos)
+#define I2C_Con_StartErrIF                  I2C_Con_StartErrIF_Msk
+
+#define I2C_Con_SDAErrIF_Pos      (2U)
+#define I2C_Con_SDAErrIF_Msk      (0x1UL << I2C_Con_SDAErrIF_Pos)
+#define I2C_Con_SDAErrIF                    I2C_Con_SDAErrIF_Msk
+
+#define I2C_Con_OddStopIF_Pos     (3U)
+#define I2C_Con_OddStopIF_Msk     (0x1UL << I2C_Con_OddStopIF_Pos)
+#define I2C_Con_OddStopIF                   I2C_Con_OddStopIF_Msk
+
+#define I2C_Con_StopErrIF_Pos     (4U)
+#define I2C_Con_StopErrIF_Msk     (0x1UL << I2C_Con_StopErrIF_Pos)
+#define I2C_Con_StopErrIF                   I2C_Con_StopErrIF_Msk
+
+#define I2C_Con_DatErrIF_Pos      (5U)
+#define I2C_Con_DatErrIF_Msk      (0x1UL << I2C_Con_DatErrIF_Pos)
+#define I2C_Con_DatErrIF                    I2C_Con_DatErrIF_Msk
+
+#define I2C_Con_AdrErrIF_Pos      (6U)
+#define I2C_Con_AdrErrIF_Msk      (0x1UL << I2C_Con_AdrErrIF_Pos)
+#define I2C_Con_AdrErrIF                    I2C_Con_AdrErrIF_Msk
+
+#define I2C_Con_RxOvfIF_Pos       (9U)
+#define I2C_Con_RxOvfIF_Msk       (0x1UL << I2C_Con_RxOvfIF_Pos)
+#define I2C_Con_RxOvfIF                     I2C_Con_RxOvfIF_Msk
+
+#define I2C_Con_GenCIF_Pos        (10U)
+#define I2C_Con_GenCIF_Msk        (0x1UL << I2C_Con_GenCIF_Pos)
+#define I2C_Con_GenCIF                      I2C_Con_GenCIF_Msk
+
+#define I2C_Con_StBytIF_Pos       (11U)
+#define I2C_Con_StBytIF_Msk       (0x1UL << I2C_Con_StBytIF_Pos)
+#define I2C_Con_StBytIF                     I2C_Con_StBytIF_Msk
+
+#define I2C_Con_CBusIF_Pos        (12U)
+#define I2C_Con_CBusIF_Msk        (0x1UL << I2C_Con_CBusIF_Pos)
+#define I2C_Con_CBusIF                      I2C_Con_CBusIF_Msk
+
+#define I2C_Con_HSIF_Pos          (13U)
+#define I2C_Con_HSIF_Msk          (0x1UL << I2C_Con_HSIF_Pos)
+#define I2C_Con_HSIF                        I2C_Con_HSIF_Msk
+
+#define I2C_Con_SlvAdrIF_Pos      (14U)
+#define I2C_Con_SlvAdrIF_Msk      (0x1UL << I2C_Con_SlvAdrIF_Pos)
+#define I2C_Con_SlvAdrIF                    I2C_Con_SlvAdrIF_Msk
+
+#define I2C_Con_SlvNoAckIF_Pos    (15U)
+#define I2C_Con_SlvNoAckIF_Msk    (0x1UL << I2C_Con_SlvNoAckIF_Pos)
+#define I2C_Con_SlvNoAckIF                  I2C_Con_SlvNoAckIF_Msk
+
 /********************  Bit definition for I2C_Stat register  ******************/
+#define I2C_Stat_Slave_Pos        (0U)
+#define I2C_Stat_Slave_Msk        (0x1UL << I2C_Stat_Slave_Pos)
+#define I2C_Stat_Slave                      I2C_Stat_Slave_Msk
+
+#define I2C_Stat_ReadOp_Pos       (1U)
+#define I2C_Stat_ReadOp_Msk       (0x1UL << I2C_Stat_ReadOp_Pos)
+#define I2C_Stat_ReadOp                     I2C_Stat_ReadOp_Msk
+
+#define I2C_Stat_TxNow_Pos        (2U)
+#define I2C_Stat_TxNow_Msk        (0x1UL << I2C_Stat_TxNow_Pos)
+#define I2C_Stat_TxNow                      I2C_Stat_TxNow_Msk
+
+#define I2C_Stat_Host_Pos         (3U)
+#define I2C_Stat_Host_Msk         (0x1UL << I2C_Stat_Host_Pos)
+#define I2C_Stat_Host                       I2C_Stat_Host_Msk
+
+#define I2C_Stat_Busy_Pos         (4U)
+#define I2C_Stat_Busy_Msk         (0x1UL << I2C_Stat_Busy_Pos)
+#define I2C_Stat_Busy                       I2C_Stat_Busy_Msk
+
+#define I2C_Stat_RxCnt_Pos        (8U)
+#define I2C_Stat_RxCnt_Msk        (0xFUL << I2C_Stat_RxCnt_Pos)
+
+#define I2C_Stat_TxCnt_Pos        (12U)
+#define I2C_Stat_TxCnt_Msk        (0xFUL << I2C_Stat_TxCnt_Pos)
+
 /********************  Bit definition for I2C_TDat register  ******************/
-/********************  Bit definition for I2C_RDat register  *******************/
+#define I2C_TDat_Data_Pos         (0U)
+#define I2C_TDat_Data_Msk         (0xFFUL << I2C_TDat_Data_Pos)
+
+#define I2C_TDat_NoAck_Pos        (8U)
+#define I2C_TDat_NoAck_Msk        (0x1UL << I2C_TDat_NoAck_Pos)
+#define I2C_TDat_NoAck                      I2C_TDat_NoAck_Msk
+
+#define I2C_TDat_Cond_Pos         (9U)
+#define I2C_TDat_Cond_Msk         (0x3UL << I2C_TDat_Cond_Pos)
+
+/********************  Bit definition for I2C_RDat register  ******************/
+#define I2C_RDat_Data_Pos         (0U)
+#define I2C_RDat_Data_Msk         (0xFFUL << I2C_RDat_Data_Pos)
+
+#define I2C_RDat_NoAck_Pos        (8U)
+#define I2C_RDat_NoAck_Msk        (0x1UL << I2C_RDat_NoAck_Pos)
+#define I2C_RDat_NoAck                      I2C_RDat_NoAck_Msk
 
 
 /*------------------------------------------------------------------------------
