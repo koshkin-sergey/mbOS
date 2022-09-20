@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2021 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2017-2022 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -52,7 +52,7 @@ SVC_Number:
         LDMIA     R0,{R0-R3}            // Read R0-R3 from stack
         BLX       R7                    // Call service function
         POP       {R2,R3}               // Restore SP and EXC_RETURN
-        STMIA     R2!,{R0-R1}           // Store return values
+        STR       R0,[R2]               // Store return values
         MOV       LR,R3                 // Set EXC_RETURN
 
 SVC_Context:
@@ -113,7 +113,7 @@ SVC_Exit:
 PendSV_Handler:
 
         PUSH     {R0,LR}                // Save EXC_RETURN
-        BL       osPendSV_Handler       // Call osRtxPendSV_Handler
+        BL       osPendSV_Handler       // Call osPendSV_Handler
         POP      {R0,R1}                // Restore EXC_RETURN
         MOV      LR,R1                  // Set EXC_RETURN
         B        SVC_Context

@@ -23,27 +23,54 @@
 #include "Driver/GPIO_ADUC7023.h"
 #include "Kernel/kernel.h"
 
+/*******************************************************************************
+ *  defines and macros (scope: module-local)
+ ******************************************************************************/
+
 #define TIMEOUT                       (250UL)
 #define THREAD_STACK_SIZE             (256U)
 
-static osThreadId_t         threadA;
-static osThread_t           threadA_cb;
-static uint64_t             threadA_stack[THREAD_STACK_SIZE/8U];
-static const osThreadAttr_t threadA_attr = {
+/*******************************************************************************
+ *  global variable definitions (scope: module-local)
+ ******************************************************************************/
+
+static osThreadId_t init_id;
+static osThread_t   init_cb;
+static uint64_t     init_stack[THREAD_STACK_SIZE/8U];
+static const osThreadAttr_t init_attr = {
     .name       = NULL,
     .attr_bits  = 0U,
-    .cb_mem     = &threadA_cb,
-    .cb_size    = sizeof(threadA_cb),
-    .stack_mem  = &threadA_stack[0],
-    .stack_size = sizeof(threadA_stack),
+    .cb_mem     = &init_cb,
+    .cb_size    = sizeof(init_cb),
+    .stack_mem  = &init_stack[0],
+    .stack_size = sizeof(init_stack),
     .priority   = osPriorityNormal,
 };
 
-__NO_RETURN
-static void threadA_func(void *param)
-{
-  (void) param;
+static osTimerId_t         timer1;
+static osTimer_t           timer1_cb;
+static const osTimerAttr_t timer1_attr = {
+    .name      = NULL,
+    .attr_bits = 0U,
+    .cb_mem    = &timer1_cb,
+    .cb_size   = sizeof(timer1_cb)
+};
 
+static osTimerId_t         timer2;
+static osTimer_t           timer2_cb;
+static const osTimerAttr_t timer2_attr = {
+    .name      = NULL,
+    .attr_bits = 0U,
+    .cb_mem    = &timer2_cb,
+    .cb_size   = sizeof(timer2_cb)
+};
+
+/*******************************************************************************
+ *  function implementations (scope: module-local)
+ ******************************************************************************/
+
+static void GPIO_Init(void)
+{
   const GPIO_PIN_CFG_t pin_cfg = {
     .func      = GPIO_PIN_FUNC_0,
     .mode      = GPIO_MODE_OUTPUT,
@@ -52,11 +79,30 @@ static void threadA_func(void *param)
   };
 
   DRIVER_GPIO0.PinConfig(GPIO_PIN_7, &pin_cfg);
+}
 
-  for (;;) {
-    DRIVER_GPIO0.PinToggle(GPIO_PIN_7);
-    osDelay(500);
-  }
+static void init_proc(void *param)
+{
+  (void) param;
+
+  GPIO_Init();
+
+  osTimerStart(timer1, TIMEOUT);
+  osTimerStart(timer2, TIMEOUT / 4U);
+}
+
+static void timer1_func(void *argument)
+{
+  (void) argument;
+
+  DRIVER_GPIO0.PinWrite(GPIO_PIN_7, GPIO_PIN_OUT_LOW);
+}
+
+static void timer2_func(void *argument)
+{
+  (void) argument;
+
+  DRIVER_GPIO0.PinWrite(GPIO_PIN_7, GPIO_PIN_OUT_HIGH);
 }
 
 int main(void)
@@ -67,9 +113,19 @@ int main(void)
 
   status = osKernelInitialize();
   if (status == osOK) {
-    threadA = osThreadNew(threadA_func, NULL, &threadA_attr);
-    if (threadA == NULL) {
-      goto error;
+    init_id = osThreadNew(init_proc, NULL, &init_attr);
+    if (init_id == NULL) {
+        goto error;
+    }
+
+    timer1 = osTimerNew(timer1_func, osTimerPeriodic, NULL, &timer1_attr);
+    if (timer1 == NULL) {
+        goto error;
+    }
+
+    timer2 = osTimerNew(timer2_func, osTimerPeriodic, NULL, &timer2_attr);
+    if (timer2 == NULL) {
+        goto error;
     }
 
     /* Start RTOS */

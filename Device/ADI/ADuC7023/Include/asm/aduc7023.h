@@ -25,7 +25,7 @@
 #endif /* __cplusplus */
 
 #include <stdint.h>
-#include "CMSIS/Core_ARM/core_arm.h"
+#include "CMSIS/Core/Arm/core_arm.h"
 #include "system_aduc7023.h"
 
 /*------------------------------------------------------------------------------
@@ -1142,6 +1142,136 @@ typedef struct PLA {
 } PLA_t;
 
 /*------------------------------------------------------------------------------
+ *                          PULSE-WIDTH MODULATOR
+ *----------------------------------------------------------------------------*/
+
+/**
+ * @brief PULSE-WIDTH MODULATOR (PWM)
+ */
+typedef struct PWM {
+  __IOM uint32_t PWMCON1;   // PWM Control Register 1
+  __IOM uint32_t PWM0COM0;  // Compare Register 0 for PWM Output 0 and PWM Output 1
+  __IOM uint32_t PWM0COM1;  // Compare Register 1 for PWM Output 0 and PWM Output 1
+  __IOM uint32_t PWM0COM2;  // Compare Register 2 for PWM Output 0 and PWM Output 1
+  __IOM uint32_t PWM0LEN;   // Frequency control for PWM Output 0 and PWM Output 1
+  __IOM uint32_t PWM1COM0;  // Compare Register 0 for PWM Output 2 and PWM Output 3
+  __IOM uint32_t PWM1COM1;  // Compare Register 1 for PWM Output 2 and PWM Output 3
+  __IOM uint32_t PWM1COM2;  // Compare Register 2 for PWM Output 2 and PWM Output 3
+  __IOM uint32_t PWM1LEN;   // Frequency control for PWM Output 2 and PWM Output 3
+  __IOM uint32_t PWM2COM0;  // Compare Register 0 for PWM Output 4
+  __IOM uint32_t PWM2COM1;  // Compare Register 1 for PWM Output 4
+  RESERVED(0, uint32_t);
+  __IOM uint32_t PWM2LEN;   // Frequency control for PWM Output 4
+  RESERVED(1, uint32_t);
+  __OM  uint32_t PWMCLRI;   // PWM interrupt clear
+} PWM_t;
+
+/*******************  Bit definition for PWMCON1 register  ********************/
+#define PWMCON1_PWMEN_Pos         (0U)
+#define PWMCON1_PWMEN_Msk         (0x1UL << PWMCON1_PWMEN_Pos)
+#define PWMCON1_PWMEN             PWMCON1_PWMEN_Msk
+
+#define PWMCON1_HMODE_Pos         (1U)
+#define PWMCON1_HMODE_Msk         (0x1UL << PWMCON1_HMODE_Pos)
+#define PWMCON1_HMODE             PWMCON1_HMODE_Msk
+
+#define PWMCON1_DIR_Pos           (2U)
+#define PWMCON1_DIR_Msk           (0x1UL << PWMCON1_DIR_Pos)
+#define PWMCON1_DIR               PWMCON1_DIR_Msk
+
+#define PWMCON1_LCOMP_Pos         (3U)
+#define PWMCON1_LCOMP_Msk         (0x1UL << PWMCON1_LCOMP_Pos)
+#define PWMCON1_LCOMP             PWMCON1_LCOMP_Msk
+
+#define PWMCON1_HOFF_Pos          (4U)
+#define PWMCON1_HOFF_Msk          (0x1UL << PWMCON1_HOFF_Pos)
+#define PWMCON1_HOFF              PWMCON1_HOFF_Msk
+
+#define PWMCON1_POINV_Pos         (5U)
+#define PWMCON1_POINV_Msk         (0x1UL << PWMCON1_POINV_Pos)
+#define PWMCON1_POINV             PWMCON1_POINV_Msk
+
+#define PWMCON1_PWMCP_Pos         (6U)
+#define PWMCON1_PWMCP_Msk         (0x7UL << PWMCON1_PWMCP_Pos)
+#define PWMCON1_PWMCP_DIV_2       (0x0UL << PWMCON1_PWMCP_Pos)
+#define PWMCON1_PWMCP_DIV_4       (0x1UL << PWMCON1_PWMCP_Pos)
+#define PWMCON1_PWMCP_DIV_8       (0x2UL << PWMCON1_PWMCP_Pos)
+#define PWMCON1_PWMCP_DIV_16      (0x3UL << PWMCON1_PWMCP_Pos)
+#define PWMCON1_PWMCP_DIV_32      (0x4UL << PWMCON1_PWMCP_Pos)
+#define PWMCON1_PWMCP_DIV_64      (0x5UL << PWMCON1_PWMCP_Pos)
+#define PWMCON1_PWMCP_DIV_128     (0x6UL << PWMCON1_PWMCP_Pos)
+#define PWMCON1_PWMCP_DIV_256     (0x7UL << PWMCON1_PWMCP_Pos)
+
+#define PWMCON1_ENA_Pos           (9U)
+#define PWMCON1_ENA_Msk           (0x1UL << PWMCON1_ENA_Pos)
+#define PWMCON1_ENA               PWMCON1_ENA_Msk
+
+#define PWMCON1_PWMTRIP_Pos       (10U)
+#define PWMCON1_PWMTRIP_Msk       (0x1UL << PWMCON1_PWMTRIP_Pos)
+#define PWMCON1_PWMTRIP           PWMCON1_PWMTRIP_Msk
+
+#define PWMCON1_PWM1INV_Pos       (11U)
+#define PWMCON1_PWM1INV_Msk       (0x1UL << PWMCON1_PWM1INV_Pos)
+#define PWMCON1_PWM1INV           PWMCON1_PWM1INV_Msk
+
+#define PWMCON1_PWM3INV_Pos       (12U)
+#define PWMCON1_PWM3INV_Msk       (0x1UL << PWMCON1_PWM3INV_Pos)
+#define PWMCON1_PWM3INV           PWMCON1_PWM3INV_Msk
+
+#define PWMCON1_SYNC_Pos          (14U)
+#define PWMCON1_SYNC_Msk          (0x1UL << PWMCON1_SYNC_Pos)
+#define PWMCON1_SYNC              PWMCON1_SYNC_Msk
+
+/*******************  Bit definition for PWM0COM0 register  *******************/
+#define PWM0COM0_VAL_Pos          (0U)
+#define PWM0COM0_VAL_Msk          (0xFFFFUL << PWM0COM0_VAL_Pos)
+
+/*******************  Bit definition for PWM0COM1 register  *******************/
+#define PWM0COM1_VAL_Pos          (0U)
+#define PWM0COM1_VAL_Msk          (0xFFFFUL << PWM0COM1_VAL_Pos)
+
+/*******************  Bit definition for PWM0COM2 register  *******************/
+#define PWM0COM2_VAL_Pos          (0U)
+#define PWM0COM2_VAL_Msk          (0xFFFFUL << PWM0COM2_VAL_Pos)
+
+/*******************  Bit definition for PWM0LEN register  ********************/
+#define PWM0LEN_VAL_Pos           (0U)
+#define PWM0LEN_VAL_Msk           (0xFFFFUL << PWM0LEN_VAL_Pos)
+
+/*******************  Bit definition for PWM1COM0 register  *******************/
+#define PWM1COM0_VAL_Pos          (0U)
+#define PWM1COM0_VAL_Msk          (0xFFFFUL << PWM1COM0_VAL_Pos)
+
+/*******************  Bit definition for PWM1COM1 register  *******************/
+#define PWM1COM1_VAL_Pos          (0U)
+#define PWM1COM1_VAL_Msk          (0xFFFFUL << PWM1COM1_VAL_Pos)
+
+/*******************  Bit definition for PWM1COM2 register  *******************/
+#define PWM1COM2_VAL_Pos          (0U)
+#define PWM1COM2_VAL_Msk          (0xFFFFUL << PWM1COM2_VAL_Pos)
+
+/*******************  Bit definition for PWM1LEN register  ********************/
+#define PWM1LEN_VAL_Pos           (0U)
+#define PWM1LEN_VAL_Msk           (0xFFFFUL << PWM1LEN_VAL_Pos)
+
+/*******************  Bit definition for PWM2COM0 register  *******************/
+#define PWM2COM0_VAL_Pos          (0U)
+#define PWM2COM0_VAL_Msk          (0xFFFFUL << PWM2COM0_VAL_Pos)
+
+/*******************  Bit definition for PWM2COM1 register  *******************/
+#define PWM2COM1_VAL_Pos          (0U)
+#define PWM2COM1_VAL_Msk          (0xFFFFUL << PWM2COM1_VAL_Pos)
+
+/*******************  Bit definition for PWM2LEN register  ********************/
+#define PWM2LEN_VAL_Pos           (0U)
+#define PWM2LEN_VAL_Msk           (0xFFFFUL << PWM2LEN_VAL_Pos)
+
+/*******************  Bit definition for PWMCLRI register  ********************/
+#define PWMCLRI_VAL_Pos           (0U)
+#define PWMCLRI_VAL_Msk           (0xFFFFUL << PWMCLRI_VAL_Pos)
+
+
+/*------------------------------------------------------------------------------
  *                          FLASH CONTROL
  *----------------------------------------------------------------------------*/
 /**
@@ -1237,6 +1367,7 @@ typedef struct FLASH_s {
 #define I2C1_BASE             0xFFFF0900UL  /*!< I2C1 Base Address            */
 #define SPI_BASE              0xFFFF0A00UL  /*!< SPI Base Address             */
 #define PLA_BASE              0xFFFF0B00UL  /*!< PLA Base Address             */
+#define PWM_BASE              0xFFFF0F80UL  /*!< PWM Base Address             */
 #define FLASH_CTL_BASE        0xFFFFF800UL  /*!< FLASH Address Base           */
 
 #define IRQ                   ((IRQ_t *)        IRQ_BASE)
@@ -1256,6 +1387,7 @@ typedef struct FLASH_s {
 #define I2C0                  ((I2C_t *)        I2C0_BASE)
 #define I2C1                  ((I2C_t *)        I2C1_BASE)
 #define PLA                   ((PLA_t *)        PLA_BASE)
+#define PWM                   ((PWM_t *)        PWM_BASE)
 #define FLASH                 ((FLASH_t *)      FLASH_CTL_BASE)
 
 #define WRITE_REG(REG, VAL)   ((REG) = (VAL))

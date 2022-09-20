@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2021-2022 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -25,7 +25,7 @@
  ******************************************************************************/
 
 #include <stdbool.h>
-#include "CMSIS/Core/cmsis_compiler.h"
+#include "CMSIS/Core/Cortex/cmsis_compiler.h"
 
 /*******************************************************************************
  *  defines and macros
@@ -194,8 +194,6 @@ typedef struct
 
 #define SysTick_CALIB_TENMS_Pos             0U                                            /*!< SysTick CALIB: TENMS Position */
 #define SysTick_CALIB_TENMS_Msk            (0xFFFFFFUL /*<< SysTick_CALIB_TENMS_Pos*/)    /*!< SysTick CALIB: TENMS Mask */
-
-#define SysTick_IRQn                       (-1)
 
 /*******************************************************************************
  *  exported functions

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2021 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2017-2022 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -83,6 +83,10 @@ typedef struct StackAttr_s {
        (defined(__ARM_ARCH_5T__)      && (__ARM_ARCH_5T__      != 0)))
 
 #include "arch_arm.h"
+
+#elif (defined(__KMX32__) && (__KMX32__ != 0))
+
+#include "arch_kmx32.h"
 
 #else
   #error Unknown target.

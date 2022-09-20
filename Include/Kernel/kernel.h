@@ -60,6 +60,9 @@ extern "C"
   #pragma clang diagnostic push
   #pragma clang diagnostic ignored "-Wc11-extensions"
   #pragma clang diagnostic ignored "-Wreserved-id-macro"
+#elif defined (__KMX32__)
+  #pragma GCC diagnostic push
+  #pragma GCC diagnostic ignored "-pedantic"
 #elif defined (__GNUC__)
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wpedantic"
@@ -1318,6 +1321,8 @@ osStatus_t osMutexDelete(osMutexId_t mutex_id);
   /* leave anonymous unions enabled */
 #elif (defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050))
   #pragma clang diagnostic pop
+#elif defined (__KMX32__)
+  #pragma GCC diagnostic pop
 #elif defined (__GNUC__)
   #pragma GCC diagnostic pop
 #elif defined (__TMS470__)

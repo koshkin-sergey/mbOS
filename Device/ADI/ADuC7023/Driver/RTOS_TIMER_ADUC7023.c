@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2021-2022 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -20,7 +20,6 @@
 #include "Kernel/tick.h"
 #include "Kernel/irq.h"
 #include "asm/aduc7023.h"
-#include "asm/system_aduc7023.h"
 
 #define RTIM_IRQ_PRIORITY           (uint32_t)IRQ_PriorityLow
 
@@ -81,20 +80,29 @@ void osTickDisable(void)
 }
 
 /**
+ * @brief       Enable generation of RTOS Kernel Tick interrupts
+ *              without changing the operating mode of the OS Tick timer
+ */
+void osTickEnableIRQ(void)
+{
+  IRQ_Enable(RTOS_TIMER_IRQn);
+}
+
+/**
+ * @brief       Disable generation of RTOS Kernel Tick interrupts
+ *              without changing the operating mode of the OS Tick timer
+ */
+void osTickDisableIRQ(void)
+{
+  IRQ_Disable(RTOS_TIMER_IRQn);
+}
+
+/**
  * @brief       Acknowledge execution of OS Tick timer interrupt
  */
 void osTickAcknowledgeIRQ(void)
 {
   RTOS_TIMER->CLRI = 0U;
-}
-
-/**
- * @brief       Get OS Tick timer IRQ number
- * @return      OS Tick IRQ number
- */
-int32_t osTickGetIRQn(void)
-{
-  return (RTOS_TIMER_IRQn);
 }
 
 /**

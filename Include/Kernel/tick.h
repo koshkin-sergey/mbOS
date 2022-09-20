@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2021-2022 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -39,25 +39,33 @@ extern uint32_t SystemCoreClock;    /*!< System Clock Frequency (Core Clock)  */
 int32_t  osTickSetup(uint32_t freq, IRQHandler_t handler);
 
 /**
- * @brief       Enable OS Tick timer interrupt
+ * @brief       Enable and start the OS Tick timer to generate periodic RTOS
+ *              Kernel Tick interrupts
  */
 void     osTickEnable(void);
 
 /**
- * @brief       Disable OS Tick timer interrupt
+ * @brief       Stop the OS Tick timer and disable generation of RTOS Kernel
+ *              Tick interrupts
  */
 void     osTickDisable(void);
+
+/**
+ * @brief       Enable generation of RTOS Kernel Tick interrupts
+ *              without changing the operating mode of the OS Tick timer
+ */
+void     osTickEnableIRQ(void);
+
+/**
+ * @brief       Disable generation of RTOS Kernel Tick interrupts
+ *              without changing the operating mode of the OS Tick timer
+ */
+void     osTickDisableIRQ(void);
 
 /**
  * @brief       Acknowledge execution of OS Tick timer interrupt
  */
 void     osTickAcknowledgeIRQ(void);
-
-/**
- * @brief       Get OS Tick timer IRQ number
- * @return      OS Tick IRQ number
- */
-int32_t  osTickGetIRQn(void);
 
 /**
  * @brief       Get OS Tick timer clock frequency

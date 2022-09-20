@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2021-2022 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -25,7 +25,7 @@
  ******************************************************************************/
 
 #include <stdbool.h>
-#include "CMSIS/Core_ARM/cmsis_compiler.h"
+#include "CMSIS/Core/Arm/cmsis_compiler.h"
 
 extern uint32_t GetModeCPU(void);
 extern uint32_t DisableIRQ(void);

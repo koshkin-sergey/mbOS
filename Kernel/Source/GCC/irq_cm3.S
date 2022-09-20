@@ -50,7 +50,7 @@ SVC_Handler:
         LDM       R0,{R0-R3,R12}        // Load function parameters and address from stack
         BLX       R12                   // Call service function
         POP       {R12,LR}              // Restore SP and EXC_RETURN
-        STM       R12,{R0-R1}           // Store function return values
+        STR       R0,[R12]              // Store function return values
 
 SVC_Context:
         LDR       R3,=osInfo            // Load address of osInfo

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2021 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2018-2022 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,8 +26,7 @@
                 .equ   F_BIT,           0x40        // When F bit is set, FIQ is disabled
 
                 .equ   K_STATE_RUNNING, 2           // osKernelState_t::osKernelRunning
-                .equ   I_K_STATE_OFS,   16          // osRtxInfo.kernel.state offset
-                .equ   I_TICK_IRQN_OFS, 24          // osInfo.tick_irqn offset
+                .equ   I_K_STATE_OFS,   16          // osInfo.kernel.state offset
 
                 .section ".rodata"
                 .global  irqLib                     // Non weak library reference
@@ -66,37 +65,28 @@ SWI_Handler:
                 STR     R1, [R0]
 
                 LDR     R0, =osInfo
-                LDR     R1, [R0, #I_K_STATE_OFS]    // Load RTX5 kernel state
+                LDR     R1, [R0, #I_K_STATE_OFS]    // Load kernel state
                 CMP     R1, #K_STATE_RUNNING        // Check osKernelRunning
                 BLT     SWI_FuncCall                // Continue if kernel is not running
-                LDR     R0, [R0, #I_TICK_IRQN_OFS]  // Load OS Tick irqn
-                LDR     R12, =IRQ_Disable
+                LDR     R12, =osTickDisableIRQ
                 MOV     LR, PC
                 BX      R12                         // Disable OS Tick interrupt
 
 SWI_FuncCall:
-                POP     {R0-R3}
-                LDR     R12, [SP]
+                LDM     SP, {R0-R3, R12}
 
                 MSR     CPSR_c, #MODE_SVC           // Re-enable interrupts
                 MOV     LR, PC
                 BX      R12                         // Branch to SVC function
                 MSR     CPSR_c, #(MODE_SVC | I_BIT) // Disable interrupts
 
-                SUB     SP, SP, #4
-                STM     SP, {SP}^                   // Store SP_usr onto stack
-                NOP
-                POP     {R12}                       // Pop SP_usr into R12
-                SUB     R12, R12, #16               // Adjust pointer to SP_usr
-                LDMDB   R12, {R2,R3}                // Load return values from SVC function
-                PUSH    {R0-R3}                     // Push return values to stack
+                STR     R0, [SP]                    // Store function return value
 
                 LDR     R0, =osInfo
-                LDR     R1, [R0, #I_K_STATE_OFS]    // Load RTX5 kernel state
+                LDR     R1, [R0, #I_K_STATE_OFS]    // Load kernel state
                 CMP     R1, #K_STATE_RUNNING        // Check osKernelRunning
                 BLT     SWI_ContextCheck            // Continue if kernel is not running
-                LDR     R0, [R0, #I_TICK_IRQN_OFS]  // Load OS Tick irqn
-                LDR     R12, =IRQ_Enable
+                LDR     R12, =osTickEnableIRQ
                 MOV     LR, PC
                 BX      R12                         // Enable OS Tick interrupt
 
@@ -251,10 +241,7 @@ PostProcess:
                 SUB     SP, SP, R4                  // Adjust stack
 
                 // Disable OS Tick
-                LDR     R5, =osInfo                 // Load address of osRtxInfo
-                LDR     R5, [R5, #I_TICK_IRQN_OFS]  // Load OS Tick irqn
-                MOV     R0, R5                      // Set it as function parameter
-                LDR     R12, =IRQ_Disable
+                LDR     R12, =osTickDisableIRQ
                 MOV     LR, PC
                 BX      R12                         // Disable OS Tick interrupt
                 MOV     R6, #0                      // Set PendSV clear value
@@ -276,8 +263,7 @@ PendCheck:
                 BEQ     PendExec                    // Branch to PendExec if PendSV is set
 
                 // Re-enable OS Tick
-                MOV     R0, R5                      // Restore irqn as function parameter
-                LDR     R12, =IRQ_Enable
+                LDR     R12, =osTickEnableIRQ
                 MOV     LR, PC
                 BX      R12                         // Enable OS Tick interrupt
 

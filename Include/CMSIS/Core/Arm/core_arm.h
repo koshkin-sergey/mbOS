@@ -1,11 +1,11 @@
 /**************************************************************************//**
  * @file     core_arm.h
  * @brief    CMSIS ARM7 Core Peripheral Access Layer Header File
- * @version  V1.0.0
- * @date     18. January 2021
+ * @version  V1.1.0
+ * @date     02. June 2022
  ******************************************************************************/
 /*
- * Copyright (C) 2021 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2021-2022 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -38,42 +38,27 @@
  *                 CMSIS definitions
  ******************************************************************************/
 
- /** __FPU_USED indicates whether an FPU is used or not.
-     This core does not support an FPU at all
- */
- #define __FPU_USED       0U
+/** __FPU_USED indicates whether an FPU is used or not.
+    This core does not support an FPU at all
+*/
+#define __FPU_USED       0U
 
- #if defined ( __CC_ARM )
-   #if defined __TARGET_FPU_VFP
-     #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
-   #endif
+#if defined ( __CC_ARM )
+  #if defined __TARGET_FPU_VFP
+    #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
+  #endif
 
- #elif defined ( __GNUC__ )
-   #if defined (__VFP_FP__) && !defined(__SOFTFP__)
-     #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
-   #endif
+#elif defined ( __GNUC__ )
+  #if defined (__VFP_FP__) && !defined(__SOFTFP__)
+    #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
+  #endif
 
- #elif defined ( __ICCARM__ )
-   #if defined __ARMVFP__
-     #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
-   #endif
+#elif defined ( __ICCARM__ )
+  #if defined __ARMVFP__
+    #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
+  #endif
 
- #elif defined ( __TI_ARM__ )
-   #if defined __TI_VFP_SUPPORT__
-     #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
-   #endif
-
- #elif defined ( __TASKING__ )
-   #if defined __FPU_VFP__
-     #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
-   #endif
-
- #elif defined ( __CSMC__ )
-   #if ( __CSMC__ & 0x400U)
-     #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
-   #endif
-
- #endif
+#endif
 
 #include "cmsis_compiler.h"               /* CMSIS compiler specific defines */
 
