@@ -7,6 +7,7 @@ Currently mbOS is available for the following architectures:
 
 - ARM Cortex-M cores: Cortex-M0/M0+/M1/M3/M4
 - ARM7, ARM9 and ARM11 processor families (Thumb and ARM Modes)
+- KMX32 core, development of LLC "KM211"
 
 mbOS is tested across Arm Compiler 5, Arm Compiler 6, GCC and IAR compiler.
 
