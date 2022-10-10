@@ -304,6 +304,10 @@ typedef enum {
 #define ADSU_ClkCon_EnHRCOsc_Msk  (0x1UL << ADSU_ClkCon_EnHRCOsc_Pos)
 #define ADSU_ClkCon_EnHRCOsc                ADSU_ClkCon_EnHRCOsc_Msk
 
+#define ADSU_ClkCon_Msk           (ADSU_ClkCon_EnRCOsc_Msk | \
+                                   ADSU_ClkCon_EnXTOsc_Msk | \
+                                   ADSU_ClkCon_EnHRCOsc_Msk)
+
 /********************  Bit definition for ADSU_ClkCfg register  ***************/
 #define ADSU_ClkCfg_Osc_Pos       (0U)
 #define ADSU_ClkCfg_Osc_Msk       (0x3UL << ADSU_ClkCfg_Osc_Pos)
@@ -322,6 +326,10 @@ typedef enum {
 #define ADSU_ClkCfg_EnCLK_OUT_Pos (5U)
 #define ADSU_ClkCfg_EnCLK_OUT_Msk (0x1UL << ADSU_ClkCfg_EnCLK_OUT_Pos)
 #define ADSU_ClkCfg_EnCLK_OUT               ADSU_ClkCfg_EnCLK_OUT_Msk
+
+#define ADSU_ClkCfg_Msk           (ADSU_ClkCfg_Osc_Msk       | \
+                                   ADSU_ClkCfg_DivOsc_Msk    | \
+                                   ADSU_ClkCfg_EnCLK_OUT_Msk |)
 
 /********************  Bit definition for ADSU_Gate register  *****************/
 #define ADSU_Gate_FMCU_Pos        (3U)

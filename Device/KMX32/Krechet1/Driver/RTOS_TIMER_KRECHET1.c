@@ -18,7 +18,6 @@
  */
 
 #include "Kernel/tick.h"
-//#include "Kernel/irq.h"
 #include "asm/krechet1.h"
 
 /**
