@@ -23,6 +23,7 @@
 
 #include <Driver/ADSU_KRECHET1.h>
 #include <asm/krechet1.h>
+#include <device_config.h>
 
 /*******************************************************************************
  *  function implementations (scope: module-local)
@@ -38,43 +39,154 @@ static void ADSU_ClkReset(void)
   __set_PeriphReg(ADSU_MAXLOAD_REG, 0U);
 }
 
-static void ADSU_OscConfig(ADSU_OscCfg_t cfg)
+static void ADSU_OscConfig(ADSU_Osc_t osc, ADSU_OscCfg_t cfg)
 {
+  uint32_t reg_val;
+
   __set_CpuReg(CPU_PRW_REG, PRW_ADSU);
-  __set_PeriphReg(ADSU_CLKCON_REG, cfg & ADSU_ClkCon_Msk);
+
+  reg_val = __get_PeriphReg(ADSU_CLKCON_REG);
+
+  switch (osc) {
+    case ADSU_OSC_RC:
+      if (cfg == ADSU_OSC_ENABLE) {
+        reg_val |= ADSU_ClkCon_EnRCOsc;
+      }
+      else {
+        reg_val &= ~ADSU_ClkCon_EnRCOsc;
+      }
+      break;
+
+    case ADSU_OSC_HRC:
+      if (cfg == ADSU_OSC_ENABLE) {
+        reg_val |= ADSU_ClkCon_EnHRCOsc;
+      }
+      else {
+        reg_val &= ~ADSU_ClkCon_EnHRCOsc;
+      }
+      break;
+
+    case ADSU_OSC_XT:
+      if (cfg == ADSU_OSC_ENABLE) {
+        reg_val |= ADSU_ClkCon_EnXTOsc;
+      }
+      else {
+        reg_val &= ~ADSU_ClkCon_EnXTOsc;
+      }
+      break;
+
+    default:
+      break;
+  }
+
+  __set_PeriphReg(ADSU_CLKCON_REG, reg_val);
 }
 
-static void ADSU_ClkConfig(ADSU_ClkCfg_t cfg)
+static void ADSU_ClkConfig(const ADSU_ClkCfg_t *cfg)
 {
+  uint32_t reg_val = 0U;
+
+  switch (cfg->clk_src) {
+    default:
+    case ADSU_OSC_RC:
+      break;
+
+    case ADSU_OSC_HRC:
+      reg_val |= ADSU_ClkCfg_Osc_HRC;
+      break;
+
+    case ADSU_OSC_XT:
+      reg_val |= ADSU_ClkCfg_Osc_XT;
+      break;
+  }
+
+  switch (cfg->clk_div) {
+    default:
+    case ADSU_CLK_DIV_1:
+      break;
+
+    case ADSU_CLK_DIV_2:
+      reg_val |= ADSU_ClkCfg_DivOsc_2;
+      break;
+
+    case ADSU_CLK_DIV_4:
+      reg_val |= ADSU_ClkCfg_DivOsc_4;
+      break;
+
+    case ADSU_CLK_DIV_8:
+      reg_val |= ADSU_ClkCfg_DivOsc_8;
+      break;
+
+    case ADSU_CLK_DIV_16:
+      reg_val |= ADSU_ClkCfg_DivOsc_16;
+      break;
+  }
+
+  if (cfg->clk_out != ADSU_CLK_OUT_DISABLE) {
+    reg_val |= ADSU_ClkCfg_EnCLK_OUT;
+  }
+
   __set_CpuReg(CPU_PRW_REG, PRW_ADSU);
-  __set_PeriphReg(ADSU_CLKCFG_REG, cfg & ADSU_ClkCfg_Msk);
+  __NOP();__NOP();__NOP();__NOP();
+  __set_PeriphReg(ADSU_CLKCFG_REG, reg_val);
+  __NOP();__NOP();__NOP();__NOP();
 }
 
 static uint32_t ADSU_GetFrequency(ADSU_Freq_t type)
 {
   uint32_t value = 0U;
+  uint32_t clk_con;
+  uint32_t clk_cfg;
 
   __set_CpuReg(CPU_PRW_REG, PRW_ADSU);
 
+  clk_con = __get_PeriphReg(ADSU_CLKCON_REG);
+  clk_cfg = __get_PeriphReg(ADSU_CLKCFG_REG);
+
   switch (type) {
     case ADSU_FREQ_RC:
-
+      if (clk_con & ADSU_ClkCon_EnRCOsc) {
+        value = RC_CLK_VALUE;
+      }
       break;
 
     case ADSU_FREQ_HRC:
-
+      if (clk_con & ADSU_ClkCon_EnHRCOsc) {
+        value = HRC_CLK_VALUE;
+      }
       break;
 
     case ADSU_FREQ_XT:
-
-      break;
-
-    case ADSU_FREQ_OSC:
-
+      if (clk_con & ADSU_ClkCon_EnXTOsc) {
+        value = XT_CLK_VALUE;
+      }
       break;
 
     case ADSU_FREQ_SYS:
+      switch (clk_cfg & ADSU_ClkCfg_Osc_Msk) {
+        case ADSU_ClkCfg_Osc_RC:
+          if (clk_con & ADSU_ClkCon_EnRCOsc) {
+            value = RC_CLK_VALUE;
+          }
+          break;
 
+        case ADSU_ClkCfg_Osc_XT:
+          if (clk_con & ADSU_ClkCon_EnXTOsc) {
+            value = XT_CLK_VALUE;
+          }
+          break;
+
+        case ADSU_ClkCfg_Osc_HRC:
+          if (clk_con & ADSU_ClkCon_EnHRCOsc) {
+            value = HRC_CLK_VALUE;
+          }
+          break;
+      }
+
+      value >>= (clk_cfg & ADSU_ClkCfg_DivOsc_Msk) >> ADSU_ClkCfg_DivOsc_Pos;
+      break;
+
+    default:
       break;
   }
 
@@ -83,31 +195,55 @@ static uint32_t ADSU_GetFrequency(ADSU_Freq_t type)
 
 static void ADSU_PeriphEnable(ADSU_Periph_t periph)
 {
+  uint32_t reg_val;
 
+  __set_CpuReg(CPU_PRW_REG, PRW_ADSU);
+
+  reg_val = __get_PeriphReg(ADSU_GATE_REG) | (uint32_t)periph;
+  __set_PeriphReg(ADSU_GATE_REG, reg_val);
 }
 
 static void ADSU_PeriphDisable(ADSU_Periph_t periph)
 {
+  uint32_t reg_val;
 
+  __set_CpuReg(CPU_PRW_REG, PRW_ADSU);
+
+  reg_val = __get_PeriphReg(ADSU_GATE_REG) & ~(uint32_t)periph;
+  __set_PeriphReg(ADSU_GATE_REG, reg_val);
 }
 
 static uint32_t ADSU_GetStatePeriph(ADSU_Periph_t periph)
 {
-  uint32_t value = 0U;
+  uint32_t reg_val;
 
-  return (value);
+  __set_CpuReg(CPU_PRW_REG, PRW_ADSU);
+
+  reg_val = __get_PeriphReg(ADSU_GATE_REG) & (uint32_t)periph;
+
+  return ((uint32_t)(reg_val != 0U));
 }
 
 static void ADSU_PeriphReset(ADSU_Periph_t periph)
 {
+  uint32_t reg_val;
 
+  __set_CpuReg(CPU_PRW_REG, PRW_ADSU);
+
+  reg_val = __get_PeriphReg(ADSU_GATE_REG);
+
+  if ((reg_val & (uint32_t)periph) != 0U) {
+    __set_PeriphReg(ADSU_GATE_REG, reg_val & ~(uint32_t)periph);
+    __NOP();__NOP();__NOP();__NOP();
+    __set_PeriphReg(ADSU_GATE_REG, reg_val |  (uint32_t)periph);
+  }
 }
 
 /*******************************************************************************
  *  global variable definitions (scope: module-exported)
  ******************************************************************************/
 
-Driver_ADSU_t Driver_ADSU = {
+const Driver_ADSU_t Driver_ADSU = {
   ADSU_ClkReset,
   ADSU_OscConfig,
   ADSU_ClkConfig,

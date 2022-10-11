@@ -21,68 +21,72 @@
 #define ADSU_KRECHET1_H_
 
 /*******************************************************************************
- *  defines and macros
+ *  includes
  ******************************************************************************/
 
-#define OSC_DISABLE                 (0U)
-#define OSC_ENABLE                  (1U)
+#include <stdint.h>
 
-#define CLK_SRC_RC                  (0U)
-#define CLK_SRC_XT                  (1U)
-#define CLK_SRC_HRC                 (2U)
-
-#define CLK_DIV_1                   (0U)
-#define CLK_DIV_2                   (1U)
-#define CLK_DIV_4                   (2U)
-#define CLK_DIV_8                   (3U)
-#define CLK_DIV_16                  (4U)
-
-#define CLK_OUT_DISABLE             (0U)
-#define CLK_OUT_ENABLE              (1U)
+/*******************************************************************************
+ *  defines and macros
+ ******************************************************************************/
 
 /*******************************************************************************
  *  typedefs and structures
  ******************************************************************************/
 
-typedef struct ADSU_OscCfg {
-  uint32_t RC_Enable  : 1;
-  uint32_t XT_Enable  : 1;
-  uint32_t HRC_Enable : 1;
-  uint32_t Reserved   : 29;
+typedef enum ADSU_Osc {
+  ADSU_OSC_RC,
+  ADSU_OSC_HRC,
+  ADSU_OSC_XT,
+} ADSU_Osc_t;
+
+typedef enum ADSU_OscCfg {
+  ADSU_OSC_DISABLE,
+  ADSU_OSC_ENABLE
 } ADSU_OscCfg_t;
 
+typedef enum ADSU_ClkDiv {
+  ADSU_CLK_DIV_1,
+  ADSU_CLK_DIV_2,
+  ADSU_CLK_DIV_4,
+  ADSU_CLK_DIV_8,
+  ADSU_CLK_DIV_16
+} ADSU_ClkDiv_t;
+
+typedef enum ADSU_ClkOut {
+  ADSU_CLK_OUT_DISABLE,
+  ADSU_CLK_OUT_ENABLE
+} ADSU_ClkOut_t;
+
 typedef struct ADSU_ClkCfg {
-  uint32_t clk_src    : 2;
-  uint32_t clk_div    : 3;
-  uint32_t clk_out_en : 1;
-  uint32_t Reserved   : 26;
+  ADSU_Osc_t    clk_src;
+  ADSU_ClkDiv_t clk_div;
+  ADSU_ClkOut_t clk_out;
 } ADSU_ClkCfg_t;
 
 typedef enum ADSU_Freq {
   ADSU_FREQ_RC,
   ADSU_FREQ_HRC,
   ADSU_FREQ_XT,
-  ADSU_FREQ_OSC,
-  ADSU_FREQ_SYS,
-  ADSU_FREQ_Reserved = 0x7FFFFFFF
+  ADSU_FREQ_SYS
 } ADSU_Freq_t;
 
 typedef enum ADSU_Periph {
-  ADSU_Periph_FMCU  = (1UL << 3U),
-  ADSU_Periph_TMR0  = (1UL << 12U),
-  ADSU_Periph_TMR1  = (1UL << 13U),
-  ADSU_Periph_PWM0  = (1UL << 14U),
-  ADSU_Periph_PWM1  = (1UL << 15U),
-  ADSU_Periph_GPIO  = (1UL << 16U),
-  ADSU_Periph_SPI0  = (1UL << 23U),
-  ADSU_Periph_SPI1  = (1UL << 24U),
-  ADSU_Periph_UART0 = (1UL << 25U),
-  ADSU_Periph_UART1 = (1UL << 26U),
-  ADSU_Periph_I2C0  = (1UL << 27U),
-  ADSU_Periph_I2C1  = (1UL << 28U),
-  ADSU_Periph_UART2 = (1UL << 29U),
-  ADSU_Periph_UART3 = (1UL << 30U),
-  ADSU_Periph_CHIN  = (1UL << 31U)
+  ADSU_Periph_FMCU  = (1L << 3U),
+  ADSU_Periph_TMR0  = (1L << 12U),
+  ADSU_Periph_TMR1  = (1L << 13U),
+  ADSU_Periph_PWM0  = (1L << 14U),
+  ADSU_Periph_PWM1  = (1L << 15U),
+  ADSU_Periph_GPIO  = (1L << 16U),
+  ADSU_Periph_SPI0  = (1L << 23U),
+  ADSU_Periph_SPI1  = (1L << 24U),
+  ADSU_Periph_UART0 = (1L << 25U),
+  ADSU_Periph_UART1 = (1L << 26U),
+  ADSU_Periph_I2C0  = (1L << 27U),
+  ADSU_Periph_I2C1  = (1L << 28U),
+  ADSU_Periph_UART2 = (1L << 29U),
+  ADSU_Periph_UART3 = (1L << 30U),
+  ADSU_Periph_CHIN  = (1L << 31U)
 } ADSU_Periph_t;
 
 /**
@@ -92,13 +96,12 @@ typedef enum ADSU_Periph {
  * @brief       Setup the clock system. Initialize the default clock
  *              source.
  *
- * @fn          void ADSU_OscConfig(ADSU_OscCfg_t cfg)
- * @brief       Initializes the Oscillators according to the specified
- *              parameters in the cfg argument.
- * @param[in]   cfg   ADSU_OscCfg_t structure that contains the configuration
- *                    information for the Oscillators.
+ * @fn          void ADSU_OscConfig(ADSU_Osc_t osc, ADSU_OscCfg_t cfg)
+ * @brief       Enables or disables the specified oscillator.
+ * @param[in]   osc   Contains oscillator type.
+ * @param[in]   cfg   Contains the configuration information for the oscillator.
  *
- * @fn          void ADSU_ClkConfig(ADSU_ClkCfg_t cfg)
+ * @fn          void ADSU_ClkConfig(const ADSU_ClkCfg_t *cfg)
  * @brief       Initializes the CPU clock according to the specified
  *              parameters in the cfg argument.
  * @param[in]   cfg   ADSU_ClkCfg_t structure that contains the configuration
@@ -135,8 +138,8 @@ typedef enum ADSU_Periph {
  */
 typedef struct Driver_ADSU {
   void     (*ClkReset)      (void);
-  void     (*OscConfig)     (ADSU_OscCfg_t cfg);
-  void     (*ClkConfig)     (ADSU_ClkCfg_t cfg);
+  void     (*OscConfig)     (ADSU_Osc_t osc, ADSU_OscCfg_t cfg);
+  void     (*ClkConfig)     (const ADSU_ClkCfg_t *cfg);
   uint32_t (*GetFrequency)  (ADSU_Freq_t   type);
   void     (*PeriphEnable)  (ADSU_Periph_t periph);
   void     (*PeriphDisable) (ADSU_Periph_t periph);

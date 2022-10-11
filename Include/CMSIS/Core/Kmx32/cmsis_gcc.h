@@ -154,7 +154,7 @@ __STATIC_FORCEINLINE void __cmsis_start(void)
 #define __PROGRAM_START           __cmsis_start
 #endif
 
-/************************  Core Instruction Access  ***************************/
+/************************  Core Function Access  ******************************/
 
 /**
  * @brief     Enable IRQ Interrupts
@@ -234,6 +234,15 @@ __extension__ (                                                                \
  */
 #define __set_PeriphReg(addr, data)                                            \
   __ASM volatile ("mtpr r%0, %1" : : "n" (addr), "r" (data))
+
+
+/************************  Core Instruction Access  ***************************/
+
+/**
+  \brief   No Operation
+  \details No Operation does nothing. This instruction can be used for code alignment purposes.
+ */
+#define __NOP()                             __ASM volatile ("nop")
 
 /**
   \brief   Reverse byte order (32 bit)
