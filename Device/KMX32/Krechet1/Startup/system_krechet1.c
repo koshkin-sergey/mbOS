@@ -51,13 +51,16 @@ void SystemCoreClockUpdate(void)
  */
 void SystemInit(void)
 {
-  const ADSU_ClkCfg_t clk_cfg = {
-    .clk_src = ADSU_OSC_HRC,
-    .clk_div = ADSU_CLK_DIV_1,
-    .clk_out = ADSU_CLK_OUT_ENABLE
+  const Driver_ADSU_t *adsu = &Driver_ADSU;
+
+  static const ADSU_ClkCfg_t clk_cfg = {
+    .clk_src      = ADSU_OSC_XT,
+    .clk_div      = ADSU_CLK_DIV_1,
+    .clk_out      = ADSU_CLK_OUT_DISABLE,
+    .flash_delay  = 0U
   };
 
-  Driver_ADSU.ClkReset();
-  Driver_ADSU.OscConfig(ADSU_OSC_HRC, ADSU_OSC_ENABLE);
-  Driver_ADSU.ClkConfig(&clk_cfg);
+  adsu->ClkReset();
+  adsu->OscConfig(ADSU_OSC_XT, ADSU_OSC_ENABLE);
+  adsu->ClkConfig(&clk_cfg);
 }

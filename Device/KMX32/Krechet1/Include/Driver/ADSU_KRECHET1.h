@@ -62,6 +62,7 @@ typedef struct ADSU_ClkCfg {
   ADSU_Osc_t    clk_src;
   ADSU_ClkDiv_t clk_div;
   ADSU_ClkOut_t clk_out;
+  uint32_t      flash_delay;
 } ADSU_ClkCfg_t;
 
 typedef enum ADSU_Freq {

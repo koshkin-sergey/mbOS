@@ -26,8 +26,35 @@
 #include <device_config.h>
 
 /*******************************************************************************
+ *  function prototypes (scope: module-local)
+ ******************************************************************************/
+
+static void ADSU_ClkReset(void);
+static void ADSU_OscConfig(ADSU_Osc_t osc, ADSU_OscCfg_t cfg);
+static void ADSU_ClkConfig(const ADSU_ClkCfg_t *cfg);
+static uint32_t ADSU_GetFrequency(ADSU_Freq_t type);
+static void ADSU_PeriphEnable(ADSU_Periph_t periph);
+static void ADSU_PeriphDisable(ADSU_Periph_t periph);
+static uint32_t ADSU_GetStatePeriph(ADSU_Periph_t periph);
+static void ADSU_PeriphReset(ADSU_Periph_t periph);
+
+/*******************************************************************************
  *  function implementations (scope: module-local)
  ******************************************************************************/
+
+static void SetFlashAccess(uint32_t delay)
+{
+  if (delay > FMCU_Access_Delay_Msk) {
+    delay = FMCU_Access_Delay_Msk;
+  }
+
+  ADSU_PeriphEnable(ADSU_Periph_FMCU);
+
+  __set_CpuReg(CPU_PRW_REG, PRW_FMCU);
+  __set_PeriphReg(FMCU_ACCESS_REG, delay);
+
+  ADSU_PeriphDisable(ADSU_Periph_FMCU);
+}
 
 static void ADSU_ClkReset(void)
 {
@@ -84,6 +111,7 @@ static void ADSU_OscConfig(ADSU_Osc_t osc, ADSU_OscCfg_t cfg)
 
 static void ADSU_ClkConfig(const ADSU_ClkCfg_t *cfg)
 {
+  uint32_t flash_delay;
   uint32_t reg_val = 0U;
 
   switch (cfg->clk_src) {
@@ -126,10 +154,21 @@ static void ADSU_ClkConfig(const ADSU_ClkCfg_t *cfg)
     reg_val |= ADSU_ClkCfg_EnCLK_OUT;
   }
 
+  __set_CpuReg(CPU_PRW_REG, PRW_FMCU);
+  flash_delay = __get_PeriphReg(FMCU_ACCESS_REG);
+
+  if (cfg->flash_delay > flash_delay) {
+    SetFlashAccess(cfg->flash_delay);
+  }
+
   __set_CpuReg(CPU_PRW_REG, PRW_ADSU);
   __NOP();__NOP();__NOP();__NOP();
   __set_PeriphReg(ADSU_CLKCFG_REG, reg_val);
   __NOP();__NOP();__NOP();__NOP();
+
+  if (cfg->flash_delay < flash_delay) {
+    SetFlashAccess(cfg->flash_delay);
+  }
 }
 
 static uint32_t ADSU_GetFrequency(ADSU_Freq_t type)
