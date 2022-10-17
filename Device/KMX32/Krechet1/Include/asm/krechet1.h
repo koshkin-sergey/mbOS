@@ -450,6 +450,68 @@ typedef enum {
 
 
 /*------------------------------------------------------------------------------
+ *                                 FMCU
+ *----------------------------------------------------------------------------*/
+/********************  Bit definition for FMCU_Con register  ******************/
+#define FMCU_Con_Prog_Pos         (0U)
+#define FMCU_Con_Prog_Msk         (0x1UL << FMCU_Con_Prog_Pos)
+#define FMCU_Con_Prog             FMCU_Con_Prog_Msk
+
+#define FMCU_Con_Ers_Pos          (1U)
+#define FMCU_Con_Ers_Msk          (0x1UL << FMCU_Con_Ers_Pos)
+#define FMCU_Con_Ers              FMCU_Con_Ers_Msk
+
+#define FMCU_Con_Info_Pos         (4U)
+#define FMCU_Con_Info_Msk         (0x1UL << FMCU_Con_Info_Pos)
+#define FMCU_Con_Info             FMCU_Con_Info_Msk
+
+#define FMCU_Con_MErs_Pos         (8U)
+#define FMCU_Con_MErs_Msk         (0x7UL << FMCU_Con_MErs_Pos)
+
+#define FMCU_Con_Sleep_Pos        (13U)
+#define FMCU_Con_Sleep_Msk        (0x1UL << FMCU_Con_Sleep_Pos)
+#define FMCU_Con_Sleep            FMCU_Con_Sleep_Msk
+
+#define FMCU_Con_PDM25_Pos        (14U)
+#define FMCU_Con_PDM25_Msk        (0x1UL << FMCU_Con_PDM25_Pos)
+#define FMCU_Con_PDM25            FMCU_Con_PDM25_Msk
+
+#define FMCU_Con_ErsOfRef_Pos     (15U)
+#define FMCU_Con_ErsOfRef_Msk     (0x1UL << FMCU_Con_ErsOfRef_Pos)
+#define FMCU_Con_ErsOfRef         FMCU_Con_ErsOfRef_Msk
+
+#define FMCU_Con_EnNAct_Pos       (16U)
+#define FMCU_Con_EnNAct_Msk       (0x1UL << FMCU_Con_EnNAct_Pos)
+#define FMCU_Con_EnNAct           FMCU_Con_EnNAct_Msk
+
+/********************  Bit definition for FMCU_Addr register  *****************/
+#define FMCU_Addr_DW_Pos          (2U)
+#define FMCU_Addr_DW_Msk          (0x7FUL << FMCU_Addr_DW_Pos)
+
+#define FMCU_Addr_Str_Pos         (9U)
+#define FMCU_Addr_Str_Msk         (0x7UL << FMCU_Addr_Str_Pos)
+
+#define FMCU_Addr_Page_Pos        (12U)
+#define FMCU_Addr_Page_Msk        (0x7FUL << FMCU_Addr_Page_Pos)
+
+/********************  Bit definition for FMCU_ABuf register  *****************/
+#define FMCU_ABuf_DWAddr_Pos      (0U)
+#define FMCU_ABuf_DWAddr_Msk      (0xFFFFUL << FMCU_ABuf_DWAddr_Pos)
+
+/********************  Bit definition for FMCU_DCnt register  *****************/
+#define FMCU_DCnt_Bytes_Pos       (0U)
+#define FMCU_DCnt_Bytes_Msk       (0x1FFUL << FMCU_DCnt_Bytes_Pos)
+
+/********************  Bit definition for FMCU_Access register  ***************/
+#define FMCU_Access_Delay_Pos     (0U)
+#define FMCU_Access_Delay_Msk     (0x3FUL << FMCU_Access_Delay_Pos)
+
+/********************  Bit definition for FMCU_1usCycle register  *************/
+#define FMCU_1usCycle_Scale_Pos   (0U)
+#define FMCU_1usCycle_Scale_Msk   (0x3FFUL << FMCU_1usCycle_Scale_Pos)
+
+
+/*------------------------------------------------------------------------------
  *                                 I2C
  *----------------------------------------------------------------------------*/
 /********************  Bit definition for I2C_Cfg register  *******************/
