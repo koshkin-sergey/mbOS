@@ -17,14 +17,10 @@
  * Project: mbOS real-time kernel
  */
 
-                .equ   IE_BIT,          0x10        // When IE bit is set, IRQ is enabled
-
-                .equ   K_STATE_RUNNING, 2           // osKernelState_t::osKernelRunning
-                .equ   I_K_STATE_OFS,   16          // osInfo.kernel.state offset
-
-                .equ   ModeHandler,     0
-                .equ   ModeThread,      1
-
+                .equ    IE_BIT,           0x10      // When IE bit is set, IRQ is enabled
+                .equ    PSW_IL_BIT,       0x0100
+                .equ    K_STATE_RUNNING,  2         // osKernelState_t::osKernelRunning
+                .equ    I_K_STATE_OFS,    16        // osInfo.kernel.state offset
 
                 .section ".rodata"
 
@@ -53,10 +49,10 @@ SWI_Handler:
                 pushr   PRW
                 push    DP2
                 push    DP1
-                mfprs   DP2, ILR_PC
-                mfprs   DP1, ILR_PSW
-                push    DP2
+                mfprs   DP1, ILR_PC
+                mfprs   DP2, ILR_PSW
                 push    DP1
+                push    DP2
                 pushr   FB
                 pushr   FA
 
@@ -65,6 +61,8 @@ SWI_Handler:
                 cmpl    dp1, K_STATE_RUNNING        // Check osKernelRunning
                 blt     1$                          // Continue if kernel is not running
                 lda     c7, MSP                     // Switch to Main Stack
+                bisl    dp2, PSW_IL_BIT
+                mtprs   ILR_PSW, dp2
 
 1$:
                 srfa    8
