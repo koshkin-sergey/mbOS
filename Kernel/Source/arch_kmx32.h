@@ -35,8 +35,8 @@ extern     void RestoreIRQ(uint32_t);
  *  defines and macros
  ******************************************************************************/
 
-#define INIT_EXC_RETURN               0xFFFFFFFDUL
-#define OS_TICK_HANDLER               osTick_Handler
+#define INIT_EXC_RETURN               0UL
+#define OS_TICK_HANDLER               SysTick_Handler
 
 /* PSW bit definitions */
 #define PSW_IL_Pos                    8U
@@ -149,9 +149,13 @@ uint32_t svc_0(uint32_t func)
   register uint32_t __r0 __ASM("a0");
   register uint32_t __rf __ASM("a4") = func;
 
-  __ASM volatile ("trap 0"
-                 :"=r"(__r0)
-                 :"r"(__rf)
+  __ASM volatile (
+      "cst  0x10 \n\t"
+      "nop       \n\t"
+      "trap 0x00 \n\t"
+      "sst  0x10"
+      :"=r"(__r0)
+      :"r"(__rf)
   );
 
   return (__r0);
@@ -163,9 +167,13 @@ uint32_t svc_1(uint32_t param1, uint32_t func)
   register uint32_t __r0 __ASM("a0") = param1;
   register uint32_t __rf __ASM("a4") = func;
 
-  __ASM volatile ("trap 0"
-                 :"=r"(__r0)
-                 :"r"(__rf),"r"(__r0)
+  __ASM volatile (
+      "cst  0x10 \n\t"
+      "nop       \n\t"
+      "trap 0x00 \n\t"
+      "sst  0x10"
+      :"=r"(__r0)
+      :"r"(__rf),"r"(__r0)
   );
 
   return (__r0);
@@ -178,9 +186,13 @@ uint32_t svc_2(uint32_t param1, uint32_t param2, uint32_t func)
   register uint32_t __r1 __ASM("a1") = param2;
   register uint32_t __rf __ASM("a4") = func;
 
-  __ASM volatile ("trap 0"
-                 :"=r"(__r0)
-                 :"r"(__rf),"r"(__r0),"r"(__r1)
+  __ASM volatile (
+      "cst  0x10 \n\t"
+      "nop       \n\t"
+      "trap 0x00 \n\t"
+      "sst  0x10"
+      :"=r"(__r0)
+      :"r"(__rf),"r"(__r0),"r"(__r1)
   );
 
   return (__r0);
@@ -194,9 +206,13 @@ uint32_t svc_3(uint32_t param1, uint32_t param2, uint32_t param3, uint32_t func)
   register uint32_t __r2 __ASM("a2") = param3;
   register uint32_t __rf __ASM("a4") = func;
 
-  __ASM volatile ("trap 0"
-                 :"=r"(__r0)
-                 :"r"(__rf),"r"(__r0),"r"(__r1),"r"(__r2)
+  __ASM volatile (
+      "cst  0x10 \n\t"
+      "nop       \n\t"
+      "trap 0x00 \n\t"
+      "sst  0x10"
+      :"=r"(__r0)
+      :"r"(__rf),"r"(__r0),"r"(__r1),"r"(__r2)
   );
 
   return (__r0);
@@ -211,9 +227,13 @@ uint32_t svc_4(uint32_t param1, uint32_t param2, uint32_t param3, uint32_t param
   register uint32_t __r3 __ASM("a3") = param4;
   register uint32_t __rf __ASM("a4") = func;
 
-  __ASM volatile ("trap 0"
-                 :"=r"(__r0)
-                 :"r"(__rf),"r"(__r0),"r"(__r1),"r"(__r2),"r"(__r3)
+  __ASM volatile (
+      "cst  0x10 \n\t"
+      "nop       \n\t"
+      "trap 0x00 \n\t"
+      "sst  0x10"
+      :"=r"(__r0)
+      :"r"(__rf),"r"(__r0),"r"(__r1),"r"(__r2),"r"(__r3)
   );
 
   return (__r0);
