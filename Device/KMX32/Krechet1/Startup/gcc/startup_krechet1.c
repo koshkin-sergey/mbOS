@@ -89,8 +89,8 @@ void Reset_Handler(void)
   __ASM volatile(
       "cst    0x10                                       \n"
       "ldrsl  PRW,    0                                  \n"
-      "ldrl   CONF,   0x0063                             \n"
-      "ldrh   CONF,   0x00F9                             \n"
+      "ldrl   CONF,   0x026B                             \n"
+      "ldrh   CONF,   0x0000                             \n"
       "reset                                             \n"
       "ldrl   r28,    lo(Vectors)                        \n"
       "ldrh   r28,    hi(Vectors)                        \n"
