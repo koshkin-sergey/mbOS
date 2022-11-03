@@ -61,8 +61,6 @@ SWI_Handler:
                 cmpl    dp1, K_STATE_RUNNING        // Check osKernelRunning
                 blt     1$                          // Continue if kernel is not running
                 lda     c7, MSP                     // Switch to Main Stack
-                bisl    dp2, PSW_IL_BIT
-                mtprs   ILR_PSW, dp2
 
 1$:
                 srfa    8

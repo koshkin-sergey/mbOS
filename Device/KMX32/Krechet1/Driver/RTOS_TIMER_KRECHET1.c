@@ -29,19 +29,27 @@
 int32_t osTickSetup(uint32_t freq, IRQHandler_t handler)
 {
   (void)   handler;
-  uint32_t load;
+  uint32_t value;
 
   if (freq == 0U) {
     return (-1);
   }
 
-  load = SystemCoreClock / freq;
+  value = SystemCoreClock / freq;
 
   __set_CpuReg(CPU_PRW_REG, PRW_ADSU);
-  __set_PeriphReg(ADSU_GATE_REG, __get_PeriphReg(ADSU_GATE_REG) | (1UL << 12));
+  __set_PeriphReg(ADSU_GATE_REG, __get_PeriphReg(ADSU_GATE_REG) | ADSU_Gate_TMR0 | ADSU_Gate_ChIN);
+
   __set_CpuReg(CPU_PRW_REG, PRW_TMR0);
   __set_PeriphReg(TMR0_CFG_REG, TIM_CFG_IE);
-  __set_PeriphReg(TMR0_RANGE_REG, load - 1);
+  __set_PeriphReg(TMR0_RANGE_REG, value - 1U);
+
+  __set_CpuReg(CPU_PRW_REG, PRW_CHIN);
+  value = __get_PeriphReg(CHIN_CFG3_REG) & ~0xFFUL;
+  __set_PeriphReg(CHIN_CFG3_REG, value | (22UL << 0U));
+
+  __set_CpuReg(CPU_PRW_REG, PRW_ADSU);
+  __set_PeriphReg(ADSU_GATE_REG, __get_PeriphReg(ADSU_GATE_REG) & ~ADSU_Gate_ChIN);
 
   return (0);
 }
