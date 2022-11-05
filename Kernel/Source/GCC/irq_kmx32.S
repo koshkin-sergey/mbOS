@@ -25,15 +25,18 @@
                 .section ".rodata"
 
                 .global  irqLib                     // Non weak library reference
-irqLib:
-                .byte    0
+irqLib:         .byte    0
 
 
                 .section ".data"
 
                 .global  IRQ_PendSV
 IRQ_PendSV:     .long    0                          // Pending SVC flag
+
+                .global  IRQ_NestLevel
 IRQ_NestLevel:  .long    0                          // IRQ nesting level counter
+
+                .global  MSP
 MSP:            .long    0
 
 
@@ -49,10 +52,10 @@ SWI_Handler:
                 pushr   PRW
                 push    DP2
                 push    DP1
-                mfprs   DP1, ILR_PC
-                mfprs   DP2, ILR_PSW
-                push    DP1
+                mfprs   DP2, ILR_PC
+                mfprs   DP1, ILR_PSW
                 push    DP2
+                push    DP1
                 pushr   FB
                 pushr   FA
 
@@ -61,7 +64,6 @@ SWI_Handler:
                 cmpl    dp1, K_STATE_RUNNING        // Check osKernelRunning
                 blt     1$                          // Continue if kernel is not running
                 lda     c7, MSP                     // Switch to Main Stack
-
 1$:
                 srfa    8
                 srfb    1
@@ -146,14 +148,15 @@ SysTick_Handler:
                 pushr   FB
                 pushr   FA
 
-                mtprs   USP, c7
+                lda     dp1, IRQ_NestLevel
+                bne     1$                          // if IRQ_NestLevel = 0
+                mtprs   USP, c7                     // Save Thread Stack to USP
                 lda     c7, MSP                     // Switch to Main Stack
+1$:
+                addl    dp1, 1                      // Increment IRQ nesting level
+                sta     IRQ_NestLevel, dp1
 
                 srfa    8
-
-                lda     a0, IRQ_NestLevel
-                addl    a0, 1                       // Increment IRQ nesting level
-                sta     IRQ_NestLevel, a0
 
                 jsr     osTickDisableIRQ            // Disable OS Tick interrupt
 
@@ -165,14 +168,15 @@ SysTick_Handler:
 
                 jsr     ContextSwitch               // Continue in context switcher
 
-                lda     a0, IRQ_NestLevel
-                subl    a0, 1                       // Decrement IRQ nesting level
-                sta     IRQ_NestLevel, a0
-
                 rsfa    8
 
-                sta     MSP, c7
-                mfprs   c7, USP
+                lda     dp1, IRQ_NestLevel
+                subl    dp1, 1                      // Decrement IRQ nesting level
+                bne     1$                          // if IRQ_NestLevel = 0
+                sta     MSP, c7                     // Save Main Stack to MSP
+                mfprs   c7, USP                     // Switch to Thread Stack
+2$:
+                sta     IRQ_NestLevel, dp1
 
                 popr    FA
                 popr    FB

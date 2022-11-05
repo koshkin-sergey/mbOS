@@ -297,68 +297,67 @@ __STATIC_FORCEINLINE uint8_t __CLZ(uint32_t value)
 __STATIC_FORCEINLINE void __isr_prologue(void)
 {
   __ASM volatile (
-    "pushr  LC                    \n"
-    "pushr  SMC                   \n"
-    "pushr  CLR                   \n"
-    "pushr  PRW                   \n"
-    "push   DP2                   \n"
-    "push   DP1                   \n"
-    "mfprs  DP1, ILR_PC           \n"
-    "mfprs  DP2, ILR_PSW          \n"
-    "push   DP1                   \n"
-    "push   DP2                   \n"
-    "pushr  FB                    \n"
-    "pushr  FA                    \n"
+    "pushr  LC                    \n\t"
+    "pushr  SMC                   \n\t"
+    "pushr  CLR                   \n\t"
+    "pushr  PRW                   \n\t"
+    "push   DP2                   \n\t"
+    "push   DP1                   \n\t"
+    "mfprs  DP1, ILR_PC           \n\t"
+    "mfprs  DP2, ILR_PSW          \n\t"
+    "push   DP1                   \n\t"
+    "push   DP2                   \n\t"
+    "pushr  FB                    \n\t"
+    "pushr  FA                    \n\t"
 
-    /* Increment IRQ nesting level */
-    "lda    a0, IRQ_NestLevel     \n"
-    "addl   a0, 1                 \n"
-    "sta    IRQ_NestLevel, a0     \n"
+    /* Increment IRQ nesting level   */
+    "lda    dp1, IRQ_NestLevel    \n\t"
+    "bne    1$                    \n\t"
+    "mtprs  USP, c7               \n\t"
+    "lda    c7, MSP               \n\t"
+    "1$:                          \n\t"
+    "addl   dp1, 1                \n\t"
+    "sta    IRQ_NestLevel, dp1    \n\t"
 
-    /* Adjust stack to ensure 8-byte alignment */
-    "mov    a0, c7                \n"
-    "movl   a1, 4                 \n"
-    "and    a0, a1                \n"
-    "sub    c7, a0                \n"
-    "push   a1                    \n"
-    "push   a0                    \n"
+    "srfa   8                     \n\t"
 
-    /* Re-enable interrupts */
-    "sst    0x10                  \n"
+    /* Re-enable interrupts          */
+    "sst    0x10                  \n\t"
   );
 }
 
 __STATIC_FORCEINLINE void __isr_epilogue(void)
 {
   __ASM volatile(
-    /* Disable interrupts */
-    "cst    0x10                \n"
+    /* Disable interrupts            */
+    "cst    0x10                  \n\t"
 
-    /* Unadjust stack */
-    "pop    a0                  \n"
-    "pop    a1                  \n"
-    "add    c7, a0              \n"
+    /* Continue in context switcher  */
+    "jsr    ContextSwitch         \n\t"
 
-    /* Continue in context switcher */
-    "jsr    ContextSwitch       \n"
+    "rsfa   8                     \n\t"
 
-    /* Decrement IRQ nesting level */
-    "lda    a0, IRQ_NestLevel   \n"
-    "subl   a0, 1               \n"
-    "sta    IRQ_NestLevel, a0   \n"
+    /* Decrement IRQ nesting level   */
+    "lda    dp1, IRQ_NestLevel    \n\t"
+    "subl   dp1, 1                \n\t"
+    "bne    1$                    \n\t"
+    "sta    MSP, c7               \n\t"
+    "mfprs  c7, USP               \n\t"
+    "2$:                          \n\t"
+    "sta    IRQ_NestLevel, dp1    \n\t"
 
-    "popr   FA                  \n"
-    "popr   FB                  \n"
-    "pop    DP1                 \n"
-    "pop    DP2                 \n"
-    "mtprs  ILR_PSW, DP1        \n"
-    "mtprs  ILR_PC,  DP2        \n"
-    "pop    DP1                 \n"
-    "pop    DP2                 \n"
-    "popr   PRW                 \n"
-    "popr   CLR                 \n"
-    "popr   SMC                 \n"
-    "popr   LC                  \n"
+    "popr   FA                    \n\t"
+    "popr   FB                    \n\t"
+    "pop    DP1                   \n\t"
+    "pop    DP2                   \n\t"
+    "mtprs  ILR_PSW, DP1          \n\t"
+    "mtprs  ILR_PC,  DP2          \n\t"
+    "pop    DP1                   \n\t"
+    "pop    DP2                   \n\t"
+    "popr   PRW                   \n\t"
+    "popr   CLR                   \n\t"
+    "popr   SMC                   \n\t"
+    "popr   LC                    \n\t"
   );
 }
 

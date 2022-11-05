@@ -17,10 +17,13 @@
  * Project: Device Configuration for KM211 Krechet1
  */
 
-//-------- <<< Use Configuration Wizard in Context Menu >>> --------------------
-
 #ifndef __DEVICE_CONFIG_H
 #define __DEVICE_CONFIG_H
+
+#define _Interruptx_Handler(x)    Interrupt##x##_Handler
+#define  Interruptx_Handler(x)    _Interruptx_Handler(x)
+
+//-------- <<< Use Configuration Wizard in Context Menu >>> --------------------
 
 // <h> Clock Configuration
 //   <o> Low-speed Internal Clock (Hz)  <1-999999999>
