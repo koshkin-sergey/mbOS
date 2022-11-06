@@ -25,6 +25,7 @@
  ******************************************************************************/
 
 #include <stdint.h>
+#include <asm/krechet1.h>
 
 /*******************************************************************************
  *  defines and macros
@@ -73,21 +74,21 @@ typedef enum ADSU_Freq {
 } ADSU_Freq_t;
 
 typedef enum ADSU_Periph {
-  ADSU_Periph_FMCU  = (1L << 3U),
-  ADSU_Periph_TMR0  = (1L << 12U),
-  ADSU_Periph_TMR1  = (1L << 13U),
-  ADSU_Periph_PWM0  = (1L << 14U),
-  ADSU_Periph_PWM1  = (1L << 15U),
-  ADSU_Periph_GPIO  = (1L << 16U),
-  ADSU_Periph_SPI0  = (1L << 23U),
-  ADSU_Periph_SPI1  = (1L << 24U),
-  ADSU_Periph_UART0 = (1L << 25U),
-  ADSU_Periph_UART1 = (1L << 26U),
-  ADSU_Periph_I2C0  = (1L << 27U),
-  ADSU_Periph_I2C1  = (1L << 28U),
-  ADSU_Periph_UART2 = (1L << 29U),
-  ADSU_Periph_UART3 = (1L << 30U),
-  ADSU_Periph_CHIN  = (1L << 31U)
+  ADSU_Periph_FMCU  = ADSU_Gate_FMCU,
+  ADSU_Periph_TMR0  = ADSU_Gate_TMR0,
+  ADSU_Periph_TMR1  = ADSU_Gate_TMR1,
+  ADSU_Periph_PWM0  = ADSU_Gate_PWM0,
+  ADSU_Periph_PWM1  = ADSU_Gate_PWM1,
+  ADSU_Periph_GPIO  = ADSU_Gate_GPIO,
+  ADSU_Periph_SPI0  = ADSU_Gate_SPI0,
+  ADSU_Periph_SPI1  = ADSU_Gate_SPI1,
+  ADSU_Periph_UART0 = ADSU_Gate_UART0,
+  ADSU_Periph_UART1 = ADSU_Gate_UART1,
+  ADSU_Periph_I2C0  = ADSU_Gate_I2C0,
+  ADSU_Periph_I2C1  = ADSU_Gate_I2C1,
+  ADSU_Periph_UART2 = ADSU_Gate_UART2,
+  ADSU_Periph_UART3 = ADSU_Gate_UART3,
+  ADSU_Periph_CHIN  = ADSU_Gate_ChIN
 } ADSU_Periph_t;
 
 /**

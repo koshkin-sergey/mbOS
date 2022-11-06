@@ -98,26 +98,28 @@ typedef enum {
 /**
  * @brief PRW Register Value
  */
-#define PRW_CPU                   0U
-#define PRW_WDT                   1U
-#define PRW_DBG                   1U
-#define PRW_ADSU                  1U
-#define PRW_CHIN                  2U
-#define PRW_DMA                   3U
-#define PRW_FMCU                  4U
-#define PRW_GPIO                  5U
-#define PRW_SPI0                  8U
-#define PRW_SPI1                  9U
-#define PRW_I2C0                  10U
-#define PRW_I2C1                  11U
-#define PRW_UART0                 12U
-#define PRW_UART1                 13U
-#define PRW_UART2                 14U
-#define PRW_UART3                 15U
-#define PRW_TMR0                  16U
-#define PRW_TMR1                  17U
-#define PRW_PWM0                  18U
-#define PRW_PWM1                  19U
+typedef enum Periph_Wnd {
+  PRW_CPU  = 0U,
+  PRW_WDT  = 1U,
+  PRW_DBG  = 1U,
+  PRW_ADSU = 1U,
+  PRW_CHIN = 2U,
+  PRW_DMA  = 3U,
+  PRW_FMCU = 4U,
+  PRW_GPIO = 5U,
+  PRW_SPI0 = 8U,
+  PRW_SPI1 = 9U,
+  PRW_I2C0 = 10U,
+  PRW_I2C1 = 11U,
+  PRW_UART0= 12U,
+  PRW_UART1= 13U,
+  PRW_UART2= 14U,
+  PRW_UART3= 15U,
+  PRW_TMR0 = 16U,
+  PRW_TMR1 = 17U,
+  PRW_PWM0 = 18U,
+  PRW_PWM1 = 19U
+} Periph_Wnd_t;
 
 /**
  * @brief Peripheral Register Address
@@ -180,113 +182,51 @@ typedef enum {
 #define GPIO_FILTER_REG           7U
 #define GPIO_PULL_REG             8U
 
-/****** PRW = 8 ***************************************************************/
-#define SPI0_CFG_REG              0U
-#define SPI0_INT_REG              1U
-#define SPI0_STAT_REG             2U
-#define SPI0_DAT_REG              3U
+/****** PRW = 8 & PRW = 9 *****************************************************/
+#define SPI_CFG_REG               0U
+#define SPI_INT_REG               1U
+#define SPI_STAT_REG              2U
+#define SPI_DAT_REG               3U
 
-/****** PRW = 9 ***************************************************************/
-#define SPI1_CFG_REG              0U
-#define SPI1_INT_REG              1U
-#define SPI1_STAT_REG             2U
-#define SPI1_DAT_REG              3U
+/****** PRW = 10 & PRW = 11 ***************************************************/
+#define I2C_CFG_REG               0U
+#define I2C_INT_REG               1U
+#define I2C_FIFO_REG              2U
+#define I2C_FLAGS_REG             3U
+#define I2C_CON_REG               3U
+#define I2C_STAT_REG              4U
+#define I2C_TDAT_REG              5U
+#define I2C_RDAT_REG              6U
 
-/****** PRW = 10 **************************************************************/
-#define I2C0_CFG_REG              0U
-#define I2C0_INT_REG              1U
-#define I2C0_FIFO_REG             2U
-#define I2C0_FLAGS_REG            3U
-#define I2C0_CON_REG              3U
-#define I2C0_STAT_REG             4U
-#define I2C0_TDAT_REG             5U
-#define I2C0_RDAT_REG             6U
+/****** PRW = 12 & PRW = 13 & PRW = 14 & PRW = 15 *****************************/
+#define UART_CFG_REG              0U
+#define UART_INT_REG              1U
+#define UART_STAT_REG             2U
+#define UART_FIFO_REG             3U
+#define UART_CON_REG              4U
+#define UART_RDAT_REG             5U
+#define UART_TDAT_REG             6U
 
-/****** PRW = 11 **************************************************************/
-#define I2C1_CFG_REG              0U
-#define I2C1_INT_REG              1U
-#define I2C1_FIFO_REG             2U
-#define I2C1_FLAGS_REG            3U
-#define I2C1_CON_REG              3U
-#define I2C1_STAT_REG             4U
-#define I2C1_TDAT_REG             5U
-#define I2C1_RDAT_REG             6U
+/****** PRW = 16 & PRW = 17 ***************************************************/
+#define TMR_CFG_REG               0U
+#define TMR_CON_REG               1U
+#define TMR_RANGE_REG             2U
+#define TMR_COUNT_REG             3U
 
-/****** PRW = 12 **************************************************************/
-#define UART0_CFG_REG             0U
-#define UART0_INT_REG             1U
-#define UART0_STAT_REG            2U
-#define UART0_FIFO_REG            3U
-#define UART0_CON_REG             4U
-#define UART0_RDAT_REG            5U
-#define UART0_TDAT_REG            6U
+/****** PRW = 18 & PRW = 19 ***************************************************/
+#define PWM_CON_REG               0U
+#define PWM_CFG_REG               1U
+#define PWM_STAT_REG              2U
+#define PWM_COUNT_A_REG           3U
+#define PWM_COUNT_B_REG           4U
+#define PWM_COUNT_C_REG           5U
+#define PWM_RANGE_A_REG           6U
+#define PWM_RANGE_B_REG           7U
+#define PWM_RANGE_C_REG           8U
+#define PWM_CMP_A_REG             9U
+#define PWM_CMP_B_REG             10U
+#define PWM_CMP_C_REG             11U
 
-/****** PRW = 13 **************************************************************/
-#define UART1_CFG_REG             0U
-#define UART1_INT_REG             1U
-#define UART1_STAT_REG            2U
-#define UART1_FIFO_REG            3U
-#define UART1_CON_REG             4U
-#define UART1_RDAT_REG            5U
-#define UART1_TDAT_REG            6U
-
-/****** PRW = 14 **************************************************************/
-#define UART2_CFG_REG             0U
-#define UART2_INT_REG             1U
-#define UART2_STAT_REG            2U
-#define UART2_FIFO_REG            3U
-#define UART2_CON_REG             4U
-#define UART2_RDAT_REG            5U
-#define UART2_TDAT_REG            6U
-
-/****** PRW = 15 **************************************************************/
-#define UART3_CFG_REG             0U
-#define UART3_INT_REG             1U
-#define UART3_STAT_REG            2U
-#define UART3_FIFO_REG            3U
-#define UART3_CON_REG             4U
-#define UART3_RDAT_REG            5U
-#define UART3_TDAT_REG            6U
-
-/****** PRW = 16 **************************************************************/
-#define TMR0_CFG_REG              0U
-#define TMR0_CON_REG              1U
-#define TMR0_RANGE_REG            2U
-#define TMR0_COUNT_REG            3U
-
-/****** PRW = 17 **************************************************************/
-#define TMR1_CFG_REG              0U
-#define TMR1_CON_REG              1U
-#define TMR1_RANGE_REG            2U
-#define TMR1_COUNT_REG            3U
-
-/****** PRW = 18 **************************************************************/
-#define PWM0_CON_REG              0U
-#define PWM0_CFG_REG              1U
-#define PWM0_STAT_REG             2U
-#define PWM0_COUNT_A_REG          3U
-#define PWM0_COUNT_B_REG          4U
-#define PWM0_COUNT_C_REG          5U
-#define PWM0_RANGE_A_REG          6U
-#define PWM0_RANGE_B_REG          7U
-#define PWM0_RANGE_C_REG          8U
-#define PWM0_CMP_A_REG            9U
-#define PWM0_CMP_B_REG            10U
-#define PWM0_CMP_C_REG            11U
-
-/****** PRW = 19 **************************************************************/
-#define PWM1_CON_REG              0U
-#define PWM1_CFG_REG              1U
-#define PWM1_STAT_REG             2U
-#define PWM1_COUNT_A_REG          3U
-#define PWM1_COUNT_B_REG          4U
-#define PWM1_COUNT_C_REG          5U
-#define PWM1_RANGE_A_REG          6U
-#define PWM1_RANGE_B_REG          7U
-#define PWM1_RANGE_C_REG          8U
-#define PWM1_CMP_A_REG            9U
-#define PWM1_CMP_B_REG            10U
-#define PWM1_CMP_C_REG            11U
 
 /*------------------------------------------------------------------------------
  *                                ADSU
