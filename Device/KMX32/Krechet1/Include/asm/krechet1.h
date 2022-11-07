@@ -125,107 +125,107 @@ typedef enum Periph_Wnd {
  * @brief Peripheral Register Address
  */
 /****** PRW = 1 ***************************************************************/
-#define WDT_CON_REG               0U
+#define WDT_CON_REG               0
 
-#define DBG_CFG_REG               1U
-#define DBG_ADDR_REG              2U
-#define DBG_BP1_ADDR_REG          3U
-#define DBG_BP2_ADDR_REG          4U
-#define DBG_BP3_ADDR_REG          5U
-#define DBG_PC_REG                6U
-#define DBG_IPC_REG               7U
-#define DBG_BP4_ADDR_REG          8U
-#define DBG_BP5_ADDR_REG          9U
+#define DBG_CFG_REG               1
+#define DBG_ADDR_REG              2
+#define DBG_BP1_ADDR_REG          3
+#define DBG_BP2_ADDR_REG          4
+#define DBG_BP3_ADDR_REG          5
+#define DBG_PC_REG                6
+#define DBG_IPC_REG               7
+#define DBG_BP4_ADDR_REG          8
+#define DBG_BP5_ADDR_REG          9
 
-#define ADSU_CLKCON_REG           17U
-#define ADSU_CLKCFG_REG           18U
-#define ADSU_GATE_REG             19U
-#define ADSU_WAKECFG_REG          20U
-#define ADSU_MAXLOAD_REG          23U
-#define ADSU_TRIM_REG             24U
+#define ADSU_CLKCON_REG           17
+#define ADSU_CLKCFG_REG           18
+#define ADSU_GATE_REG             19
+#define ADSU_WAKECFG_REG          20
+#define ADSU_MAXLOAD_REG          23
+#define ADSU_TRIM_REG             24
 
 /****** PRW = 2 ***************************************************************/
-#define CHIN_CFG0_REG             0U
-#define CHIN_CFG1_REG             1U
-#define CHIN_CFG2_REG             2U
-#define CHIN_CFG3_REG             3U
-#define CHIN_CFG4_REG             4U
-#define CHIN_CHECK_REG            8U
-#define CHIN_CON_REG              30U
-#define CHIN_TST_REG              31U
+#define CHIN_CFG0_REG             0
+#define CHIN_CFG1_REG             1
+#define CHIN_CFG2_REG             2
+#define CHIN_CFG3_REG             3
+#define CHIN_CFG4_REG             4
+#define CHIN_CHECK_REG            8
+#define CHIN_CON_REG              30
+#define CHIN_TST_REG              31
 
 /****** PRW = 3 ***************************************************************/
-#define DMA_CHAN_REG              0U
-#define DMA_CON_REG               1U
-#define DMA_CFG_REG               2U
-#define DMA_SRC_REG               3U
-#define DMA_DST_REG               4U
-#define DMA_DCNT_REG              5U
-#define DMA_STAT_REG              6U
+#define DMA_CHAN_REG              0
+#define DMA_CON_REG               1
+#define DMA_CFG_REG               2
+#define DMA_SRC_REG               3
+#define DMA_DST_REG               4
+#define DMA_DCNT_REG              5
+#define DMA_STAT_REG              6
 
 /****** PRW = 4 ***************************************************************/
-#define FMCU_CON_REG              0U
-#define FMCU_ADDR_REG             1U
-#define FMCU_ABUF_REG             2U
-#define FMCU_DCNT_REG             3U
-#define FMCU_ACCESS_REG           4U
-#define FMCU_1US_CYCLE_REG        5U
+#define FMCU_CON_REG              0
+#define FMCU_ADDR_REG             1
+#define FMCU_ABUF_REG             2
+#define FMCU_DCNT_REG             3
+#define FMCU_ACCESS_REG           4
+#define FMCU_1US_CYCLE_REG        5
 
 /****** PRW = 5 ***************************************************************/
-#define GPIO_IN_REG               0U
-#define GPIO_DIR_REG              1U
-#define GPIO_OUT_REG              2U
-#define GPIO_RISE_IE_REG          3U
-#define GPIO_DROP_IE_REG          4U
-#define GPIO_RISE_IF_REG          5U
-#define GPIO_DROP_IF_REG          6U
-#define GPIO_FILTER_REG           7U
-#define GPIO_PULL_REG             8U
+#define GPIO_IN_REG               0
+#define GPIO_DIR_REG              1
+#define GPIO_OUT_REG              2
+#define GPIO_RISE_IE_REG          3
+#define GPIO_DROP_IE_REG          4
+#define GPIO_RISE_IF_REG          5
+#define GPIO_DROP_IF_REG          6
+#define GPIO_FILTER_REG           7
+#define GPIO_PULL_REG             8
 
 /****** PRW = 8 & PRW = 9 *****************************************************/
-#define SPI_CFG_REG               0U
-#define SPI_INT_REG               1U
-#define SPI_STAT_REG              2U
-#define SPI_DAT_REG               3U
+#define SPI_CFG_REG               0
+#define SPI_INT_REG               1
+#define SPI_STAT_REG              2
+#define SPI_DAT_REG               3
 
 /****** PRW = 10 & PRW = 11 ***************************************************/
-#define I2C_CFG_REG               0U
-#define I2C_INT_REG               1U
-#define I2C_FIFO_REG              2U
-#define I2C_FLAGS_REG             3U
-#define I2C_CON_REG               3U
-#define I2C_STAT_REG              4U
-#define I2C_TDAT_REG              5U
-#define I2C_RDAT_REG              6U
+#define I2C_CFG_REG               0
+#define I2C_INT_REG               1
+#define I2C_FIFO_REG              2
+#define I2C_FLAGS_REG             3
+#define I2C_CON_REG               3
+#define I2C_STAT_REG              4
+#define I2C_TDAT_REG              5
+#define I2C_RDAT_REG              6
 
 /****** PRW = 12 & PRW = 13 & PRW = 14 & PRW = 15 *****************************/
-#define UART_CFG_REG              0U
-#define UART_INT_REG              1U
-#define UART_STAT_REG             2U
-#define UART_FIFO_REG             3U
-#define UART_CON_REG              4U
-#define UART_RDAT_REG             5U
-#define UART_TDAT_REG             6U
+#define UART_CFG_REG              0
+#define UART_INT_REG              1
+#define UART_STAT_REG             2
+#define UART_FIFO_REG             3
+#define UART_CON_REG              4
+#define UART_RDAT_REG             5
+#define UART_TDAT_REG             6
 
 /****** PRW = 16 & PRW = 17 ***************************************************/
-#define TMR_CFG_REG               0U
-#define TMR_CON_REG               1U
-#define TMR_RANGE_REG             2U
-#define TMR_COUNT_REG             3U
+#define TMR_CFG_REG               0
+#define TMR_CON_REG               1
+#define TMR_RANGE_REG             2
+#define TMR_COUNT_REG             3
 
 /****** PRW = 18 & PRW = 19 ***************************************************/
-#define PWM_CON_REG               0U
-#define PWM_CFG_REG               1U
-#define PWM_STAT_REG              2U
-#define PWM_COUNT_A_REG           3U
-#define PWM_COUNT_B_REG           4U
-#define PWM_COUNT_C_REG           5U
-#define PWM_RANGE_A_REG           6U
-#define PWM_RANGE_B_REG           7U
-#define PWM_RANGE_C_REG           8U
-#define PWM_CMP_A_REG             9U
-#define PWM_CMP_B_REG             10U
-#define PWM_CMP_C_REG             11U
+#define PWM_CON_REG               0
+#define PWM_CFG_REG               1
+#define PWM_STAT_REG              2
+#define PWM_COUNT_A_REG           3
+#define PWM_COUNT_B_REG           4
+#define PWM_COUNT_C_REG           5
+#define PWM_RANGE_A_REG           6
+#define PWM_RANGE_B_REG           7
+#define PWM_RANGE_C_REG           8
+#define PWM_CMP_A_REG             9
+#define PWM_CMP_B_REG             10
+#define PWM_CMP_C_REG             11
 
 
 /*------------------------------------------------------------------------------
@@ -488,61 +488,61 @@ typedef enum Periph_Wnd {
 #define I2C_Cfg_PullUp                      I2C_Cfg_PullUp_Msk
 
 /********************  Bit definition for I2C_Int register  *******************/
-#define I2C_Cfg_ArbErrIE_Pos      (0U)
-#define I2C_Cfg_ArbErrIE_Msk      (0x1UL << I2C_Cfg_ArbErrIE_Pos)
-#define I2C_Cfg_ArbErrIE                    I2C_Cfg_ArbErrIE_Msk
+#define I2C_Int_ArbErrIE_Pos      (0U)
+#define I2C_Int_ArbErrIE_Msk      (0x1UL << I2C_Int_ArbErrIE_Pos)
+#define I2C_Int_ArbErrIE                    I2C_Int_ArbErrIE_Msk
 
-#define I2C_Cfg_DatErrIE_Pos      (1U)
-#define I2C_Cfg_DatErrIE_Msk      (0x1UL << I2C_Cfg_DatErrIE_Pos)
-#define I2C_Cfg_DatErrIE                    I2C_Cfg_DatErrIE_Msk
+#define I2C_Int_DatErrIE_Pos      (1U)
+#define I2C_Int_DatErrIE_Msk      (0x1UL << I2C_Int_DatErrIE_Pos)
+#define I2C_Int_DatErrIE                    I2C_Int_DatErrIE_Msk
 
-#define I2C_Cfg_AdrErrIE_Pos      (2U)
-#define I2C_Cfg_AdrErrIE_Msk      (0x1UL << I2C_Cfg_AdrErrIE_Pos)
-#define I2C_Cfg_AdrErrIE                    I2C_Cfg_AdrErrIE_Msk
+#define I2C_Int_AdrErrIE_Pos      (2U)
+#define I2C_Int_AdrErrIE_Msk      (0x1UL << I2C_Int_AdrErrIE_Pos)
+#define I2C_Int_AdrErrIE                    I2C_Int_AdrErrIE_Msk
 
-#define I2C_Cfg_RxIE_Pos          (3U)
-#define I2C_Cfg_RxIE_Msk          (0x1UL << I2C_Cfg_RxIE_Pos)
-#define I2C_Cfg_RxIE                        I2C_Cfg_RxIE_Msk
+#define I2C_Int_RxIE_Pos          (3U)
+#define I2C_Int_RxIE_Msk          (0x1UL << I2C_Int_RxIE_Pos)
+#define I2C_Int_RxIE                        I2C_Int_RxIE_Msk
 
-#define I2C_Cfg_TxIE_Pos          (4U)
-#define I2C_Cfg_TxIE_Msk          (0x1UL << I2C_Cfg_TxIE_Pos)
-#define I2C_Cfg_TxIE                        I2C_Cfg_TxIE_Msk
+#define I2C_Int_TxIE_Pos          (4U)
+#define I2C_Int_TxIE_Msk          (0x1UL << I2C_Int_TxIE_Pos)
+#define I2C_Int_TxIE                        I2C_Int_TxIE_Msk
 
-#define I2C_Cfg_RxOvfIE_Pos       (5U)
-#define I2C_Cfg_RxOvfIE_Msk       (0x1UL << I2C_Cfg_RxOvfIE_Pos)
-#define I2C_Cfg_RxOvfIE                     I2C_Cfg_RxOvfIE_Msk
+#define I2C_Int_RxOvfIE_Pos       (5U)
+#define I2C_Int_RxOvfIE_Msk       (0x1UL << I2C_Int_RxOvfIE_Pos)
+#define I2C_Int_RxOvfIE                     I2C_Int_RxOvfIE_Msk
 
-#define I2C_Cfg_GenCIE_Pos        (6U)
-#define I2C_Cfg_GenCIE_Msk        (0x1UL << I2C_Cfg_GenCIE_Pos)
-#define I2C_Cfg_GenCIE                      I2C_Cfg_GenCIE_Msk
+#define I2C_Int_GenCIE_Pos        (6U)
+#define I2C_Int_GenCIE_Msk        (0x1UL << I2C_Int_GenCIE_Pos)
+#define I2C_Int_GenCIE                      I2C_Int_GenCIE_Msk
 
-#define I2C_Cfg_StBytIE_Pos       (7U)
-#define I2C_Cfg_StBytIE_Msk       (0x1UL << I2C_Cfg_StBytIE_Pos)
-#define I2C_Cfg_StBytIE                     I2C_Cfg_StBytIE_Msk
+#define I2C_Int_StBytIE_Pos       (7U)
+#define I2C_Int_StBytIE_Msk       (0x1UL << I2C_Int_StBytIE_Pos)
+#define I2C_Int_StBytIE                     I2C_Int_StBytIE_Msk
 
-#define I2C_Cfg_CBusIE_Pos        (8U)
-#define I2C_Cfg_CBusIE_Msk        (0x1UL << I2C_Cfg_CBusIE_Pos)
-#define I2C_Cfg_CBusIE                      I2C_Cfg_CBusIE_Msk
+#define I2C_Int_CBusIE_Pos        (8U)
+#define I2C_Int_CBusIE_Msk        (0x1UL << I2C_Int_CBusIE_Pos)
+#define I2C_Int_CBusIE                      I2C_Int_CBusIE_Msk
 
-#define I2C_Cfg_HSIE_Pos          (9U)
-#define I2C_Cfg_HSIE_Msk          (0x1UL << I2C_Cfg_HSIE_Pos)
-#define I2C_Cfg_HSIE                        I2C_Cfg_HSIE_Msk
+#define I2C_Int_HSIE_Pos          (9U)
+#define I2C_Int_HSIE_Msk          (0x1UL << I2C_Int_HSIE_Pos)
+#define I2C_Int_HSIE                        I2C_Int_HSIE_Msk
 
-#define I2C_Cfg_SlvAdrIE_Pos      (10U)
-#define I2C_Cfg_SlvAdrIE_Msk      (0x1UL << I2C_Cfg_SlvAdrIE_Pos)
-#define I2C_Cfg_SlvAdrIE                    I2C_Cfg_SlvAdrIE_Msk
+#define I2C_Int_SlvAdrIE_Pos      (10U)
+#define I2C_Int_SlvAdrIE_Msk      (0x1UL << I2C_Int_SlvAdrIE_Pos)
+#define I2C_Int_SlvAdrIE                    I2C_Int_SlvAdrIE_Msk
 
-#define I2C_Cfg_Master_Pos        (11U)
-#define I2C_Cfg_Master_Msk        (0x1UL << I2C_Cfg_Master_Pos)
-#define I2C_Cfg_Master                      I2C_Cfg_Master_Msk
+#define I2C_Int_Master_Pos        (11U)
+#define I2C_Int_Master_Msk        (0x1UL << I2C_Int_Master_Pos)
+#define I2C_Int_Master                      I2C_Int_Master_Msk
 
-#define I2C_Cfg_DMARqEn_Pos       (12U)
-#define I2C_Cfg_DMARqEn_Msk       (0x1UL << I2C_Cfg_DMARqEn_Pos)
-#define I2C_Cfg_DMARqEn                     I2C_Cfg_DMARqEn_Msk
+#define I2C_Int_DMARqEn_Pos       (12U)
+#define I2C_Int_DMARqEn_Msk       (0x1UL << I2C_Int_DMARqEn_Pos)
+#define I2C_Int_DMARqEn                     I2C_Int_DMARqEn_Msk
 
-#define I2C_Cfg_TxDMARq_Pos       (13U)
-#define I2C_Cfg_TxDMARq_Msk       (0x1UL << I2C_Cfg_TxDMARq_Pos)
-#define I2C_Cfg_TxDMARq                     I2C_Cfg_TxDMARq_Msk
+#define I2C_Int_TxDMARq_Pos       (13U)
+#define I2C_Int_TxDMARq_Msk       (0x1UL << I2C_Int_TxDMARq_Pos)
+#define I2C_Int_TxDMARq                     I2C_Int_TxDMARq_Msk
 
 /********************  Bit definition for I2C_FIFO register  ******************/
 #define I2C_FIFO_RxCntLim_Pos     (0U)
