@@ -710,6 +710,10 @@ typedef enum Periph_Wnd {
 
 #define I2C_TDat_Cond_Pos         (9U)
 #define I2C_TDat_Cond_Msk         (0x3UL << I2C_TDat_Cond_Pos)
+#define I2C_TDat_Cond_Data        (0x0UL << I2C_TDat_Cond_Pos)
+#define I2C_TDat_Cond_Start       (0x1UL << I2C_TDat_Cond_Pos)
+#define I2C_TDat_Cond_Stop        (0x2UL << I2C_TDat_Cond_Pos)
+#define I2C_TDat_Cond_Slv         (0x3UL << I2C_TDat_Cond_Pos)
 
 /********************  Bit definition for I2C_RDat register  ******************/
 #define I2C_RDat_Data_Pos         (0U)

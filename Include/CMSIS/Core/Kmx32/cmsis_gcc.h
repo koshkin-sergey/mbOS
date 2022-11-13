@@ -340,7 +340,7 @@ __STATIC_FORCEINLINE void __isr_epilogue(void)
     /* Decrement IRQ nesting level   */
     "lda    dp1, IRQ_NestLevel    \n\t"
     "subl   dp1, 1                \n\t"
-    "bne    1$                    \n\t"
+    "bne    2$                    \n\t"
     "sta    MSP, c7               \n\t"
     "mfprs  c7, USP               \n\t"
     "2$:                          \n\t"

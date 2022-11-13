@@ -172,7 +172,7 @@ SysTick_Handler:
 
                 lda     dp1, IRQ_NestLevel
                 subl    dp1, 1                      // Decrement IRQ nesting level
-                bne     1$                          // if IRQ_NestLevel = 0
+                bne     2$                          // if IRQ_NestLevel = 0
                 sta     MSP, c7                     // Save Main Stack to MSP
                 mfprs   c7, USP                     // Switch to Thread Stack
 2$:
