@@ -527,6 +527,7 @@ void I2C_IRQHandler(I2C_RESOURCES *i2c)
   uint32_t event;
   uint32_t flags;
   uint32_t state;
+  uint32_t cnt;
   I2C_INFO *info;
   I2C_TX_XFER_INFO *tx;
 
@@ -542,31 +543,28 @@ void I2C_IRQHandler(I2C_RESOURCES *i2c)
   if ((state & I2C_Stat_Host) != 0U) {
     /* Master Mode */
     if ((flags & (I2C_Flags_AdrErrIF | I2C_Flags_DatErrIF)) != 0U) {
-      info->status &= ~I2C_BUSY;
-      event |= ARM_I2C_EVENT_TRANSFER_DONE;
-      if (tx->cnt == 0U) {
-        event |= ARM_I2C_EVENT_ADDRESS_NACK;
-      }
       __set_PeriphReg(I2C_CON_REG, I2C_Con_AdrErrIF | I2C_Con_DatErrIF);
-      __set_PeriphReg(I2C_INT_REG, I2C_Int_Master);
       __set_PeriphReg(I2C_TDAT_REG, I2C_TDat_Cond_Stop | I2C_TDat_NoAck | 0xFFU);
     }
     else if ((flags & I2C_Flags_TxIF) != 0U) {
       if ((info->status & I2C_RECEIVER) == 0U) {
         /* Master Transmit */
-        if (tx->cnt < tx->num) {
-          __set_PeriphReg(I2C_TDAT_REG, I2C_TDat_Cond_Data | I2C_TDat_NoAck | tx->data[tx->cnt]);
-          tx->cnt++;
-        }
-        if (tx->cnt == tx->num) {
-          info->status &= ~I2C_BUSY;
-          event |= ARM_I2C_EVENT_TRANSFER_DONE;
-          __set_PeriphReg(I2C_INT_REG, I2C_Int_Master);
-          __set_PeriphReg(I2C_TDAT_REG, I2C_TDat_Cond_Stop | I2C_TDat_NoAck | 0xFFU);
+        cnt = (state & I2C_Stat_TxCnt_Msk) >> I2C_Stat_TxCnt_Pos;
+        while (cnt < I2C_FIFO_SIZE) {
+          if (tx->cnt < tx->num) {
+            __set_PeriphReg(I2C_TDAT_REG, I2C_TDat_Cond_Data | I2C_TDat_NoAck | tx->data[tx->cnt]);
+            ++tx->cnt;
+            ++cnt;
+          }
+          else {
+            __set_PeriphReg(I2C_TDAT_REG, I2C_TDat_Cond_Stop | I2C_TDat_NoAck | 0xFFU);
+            break;
+          }
         }
       }
       else {
         /* Master Receive */
+        cnt = (state & I2C_Stat_RxCnt_Msk) >> I2C_Stat_RxCnt_Pos;
       }
     }
     else if ((flags & I2C_Flags_RxIF) != 0U) {
@@ -579,9 +577,11 @@ void I2C_IRQHandler(I2C_RESOURCES *i2c)
   }
   else {
     info->status &= ~I2C_BUSY;
-    event |= ARM_I2C_EVENT_TRANSFER_DONE | ARM_I2C_EVENT_BUS_ERROR;
-    __set_PeriphReg(I2C_INT_REG, I2C_Int_Master);
-    __set_PeriphReg(I2C_TDAT_REG, I2C_TDat_Cond_Stop | I2C_TDat_NoAck | 0xFFU);
+    event |= ARM_I2C_EVENT_TRANSFER_DONE;
+    if (tx->cnt == 0U) {
+      event |= ARM_I2C_EVENT_ADDRESS_NACK;
+    }
+    __set_PeriphReg(I2C_INT_REG, 0U);
   }
 
   /* Send events */
