@@ -40,6 +40,9 @@
 #ifndef   __FORCEINLINE
   #define __FORCEINLINE                          __attribute__((always_inline))
 #endif
+#ifndef   __NO_INLINE
+  #define __NO_INLINE                            __attribute__((noinline))
+#endif
 #ifndef   __STATIC_INLINE
   #define __STATIC_INLINE                        static inline
 #endif
@@ -47,7 +50,7 @@
   #define __STATIC_FORCEINLINE                   __attribute__((always_inline)) static inline
 #endif
 #ifndef   __NO_RETURN
-  #define __NO_RETURN                            __attribute__((__noreturn__))
+  #define __NO_RETURN                            __attribute__((noreturn))
 #endif
 #ifndef   __USED
   #define __USED                                 __attribute__((used))
