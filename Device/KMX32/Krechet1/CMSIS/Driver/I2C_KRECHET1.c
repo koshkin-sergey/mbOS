@@ -32,6 +32,8 @@
  *  defines and macros (scope: module-local)
  ******************************************************************************/
 
+#define I2C_FIFO_SIZE                   (8U)
+
 #define ARM_I2C_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(1,0) /* driver version */
 
 /*******************************************************************************
@@ -268,7 +270,7 @@ int32_t I2C_MasterTransmit(uint32_t       addr,
 
   __set_PeriphReg(I2C_FIFO_REG, 0U);
   __set_PeriphReg(I2C_TDAT_REG, I2C_TDat_Cond_Start | I2C_TDat_NoAck | (addr << 1U));
-  __set_PeriphReg(I2C_INT_REG, I2C_Int_Master | I2C_Int_TxIE | I2C_Int_AdrErrIE | I2C_Int_DatErrIE | I2C_Int_ArbErrIE);
+  __set_PeriphReg(I2C_INT_REG, I2C_Int_Master | I2C_Int_TxIE | I2C_Int_AdrErrIE | I2C_Int_DatErrIE);
   __set_PeriphReg(I2C_CON_REG, I2C_Con_StartTx);
 
   return (ARM_DRIVER_OK);
@@ -519,18 +521,16 @@ ARM_I2C_STATUS I2C_GetStatus(I2C_RESOURCES *i2c)
  * @brief       I2C Interrupt handler.
  * @param[in]   i2c   Pointer to I2C resources
  */
-static
+__NO_INLINE
 void I2C_IRQHandler(I2C_RESOURCES *i2c)
 {
   uint32_t event;
   uint32_t flags;
-  uint32_t clear;
   uint32_t state;
   I2C_INFO *info;
   I2C_TX_XFER_INFO *tx;
 
   event = 0U;
-  clear = 0U;
   info  = i2c->info;
   tx    = &info->tx;
 
@@ -542,12 +542,12 @@ void I2C_IRQHandler(I2C_RESOURCES *i2c)
   if ((state & I2C_Stat_Host) != 0U) {
     /* Master Mode */
     if ((flags & (I2C_Flags_AdrErrIF | I2C_Flags_DatErrIF)) != 0U) {
-      clear |= I2C_Con_AdrErrIF | I2C_Con_DatErrIF;
       info->status &= ~I2C_BUSY;
       event |= ARM_I2C_EVENT_TRANSFER_DONE;
       if (tx->cnt == 0U) {
         event |= ARM_I2C_EVENT_ADDRESS_NACK;
       }
+      __set_PeriphReg(I2C_CON_REG, I2C_Con_AdrErrIF | I2C_Con_DatErrIF);
       __set_PeriphReg(I2C_INT_REG, I2C_Int_Master);
       __set_PeriphReg(I2C_TDAT_REG, I2C_TDat_Cond_Stop | I2C_TDat_NoAck | 0xFFU);
     }
@@ -578,10 +578,11 @@ void I2C_IRQHandler(I2C_RESOURCES *i2c)
 
   }
   else {
-
+    info->status &= ~I2C_BUSY;
+    event |= ARM_I2C_EVENT_TRANSFER_DONE | ARM_I2C_EVENT_BUS_ERROR;
+    __set_PeriphReg(I2C_INT_REG, I2C_Int_Master);
+    __set_PeriphReg(I2C_TDAT_REG, I2C_TDat_Cond_Stop | I2C_TDat_NoAck | 0xFFU);
   }
-
-  __set_PeriphReg(I2C_CON_REG, clear);
 
   /* Send events */
   if ((event != 0U) && (info->cb_event)) {
