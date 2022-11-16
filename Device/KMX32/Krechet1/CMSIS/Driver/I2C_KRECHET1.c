@@ -24,7 +24,6 @@
 #include <string.h>
 
 #include "I2C_KRECHET1.h"
-#include <asm/system_krechet1.h>
 
 #if defined(USE_I2C0) || defined(USE_I2C1)
 
@@ -268,9 +267,8 @@ int32_t I2C_MasterTransmit(uint32_t       addr,
   tx->num  = num;
   tx->cnt  = 0U;
 
-  __set_PeriphReg(I2C_FIFO_REG, 0U);
   __set_PeriphReg(I2C_TDAT_REG, I2C_TDat_Cond_Start | I2C_TDat_NoAck | (addr << 1U));
-  __set_PeriphReg(I2C_INT_REG, I2C_Int_Master | I2C_Int_TxIE | I2C_Int_AdrErrIE | I2C_Int_DatErrIE);
+  __set_PeriphReg(I2C_INT_REG, I2C_Int_Master | I2C_Int_TxIE | I2C_Int_AdrErrIE | I2C_Int_DatErrIE | I2C_Int_ArbErrIE);
   __set_PeriphReg(I2C_CON_REG, I2C_Con_StartTx);
 
   return (ARM_DRIVER_OK);
@@ -484,6 +482,7 @@ int32_t I2C_Control(uint32_t control, uint32_t arg, I2C_RESOURCES *i2c)
       __set_CpuReg(CPU_PRW_REG, i2c->prw);
       reg_value = __get_PeriphReg(I2C_CFG_REG) & ~I2C_Cfg_SCP_Msk;
       __set_PeriphReg(I2C_CFG_REG, reg_value | (scp << I2C_Cfg_SCP_Pos));
+      __set_PeriphReg(I2C_FIFO_REG, 0U);
 
       /* Master configured, clock set */
       info->flags |= I2C_SETUP;
@@ -530,6 +529,7 @@ void I2C_IRQHandler(I2C_RESOURCES *i2c)
   uint32_t cnt;
   I2C_INFO *info;
   I2C_TX_XFER_INFO *tx;
+  I2C_RX_XFER_INFO *rx;
 
   event = 0U;
   info  = i2c->info;
@@ -540,53 +540,67 @@ void I2C_IRQHandler(I2C_RESOURCES *i2c)
   state = __get_PeriphReg(I2C_STAT_REG);
   flags = __get_PeriphReg(I2C_FLAGS_REG);
 
-  if ((state & I2C_Stat_Host) != 0U) {
-    /* Master Mode */
-    if ((flags & (I2C_Flags_AdrErrIF | I2C_Flags_DatErrIF)) != 0U) {
-      __set_PeriphReg(I2C_CON_REG, I2C_Con_AdrErrIF | I2C_Con_DatErrIF);
-      __set_PeriphReg(I2C_TDAT_REG, I2C_TDat_Cond_Stop | I2C_TDat_NoAck | 0xFFU);
-    }
-    else if ((flags & I2C_Flags_TxIF) != 0U) {
-      if ((info->status & I2C_RECEIVER) == 0U) {
-        /* Master Transmit */
-        cnt = (state & I2C_Stat_TxCnt_Msk) >> I2C_Stat_TxCnt_Pos;
-        while (cnt < I2C_FIFO_SIZE) {
-          if (tx->cnt < tx->num) {
-            __set_PeriphReg(I2C_TDAT_REG, I2C_TDat_Cond_Data | I2C_TDat_NoAck | tx->data[tx->cnt]);
-            ++tx->cnt;
-            ++cnt;
-          }
-          else {
-            __set_PeriphReg(I2C_TDAT_REG, I2C_TDat_Cond_Stop | I2C_TDat_NoAck | 0xFFU);
-            break;
-          }
-        }
-      }
-      else {
-        /* Master Receive */
-        cnt = (state & I2C_Stat_RxCnt_Msk) >> I2C_Stat_RxCnt_Pos;
-      }
-    }
-    else if ((flags & I2C_Flags_RxIF) != 0U) {
-
-    }
-  }
-  else if ((state & I2C_Stat_Slave) != 0U) {
-    /* Slave Mode */
-
+  if ((flags & (I2C_Flags_StopErrIF | I2C_Flags_OddStopIF | I2C_Flags_SDAErrIF | I2C_Flags_StartErrIF)) != 0U) {
+    event = ARM_I2C_EVENT_TRANSFER_DONE | ARM_I2C_EVENT_ARBITRATION_LOST;
+    __set_PeriphReg(I2C_CON_REG, I2C_Con_SDAErrIF | I2C_Con_StopErrIF | I2C_Con_OddStopIF | I2C_Con_StartErrIF);
+    __set_PeriphReg(I2C_INT_REG, 0U);
   }
   else {
-    info->status &= ~I2C_BUSY;
-    event |= ARM_I2C_EVENT_TRANSFER_DONE;
-    if (tx->cnt == 0U) {
-      event |= ARM_I2C_EVENT_ADDRESS_NACK;
+    if ((state & I2C_Stat_Host) != 0U) {
+      /* Master Mode */
+      if ((flags & (I2C_Flags_AdrErrIF | I2C_Flags_DatErrIF)) != 0U) {
+        __set_PeriphReg(I2C_CON_REG, I2C_Con_AdrErrIF | I2C_Con_DatErrIF);
+        __set_PeriphReg(I2C_TDAT_REG, I2C_TDat_Cond_Stop | I2C_TDat_NoAck | 0xFFU);
+      }
+      else if ((flags & I2C_Flags_TxIF) != 0U) {
+        if ((info->status & I2C_RECEIVER) == 0U) {
+          /* Master Transmit */
+          cnt = (state & I2C_Stat_TxCnt_Msk) >> I2C_Stat_TxCnt_Pos;
+          while (cnt < I2C_FIFO_SIZE) {
+            if (tx->cnt < tx->num) {
+              __set_PeriphReg(I2C_TDAT_REG, I2C_TDat_Cond_Data | I2C_TDat_NoAck | tx->data[tx->cnt++]);
+              ++cnt;
+            }
+            else {
+              if ((info->xfer_ctrl & XFER_CTRL_XPENDING) == 0U) {
+                __set_PeriphReg(I2C_TDAT_REG, I2C_TDat_Cond_Stop | I2C_TDat_NoAck | 0xFFU);
+              }
+              else {
+                event = ARM_I2C_EVENT_TRANSFER_DONE;
+                __set_PeriphReg(I2C_INT_REG, I2C_Int_Master);
+              }
+              break;
+            }
+          }
+        }
+        else {
+          /* Master Receive */
+          cnt = (state & I2C_Stat_RxCnt_Msk) >> I2C_Stat_RxCnt_Pos;
+        }
+      }
+      else if ((flags & I2C_Flags_RxIF) != 0U) {
+
+      }
     }
-    __set_PeriphReg(I2C_INT_REG, 0U);
+    else if ((state & I2C_Stat_Slave) != 0U) {
+      /* Slave Mode */
+
+    }
+    else {
+      event |= ARM_I2C_EVENT_TRANSFER_DONE;
+      if (tx->cnt == 0U) {
+        event |= ARM_I2C_EVENT_ADDRESS_NACK;
+      }
+      __set_PeriphReg(I2C_INT_REG, 0U);
+    }
   }
 
   /* Send events */
-  if ((event != 0U) && (info->cb_event)) {
-    info->cb_event(event);
+  if (event != 0U) {
+    info->status &= ~I2C_BUSY;
+    if (info->cb_event) {
+      info->cb_event(event);
+    }
   }
 }
 
