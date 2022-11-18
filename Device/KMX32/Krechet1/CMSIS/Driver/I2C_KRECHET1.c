@@ -192,7 +192,7 @@ int32_t I2C_PowerControl(ARM_POWER_STATE state, I2C_RESOURCES *i2c)
 
       /* Setup peripheral */
       __set_CpuReg(CPU_PRW_REG, i2c->prw);
-      __set_PeriphReg(I2C_CFG_REG, I2C_Cfg_PullUp | I2C_Cfg_On);
+      __set_PeriphReg(I2C_CFG_REG, I2C_Cfg_On);
 
       /* Ready for operation */
       info->flags |= I2C_POWER;
@@ -226,6 +226,7 @@ int32_t I2C_MasterTransmit(uint32_t       addr,
                            bool           xfer_pending,
                            I2C_RESOURCES *i2c)
 {
+  uint32_t          state;
   I2C_INFO         *info = i2c->info;
   I2C_TX_XFER_INFO *tx   = &info->tx;
 
@@ -242,15 +243,12 @@ int32_t I2C_MasterTransmit(uint32_t       addr,
     return (ARM_DRIVER_ERROR);
   }
 
-  if ((info->status & I2C_BUSY) != 0U) {
-    return (ARM_DRIVER_ERROR_BUSY);
-  }
-
   __set_CpuReg(CPU_PRW_REG, i2c->prw);
+  state = __get_PeriphReg(I2C_STAT_REG);
 
-  if ((info->xfer_ctrl & XFER_CTRL_XPENDING) == 0U) {
+  if ((state & I2C_Stat_Host) == 0U) {
     /* New transfer, check the line is busy */
-    if ((__get_PeriphReg(I2C_STAT_REG) & I2C_Stat_Busy) != 0U) {
+    if ((state & I2C_Stat_Busy) != 0U) {
       /* Bus is busy or locked */
       return (ARM_DRIVER_ERROR_BUSY);
     }
@@ -268,8 +266,13 @@ int32_t I2C_MasterTransmit(uint32_t       addr,
   tx->cnt  = 0U;
 
   __set_PeriphReg(I2C_TDAT_REG, I2C_TDat_Cond_Start | I2C_TDat_NoAck | (addr << 1U));
+
+  /* Start Transfer */
+  if ((state & I2C_Stat_Host) == 0U) {
+    __set_PeriphReg(I2C_CON_REG, I2C_Con_StartTx);
+  }
+
   __set_PeriphReg(I2C_INT_REG, I2C_Int_Master | I2C_Int_TxIE | I2C_Int_AdrErrIE | I2C_Int_DatErrIE | I2C_Int_ArbErrIE);
-  __set_PeriphReg(I2C_CON_REG, I2C_Con_StartTx);
 
   return (ARM_DRIVER_OK);
 }
@@ -295,6 +298,7 @@ int32_t I2C_MasterReceive(uint32_t       addr,
                           bool           xfer_pending,
                           I2C_RESOURCES *i2c)
 {
+  uint32_t          state;
   I2C_INFO         *info = i2c->info;
   I2C_RX_XFER_INFO *rx   = &info->rx;
 
@@ -311,13 +315,12 @@ int32_t I2C_MasterReceive(uint32_t       addr,
     return (ARM_DRIVER_ERROR);
   }
 
-  if ((info->status & I2C_BUSY) != 0U) {
-    return (ARM_DRIVER_ERROR_BUSY);
-  }
+  __set_CpuReg(CPU_PRW_REG, i2c->prw);
+  state = __get_PeriphReg(I2C_STAT_REG);
 
-  if ((info->xfer_ctrl & XFER_CTRL_XPENDING) == 0U) {
+  if ((state & I2C_Stat_Host) == 0U) {
     /* New transfer, check the line is busy */
-    if ((__get_PeriphReg(I2C_STAT_REG) & I2C_Stat_Busy) != 0U) {
+    if ((state & I2C_Stat_Busy) != 0U) {
       /* Bus is busy or locked */
       return (ARM_DRIVER_ERROR_BUSY);
     }
@@ -334,10 +337,14 @@ int32_t I2C_MasterReceive(uint32_t       addr,
   rx->num  = num;
   rx->cnt  = 0U;
 
-  __set_PeriphReg(I2C_FIFO_REG, 0U);
   __set_PeriphReg(I2C_TDAT_REG, I2C_TDat_Cond_Start | I2C_TDat_NoAck | ((addr << 1U) | 1U));
-  __set_PeriphReg(I2C_INT_REG, I2C_Int_Master | I2C_Int_TxIE | I2C_Int_TxIE | I2C_Int_AdrErrIE | I2C_Int_DatErrIE | I2C_Int_ArbErrIE);
-  __set_PeriphReg(I2C_CON_REG, I2C_Con_StartTx);
+
+  /* Start Transfer */
+  if ((state & I2C_Stat_Host) == 0U) {
+    __set_PeriphReg(I2C_CON_REG, I2C_Con_StartTx);
+  }
+
+  __set_PeriphReg(I2C_INT_REG, I2C_Int_Master | I2C_Int_TxIE | I2C_Int_RxIE | I2C_Int_AdrErrIE | I2C_Int_DatErrIE | I2C_Int_ArbErrIE);
 
   return (ARM_DRIVER_OK);
 }
@@ -541,6 +548,8 @@ void I2C_IRQHandler(I2C_RESOURCES *i2c)
   flags = __get_PeriphReg(I2C_FLAGS_REG);
 
   if ((flags & (I2C_Flags_StopErrIF | I2C_Flags_OddStopIF | I2C_Flags_SDAErrIF | I2C_Flags_StartErrIF)) != 0U) {
+    info->status |= I2C_ARBITRATION_LOST;
+    info->status &= ~(I2C_BUSY | I2C_MASTER);
     event = ARM_I2C_EVENT_TRANSFER_DONE | ARM_I2C_EVENT_ARBITRATION_LOST;
     __set_PeriphReg(I2C_CON_REG, I2C_Con_SDAErrIF | I2C_Con_StopErrIF | I2C_Con_OddStopIF | I2C_Con_StartErrIF);
     __set_PeriphReg(I2C_INT_REG, 0U);
@@ -587,6 +596,7 @@ void I2C_IRQHandler(I2C_RESOURCES *i2c)
 
     }
     else {
+      info->status &= ~(I2C_BUSY | I2C_MASTER);
       event |= ARM_I2C_EVENT_TRANSFER_DONE;
       if (tx->cnt == 0U) {
         event |= ARM_I2C_EVENT_ADDRESS_NACK;
@@ -596,11 +606,8 @@ void I2C_IRQHandler(I2C_RESOURCES *i2c)
   }
 
   /* Send events */
-  if (event != 0U) {
-    info->status &= ~I2C_BUSY;
-    if (info->cb_event) {
-      info->cb_event(event);
-    }
+  if ((event != 0U) && (info->cb_event)) {
+    info->cb_event(event);
   }
 }
 
