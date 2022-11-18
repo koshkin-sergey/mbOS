@@ -300,6 +300,7 @@ int32_t I2C_MasterReceive(uint32_t       addr,
 {
   uint32_t          state;
   I2C_INFO         *info = i2c->info;
+  I2C_TX_XFER_INFO *tx   = &info->tx;
   I2C_RX_XFER_INFO *rx   = &info->rx;
 
   if ((data == NULL) || (num == 0U)) {
@@ -336,6 +337,9 @@ int32_t I2C_MasterReceive(uint32_t       addr,
   rx->data = data;
   rx->num  = num;
   rx->cnt  = 0U;
+  tx->data = NULL;
+  tx->num  = num;
+  tx->cnt  = 0U;
 
   __set_PeriphReg(I2C_TDAT_REG, I2C_TDat_Cond_Start | I2C_TDat_NoAck | ((addr << 1U) | 1U));
 
@@ -576,7 +580,7 @@ void I2C_IRQHandler(I2C_RESOURCES *i2c)
               }
               else {
                 event = ARM_I2C_EVENT_TRANSFER_DONE;
-                __set_PeriphReg(I2C_INT_REG, I2C_Int_Master);
+                __set_PeriphReg(I2C_INT_REG, __get_PeriphReg(I2C_INT_REG) & ~I2C_Int_TxIE);
               }
               break;
             }
@@ -584,11 +588,35 @@ void I2C_IRQHandler(I2C_RESOURCES *i2c)
         }
         else {
           /* Master Receive */
-          cnt = (state & I2C_Stat_RxCnt_Msk) >> I2C_Stat_RxCnt_Pos;
+          cnt = (state & I2C_Stat_TxCnt_Msk) >> I2C_Stat_TxCnt_Pos;
+          while (cnt < I2C_FIFO_SIZE) {
+            uint32_t dat;
+
+            if (tx->cnt < tx->num) {
+              if (++tx->cnt == tx->num) {
+                dat = I2C_TDat_Cond_Data | I2C_TDat_NoAck | 0xFFU;
+              }
+              else {
+                dat = I2C_TDat_Cond_Data | 0xFFU;
+              }
+              __set_PeriphReg(I2C_TDAT_REG, dat);
+              ++cnt;
+            }
+            else {
+              if ((info->xfer_ctrl & XFER_CTRL_XPENDING) == 0U) {
+                __set_PeriphReg(I2C_TDAT_REG, I2C_TDat_Cond_Stop | I2C_TDat_NoAck | 0xFFU);
+              }
+              __set_PeriphReg(I2C_INT_REG, __get_PeriphReg(I2C_INT_REG) & ~I2C_Int_TxIE);
+              break;
+            }
+          }
         }
       }
       else if ((flags & I2C_Flags_RxIF) != 0U) {
-
+        cnt = (state & I2C_Stat_RxCnt_Msk) >> I2C_Stat_RxCnt_Pos;
+        while (cnt-- > 0U) {
+          rx->data[rx->cnt++] = __get_PeriphReg(I2C_RDAT_REG);
+        }
       }
     }
     else if ((state & I2C_Stat_Slave) != 0U) {
