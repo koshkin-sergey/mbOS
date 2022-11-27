@@ -265,6 +265,17 @@ int32_t I2C_MasterTransmit(uint32_t       addr,
   tx->num  = num;
   tx->cnt  = 0U;
 
+  /* Clear Flags */
+  __set_PeriphReg(
+      I2C_CON_REG,
+      I2C_Con_AdrErrIF  |
+      I2C_Con_DatErrIF  |
+      I2C_Con_StopErrIF |
+      I2C_Con_OddStopIF |
+      I2C_Con_SDAErrIF  |
+      I2C_Con_StartErrIF
+  );
+
   __set_PeriphReg(I2C_TDAT_REG, I2C_TDat_Cond_Start | I2C_TDat_NoAck | (addr << 1U));
 
   /* Start Transfer */
@@ -340,6 +351,17 @@ int32_t I2C_MasterReceive(uint32_t       addr,
   tx->data = NULL;
   tx->num  = num;
   tx->cnt  = 0U;
+
+  /* Clear Flags */
+  __set_PeriphReg(
+      I2C_CON_REG,
+      I2C_Con_AdrErrIF  |
+      I2C_Con_DatErrIF  |
+      I2C_Con_StopErrIF |
+      I2C_Con_OddStopIF |
+      I2C_Con_SDAErrIF  |
+      I2C_Con_StartErrIF
+  );
 
   __set_PeriphReg(I2C_TDAT_REG, I2C_TDat_Cond_Start | I2C_TDat_NoAck | ((addr << 1U) | 1U));
 
@@ -581,7 +603,6 @@ void I2C_IRQHandler(I2C_RESOURCES *i2c)
         cnt = (state & I2C_Stat_TxCnt_Msk) >> I2C_Stat_TxCnt_Pos;
         while (cnt < I2C_FIFO_SIZE) {
           if (tx->cnt < tx->num) {
-//            if ((info->status & I2C_RECEIVER) == 0U) {
             if ((state & I2C_Stat_TxNow) != 0U) {
               dat = I2C_TDat_Cond_Data | I2C_TDat_NoAck | tx->data[tx->cnt++];
             }
@@ -601,6 +622,7 @@ void I2C_IRQHandler(I2C_RESOURCES *i2c)
             else {
               event = ARM_I2C_EVENT_TRANSFER_DONE;
               __set_PeriphReg(I2C_INT_REG, __get_PeriphReg(I2C_INT_REG) & ~I2C_Int_TxIE);
+              while ((__get_PeriphReg(I2C_FLAGS_REG) & I2C_Flags_TxIF) == 0U);
             }
             break;
           }
@@ -614,7 +636,6 @@ void I2C_IRQHandler(I2C_RESOURCES *i2c)
         event |= ARM_I2C_EVENT_ADDRESS_NACK;
       }
       __set_PeriphReg(I2C_INT_REG, 0U);
-      __set_PeriphReg(I2C_CON_REG, I2C_Con_AdrErrIF | I2C_Con_DatErrIF);
     }
   }
 

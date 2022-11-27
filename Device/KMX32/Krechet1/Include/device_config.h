@@ -37,7 +37,7 @@
 
 // <e> I2C0 (Inter-integrated Circuit Interface) [Driver_I2C0]
 // <i> Configuration settings for Driver_I2C0 in component ::CMSIS Driver:I2C
-#define DEV_I2C0                       1
+#define DEV_I2C0                       0
 
 //   <o> Interrupt Priority <3=>3 High <4=>4 Above_Normal_3 <5=>5 Above_Normal_2 <6=>6 Above_Normal_1
 //                          <7=>7 Above_Normal <8=>8 Normal_4 <9=>9 Normal_3 <10=>10 Normal_2
@@ -49,7 +49,7 @@
 
 // <e> I2C1 (Inter-integrated Circuit Interface) [Driver_I2C1]
 // <i> Configuration settings for Driver_I2C1 in component ::CMSIS Driver:I2C
-#define DEV_I2C1                       1
+#define DEV_I2C1                       0
 
 //   <o> Interrupt Priority <3=>3 High <4=>4 Above_Normal_3 <5=>5 Above_Normal_2 <6=>6 Above_Normal_1
 //                          <7=>7 Above_Normal <8=>8 Normal_4 <9=>9 Normal_3 <10=>10 Normal_2
