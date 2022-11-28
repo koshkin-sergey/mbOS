@@ -463,6 +463,9 @@ typedef enum Periph_Wnd {
 
 #define I2C_Cfg_AMode_Pos         (11U)
 #define I2C_Cfg_AMode_Msk         (0x3UL << I2C_Cfg_AMode_Pos)
+#define I2C_Cfg_AMode_7           (0x1UL << I2C_Cfg_AMode_Pos)
+#define I2C_Cfg_AMode_10          (0x2UL << I2C_Cfg_AMode_Pos)
+#define I2C_Cfg_AMode_7_10        (0x3UL << I2C_Cfg_AMode_Pos)
 
 #define I2C_Cfg_EnMTS_Pos         (13U)
 #define I2C_Cfg_EnMTS_Msk         (0x1UL << I2C_Cfg_EnMTS_Pos)

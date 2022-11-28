@@ -169,8 +169,8 @@ int32_t I2C_PowerControl(ARM_POWER_STATE state, I2C_RESOURCES *i2c)
 
   switch (state) {
     case ARM_POWER_OFF:
-      __set_CpuReg(CPU_PRW_REG, PRW_I2C0);
-      __set_PeriphReg(I2C_CFG_REG, I2C_Cfg_PullUp);
+      __set_CpuReg(CPU_PRW_REG, i2c->prw);
+      __set_PeriphReg(I2C_CFG_REG, 0U);
 
       info->flags &= ~I2C_POWER;
       break;
@@ -494,6 +494,19 @@ int32_t I2C_Control(uint32_t control, uint32_t arg, I2C_RESOURCES *i2c)
 
   switch (control) {
     case ARM_I2C_OWN_ADDRESS:
+      __set_CpuReg(CPU_PRW_REG, i2c->prw);
+      reg_value = __get_PeriphReg(I2C_CFG_REG);
+
+      if (arg == 0) {
+        /* Disable slave */
+        reg_value &= ~(I2C_Cfg_EnSWr | I2C_Cfg_EnSRd | I2C_Cfg_AMode_Msk | I2C_Cfg_Adr7_Msk);
+      }
+      else {
+        /* Enable slave */
+        reg_value |= I2C_Cfg_EnSWr | I2C_Cfg_EnSRd | I2C_Cfg_AMode_7 | (arg & I2C_Cfg_Adr7_Msk);
+      }
+
+      __set_PeriphReg(I2C_CFG_REG, reg_value);
       break;
 
     case ARM_I2C_BUS_SPEED:
@@ -511,8 +524,8 @@ int32_t I2C_Control(uint32_t control, uint32_t arg, I2C_RESOURCES *i2c)
       }
 
       SystemCoreClockUpdate();
-      scp = (SystemCoreClock / (4U * master_freq) - 1U) / 2U;
       __set_CpuReg(CPU_PRW_REG, i2c->prw);
+      scp = (SystemCoreClock / (4U * master_freq) - 1U) / 2U;
       reg_value = __get_PeriphReg(I2C_CFG_REG) & ~I2C_Cfg_SCP_Msk;
       __set_PeriphReg(I2C_CFG_REG, reg_value | (scp << I2C_Cfg_SCP_Pos));
       __set_PeriphReg(I2C_FIFO_REG, 0U);
