@@ -268,11 +268,11 @@ int32_t I2C_MasterTransmit(uint32_t       addr,
   /* Clear Flags */
   __set_PeriphReg(
       I2C_CON_REG,
-      I2C_Con_AdrErrIF  |
-      I2C_Con_DatErrIF  |
-      I2C_Con_StopErrIF |
-      I2C_Con_OddStopIF |
-      I2C_Con_SDAErrIF  |
+      I2C_Con_BusErrIF    |
+      I2C_Con_MstNoAckIF  |
+      I2C_Con_StopErrIF   |
+      I2C_Con_OddStopIF   |
+      I2C_Con_SDAErrIF    |
       I2C_Con_StartErrIF
   );
 
@@ -355,11 +355,11 @@ int32_t I2C_MasterReceive(uint32_t       addr,
   /* Clear Flags */
   __set_PeriphReg(
       I2C_CON_REG,
-      I2C_Con_AdrErrIF  |
-      I2C_Con_DatErrIF  |
-      I2C_Con_StopErrIF |
-      I2C_Con_OddStopIF |
-      I2C_Con_SDAErrIF  |
+      I2C_Con_BusErrIF    |
+      I2C_Con_MstNoAckIF  |
+      I2C_Con_StopErrIF   |
+      I2C_Con_OddStopIF   |
+      I2C_Con_SDAErrIF    |
       I2C_Con_StartErrIF
   );
 
@@ -606,8 +606,8 @@ void I2C_IRQHandler(I2C_RESOURCES *i2c)
   if ((flags & I2C_Flags_TxIF) != 0U) {
     if ((state & I2C_Stat_Host) != 0U) {
       /* Received NACK */
-      if ((flags & (I2C_Flags_AdrErrIF | I2C_Flags_DatErrIF)) != 0U) {
-        __set_PeriphReg(I2C_CON_REG, I2C_Con_AdrErrIF | I2C_Con_DatErrIF);
+      if ((flags & (I2C_Flags_BusErrIF | I2C_Flags_MstNoAckIF)) != 0U) {
+        __set_PeriphReg(I2C_CON_REG, I2C_Con_BusErrIF | I2C_Con_MstNoAckIF);
         __set_PeriphReg(I2C_TDAT_REG, I2C_TDat_Cond_Stop | I2C_TDat_NoAck | 0xFFU);
       }
       else {
@@ -632,10 +632,9 @@ void I2C_IRQHandler(I2C_RESOURCES *i2c)
             if ((info->xfer_ctrl & XFER_CTRL_XPENDING) == 0U) {
               __set_PeriphReg(I2C_TDAT_REG, I2C_TDat_Cond_Stop | I2C_TDat_NoAck | 0xFFU);
             }
-            else {
+            else if (cnt == 0U) {
               event = ARM_I2C_EVENT_TRANSFER_DONE;
               __set_PeriphReg(I2C_INT_REG, __get_PeriphReg(I2C_INT_REG) & ~I2C_Int_TxIE);
-              while ((__get_PeriphReg(I2C_FLAGS_REG) & I2C_Flags_TxIF) == 0U);
             }
             break;
           }

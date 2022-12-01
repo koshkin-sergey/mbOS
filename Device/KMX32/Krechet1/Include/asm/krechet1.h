@@ -495,13 +495,13 @@ typedef enum Periph_Wnd {
 #define I2C_Int_ArbErrIE_Msk      (0x1UL << I2C_Int_ArbErrIE_Pos)
 #define I2C_Int_ArbErrIE                    I2C_Int_ArbErrIE_Msk
 
-#define I2C_Int_DatErrIE_Pos      (1U)
-#define I2C_Int_DatErrIE_Msk      (0x1UL << I2C_Int_DatErrIE_Pos)
-#define I2C_Int_DatErrIE                    I2C_Int_DatErrIE_Msk
+#define I2C_Int_NoAckIE_Pos       (1U)
+#define I2C_Int_NoAckIE_Msk       (0x1UL << I2C_Int_NoAckIE_Pos)
+#define I2C_Int_NoAckIE                     I2C_Int_NoAckIE_Msk
 
-#define I2C_Int_AdrErrIE_Pos      (2U)
-#define I2C_Int_AdrErrIE_Msk      (0x1UL << I2C_Int_AdrErrIE_Pos)
-#define I2C_Int_AdrErrIE                    I2C_Int_AdrErrIE_Msk
+#define I2C_Int_BusErrIE_Pos      (2U)
+#define I2C_Int_BusErrIE_Msk      (0x1UL << I2C_Int_BusErrIE_Pos)
+#define I2C_Int_BusErrIE                    I2C_Int_BusErrIE_Msk
 
 #define I2C_Int_RxIE_Pos          (3U)
 #define I2C_Int_RxIE_Msk          (0x1UL << I2C_Int_RxIE_Pos)
@@ -555,10 +555,6 @@ typedef enum Periph_Wnd {
 #define I2C_FIFO_TxCntLim_Msk     (0xFUL << I2C_FIFO_TxCntLim_Pos)
 
 /********************  Bit definition for I2C_Flags register  *****************/
-#define I2C_Flags_Attentn_Pos     (0U)
-#define I2C_Flags_Attentn_Msk     (0x1UL << I2C_Flags_Attentn_Pos)
-#define I2C_Flags_Attentn                   I2C_Flags_Attentn_Msk
-
 #define I2C_Flags_StartErrIF_Pos  (1U)
 #define I2C_Flags_StartErrIF_Msk  (0x1UL << I2C_Flags_StartErrIF_Pos)
 #define I2C_Flags_StartErrIF                I2C_Flags_StartErrIF_Msk
@@ -575,13 +571,13 @@ typedef enum Periph_Wnd {
 #define I2C_Flags_StopErrIF_Msk   (0x1UL << I2C_Flags_StopErrIF_Pos)
 #define I2C_Flags_StopErrIF                 I2C_Flags_StopErrIF_Msk
 
-#define I2C_Flags_DatErrIF_Pos    (5U)
-#define I2C_Flags_DatErrIF_Msk    (0x1UL << I2C_Flags_DatErrIF_Pos)
-#define I2C_Flags_DatErrIF                  I2C_Flags_DatErrIF_Msk
+#define I2C_Flags_MstNoAckIF_Pos  (5U)
+#define I2C_Flags_MstNoAckIF_Msk  (0x1UL << I2C_Flags_MstNoAckIF_Pos)
+#define I2C_Flags_MstNoAckIF                I2C_Flags_MstNoAckIF_Msk
 
-#define I2C_Flags_AdrErrIF_Pos    (6U)
-#define I2C_Flags_AdrErrIF_Msk    (0x1UL << I2C_Flags_AdrErrIF_Pos)
-#define I2C_Flags_AdrErrIF                  I2C_Flags_AdrErrIF_Msk
+#define I2C_Flags_BusErrIF_Pos    (6U)
+#define I2C_Flags_BusErrIF_Msk    (0x1UL << I2C_Flags_BusErrIF_Pos)
+#define I2C_Flags_BusErrIF                  I2C_Flags_BusErrIF_Msk
 
 #define I2C_Flags_RxIF_Pos        (7U)
 #define I2C_Flags_RxIF_Msk        (0x1UL << I2C_Flags_RxIF_Pos)
@@ -640,13 +636,13 @@ typedef enum Periph_Wnd {
 #define I2C_Con_StopErrIF_Msk     (0x1UL << I2C_Con_StopErrIF_Pos)
 #define I2C_Con_StopErrIF                   I2C_Con_StopErrIF_Msk
 
-#define I2C_Con_DatErrIF_Pos      (5U)
-#define I2C_Con_DatErrIF_Msk      (0x1UL << I2C_Con_DatErrIF_Pos)
-#define I2C_Con_DatErrIF                    I2C_Con_DatErrIF_Msk
+#define I2C_Con_MstNoAckIF_Pos    (5U)
+#define I2C_Con_MstNoAckIF_Msk    (0x1UL << I2C_Con_MstNoAckIF_Pos)
+#define I2C_Con_MstNoAckIF                  I2C_Con_MstNoAckIF_Msk
 
-#define I2C_Con_AdrErrIF_Pos      (6U)
-#define I2C_Con_AdrErrIF_Msk      (0x1UL << I2C_Con_AdrErrIF_Pos)
-#define I2C_Con_AdrErrIF                    I2C_Con_AdrErrIF_Msk
+#define I2C_Con_BusErrIF_Pos      (6U)
+#define I2C_Con_BusErrIF_Msk      (0x1UL << I2C_Con_BusErrIF_Pos)
+#define I2C_Con_BusErrIF                    I2C_Con_BusErrIF_Msk
 
 #define I2C_Con_RxOvfIF_Pos       (9U)
 #define I2C_Con_RxOvfIF_Msk       (0x1UL << I2C_Con_RxOvfIF_Pos)
