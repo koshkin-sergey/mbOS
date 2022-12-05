@@ -370,7 +370,7 @@ int32_t I2C_MasterReceive(uint32_t       addr,
     __set_PeriphReg(I2C_CON_REG, I2C_Con_StartTx);
   }
 
-  __set_PeriphReg(I2C_INT_REG, I2C_Int_Master | I2C_Int_TxIE | I2C_Int_RxIE | I2C_Int_ArbErrIE);
+  __set_PeriphReg(I2C_INT_REG, I2C_Int_Master | I2C_Int_TxIE | I2C_Int_ArbErrIE);
 
   return (ARM_DRIVER_OK);
 }
@@ -402,9 +402,11 @@ int32_t I2C_SlaveTransmit(const uint8_t *data, uint32_t num, I2C_RESOURCES *i2c)
   info->status    = 0U;
   info->xfer_ctrl = 0U;
 
-  tx->data      = data;
-  tx->num       = num;
-  tx->cnt       = 0U;
+  tx->data = data;
+  tx->num  = num;
+  tx->cnt  = 0U;
+
+  __set_PeriphReg(I2C_INT_REG, I2C_Int_TxIE | I2C_Int_NoAckIE);
 
   return (ARM_DRIVER_OK);
 }
@@ -439,6 +441,8 @@ int32_t I2C_SlaveReceive(uint8_t *data, uint32_t num, I2C_RESOURCES *i2c)
   rx->data = data;
   rx->num  = num;
   rx->cnt  = 0U;
+
+  __set_PeriphReg(I2C_INT_REG, I2C_Int_RxIE);
 
   return (ARM_DRIVER_OK);
 }
@@ -500,13 +504,16 @@ int32_t I2C_Control(uint32_t control, uint32_t arg, I2C_RESOURCES *i2c)
       if (arg == 0) {
         /* Disable slave */
         reg_value &= ~(I2C_Cfg_EnSWr | I2C_Cfg_EnSRd | I2C_Cfg_AMode_Msk | I2C_Cfg_Adr7_Msk);
+        __set_PeriphReg(I2C_INT_REG, 0U);
       }
       else {
         /* Enable slave */
         reg_value |= I2C_Cfg_EnSWr | I2C_Cfg_EnSRd | I2C_Cfg_AMode_7 | (arg & I2C_Cfg_Adr7_Msk);
+        __set_PeriphReg(I2C_INT_REG, I2C_Int_SlvAdrIE);
       }
 
       __set_PeriphReg(I2C_CFG_REG, reg_value);
+      __set_PeriphReg(I2C_FIFO_REG, 0U);
       break;
 
     case ARM_I2C_BUS_SPEED:
@@ -523,11 +530,12 @@ int32_t I2C_Control(uint32_t control, uint32_t arg, I2C_RESOURCES *i2c)
           return (ARM_DRIVER_ERROR_UNSUPPORTED);
       }
 
-      SystemCoreClockUpdate();
+      /* Configure period of SCL */
+      scp = (adsu->GetFrequency(ADSU_FREQ_SYS) / (4U * master_freq) - 1U) / 2U;
       __set_CpuReg(CPU_PRW_REG, i2c->prw);
-      scp = (SystemCoreClock / (4U * master_freq) - 1U) / 2U;
       reg_value = __get_PeriphReg(I2C_CFG_REG) & ~I2C_Cfg_SCP_Msk;
       __set_PeriphReg(I2C_CFG_REG, reg_value | (scp << I2C_Cfg_SCP_Pos));
+      /* Configure FIFO */
       __set_PeriphReg(I2C_FIFO_REG, 0U);
 
       /* Master configured, clock set */
@@ -573,6 +581,7 @@ void I2C_IRQHandler(I2C_RESOURCES *i2c)
   uint32_t flags;
   uint32_t state;
   uint32_t cnt;
+  uint32_t data;
   I2C_INFO *info;
   I2C_TX_XFER_INFO *tx;
   I2C_RX_XFER_INFO *rx;
@@ -599,7 +608,10 @@ void I2C_IRQHandler(I2C_RESOURCES *i2c)
   if ((flags & I2C_Flags_RxIF) != 0U) {
     cnt = (state & I2C_Stat_RxCnt_Msk) >> I2C_Stat_RxCnt_Pos;
     while (cnt-- > 0U) {
-      rx->data[rx->cnt++] = __get_PeriphReg(I2C_RDAT_REG);
+      data = __get_PeriphReg(I2C_RDAT_REG);
+      if (rx->cnt < rx->num) {
+        rx->data[rx->cnt++] = (uint8_t)data;
+      }
     }
   }
 
