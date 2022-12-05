@@ -605,18 +605,59 @@ void I2C_IRQHandler(I2C_RESOURCES *i2c)
     __set_PeriphReg(I2C_INT_REG, 0U);
   }
 
+  /* Slave addressed by the master */
+  if ((flags & I2C_Flags_SlvAdrIF) != 0U) {
+    if ((state & I2C_Stat_ReadOp) != 0U) {
+      if (tx->num == 0U) {
+        if (info->cb_event != NULL) {
+          info->cb_event(ARM_I2C_EVENT_SLAVE_TRANSMIT);
+        }
+      }
+
+      if (tx->num != 0U) {
+        info->xfer_ctrl |= XFER_CTRL_ADDR_DONE;
+        info->status    |= I2C_BUSY;
+      }
+    }
+    else {
+      if (rx->num == 0U) {
+        if (info->cb_event != NULL) {
+          info->cb_event(ARM_I2C_EVENT_SLAVE_RECEIVE);
+        }
+      }
+
+      if (rx->num != 0U) {
+        info->xfer_ctrl |= XFER_CTRL_ADDR_DONE;
+        info->status    |= I2C_BUSY;
+      }
+    }
+
+    /* Clear Flag */
+    __set_PeriphReg(I2C_CON_REG, I2C_Con_SlvAdrIF);
+  }
+
+  /* RX Ready */
   if ((flags & I2C_Flags_RxIF) != 0U) {
-    cnt = (state & I2C_Stat_RxCnt_Msk) >> I2C_Stat_RxCnt_Pos;
-    while (cnt-- > 0U) {
-      data = __get_PeriphReg(I2C_RDAT_REG);
-      if (rx->cnt < rx->num) {
-        rx->data[rx->cnt++] = (uint8_t)data;
+    if ((state & I2C_Stat_Slave) != 0U) {
+
+    }
+    else {
+      cnt = (state & I2C_Stat_RxCnt_Msk) >> I2C_Stat_RxCnt_Pos;
+      while (cnt-- > 0U) {
+        data = __get_PeriphReg(I2C_RDAT_REG);
+        if (rx->cnt < rx->num) {
+          rx->data[rx->cnt++] = (uint8_t)data;
+        }
       }
     }
   }
 
+  /* TX Ready */
   if ((flags & I2C_Flags_TxIF) != 0U) {
-    if ((state & I2C_Stat_Host) != 0U) {
+    if ((state & I2C_Stat_Slave) != 0U) {
+
+    }
+    else if ((state & I2C_Stat_Host) != 0U) {
       /* Received NACK */
       if ((flags & (I2C_Flags_BusErrIF | I2C_Flags_MstNoAckIF)) != 0U) {
         __set_PeriphReg(I2C_CON_REG, I2C_Con_BusErrIF | I2C_Con_MstNoAckIF);
