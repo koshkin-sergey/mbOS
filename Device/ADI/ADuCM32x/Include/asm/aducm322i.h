@@ -122,8 +122,10 @@ typedef enum {
 #define __Vendor_SysTickConfig    0         /*!< Set to 1 if different SysTick Config is used */
 /** @} */ /* End of group Configuration_of_CMSIS */
 
-#include <core_cm3.h>                       /*!< Cortex-M3 processor and core peripherals */
-#include "system_ADUCM322.h"               /*!< ADUCM322 System                      */
+
+#include <CMSIS/Core/Cortex/core_cm3.h>
+#include "system_aducm32x.h"
+#include <stdint.h>
 
 
 /* ================================================================================ */
