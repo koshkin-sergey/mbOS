@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2017-2022 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -17,17 +17,18 @@
  * Project: I2C Driver Definitions for ADI ADuCM32x
  */
 
-#ifndef I2C_ADUCM320_H_
-#define I2C_ADUCM320_H_
+#ifndef I2C_ADUCM32X_H_
+#define I2C_ADUCM32X_H_
 
 /*******************************************************************************
  *  includes
  ******************************************************************************/
 
-#include "RTE_Device.h"
-#include "CLK_ADuCM320.h"
-#include "GPIO_ADuCM320.h"
-#include "Driver_I2C.h"
+#include <aducm32x.h>
+#include <device_config.h>
+#include <Driver/CLK_ADUCM32x.h>
+#include <Driver/GPIO_ADUCM32x.h>
+#include <Driver_I2C.h>
 
 /*******************************************************************************
  *  defines and macros (scope: module-local)
@@ -119,6 +120,6 @@ typedef struct {
  *  exported function prototypes
  ******************************************************************************/
 
-#endif /* I2C_ADUCM320_H_ */
+#endif /* I2C_ADUCM32X_H_ */
 
 /* ----------------------------- End of file ---------------------------------*/

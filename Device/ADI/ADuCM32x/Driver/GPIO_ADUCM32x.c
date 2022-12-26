@@ -21,9 +21,10 @@
  *  includes
  ******************************************************************************/
 
-#include "stddef.h"
-#include "ADuCM320.h"
-#include "GPIO_ADuCM320.h"
+#include <stddef.h>
+#include <Driver/GPIO_ADUCM32x.h>
+
+#include <aducm32x.h>
 
 /*******************************************************************************
  *  external declarations

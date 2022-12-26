@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2017-2022 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -17,18 +17,19 @@
  * Project: UART Driver Definitions for ADI ADuCM32x
  */
 
-#ifndef UART_ADUCM320_H_
-#define UART_ADUCM320_H_
+#ifndef UART_ADUCM32X_H_
+#define UART_ADUCM32X_H_
 
 /*******************************************************************************
  *  includes
  ******************************************************************************/
 
-#include "Driver_USART.h"
-
-#include "RTE_Device.h"
-#include "GPIO_ADuCM320.h"
-#include "DMA_ADuCM320.h"
+#include <aducm32x.h>
+#include <device_config.h>
+#include <Driver/CLK_ADUCM32x.h>
+#include <Driver/DMA_ADUCM32x.h>
+#include <Driver/GPIO_ADUCM32x.h>
+#include <Driver_USART.h>
 
 /*******************************************************************************
  *  defines and macros
@@ -119,6 +120,6 @@ typedef struct {
  *  exported function prototypes
  ******************************************************************************/
 
-#endif /* UART_ADUCM320_H_ */
+#endif /* UART_ADUCM32X_H_ */
 
 /* ----------------------------- End of file ---------------------------------*/

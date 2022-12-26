@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2017-2022 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -21,8 +21,9 @@
  *  includes
  ******************************************************************************/
 
-#include "ADuCM320.h"
-#include "CLK_ADuCM320.h"
+#include <Driver/CLK_ADUCM32x.h>
+
+#include <aducm32x.h>
 
 /*******************************************************************************
  *  external declarations

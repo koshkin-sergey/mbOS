@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2017-2022 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -17,8 +17,8 @@
  * Project: GPIO Driver Definitions for ADI ADuCM32x
  */
 
-#ifndef GPIO_ADUCM320_H_
-#define GPIO_ADUCM320_H_
+#ifndef GPIO_ADUCM32X_H_
+#define GPIO_ADUCM32X_H_
 
 /*******************************************************************************
  *  includes
@@ -165,6 +165,6 @@ void GPIO_PinConfig(GPIO_PORT_t port_num, GPIO_PIN_t pin_num, const GPIO_PIN_CFG
 extern
 void GPIO_AFConfig(GPIO_PORT_t port_num, GPIO_PIN_t pin_num, GPIO_PIN_FUNC_t af_num);
 
-#endif /* GPIO_ADUCM320_H_ */
+#endif /* GPIO_ADUCM32X_H_ */
 
 /* ----------------------------- End of file ---------------------------------*/

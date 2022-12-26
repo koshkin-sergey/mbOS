@@ -14,39 +14,47 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Project: DMA Driver Definitions for ADI ADuCM32x
+ * Project: DMA Driver for ADI ADuCM32x
  */
-
-#ifndef DMA_ADUCM320_H_
-#define DMA_ADUCM320_H_
 
 /*******************************************************************************
  *  includes
  ******************************************************************************/
 
-#include <stdint.h>
+#include <Driver/DMA_ADUCM32x.h>
+
+#include <aducm32x.h>
 
 /*******************************************************************************
- *  defines and macros
+ *  external declarations
  ******************************************************************************/
 
 /*******************************************************************************
- *  typedefs and structures
- ******************************************************************************/
-
-/**
- * @brief       Signal DMA Events.
- * @param[in]   event   DMA Event mask
- * @return      none
- */
-typedef void (*DMA_SignalEvent_t)(uint32_t event);
-
-/*******************************************************************************
- *  exported variables
+ *  defines and macros (scope: module-local)
  ******************************************************************************/
 
 /*******************************************************************************
- *  exported function prototypes
+ *  typedefs and structures (scope: module-local)
+ ******************************************************************************/
+
+/*******************************************************************************
+ *  global variable definitions  (scope: module-exported)
+ ******************************************************************************/
+
+/*******************************************************************************
+ *  global variable definitions (scope: module-local)
+ ******************************************************************************/
+
+/*******************************************************************************
+ *  function prototypes (scope: module-local)
+ ******************************************************************************/
+
+/*******************************************************************************
+ *  function implementations (scope: module-local)
+ ******************************************************************************/
+
+/*******************************************************************************
+ *  function implementations (scope: module-exported)
  ******************************************************************************/
 
 /**
@@ -54,16 +62,20 @@ typedef void (*DMA_SignalEvent_t)(uint32_t event);
  * @returns     -  0: function succeeded
  *              - -1: function failed
  */
-extern
-int32_t DMA_Initialize(void);
+int32_t DMA_Initialize(void)
+{
+
+}
 
 /**
  * @brief       De-initialize DMA peripheral
  * @returns     -  0: function succeeded
  *              - -1: function failed
  */
-extern
-int32_t DMA_Uninitialize(void);
+int32_t DMA_Uninitialize(void)
+{
+
+}
 
 /**
  * @brief       Selects DMA requests
@@ -72,8 +84,10 @@ int32_t DMA_Uninitialize(void);
  * @returns     -  0: function succeeded
  *              - -1: function failed
  */
-extern
-int32_t DMA_PeripheralSelect(uint8_t peri, uint8_t sel);
+int32_t DMA_PeripheralSelect(uint8_t peri, uint8_t sel)
+{
+
+}
 
 /**
  * @brief       Configure DMA channel for next transfer
@@ -87,9 +101,11 @@ int32_t DMA_PeripheralSelect(uint8_t peri, uint8_t sel);
  * @returns     -  0: function succeeded
  *              - -1: function failed
  */
-extern
 int32_t DMA_ChannelConfigure(uint8_t ch, uint32_t src_addr, uint32_t dest_addr,
-    uint32_t size, uint32_t control, uint32_t config, DMA_SignalEvent_t cb_event);
+    uint32_t size, uint32_t control, uint32_t config, DMA_SignalEvent_t cb_event)
+{
+
+}
 
 /**
  * @brief       Enable DMA channel
@@ -97,8 +113,10 @@ int32_t DMA_ChannelConfigure(uint8_t ch, uint32_t src_addr, uint32_t dest_addr,
  * @returns     -  0: function succeeded
  *              - -1: function failed
  */
-extern
-int32_t DMA_ChannelEnable(uint8_t ch);
+int32_t DMA_ChannelEnable(uint8_t ch)
+{
+
+}
 
 /**
  * @brief       Disable DMA channel
@@ -106,8 +124,10 @@ int32_t DMA_ChannelEnable(uint8_t ch);
  * @returns     -  0: function succeeded
  *              - -1: function failed
  */
-extern
-int32_t DMA_ChannelDisable(uint8_t ch);
+int32_t DMA_ChannelDisable(uint8_t ch)
+{
+
+}
 
 /**
  * @brief       Check if DMA channel is enabled or disabled
@@ -116,17 +136,19 @@ int32_t DMA_ChannelDisable(uint8_t ch);
  *              - 1: channel enabled
  *              - 0: channel disabled
  */
-extern
-uint32_t DMA_ChannelGetStatus(uint8_t ch);
+uint32_t DMA_ChannelGetStatus(uint8_t ch)
+{
+
+}
 
 /**
  * @brief       Get number of transferred data
  * @param[in]   ch    Channel number (0..7)
  * @returns     Number of transferred data
  */
-extern
-uint32_t DMA_ChannelGetCount(uint8_t ch);
+uint32_t DMA_ChannelGetCount(uint8_t ch)
+{
 
-#endif /* DMA_ADUCM320_H_ */
+}
 
 /* ----------------------------- End of file ---------------------------------*/

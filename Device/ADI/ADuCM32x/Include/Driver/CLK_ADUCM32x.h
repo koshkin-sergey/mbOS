@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2017-2022 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -17,8 +17,8 @@
  * Project: Clock Driver Definitions for ADI ADuCM32x
  */
 
-#ifndef CLK_ADUCM320_H_
-#define CLK_ADUCM320_H_
+#ifndef CLK_ADUCM32X_H_
+#define CLK_ADUCM32X_H_
 
 /*******************************************************************************
  *  includes
@@ -67,6 +67,6 @@ uint32_t CLK_GetFreqD2DCLK(void);
 extern
 void CLK_PeriphGateControl(CLK_PERIPH clk, CLK_MODE mode);
 
-#endif /* CLK_ADUCM320_H_ */
+#endif /* CLK_ADUCM32X_H_ */
 
 /* ----------------------------- End of file ---------------------------------*/
