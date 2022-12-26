@@ -39,70 +39,67 @@ extern "C" {
 #endif 
 
 
-/* -------------------------  Interrupt Number Definition  ------------------------ */
+/* ----------------------  Interrupt Number Definition  --------------------- */
 
 typedef enum {
-/* -------------------  Cortex-M3 Processor Exceptions Numbers  ------------------- */
-  Reset_IRQn                        = -15,  /*!<   1  Reset Vector, invoked on Power up and warm reset */
-  NonMaskableInt_IRQn               = -14,  /*!<   2  Non maskable Interrupt, cannot be stopped or preempted */
-  HardFault_IRQn                    = -13,  /*!<   3  Hard Fault, all classes of Fault */
-  MemoryManagement_IRQn             = -12,  /*!<   4  Memory Management, MPU mismatch, including Access Violation and No Match */
-  BusFault_IRQn                     = -11,  /*!<   5  Bus Fault, Pre-Fetch-, Memory Access Fault, other address/memory related Fault */
-  UsageFault_IRQn                   = -10,  /*!<   6  Usage Fault, i.e. Undef Instruction, Illegal State Transition */
-  SVCall_IRQn                       = -5,   /*!<  11  System Service Call via SVC instruction */
-  DebugMonitor_IRQn                 = -4,   /*!<  12  Debug Monitor                    */
-  PendSV_IRQn                       = -2,   /*!<  14  Pendable request for system service */
-  SysTick_IRQn                      = -1,   /*!<  15  System Tick Timer                */
-// --------------------------  ADUCM322 Specific Interrupt Numbers  ------------------------------
-  WUT_IRQn                          = 0,    /*!<   0  WUT                              */
-  EINT0_IRQn                        = 1,    /*!<   1  EINT0                            */
-  EINT1_IRQn                        = 2,    /*!<   2  EINT1                            */
-  EINT2_IRQn                        = 3,    /*!<   3  EINT2                            */
-  EINT3_IRQn                        = 4,    /*!<   4  EINT3                            */
-  EINT4_IRQn                        = 5,    /*!<   5  EINT4                            */
-  EINT5_IRQn                        = 6,    /*!<   6  EINT5                            */
-  EINT6_IRQn                        = 7,    /*!<   7  EINT6                            */
-  EINT7_IRQn                        = 8,    /*!<   8  EINT7                            */
-  EINT8_IRQn                        = 9,    /*!<   9  EINT8                            */
-  WDT_IRQn                          = 10,   /*!<  10  WDT                              */
-  LVD0_IRQn                         = 13,   /*!<  13  LVD0                             */
-  MDIO_IRQn                         = 14,   /*!<  14  MDIO                             */
-  TIMER0_IRQn                       = 15,   /*!<  15  TIMER0                           */
-  TIMER1_IRQn                       = 16,   /*!<  16  TIMER1                           */
-  FLASH_IRQn                        = 17,   /*!<  17  FLASH                            */
-  UART_IRQn                         = 18,   /*!<  18  UART                             */
-  SPI0_IRQn                         = 19,   /*!<  19  SPI0                             */
-  SPI1_IRQn                         = 20,   /*!<  20  SPI1                             */
-  I2C0S_IRQn                        = 21,   /*!<  21  I2C0S                            */
-  I2C0M_IRQn                        = 22,   /*!<  22  I2C0M                            */
-  PLA0_IRQn                         = 23,   /*!<  23  PLA0                             */
-  PLA1_IRQn                         = 24,   /*!<  24  PLA1                             */
-  DMA_ERR_IRQn                      = 25,   /*!<  25  DMA_ERR                          */
-  DMA_SPI0_TX_IRQn                  = 26,   /*!<  26  DMA_SPI0_TX                      */
-  DMA_SPI0_RX_IRQn                  = 27,   /*!<  27  DMA_SPI0_RX                      */
-  DMA_SPI1_TX_IRQn                  = 28,   /*!<  28  DMA_SPI1_TX                      */
-  DMA_SPI1_RX_IRQn                  = 29,   /*!<  29  DMA_SPI1_RX                      */
-  DMA_UART_TX_IRQn                  = 30,   /*!<  30  DMA_UART_TX                      */
-  DMA_UART_RX_IRQn                  = 31,   /*!<  31  DMA_UART_RX                      */
-  DMA_I2C0S_TX_IRQn                 = 32,   /*!<  32  DMA_I2C0S_TX                     */
-  DMA_I2C0S_RX_IRQn                 = 33,   /*!<  33  DMA_I2C0S_RX                     */
-  DMA_I2C0M_IRQn                    = 34,   /*!<  34  DMA_I2C0M                        */
-  DMA_I2C1S_TX_IRQn                 = 35,   /*!<  35  DMA_I2C1S_TX                     */
-  DMA_I2C1S_RX_IRQn                 = 36,   /*!<  36  DMA_I2C1S_RX                     */
-  DMA_I2C1M_IRQn                    = 37,   /*!<  37  DMA_I2C1M                        */
-  DMA_ADC_IRQn                      = 38,   /*!<  38  DMA_ADC                          */
-  DMA_FLASH_IRQn                    = 39,   /*!<  39  DMA_FLASH                        */
-  I2C1S_IRQn                        = 44,   /*!<  44  I2C1S                            */
-  I2C1M_IRQn                        = 45,   /*!<  45  I2C1M                            */
-  PLA2_IRQn                         = 46,   /*!<  46  PLA2                             */
-  PLA3_IRQn                         = 47,   /*!<  47  PLA3                             */
-  TIMER2_IRQn                       = 48,   /*!<  48  TIMER2                           */
-  LVD1_IRQn                         = 49,   /*!<  49  LVD1                             */
-  PWM_TRIP_IRQn                     = 50,   /*!<  50  PWM_TRIP                         */
-  PWM_PAIR0_IRQn                    = 51,   /*!<  51  PWM_PAIR0                        */
-  PWM_PAIR1_IRQn                    = 52,   /*!<  52  PWM_PAIR1                        */
-  PWM_PAIR2_IRQn                    = 53,   /*!<  53  PWM_PAIR2                        */
-  PWM_PAIR3_IRQn                    = 54    /*!<  54  PWM_PAIR3                        */
+/* ----------------  Cortex-M3 Processor Exceptions Numbers  ---------------- */
+  NonMaskableInt_IRQn       = -14,  /* Non Maskable Interrupt                 */
+  HardFault_IRQn            = -13,  /* Hard Fault Interrupt                   */
+  MemoryManagement_IRQn     = -12,  /* Memory Management Interrupt            */
+  BusFault_IRQn             = -11,  /* Bus Fault Interrupt                    */
+  UsageFault_IRQn           = -10,  /* Usage Fault Interrupt                  */
+  SVCall_IRQn               = -5,   /* SV Call Interrupt via SVC instruction  */
+  DebugMonitor_IRQn         = -4,   /* Debug Monitor Interrupt                */
+  PendSV_IRQn               = -2,   /* Pend SV Interrupt                      */
+  SysTick_IRQn              = -1,   /* System Tick Timer Interrupt            */
+/* -----------------  ADUCM322 Specific Interrupt Numbers  ------------------ */
+  WKUP_IRQn                 = 0,    /* Wakeup Timer Interrupt                 */
+  EXTI0_IRQn                = 1,    /* External Interrupt 0                   */
+  EXTI1_IRQn                = 2,    /* External Interrupt 1                   */
+  EXTI2_IRQn                = 3,    /* External Interrupt 2                   */
+  EXTI4_IRQn                = 5,    /* External Interrupt 4                   */
+  EXTI5_IRQn                = 6,    /* External Interrupt 5                   */
+  EXTI7_IRQn                = 8,    /* External Interrupt 7                   */
+  EXTI8_IRQn                = 9,    /* External Interrupt 8                   */
+  WDT_IRQn                  = 10,   /* Watchdog Timer Interrupt               */
+  LVD0_IRQn                 = 13,   /* Low Voltage Die Interrupt 0            */
+  MDIO_IRQn                 = 14,   /* MDIO Interrupt                         */
+  TIM0_IRQn                 = 15,   /* Timer0 Interrupt                       */
+  TIM1_IRQn                 = 16,   /* Timer1 Interrupt                       */
+  FLASH_IRQn                = 17,   /* Flash Memory Interrupt                 */
+  UART0_IRQn                = 18,   /* UART Interrupt                         */
+  SPI0_IRQn                 = 19,   /* SPI0 Interrupt                         */
+  SPI1_IRQn                 = 20,   /* SPI1 Interrupt                         */
+  I2C0_Slave_IRQn           = 21,   /* I2C0 Slave Interrupt                   */
+  I2C0_Master_IRQn          = 22,   /* I2C0 Master Interrupt                  */
+  PLA0_IRQn                 = 23,   /* PLA0 Interrupt                         */
+  PLA1_IRQn                 = 24,   /* PLA1 Interrupt                         */
+  DMA_ERR_IRQn              = 25,   /* DMA Error Interrupt                    */
+  DMA_SPI0_TX_IRQn          = 26,   /* DMA SPI0 TX Interrupt                  */
+  DMA_SPI0_RX_IRQn          = 27,   /* DMA SPI0 RX Interrupt                  */
+  DMA_SPI1_TX_IRQn          = 28,   /* DMA SPI1 TX Interrupt                  */
+  DMA_SPI1_RX_IRQn          = 29,   /* DMA SPI1 RX Interrupt                  */
+  DMA_UART0_TX_IRQn         = 30,   /* DMA UART TX Interrupt                  */
+  DMA_UART0_RX_IRQn         = 31,   /* DMA UART RX Interrupt                  */
+  DMA_I2C0_STX_IRQn         = 32,   /* DMA I2C0 Slave TX Interrupt            */
+  DMA_I2C0_SRX_IRQn         = 33,   /* DMA I2C0 Slave RX Interrupt            */
+  DMA_I2C0_M_IRQn           = 34,   /* DMA I2C0 Master Interrupt              */
+  DMA_I2C1_STX_IRQn         = 35,   /* DMA I2C1 Slave TX Interrupt            */
+  DMA_I2C1_SRX_IRQn         = 36,   /* DMA I2C1 Slave RX Interrupt            */
+  DMA_I2C1_M_IRQn           = 37,   /* DMA I2C1 Master Interrupt              */
+  DMA_ADC_IRQn              = 38,   /* DMA ADC Interrupt                      */
+  DMA_FLASH_IRQn            = 39,   /* DMA Flash Interrupt                    */
+  I2C1_Slave_IRQn           = 44,   /* I2C1 Slave Interrupt                   */
+  I2C1_Master_IRQn          = 45,   /* I2C1 Master Interrupt                  */
+  PLA2_IRQn                 = 46,   /* PLA2 Interrupt                         */
+  PLA3_IRQn                 = 47,   /* PLA3 Interrupt                         */
+  TIM2_IRQn                 = 48,   /* Timer2 Interrupt                       */
+  LVD1_IRQn                 = 49,   /* Low Voltage Die Interrupt 1            */
+  PWMT_IRQn                 = 50,   /* PWM TRIP Interrupt                     */
+  PWM0_IRQn                 = 51,   /* PWM Channel Pair 0 interrupt           */
+  PWM1_IRQn                 = 52,   /* PWM Channel Pair 1 interrupt           */
+  PWM2_IRQn                 = 53,   /* PWM Channel Pair 2 interrupt           */
+  PWM3_IRQn                 = 54    /* PWM Channel Pair 3 interrupt           */
 } IRQn_Type;
 
 

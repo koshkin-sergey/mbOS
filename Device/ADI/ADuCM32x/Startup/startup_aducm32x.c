@@ -59,7 +59,7 @@ void EXTI4_IRQHandler              (void) __attribute__ ((weak, alias("Default_H
 void EXTI5_IRQHandler              (void) __attribute__ ((weak, alias("Default_Handler")));
 void EXTI7_IRQHandler              (void) __attribute__ ((weak, alias("Default_Handler")));
 void EXTI8_IRQHandler              (void) __attribute__ ((weak, alias("Default_Handler")));
-void WDG_IRQHandler                (void) __attribute__ ((weak, alias("Default_Handler")));
+void WDT_IRQHandler                (void) __attribute__ ((weak, alias("Default_Handler")));
 void LVD0_IRQHandler               (void) __attribute__ ((weak, alias("Default_Handler")));
 void MDIO_IRQHandler               (void) __attribute__ ((weak, alias("Default_Handler")));
 void TIM0_IRQHandler               (void) __attribute__ ((weak, alias("Default_Handler")));
@@ -138,7 +138,7 @@ extern const pFunc __VECTOR_TABLE[];
   0,                                /* Reserved                      [ 7]     */
   EXTI7_IRQHandler,                 /* External Interrupt 7          [ 8]     */
   EXTI8_IRQHandler,                 /* External Interrupt 8          [ 9]     */
-  WDG_IRQHandler,                   /* Watchdog Timer Interrupt      [10]     */
+  WDT_IRQHandler,                   /* Watchdog Timer Interrupt      [10]     */
   0,                                /* Reserved                      [11]     */
   0,                                /* Reserved                      [12]     */
   LVD0_IRQHandler,                  /* Low Voltage Die Interrupt 0   [13]     */
