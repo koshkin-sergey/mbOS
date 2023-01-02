@@ -24,7 +24,7 @@
 #include <stddef.h>
 #include <Driver/GPIO_ADUCM32x.h>
 
-#include <aducm32x.h>
+#include <asm/aducm32x.h>
 
 /*******************************************************************************
  *  external declarations

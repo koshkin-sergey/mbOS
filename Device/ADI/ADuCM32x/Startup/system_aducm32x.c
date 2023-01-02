@@ -36,7 +36,7 @@ uint32_t SystemCoreClock;           /*!< System Clock Frequency (Core Clock)  */
  */
 void SystemCoreClockUpdate(void)
 {
-
+  SystemCoreClock = 80000000U;
 }
 
 /**

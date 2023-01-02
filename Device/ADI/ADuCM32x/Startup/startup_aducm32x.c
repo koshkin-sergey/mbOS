@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-#include <CMSIS/Core/Cortex/cmsis_compiler.h>
+#include <asm/aducm32x.h>
 
 /*----------------------------------------------------------------------------
   Exception / Interrupt Handler Function Prototype
