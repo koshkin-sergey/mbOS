@@ -30,7 +30,6 @@
 #define TIMEOUT                       (500UL)
 #define THREAD_STACK_SIZE             (256U)
 
-#define LED_PORT                      (GPIO_PORT_2)
 #define LED_PIN                       (GPIO_PIN_4)
 
 /*******************************************************************************
@@ -59,6 +58,9 @@ static const osTimerAttr_t timer_attr = {
     .cb_size   = sizeof(timer_cb)
 };
 
+extern Driver_GPIO_t Driver_GPIO2;
+static Driver_GPIO_t *gpio = &Driver_GPIO2;
+
 /*******************************************************************************
  *  function implementations (scope: module-local)
  ******************************************************************************/
@@ -66,11 +68,12 @@ static const osTimerAttr_t timer_attr = {
 static void GPIO_Init(void)
 {
   const GPIO_PIN_CFG_t led_cfg = {
-    .mode       = GPIO_MODE_OUT_PP,
-    .pull_mode  = GPIO_PULL_DISABLE
+    .func = GPIO_PIN_FUNC_0,
+    .mode = GPIO_MODE_OUT_PP,
+    .pull = GPIO_PULL_DISABLE
   };
 
-  GPIO_PinConfig(LED_PORT, LED_PIN, &led_cfg);
+  gpio->PinConfig(LED_PIN, &led_cfg);
 }
 
 static void init_proc(void *param)
@@ -86,7 +89,7 @@ static void timer_func(void *argument)
 {
   (void) argument;
 
-  GPIO_PinToggle(LED_PORT, LED_PIN);
+  gpio->PinToggle(LED_PIN);
 }
 
 int main(void)
