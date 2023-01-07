@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015 Analog Devices Inc.
- * Copyright (C) 2022 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2022-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -26,13 +26,6 @@
 
 #ifndef ADUCM322I_H_
 #define ADUCM322I_H_
-
-#ifndef __NO_MMR_STRUCTS__
-// The new style CMSIS structure definitions for MMRs clash with
-// the old style defs. If the old style are required for compilation
-// then set __NO_MMR_STRUCTS__ to 0x1
-#define __NO_MMR_STRUCTS__ 0x0
-#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -897,342 +890,6 @@ typedef enum {
 /* I2CASSCL[MSTRCON] - automatic stretch mode for master */
 #define I2CASSCL_MSTRCON_MSK           (0xF   << 0  )
 
-/* GPCON[CON7] - p0.7  configuration bits */
-#define GPCON_CON7_MSK                 (0x3   << 14 )
-
-/* GPCON[CON6] - p0.6  configuration bits */
-#define GPCON_CON6_MSK                 (0x3   << 12 )
-
-/* GPCON[CON5] - p0.5  configuration bits */
-#define GPCON_CON5_MSK                 (0x3   << 10 )
-
-/* GPCON[CON4] - p0.4  configuration bits */
-#define GPCON_CON4_MSK                 (0x3   << 8  )
-
-/* GPCON[CON3] - p0.3  configuration bits */
-#define GPCON_CON3_MSK                 (0x3   << 6  )
-
-/* GPCON[CON2] - p0.2  configuration bits */
-#define GPCON_CON2_MSK                 (0x3   << 4  )
-
-/* GPCON[CON1] - p0.1  configuration bits */
-#define GPCON_CON1_MSK                 (0x3   << 2  )
-
-/* GPCON[CON0] - p0.0  configuration bits */
-#define GPCON_CON0_MSK                 (0x3   << 0  )
-
-/* GPOE[OE7] - Pin output drive enable */
-#define GPOE_OE7_MSK                   (0x1   << 7  )
-#define GPOE_OE7                       (0x1   << 7  )
-#define GPOE_OE7_DIS                   (0x0   << 7  )
-#define GPOE_OE7_EN                    (0x1   << 7  )
-
-/* GPOE[OE6] - Pin output drive enable */
-#define GPOE_OE6_MSK                   (0x1   << 6  )
-#define GPOE_OE6                       (0x1   << 6  )
-#define GPOE_OE6_DIS                   (0x0   << 6  )
-#define GPOE_OE6_EN                    (0x1   << 6  )
-
-/* GPOE[OE5] - Pin output drive enable */
-#define GPOE_OE5_MSK                   (0x1   << 5  )
-#define GPOE_OE5                       (0x1   << 5  )
-#define GPOE_OE5_DIS                   (0x0   << 5  )
-#define GPOE_OE5_EN                    (0x1   << 5  )
-
-/* GPOE[OE4] - Pin output drive enable */
-#define GPOE_OE4_MSK                   (0x1   << 4  )
-#define GPOE_OE4                       (0x1   << 4  )
-#define GPOE_OE4_DIS                   (0x0   << 4  )
-#define GPOE_OE4_EN                    (0x1   << 4  )
-
-/* GPOE[OE3] - Pin output drive enable */
-#define GPOE_OE3_MSK                   (0x1   << 3  )
-#define GPOE_OE3                       (0x1   << 3  )
-#define GPOE_OE3_DIS                   (0x0   << 3  )
-#define GPOE_OE3_EN                    (0x1   << 3  )
-
-/* GPOE[OE2] - Pin output drive enable */
-#define GPOE_OE2_MSK                   (0x1   << 2  )
-#define GPOE_OE2                       (0x1   << 2  )
-#define GPOE_OE2_DIS                   (0x0   << 2  )
-#define GPOE_OE2_EN                    (0x1   << 2  )
-
-/* GPOE[OE1] - Pin output drive enable */
-#define GPOE_OE1_MSK                   (0x1   << 1  )
-#define GPOE_OE1                       (0x1   << 1  )
-#define GPOE_OE1_DIS                   (0x0   << 1  )
-#define GPOE_OE1_EN                    (0x1   << 1  )
-
-/* GPOE[OE0] - Pin output drive enable */
-#define GPOE_OE0_MSK                   (0x1   << 0  )
-#define GPOE_OE0                       (0x1   << 0  )
-#define GPOE_OE0_DIS                   (0x0   << 0  )
-#define GPOE_OE0_EN                    (0x1   << 0  )
-
-/* GPPUL[PUL7] - Pin Pull up enable */
-#define GPPUL_PUL7_MSK                 (0x1   << 7  )
-#define GPPUL_PUL7                     (0x1   << 7  )
-#define GPPUL_PUL7_DIS                 (0x0   << 7  )
-#define GPPUL_PUL7_EN                  (0x1   << 7  )
-
-/* GPPUL[PUL6] - Pin Pull up enable */
-#define GPPUL_PUL6_MSK                 (0x1   << 6  )
-#define GPPUL_PUL6                     (0x1   << 6  )
-#define GPPUL_PUL6_DIS                 (0x0   << 6  )
-#define GPPUL_PUL6_EN                  (0x1   << 6  )
-
-/* GPPUL[PUL5] - Pin Pull up enable */
-#define GPPUL_PUL5_MSK                 (0x1   << 5  )
-#define GPPUL_PUL5                     (0x1   << 5  )
-#define GPPUL_PUL5_DIS                 (0x0   << 5  )
-#define GPPUL_PUL5_EN                  (0x1   << 5  )
-
-/* GPPUL[PUL4] - Pin Pull up enable */
-#define GPPUL_PUL4_MSK                 (0x1   << 4  )
-#define GPPUL_PUL4                     (0x1   << 4  )
-#define GPPUL_PUL4_DIS                 (0x0   << 4  )
-#define GPPUL_PUL4_EN                  (0x1   << 4  )
-
-/* GPPUL[PUL3] - Pin Pull up enable */
-#define GPPUL_PUL3_MSK                 (0x1   << 3  )
-#define GPPUL_PUL3                     (0x1   << 3  )
-#define GPPUL_PUL3_DIS                 (0x0   << 3  )
-#define GPPUL_PUL3_EN                  (0x1   << 3  )
-
-/* GPPUL[PUL2] - Pin Pull up enable */
-#define GPPUL_PUL2_MSK                 (0x1   << 2  )
-#define GPPUL_PUL2                     (0x1   << 2  )
-#define GPPUL_PUL2_DIS                 (0x0   << 2  )
-#define GPPUL_PUL2_EN                  (0x1   << 2  )
-
-/* GPPUL[PUL1] - Pin Pull up enable */
-#define GPPUL_PUL1_MSK                 (0x1   << 1  )
-#define GPPUL_PUL1                     (0x1   << 1  )
-#define GPPUL_PUL1_DIS                 (0x0   << 1  )
-#define GPPUL_PUL1_EN                  (0x1   << 1  )
-
-/* GPPUL[PUL0] - Pin Pull up enable */
-#define GPPUL_PUL0_MSK                 (0x1   << 0  )
-#define GPPUL_PUL0                     (0x1   << 0  )
-#define GPPUL_PUL0_DIS                 (0x0   << 0  )
-#define GPPUL_PUL0_EN                  (0x1   << 0  )
-
-/* GPIN[IN7] - Registered data input */
-#define GPIN_IN7_MSK                   (0x1   << 7  )
-#define GPIN_IN7                       (0x1   << 7  )
-#define GPIN_IN7_LOW                   (0x0   << 7  )
-#define GPIN_IN7_HIGH                  (0x1   << 7  )
-
-/* GPIN[IN6] - Registered data input */
-#define GPIN_IN6_MSK                   (0x1   << 6  )
-#define GPIN_IN6                       (0x1   << 6  )
-#define GPIN_IN6_LOW                   (0x0   << 6  )
-#define GPIN_IN6_HIGH                  (0x1   << 6  )
-
-/* GPIN[IN5] - Registered data input */
-#define GPIN_IN5_MSK                   (0x1   << 5  )
-#define GPIN_IN5                       (0x1   << 5  )
-#define GPIN_IN5_LOW                   (0x0   << 5  )
-#define GPIN_IN5_HIGH                  (0x1   << 5  )
-
-/* GPIN[IN4] - Registered data input */
-#define GPIN_IN4_MSK                   (0x1   << 4  )
-#define GPIN_IN4                       (0x1   << 4  )
-#define GPIN_IN4_LOW                   (0x0   << 4  )
-#define GPIN_IN4_HIGH                  (0x1   << 4  )
-
-/* GPIN[IN3] - Registered data input */
-#define GPIN_IN3_MSK                   (0x1   << 3  )
-#define GPIN_IN3                       (0x1   << 3  )
-#define GPIN_IN3_LOW                   (0x0   << 3  )
-#define GPIN_IN3_HIGH                  (0x1   << 3  )
-
-/* GPIN[IN2] - Registered data input */
-#define GPIN_IN2_MSK                   (0x1   << 2  )
-#define GPIN_IN2                       (0x1   << 2  )
-#define GPIN_IN2_LOW                   (0x0   << 2  )
-#define GPIN_IN2_HIGH                  (0x1   << 2  )
-
-/* GPIN[IN1] - Registered data input */
-#define GPIN_IN1_MSK                   (0x1   << 1  )
-#define GPIN_IN1                       (0x1   << 1  )
-#define GPIN_IN1_LOW                   (0x0   << 1  )
-#define GPIN_IN1_HIGH                  (0x1   << 1  )
-
-/* GPIN[IN0] - Registered data input */
-#define GPIN_IN0_MSK                   (0x1   << 0  )
-#define GPIN_IN0                       (0x1   << 0  )
-#define GPIN_IN0_LOW                   (0x0   << 0  )
-#define GPIN_IN0_HIGH                  (0x1   << 0  )
-
-/* GPOUT[OUT7] - Data out */
-#define GPOUT_OUT7_MSK                 (0x1   << 7  )
-#define GPOUT_OUT7                     (0x1   << 7  )
-#define GPOUT_OUT7_LOW                 (0x0   << 7  )
-#define GPOUT_OUT7_HIGH                (0x1   << 7  )
-
-/* GPOUT[OUT6] - Data out */
-#define GPOUT_OUT6_MSK                 (0x1   << 6  )
-#define GPOUT_OUT6                     (0x1   << 6  )
-#define GPOUT_OUT6_LOW                 (0x0   << 6  )
-#define GPOUT_OUT6_HIGH                (0x1   << 6  )
-
-/* GPOUT[OUT5] - Data out */
-#define GPOUT_OUT5_MSK                 (0x1   << 5  )
-#define GPOUT_OUT5                     (0x1   << 5  )
-#define GPOUT_OUT5_LOW                 (0x0   << 5  )
-#define GPOUT_OUT5_HIGH                (0x1   << 5  )
-
-/* GPOUT[OUT4] - Data out */
-#define GPOUT_OUT4_MSK                 (0x1   << 4  )
-#define GPOUT_OUT4                     (0x1   << 4  )
-#define GPOUT_OUT4_LOW                 (0x0   << 4  )
-#define GPOUT_OUT4_HIGH                (0x1   << 4  )
-
-/* GPOUT[OUT3] - Data out */
-#define GPOUT_OUT3_MSK                 (0x1   << 3  )
-#define GPOUT_OUT3                     (0x1   << 3  )
-#define GPOUT_OUT3_LOW                 (0x0   << 3  )
-#define GPOUT_OUT3_HIGH                (0x1   << 3  )
-
-/* GPOUT[OUT2] - Data out */
-#define GPOUT_OUT2_MSK                 (0x1   << 2  )
-#define GPOUT_OUT2                     (0x1   << 2  )
-#define GPOUT_OUT2_LOW                 (0x0   << 2  )
-#define GPOUT_OUT2_HIGH                (0x1   << 2  )
-
-/* GPOUT[OUT1] - Data out */
-#define GPOUT_OUT1_MSK                 (0x1   << 1  )
-#define GPOUT_OUT1                     (0x1   << 1  )
-#define GPOUT_OUT1_LOW                 (0x0   << 1  )
-#define GPOUT_OUT1_HIGH                (0x1   << 1  )
-
-/* GPOUT[OUT0] - Data out */
-#define GPOUT_OUT0_MSK                 (0x1   << 0  )
-#define GPOUT_OUT0                     (0x1   << 0  )
-#define GPOUT_OUT0_LOW                 (0x0   << 0  )
-#define GPOUT_OUT0_HIGH                (0x1   << 0  )
-
-/* GPSET[SET7] - Set the output high. */
-#define GPSET_SET7_MSK                 (0x1   << 7  )
-#define GPSET_SET7                     (0x1   << 7  )
-#define GPSET_SET7_SET                 (0x1   << 7  )
-
-/* GPSET[SET6] - Set the output high. */
-#define GPSET_SET6_MSK                 (0x1   << 6  )
-#define GPSET_SET6                     (0x1   << 6  )
-#define GPSET_SET6_SET                 (0x1   << 6  )
-
-/* GPSET[SET5] - Set the output high. */
-#define GPSET_SET5_MSK                 (0x1   << 5  )
-#define GPSET_SET5                     (0x1   << 5  )
-#define GPSET_SET5_SET                 (0x1   << 5  )
-
-/* GPSET[SET4] - Set the output high. */
-#define GPSET_SET4_MSK                 (0x1   << 4  )
-#define GPSET_SET4                     (0x1   << 4  )
-#define GPSET_SET4_SET                 (0x1   << 4  )
-
-/* GPSET[SET3] - Set the output high. */
-#define GPSET_SET3_MSK                 (0x1   << 3  )
-#define GPSET_SET3                     (0x1   << 3  )
-#define GPSET_SET3_SET                 (0x1   << 3  )
-
-/* GPSET[SET2] - Set the output high. */
-#define GPSET_SET2_MSK                 (0x1   << 2  )
-#define GPSET_SET2                     (0x1   << 2  )
-#define GPSET_SET2_SET                 (0x1   << 2  )
-
-/* GPSET[SET1] - Set the output high. */
-#define GPSET_SET1_MSK                 (0x1   << 1  )
-#define GPSET_SET1                     (0x1   << 1  )
-#define GPSET_SET1_SET                 (0x1   << 1  )
-
-/* GPSET[SET0] - Set the output high. */
-#define GPSET_SET0_MSK                 (0x1   << 0  )
-#define GPSET_SET0                     (0x1   << 0  )
-#define GPSET_SET0_SET                 (0x1   << 0  )
-
-/* GPCLR[CLR7] - Set the output low. */
-#define GPCLR_CLR7_MSK                 (0x1   << 7  )
-#define GPCLR_CLR7                     (0x1   << 7  )
-#define GPCLR_CLR7_CLR                 (0x1   << 7  )
-
-/* GPCLR[CLR6] - Set the output low. */
-#define GPCLR_CLR6_MSK                 (0x1   << 6  )
-#define GPCLR_CLR6                     (0x1   << 6  )
-#define GPCLR_CLR6_CLR                 (0x1   << 6  )
-
-/* GPCLR[CLR5] - Set the output low. */
-#define GPCLR_CLR5_MSK                 (0x1   << 5  )
-#define GPCLR_CLR5                     (0x1   << 5  )
-#define GPCLR_CLR5_CLR                 (0x1   << 5  )
-
-/* GPCLR[CLR4] - Set the output low. */
-#define GPCLR_CLR4_MSK                 (0x1   << 4  )
-#define GPCLR_CLR4                     (0x1   << 4  )
-#define GPCLR_CLR4_CLR                 (0x1   << 4  )
-
-/* GPCLR[CLR3] - Set the output low. */
-#define GPCLR_CLR3_MSK                 (0x1   << 3  )
-#define GPCLR_CLR3                     (0x1   << 3  )
-#define GPCLR_CLR3_CLR                 (0x1   << 3  )
-
-/* GPCLR[CLR2] - Set the output low. */
-#define GPCLR_CLR2_MSK                 (0x1   << 2  )
-#define GPCLR_CLR2                     (0x1   << 2  )
-#define GPCLR_CLR2_CLR                 (0x1   << 2  )
-
-/* GPCLR[CLR1] - Set the output low. */
-#define GPCLR_CLR1_MSK                 (0x1   << 1  )
-#define GPCLR_CLR1                     (0x1   << 1  )
-#define GPCLR_CLR1_CLR                 (0x1   << 1  )
-
-/* GPCLR[CLR0] - Set the output low. */
-#define GPCLR_CLR0_MSK                 (0x1   << 0  )
-#define GPCLR_CLR0                     (0x1   << 0  )
-#define GPCLR_CLR0_CLR                 (0x1   << 0  )
-
-/* GPTGL[TGL7] - Toggle the output of the port pin */
-#define GPTGL_TGL7_MSK                 (0x1   << 7  )
-#define GPTGL_TGL7                     (0x1   << 7  )
-#define GPTGL_TGL7_TGL                 (0x1   << 7  )
-
-/* GPTGL[TGL6] - Toggle the output of the port pin */
-#define GPTGL_TGL6_MSK                 (0x1   << 6  )
-#define GPTGL_TGL6                     (0x1   << 6  )
-#define GPTGL_TGL6_TGL                 (0x1   << 6  )
-
-/* GPTGL[TGL5] - Toggle the output of the port pin */
-#define GPTGL_TGL5_MSK                 (0x1   << 5  )
-#define GPTGL_TGL5                     (0x1   << 5  )
-#define GPTGL_TGL5_TGL                 (0x1   << 5  )
-
-/* GPTGL[TGL4] - Toggle the output of the port pin */
-#define GPTGL_TGL4_MSK                 (0x1   << 4  )
-#define GPTGL_TGL4                     (0x1   << 4  )
-#define GPTGL_TGL4_TGL                 (0x1   << 4  )
-
-/* GPTGL[TGL3] - Toggle the output of the port pin */
-#define GPTGL_TGL3_MSK                 (0x1   << 3  )
-#define GPTGL_TGL3                     (0x1   << 3  )
-#define GPTGL_TGL3_TGL                 (0x1   << 3  )
-
-/* GPTGL[TGL2] - Toggle the output of the port pin */
-#define GPTGL_TGL2_MSK                 (0x1   << 2  )
-#define GPTGL_TGL2                     (0x1   << 2  )
-#define GPTGL_TGL2_TGL                 (0x1   << 2  )
-
-/* GPTGL[TGL1] - Toggle the output of the port pin */
-#define GPTGL_TGL1_MSK                 (0x1   << 1  )
-#define GPTGL_TGL1                     (0x1   << 1  )
-#define GPTGL_TGL1_TGL                 (0x1   << 1  )
-
-/* GPTGL[TGL0] - Toggle the output of the port pin */
-#define GPTGL_TGL0_MSK                 (0x1   << 0  )
-#define GPTGL_TGL0                     (0x1   << 0  )
-#define GPTGL_TGL0_TGL                 (0x1   << 0  )
-
 /* DACCON[PD] - DAC0 power down */
 #define DACCON_PD_MSK                  (0x1   << 8  )
 #define DACCON_PD                      (0x1   << 8  )
@@ -1256,7 +913,6 @@ typedef enum {
   * @brief tmr0 (pADI_TMR0)
   */
 
-#if (__NO_MMR_STRUCTS__==0)
 typedef struct {                            /*!< pADI_TMR0 Structure                    */
   __IO uint16_t  TLD;                       /*!< 16-bit load value register            */
   __I  uint16_t  RESERVED0;
@@ -1270,14 +926,6 @@ typedef struct {                            /*!< pADI_TMR0 Structure            
   __I  uint16_t  RESERVED4[5];
   __IO uint16_t  TSTA;                      /*!< Status register                       */
 } ADI_TIMER_TypeDef;
-#else // (__NO_MMR_STRUCTS__==0)
-#define          T0LD                                       (*(volatile unsigned short int *) 0x40000000)
-#define          T0VAL                                      (*(volatile unsigned short int *) 0x40000004)
-#define          T0CON                                      (*(volatile unsigned short int *) 0x40000008)
-#define          T0CLRI                                     (*(volatile unsigned short int *) 0x4000000C)
-#define          T0CAP                                      (*(volatile unsigned short int *) 0x40000010)
-#define          T0STA                                      (*(volatile unsigned short int *) 0x4000001C)
-#endif // (__NO_MMR_STRUCTS__==0)
 
 /* Reset Value for T0LD*/
 #define T0LD_RVAL                      0x0 
@@ -1397,15 +1045,6 @@ typedef struct {                            /*!< pADI_TMR0 Structure            
 #define T0STA_TMOUT                    (0x1   << 0  )
 #define T0STA_TMOUT_CLR                (0x0   << 0  ) /* CLR. No timeout event has occurred */
 #define T0STA_TMOUT_SET                (0x1   << 0  ) /* SET. A timeout event has occurred */
-#if (__NO_MMR_STRUCTS__==1)
-
-#define          T1LD                                       (*(volatile unsigned short int *) 0x40000400)
-#define          T1VAL                                      (*(volatile unsigned short int *) 0x40000404)
-#define          T1CON                                      (*(volatile unsigned short int *) 0x40000408)
-#define          T1CLRI                                     (*(volatile unsigned short int *) 0x4000040C)
-#define          T1CAP                                      (*(volatile unsigned short int *) 0x40000410)
-#define          T1STA                                      (*(volatile unsigned short int *) 0x4000041C)
-#endif // (__NO_MMR_STRUCTS__==1)
 
 /* Reset Value for T1LD*/
 #define T1LD_RVAL                      0x0 
@@ -1525,15 +1164,6 @@ typedef struct {                            /*!< pADI_TMR0 Structure            
 #define T1STA_TMOUT                    (0x1   << 0  )
 #define T1STA_TMOUT_CLR                (0x0   << 0  ) /* CLR. No timeout event has occurred */
 #define T1STA_TMOUT_SET                (0x1   << 0  ) /* SET. A timeout event has occurred */
-#if (__NO_MMR_STRUCTS__==1)
-
-#define          T2LD                                       (*(volatile unsigned short int *) 0x40000800)
-#define          T2VAL                                      (*(volatile unsigned short int *) 0x40000804)
-#define          T2CON                                      (*(volatile unsigned short int *) 0x40000808)
-#define          T2CLRI                                     (*(volatile unsigned short int *) 0x4000080C)
-#define          T2CAP                                      (*(volatile unsigned short int *) 0x40000810)
-#define          T2STA                                      (*(volatile unsigned short int *) 0x4000081C)
-#endif // (__NO_MMR_STRUCTS__==1)
 
 /* Reset Value for T2LD*/
 #define T2LD_RVAL                      0x0 
@@ -1662,13 +1292,9 @@ typedef struct {                            /*!< pADI_TMR0 Structure            
   * @brief misc16 (pADI_ID)
   */
 
-#if (__NO_MMR_STRUCTS__==0)
 typedef struct {                            /*!< pADI_ID Structure                      */
   __IO uint16_t  CHIPID;                    /*!< Digital die ID                        */
 } ADI_ID_TypeDef;
-#else // (__NO_MMR_STRUCTS__==0)
-#define          CHIPID                                     (*(volatile unsigned short int *) 0x40002024)
-#endif // (__NO_MMR_STRUCTS__==0)
 
 /* Reset Value for CHIPID*/
 #define CHIPID_RVAL                    0x561 
@@ -1687,16 +1313,11 @@ typedef struct {                            /*!< pADI_ID Structure              
   * @brief always_on (pADI_PWRCTL)
   */
 
-#if (__NO_MMR_STRUCTS__==0)
 typedef struct {                            /*!< pADI_PWRCTL Structure                  */
   __IO uint16_t  PWRMOD;                    /*!< Power modes                           */
   __I  uint16_t  RESERVED0;
   __IO uint16_t  PWRKEY;                    /*!< Key protection for PWRMOD             */
 } ADI_PWRCTL_TypeDef;
-#else // (__NO_MMR_STRUCTS__==0)
-#define          PWRMOD                                     (*(volatile unsigned short int *) 0x40002400)
-#define          PWRKEY                                     (*(volatile unsigned short int *) 0x40002404)
-#endif // (__NO_MMR_STRUCTS__==0)
 
 /* Reset Value for PWRMOD*/
 #define PWRMOD_RVAL                    0x0 
@@ -1729,7 +1350,6 @@ typedef struct {                            /*!< pADI_PWRCTL Structure          
   * @brief always_on (pADI_RESET)
   */
 
-#if (__NO_MMR_STRUCTS__==0)
 typedef struct {                            /*!< pADI_RESET Structure                   */
   __IO uint16_t  RSTCFG;                    /*!< Reset configuration                   */
   __I  uint16_t  RESERVED0;
@@ -1737,11 +1357,6 @@ typedef struct {                            /*!< pADI_RESET Structure           
   __I  uint16_t  RESERVED1[25];
   __IO uint16_t  RSTSTA;                    /*!< Reset status                          */
 } ADI_RESET_TypeDef;
-#else // (__NO_MMR_STRUCTS__==0)
-#define          RSTCFG                                     (*(volatile unsigned short int *) 0x40002408)
-#define          RSTKEY                                     (*(volatile unsigned short int *) 0x4000240C)
-#define          RSTSTA                                     (*(volatile unsigned short int *) 0x40002440)
-#endif // (__NO_MMR_STRUCTS__==0)
 
 /* Reset Value for RSTCFG*/
 #define RSTCFG_RVAL                    0x0 
@@ -1798,7 +1413,6 @@ typedef struct {                            /*!< pADI_RESET Structure           
   * @brief always_on (pADI_INTERRUPT)
   */
 
-#if (__NO_MMR_STRUCTS__==0)
 typedef struct {                            /*!< pADI_INTERRUPT Structure               */
   __IO uint16_t  EI0CFG;                    /*!< External Interrupt configuration 0    */
   __I  uint16_t  RESERVED0;
@@ -1808,12 +1422,6 @@ typedef struct {                            /*!< pADI_INTERRUPT Structure       
   __I  uint16_t  RESERVED2[3];
   __IO uint16_t  EICLR;                     /*!< External Interrupt clear              */
 } ADI_INTERRUPT_TypeDef;
-#else // (__NO_MMR_STRUCTS__==0)
-#define          EI0CFG                                     (*(volatile unsigned short int *) 0x40002420)
-#define          EI1CFG                                     (*(volatile unsigned short int *) 0x40002424)
-#define          EI2CFG                                     (*(volatile unsigned short int *) 0x40002428)
-#define          EICLR                                      (*(volatile unsigned short int *) 0x40002430)
-#endif // (__NO_MMR_STRUCTS__==0)
 
 /* Reset Value for EI0CFG*/
 #define EI0CFG_RVAL                    0x0 
@@ -2033,7 +1641,6 @@ typedef struct {                            /*!< pADI_INTERRUPT Structure       
   * @brief wdt (pADI_WDT)
   */
 
-#if (__NO_MMR_STRUCTS__==0)
 typedef struct {                            /*!< pADI_WDT Structure                     */
   __IO uint16_t  T3LD;                      /*!< Load value register                   */
   __I  uint16_t  RESERVED0;
@@ -2045,13 +1652,6 @@ typedef struct {                            /*!< pADI_WDT Structure             
   __I  uint16_t  RESERVED3[5];
   __IO uint16_t  T3STA;                     /*!< Status register                       */
 } ADI_WDT_TypeDef;
-#else // (__NO_MMR_STRUCTS__==0)
-#define          T3LD                                       (*(volatile unsigned short int *) 0x40002580)
-#define          T3VAL                                      (*(volatile unsigned short int *) 0x40002584)
-#define          T3CON                                      (*(volatile unsigned short int *) 0x40002588)
-#define          T3CLRI                                     (*(volatile unsigned short int *) 0x4000258C)
-#define          T3STA                                      (*(volatile unsigned short int *) 0x40002598)
-#endif // (__NO_MMR_STRUCTS__==0)
 
 /* Reset Value for T3LD*/
 #define T3LD_RVAL                      0x1000 
@@ -2148,7 +1748,6 @@ typedef struct {                            /*!< pADI_WDT Structure             
   * @brief wut (pADI_WUT)
   */
 
-#if (__NO_MMR_STRUCTS__==0)
 typedef struct {                            /*!< pADI_WUT Structure                     */
   __IO uint16_t  T4VAL0;                    /*!< Current count value - LS 16 bits      */
   __I  uint16_t  RESERVED0;
@@ -2180,23 +1779,6 @@ typedef struct {                            /*!< pADI_WUT Structure             
   __I  uint16_t  RESERVED13;
   __IO uint16_t  T4WUFA1;                   /*!< Wakeup field A - MS 16 bits           */
 } ADI_WUT_TypeDef;
-#else // (__NO_MMR_STRUCTS__==0)
-#define          T4VAL0                                     (*(volatile unsigned short int *) 0x40002500)
-#define          T4VAL1                                     (*(volatile unsigned short int *) 0x40002504)
-#define          T4CON                                      (*(volatile unsigned short int *) 0x40002508)
-#define          T4INC                                      (*(volatile unsigned short int *) 0x4000250C)
-#define          T4WUFB0                                    (*(volatile unsigned short int *) 0x40002510)
-#define          T4WUFB1                                    (*(volatile unsigned short int *) 0x40002514)
-#define          T4WUFC0                                    (*(volatile unsigned short int *) 0x40002518)
-#define          T4WUFC1                                    (*(volatile unsigned short int *) 0x4000251C)
-#define          T4WUFD0                                    (*(volatile unsigned short int *) 0x40002520)
-#define          T4WUFD1                                    (*(volatile unsigned short int *) 0x40002524)
-#define          T4IEN                                      (*(volatile unsigned short int *) 0x40002528)
-#define          T4STA                                      (*(volatile unsigned short int *) 0x4000252C)
-#define          T4CLRI                                     (*(volatile unsigned short int *) 0x40002530)
-#define          T4WUFA0                                    (*(volatile unsigned short int *) 0x4000253C)
-#define          T4WUFA1                                    (*(volatile unsigned short int *) 0x40002540)
-#endif // (__NO_MMR_STRUCTS__==0)
 
 /* Reset Value for T4VAL0*/
 #define T4VAL0_RVAL                    0x0 
@@ -2458,7 +2040,6 @@ typedef struct {                            /*!< pADI_WUT Structure             
   * @brief i2cms (pADI_I2C0)
   */
 
-#if (__NO_MMR_STRUCTS__==0)
 typedef struct {                            /*!< pADI_I2C0 Structure                    */
   __IO uint16_t  I2CMCON;                   /*!< Master control register               */
   __I  uint16_t  RESERVED0;
@@ -2502,29 +2083,6 @@ typedef struct {                            /*!< pADI_I2C0 Structure            
   __I  uint16_t  RESERVED19[3];
   __IO uint16_t  I2CASSCL;                  /*!< Automatic Stretch control register    */
 } ADI_I2C_TypeDef;
-#else // (__NO_MMR_STRUCTS__==0)
-#define          I2C0MCON                                   (*(volatile unsigned short int *) 0x40003000)
-#define          I2C0MSTA                                   (*(volatile unsigned short int *) 0x40003004)
-#define          I2C0MRX                                    (*(volatile unsigned short int *) 0x40003008)
-#define          I2C0MTX                                    (*(volatile unsigned short int *) 0x4000300C)
-#define          I2C0MRXCNT                                 (*(volatile unsigned short int *) 0x40003010)
-#define          I2C0MCRXCNT                                (*(volatile unsigned short int *) 0x40003014)
-#define          I2C0ADR0                                   (*(volatile unsigned short int *) 0x40003018)
-#define          I2C0ADR1                                   (*(volatile unsigned short int *) 0x4000301C)
-#define          I2C0DIV                                    (*(volatile unsigned short int *) 0x40003024)
-#define          I2C0SCON                                   (*(volatile unsigned short int *) 0x40003028)
-#define          I2C0SSTA                                   (*(volatile unsigned short int *) 0x4000302C)
-#define          I2C0SRX                                    (*(volatile unsigned short int *) 0x40003030)
-#define          I2C0STX                                    (*(volatile unsigned short int *) 0x40003034)
-#define          I2C0ALT                                    (*(volatile unsigned short int *) 0x40003038)
-#define          I2C0ID0                                    (*(volatile unsigned short int *) 0x4000303C)
-#define          I2C0ID1                                    (*(volatile unsigned short int *) 0x40003040)
-#define          I2C0ID2                                    (*(volatile unsigned short int *) 0x40003044)
-#define          I2C0ID3                                    (*(volatile unsigned short int *) 0x40003048)
-#define          I2C0FSTA                                   (*(volatile unsigned short int *) 0x4000304C)
-#define          I2C0SHCON                                  (*(volatile unsigned short int *) 0x40003050)
-#define          I2C0ASSCL                                  (*(volatile unsigned short int *) 0x40003058)
-#endif // (__NO_MMR_STRUCTS__==0)
 
 /* Reset Value for I2C0MCON*/
 #define I2C0MCON_RVAL                  0x0 
@@ -3085,30 +2643,6 @@ typedef struct {                            /*!< pADI_I2C0 Structure            
 
 /* I2C0ASSCL[MSTRCON] - automatic stretch mode for master */
 #define I2C0ASSCL_MSTRCON_MSK          (0xF   << 0  )
-#if (__NO_MMR_STRUCTS__==1)
-
-#define          I2C1MCON                                   (*(volatile unsigned short int *) 0x40003400)
-#define          I2C1MSTA                                   (*(volatile unsigned short int *) 0x40003404)
-#define          I2C1MRX                                    (*(volatile unsigned short int *) 0x40003408)
-#define          I2C1MTX                                    (*(volatile unsigned short int *) 0x4000340C)
-#define          I2C1MRXCNT                                 (*(volatile unsigned short int *) 0x40003410)
-#define          I2C1MCRXCNT                                (*(volatile unsigned short int *) 0x40003414)
-#define          I2C1ADR0                                   (*(volatile unsigned short int *) 0x40003418)
-#define          I2C1ADR1                                   (*(volatile unsigned short int *) 0x4000341C)
-#define          I2C1DIV                                    (*(volatile unsigned short int *) 0x40003424)
-#define          I2C1SCON                                   (*(volatile unsigned short int *) 0x40003428)
-#define          I2C1SSTA                                   (*(volatile unsigned short int *) 0x4000342C)
-#define          I2C1SRX                                    (*(volatile unsigned short int *) 0x40003430)
-#define          I2C1STX                                    (*(volatile unsigned short int *) 0x40003434)
-#define          I2C1ALT                                    (*(volatile unsigned short int *) 0x40003438)
-#define          I2C1ID0                                    (*(volatile unsigned short int *) 0x4000343C)
-#define          I2C1ID1                                    (*(volatile unsigned short int *) 0x40003440)
-#define          I2C1ID2                                    (*(volatile unsigned short int *) 0x40003444)
-#define          I2C1ID3                                    (*(volatile unsigned short int *) 0x40003448)
-#define          I2C1FSTA                                   (*(volatile unsigned short int *) 0x4000344C)
-#define          I2C1SHCON                                  (*(volatile unsigned short int *) 0x40003450)
-#define          I2C1ASSCL                                  (*(volatile unsigned short int *) 0x40003458)
-#endif // (__NO_MMR_STRUCTS__==1)
 
 /* Reset Value for I2C1MCON*/
 #define I2C1MCON_RVAL                  0x0 
@@ -3678,7 +3212,6 @@ typedef struct {                            /*!< pADI_I2C0 Structure            
   * @brief uart0 (pADI_UART)
   */
 
-#if (__NO_MMR_STRUCTS__==0)
 typedef struct {                            /*!< pADI_UART Structure                    */
   
   union {
@@ -3704,19 +3237,6 @@ typedef struct {                            /*!< pADI_UART Structure            
   __I  uint16_t  RESERVED8;
   __IO uint16_t  COMDIV;                    /*!< Baud rate divider register            */
 } ADI_UART_TypeDef;
-#else // (__NO_MMR_STRUCTS__==0)
-#define          COMTX                                      (*(volatile unsigned short int *) 0x40005000)
-#define          COMRX                                      (*(volatile unsigned short int *) 0x40005000)
-#define          COMIEN                                     (*(volatile unsigned short int *) 0x40005004)
-#define          COMIIR                                     (*(volatile unsigned short int *) 0x40005008)
-#define          COMLCR                                     (*(volatile unsigned short int *) 0x4000500C)
-#define          COMMCR                                     (*(volatile unsigned short int *) 0x40005010)
-#define          COMLSR                                     (*(volatile unsigned short int *) 0x40005014)
-#define          COMMSR                                     (*(volatile unsigned short int *) 0x40005018)
-#define          COMSCR                                     (*(volatile unsigned short int *) 0x4000501C)
-#define          COMFBR                                     (*(volatile unsigned short int *) 0x40005024)
-#define          COMDIV                                     (*(volatile unsigned short int *) 0x40005028)
-#endif // (__NO_MMR_STRUCTS__==0)
 
 /* Reset Value for COMTX*/
 #define COMTX_RVAL                     0x0 
@@ -4022,7 +3542,6 @@ typedef struct {                            /*!< pADI_UART Structure            
   * @brief MDIO (pADI_MDIO)
   */
 
-#if (__NO_MMR_STRUCTS__==0)
 typedef struct {                            /*!< pADI_MDIO Structure                    */
   __IO uint16_t  MDCON;                     /*!< MDIO block control                    */
   __I  uint16_t  RESERVED0;
@@ -4042,17 +3561,6 @@ typedef struct {                            /*!< pADI_MDIO Structure            
   __I  uint16_t  RESERVED7;
   __IO uint16_t  MDPIN;                     /*!< MDIO read PHYADDR pins                */
 } ADI_MDIO_TypeDef;
-#else // (__NO_MMR_STRUCTS__==0)
-#define          MDCON                                      (*(volatile unsigned short int *) 0x40005C00)
-#define          MDFRM                                      (*(volatile unsigned short int *) 0x40005C04)
-#define          MDRXD                                      (*(volatile unsigned short int *) 0x40005C08)
-#define          MDADR                                      (*(volatile unsigned short int *) 0x40005C0C)
-#define          MDTXD                                      (*(volatile unsigned short int *) 0x40005C10)
-#define          MDPHY                                      (*(volatile unsigned short int *) 0x40005C14)
-#define          MDSTA                                      (*(volatile unsigned short int *) 0x40005C18)
-#define          MDIEN                                      (*(volatile unsigned short int *) 0x40005C1C)
-#define          MDPIN                                      (*(volatile unsigned short int *) 0x40005C20)
-#endif // (__NO_MMR_STRUCTS__==0)
 
 /* Reset Value for MDCON*/
 #define MDCON_RVAL                     0x0 
@@ -4254,7 +3762,6 @@ typedef struct {                            /*!< pADI_MDIO Structure            
   * @brief PLA (pADI_PLA)
   */
 
-#if (__NO_MMR_STRUCTS__==0)
 typedef struct {                            /*!< pADI_PLA Structure                     */
   __IO uint32_t  PLA_ELEM[32];              /*!< ELEMx Configuration Register          */
   __IO uint16_t  PLA_CLK;                   /*!< PLA Clock Select                      */
@@ -4275,49 +3782,6 @@ typedef struct {                            /*!< pADI_PLA Structure             
   __I  uint16_t  RESERVED7;
   __IO uint16_t  PLA_PROBE_I2C;             /*!< PLA GPIO INPUT can be switched to probe I2C SCL/SDA */
 } ADI_PLA_TypeDef;
-#else // (__NO_MMR_STRUCTS__==0)
-#define          PLA_ELEM0                                  (*(volatile unsigned short int *) 0x40005800)
-#define          PLA_ELEM1                                  (*(volatile unsigned short int *) 0x40005804)
-#define          PLA_ELEM2                                  (*(volatile unsigned short int *) 0x40005808)
-#define          PLA_ELEM3                                  (*(volatile unsigned short int *) 0x4000580C)
-#define          PLA_ELEM4                                  (*(volatile unsigned short int *) 0x40005810)
-#define          PLA_ELEM5                                  (*(volatile unsigned short int *) 0x40005814)
-#define          PLA_ELEM6                                  (*(volatile unsigned short int *) 0x40005818)
-#define          PLA_ELEM7                                  (*(volatile unsigned short int *) 0x4000581C)
-#define          PLA_ELEM8                                  (*(volatile unsigned short int *) 0x40005820)
-#define          PLA_ELEM9                                  (*(volatile unsigned short int *) 0x40005824)
-#define          PLA_ELEM10                                 (*(volatile unsigned short int *) 0x40005828)
-#define          PLA_ELEM11                                 (*(volatile unsigned short int *) 0x4000582C)
-#define          PLA_ELEM12                                 (*(volatile unsigned short int *) 0x40005830)
-#define          PLA_ELEM13                                 (*(volatile unsigned short int *) 0x40005834)
-#define          PLA_ELEM14                                 (*(volatile unsigned short int *) 0x40005838)
-#define          PLA_ELEM15                                 (*(volatile unsigned short int *) 0x4000583C)
-#define          PLA_ELEM16                                 (*(volatile unsigned short int *) 0x40005840)
-#define          PLA_ELEM17                                 (*(volatile unsigned short int *) 0x40005844)
-#define          PLA_ELEM18                                 (*(volatile unsigned short int *) 0x40005848)
-#define          PLA_ELEM19                                 (*(volatile unsigned short int *) 0x4000584C)
-#define          PLA_ELEM20                                 (*(volatile unsigned short int *) 0x40005850)
-#define          PLA_ELEM21                                 (*(volatile unsigned short int *) 0x40005854)
-#define          PLA_ELEM22                                 (*(volatile unsigned short int *) 0x40005858)
-#define          PLA_ELEM23                                 (*(volatile unsigned short int *) 0x4000585C)
-#define          PLA_ELEM24                                 (*(volatile unsigned short int *) 0x40005860)
-#define          PLA_ELEM25                                 (*(volatile unsigned short int *) 0x40005864)
-#define          PLA_ELEM26                                 (*(volatile unsigned short int *) 0x40005868)
-#define          PLA_ELEM27                                 (*(volatile unsigned short int *) 0x4000586C)
-#define          PLA_ELEM28                                 (*(volatile unsigned short int *) 0x40005870)
-#define          PLA_ELEM29                                 (*(volatile unsigned short int *) 0x40005874)
-#define          PLA_ELEM30                                 (*(volatile unsigned short int *) 0x40005878)
-#define          PLA_ELEM31                                 (*(volatile unsigned short int *) 0x4000587C)
-#define          PLA_CLK                                    (*(volatile unsigned short int *) 0x40005880)
-#define          PLA_IRQ0                                   (*(volatile unsigned short int *) 0x40005884)
-#define          PLA_IRQ1                                   (*(volatile unsigned short int *) 0x40005888)
-#define          PLA_ADC                                    (*(volatile unsigned short int *) 0x4000588C)
-#define          PLA_DIN0                                   (*(volatile unsigned short int *) 0x40005890)
-#define          PLA_DOUT0                                  (*(volatile unsigned short int *) 0x40005898)
-#define          PLA_DOUT1                                  (*(volatile unsigned short int *) 0x4000589C)
-#define          PLA_LCK                                    (*(volatile unsigned short int *) 0x400058A0)
-#define          PLA_PROBE_I2C                              (*(volatile unsigned short int *) 0x400058A4)
-#endif // (__NO_MMR_STRUCTS__==0)
 
 /* Reset Value for PLA_ELEM*/
 #define PLA_ELEM_RVAL                  0x0 
@@ -4765,7 +4229,6 @@ typedef struct {                            /*!< pADI_PLA Structure             
   * @brief dma (pADI_DMA)
   */
 
-#if (__NO_MMR_STRUCTS__==0)
 typedef struct {                            /*!< pADI_DMA Structure                     */
   __IO uint32_t  DMASTA;                    /*!< DMA Status                            */
   __IO uint32_t  DMACFG;                    /*!< DMA Configuration                     */
@@ -4788,24 +4251,6 @@ typedef struct {                            /*!< pADI_DMA Structure             
   __IO uint32_t  DMABSSET;                  /*!< DMA channel bytes swap enable set     */
   __IO uint32_t  DMABSCLR;                  /*!< DMA channel bytes swap enable clear   */
 } ADI_DMA_TypeDef;
-#else // (__NO_MMR_STRUCTS__==0)
-#define          DMASTA                                     (*(volatile unsigned long      *) 0x40010000)
-#define          DMACFG                                     (*(volatile unsigned long      *) 0x40010004)
-#define          DMAPDBPTR                                  (*(volatile unsigned long      *) 0x40010008)
-#define          DMAADBPTR                                  (*(volatile unsigned long      *) 0x4001000C)
-#define          DMASWREQ                                   (*(volatile unsigned long      *) 0x40010014)
-#define          DMARMSKSET                                 (*(volatile unsigned long      *) 0x40010020)
-#define          DMARMSKCLR                                 (*(volatile unsigned long      *) 0x40010024)
-#define          DMAENSET                                   (*(volatile unsigned long      *) 0x40010028)
-#define          DMAENCLR                                   (*(volatile unsigned long      *) 0x4001002C)
-#define          DMAALTSET                                  (*(volatile unsigned long      *) 0x40010030)
-#define          DMAALTCLR                                  (*(volatile unsigned long      *) 0x40010034)
-#define          DMAPRISET                                  (*(volatile unsigned long      *) 0x40010038)
-#define          DMAPRICLR                                  (*(volatile unsigned long      *) 0x4001003C)
-#define          DMAERRCLR                                  (*(volatile unsigned long      *) 0x4001004C)
-#define          DMABSSET                                   (*(volatile unsigned long      *) 0x40010800)
-#define          DMABSCLR                                   (*(volatile unsigned long      *) 0x40010804)
-#endif // (__NO_MMR_STRUCTS__==0)
 
 /* Reset Value for DMASTA*/
 #define DMASTA_RVAL                    0xF0000 
@@ -4921,7 +4366,6 @@ typedef struct {                            /*!< pADI_DMA Structure             
   * @brief FEE (pADI_FEE)
   */
 
-#if (__NO_MMR_STRUCTS__==0)
 typedef struct {                            /*!< pADI_FEE Structure                     */
   __IO uint32_t  FEESTA;                    /*!< Status register                       */
   __IO uint32_t  FEECON0;                   /*!< Command Control register: interrupt enable register */
@@ -4953,30 +4397,6 @@ typedef struct {                            /*!< pADI_FEE Structure             
   __IO uint32_t  CACHESETUP;                /*!< Cache Setup register                  */
   __IO uint32_t  CACHEKEY;                  /*!< Cache Key register                    */
 } ADI_FEE_TypeDef;
-#else // (__NO_MMR_STRUCTS__==0)
-#define          FEESTA                                     (*(volatile unsigned long      *) 0x40018000)
-#define          FEECON0                                    (*(volatile unsigned long      *) 0x40018004)
-#define          FEECMD                                     (*(volatile unsigned long      *) 0x40018008)
-#define          FEEFLADR                                   (*(volatile unsigned long      *) 0x4001800C)
-#define          FEEFLDATA0                                 (*(volatile unsigned long      *) 0x40018010)
-#define          FEEFLDATA1                                 (*(volatile unsigned long      *) 0x40018014)
-#define          FEEADR0                                    (*(volatile unsigned long      *) 0x40018018)
-#define          FEEADR1                                    (*(volatile unsigned long      *) 0x4001801C)
-#define          FEEKEY                                     (*(volatile unsigned long      *) 0x40018020)
-#define          FEEPRO0                                    (*(volatile unsigned long      *) 0x40018028)
-#define          FEEPRO1                                    (*(volatile unsigned long      *) 0x4001802C)
-#define          FEESIG                                     (*(volatile unsigned long      *) 0x40018034)
-#define          FEECON1                                    (*(volatile unsigned long      *) 0x40018038)
-#define          FEEWRADDRA                                 (*(volatile unsigned long      *) 0x40018040)
-#define          FEEAEN0                                    (*(volatile unsigned long      *) 0x40018048)
-#define          FEEAEN1                                    (*(volatile unsigned long      *) 0x4001804C)
-#define          FEEECCCONFIG                               (*(volatile unsigned long      *) 0x40018064)
-#define          FEEECCADDR0                                (*(volatile unsigned long      *) 0x40018074)
-#define          FEEECCADDR1                                (*(volatile unsigned long      *) 0x40018078)
-#define          CACHESTAT                                  (*(volatile unsigned long      *) 0x400180C0)
-#define          CACHESETUP                                 (*(volatile unsigned long      *) 0x400180C4)
-#define          CACHEKEY                                   (*(volatile unsigned long      *) 0x400180C8)
-#endif // (__NO_MMR_STRUCTS__==0)
 
 /* Reset Value for FEESTA*/
 #define FEESTA_RVAL                    0x0 
@@ -5321,3196 +4741,75 @@ typedef struct {                            /*!< pADI_FEE Structure             
 
 /* CACHEKEY[Key] - Cache Key register */
 #define CACHEKEY_Key_MSK               (0xFFFFFFFF << 0  )
-// ------------------------------------------------------------------------------------------------
-// -----                                        GPIO                                        -----
-// ------------------------------------------------------------------------------------------------
 
+
+/*------------------------------------------------------------------------------
+ *                                  GPIO
+ *----------------------------------------------------------------------------*/
 
 /**
-  * @brief gpio (pADI_GP0)
-  */
+ * @brief GPIO (MMR_GPIO)
+ */
+
+typedef struct {                            /*!< MMR_GPIO Structure                     */
+  __IOM uint16_t  GPCON;                    /*!< GPIO Port configuration             */
+  __IM  uint16_t  RESERVED0;
+  __IOM uint8_t   GPOE;                     /*!< GPIO Port output enable             */
+  __IM  uint8_t   RESERVED1[3];
+  __IOM uint8_t   GPPUL;                    /*!< GPIO Port pullup enable             */
+  __IM  uint8_t   RESERVED2[3];
+  __IOM uint8_t   GPIE;                     /*!< GPIO Port input path enable         */
+  __IM  uint8_t   RESERVED3[3];
+  __IOM uint8_t   GPIN;                     /*!< GPIO Port registered data input     */
+  __IM  uint8_t   RESERVED4[3];
+  __IOM uint8_t   GPOUT;                    /*!< GPIO Port data output               */
+  __IM  uint8_t   RESERVED5[3];
+  __IOM uint8_t   GPSET;                    /*!< GPIO Port data out set              */
+  __IM  uint8_t   RESERVED6[3];
+  __IOM uint8_t   GPCLR;                    /*!< GPIO Port data out clear            */
+  __IM  uint8_t   RESERVED7[3];
+  __IOM uint8_t   GPTGL;                    /*!< GPIO Port pin toggle                */
+  __IM  uint8_t   RESERVED8[3];
+  __IOM uint8_t   GPODE;                    /*!< GPIO Port open drain enable         */
+} MMR_GPIO_t;
+
+/********************  Reset Value for registers  *****************************/
+#define GPIO_CON_RVAL             (0U)
+#define GPIO_OE_RVAL              (0U)
+#define GPIO_PUL_RVAL             (0U)
+#define GPIO_IE_RVAL              (0U)
+#define GPIO_IN_RVAL              (0U)
+#define GPIO_OUT_RVAL             (0U)
+#define GPIO_SET_RVAL             (0U)
+#define GPIO_CLR_RVAL             (0U)
+#define GPIO_TGL_RVAL             (0U)
+#define GPIO_ODE_RVAL             (0U)
+
+/********************  Bit definition for GPCON register  *********************/
+#define GPIO_CON(af, pin)         (((uint16_t)(af) & 3U) << ((pin) << 1U))
+
+/********************  Bit definition for GPOE register  **********************/
+#define GPIO_OE(mode, pin)        ((uint8_t)(((mode) & 1U) << (pin)))
+
+/********************  Bit definition for GPPUL register  *********************/
+#define GPIO_PUL(mode, pin)       ((uint8_t)(((mode) & 1U) << (pin)))
+
+/********************  Bit definition for GPIE register  **********************/
+#define GPIO_IE(mode, pin)        ((uint8_t)(((mode) & 1U) << (pin)))
+
+/********************  Bit definition for GPSET register  *********************/
+#define GPIO_SET(pin)             ((uint8_t)(1U << (pin)))
+
+/********************  Bit definition for GPCLR register  *********************/
+#define GPIO_CLR(pin)             ((uint8_t)(1U << (pin)))
+
+/********************  Bit definition for GPTGL register  *********************/
+#define GPIO_TGL(pin)             ((uint8_t)(1U << (pin)))
+
+/********************  Bit definition for GPODE register  *********************/
+#define GPIO_ODE(mode, pin)       ((uint8_t)(((mode) & 1U) << (pin)))
 
-#if (__NO_MMR_STRUCTS__==0)
-typedef struct {                            /*!< pADI_GP0 Structure                     */
-  __IO uint16_t  GPCON;                     /*!< GPIO Port 0 configuration             */
-  __I  uint16_t  RESERVED0;
-  __IO uint8_t   GPOE;                      /*!< GPIO Port 0 output enable             */
-  __I  uint8_t   RESERVED1[3];
-  __IO uint8_t   GPPUL;                     /*!< GPIO Port 0 pullup enable             */
-  __I  uint8_t   RESERVED2[3];
-  __IO uint8_t   GPIE;                      /*!< GPIO Port 0 input path enable         */
-  __I  uint8_t   RESERVED3[3];
-  __IO uint8_t   GPIN;                      /*!< GPIO Port 0 registered data input     */
-  __I  uint8_t   RESERVED4[3];
-  __IO uint8_t   GPOUT;                     /*!< GPIO Port 0 data output               */
-  __I  uint8_t   RESERVED5[3];
-  __IO uint8_t   GPSET;                     /*!< GPIO Port 0 data out set              */
-  __I  uint8_t   RESERVED6[3];
-  __IO uint8_t   GPCLR;                     /*!< GPIO Port 0 data out clear            */
-  __I  uint8_t   RESERVED7[3];
-  __IO uint8_t   GPTGL;                     /*!< GPIO Port 0 pin toggle                */
-  __I  uint8_t   RESERVED8[3];
-  __IO uint8_t   GPODE;                     /*!< GPIO Port 0 open drain enable         */
-} ADI_GPIO_TypeDef;
-#else // (__NO_MMR_STRUCTS__==0)
-#define          GP0CON                                     (*(volatile unsigned short int *) 0x40020000)
-#define          GP0OE                                      (*(volatile unsigned char      *) 0x40020004)
-#define          GP0PUL                                     (*(volatile unsigned char      *) 0x40020008)
-#define          GP0IE                                      (*(volatile unsigned char      *) 0x4002000C)
-#define          GP0IN                                      (*(volatile unsigned char      *) 0x40020010)
-#define          GP0OUT                                     (*(volatile unsigned char      *) 0x40020014)
-#define          GP0SET                                     (*(volatile unsigned char      *) 0x40020018)
-#define          GP0CLR                                     (*(volatile unsigned char      *) 0x4002001C)
-#define          GP0TGL                                     (*(volatile unsigned char      *) 0x40020020)
-#define          GP0ODE                                     (*(volatile unsigned char      *) 0x40020024)
-#endif // (__NO_MMR_STRUCTS__==0)
 
-/* Reset Value for GP0CON*/
-#define GP0CON_RVAL                    0x0 
-
-/* GP0CON[CON7] - p0.7  configuration bits */
-#define GP0CON_CON7_MSK                (0x3   << 14 )
-#define GP0CON_CON7_GPIO               (0x0   << 14 ) /* GPIO                     */
-#define GP0CON_CON7_I2C1SDA            (0x1   << 14 ) /* I2C1 SDA                 */
-#define GP0CON_CON7_PLAO3              (0x3   << 14 ) /* PLAO[3]                  */
-
-/* GP0CON[CON6] - p0.6  configuration bits */
-#define GP0CON_CON6_MSK                (0x3   << 12 )
-#define GP0CON_CON6_GPIO               (0x0   << 12 ) /* GPIO                     */
-#define GP0CON_CON6_I2C1SCL            (0x1   << 12 ) /* I2C1 SCL                 */
-#define GP0CON_CON6_PLAO2              (0x3   << 12 ) /* PLAO[2]                  */
-
-/* GP0CON[CON5] - p0.5  configuration bits */
-#define GP0CON_CON5_MSK                (0x3   << 10 )
-#define GP0CON_CON5_GPIO               (0x0   << 10 ) /* GPIO                     */
-#define GP0CON_CON5_I2C0SDA            (0x1   << 10 ) /* I2C0 SDA                 */
-#define GP0CON_CON5_PLAO1              (0x3   << 10 ) /* PLAO[1]                  */
-
-/* GP0CON[CON4] - p0.4  configuration bits */
-#define GP0CON_CON4_MSK                (0x3   << 8  )
-#define GP0CON_CON4_GPIO               (0x0   << 8  ) /* GPIO                     */
-#define GP0CON_CON4_I2CSCL             (0x1   << 8  ) /* I2C0 SCL                 */
-#define GP0CON_CON4_PLAO0              (0x3   << 8  ) /* PLAO[0]                  */
-
-/* GP0CON[CON3] - p0.3  configuration bits */
-#define GP0CON_CON3_MSK                (0x3   << 6  )
-#define GP0CON_CON3_GPIOIRQ0           (0x0   << 6  ) /* GPIO/IRQ0                */
-#define GP0CON_CON3_SPI0CS             (0x1   << 6  ) /* SPI0 CS                  */
-#define GP0CON_CON3_PLACLK0            (0x2   << 6  ) /* PLA CLK0                 */
-#define GP0CON_CON3_PLAI3              (0x3   << 6  ) /* PLAI[3]                  */
-
-/* GP0CON[CON2] - p0.2  configuration bits */
-#define GP0CON_CON2_MSK                (0x3   << 4  )
-#define GP0CON_CON2_GPIO               (0x0   << 4  ) /* GPIO                     */
-#define GP0CON_CON2_SPI0MOSI           (0x1   << 4  ) /* SPI0 MOSI                */
-#define GP0CON_CON2_PLAI2              (0x3   << 4  ) /* PLAI[2]                  */
-
-/* GP0CON[CON1] - p0.1  configuration bits */
-#define GP0CON_CON1_MSK                (0x3   << 2  )
-#define GP0CON_CON1_GPIO               (0x0   << 2  ) /* GPIO                     */
-#define GP0CON_CON1_SIP0MISO           (0x1   << 2  ) /* SPI0 MISO                */
-#define GP0CON_CON1_PLAI1              (0x3   << 2  ) /* PLAI[1]                  */
-
-/* GP0CON[CON0] - p0.0  configuration bits */
-#define GP0CON_CON0_MSK                (0x3   << 0  )
-#define GP0CON_CON0_GPIO               (0x0   << 0  ) /* GPIO                     */
-#define GP0CON_CON0_SPI0SCLK           (0x1   << 0  ) /* SPI0 SCLK                */
-#define GP0CON_CON0_PLAI0              (0x3   << 0  ) /* PLAI[0]                  */
-
-/* Reset Value for GP0OE*/
-#define GP0OE_RVAL                     0x0 
-
-/* GP0OE[OE7] - Pin output drive enable */
-#define GP0OE_OE7_BBA                  (*(volatile unsigned long *) 0x4240009C)
-#define GP0OE_OE7_MSK                  (0x1   << 7  )
-#define GP0OE_OE7                      (0x1   << 7  )
-#define GP0OE_OE7_DIS                  (0x0   << 7  )
-#define GP0OE_OE7_EN                   (0x1   << 7  )
-
-/* GP0OE[OE6] - Pin output drive enable */
-#define GP0OE_OE6_BBA                  (*(volatile unsigned long *) 0x42400098)
-#define GP0OE_OE6_MSK                  (0x1   << 6  )
-#define GP0OE_OE6                      (0x1   << 6  )
-#define GP0OE_OE6_DIS                  (0x0   << 6  )
-#define GP0OE_OE6_EN                   (0x1   << 6  )
-
-/* GP0OE[OE5] - Pin output drive enable */
-#define GP0OE_OE5_BBA                  (*(volatile unsigned long *) 0x42400094)
-#define GP0OE_OE5_MSK                  (0x1   << 5  )
-#define GP0OE_OE5                      (0x1   << 5  )
-#define GP0OE_OE5_DIS                  (0x0   << 5  )
-#define GP0OE_OE5_EN                   (0x1   << 5  )
-
-/* GP0OE[OE4] - Pin output drive enable */
-#define GP0OE_OE4_BBA                  (*(volatile unsigned long *) 0x42400090)
-#define GP0OE_OE4_MSK                  (0x1   << 4  )
-#define GP0OE_OE4                      (0x1   << 4  )
-#define GP0OE_OE4_DIS                  (0x0   << 4  )
-#define GP0OE_OE4_EN                   (0x1   << 4  )
-
-/* GP0OE[OE3] - Pin output drive enable */
-#define GP0OE_OE3_BBA                  (*(volatile unsigned long *) 0x4240008C)
-#define GP0OE_OE3_MSK                  (0x1   << 3  )
-#define GP0OE_OE3                      (0x1   << 3  )
-#define GP0OE_OE3_DIS                  (0x0   << 3  )
-#define GP0OE_OE3_EN                   (0x1   << 3  )
-
-/* GP0OE[OE2] - Pin output drive enable */
-#define GP0OE_OE2_BBA                  (*(volatile unsigned long *) 0x42400088)
-#define GP0OE_OE2_MSK                  (0x1   << 2  )
-#define GP0OE_OE2                      (0x1   << 2  )
-#define GP0OE_OE2_DIS                  (0x0   << 2  )
-#define GP0OE_OE2_EN                   (0x1   << 2  )
-
-/* GP0OE[OE1] - Pin output drive enable */
-#define GP0OE_OE1_BBA                  (*(volatile unsigned long *) 0x42400084)
-#define GP0OE_OE1_MSK                  (0x1   << 1  )
-#define GP0OE_OE1                      (0x1   << 1  )
-#define GP0OE_OE1_DIS                  (0x0   << 1  )
-#define GP0OE_OE1_EN                   (0x1   << 1  )
-
-/* GP0OE[OE0] - Pin output drive enable */
-#define GP0OE_OE0_BBA                  (*(volatile unsigned long *) 0x42400080)
-#define GP0OE_OE0_MSK                  (0x1   << 0  )
-#define GP0OE_OE0                      (0x1   << 0  )
-#define GP0OE_OE0_DIS                  (0x0   << 0  )
-#define GP0OE_OE0_EN                   (0x1   << 0  )
-
-/* Reset Value for GP0PUL*/
-#define GP0PUL_RVAL                    0x0 
-
-/* GP0PUL[PUL7] - Pin Pull up enable */
-#define GP0PUL_PUL7_BBA                (*(volatile unsigned long *) 0x4240011C)
-#define GP0PUL_PUL7_MSK                (0x1   << 7  )
-#define GP0PUL_PUL7                    (0x1   << 7  )
-#define GP0PUL_PUL7_DIS                (0x0   << 7  )
-#define GP0PUL_PUL7_EN                 (0x1   << 7  )
-
-/* GP0PUL[PUL6] - Pin Pull up enable */
-#define GP0PUL_PUL6_BBA                (*(volatile unsigned long *) 0x42400118)
-#define GP0PUL_PUL6_MSK                (0x1   << 6  )
-#define GP0PUL_PUL6                    (0x1   << 6  )
-#define GP0PUL_PUL6_DIS                (0x0   << 6  )
-#define GP0PUL_PUL6_EN                 (0x1   << 6  )
-
-/* GP0PUL[PUL5] - Pin Pull up enable */
-#define GP0PUL_PUL5_BBA                (*(volatile unsigned long *) 0x42400114)
-#define GP0PUL_PUL5_MSK                (0x1   << 5  )
-#define GP0PUL_PUL5                    (0x1   << 5  )
-#define GP0PUL_PUL5_DIS                (0x0   << 5  )
-#define GP0PUL_PUL5_EN                 (0x1   << 5  )
-
-/* GP0PUL[PUL4] - Pin Pull up enable */
-#define GP0PUL_PUL4_BBA                (*(volatile unsigned long *) 0x42400110)
-#define GP0PUL_PUL4_MSK                (0x1   << 4  )
-#define GP0PUL_PUL4                    (0x1   << 4  )
-#define GP0PUL_PUL4_DIS                (0x0   << 4  )
-#define GP0PUL_PUL4_EN                 (0x1   << 4  )
-
-/* GP0PUL[PUL3] - Pin Pull up enable */
-#define GP0PUL_PUL3_BBA                (*(volatile unsigned long *) 0x4240010C)
-#define GP0PUL_PUL3_MSK                (0x1   << 3  )
-#define GP0PUL_PUL3                    (0x1   << 3  )
-#define GP0PUL_PUL3_DIS                (0x0   << 3  )
-#define GP0PUL_PUL3_EN                 (0x1   << 3  )
-
-/* GP0PUL[PUL2] - Pin Pull up enable */
-#define GP0PUL_PUL2_BBA                (*(volatile unsigned long *) 0x42400108)
-#define GP0PUL_PUL2_MSK                (0x1   << 2  )
-#define GP0PUL_PUL2                    (0x1   << 2  )
-#define GP0PUL_PUL2_DIS                (0x0   << 2  )
-#define GP0PUL_PUL2_EN                 (0x1   << 2  )
-
-/* GP0PUL[PUL1] - Pin Pull up enable */
-#define GP0PUL_PUL1_BBA                (*(volatile unsigned long *) 0x42400104)
-#define GP0PUL_PUL1_MSK                (0x1   << 1  )
-#define GP0PUL_PUL1                    (0x1   << 1  )
-#define GP0PUL_PUL1_DIS                (0x0   << 1  )
-#define GP0PUL_PUL1_EN                 (0x1   << 1  )
-
-/* GP0PUL[PUL0] - Pin Pull up enable */
-#define GP0PUL_PUL0_BBA                (*(volatile unsigned long *) 0x42400100)
-#define GP0PUL_PUL0_MSK                (0x1   << 0  )
-#define GP0PUL_PUL0                    (0x1   << 0  )
-#define GP0PUL_PUL0_DIS                (0x0   << 0  )
-#define GP0PUL_PUL0_EN                 (0x1   << 0  )
-
-/* Reset Value for GP0IE*/
-#define GP0IE_RVAL                     0x0 
-
-/* GP0IE[IEN7] - Input path enable */
-#define GP0IE_IEN7_BBA                 (*(volatile unsigned long *) 0x4240019C)
-#define GP0IE_IEN7_MSK                 (0x1   << 7  )
-#define GP0IE_IEN7                     (0x1   << 7  )
-#define GP0IE_IEN7_DIS                 (0x0   << 7  )
-#define GP0IE_IEN7_EN                  (0x1   << 7  )
-
-/* GP0IE[IEN6] - Input path enable */
-#define GP0IE_IEN6_BBA                 (*(volatile unsigned long *) 0x42400198)
-#define GP0IE_IEN6_MSK                 (0x1   << 6  )
-#define GP0IE_IEN6                     (0x1   << 6  )
-#define GP0IE_IEN6_DIS                 (0x0   << 6  )
-#define GP0IE_IEN6_EN                  (0x1   << 6  )
-
-/* GP0IE[IEN5] - Input path enable */
-#define GP0IE_IEN5_BBA                 (*(volatile unsigned long *) 0x42400194)
-#define GP0IE_IEN5_MSK                 (0x1   << 5  )
-#define GP0IE_IEN5                     (0x1   << 5  )
-#define GP0IE_IEN5_DIS                 (0x0   << 5  )
-#define GP0IE_IEN5_EN                  (0x1   << 5  )
-
-/* GP0IE[IEN4] - Input path enable */
-#define GP0IE_IEN4_BBA                 (*(volatile unsigned long *) 0x42400190)
-#define GP0IE_IEN4_MSK                 (0x1   << 4  )
-#define GP0IE_IEN4                     (0x1   << 4  )
-#define GP0IE_IEN4_DIS                 (0x0   << 4  )
-#define GP0IE_IEN4_EN                  (0x1   << 4  )
-
-/* GP0IE[IEN3] - Input path enable */
-#define GP0IE_IEN3_BBA                 (*(volatile unsigned long *) 0x4240018C)
-#define GP0IE_IEN3_MSK                 (0x1   << 3  )
-#define GP0IE_IEN3                     (0x1   << 3  )
-#define GP0IE_IEN3_DIS                 (0x0   << 3  )
-#define GP0IE_IEN3_EN                  (0x1   << 3  )
-
-/* GP0IE[IEN2] - Input path enable */
-#define GP0IE_IEN2_BBA                 (*(volatile unsigned long *) 0x42400188)
-#define GP0IE_IEN2_MSK                 (0x1   << 2  )
-#define GP0IE_IEN2                     (0x1   << 2  )
-#define GP0IE_IEN2_DIS                 (0x0   << 2  )
-#define GP0IE_IEN2_EN                  (0x1   << 2  )
-
-/* GP0IE[IEN1] - Input path enable */
-#define GP0IE_IEN1_BBA                 (*(volatile unsigned long *) 0x42400184)
-#define GP0IE_IEN1_MSK                 (0x1   << 1  )
-#define GP0IE_IEN1                     (0x1   << 1  )
-#define GP0IE_IEN1_DIS                 (0x0   << 1  )
-#define GP0IE_IEN1_EN                  (0x1   << 1  )
-
-/* GP0IE[IEN0] - Input path enable */
-#define GP0IE_IEN0_BBA                 (*(volatile unsigned long *) 0x42400180)
-#define GP0IE_IEN0_MSK                 (0x1   << 0  )
-#define GP0IE_IEN0                     (0x1   << 0  )
-#define GP0IE_IEN0_DIS                 (0x0   << 0  )
-#define GP0IE_IEN0_EN                  (0x1   << 0  )
-
-/* Reset Value for GP0IN*/
-#define GP0IN_RVAL                     0x0 
-
-/* GP0IN[IN7] - Registered data input */
-#define GP0IN_IN7_BBA                  (*(volatile unsigned long *) 0x4240021C)
-#define GP0IN_IN7_MSK                  (0x1   << 7  )
-#define GP0IN_IN7                      (0x1   << 7  )
-#define GP0IN_IN7_LOW                  (0x0   << 7  )
-#define GP0IN_IN7_HIGH                 (0x1   << 7  )
-
-/* GP0IN[IN6] - Registered data input */
-#define GP0IN_IN6_BBA                  (*(volatile unsigned long *) 0x42400218)
-#define GP0IN_IN6_MSK                  (0x1   << 6  )
-#define GP0IN_IN6                      (0x1   << 6  )
-#define GP0IN_IN6_LOW                  (0x0   << 6  )
-#define GP0IN_IN6_HIGH                 (0x1   << 6  )
-
-/* GP0IN[IN5] - Registered data input */
-#define GP0IN_IN5_BBA                  (*(volatile unsigned long *) 0x42400214)
-#define GP0IN_IN5_MSK                  (0x1   << 5  )
-#define GP0IN_IN5                      (0x1   << 5  )
-#define GP0IN_IN5_LOW                  (0x0   << 5  )
-#define GP0IN_IN5_HIGH                 (0x1   << 5  )
-
-/* GP0IN[IN4] - Registered data input */
-#define GP0IN_IN4_BBA                  (*(volatile unsigned long *) 0x42400210)
-#define GP0IN_IN4_MSK                  (0x1   << 4  )
-#define GP0IN_IN4                      (0x1   << 4  )
-#define GP0IN_IN4_LOW                  (0x0   << 4  )
-#define GP0IN_IN4_HIGH                 (0x1   << 4  )
-
-/* GP0IN[IN3] - Registered data input */
-#define GP0IN_IN3_BBA                  (*(volatile unsigned long *) 0x4240020C)
-#define GP0IN_IN3_MSK                  (0x1   << 3  )
-#define GP0IN_IN3                      (0x1   << 3  )
-#define GP0IN_IN3_LOW                  (0x0   << 3  )
-#define GP0IN_IN3_HIGH                 (0x1   << 3  )
-
-/* GP0IN[IN2] - Registered data input */
-#define GP0IN_IN2_BBA                  (*(volatile unsigned long *) 0x42400208)
-#define GP0IN_IN2_MSK                  (0x1   << 2  )
-#define GP0IN_IN2                      (0x1   << 2  )
-#define GP0IN_IN2_LOW                  (0x0   << 2  )
-#define GP0IN_IN2_HIGH                 (0x1   << 2  )
-
-/* GP0IN[IN1] - Registered data input */
-#define GP0IN_IN1_BBA                  (*(volatile unsigned long *) 0x42400204)
-#define GP0IN_IN1_MSK                  (0x1   << 1  )
-#define GP0IN_IN1                      (0x1   << 1  )
-#define GP0IN_IN1_LOW                  (0x0   << 1  )
-#define GP0IN_IN1_HIGH                 (0x1   << 1  )
-
-/* GP0IN[IN0] - Registered data input */
-#define GP0IN_IN0_BBA                  (*(volatile unsigned long *) 0x42400200)
-#define GP0IN_IN0_MSK                  (0x1   << 0  )
-#define GP0IN_IN0                      (0x1   << 0  )
-#define GP0IN_IN0_LOW                  (0x0   << 0  )
-#define GP0IN_IN0_HIGH                 (0x1   << 0  )
-
-/* Reset Value for GP0OUT*/
-#define GP0OUT_RVAL                    0x0 
-
-/* GP0OUT[OUT7] - Data out */
-#define GP0OUT_OUT7_BBA                (*(volatile unsigned long *) 0x4240029C)
-#define GP0OUT_OUT7_MSK                (0x1   << 7  )
-#define GP0OUT_OUT7                    (0x1   << 7  )
-#define GP0OUT_OUT7_LOW                (0x0   << 7  )
-#define GP0OUT_OUT7_HIGH               (0x1   << 7  )
-
-/* GP0OUT[OUT6] - Data out */
-#define GP0OUT_OUT6_BBA                (*(volatile unsigned long *) 0x42400298)
-#define GP0OUT_OUT6_MSK                (0x1   << 6  )
-#define GP0OUT_OUT6                    (0x1   << 6  )
-#define GP0OUT_OUT6_LOW                (0x0   << 6  )
-#define GP0OUT_OUT6_HIGH               (0x1   << 6  )
-
-/* GP0OUT[OUT5] - Data out */
-#define GP0OUT_OUT5_BBA                (*(volatile unsigned long *) 0x42400294)
-#define GP0OUT_OUT5_MSK                (0x1   << 5  )
-#define GP0OUT_OUT5                    (0x1   << 5  )
-#define GP0OUT_OUT5_LOW                (0x0   << 5  )
-#define GP0OUT_OUT5_HIGH               (0x1   << 5  )
-
-/* GP0OUT[OUT4] - Data out */
-#define GP0OUT_OUT4_BBA                (*(volatile unsigned long *) 0x42400290)
-#define GP0OUT_OUT4_MSK                (0x1   << 4  )
-#define GP0OUT_OUT4                    (0x1   << 4  )
-#define GP0OUT_OUT4_LOW                (0x0   << 4  )
-#define GP0OUT_OUT4_HIGH               (0x1   << 4  )
-
-/* GP0OUT[OUT3] - Data out */
-#define GP0OUT_OUT3_BBA                (*(volatile unsigned long *) 0x4240028C)
-#define GP0OUT_OUT3_MSK                (0x1   << 3  )
-#define GP0OUT_OUT3                    (0x1   << 3  )
-#define GP0OUT_OUT3_LOW                (0x0   << 3  )
-#define GP0OUT_OUT3_HIGH               (0x1   << 3  )
-
-/* GP0OUT[OUT2] - Data out */
-#define GP0OUT_OUT2_BBA                (*(volatile unsigned long *) 0x42400288)
-#define GP0OUT_OUT2_MSK                (0x1   << 2  )
-#define GP0OUT_OUT2                    (0x1   << 2  )
-#define GP0OUT_OUT2_LOW                (0x0   << 2  )
-#define GP0OUT_OUT2_HIGH               (0x1   << 2  )
-
-/* GP0OUT[OUT1] - Data out */
-#define GP0OUT_OUT1_BBA                (*(volatile unsigned long *) 0x42400284)
-#define GP0OUT_OUT1_MSK                (0x1   << 1  )
-#define GP0OUT_OUT1                    (0x1   << 1  )
-#define GP0OUT_OUT1_LOW                (0x0   << 1  )
-#define GP0OUT_OUT1_HIGH               (0x1   << 1  )
-
-/* GP0OUT[OUT0] - Data out */
-#define GP0OUT_OUT0_BBA                (*(volatile unsigned long *) 0x42400280)
-#define GP0OUT_OUT0_MSK                (0x1   << 0  )
-#define GP0OUT_OUT0                    (0x1   << 0  )
-#define GP0OUT_OUT0_LOW                (0x0   << 0  )
-#define GP0OUT_OUT0_HIGH               (0x1   << 0  )
-
-/* Reset Value for GP0SET*/
-#define GP0SET_RVAL                    0x0 
-
-/* GP0SET[SET7] - Set the output high. */
-#define GP0SET_SET7_BBA                (*(volatile unsigned long *) 0x4240031C)
-#define GP0SET_SET7_MSK                (0x1   << 7  )
-#define GP0SET_SET7                    (0x1   << 7  )
-#define GP0SET_SET7_SET                (0x1   << 7  )
-
-/* GP0SET[SET6] - Set the output high. */
-#define GP0SET_SET6_BBA                (*(volatile unsigned long *) 0x42400318)
-#define GP0SET_SET6_MSK                (0x1   << 6  )
-#define GP0SET_SET6                    (0x1   << 6  )
-#define GP0SET_SET6_SET                (0x1   << 6  )
-
-/* GP0SET[SET5] - Set the output high. */
-#define GP0SET_SET5_BBA                (*(volatile unsigned long *) 0x42400314)
-#define GP0SET_SET5_MSK                (0x1   << 5  )
-#define GP0SET_SET5                    (0x1   << 5  )
-#define GP0SET_SET5_SET                (0x1   << 5  )
-
-/* GP0SET[SET4] - Set the output high. */
-#define GP0SET_SET4_BBA                (*(volatile unsigned long *) 0x42400310)
-#define GP0SET_SET4_MSK                (0x1   << 4  )
-#define GP0SET_SET4                    (0x1   << 4  )
-#define GP0SET_SET4_SET                (0x1   << 4  )
-
-/* GP0SET[SET3] - Set the output high. */
-#define GP0SET_SET3_BBA                (*(volatile unsigned long *) 0x4240030C)
-#define GP0SET_SET3_MSK                (0x1   << 3  )
-#define GP0SET_SET3                    (0x1   << 3  )
-#define GP0SET_SET3_SET                (0x1   << 3  )
-
-/* GP0SET[SET2] - Set the output high. */
-#define GP0SET_SET2_BBA                (*(volatile unsigned long *) 0x42400308)
-#define GP0SET_SET2_MSK                (0x1   << 2  )
-#define GP0SET_SET2                    (0x1   << 2  )
-#define GP0SET_SET2_SET                (0x1   << 2  )
-
-/* GP0SET[SET1] - Set the output high. */
-#define GP0SET_SET1_BBA                (*(volatile unsigned long *) 0x42400304)
-#define GP0SET_SET1_MSK                (0x1   << 1  )
-#define GP0SET_SET1                    (0x1   << 1  )
-#define GP0SET_SET1_SET                (0x1   << 1  )
-
-/* GP0SET[SET0] - Set the output high. */
-#define GP0SET_SET0_BBA                (*(volatile unsigned long *) 0x42400300)
-#define GP0SET_SET0_MSK                (0x1   << 0  )
-#define GP0SET_SET0                    (0x1   << 0  )
-#define GP0SET_SET0_SET                (0x1   << 0  )
-
-/* Reset Value for GP0CLR*/
-#define GP0CLR_RVAL                    0x0 
-
-/* GP0CLR[CLR7] - Set the output low. */
-#define GP0CLR_CLR7_BBA                (*(volatile unsigned long *) 0x4240039C)
-#define GP0CLR_CLR7_MSK                (0x1   << 7  )
-#define GP0CLR_CLR7                    (0x1   << 7  )
-#define GP0CLR_CLR7_CLR                (0x1   << 7  )
-
-/* GP0CLR[CLR6] - Set the output low. */
-#define GP0CLR_CLR6_BBA                (*(volatile unsigned long *) 0x42400398)
-#define GP0CLR_CLR6_MSK                (0x1   << 6  )
-#define GP0CLR_CLR6                    (0x1   << 6  )
-#define GP0CLR_CLR6_CLR                (0x1   << 6  )
-
-/* GP0CLR[CLR5] - Set the output low. */
-#define GP0CLR_CLR5_BBA                (*(volatile unsigned long *) 0x42400394)
-#define GP0CLR_CLR5_MSK                (0x1   << 5  )
-#define GP0CLR_CLR5                    (0x1   << 5  )
-#define GP0CLR_CLR5_CLR                (0x1   << 5  )
-
-/* GP0CLR[CLR4] - Set the output low. */
-#define GP0CLR_CLR4_BBA                (*(volatile unsigned long *) 0x42400390)
-#define GP0CLR_CLR4_MSK                (0x1   << 4  )
-#define GP0CLR_CLR4                    (0x1   << 4  )
-#define GP0CLR_CLR4_CLR                (0x1   << 4  )
-
-/* GP0CLR[CLR3] - Set the output low. */
-#define GP0CLR_CLR3_BBA                (*(volatile unsigned long *) 0x4240038C)
-#define GP0CLR_CLR3_MSK                (0x1   << 3  )
-#define GP0CLR_CLR3                    (0x1   << 3  )
-#define GP0CLR_CLR3_CLR                (0x1   << 3  )
-
-/* GP0CLR[CLR2] - Set the output low. */
-#define GP0CLR_CLR2_BBA                (*(volatile unsigned long *) 0x42400388)
-#define GP0CLR_CLR2_MSK                (0x1   << 2  )
-#define GP0CLR_CLR2                    (0x1   << 2  )
-#define GP0CLR_CLR2_CLR                (0x1   << 2  )
-
-/* GP0CLR[CLR1] - Set the output low. */
-#define GP0CLR_CLR1_BBA                (*(volatile unsigned long *) 0x42400384)
-#define GP0CLR_CLR1_MSK                (0x1   << 1  )
-#define GP0CLR_CLR1                    (0x1   << 1  )
-#define GP0CLR_CLR1_CLR                (0x1   << 1  )
-
-/* GP0CLR[CLR0] - Set the output low. */
-#define GP0CLR_CLR0_BBA                (*(volatile unsigned long *) 0x42400380)
-#define GP0CLR_CLR0_MSK                (0x1   << 0  )
-#define GP0CLR_CLR0                    (0x1   << 0  )
-#define GP0CLR_CLR0_CLR                (0x1   << 0  )
-
-/* Reset Value for GP0TGL*/
-#define GP0TGL_RVAL                    0x0 
-
-/* GP0TGL[TGL7] - Toggle the output of the port pin */
-#define GP0TGL_TGL7_BBA                (*(volatile unsigned long *) 0x4240041C)
-#define GP0TGL_TGL7_MSK                (0x1   << 7  )
-#define GP0TGL_TGL7                    (0x1   << 7  )
-#define GP0TGL_TGL7_TGL                (0x1   << 7  )
-
-/* GP0TGL[TGL6] - Toggle the output of the port pin */
-#define GP0TGL_TGL6_BBA                (*(volatile unsigned long *) 0x42400418)
-#define GP0TGL_TGL6_MSK                (0x1   << 6  )
-#define GP0TGL_TGL6                    (0x1   << 6  )
-#define GP0TGL_TGL6_TGL                (0x1   << 6  )
-
-/* GP0TGL[TGL5] - Toggle the output of the port pin */
-#define GP0TGL_TGL5_BBA                (*(volatile unsigned long *) 0x42400414)
-#define GP0TGL_TGL5_MSK                (0x1   << 5  )
-#define GP0TGL_TGL5                    (0x1   << 5  )
-#define GP0TGL_TGL5_TGL                (0x1   << 5  )
-
-/* GP0TGL[TGL4] - Toggle the output of the port pin */
-#define GP0TGL_TGL4_BBA                (*(volatile unsigned long *) 0x42400410)
-#define GP0TGL_TGL4_MSK                (0x1   << 4  )
-#define GP0TGL_TGL4                    (0x1   << 4  )
-#define GP0TGL_TGL4_TGL                (0x1   << 4  )
-
-/* GP0TGL[TGL3] - Toggle the output of the port pin */
-#define GP0TGL_TGL3_BBA                (*(volatile unsigned long *) 0x4240040C)
-#define GP0TGL_TGL3_MSK                (0x1   << 3  )
-#define GP0TGL_TGL3                    (0x1   << 3  )
-#define GP0TGL_TGL3_TGL                (0x1   << 3  )
-
-/* GP0TGL[TGL2] - Toggle the output of the port pin */
-#define GP0TGL_TGL2_BBA                (*(volatile unsigned long *) 0x42400408)
-#define GP0TGL_TGL2_MSK                (0x1   << 2  )
-#define GP0TGL_TGL2                    (0x1   << 2  )
-#define GP0TGL_TGL2_TGL                (0x1   << 2  )
-
-/* GP0TGL[TGL1] - Toggle the output of the port pin */
-#define GP0TGL_TGL1_BBA                (*(volatile unsigned long *) 0x42400404)
-#define GP0TGL_TGL1_MSK                (0x1   << 1  )
-#define GP0TGL_TGL1                    (0x1   << 1  )
-#define GP0TGL_TGL1_TGL                (0x1   << 1  )
-
-/* GP0TGL[TGL0] - Toggle the output of the port pin */
-#define GP0TGL_TGL0_BBA                (*(volatile unsigned long *) 0x42400400)
-#define GP0TGL_TGL0_MSK                (0x1   << 0  )
-#define GP0TGL_TGL0                    (0x1   << 0  )
-#define GP0TGL_TGL0_TGL                (0x1   << 0  )
-
-/* Reset Value for GP0ODE*/
-#define GP0ODE_RVAL                    0x0 
-
-/* GP0ODE[ODE7] - Open drain enable */
-#define GP0ODE_ODE7_BBA                (*(volatile unsigned long *) 0x4240049C)
-#define GP0ODE_ODE7_MSK                (0x1   << 7  )
-#define GP0ODE_ODE7                    (0x1   << 7  )
-#define GP0ODE_ODE7_DIS                (0x0   << 7  )
-#define GP0ODE_ODE7_EN                 (0x1   << 7  )
-
-/* GP0ODE[ODE6] - Open drain enable */
-#define GP0ODE_ODE6_BBA                (*(volatile unsigned long *) 0x42400498)
-#define GP0ODE_ODE6_MSK                (0x1   << 6  )
-#define GP0ODE_ODE6                    (0x1   << 6  )
-#define GP0ODE_ODE6_DIS                (0x0   << 6  )
-#define GP0ODE_ODE6_EN                 (0x1   << 6  )
-
-/* GP0ODE[ODE5] - Open drain enable */
-#define GP0ODE_ODE5_BBA                (*(volatile unsigned long *) 0x42400494)
-#define GP0ODE_ODE5_MSK                (0x1   << 5  )
-#define GP0ODE_ODE5                    (0x1   << 5  )
-#define GP0ODE_ODE5_DIS                (0x0   << 5  )
-#define GP0ODE_ODE5_EN                 (0x1   << 5  )
-
-/* GP0ODE[ODE4] - Open drain enable */
-#define GP0ODE_ODE4_BBA                (*(volatile unsigned long *) 0x42400490)
-#define GP0ODE_ODE4_MSK                (0x1   << 4  )
-#define GP0ODE_ODE4                    (0x1   << 4  )
-#define GP0ODE_ODE4_DIS                (0x0   << 4  )
-#define GP0ODE_ODE4_EN                 (0x1   << 4  )
-
-/* GP0ODE[ODE3] - Open drain enable */
-#define GP0ODE_ODE3_BBA                (*(volatile unsigned long *) 0x4240048C)
-#define GP0ODE_ODE3_MSK                (0x1   << 3  )
-#define GP0ODE_ODE3                    (0x1   << 3  )
-#define GP0ODE_ODE3_DIS                (0x0   << 3  )
-#define GP0ODE_ODE3_EN                 (0x1   << 3  )
-
-/* GP0ODE[ODE2] - Open drain enable */
-#define GP0ODE_ODE2_BBA                (*(volatile unsigned long *) 0x42400488)
-#define GP0ODE_ODE2_MSK                (0x1   << 2  )
-#define GP0ODE_ODE2                    (0x1   << 2  )
-#define GP0ODE_ODE2_DIS                (0x0   << 2  )
-#define GP0ODE_ODE2_EN                 (0x1   << 2  )
-
-/* GP0ODE[ODE1] - Open drain enable */
-#define GP0ODE_ODE1_BBA                (*(volatile unsigned long *) 0x42400484)
-#define GP0ODE_ODE1_MSK                (0x1   << 1  )
-#define GP0ODE_ODE1                    (0x1   << 1  )
-#define GP0ODE_ODE1_DIS                (0x0   << 1  )
-#define GP0ODE_ODE1_EN                 (0x1   << 1  )
-
-/* GP0ODE[ODE0] - Open drain enable */
-#define GP0ODE_ODE0_BBA                (*(volatile unsigned long *) 0x42400480)
-#define GP0ODE_ODE0_MSK                (0x1   << 0  )
-#define GP0ODE_ODE0                    (0x1   << 0  )
-#define GP0ODE_ODE0_DIS                (0x0   << 0  )
-#define GP0ODE_ODE0_EN                 (0x1   << 0  )
-#if (__NO_MMR_STRUCTS__==1)
-
-#define          GP1CON                                     (*(volatile unsigned short int *) 0x40020040)
-#define          GP1OE                                      (*(volatile unsigned char      *) 0x40020044)
-#define          GP1PUL                                     (*(volatile unsigned char      *) 0x40020048)
-#define          GP1IE                                      (*(volatile unsigned char      *) 0x4002004C)
-#define          GP1IN                                      (*(volatile unsigned char      *) 0x40020050)
-#define          GP1OUT                                     (*(volatile unsigned char      *) 0x40020054)
-#define          GP1SET                                     (*(volatile unsigned char      *) 0x40020058)
-#define          GP1CLR                                     (*(volatile unsigned char      *) 0x4002005C)
-#define          GP1TGL                                     (*(volatile unsigned char      *) 0x40020060)
-#define          GP1ODE                                     (*(volatile unsigned char      *) 0x40020064)
-#endif // (__NO_MMR_STRUCTS__==1)
-
-/* Reset Value for GP1CON*/
-#define GP1CON_RVAL                    0x0 
-
-/* GP1CON[CON7] - p1.7  configuration bits */
-#define GP1CON_CON7_MSK                (0x3   << 14 )
-#define GP1CON_CON7_GPIOIRQ1           (0x0   << 14 ) /* GPIO/IRQ1                */
-#define GP1CON_CON7_PWM5               (0x1   << 14 ) /* PWM5                     */
-#define GP1CON_CON7_SPI1CS             (0x2   << 14 ) /* SPI1 CS                  */
-#define GP1CON_CON7_PLAO7              (0x3   << 14 ) /* PLAO[7]                  */
-
-/* GP1CON[CON6] - p1.6  configuration bits */
-#define GP1CON_CON6_MSK                (0x3   << 12 )
-#define GP1CON_CON6_GPIO               (0x0   << 12 ) /* GPIO                     */
-#define GP1CON_CON6_PWM4               (0x1   << 12 ) /* PWM4                     */
-#define GP1CON_CON6_SPI1MOSI           (0x2   << 12 ) /* SPI1 MOSI                */
-#define GP1CON_CON6_PLAO6              (0x3   << 12 ) /* PLAO[6]                  */
-
-/* GP1CON[CON5] - p1.5  configuration bits */
-#define GP1CON_CON5_MSK                (0x3   << 10 )
-#define GP1CON_CON5_GPIO               (0x0   << 10 ) /* GPIO                     */
-#define GP1CON_CON5_PWM3               (0x1   << 10 ) /* PWM3                     */
-#define GP1CON_CON5_SPI1MISO           (0x2   << 10 ) /* SPI1 MISO                */
-#define GP1CON_CON5_PLAO5              (0x3   << 10 ) /* PLAO[5]                  */
-
-/* GP1CON[CON4] - p1.4  configuration bits */
-#define GP1CON_CON4_MSK                (0x3   << 8  )
-#define GP1CON_CON4_GPIO               (0x0   << 8  ) /* GPIO                     */
-#define GP1CON_CON4_PWM2               (0x1   << 8  ) /* PWM2                     */
-#define GP1CON_CON4_SPISCLK            (0x2   << 8  ) /* SPI1 SCLK                */
-#define GP1CON_CON4_PLAO4              (0x3   << 8  ) /* PLAO[4]                  */
-
-/* GP1CON[CON3] - p1.3  configuration bits */
-#define GP1CON_CON3_MSK                (0x3   << 6  )
-#define GP1CON_CON3_GPIO               (0x0   << 6  ) /* GPIO                     */
-#define GP1CON_CON3_PWM1               (0x1   << 6  ) /* PWM1                     */
-#define GP1CON_CON3_PLAI7              (0x3   << 6  ) /* PLAI[7]                  */
-
-/* GP1CON[CON2] - p1.2  configuration bits */
-#define GP1CON_CON2_MSK                (0x3   << 4  )
-#define GP1CON_CON2_GPIO               (0x0   << 4  ) /* GPIO                     */
-#define GP1CON_CON2_PWM0               (0x1   << 4  ) /* PWM0                     */
-#define GP1CON_CON2_PLAI6              (0x3   << 4  ) /* PLAI6]                   */
-
-/* GP1CON[CON1] - p1.1  configuration bits */
-#define GP1CON_CON1_MSK                (0x3   << 2  )
-#define GP1CON_CON1_GPIO               (0x0   << 2  ) /* GPIO                     */
-#define GP1CON_CON1_UARTSOUT           (0x1   << 2  ) /* UART SOUT                */
-#define GP1CON_CON1_PLACLK1            (0x2   << 2  ) /* PLA CLK1                 */
-#define GP1CON_CON1_PLAI5              (0x3   << 2  ) /* PLAI[5]                  */
-
-/* GP1CON[CON0] - p1.0  configuration bits */
-#define GP1CON_CON0_MSK                (0x3   << 0  )
-#define GP1CON_CON0_GPIO               (0x0   << 0  ) /* GPIO                     */
-#define GP1CON_CON0_UARTSIN            (0x1   << 0  ) /* UART SIN                 */
-#define GP1CON_CON0_ECLKIN             (0x2   << 0  ) /* External Clock Input     */
-#define GP1CON_CON0_PLAI4              (0x3   << 0  ) /* PLAI[4]                  */
-
-/* Reset Value for GP1OE*/
-#define GP1OE_RVAL                     0x0 
-
-/* GP1OE[OE7] - Pin Output Drive enable */
-#define GP1OE_OE7_BBA                  (*(volatile unsigned long *) 0x4240089C)
-#define GP1OE_OE7_MSK                  (0x1   << 7  )
-#define GP1OE_OE7                      (0x1   << 7  )
-#define GP1OE_OE7_DIS                  (0x0   << 7  )
-#define GP1OE_OE7_EN                   (0x1   << 7  )
-
-/* GP1OE[OE6] - Pin Output Drive enable */
-#define GP1OE_OE6_BBA                  (*(volatile unsigned long *) 0x42400898)
-#define GP1OE_OE6_MSK                  (0x1   << 6  )
-#define GP1OE_OE6                      (0x1   << 6  )
-#define GP1OE_OE6_DIS                  (0x0   << 6  )
-#define GP1OE_OE6_EN                   (0x1   << 6  )
-
-/* GP1OE[OE5] - Pin Output Drive enable */
-#define GP1OE_OE5_BBA                  (*(volatile unsigned long *) 0x42400894)
-#define GP1OE_OE5_MSK                  (0x1   << 5  )
-#define GP1OE_OE5                      (0x1   << 5  )
-#define GP1OE_OE5_DIS                  (0x0   << 5  )
-#define GP1OE_OE5_EN                   (0x1   << 5  )
-
-/* GP1OE[OE4] - Pin Output Drive enable */
-#define GP1OE_OE4_BBA                  (*(volatile unsigned long *) 0x42400890)
-#define GP1OE_OE4_MSK                  (0x1   << 4  )
-#define GP1OE_OE4                      (0x1   << 4  )
-#define GP1OE_OE4_DIS                  (0x0   << 4  )
-#define GP1OE_OE4_EN                   (0x1   << 4  )
-
-/* GP1OE[OE3] - Pin Output Drive enable */
-#define GP1OE_OE3_BBA                  (*(volatile unsigned long *) 0x4240088C)
-#define GP1OE_OE3_MSK                  (0x1   << 3  )
-#define GP1OE_OE3                      (0x1   << 3  )
-#define GP1OE_OE3_DIS                  (0x0   << 3  )
-#define GP1OE_OE3_EN                   (0x1   << 3  )
-
-/* GP1OE[OE2] - Pin Output Drive enable */
-#define GP1OE_OE2_BBA                  (*(volatile unsigned long *) 0x42400888)
-#define GP1OE_OE2_MSK                  (0x1   << 2  )
-#define GP1OE_OE2                      (0x1   << 2  )
-#define GP1OE_OE2_DIS                  (0x0   << 2  )
-#define GP1OE_OE2_EN                   (0x1   << 2  )
-
-/* GP1OE[OE1] - Pin Output Drive enable */
-#define GP1OE_OE1_BBA                  (*(volatile unsigned long *) 0x42400884)
-#define GP1OE_OE1_MSK                  (0x1   << 1  )
-#define GP1OE_OE1                      (0x1   << 1  )
-#define GP1OE_OE1_DIS                  (0x0   << 1  )
-#define GP1OE_OE1_EN                   (0x1   << 1  )
-
-/* GP1OE[OE0] - Pin Output Drive enable */
-#define GP1OE_OE0_BBA                  (*(volatile unsigned long *) 0x42400880)
-#define GP1OE_OE0_MSK                  (0x1   << 0  )
-#define GP1OE_OE0                      (0x1   << 0  )
-#define GP1OE_OE0_DIS                  (0x0   << 0  )
-#define GP1OE_OE0_EN                   (0x1   << 0  )
-
-/* Reset Value for GP1PUL*/
-#define GP1PUL_RVAL                    0x0 
-
-/* GP1PUL[PUL7] - Pin Pull up enable */
-#define GP1PUL_PUL7_BBA                (*(volatile unsigned long *) 0x4240091C)
-#define GP1PUL_PUL7_MSK                (0x1   << 7  )
-#define GP1PUL_PUL7                    (0x1   << 7  )
-#define GP1PUL_PUL7_DIS                (0x0   << 7  )
-#define GP1PUL_PUL7_EN                 (0x1   << 7  )
-
-/* GP1PUL[PUL6] - Pin Pull up enable */
-#define GP1PUL_PUL6_BBA                (*(volatile unsigned long *) 0x42400918)
-#define GP1PUL_PUL6_MSK                (0x1   << 6  )
-#define GP1PUL_PUL6                    (0x1   << 6  )
-#define GP1PUL_PUL6_DIS                (0x0   << 6  )
-#define GP1PUL_PUL6_EN                 (0x1   << 6  )
-
-/* GP1PUL[PUL5] - Pin Pull up enable */
-#define GP1PUL_PUL5_BBA                (*(volatile unsigned long *) 0x42400914)
-#define GP1PUL_PUL5_MSK                (0x1   << 5  )
-#define GP1PUL_PUL5                    (0x1   << 5  )
-#define GP1PUL_PUL5_DIS                (0x0   << 5  )
-#define GP1PUL_PUL5_EN                 (0x1   << 5  )
-
-/* GP1PUL[PUL4] - Pin Pull up enable */
-#define GP1PUL_PUL4_BBA                (*(volatile unsigned long *) 0x42400910)
-#define GP1PUL_PUL4_MSK                (0x1   << 4  )
-#define GP1PUL_PUL4                    (0x1   << 4  )
-#define GP1PUL_PUL4_DIS                (0x0   << 4  )
-#define GP1PUL_PUL4_EN                 (0x1   << 4  )
-
-/* GP1PUL[PUL3] - Pin Pull up enable */
-#define GP1PUL_PUL3_BBA                (*(volatile unsigned long *) 0x4240090C)
-#define GP1PUL_PUL3_MSK                (0x1   << 3  )
-#define GP1PUL_PUL3                    (0x1   << 3  )
-#define GP1PUL_PUL3_DIS                (0x0   << 3  )
-#define GP1PUL_PUL3_EN                 (0x1   << 3  )
-
-/* GP1PUL[PUL2] - Pin Pull up enable */
-#define GP1PUL_PUL2_BBA                (*(volatile unsigned long *) 0x42400908)
-#define GP1PUL_PUL2_MSK                (0x1   << 2  )
-#define GP1PUL_PUL2                    (0x1   << 2  )
-#define GP1PUL_PUL2_DIS                (0x0   << 2  )
-#define GP1PUL_PUL2_EN                 (0x1   << 2  )
-
-/* GP1PUL[PUL1] - Pin Pull up enable */
-#define GP1PUL_PUL1_BBA                (*(volatile unsigned long *) 0x42400904)
-#define GP1PUL_PUL1_MSK                (0x1   << 1  )
-#define GP1PUL_PUL1                    (0x1   << 1  )
-#define GP1PUL_PUL1_DIS                (0x0   << 1  )
-#define GP1PUL_PUL1_EN                 (0x1   << 1  )
-
-/* GP1PUL[PUL0] - Pin Pull up enable */
-#define GP1PUL_PUL0_BBA                (*(volatile unsigned long *) 0x42400900)
-#define GP1PUL_PUL0_MSK                (0x1   << 0  )
-#define GP1PUL_PUL0                    (0x1   << 0  )
-#define GP1PUL_PUL0_DIS                (0x0   << 0  )
-#define GP1PUL_PUL0_EN                 (0x1   << 0  )
-
-/* Reset Value for GP1IE*/
-#define GP1IE_RVAL                     0x0 
-
-/* GP1IE[IEN7] - Input path enable */
-#define GP1IE_IEN7_BBA                 (*(volatile unsigned long *) 0x4240099C)
-#define GP1IE_IEN7_MSK                 (0x1   << 7  )
-#define GP1IE_IEN7                     (0x1   << 7  )
-#define GP1IE_IEN7_DIS                 (0x0   << 7  )
-#define GP1IE_IEN7_EN                  (0x1   << 7  )
-
-/* GP1IE[IEN6] - Input path enable */
-#define GP1IE_IEN6_BBA                 (*(volatile unsigned long *) 0x42400998)
-#define GP1IE_IEN6_MSK                 (0x1   << 6  )
-#define GP1IE_IEN6                     (0x1   << 6  )
-#define GP1IE_IEN6_DIS                 (0x0   << 6  )
-#define GP1IE_IEN6_EN                  (0x1   << 6  )
-
-/* GP1IE[IEN5] - Input path enable */
-#define GP1IE_IEN5_BBA                 (*(volatile unsigned long *) 0x42400994)
-#define GP1IE_IEN5_MSK                 (0x1   << 5  )
-#define GP1IE_IEN5                     (0x1   << 5  )
-#define GP1IE_IEN5_DIS                 (0x0   << 5  )
-#define GP1IE_IEN5_EN                  (0x1   << 5  )
-
-/* GP1IE[IEN4] - Input path enable */
-#define GP1IE_IEN4_BBA                 (*(volatile unsigned long *) 0x42400990)
-#define GP1IE_IEN4_MSK                 (0x1   << 4  )
-#define GP1IE_IEN4                     (0x1   << 4  )
-#define GP1IE_IEN4_DIS                 (0x0   << 4  )
-#define GP1IE_IEN4_EN                  (0x1   << 4  )
-
-/* GP1IE[IEN3] - Input path enable */
-#define GP1IE_IEN3_BBA                 (*(volatile unsigned long *) 0x4240098C)
-#define GP1IE_IEN3_MSK                 (0x1   << 3  )
-#define GP1IE_IEN3                     (0x1   << 3  )
-#define GP1IE_IEN3_DIS                 (0x0   << 3  )
-#define GP1IE_IEN3_EN                  (0x1   << 3  )
-
-/* GP1IE[IEN2] - Input path enable */
-#define GP1IE_IEN2_BBA                 (*(volatile unsigned long *) 0x42400988)
-#define GP1IE_IEN2_MSK                 (0x1   << 2  )
-#define GP1IE_IEN2                     (0x1   << 2  )
-#define GP1IE_IEN2_DIS                 (0x0   << 2  )
-#define GP1IE_IEN2_EN                  (0x1   << 2  )
-
-/* GP1IE[IEN1] - Input path enable */
-#define GP1IE_IEN1_BBA                 (*(volatile unsigned long *) 0x42400984)
-#define GP1IE_IEN1_MSK                 (0x1   << 1  )
-#define GP1IE_IEN1                     (0x1   << 1  )
-#define GP1IE_IEN1_DIS                 (0x0   << 1  )
-#define GP1IE_IEN1_EN                  (0x1   << 1  )
-
-/* GP1IE[IEN0] - Input path enable */
-#define GP1IE_IEN0_BBA                 (*(volatile unsigned long *) 0x42400980)
-#define GP1IE_IEN0_MSK                 (0x1   << 0  )
-#define GP1IE_IEN0                     (0x1   << 0  )
-#define GP1IE_IEN0_DIS                 (0x0   << 0  )
-#define GP1IE_IEN0_EN                  (0x1   << 0  )
-
-/* Reset Value for GP1IN*/
-#define GP1IN_RVAL                     0x0 
-
-/* GP1IN[IN7] - Registered data input */
-#define GP1IN_IN7_BBA                  (*(volatile unsigned long *) 0x42400A1C)
-#define GP1IN_IN7_MSK                  (0x1   << 7  )
-#define GP1IN_IN7                      (0x1   << 7  )
-#define GP1IN_IN7_LOW                  (0x0   << 7  )
-#define GP1IN_IN7_HIGH                 (0x1   << 7  )
-
-/* GP1IN[IN6] - Registered data input */
-#define GP1IN_IN6_BBA                  (*(volatile unsigned long *) 0x42400A18)
-#define GP1IN_IN6_MSK                  (0x1   << 6  )
-#define GP1IN_IN6                      (0x1   << 6  )
-#define GP1IN_IN6_LOW                  (0x0   << 6  )
-#define GP1IN_IN6_HIGH                 (0x1   << 6  )
-
-/* GP1IN[IN5] - Registered data input */
-#define GP1IN_IN5_BBA                  (*(volatile unsigned long *) 0x42400A14)
-#define GP1IN_IN5_MSK                  (0x1   << 5  )
-#define GP1IN_IN5                      (0x1   << 5  )
-#define GP1IN_IN5_LOW                  (0x0   << 5  )
-#define GP1IN_IN5_HIGH                 (0x1   << 5  )
-
-/* GP1IN[IN4] - Registered data input */
-#define GP1IN_IN4_BBA                  (*(volatile unsigned long *) 0x42400A10)
-#define GP1IN_IN4_MSK                  (0x1   << 4  )
-#define GP1IN_IN4                      (0x1   << 4  )
-#define GP1IN_IN4_LOW                  (0x0   << 4  )
-#define GP1IN_IN4_HIGH                 (0x1   << 4  )
-
-/* GP1IN[IN3] - Registered data input */
-#define GP1IN_IN3_BBA                  (*(volatile unsigned long *) 0x42400A0C)
-#define GP1IN_IN3_MSK                  (0x1   << 3  )
-#define GP1IN_IN3                      (0x1   << 3  )
-#define GP1IN_IN3_LOW                  (0x0   << 3  )
-#define GP1IN_IN3_HIGH                 (0x1   << 3  )
-
-/* GP1IN[IN2] - Registered data input */
-#define GP1IN_IN2_BBA                  (*(volatile unsigned long *) 0x42400A08)
-#define GP1IN_IN2_MSK                  (0x1   << 2  )
-#define GP1IN_IN2                      (0x1   << 2  )
-#define GP1IN_IN2_LOW                  (0x0   << 2  )
-#define GP1IN_IN2_HIGH                 (0x1   << 2  )
-
-/* GP1IN[IN1] - Registered data input */
-#define GP1IN_IN1_BBA                  (*(volatile unsigned long *) 0x42400A04)
-#define GP1IN_IN1_MSK                  (0x1   << 1  )
-#define GP1IN_IN1                      (0x1   << 1  )
-#define GP1IN_IN1_LOW                  (0x0   << 1  )
-#define GP1IN_IN1_HIGH                 (0x1   << 1  )
-
-/* GP1IN[IN0] - Registered data input */
-#define GP1IN_IN0_BBA                  (*(volatile unsigned long *) 0x42400A00)
-#define GP1IN_IN0_MSK                  (0x1   << 0  )
-#define GP1IN_IN0                      (0x1   << 0  )
-#define GP1IN_IN0_LOW                  (0x0   << 0  )
-#define GP1IN_IN0_HIGH                 (0x1   << 0  )
-
-/* Reset Value for GP1OUT*/
-#define GP1OUT_RVAL                    0x0 
-
-/* GP1OUT[OUT7] - Data out */
-#define GP1OUT_OUT7_BBA                (*(volatile unsigned long *) 0x42400A9C)
-#define GP1OUT_OUT7_MSK                (0x1   << 7  )
-#define GP1OUT_OUT7                    (0x1   << 7  )
-#define GP1OUT_OUT7_LOW                (0x0   << 7  )
-#define GP1OUT_OUT7_HIGH               (0x1   << 7  )
-
-/* GP1OUT[OUT6] - Data out */
-#define GP1OUT_OUT6_BBA                (*(volatile unsigned long *) 0x42400A98)
-#define GP1OUT_OUT6_MSK                (0x1   << 6  )
-#define GP1OUT_OUT6                    (0x1   << 6  )
-#define GP1OUT_OUT6_LOW                (0x0   << 6  )
-#define GP1OUT_OUT6_HIGH               (0x1   << 6  )
-
-/* GP1OUT[OUT5] - Data out */
-#define GP1OUT_OUT5_BBA                (*(volatile unsigned long *) 0x42400A94)
-#define GP1OUT_OUT5_MSK                (0x1   << 5  )
-#define GP1OUT_OUT5                    (0x1   << 5  )
-#define GP1OUT_OUT5_LOW                (0x0   << 5  )
-#define GP1OUT_OUT5_HIGH               (0x1   << 5  )
-
-/* GP1OUT[OUT4] - Data out */
-#define GP1OUT_OUT4_BBA                (*(volatile unsigned long *) 0x42400A90)
-#define GP1OUT_OUT4_MSK                (0x1   << 4  )
-#define GP1OUT_OUT4                    (0x1   << 4  )
-#define GP1OUT_OUT4_LOW                (0x0   << 4  )
-#define GP1OUT_OUT4_HIGH               (0x1   << 4  )
-
-/* GP1OUT[OUT3] - Data out */
-#define GP1OUT_OUT3_BBA                (*(volatile unsigned long *) 0x42400A8C)
-#define GP1OUT_OUT3_MSK                (0x1   << 3  )
-#define GP1OUT_OUT3                    (0x1   << 3  )
-#define GP1OUT_OUT3_LOW                (0x0   << 3  )
-#define GP1OUT_OUT3_HIGH               (0x1   << 3  )
-
-/* GP1OUT[OUT2] - Data out */
-#define GP1OUT_OUT2_BBA                (*(volatile unsigned long *) 0x42400A88)
-#define GP1OUT_OUT2_MSK                (0x1   << 2  )
-#define GP1OUT_OUT2                    (0x1   << 2  )
-#define GP1OUT_OUT2_LOW                (0x0   << 2  )
-#define GP1OUT_OUT2_HIGH               (0x1   << 2  )
-
-/* GP1OUT[OUT1] - Data out */
-#define GP1OUT_OUT1_BBA                (*(volatile unsigned long *) 0x42400A84)
-#define GP1OUT_OUT1_MSK                (0x1   << 1  )
-#define GP1OUT_OUT1                    (0x1   << 1  )
-#define GP1OUT_OUT1_LOW                (0x0   << 1  )
-#define GP1OUT_OUT1_HIGH               (0x1   << 1  )
-
-/* GP1OUT[OUT0] - Data out */
-#define GP1OUT_OUT0_BBA                (*(volatile unsigned long *) 0x42400A80)
-#define GP1OUT_OUT0_MSK                (0x1   << 0  )
-#define GP1OUT_OUT0                    (0x1   << 0  )
-#define GP1OUT_OUT0_LOW                (0x0   << 0  )
-#define GP1OUT_OUT0_HIGH               (0x1   << 0  )
-
-/* Reset Value for GP1SET*/
-#define GP1SET_RVAL                    0x0 
-
-/* GP1SET[SET7] - Set the output HIGH for the pin */
-#define GP1SET_SET7_BBA                (*(volatile unsigned long *) 0x42400B1C)
-#define GP1SET_SET7_MSK                (0x1   << 7  )
-#define GP1SET_SET7                    (0x1   << 7  )
-#define GP1SET_SET7_SET                (0x1   << 7  )
-
-/* GP1SET[SET6] - Set the output HIGH for the pin */
-#define GP1SET_SET6_BBA                (*(volatile unsigned long *) 0x42400B18)
-#define GP1SET_SET6_MSK                (0x1   << 6  )
-#define GP1SET_SET6                    (0x1   << 6  )
-#define GP1SET_SET6_SET                (0x1   << 6  )
-
-/* GP1SET[SET5] - Set the output HIGH for the pin */
-#define GP1SET_SET5_BBA                (*(volatile unsigned long *) 0x42400B14)
-#define GP1SET_SET5_MSK                (0x1   << 5  )
-#define GP1SET_SET5                    (0x1   << 5  )
-#define GP1SET_SET5_SET                (0x1   << 5  )
-
-/* GP1SET[SET4] - Set the output HIGH for the pin */
-#define GP1SET_SET4_BBA                (*(volatile unsigned long *) 0x42400B10)
-#define GP1SET_SET4_MSK                (0x1   << 4  )
-#define GP1SET_SET4                    (0x1   << 4  )
-#define GP1SET_SET4_SET                (0x1   << 4  )
-
-/* GP1SET[SET3] - Set the output HIGH for the pin */
-#define GP1SET_SET3_BBA                (*(volatile unsigned long *) 0x42400B0C)
-#define GP1SET_SET3_MSK                (0x1   << 3  )
-#define GP1SET_SET3                    (0x1   << 3  )
-#define GP1SET_SET3_SET                (0x1   << 3  )
-
-/* GP1SET[SET2] - Set the output HIGH for the pin */
-#define GP1SET_SET2_BBA                (*(volatile unsigned long *) 0x42400B08)
-#define GP1SET_SET2_MSK                (0x1   << 2  )
-#define GP1SET_SET2                    (0x1   << 2  )
-#define GP1SET_SET2_SET                (0x1   << 2  )
-
-/* GP1SET[SET1] - Set the output HIGH for the pin */
-#define GP1SET_SET1_BBA                (*(volatile unsigned long *) 0x42400B04)
-#define GP1SET_SET1_MSK                (0x1   << 1  )
-#define GP1SET_SET1                    (0x1   << 1  )
-#define GP1SET_SET1_SET                (0x1   << 1  )
-
-/* GP1SET[SET0] - Set the output HIGH for the pin */
-#define GP1SET_SET0_BBA                (*(volatile unsigned long *) 0x42400B00)
-#define GP1SET_SET0_MSK                (0x1   << 0  )
-#define GP1SET_SET0                    (0x1   << 0  )
-#define GP1SET_SET0_SET                (0x1   << 0  )
-
-/* Reset Value for GP1CLR*/
-#define GP1CLR_RVAL                    0x0 
-
-/* GP1CLR[CLR7] - Set the output low  for the port pin */
-#define GP1CLR_CLR7_BBA                (*(volatile unsigned long *) 0x42400B9C)
-#define GP1CLR_CLR7_MSK                (0x1   << 7  )
-#define GP1CLR_CLR7                    (0x1   << 7  )
-#define GP1CLR_CLR7_CLR                (0x1   << 7  )
-
-/* GP1CLR[CLR6] - Set the output low  for the port pin */
-#define GP1CLR_CLR6_BBA                (*(volatile unsigned long *) 0x42400B98)
-#define GP1CLR_CLR6_MSK                (0x1   << 6  )
-#define GP1CLR_CLR6                    (0x1   << 6  )
-#define GP1CLR_CLR6_CLR                (0x1   << 6  )
-
-/* GP1CLR[CLR5] - Set the output low  for the port pin */
-#define GP1CLR_CLR5_BBA                (*(volatile unsigned long *) 0x42400B94)
-#define GP1CLR_CLR5_MSK                (0x1   << 5  )
-#define GP1CLR_CLR5                    (0x1   << 5  )
-#define GP1CLR_CLR5_CLR                (0x1   << 5  )
-
-/* GP1CLR[CLR4] - Set the output low  for the port pin */
-#define GP1CLR_CLR4_BBA                (*(volatile unsigned long *) 0x42400B90)
-#define GP1CLR_CLR4_MSK                (0x1   << 4  )
-#define GP1CLR_CLR4                    (0x1   << 4  )
-#define GP1CLR_CLR4_CLR                (0x1   << 4  )
-
-/* GP1CLR[CLR3] - Set the output low  for the port pin */
-#define GP1CLR_CLR3_BBA                (*(volatile unsigned long *) 0x42400B8C)
-#define GP1CLR_CLR3_MSK                (0x1   << 3  )
-#define GP1CLR_CLR3                    (0x1   << 3  )
-#define GP1CLR_CLR3_CLR                (0x1   << 3  )
-
-/* GP1CLR[CLR2] - Set the output low  for the port pin */
-#define GP1CLR_CLR2_BBA                (*(volatile unsigned long *) 0x42400B88)
-#define GP1CLR_CLR2_MSK                (0x1   << 2  )
-#define GP1CLR_CLR2                    (0x1   << 2  )
-#define GP1CLR_CLR2_CLR                (0x1   << 2  )
-
-/* GP1CLR[CLR1] - Set the output low  for the port pin */
-#define GP1CLR_CLR1_BBA                (*(volatile unsigned long *) 0x42400B84)
-#define GP1CLR_CLR1_MSK                (0x1   << 1  )
-#define GP1CLR_CLR1                    (0x1   << 1  )
-#define GP1CLR_CLR1_CLR                (0x1   << 1  )
-
-/* GP1CLR[CLR0] - Set the output low  for the port pin */
-#define GP1CLR_CLR0_BBA                (*(volatile unsigned long *) 0x42400B80)
-#define GP1CLR_CLR0_MSK                (0x1   << 0  )
-#define GP1CLR_CLR0                    (0x1   << 0  )
-#define GP1CLR_CLR0_CLR                (0x1   << 0  )
-
-/* Reset Value for GP1TGL*/
-#define GP1TGL_RVAL                    0x0 
-
-/* GP1TGL[TGL7] - Toggle the output of the port pin */
-#define GP1TGL_TGL7_BBA                (*(volatile unsigned long *) 0x42400C1C)
-#define GP1TGL_TGL7_MSK                (0x1   << 7  )
-#define GP1TGL_TGL7                    (0x1   << 7  )
-#define GP1TGL_TGL7_TGL                (0x1   << 7  )
-
-/* GP1TGL[TGL6] - Toggle the output of the port pin */
-#define GP1TGL_TGL6_BBA                (*(volatile unsigned long *) 0x42400C18)
-#define GP1TGL_TGL6_MSK                (0x1   << 6  )
-#define GP1TGL_TGL6                    (0x1   << 6  )
-#define GP1TGL_TGL6_TGL                (0x1   << 6  )
-
-/* GP1TGL[TGL5] - Toggle the output of the port pin */
-#define GP1TGL_TGL5_BBA                (*(volatile unsigned long *) 0x42400C14)
-#define GP1TGL_TGL5_MSK                (0x1   << 5  )
-#define GP1TGL_TGL5                    (0x1   << 5  )
-#define GP1TGL_TGL5_TGL                (0x1   << 5  )
-
-/* GP1TGL[TGL4] - Toggle the output of the port pin */
-#define GP1TGL_TGL4_BBA                (*(volatile unsigned long *) 0x42400C10)
-#define GP1TGL_TGL4_MSK                (0x1   << 4  )
-#define GP1TGL_TGL4                    (0x1   << 4  )
-#define GP1TGL_TGL4_TGL                (0x1   << 4  )
-
-/* GP1TGL[TGL3] - Toggle the output of the port pin */
-#define GP1TGL_TGL3_BBA                (*(volatile unsigned long *) 0x42400C0C)
-#define GP1TGL_TGL3_MSK                (0x1   << 3  )
-#define GP1TGL_TGL3                    (0x1   << 3  )
-#define GP1TGL_TGL3_TGL                (0x1   << 3  )
-
-/* GP1TGL[TGL2] - Toggle the output of the port pin */
-#define GP1TGL_TGL2_BBA                (*(volatile unsigned long *) 0x42400C08)
-#define GP1TGL_TGL2_MSK                (0x1   << 2  )
-#define GP1TGL_TGL2                    (0x1   << 2  )
-#define GP1TGL_TGL2_TGL                (0x1   << 2  )
-
-/* GP1TGL[TGL1] - Toggle the output of the port pin */
-#define GP1TGL_TGL1_BBA                (*(volatile unsigned long *) 0x42400C04)
-#define GP1TGL_TGL1_MSK                (0x1   << 1  )
-#define GP1TGL_TGL1                    (0x1   << 1  )
-#define GP1TGL_TGL1_TGL                (0x1   << 1  )
-
-/* GP1TGL[TGL0] - Toggle the output of the port pin */
-#define GP1TGL_TGL0_BBA                (*(volatile unsigned long *) 0x42400C00)
-#define GP1TGL_TGL0_MSK                (0x1   << 0  )
-#define GP1TGL_TGL0                    (0x1   << 0  )
-#define GP1TGL_TGL0_TGL                (0x1   << 0  )
-
-/* Reset Value for GP1ODE*/
-#define GP1ODE_RVAL                    0x0 
-
-/* GP1ODE[ODE7] - Open drain enable */
-#define GP1ODE_ODE7_BBA                (*(volatile unsigned long *) 0x42400C9C)
-#define GP1ODE_ODE7_MSK                (0x1   << 7  )
-#define GP1ODE_ODE7                    (0x1   << 7  )
-#define GP1ODE_ODE7_DIS                (0x0   << 7  )
-#define GP1ODE_ODE7_EN                 (0x1   << 7  )
-
-/* GP1ODE[ODE6] - Open drain enable */
-#define GP1ODE_ODE6_BBA                (*(volatile unsigned long *) 0x42400C98)
-#define GP1ODE_ODE6_MSK                (0x1   << 6  )
-#define GP1ODE_ODE6                    (0x1   << 6  )
-#define GP1ODE_ODE6_DIS                (0x0   << 6  )
-#define GP1ODE_ODE6_EN                 (0x1   << 6  )
-
-/* GP1ODE[ODE5] - Open drain enable */
-#define GP1ODE_ODE5_BBA                (*(volatile unsigned long *) 0x42400C94)
-#define GP1ODE_ODE5_MSK                (0x1   << 5  )
-#define GP1ODE_ODE5                    (0x1   << 5  )
-#define GP1ODE_ODE5_DIS                (0x0   << 5  )
-#define GP1ODE_ODE5_EN                 (0x1   << 5  )
-
-/* GP1ODE[ODE4] - Open drain enable */
-#define GP1ODE_ODE4_BBA                (*(volatile unsigned long *) 0x42400C90)
-#define GP1ODE_ODE4_MSK                (0x1   << 4  )
-#define GP1ODE_ODE4                    (0x1   << 4  )
-#define GP1ODE_ODE4_DIS                (0x0   << 4  )
-#define GP1ODE_ODE4_EN                 (0x1   << 4  )
-
-/* GP1ODE[ODE3] - Open drain enable */
-#define GP1ODE_ODE3_BBA                (*(volatile unsigned long *) 0x42400C8C)
-#define GP1ODE_ODE3_MSK                (0x1   << 3  )
-#define GP1ODE_ODE3                    (0x1   << 3  )
-#define GP1ODE_ODE3_DIS                (0x0   << 3  )
-#define GP1ODE_ODE3_EN                 (0x1   << 3  )
-
-/* GP1ODE[ODE2] - Open drain enable */
-#define GP1ODE_ODE2_BBA                (*(volatile unsigned long *) 0x42400C88)
-#define GP1ODE_ODE2_MSK                (0x1   << 2  )
-#define GP1ODE_ODE2                    (0x1   << 2  )
-#define GP1ODE_ODE2_DIS                (0x0   << 2  )
-#define GP1ODE_ODE2_EN                 (0x1   << 2  )
-
-/* GP1ODE[ODE1] - Open drain enable */
-#define GP1ODE_ODE1_BBA                (*(volatile unsigned long *) 0x42400C84)
-#define GP1ODE_ODE1_MSK                (0x1   << 1  )
-#define GP1ODE_ODE1                    (0x1   << 1  )
-#define GP1ODE_ODE1_DIS                (0x0   << 1  )
-#define GP1ODE_ODE1_EN                 (0x1   << 1  )
-
-/* GP1ODE[ODE0] - Open drain enable */
-#define GP1ODE_ODE0_BBA                (*(volatile unsigned long *) 0x42400C80)
-#define GP1ODE_ODE0_MSK                (0x1   << 0  )
-#define GP1ODE_ODE0                    (0x1   << 0  )
-#define GP1ODE_ODE0_DIS                (0x0   << 0  )
-#define GP1ODE_ODE0_EN                 (0x1   << 0  )
-
-
-// ------------------------------------------------------------------------------------------------
-// -----                                        GPIO_FIX                                        -----
-// ------------------------------------------------------------------------------------------------
-
-
-/**
-  * @brief gpio (pADI_GPIO_FIX)
-  */
-
-#if (__NO_MMR_STRUCTS__==0)
-typedef struct {                            /*!< pADI_GPIO_FIX Structure                */
-  __IO uint8_t   GP1SET;                    /*!< GPIO Port 1 data out set              */
-  __I  uint8_t   RESERVED0[3];
-  __IO uint8_t   GP2CLR;                    /*!< GPIO Port 2 data out clear            */
-} ADI_GPIO_FIX_TypeDef;
-#endif // (__NO_MMR_STRUCTS__==0)
-
-
-#if (__NO_MMR_STRUCTS__==1)
-
-#define          GP2CON                                     (*(volatile unsigned short int *) 0x40020080)
-#define          GP2OE                                      (*(volatile unsigned char      *) 0x40020084)
-#define          GP2PUL                                     (*(volatile unsigned char      *) 0x40020088)
-#define          GP2IE                                      (*(volatile unsigned char      *) 0x4002008C)
-#define          GP2IN                                      (*(volatile unsigned char      *) 0x40020090)
-#define          GP2OUT                                     (*(volatile unsigned char      *) 0x40020094)
-#define          GP2SET                                     (*(volatile unsigned char      *) 0x40020098)
-#define          GP2CLR                                     (*(volatile unsigned char      *) 0x4002009C)
-#define          GP2TGL                                     (*(volatile unsigned char      *) 0x400200A0)
-#define          GP2ODE                                     (*(volatile unsigned char      *) 0x400200A4)
-#endif // (__NO_MMR_STRUCTS__==1)
-
-/* Reset Value for GP2CON*/
-#define GP2CON_RVAL                    0x10 
-
-/* GP2CON[CON7] - p2.7  configuration bits */
-#define GP2CON_CON7_MSK                (0x3   << 14 )
-#define GP2CON_CON7_GPIOIRQ8           (0x0   << 14 ) /* GPIO/IRQ8                */
-#define GP2CON_CON7_PLAO11             (0x3   << 14 ) /* PLAO[11]                 */
-
-/* GP2CON[CON6] - p2.6  configuration bits */
-#define GP2CON_CON6_MSK                (0x3   << 12 )
-#define GP2CON_CON6_GPIOIRQ7           (0x0   << 12 ) /* GPIO/IRQ7                */
-#define GP2CON_CON6_PLAO10             (0x3   << 12 ) /* PLAO[10]                 */
-
-/* GP2CON[CON5] - p2.5  configuration bits */
-#define GP2CON_CON5_MSK                (0x3   << 10 )
-#define GP2CON_CON5_GPIOIRQ6           (0x0   << 10 ) /* GPIO/IRQ6                */
-#define GP2CON_CON5_PWM7               (0x2   << 10 ) /* PWM7                     */
-#define GP2CON_CON5_PLAO9              (0x3   << 10 ) /* PLAO[9]                  */
-
-/* GP2CON[CON4] - p2.4  configuration bits */
-#define GP2CON_CON4_MSK                (0x3   << 8  )
-#define GP2CON_CON4_GIPOIRQ5           (0x0   << 8  ) /* GPIO/IRQ5                */
-#define GP2CON_CON4_ADCCONVSTIN        (0x1   << 8  ) /* ADC_CONVST input         */
-#define GP2CON_CON4_PWM6               (0x2   << 8  ) /* PWM6                     */
-#define GP2CON_CON4_PLAO8              (0x3   << 8  ) /* PLAO[8]                  */
-
-/* GP2CON[CON3] - p2.3  configuration bits */
-#define GP2CON_CON3_MSK                (0x3   << 6  )
-#define GP2CON_CON3_GPIOBM             (0x0   << 6  ) /* GPIO/BM                  */
-
-/* GP2CON[CON2] - p2.2  configuration bits */
-#define GP2CON_CON2_MSK                (0x3   << 4  )
-#define GP2CON_CON2_GPIOIRQ4           (0x0   << 4  ) /* GPIO/IRQ4                */
-#define GP2CON_CON2_EXTCLKOUT          (0x2   << 4  ) /* External Clock output    */
-#define GP2CON_CON2_PLAI10             (0x3   << 4  ) /* PLAI[10]                 */
-
-/* GP2CON[CON1] - p2.1  configuration bits */
-#define GP2CON_CON1_MSK                (0x3   << 2  )
-#define GP2CON_CON1_GPIOIRQ3           (0x0   << 2  ) /* GPIO/IRQ3                */
-#define GP2CON_CON1_PWMSYNC            (0x1   << 2  ) /* PWM Sync                 */
-#define GP2CON_CON1_PLAI9              (0x3   << 2  ) /* PLAI[9]                  */
-
-/* GP2CON[CON0] - p2.0  configuration bits */
-#define GP2CON_CON0_MSK                (0x3   << 0  )
-#define GP2CON_CON0_GPIOIRQ2           (0x0   << 0  ) /* GPIO/IRQ2                */
-#define GP2CON_CON0_PWMTRIP            (0x1   << 0  ) /* PWM Trip                 */
-#define GP2CON_CON0_PLACLK2            (0x2   << 0  ) /* PLA CLK2                 */
-#define GP2CON_CON0_PLAI8              (0x3   << 0  ) /* PLAI[8]                  */
-
-/* Reset Value for GP2OE*/
-#define GP2OE_RVAL                     0x0 
-
-/* GP2OE[OE7] - Pin Output Drive enable */
-#define GP2OE_OE7_BBA                  (*(volatile unsigned long *) 0x4240109C)
-#define GP2OE_OE7_MSK                  (0x1   << 7  )
-#define GP2OE_OE7                      (0x1   << 7  )
-#define GP2OE_OE7_DIS                  (0x0   << 7  )
-#define GP2OE_OE7_EN                   (0x1   << 7  )
-
-/* GP2OE[OE6] - Pin Output Drive enable */
-#define GP2OE_OE6_BBA                  (*(volatile unsigned long *) 0x42401098)
-#define GP2OE_OE6_MSK                  (0x1   << 6  )
-#define GP2OE_OE6                      (0x1   << 6  )
-#define GP2OE_OE6_DIS                  (0x0   << 6  )
-#define GP2OE_OE6_EN                   (0x1   << 6  )
-
-/* GP2OE[OE5] - Pin Output Drive enable */
-#define GP2OE_OE5_BBA                  (*(volatile unsigned long *) 0x42401094)
-#define GP2OE_OE5_MSK                  (0x1   << 5  )
-#define GP2OE_OE5                      (0x1   << 5  )
-#define GP2OE_OE5_DIS                  (0x0   << 5  )
-#define GP2OE_OE5_EN                   (0x1   << 5  )
-
-/* GP2OE[OE4] - Pin Output Drive enable */
-#define GP2OE_OE4_BBA                  (*(volatile unsigned long *) 0x42401090)
-#define GP2OE_OE4_MSK                  (0x1   << 4  )
-#define GP2OE_OE4                      (0x1   << 4  )
-#define GP2OE_OE4_DIS                  (0x0   << 4  )
-#define GP2OE_OE4_EN                   (0x1   << 4  )
-
-/* GP2OE[OE3] - Pin Output Drive enable */
-#define GP2OE_OE3_BBA                  (*(volatile unsigned long *) 0x4240108C)
-#define GP2OE_OE3_MSK                  (0x1   << 3  )
-#define GP2OE_OE3                      (0x1   << 3  )
-#define GP2OE_OE3_DIS                  (0x0   << 3  )
-#define GP2OE_OE3_EN                   (0x1   << 3  )
-
-/* GP2OE[OE2] - Pin Output Drive enable */
-#define GP2OE_OE2_BBA                  (*(volatile unsigned long *) 0x42401088)
-#define GP2OE_OE2_MSK                  (0x1   << 2  )
-#define GP2OE_OE2                      (0x1   << 2  )
-#define GP2OE_OE2_DIS                  (0x0   << 2  )
-#define GP2OE_OE2_EN                   (0x1   << 2  )
-
-/* GP2OE[OE1] - Pin Output Drive enable */
-#define GP2OE_OE1_BBA                  (*(volatile unsigned long *) 0x42401084)
-#define GP2OE_OE1_MSK                  (0x1   << 1  )
-#define GP2OE_OE1                      (0x1   << 1  )
-#define GP2OE_OE1_DIS                  (0x0   << 1  )
-#define GP2OE_OE1_EN                   (0x1   << 1  )
-
-/* GP2OE[OE0] - Pin Output Drive enable */
-#define GP2OE_OE0_BBA                  (*(volatile unsigned long *) 0x42401080)
-#define GP2OE_OE0_MSK                  (0x1   << 0  )
-#define GP2OE_OE0                      (0x1   << 0  )
-#define GP2OE_OE0_DIS                  (0x0   << 0  )
-#define GP2OE_OE0_EN                   (0x1   << 0  )
-
-/* Reset Value for GP2PUL*/
-#define GP2PUL_RVAL                    0x0 
-
-/* GP2PUL[PUL7] - Pin Pull up enable */
-#define GP2PUL_PUL7_BBA                (*(volatile unsigned long *) 0x4240111C)
-#define GP2PUL_PUL7_MSK                (0x1   << 7  )
-#define GP2PUL_PUL7                    (0x1   << 7  )
-#define GP2PUL_PUL7_DIS                (0x0   << 7  )
-#define GP2PUL_PUL7_EN                 (0x1   << 7  )
-
-/* GP2PUL[PUL6] - Pin Pull up enable */
-#define GP2PUL_PUL6_BBA                (*(volatile unsigned long *) 0x42401118)
-#define GP2PUL_PUL6_MSK                (0x1   << 6  )
-#define GP2PUL_PUL6                    (0x1   << 6  )
-#define GP2PUL_PUL6_DIS                (0x0   << 6  )
-#define GP2PUL_PUL6_EN                 (0x1   << 6  )
-
-/* GP2PUL[PUL5] - Pin Pull up enable */
-#define GP2PUL_PUL5_BBA                (*(volatile unsigned long *) 0x42401114)
-#define GP2PUL_PUL5_MSK                (0x1   << 5  )
-#define GP2PUL_PUL5                    (0x1   << 5  )
-#define GP2PUL_PUL5_DIS                (0x0   << 5  )
-#define GP2PUL_PUL5_EN                 (0x1   << 5  )
-
-/* GP2PUL[PUL4] - Pin Pull up enable */
-#define GP2PUL_PUL4_BBA                (*(volatile unsigned long *) 0x42401110)
-#define GP2PUL_PUL4_MSK                (0x1   << 4  )
-#define GP2PUL_PUL4                    (0x1   << 4  )
-#define GP2PUL_PUL4_DIS                (0x0   << 4  )
-#define GP2PUL_PUL4_EN                 (0x1   << 4  )
-
-/* GP2PUL[PUL3] - Pin Pull up enable */
-#define GP2PUL_PUL3_BBA                (*(volatile unsigned long *) 0x4240110C)
-#define GP2PUL_PUL3_MSK                (0x1   << 3  )
-#define GP2PUL_PUL3                    (0x1   << 3  )
-#define GP2PUL_PUL3_DIS                (0x0   << 3  )
-#define GP2PUL_PUL3_EN                 (0x1   << 3  )
-
-/* GP2PUL[PUL2] - Pin Pull up enable */
-#define GP2PUL_PUL2_BBA                (*(volatile unsigned long *) 0x42401108)
-#define GP2PUL_PUL2_MSK                (0x1   << 2  )
-#define GP2PUL_PUL2                    (0x1   << 2  )
-#define GP2PUL_PUL2_DIS                (0x0   << 2  )
-#define GP2PUL_PUL2_EN                 (0x1   << 2  )
-
-/* GP2PUL[PUL1] - Pin Pull up enable */
-#define GP2PUL_PUL1_BBA                (*(volatile unsigned long *) 0x42401104)
-#define GP2PUL_PUL1_MSK                (0x1   << 1  )
-#define GP2PUL_PUL1                    (0x1   << 1  )
-#define GP2PUL_PUL1_DIS                (0x0   << 1  )
-#define GP2PUL_PUL1_EN                 (0x1   << 1  )
-
-/* GP2PUL[PUL0] - Pin Pull up enable */
-#define GP2PUL_PUL0_BBA                (*(volatile unsigned long *) 0x42401100)
-#define GP2PUL_PUL0_MSK                (0x1   << 0  )
-#define GP2PUL_PUL0                    (0x1   << 0  )
-#define GP2PUL_PUL0_DIS                (0x0   << 0  )
-#define GP2PUL_PUL0_EN                 (0x1   << 0  )
-
-/* Reset Value for GP2IE*/
-#define GP2IE_RVAL                     0x0 
-
-/* GP2IE[IEN7] - Input path enable */
-#define GP2IE_IEN7_BBA                 (*(volatile unsigned long *) 0x4240119C)
-#define GP2IE_IEN7_MSK                 (0x1   << 7  )
-#define GP2IE_IEN7                     (0x1   << 7  )
-#define GP2IE_IEN7_DIS                 (0x0   << 7  )
-#define GP2IE_IEN7_EN                  (0x1   << 7  )
-
-/* GP2IE[IEN6] - Input path enable */
-#define GP2IE_IEN6_BBA                 (*(volatile unsigned long *) 0x42401198)
-#define GP2IE_IEN6_MSK                 (0x1   << 6  )
-#define GP2IE_IEN6                     (0x1   << 6  )
-#define GP2IE_IEN6_DIS                 (0x0   << 6  )
-#define GP2IE_IEN6_EN                  (0x1   << 6  )
-
-/* GP2IE[IEN5] - Input path enable */
-#define GP2IE_IEN5_BBA                 (*(volatile unsigned long *) 0x42401194)
-#define GP2IE_IEN5_MSK                 (0x1   << 5  )
-#define GP2IE_IEN5                     (0x1   << 5  )
-#define GP2IE_IEN5_DIS                 (0x0   << 5  )
-#define GP2IE_IEN5_EN                  (0x1   << 5  )
-
-/* GP2IE[IEN4] - Input path enable */
-#define GP2IE_IEN4_BBA                 (*(volatile unsigned long *) 0x42401190)
-#define GP2IE_IEN4_MSK                 (0x1   << 4  )
-#define GP2IE_IEN4                     (0x1   << 4  )
-#define GP2IE_IEN4_DIS                 (0x0   << 4  )
-#define GP2IE_IEN4_EN                  (0x1   << 4  )
-
-/* GP2IE[IEN3] - Input path enable */
-#define GP2IE_IEN3_BBA                 (*(volatile unsigned long *) 0x4240118C)
-#define GP2IE_IEN3_MSK                 (0x1   << 3  )
-#define GP2IE_IEN3                     (0x1   << 3  )
-#define GP2IE_IEN3_DIS                 (0x0   << 3  )
-#define GP2IE_IEN3_EN                  (0x1   << 3  )
-
-/* GP2IE[IEN2] - Input path enable */
-#define GP2IE_IEN2_BBA                 (*(volatile unsigned long *) 0x42401188)
-#define GP2IE_IEN2_MSK                 (0x1   << 2  )
-#define GP2IE_IEN2                     (0x1   << 2  )
-#define GP2IE_IEN2_DIS                 (0x0   << 2  )
-#define GP2IE_IEN2_EN                  (0x1   << 2  )
-
-/* GP2IE[IEN1] - Input path enable */
-#define GP2IE_IEN1_BBA                 (*(volatile unsigned long *) 0x42401184)
-#define GP2IE_IEN1_MSK                 (0x1   << 1  )
-#define GP2IE_IEN1                     (0x1   << 1  )
-#define GP2IE_IEN1_DIS                 (0x0   << 1  )
-#define GP2IE_IEN1_EN                  (0x1   << 1  )
-
-/* GP2IE[IEN0] - Input path enable */
-#define GP2IE_IEN0_BBA                 (*(volatile unsigned long *) 0x42401180)
-#define GP2IE_IEN0_MSK                 (0x1   << 0  )
-#define GP2IE_IEN0                     (0x1   << 0  )
-#define GP2IE_IEN0_DIS                 (0x0   << 0  )
-#define GP2IE_IEN0_EN                  (0x1   << 0  )
-
-/* Reset Value for GP2IN*/
-#define GP2IN_RVAL                     0x0 
-
-/* GP2IN[IN7] - Registered data input */
-#define GP2IN_IN7_BBA                  (*(volatile unsigned long *) 0x4240121C)
-#define GP2IN_IN7_MSK                  (0x1   << 7  )
-#define GP2IN_IN7                      (0x1   << 7  )
-#define GP2IN_IN7_LOW                  (0x0   << 7  )
-#define GP2IN_IN7_HIGH                 (0x1   << 7  )
-
-/* GP2IN[IN6] - Registered data input */
-#define GP2IN_IN6_BBA                  (*(volatile unsigned long *) 0x42401218)
-#define GP2IN_IN6_MSK                  (0x1   << 6  )
-#define GP2IN_IN6                      (0x1   << 6  )
-#define GP2IN_IN6_LOW                  (0x0   << 6  )
-#define GP2IN_IN6_HIGH                 (0x1   << 6  )
-
-/* GP2IN[IN5] - Registered data input */
-#define GP2IN_IN5_BBA                  (*(volatile unsigned long *) 0x42401214)
-#define GP2IN_IN5_MSK                  (0x1   << 5  )
-#define GP2IN_IN5                      (0x1   << 5  )
-#define GP2IN_IN5_LOW                  (0x0   << 5  )
-#define GP2IN_IN5_HIGH                 (0x1   << 5  )
-
-/* GP2IN[IN4] - Registered data input */
-#define GP2IN_IN4_BBA                  (*(volatile unsigned long *) 0x42401210)
-#define GP2IN_IN4_MSK                  (0x1   << 4  )
-#define GP2IN_IN4                      (0x1   << 4  )
-#define GP2IN_IN4_LOW                  (0x0   << 4  )
-#define GP2IN_IN4_HIGH                 (0x1   << 4  )
-
-/* GP2IN[IN3] - Registered data input */
-#define GP2IN_IN3_BBA                  (*(volatile unsigned long *) 0x4240120C)
-#define GP2IN_IN3_MSK                  (0x1   << 3  )
-#define GP2IN_IN3                      (0x1   << 3  )
-#define GP2IN_IN3_LOW                  (0x0   << 3  )
-#define GP2IN_IN3_HIGH                 (0x1   << 3  )
-
-/* GP2IN[IN2] - Registered data input */
-#define GP2IN_IN2_BBA                  (*(volatile unsigned long *) 0x42401208)
-#define GP2IN_IN2_MSK                  (0x1   << 2  )
-#define GP2IN_IN2                      (0x1   << 2  )
-#define GP2IN_IN2_LOW                  (0x0   << 2  )
-#define GP2IN_IN2_HIGH                 (0x1   << 2  )
-
-/* GP2IN[IN1] - Registered data input */
-#define GP2IN_IN1_BBA                  (*(volatile unsigned long *) 0x42401204)
-#define GP2IN_IN1_MSK                  (0x1   << 1  )
-#define GP2IN_IN1                      (0x1   << 1  )
-#define GP2IN_IN1_LOW                  (0x0   << 1  )
-#define GP2IN_IN1_HIGH                 (0x1   << 1  )
-
-/* GP2IN[IN0] - Registered data input */
-#define GP2IN_IN0_BBA                  (*(volatile unsigned long *) 0x42401200)
-#define GP2IN_IN0_MSK                  (0x1   << 0  )
-#define GP2IN_IN0                      (0x1   << 0  )
-#define GP2IN_IN0_LOW                  (0x0   << 0  )
-#define GP2IN_IN0_HIGH                 (0x1   << 0  )
-
-/* Reset Value for GP2OUT*/
-#define GP2OUT_RVAL                    0x0 
-
-/* GP2OUT[OUT7] - Data out */
-#define GP2OUT_OUT7_BBA                (*(volatile unsigned long *) 0x4240129C)
-#define GP2OUT_OUT7_MSK                (0x1   << 7  )
-#define GP2OUT_OUT7                    (0x1   << 7  )
-#define GP2OUT_OUT7_LOW                (0x0   << 7  )
-#define GP2OUT_OUT7_HIGH               (0x1   << 7  )
-
-/* GP2OUT[OUT6] - Data out */
-#define GP2OUT_OUT6_BBA                (*(volatile unsigned long *) 0x42401298)
-#define GP2OUT_OUT6_MSK                (0x1   << 6  )
-#define GP2OUT_OUT6                    (0x1   << 6  )
-#define GP2OUT_OUT6_LOW                (0x0   << 6  )
-#define GP2OUT_OUT6_HIGH               (0x1   << 6  )
-
-/* GP2OUT[OUT5] - Data out */
-#define GP2OUT_OUT5_BBA                (*(volatile unsigned long *) 0x42401294)
-#define GP2OUT_OUT5_MSK                (0x1   << 5  )
-#define GP2OUT_OUT5                    (0x1   << 5  )
-#define GP2OUT_OUT5_LOW                (0x0   << 5  )
-#define GP2OUT_OUT5_HIGH               (0x1   << 5  )
-
-/* GP2OUT[OUT4] - Data out */
-#define GP2OUT_OUT4_BBA                (*(volatile unsigned long *) 0x42401290)
-#define GP2OUT_OUT4_MSK                (0x1   << 4  )
-#define GP2OUT_OUT4                    (0x1   << 4  )
-#define GP2OUT_OUT4_LOW                (0x0   << 4  )
-#define GP2OUT_OUT4_HIGH               (0x1   << 4  )
-
-/* GP2OUT[OUT3] - Data out */
-#define GP2OUT_OUT3_BBA                (*(volatile unsigned long *) 0x4240128C)
-#define GP2OUT_OUT3_MSK                (0x1   << 3  )
-#define GP2OUT_OUT3                    (0x1   << 3  )
-#define GP2OUT_OUT3_LOW                (0x0   << 3  )
-#define GP2OUT_OUT3_HIGH               (0x1   << 3  )
-
-/* GP2OUT[OUT2] - Data out */
-#define GP2OUT_OUT2_BBA                (*(volatile unsigned long *) 0x42401288)
-#define GP2OUT_OUT2_MSK                (0x1   << 2  )
-#define GP2OUT_OUT2                    (0x1   << 2  )
-#define GP2OUT_OUT2_LOW                (0x0   << 2  )
-#define GP2OUT_OUT2_HIGH               (0x1   << 2  )
-
-/* GP2OUT[OUT1] - Data out */
-#define GP2OUT_OUT1_BBA                (*(volatile unsigned long *) 0x42401284)
-#define GP2OUT_OUT1_MSK                (0x1   << 1  )
-#define GP2OUT_OUT1                    (0x1   << 1  )
-#define GP2OUT_OUT1_LOW                (0x0   << 1  )
-#define GP2OUT_OUT1_HIGH               (0x1   << 1  )
-
-/* GP2OUT[OUT0] - Data out */
-#define GP2OUT_OUT0_BBA                (*(volatile unsigned long *) 0x42401280)
-#define GP2OUT_OUT0_MSK                (0x1   << 0  )
-#define GP2OUT_OUT0                    (0x1   << 0  )
-#define GP2OUT_OUT0_LOW                (0x0   << 0  )
-#define GP2OUT_OUT0_HIGH               (0x1   << 0  )
-
-/* Reset Value for GP2SET*/
-#define GP2SET_RVAL                    0x0 
-
-/* GP2SET[SET7] - Set the output HIGH for the pin */
-#define GP2SET_SET7_BBA                (*(volatile unsigned long *) 0x4240131C)
-#define GP2SET_SET7_MSK                (0x1   << 7  )
-#define GP2SET_SET7                    (0x1   << 7  )
-#define GP2SET_SET7_SET                (0x1   << 7  )
-
-/* GP2SET[SET6] - Set the output HIGH for the pin */
-#define GP2SET_SET6_BBA                (*(volatile unsigned long *) 0x42401318)
-#define GP2SET_SET6_MSK                (0x1   << 6  )
-#define GP2SET_SET6                    (0x1   << 6  )
-#define GP2SET_SET6_SET                (0x1   << 6  )
-
-/* GP2SET[SET5] - Set the output HIGH for the pin */
-#define GP2SET_SET5_BBA                (*(volatile unsigned long *) 0x42401314)
-#define GP2SET_SET5_MSK                (0x1   << 5  )
-#define GP2SET_SET5                    (0x1   << 5  )
-#define GP2SET_SET5_SET                (0x1   << 5  )
-
-/* GP2SET[SET4] - Set the output HIGH for the pin */
-#define GP2SET_SET4_BBA                (*(volatile unsigned long *) 0x42401310)
-#define GP2SET_SET4_MSK                (0x1   << 4  )
-#define GP2SET_SET4                    (0x1   << 4  )
-#define GP2SET_SET4_SET                (0x1   << 4  )
-
-/* GP2SET[SET3] - Set the output HIGH for the pin */
-#define GP2SET_SET3_BBA                (*(volatile unsigned long *) 0x4240130C)
-#define GP2SET_SET3_MSK                (0x1   << 3  )
-#define GP2SET_SET3                    (0x1   << 3  )
-#define GP2SET_SET3_SET                (0x1   << 3  )
-
-/* GP2SET[SET2] - Set the output HIGH for the pin */
-#define GP2SET_SET2_BBA                (*(volatile unsigned long *) 0x42401308)
-#define GP2SET_SET2_MSK                (0x1   << 2  )
-#define GP2SET_SET2                    (0x1   << 2  )
-#define GP2SET_SET2_SET                (0x1   << 2  )
-
-/* GP2SET[SET1] - Set the output HIGH for the pin */
-#define GP2SET_SET1_BBA                (*(volatile unsigned long *) 0x42401304)
-#define GP2SET_SET1_MSK                (0x1   << 1  )
-#define GP2SET_SET1                    (0x1   << 1  )
-#define GP2SET_SET1_SET                (0x1   << 1  )
-
-/* GP2SET[SET0] - Set the output HIGH for the pin */
-#define GP2SET_SET0_BBA                (*(volatile unsigned long *) 0x42401300)
-#define GP2SET_SET0_MSK                (0x1   << 0  )
-#define GP2SET_SET0                    (0x1   << 0  )
-#define GP2SET_SET0_SET                (0x1   << 0  )
-
-/* Reset Value for GP2CLR*/
-#define GP2CLR_RVAL                    0x0 
-
-/* GP2CLR[CLR7] - Set the output low  for the port pin */
-#define GP2CLR_CLR7_BBA                (*(volatile unsigned long *) 0x4240139C)
-#define GP2CLR_CLR7_MSK                (0x1   << 7  )
-#define GP2CLR_CLR7                    (0x1   << 7  )
-#define GP2CLR_CLR7_CLR                (0x1   << 7  )
-
-/* GP2CLR[CLR6] - Set the output low  for the port pin */
-#define GP2CLR_CLR6_BBA                (*(volatile unsigned long *) 0x42401398)
-#define GP2CLR_CLR6_MSK                (0x1   << 6  )
-#define GP2CLR_CLR6                    (0x1   << 6  )
-#define GP2CLR_CLR6_CLR                (0x1   << 6  )
-
-/* GP2CLR[CLR5] - Set the output low  for the port pin */
-#define GP2CLR_CLR5_BBA                (*(volatile unsigned long *) 0x42401394)
-#define GP2CLR_CLR5_MSK                (0x1   << 5  )
-#define GP2CLR_CLR5                    (0x1   << 5  )
-#define GP2CLR_CLR5_CLR                (0x1   << 5  )
-
-/* GP2CLR[CLR4] - Set the output low  for the port pin */
-#define GP2CLR_CLR4_BBA                (*(volatile unsigned long *) 0x42401390)
-#define GP2CLR_CLR4_MSK                (0x1   << 4  )
-#define GP2CLR_CLR4                    (0x1   << 4  )
-#define GP2CLR_CLR4_CLR                (0x1   << 4  )
-
-/* GP2CLR[CLR3] - Set the output low  for the port pin */
-#define GP2CLR_CLR3_BBA                (*(volatile unsigned long *) 0x4240138C)
-#define GP2CLR_CLR3_MSK                (0x1   << 3  )
-#define GP2CLR_CLR3                    (0x1   << 3  )
-#define GP2CLR_CLR3_CLR                (0x1   << 3  )
-
-/* GP2CLR[CLR2] - Set the output low  for the port pin */
-#define GP2CLR_CLR2_BBA                (*(volatile unsigned long *) 0x42401388)
-#define GP2CLR_CLR2_MSK                (0x1   << 2  )
-#define GP2CLR_CLR2                    (0x1   << 2  )
-#define GP2CLR_CLR2_CLR                (0x1   << 2  )
-
-/* GP2CLR[CLR1] - Set the output low  for the port pin */
-#define GP2CLR_CLR1_BBA                (*(volatile unsigned long *) 0x42401384)
-#define GP2CLR_CLR1_MSK                (0x1   << 1  )
-#define GP2CLR_CLR1                    (0x1   << 1  )
-#define GP2CLR_CLR1_CLR                (0x1   << 1  )
-
-/* GP2CLR[CLR0] - Set the output low  for the port pin */
-#define GP2CLR_CLR0_BBA                (*(volatile unsigned long *) 0x42401380)
-#define GP2CLR_CLR0_MSK                (0x1   << 0  )
-#define GP2CLR_CLR0                    (0x1   << 0  )
-#define GP2CLR_CLR0_CLR                (0x1   << 0  )
-
-/* Reset Value for GP2TGL*/
-#define GP2TGL_RVAL                    0x0 
-
-/* GP2TGL[TGL7] - Toggle the output of the port pin */
-#define GP2TGL_TGL7_BBA                (*(volatile unsigned long *) 0x4240141C)
-#define GP2TGL_TGL7_MSK                (0x1   << 7  )
-#define GP2TGL_TGL7                    (0x1   << 7  )
-#define GP2TGL_TGL7_TGL                (0x1   << 7  )
-
-/* GP2TGL[TGL6] - Toggle the output of the port pin */
-#define GP2TGL_TGL6_BBA                (*(volatile unsigned long *) 0x42401418)
-#define GP2TGL_TGL6_MSK                (0x1   << 6  )
-#define GP2TGL_TGL6                    (0x1   << 6  )
-#define GP2TGL_TGL6_TGL                (0x1   << 6  )
-
-/* GP2TGL[TGL5] - Toggle the output of the port pin */
-#define GP2TGL_TGL5_BBA                (*(volatile unsigned long *) 0x42401414)
-#define GP2TGL_TGL5_MSK                (0x1   << 5  )
-#define GP2TGL_TGL5                    (0x1   << 5  )
-#define GP2TGL_TGL5_TGL                (0x1   << 5  )
-
-/* GP2TGL[TGL4] - Toggle the output of the port pin */
-#define GP2TGL_TGL4_BBA                (*(volatile unsigned long *) 0x42401410)
-#define GP2TGL_TGL4_MSK                (0x1   << 4  )
-#define GP2TGL_TGL4                    (0x1   << 4  )
-#define GP2TGL_TGL4_TGL                (0x1   << 4  )
-
-/* GP2TGL[TGL3] - Toggle the output of the port pin */
-#define GP2TGL_TGL3_BBA                (*(volatile unsigned long *) 0x4240140C)
-#define GP2TGL_TGL3_MSK                (0x1   << 3  )
-#define GP2TGL_TGL3                    (0x1   << 3  )
-#define GP2TGL_TGL3_TGL                (0x1   << 3  )
-
-/* GP2TGL[TGL2] - Toggle the output of the port pin */
-#define GP2TGL_TGL2_BBA                (*(volatile unsigned long *) 0x42401408)
-#define GP2TGL_TGL2_MSK                (0x1   << 2  )
-#define GP2TGL_TGL2                    (0x1   << 2  )
-#define GP2TGL_TGL2_TGL                (0x1   << 2  )
-
-/* GP2TGL[TGL1] - Toggle the output of the port pin */
-#define GP2TGL_TGL1_BBA                (*(volatile unsigned long *) 0x42401404)
-#define GP2TGL_TGL1_MSK                (0x1   << 1  )
-#define GP2TGL_TGL1                    (0x1   << 1  )
-#define GP2TGL_TGL1_TGL                (0x1   << 1  )
-
-/* GP2TGL[TGL0] - Toggle the output of the port pin */
-#define GP2TGL_TGL0_BBA                (*(volatile unsigned long *) 0x42401400)
-#define GP2TGL_TGL0_MSK                (0x1   << 0  )
-#define GP2TGL_TGL0                    (0x1   << 0  )
-#define GP2TGL_TGL0_TGL                (0x1   << 0  )
-
-/* Reset Value for GP2ODE*/
-#define GP2ODE_RVAL                    0x0 
-
-/* GP2ODE[ODE7] - Open drain enable */
-#define GP2ODE_ODE7_BBA                (*(volatile unsigned long *) 0x4240149C)
-#define GP2ODE_ODE7_MSK                (0x1   << 7  )
-#define GP2ODE_ODE7                    (0x1   << 7  )
-#define GP2ODE_ODE7_DIS                (0x0   << 7  )
-#define GP2ODE_ODE7_EN                 (0x1   << 7  )
-
-/* GP2ODE[ODE6] - Open drain enable */
-#define GP2ODE_ODE6_BBA                (*(volatile unsigned long *) 0x42401498)
-#define GP2ODE_ODE6_MSK                (0x1   << 6  )
-#define GP2ODE_ODE6                    (0x1   << 6  )
-#define GP2ODE_ODE6_DIS                (0x0   << 6  )
-#define GP2ODE_ODE6_EN                 (0x1   << 6  )
-
-/* GP2ODE[ODE5] - Open drain enable */
-#define GP2ODE_ODE5_BBA                (*(volatile unsigned long *) 0x42401494)
-#define GP2ODE_ODE5_MSK                (0x1   << 5  )
-#define GP2ODE_ODE5                    (0x1   << 5  )
-#define GP2ODE_ODE5_DIS                (0x0   << 5  )
-#define GP2ODE_ODE5_EN                 (0x1   << 5  )
-
-/* GP2ODE[ODE4] - Open drain enable */
-#define GP2ODE_ODE4_BBA                (*(volatile unsigned long *) 0x42401490)
-#define GP2ODE_ODE4_MSK                (0x1   << 4  )
-#define GP2ODE_ODE4                    (0x1   << 4  )
-#define GP2ODE_ODE4_DIS                (0x0   << 4  )
-#define GP2ODE_ODE4_EN                 (0x1   << 4  )
-
-/* GP2ODE[ODE3] - Open drain enable */
-#define GP2ODE_ODE3_BBA                (*(volatile unsigned long *) 0x4240148C)
-#define GP2ODE_ODE3_MSK                (0x1   << 3  )
-#define GP2ODE_ODE3                    (0x1   << 3  )
-#define GP2ODE_ODE3_DIS                (0x0   << 3  )
-#define GP2ODE_ODE3_EN                 (0x1   << 3  )
-
-/* GP2ODE[ODE2] - Open drain enable */
-#define GP2ODE_ODE2_BBA                (*(volatile unsigned long *) 0x42401488)
-#define GP2ODE_ODE2_MSK                (0x1   << 2  )
-#define GP2ODE_ODE2                    (0x1   << 2  )
-#define GP2ODE_ODE2_DIS                (0x0   << 2  )
-#define GP2ODE_ODE2_EN                 (0x1   << 2  )
-
-/* GP2ODE[ODE1] - Open drain enable */
-#define GP2ODE_ODE1_BBA                (*(volatile unsigned long *) 0x42401484)
-#define GP2ODE_ODE1_MSK                (0x1   << 1  )
-#define GP2ODE_ODE1                    (0x1   << 1  )
-#define GP2ODE_ODE1_DIS                (0x0   << 1  )
-#define GP2ODE_ODE1_EN                 (0x1   << 1  )
-
-/* GP2ODE[ODE0] - Open drain enable */
-#define GP2ODE_ODE0_BBA                (*(volatile unsigned long *) 0x42401480)
-#define GP2ODE_ODE0_MSK                (0x1   << 0  )
-#define GP2ODE_ODE0                    (0x1   << 0  )
-#define GP2ODE_ODE0_DIS                (0x0   << 0  )
-#define GP2ODE_ODE0_EN                 (0x1   << 0  )
-#if (__NO_MMR_STRUCTS__==1)
-
-#define          GP3CON                                     (*(volatile unsigned short int *) 0x400200C0)
-#define          GP3OE                                      (*(volatile unsigned char      *) 0x400200C4)
-#define          GP3PUL                                     (*(volatile unsigned char      *) 0x400200C8)
-#define          GP3IE                                      (*(volatile unsigned char      *) 0x400200CC)
-#define          GP3IN                                      (*(volatile unsigned char      *) 0x400200D0)
-#define          GP3OUT                                     (*(volatile unsigned char      *) 0x400200D4)
-#define          GP3SET                                     (*(volatile unsigned char      *) 0x400200D8)
-#define          GP3CLR                                     (*(volatile unsigned char      *) 0x400200DC)
-#define          GP3TGL                                     (*(volatile unsigned char      *) 0x400200E0)
-#define          GP3ODE                                     (*(volatile unsigned char      *) 0x400200E4)
-#endif // (__NO_MMR_STRUCTS__==1)
-
-/* Reset Value for GP3CON*/
-#define GP3CON_RVAL                    0x0 
-
-/* GP3CON[CON7] - p3.7  configuration bits */
-#define GP3CON_CON7_MSK                (0x3   << 14 )
-#define GP3CON_CON7_GPIO               (0x0   << 14 ) /* GPIO                     */
-#define GP3CON_CON7_VDAC2              (0x1   << 14 ) /* VDAC2                    */
-#define GP3CON_CON7_PLAO15             (0x3   << 14 ) /* PLAO[15]                 */
-
-/* GP3CON[CON6] - p3.6  configuration bits */
-#define GP3CON_CON6_MSK                (0x3   << 12 )
-#define GP3CON_CON6_GPIO               (0x0   << 12 ) /* GPIO                     */
-#define GP3CON_CON6_MDIO               (0x1   << 12 ) /* MDIO MDIO                */
-#define GP3CON_CON6_PLAO14             (0x3   << 12 ) /* PLAO[14]                 */
-
-/* GP3CON[CON5] - p3.5  configuration bits */
-#define GP3CON_CON5_MSK                (0x3   << 10 )
-#define GP3CON_CON5_GPIO               (0x0   << 10 ) /* GPIO                     */
-#define GP3CON_CON5_MCLK               (0x1   << 10 ) /* MDIO MCK                 */
-#define GP3CON_CON5_PLAO13             (0x3   << 10 ) /* PLAO[13]                 */
-
-/* GP3CON[CON4] - p3.4  configuration bits */
-#define GP3CON_CON4_MSK                (0x3   << 8  )
-#define GP3CON_CON4_GPIO               (0x0   << 8  ) /* GPIO                     */
-#define GP3CON_CON4_PRTADDR4           (0x1   << 8  ) /* MDIO PRTADDR4            */
-#define GP3CON_CON4_PLAO12             (0x3   << 8  ) /* PLAO[12]                 */
-
-/* GP3CON[CON3] - p3.3  configuration bits */
-#define GP3CON_CON3_MSK                (0x3   << 6  )
-#define GP3CON_CON3_GPIO               (0x0   << 6  ) /* GPIO                     */
-#define GP3CON_CON3_PRTADDR3           (0x1   << 6  ) /* MDIO PRTADDR3            */
-#define GP3CON_CON3_PLAI15             (0x3   << 6  ) /* PLAI[15]                 */
-
-/* GP3CON[CON2] - p3.2  configuration bits */
-#define GP3CON_CON2_MSK                (0x3   << 4  )
-#define GP3CON_CON2_GPIO               (0x0   << 4  ) /* GPIO                     */
-#define GP3CON_CON2_PRTADDR2           (0x1   << 4  ) /* MDIO PRTADDR2            */
-#define GP3CON_CON2_PLAI14             (0x3   << 4  ) /* PLAI[14]                 */
-
-/* GP3CON[CON1] - p3.1  configuration bits */
-#define GP3CON_CON1_MSK                (0x3   << 2  )
-#define GP3CON_CON1_GPIO               (0x0   << 2  ) /* GPIO                     */
-#define GP3CON_CON1_PRTADDR1           (0x1   << 2  ) /* MDIO PRTADDR1            */
-#define GP3CON_CON1_PLAI13             (0x3   << 2  ) /* PLAI[13]                 */
-
-/* GP3CON[CON0] - p3.0  configuration bits */
-#define GP3CON_CON0_MSK                (0x3   << 0  )
-#define GP3CON_CON0_GPIO               (0x0   << 0  ) /* GPIO                     */
-#define GP3CON_CON0_PRTADDR0           (0x1   << 0  ) /* MDIO PRTADDR0            */
-#define GP3CON_CON0_PLAI12             (0x3   << 0  ) /* PLAI[12]                 */
-
-/* Reset Value for GP3OE*/
-#define GP3OE_RVAL                     0x0 
-
-/* GP3OE[OE7] - Pin Output Drive enable */
-#define GP3OE_OE7_BBA                  (*(volatile unsigned long *) 0x4240189C)
-#define GP3OE_OE7_MSK                  (0x1   << 7  )
-#define GP3OE_OE7                      (0x1   << 7  )
-#define GP3OE_OE7_DIS                  (0x0   << 7  )
-#define GP3OE_OE7_EN                   (0x1   << 7  )
-
-/* GP3OE[OE6] - Pin Output Drive enable */
-#define GP3OE_OE6_BBA                  (*(volatile unsigned long *) 0x42401898)
-#define GP3OE_OE6_MSK                  (0x1   << 6  )
-#define GP3OE_OE6                      (0x1   << 6  )
-#define GP3OE_OE6_DIS                  (0x0   << 6  )
-#define GP3OE_OE6_EN                   (0x1   << 6  )
-
-/* GP3OE[OE5] - Pin Output Drive enable */
-#define GP3OE_OE5_BBA                  (*(volatile unsigned long *) 0x42401894)
-#define GP3OE_OE5_MSK                  (0x1   << 5  )
-#define GP3OE_OE5                      (0x1   << 5  )
-#define GP3OE_OE5_DIS                  (0x0   << 5  )
-#define GP3OE_OE5_EN                   (0x1   << 5  )
-
-/* GP3OE[OE4] - Pin Output Drive enable */
-#define GP3OE_OE4_BBA                  (*(volatile unsigned long *) 0x42401890)
-#define GP3OE_OE4_MSK                  (0x1   << 4  )
-#define GP3OE_OE4                      (0x1   << 4  )
-#define GP3OE_OE4_DIS                  (0x0   << 4  )
-#define GP3OE_OE4_EN                   (0x1   << 4  )
-
-/* GP3OE[OE3] - Pin Output Drive enable */
-#define GP3OE_OE3_BBA                  (*(volatile unsigned long *) 0x4240188C)
-#define GP3OE_OE3_MSK                  (0x1   << 3  )
-#define GP3OE_OE3                      (0x1   << 3  )
-#define GP3OE_OE3_DIS                  (0x0   << 3  )
-#define GP3OE_OE3_EN                   (0x1   << 3  )
-
-/* GP3OE[OE2] - Pin Output Drive enable */
-#define GP3OE_OE2_BBA                  (*(volatile unsigned long *) 0x42401888)
-#define GP3OE_OE2_MSK                  (0x1   << 2  )
-#define GP3OE_OE2                      (0x1   << 2  )
-#define GP3OE_OE2_DIS                  (0x0   << 2  )
-#define GP3OE_OE2_EN                   (0x1   << 2  )
-
-/* GP3OE[OE1] - Pin Output Drive enable */
-#define GP3OE_OE1_BBA                  (*(volatile unsigned long *) 0x42401884)
-#define GP3OE_OE1_MSK                  (0x1   << 1  )
-#define GP3OE_OE1                      (0x1   << 1  )
-#define GP3OE_OE1_DIS                  (0x0   << 1  )
-#define GP3OE_OE1_EN                   (0x1   << 1  )
-
-/* GP3OE[OE0] - Pin Output Drive enable */
-#define GP3OE_OE0_BBA                  (*(volatile unsigned long *) 0x42401880)
-#define GP3OE_OE0_MSK                  (0x1   << 0  )
-#define GP3OE_OE0                      (0x1   << 0  )
-#define GP3OE_OE0_DIS                  (0x0   << 0  )
-#define GP3OE_OE0_EN                   (0x1   << 0  )
-
-/* Reset Value for GP3PUL*/
-#define GP3PUL_RVAL                    0x0 
-
-/* GP3PUL[PUL7] - Pin Pull up enable */
-#define GP3PUL_PUL7_BBA                (*(volatile unsigned long *) 0x4240191C)
-#define GP3PUL_PUL7_MSK                (0x1   << 7  )
-#define GP3PUL_PUL7                    (0x1   << 7  )
-#define GP3PUL_PUL7_DIS                (0x0   << 7  )
-#define GP3PUL_PUL7_EN                 (0x1   << 7  )
-
-/* GP3PUL[PUL6] - Pin Pull up enable */
-#define GP3PUL_PUL6_BBA                (*(volatile unsigned long *) 0x42401918)
-#define GP3PUL_PUL6_MSK                (0x1   << 6  )
-#define GP3PUL_PUL6                    (0x1   << 6  )
-#define GP3PUL_PUL6_DIS                (0x0   << 6  )
-#define GP3PUL_PUL6_EN                 (0x1   << 6  )
-
-/* GP3PUL[PUL5] - Pin Pull up enable */
-#define GP3PUL_PUL5_BBA                (*(volatile unsigned long *) 0x42401914)
-#define GP3PUL_PUL5_MSK                (0x1   << 5  )
-#define GP3PUL_PUL5                    (0x1   << 5  )
-#define GP3PUL_PUL5_DIS                (0x0   << 5  )
-#define GP3PUL_PUL5_EN                 (0x1   << 5  )
-
-/* GP3PUL[PUL4] - Pin Pull up enable */
-#define GP3PUL_PUL4_BBA                (*(volatile unsigned long *) 0x42401910)
-#define GP3PUL_PUL4_MSK                (0x1   << 4  )
-#define GP3PUL_PUL4                    (0x1   << 4  )
-#define GP3PUL_PUL4_DIS                (0x0   << 4  )
-#define GP3PUL_PUL4_EN                 (0x1   << 4  )
-
-/* GP3PUL[PUL3] - Pin Pull up enable */
-#define GP3PUL_PUL3_BBA                (*(volatile unsigned long *) 0x4240190C)
-#define GP3PUL_PUL3_MSK                (0x1   << 3  )
-#define GP3PUL_PUL3                    (0x1   << 3  )
-#define GP3PUL_PUL3_DIS                (0x0   << 3  )
-#define GP3PUL_PUL3_EN                 (0x1   << 3  )
-
-/* GP3PUL[PUL2] - Pin Pull up enable */
-#define GP3PUL_PUL2_BBA                (*(volatile unsigned long *) 0x42401908)
-#define GP3PUL_PUL2_MSK                (0x1   << 2  )
-#define GP3PUL_PUL2                    (0x1   << 2  )
-#define GP3PUL_PUL2_DIS                (0x0   << 2  )
-#define GP3PUL_PUL2_EN                 (0x1   << 2  )
-
-/* GP3PUL[PUL1] - Pin Pull up enable */
-#define GP3PUL_PUL1_BBA                (*(volatile unsigned long *) 0x42401904)
-#define GP3PUL_PUL1_MSK                (0x1   << 1  )
-#define GP3PUL_PUL1                    (0x1   << 1  )
-#define GP3PUL_PUL1_DIS                (0x0   << 1  )
-#define GP3PUL_PUL1_EN                 (0x1   << 1  )
-
-/* GP3PUL[PUL0] - Pin Pull up enable */
-#define GP3PUL_PUL0_BBA                (*(volatile unsigned long *) 0x42401900)
-#define GP3PUL_PUL0_MSK                (0x1   << 0  )
-#define GP3PUL_PUL0                    (0x1   << 0  )
-#define GP3PUL_PUL0_DIS                (0x0   << 0  )
-#define GP3PUL_PUL0_EN                 (0x1   << 0  )
-
-/* Reset Value for GP3IE*/
-#define GP3IE_RVAL                     0x0 
-
-/* GP3IE[IEN7] - Input path enable */
-#define GP3IE_IEN7_BBA                 (*(volatile unsigned long *) 0x4240199C)
-#define GP3IE_IEN7_MSK                 (0x1   << 7  )
-#define GP3IE_IEN7                     (0x1   << 7  )
-#define GP3IE_IEN7_DIS                 (0x0   << 7  )
-#define GP3IE_IEN7_EN                  (0x1   << 7  )
-
-/* GP3IE[IEN6] - Input path enable */
-#define GP3IE_IEN6_BBA                 (*(volatile unsigned long *) 0x42401998)
-#define GP3IE_IEN6_MSK                 (0x1   << 6  )
-#define GP3IE_IEN6                     (0x1   << 6  )
-#define GP3IE_IEN6_DIS                 (0x0   << 6  )
-#define GP3IE_IEN6_EN                  (0x1   << 6  )
-
-/* GP3IE[IEN5] - Input path enable */
-#define GP3IE_IEN5_BBA                 (*(volatile unsigned long *) 0x42401994)
-#define GP3IE_IEN5_MSK                 (0x1   << 5  )
-#define GP3IE_IEN5                     (0x1   << 5  )
-#define GP3IE_IEN5_DIS                 (0x0   << 5  )
-#define GP3IE_IEN5_EN                  (0x1   << 5  )
-
-/* GP3IE[IEN4] - Input path enable */
-#define GP3IE_IEN4_BBA                 (*(volatile unsigned long *) 0x42401990)
-#define GP3IE_IEN4_MSK                 (0x1   << 4  )
-#define GP3IE_IEN4                     (0x1   << 4  )
-#define GP3IE_IEN4_DIS                 (0x0   << 4  )
-#define GP3IE_IEN4_EN                  (0x1   << 4  )
-
-/* GP3IE[IEN3] - Input path enable */
-#define GP3IE_IEN3_BBA                 (*(volatile unsigned long *) 0x4240198C)
-#define GP3IE_IEN3_MSK                 (0x1   << 3  )
-#define GP3IE_IEN3                     (0x1   << 3  )
-#define GP3IE_IEN3_DIS                 (0x0   << 3  )
-#define GP3IE_IEN3_EN                  (0x1   << 3  )
-
-/* GP3IE[IEN2] - Input path enable */
-#define GP3IE_IEN2_BBA                 (*(volatile unsigned long *) 0x42401988)
-#define GP3IE_IEN2_MSK                 (0x1   << 2  )
-#define GP3IE_IEN2                     (0x1   << 2  )
-#define GP3IE_IEN2_DIS                 (0x0   << 2  )
-#define GP3IE_IEN2_EN                  (0x1   << 2  )
-
-/* GP3IE[IEN1] - Input path enable */
-#define GP3IE_IEN1_BBA                 (*(volatile unsigned long *) 0x42401984)
-#define GP3IE_IEN1_MSK                 (0x1   << 1  )
-#define GP3IE_IEN1                     (0x1   << 1  )
-#define GP3IE_IEN1_DIS                 (0x0   << 1  )
-#define GP3IE_IEN1_EN                  (0x1   << 1  )
-
-/* GP3IE[IEN0] - Input path enable */
-#define GP3IE_IEN0_BBA                 (*(volatile unsigned long *) 0x42401980)
-#define GP3IE_IEN0_MSK                 (0x1   << 0  )
-#define GP3IE_IEN0                     (0x1   << 0  )
-#define GP3IE_IEN0_DIS                 (0x0   << 0  )
-#define GP3IE_IEN0_EN                  (0x1   << 0  )
-
-/* Reset Value for GP3IN*/
-#define GP3IN_RVAL                     0x0 
-
-/* GP3IN[IN7] - Registered data input */
-#define GP3IN_IN7_BBA                  (*(volatile unsigned long *) 0x42401A1C)
-#define GP3IN_IN7_MSK                  (0x1   << 7  )
-#define GP3IN_IN7                      (0x1   << 7  )
-#define GP3IN_IN7_LOW                  (0x0   << 7  )
-#define GP3IN_IN7_HIGH                 (0x1   << 7  )
-
-/* GP3IN[IN6] - Registered data input */
-#define GP3IN_IN6_BBA                  (*(volatile unsigned long *) 0x42401A18)
-#define GP3IN_IN6_MSK                  (0x1   << 6  )
-#define GP3IN_IN6                      (0x1   << 6  )
-#define GP3IN_IN6_LOW                  (0x0   << 6  )
-#define GP3IN_IN6_HIGH                 (0x1   << 6  )
-
-/* GP3IN[IN5] - Registered data input */
-#define GP3IN_IN5_BBA                  (*(volatile unsigned long *) 0x42401A14)
-#define GP3IN_IN5_MSK                  (0x1   << 5  )
-#define GP3IN_IN5                      (0x1   << 5  )
-#define GP3IN_IN5_LOW                  (0x0   << 5  )
-#define GP3IN_IN5_HIGH                 (0x1   << 5  )
-
-/* GP3IN[IN4] - Registered data input */
-#define GP3IN_IN4_BBA                  (*(volatile unsigned long *) 0x42401A10)
-#define GP3IN_IN4_MSK                  (0x1   << 4  )
-#define GP3IN_IN4                      (0x1   << 4  )
-#define GP3IN_IN4_LOW                  (0x0   << 4  )
-#define GP3IN_IN4_HIGH                 (0x1   << 4  )
-
-/* GP3IN[IN3] - Registered data input */
-#define GP3IN_IN3_BBA                  (*(volatile unsigned long *) 0x42401A0C)
-#define GP3IN_IN3_MSK                  (0x1   << 3  )
-#define GP3IN_IN3                      (0x1   << 3  )
-#define GP3IN_IN3_LOW                  (0x0   << 3  )
-#define GP3IN_IN3_HIGH                 (0x1   << 3  )
-
-/* GP3IN[IN2] - Registered data input */
-#define GP3IN_IN2_BBA                  (*(volatile unsigned long *) 0x42401A08)
-#define GP3IN_IN2_MSK                  (0x1   << 2  )
-#define GP3IN_IN2                      (0x1   << 2  )
-#define GP3IN_IN2_LOW                  (0x0   << 2  )
-#define GP3IN_IN2_HIGH                 (0x1   << 2  )
-
-/* GP3IN[IN1] - Registered data input */
-#define GP3IN_IN1_BBA                  (*(volatile unsigned long *) 0x42401A04)
-#define GP3IN_IN1_MSK                  (0x1   << 1  )
-#define GP3IN_IN1                      (0x1   << 1  )
-#define GP3IN_IN1_LOW                  (0x0   << 1  )
-#define GP3IN_IN1_HIGH                 (0x1   << 1  )
-
-/* GP3IN[IN0] - Registered data input */
-#define GP3IN_IN0_BBA                  (*(volatile unsigned long *) 0x42401A00)
-#define GP3IN_IN0_MSK                  (0x1   << 0  )
-#define GP3IN_IN0                      (0x1   << 0  )
-#define GP3IN_IN0_LOW                  (0x0   << 0  )
-#define GP3IN_IN0_HIGH                 (0x1   << 0  )
-
-/* Reset Value for GP3OUT*/
-#define GP3OUT_RVAL                    0x0 
-
-/* GP3OUT[OUT7] - Data out */
-#define GP3OUT_OUT7_BBA                (*(volatile unsigned long *) 0x42401A9C)
-#define GP3OUT_OUT7_MSK                (0x1   << 7  )
-#define GP3OUT_OUT7                    (0x1   << 7  )
-#define GP3OUT_OUT7_LOW                (0x0   << 7  )
-#define GP3OUT_OUT7_HIGH               (0x1   << 7  )
-
-/* GP3OUT[OUT6] - Data out */
-#define GP3OUT_OUT6_BBA                (*(volatile unsigned long *) 0x42401A98)
-#define GP3OUT_OUT6_MSK                (0x1   << 6  )
-#define GP3OUT_OUT6                    (0x1   << 6  )
-#define GP3OUT_OUT6_LOW                (0x0   << 6  )
-#define GP3OUT_OUT6_HIGH               (0x1   << 6  )
-
-/* GP3OUT[OUT5] - Data out */
-#define GP3OUT_OUT5_BBA                (*(volatile unsigned long *) 0x42401A94)
-#define GP3OUT_OUT5_MSK                (0x1   << 5  )
-#define GP3OUT_OUT5                    (0x1   << 5  )
-#define GP3OUT_OUT5_LOW                (0x0   << 5  )
-#define GP3OUT_OUT5_HIGH               (0x1   << 5  )
-
-/* GP3OUT[OUT4] - Data out */
-#define GP3OUT_OUT4_BBA                (*(volatile unsigned long *) 0x42401A90)
-#define GP3OUT_OUT4_MSK                (0x1   << 4  )
-#define GP3OUT_OUT4                    (0x1   << 4  )
-#define GP3OUT_OUT4_LOW                (0x0   << 4  )
-#define GP3OUT_OUT4_HIGH               (0x1   << 4  )
-
-/* GP3OUT[OUT3] - Data out */
-#define GP3OUT_OUT3_BBA                (*(volatile unsigned long *) 0x42401A8C)
-#define GP3OUT_OUT3_MSK                (0x1   << 3  )
-#define GP3OUT_OUT3                    (0x1   << 3  )
-#define GP3OUT_OUT3_LOW                (0x0   << 3  )
-#define GP3OUT_OUT3_HIGH               (0x1   << 3  )
-
-/* GP3OUT[OUT2] - Data out */
-#define GP3OUT_OUT2_BBA                (*(volatile unsigned long *) 0x42401A88)
-#define GP3OUT_OUT2_MSK                (0x1   << 2  )
-#define GP3OUT_OUT2                    (0x1   << 2  )
-#define GP3OUT_OUT2_LOW                (0x0   << 2  )
-#define GP3OUT_OUT2_HIGH               (0x1   << 2  )
-
-/* GP3OUT[OUT1] - Data out */
-#define GP3OUT_OUT1_BBA                (*(volatile unsigned long *) 0x42401A84)
-#define GP3OUT_OUT1_MSK                (0x1   << 1  )
-#define GP3OUT_OUT1                    (0x1   << 1  )
-#define GP3OUT_OUT1_LOW                (0x0   << 1  )
-#define GP3OUT_OUT1_HIGH               (0x1   << 1  )
-
-/* GP3OUT[OUT0] - Data out */
-#define GP3OUT_OUT0_BBA                (*(volatile unsigned long *) 0x42401A80)
-#define GP3OUT_OUT0_MSK                (0x1   << 0  )
-#define GP3OUT_OUT0                    (0x1   << 0  )
-#define GP3OUT_OUT0_LOW                (0x0   << 0  )
-#define GP3OUT_OUT0_HIGH               (0x1   << 0  )
-
-/* Reset Value for GP3SET*/
-#define GP3SET_RVAL                    0x0 
-
-/* GP3SET[SET7] - Set the output HIGH for the pin */
-#define GP3SET_SET7_BBA                (*(volatile unsigned long *) 0x42401B1C)
-#define GP3SET_SET7_MSK                (0x1   << 7  )
-#define GP3SET_SET7                    (0x1   << 7  )
-#define GP3SET_SET7_SET                (0x1   << 7  )
-
-/* GP3SET[SET6] - Set the output HIGH for the pin */
-#define GP3SET_SET6_BBA                (*(volatile unsigned long *) 0x42401B18)
-#define GP3SET_SET6_MSK                (0x1   << 6  )
-#define GP3SET_SET6                    (0x1   << 6  )
-#define GP3SET_SET6_SET                (0x1   << 6  )
-
-/* GP3SET[SET5] - Set the output HIGH for the pin */
-#define GP3SET_SET5_BBA                (*(volatile unsigned long *) 0x42401B14)
-#define GP3SET_SET5_MSK                (0x1   << 5  )
-#define GP3SET_SET5                    (0x1   << 5  )
-#define GP3SET_SET5_SET                (0x1   << 5  )
-
-/* GP3SET[SET4] - Set the output HIGH for the pin */
-#define GP3SET_SET4_BBA                (*(volatile unsigned long *) 0x42401B10)
-#define GP3SET_SET4_MSK                (0x1   << 4  )
-#define GP3SET_SET4                    (0x1   << 4  )
-#define GP3SET_SET4_SET                (0x1   << 4  )
-
-/* GP3SET[SET3] - Set the output HIGH for the pin */
-#define GP3SET_SET3_BBA                (*(volatile unsigned long *) 0x42401B0C)
-#define GP3SET_SET3_MSK                (0x1   << 3  )
-#define GP3SET_SET3                    (0x1   << 3  )
-#define GP3SET_SET3_SET                (0x1   << 3  )
-
-/* GP3SET[SET2] - Set the output HIGH for the pin */
-#define GP3SET_SET2_BBA                (*(volatile unsigned long *) 0x42401B08)
-#define GP3SET_SET2_MSK                (0x1   << 2  )
-#define GP3SET_SET2                    (0x1   << 2  )
-#define GP3SET_SET2_SET                (0x1   << 2  )
-
-/* GP3SET[SET1] - Set the output HIGH for the pin */
-#define GP3SET_SET1_BBA                (*(volatile unsigned long *) 0x42401B04)
-#define GP3SET_SET1_MSK                (0x1   << 1  )
-#define GP3SET_SET1                    (0x1   << 1  )
-#define GP3SET_SET1_SET                (0x1   << 1  )
-
-/* GP3SET[SET0] - Set the output HIGH for the pin */
-#define GP3SET_SET0_BBA                (*(volatile unsigned long *) 0x42401B00)
-#define GP3SET_SET0_MSK                (0x1   << 0  )
-#define GP3SET_SET0                    (0x1   << 0  )
-#define GP3SET_SET0_SET                (0x1   << 0  )
-
-/* Reset Value for GP3CLR*/
-#define GP3CLR_RVAL                    0x0 
-
-/* GP3CLR[CLR7] - Set the output low  for the port pin */
-#define GP3CLR_CLR7_BBA                (*(volatile unsigned long *) 0x42401B9C)
-#define GP3CLR_CLR7_MSK                (0x1   << 7  )
-#define GP3CLR_CLR7                    (0x1   << 7  )
-#define GP3CLR_CLR7_CLR                (0x1   << 7  )
-
-/* GP3CLR[CLR6] - Set the output low  for the port pin */
-#define GP3CLR_CLR6_BBA                (*(volatile unsigned long *) 0x42401B98)
-#define GP3CLR_CLR6_MSK                (0x1   << 6  )
-#define GP3CLR_CLR6                    (0x1   << 6  )
-#define GP3CLR_CLR6_CLR                (0x1   << 6  )
-
-/* GP3CLR[CLR5] - Set the output low  for the port pin */
-#define GP3CLR_CLR5_BBA                (*(volatile unsigned long *) 0x42401B94)
-#define GP3CLR_CLR5_MSK                (0x1   << 5  )
-#define GP3CLR_CLR5                    (0x1   << 5  )
-#define GP3CLR_CLR5_CLR                (0x1   << 5  )
-
-/* GP3CLR[CLR4] - Set the output low  for the port pin */
-#define GP3CLR_CLR4_BBA                (*(volatile unsigned long *) 0x42401B90)
-#define GP3CLR_CLR4_MSK                (0x1   << 4  )
-#define GP3CLR_CLR4                    (0x1   << 4  )
-#define GP3CLR_CLR4_CLR                (0x1   << 4  )
-
-/* GP3CLR[CLR3] - Set the output low  for the port pin */
-#define GP3CLR_CLR3_BBA                (*(volatile unsigned long *) 0x42401B8C)
-#define GP3CLR_CLR3_MSK                (0x1   << 3  )
-#define GP3CLR_CLR3                    (0x1   << 3  )
-#define GP3CLR_CLR3_CLR                (0x1   << 3  )
-
-/* GP3CLR[CLR2] - Set the output low  for the port pin */
-#define GP3CLR_CLR2_BBA                (*(volatile unsigned long *) 0x42401B88)
-#define GP3CLR_CLR2_MSK                (0x1   << 2  )
-#define GP3CLR_CLR2                    (0x1   << 2  )
-#define GP3CLR_CLR2_CLR                (0x1   << 2  )
-
-/* GP3CLR[CLR1] - Set the output low  for the port pin */
-#define GP3CLR_CLR1_BBA                (*(volatile unsigned long *) 0x42401B84)
-#define GP3CLR_CLR1_MSK                (0x1   << 1  )
-#define GP3CLR_CLR1                    (0x1   << 1  )
-#define GP3CLR_CLR1_CLR                (0x1   << 1  )
-
-/* GP3CLR[CLR0] - Set the output low  for the port pin */
-#define GP3CLR_CLR0_BBA                (*(volatile unsigned long *) 0x42401B80)
-#define GP3CLR_CLR0_MSK                (0x1   << 0  )
-#define GP3CLR_CLR0                    (0x1   << 0  )
-#define GP3CLR_CLR0_CLR                (0x1   << 0  )
-
-/* Reset Value for GP3TGL*/
-#define GP3TGL_RVAL                    0x0 
-
-/* GP3TGL[TGL7] - Toggle the output of the port pin */
-#define GP3TGL_TGL7_BBA                (*(volatile unsigned long *) 0x42401C1C)
-#define GP3TGL_TGL7_MSK                (0x1   << 7  )
-#define GP3TGL_TGL7                    (0x1   << 7  )
-#define GP3TGL_TGL7_TGL                (0x1   << 7  )
-
-/* GP3TGL[TGL6] - Toggle the output of the port pin */
-#define GP3TGL_TGL6_BBA                (*(volatile unsigned long *) 0x42401C18)
-#define GP3TGL_TGL6_MSK                (0x1   << 6  )
-#define GP3TGL_TGL6                    (0x1   << 6  )
-#define GP3TGL_TGL6_TGL                (0x1   << 6  )
-
-/* GP3TGL[TGL5] - Toggle the output of the port pin */
-#define GP3TGL_TGL5_BBA                (*(volatile unsigned long *) 0x42401C14)
-#define GP3TGL_TGL5_MSK                (0x1   << 5  )
-#define GP3TGL_TGL5                    (0x1   << 5  )
-#define GP3TGL_TGL5_TGL                (0x1   << 5  )
-
-/* GP3TGL[TGL4] - Toggle the output of the port pin */
-#define GP3TGL_TGL4_BBA                (*(volatile unsigned long *) 0x42401C10)
-#define GP3TGL_TGL4_MSK                (0x1   << 4  )
-#define GP3TGL_TGL4                    (0x1   << 4  )
-#define GP3TGL_TGL4_TGL                (0x1   << 4  )
-
-/* GP3TGL[TGL3] - Toggle the output of the port pin */
-#define GP3TGL_TGL3_BBA                (*(volatile unsigned long *) 0x42401C0C)
-#define GP3TGL_TGL3_MSK                (0x1   << 3  )
-#define GP3TGL_TGL3                    (0x1   << 3  )
-#define GP3TGL_TGL3_TGL                (0x1   << 3  )
-
-/* GP3TGL[TGL2] - Toggle the output of the port pin */
-#define GP3TGL_TGL2_BBA                (*(volatile unsigned long *) 0x42401C08)
-#define GP3TGL_TGL2_MSK                (0x1   << 2  )
-#define GP3TGL_TGL2                    (0x1   << 2  )
-#define GP3TGL_TGL2_TGL                (0x1   << 2  )
-
-/* GP3TGL[TGL1] - Toggle the output of the port pin */
-#define GP3TGL_TGL1_BBA                (*(volatile unsigned long *) 0x42401C04)
-#define GP3TGL_TGL1_MSK                (0x1   << 1  )
-#define GP3TGL_TGL1                    (0x1   << 1  )
-#define GP3TGL_TGL1_TGL                (0x1   << 1  )
-
-/* GP3TGL[TGL0] - Toggle the output of the port pin */
-#define GP3TGL_TGL0_BBA                (*(volatile unsigned long *) 0x42401C00)
-#define GP3TGL_TGL0_MSK                (0x1   << 0  )
-#define GP3TGL_TGL0                    (0x1   << 0  )
-#define GP3TGL_TGL0_TGL                (0x1   << 0  )
-
-/* Reset Value for GP3ODE*/
-#define GP3ODE_RVAL                    0x0 
-
-/* GP3ODE[ODE7] - Open drain enable */
-#define GP3ODE_ODE7_BBA                (*(volatile unsigned long *) 0x42401C9C)
-#define GP3ODE_ODE7_MSK                (0x1   << 7  )
-#define GP3ODE_ODE7                    (0x1   << 7  )
-#define GP3ODE_ODE7_DIS                (0x0   << 7  )
-#define GP3ODE_ODE7_EN                 (0x1   << 7  )
-
-/* GP3ODE[ODE6] - Open drain enable */
-#define GP3ODE_ODE6_BBA                (*(volatile unsigned long *) 0x42401C98)
-#define GP3ODE_ODE6_MSK                (0x1   << 6  )
-#define GP3ODE_ODE6                    (0x1   << 6  )
-#define GP3ODE_ODE6_DIS                (0x0   << 6  )
-#define GP3ODE_ODE6_EN                 (0x1   << 6  )
-
-/* GP3ODE[ODE5] - Open drain enable */
-#define GP3ODE_ODE5_BBA                (*(volatile unsigned long *) 0x42401C94)
-#define GP3ODE_ODE5_MSK                (0x1   << 5  )
-#define GP3ODE_ODE5                    (0x1   << 5  )
-#define GP3ODE_ODE5_DIS                (0x0   << 5  )
-#define GP3ODE_ODE5_EN                 (0x1   << 5  )
-
-/* GP3ODE[ODE4] - Open drain enable */
-#define GP3ODE_ODE4_BBA                (*(volatile unsigned long *) 0x42401C90)
-#define GP3ODE_ODE4_MSK                (0x1   << 4  )
-#define GP3ODE_ODE4                    (0x1   << 4  )
-#define GP3ODE_ODE4_DIS                (0x0   << 4  )
-#define GP3ODE_ODE4_EN                 (0x1   << 4  )
-
-/* GP3ODE[ODE3] - Open drain enable */
-#define GP3ODE_ODE3_BBA                (*(volatile unsigned long *) 0x42401C8C)
-#define GP3ODE_ODE3_MSK                (0x1   << 3  )
-#define GP3ODE_ODE3                    (0x1   << 3  )
-#define GP3ODE_ODE3_DIS                (0x0   << 3  )
-#define GP3ODE_ODE3_EN                 (0x1   << 3  )
-
-/* GP3ODE[ODE2] - Open drain enable */
-#define GP3ODE_ODE2_BBA                (*(volatile unsigned long *) 0x42401C88)
-#define GP3ODE_ODE2_MSK                (0x1   << 2  )
-#define GP3ODE_ODE2                    (0x1   << 2  )
-#define GP3ODE_ODE2_DIS                (0x0   << 2  )
-#define GP3ODE_ODE2_EN                 (0x1   << 2  )
-
-/* GP3ODE[ODE1] - Open drain enable */
-#define GP3ODE_ODE1_BBA                (*(volatile unsigned long *) 0x42401C84)
-#define GP3ODE_ODE1_MSK                (0x1   << 1  )
-#define GP3ODE_ODE1                    (0x1   << 1  )
-#define GP3ODE_ODE1_DIS                (0x0   << 1  )
-#define GP3ODE_ODE1_EN                 (0x1   << 1  )
-
-/* GP3ODE[ODE0] - Open drain enable */
-#define GP3ODE_ODE0_BBA                (*(volatile unsigned long *) 0x42401C80)
-#define GP3ODE_ODE0_MSK                (0x1   << 0  )
-#define GP3ODE_ODE0                    (0x1   << 0  )
-#define GP3ODE_ODE0_DIS                (0x0   << 0  )
-#define GP3ODE_ODE0_EN                 (0x1   << 0  )
-#if (__NO_MMR_STRUCTS__==1)
-
-#define          GP4CON                                     (*(volatile unsigned short int *) 0x40020100)
-#define          GP4OE                                      (*(volatile unsigned char      *) 0x40020104)
-#define          GP4PUL                                     (*(volatile unsigned char      *) 0x40020108)
-#define          GP4IE                                      (*(volatile unsigned char      *) 0x4002010C)
-#define          GP4IN                                      (*(volatile unsigned char      *) 0x40020110)
-#define          GP4OUT                                     (*(volatile unsigned char      *) 0x40020114)
-#define          GP4SET                                     (*(volatile unsigned char      *) 0x40020118)
-#define          GP4CLR                                     (*(volatile unsigned char      *) 0x4002011C)
-#define          GP4TGL                                     (*(volatile unsigned char      *) 0x40020120)
-#define          GP4ODE                                     (*(volatile unsigned char      *) 0x40020124)
-#endif // (__NO_MMR_STRUCTS__==1)
-
-/* Reset Value for GP4CON*/
-#define GP4CON_RVAL                    0x0 
-
-/* GP4CON[CON7] - p4.7  configuration bits */
-#define GP4CON_CON7_MSK                (0x3   << 14 )
-
-/* GP4CON[CON6] - p4.6  configuration bits */
-#define GP4CON_CON6_MSK                (0x3   << 12 )
-
-/* GP4CON[CON5] - p4.5  configuration bits */
-#define GP4CON_CON5_MSK                (0x3   << 10 )
-
-/* GP4CON[CON4] - p4.4  configuration bits */
-#define GP4CON_CON4_MSK                (0x3   << 8  )
-
-/* GP4CON[CON3] - p4.3  configuration bits */
-#define GP4CON_CON3_MSK                (0x3   << 6  )
-
-/* GP4CON[CON2] - p4.2  configuration bits */
-#define GP4CON_CON2_MSK                (0x3   << 4  )
-
-/* GP4CON[CON1] - p4.1  configuration bits */
-#define GP4CON_CON1_MSK                (0x3   << 2  )
-
-/* GP4CON[CON0] - p4.0  configuration bits */
-#define GP4CON_CON0_MSK                (0x3   << 0  )
-#define GP4CON_CON0_GPIO               (0x0   << 0  ) /* GPIO                     */
-
-/* Reset Value for GP4OE*/
-#define GP4OE_RVAL                     0x0 
-
-/* GP4OE[OE7] - Pin Output Drive enable */
-#define GP4OE_OE7_BBA                  (*(volatile unsigned long *) 0x4240209C)
-#define GP4OE_OE7_MSK                  (0x1   << 7  )
-#define GP4OE_OE7                      (0x1   << 7  )
-#define GP4OE_OE7_DIS                  (0x0   << 7  )
-#define GP4OE_OE7_EN                   (0x1   << 7  )
-
-/* GP4OE[OE6] - Pin Output Drive enable */
-#define GP4OE_OE6_BBA                  (*(volatile unsigned long *) 0x42402098)
-#define GP4OE_OE6_MSK                  (0x1   << 6  )
-#define GP4OE_OE6                      (0x1   << 6  )
-#define GP4OE_OE6_DIS                  (0x0   << 6  )
-#define GP4OE_OE6_EN                   (0x1   << 6  )
-
-/* GP4OE[OE5] - Pin Output Drive enable */
-#define GP4OE_OE5_BBA                  (*(volatile unsigned long *) 0x42402094)
-#define GP4OE_OE5_MSK                  (0x1   << 5  )
-#define GP4OE_OE5                      (0x1   << 5  )
-#define GP4OE_OE5_DIS                  (0x0   << 5  )
-#define GP4OE_OE5_EN                   (0x1   << 5  )
-
-/* GP4OE[OE4] - Pin Output Drive enable */
-#define GP4OE_OE4_BBA                  (*(volatile unsigned long *) 0x42402090)
-#define GP4OE_OE4_MSK                  (0x1   << 4  )
-#define GP4OE_OE4                      (0x1   << 4  )
-#define GP4OE_OE4_DIS                  (0x0   << 4  )
-#define GP4OE_OE4_EN                   (0x1   << 4  )
-
-/* GP4OE[OE3] - Pin Output Drive enable */
-#define GP4OE_OE3_BBA                  (*(volatile unsigned long *) 0x4240208C)
-#define GP4OE_OE3_MSK                  (0x1   << 3  )
-#define GP4OE_OE3                      (0x1   << 3  )
-#define GP4OE_OE3_DIS                  (0x0   << 3  )
-#define GP4OE_OE3_EN                   (0x1   << 3  )
-
-/* GP4OE[OE2] - Pin Output Drive enable */
-#define GP4OE_OE2_BBA                  (*(volatile unsigned long *) 0x42402088)
-#define GP4OE_OE2_MSK                  (0x1   << 2  )
-#define GP4OE_OE2                      (0x1   << 2  )
-#define GP4OE_OE2_DIS                  (0x0   << 2  )
-#define GP4OE_OE2_EN                   (0x1   << 2  )
-
-/* GP4OE[OE1] - Pin Output Drive enable */
-#define GP4OE_OE1_BBA                  (*(volatile unsigned long *) 0x42402084)
-#define GP4OE_OE1_MSK                  (0x1   << 1  )
-#define GP4OE_OE1                      (0x1   << 1  )
-#define GP4OE_OE1_DIS                  (0x0   << 1  )
-#define GP4OE_OE1_EN                   (0x1   << 1  )
-
-/* GP4OE[OE0] - Pin Output Drive enable */
-#define GP4OE_OE0_BBA                  (*(volatile unsigned long *) 0x42402080)
-#define GP4OE_OE0_MSK                  (0x1   << 0  )
-#define GP4OE_OE0                      (0x1   << 0  )
-#define GP4OE_OE0_DIS                  (0x0   << 0  )
-#define GP4OE_OE0_EN                   (0x1   << 0  )
-
-/* Reset Value for GP4PUL*/
-#define GP4PUL_RVAL                    0x0 
-
-/* GP4PUL[PUL7] - Pin Pull down enable */
-#define GP4PUL_PUL7_BBA                (*(volatile unsigned long *) 0x4240211C)
-#define GP4PUL_PUL7_MSK                (0x1   << 7  )
-#define GP4PUL_PUL7                    (0x1   << 7  )
-#define GP4PUL_PUL7_DIS                (0x0   << 7  )
-#define GP4PUL_PUL7_EN                 (0x1   << 7  )
-
-/* GP4PUL[PUL6] - Pin Pull down enable */
-#define GP4PUL_PUL6_BBA                (*(volatile unsigned long *) 0x42402118)
-#define GP4PUL_PUL6_MSK                (0x1   << 6  )
-#define GP4PUL_PUL6                    (0x1   << 6  )
-#define GP4PUL_PUL6_DIS                (0x0   << 6  )
-#define GP4PUL_PUL6_EN                 (0x1   << 6  )
-
-/* GP4PUL[PUL5] - Pin Pull down enable */
-#define GP4PUL_PUL5_BBA                (*(volatile unsigned long *) 0x42402114)
-#define GP4PUL_PUL5_MSK                (0x1   << 5  )
-#define GP4PUL_PUL5                    (0x1   << 5  )
-#define GP4PUL_PUL5_DIS                (0x0   << 5  )
-#define GP4PUL_PUL5_EN                 (0x1   << 5  )
-
-/* GP4PUL[PUL4] - Pin Pull down enable */
-#define GP4PUL_PUL4_BBA                (*(volatile unsigned long *) 0x42402110)
-#define GP4PUL_PUL4_MSK                (0x1   << 4  )
-#define GP4PUL_PUL4                    (0x1   << 4  )
-#define GP4PUL_PUL4_DIS                (0x0   << 4  )
-#define GP4PUL_PUL4_EN                 (0x1   << 4  )
-
-/* GP4PUL[PUL3] - Pin Pull down enable */
-#define GP4PUL_PUL3_BBA                (*(volatile unsigned long *) 0x4240210C)
-#define GP4PUL_PUL3_MSK                (0x1   << 3  )
-#define GP4PUL_PUL3                    (0x1   << 3  )
-#define GP4PUL_PUL3_DIS                (0x0   << 3  )
-#define GP4PUL_PUL3_EN                 (0x1   << 3  )
-
-/* GP4PUL[PUL2] - Pin Pull down enable */
-#define GP4PUL_PUL2_BBA                (*(volatile unsigned long *) 0x42402108)
-#define GP4PUL_PUL2_MSK                (0x1   << 2  )
-#define GP4PUL_PUL2                    (0x1   << 2  )
-#define GP4PUL_PUL2_DIS                (0x0   << 2  )
-#define GP4PUL_PUL2_EN                 (0x1   << 2  )
-
-/* GP4PUL[PUL1] - Pin Pull down enable */
-#define GP4PUL_PUL1_BBA                (*(volatile unsigned long *) 0x42402104)
-#define GP4PUL_PUL1_MSK                (0x1   << 1  )
-#define GP4PUL_PUL1                    (0x1   << 1  )
-#define GP4PUL_PUL1_DIS                (0x0   << 1  )
-#define GP4PUL_PUL1_EN                 (0x1   << 1  )
-
-/* GP4PUL[PUL0] - Pin Pull down enable */
-#define GP4PUL_PUL0_BBA                (*(volatile unsigned long *) 0x42402100)
-#define GP4PUL_PUL0_MSK                (0x1   << 0  )
-#define GP4PUL_PUL0                    (0x1   << 0  )
-#define GP4PUL_PUL0_DIS                (0x0   << 0  )
-#define GP4PUL_PUL0_EN                 (0x1   << 0  )
-
-/* Reset Value for GP4IE*/
-#define GP4IE_RVAL                     0x0 
-
-/* GP4IE[IEN7] - Input path enable */
-#define GP4IE_IEN7_BBA                 (*(volatile unsigned long *) 0x4240219C)
-#define GP4IE_IEN7_MSK                 (0x1   << 7  )
-#define GP4IE_IEN7                     (0x1   << 7  )
-#define GP4IE_IEN7_DIS                 (0x0   << 7  )
-#define GP4IE_IEN7_EN                  (0x1   << 7  )
-
-/* GP4IE[IEN6] - Input path enable */
-#define GP4IE_IEN6_BBA                 (*(volatile unsigned long *) 0x42402198)
-#define GP4IE_IEN6_MSK                 (0x1   << 6  )
-#define GP4IE_IEN6                     (0x1   << 6  )
-#define GP4IE_IEN6_DIS                 (0x0   << 6  )
-#define GP4IE_IEN6_EN                  (0x1   << 6  )
-
-/* GP4IE[IEN5] - Input path enable */
-#define GP4IE_IEN5_BBA                 (*(volatile unsigned long *) 0x42402194)
-#define GP4IE_IEN5_MSK                 (0x1   << 5  )
-#define GP4IE_IEN5                     (0x1   << 5  )
-#define GP4IE_IEN5_DIS                 (0x0   << 5  )
-#define GP4IE_IEN5_EN                  (0x1   << 5  )
-
-/* GP4IE[IEN4] - Input path enable */
-#define GP4IE_IEN4_BBA                 (*(volatile unsigned long *) 0x42402190)
-#define GP4IE_IEN4_MSK                 (0x1   << 4  )
-#define GP4IE_IEN4                     (0x1   << 4  )
-#define GP4IE_IEN4_DIS                 (0x0   << 4  )
-#define GP4IE_IEN4_EN                  (0x1   << 4  )
-
-/* GP4IE[IEN3] - Input path enable */
-#define GP4IE_IEN3_BBA                 (*(volatile unsigned long *) 0x4240218C)
-#define GP4IE_IEN3_MSK                 (0x1   << 3  )
-#define GP4IE_IEN3                     (0x1   << 3  )
-#define GP4IE_IEN3_DIS                 (0x0   << 3  )
-#define GP4IE_IEN3_EN                  (0x1   << 3  )
-
-/* GP4IE[IEN2] - Input path enable */
-#define GP4IE_IEN2_BBA                 (*(volatile unsigned long *) 0x42402188)
-#define GP4IE_IEN2_MSK                 (0x1   << 2  )
-#define GP4IE_IEN2                     (0x1   << 2  )
-#define GP4IE_IEN2_DIS                 (0x0   << 2  )
-#define GP4IE_IEN2_EN                  (0x1   << 2  )
-
-/* GP4IE[IEN1] - Input path enable */
-#define GP4IE_IEN1_BBA                 (*(volatile unsigned long *) 0x42402184)
-#define GP4IE_IEN1_MSK                 (0x1   << 1  )
-#define GP4IE_IEN1                     (0x1   << 1  )
-#define GP4IE_IEN1_DIS                 (0x0   << 1  )
-#define GP4IE_IEN1_EN                  (0x1   << 1  )
-
-/* GP4IE[IEN0] - Input path enable */
-#define GP4IE_IEN0_BBA                 (*(volatile unsigned long *) 0x42402180)
-#define GP4IE_IEN0_MSK                 (0x1   << 0  )
-#define GP4IE_IEN0                     (0x1   << 0  )
-#define GP4IE_IEN0_DIS                 (0x0   << 0  )
-#define GP4IE_IEN0_EN                  (0x1   << 0  )
-
-/* Reset Value for GP4IN*/
-#define GP4IN_RVAL                     0x0 
-
-/* GP4IN[IN7] - Registered data input */
-#define GP4IN_IN7_BBA                  (*(volatile unsigned long *) 0x4240221C)
-#define GP4IN_IN7_MSK                  (0x1   << 7  )
-#define GP4IN_IN7                      (0x1   << 7  )
-#define GP4IN_IN7_LOW                  (0x0   << 7  )
-#define GP4IN_IN7_HIGH                 (0x1   << 7  )
-
-/* GP4IN[IN6] - Registered data input */
-#define GP4IN_IN6_BBA                  (*(volatile unsigned long *) 0x42402218)
-#define GP4IN_IN6_MSK                  (0x1   << 6  )
-#define GP4IN_IN6                      (0x1   << 6  )
-#define GP4IN_IN6_LOW                  (0x0   << 6  )
-#define GP4IN_IN6_HIGH                 (0x1   << 6  )
-
-/* GP4IN[IN5] - Registered data input */
-#define GP4IN_IN5_BBA                  (*(volatile unsigned long *) 0x42402214)
-#define GP4IN_IN5_MSK                  (0x1   << 5  )
-#define GP4IN_IN5                      (0x1   << 5  )
-#define GP4IN_IN5_LOW                  (0x0   << 5  )
-#define GP4IN_IN5_HIGH                 (0x1   << 5  )
-
-/* GP4IN[IN4] - Registered data input */
-#define GP4IN_IN4_BBA                  (*(volatile unsigned long *) 0x42402210)
-#define GP4IN_IN4_MSK                  (0x1   << 4  )
-#define GP4IN_IN4                      (0x1   << 4  )
-#define GP4IN_IN4_LOW                  (0x0   << 4  )
-#define GP4IN_IN4_HIGH                 (0x1   << 4  )
-
-/* GP4IN[IN3] - Registered data input */
-#define GP4IN_IN3_BBA                  (*(volatile unsigned long *) 0x4240220C)
-#define GP4IN_IN3_MSK                  (0x1   << 3  )
-#define GP4IN_IN3                      (0x1   << 3  )
-#define GP4IN_IN3_LOW                  (0x0   << 3  )
-#define GP4IN_IN3_HIGH                 (0x1   << 3  )
-
-/* GP4IN[IN2] - Registered data input */
-#define GP4IN_IN2_BBA                  (*(volatile unsigned long *) 0x42402208)
-#define GP4IN_IN2_MSK                  (0x1   << 2  )
-#define GP4IN_IN2                      (0x1   << 2  )
-#define GP4IN_IN2_LOW                  (0x0   << 2  )
-#define GP4IN_IN2_HIGH                 (0x1   << 2  )
-
-/* GP4IN[IN1] - Registered data input */
-#define GP4IN_IN1_BBA                  (*(volatile unsigned long *) 0x42402204)
-#define GP4IN_IN1_MSK                  (0x1   << 1  )
-#define GP4IN_IN1                      (0x1   << 1  )
-#define GP4IN_IN1_LOW                  (0x0   << 1  )
-#define GP4IN_IN1_HIGH                 (0x1   << 1  )
-
-/* GP4IN[IN0] - Registered data input */
-#define GP4IN_IN0_BBA                  (*(volatile unsigned long *) 0x42402200)
-#define GP4IN_IN0_MSK                  (0x1   << 0  )
-#define GP4IN_IN0                      (0x1   << 0  )
-#define GP4IN_IN0_LOW                  (0x0   << 0  )
-#define GP4IN_IN0_HIGH                 (0x1   << 0  )
-
-/* Reset Value for GP4OUT*/
-#define GP4OUT_RVAL                    0x0 
-
-/* GP4OUT[OUT7] - Data out */
-#define GP4OUT_OUT7_BBA                (*(volatile unsigned long *) 0x4240229C)
-#define GP4OUT_OUT7_MSK                (0x1   << 7  )
-#define GP4OUT_OUT7                    (0x1   << 7  )
-#define GP4OUT_OUT7_LOW                (0x0   << 7  )
-#define GP4OUT_OUT7_HIGH               (0x1   << 7  )
-
-/* GP4OUT[OUT6] - Data out */
-#define GP4OUT_OUT6_BBA                (*(volatile unsigned long *) 0x42402298)
-#define GP4OUT_OUT6_MSK                (0x1   << 6  )
-#define GP4OUT_OUT6                    (0x1   << 6  )
-#define GP4OUT_OUT6_LOW                (0x0   << 6  )
-#define GP4OUT_OUT6_HIGH               (0x1   << 6  )
-
-/* GP4OUT[OUT5] - Data out */
-#define GP4OUT_OUT5_BBA                (*(volatile unsigned long *) 0x42402294)
-#define GP4OUT_OUT5_MSK                (0x1   << 5  )
-#define GP4OUT_OUT5                    (0x1   << 5  )
-#define GP4OUT_OUT5_LOW                (0x0   << 5  )
-#define GP4OUT_OUT5_HIGH               (0x1   << 5  )
-
-/* GP4OUT[OUT4] - Data out */
-#define GP4OUT_OUT4_BBA                (*(volatile unsigned long *) 0x42402290)
-#define GP4OUT_OUT4_MSK                (0x1   << 4  )
-#define GP4OUT_OUT4                    (0x1   << 4  )
-#define GP4OUT_OUT4_LOW                (0x0   << 4  )
-#define GP4OUT_OUT4_HIGH               (0x1   << 4  )
-
-/* GP4OUT[OUT3] - Data out */
-#define GP4OUT_OUT3_BBA                (*(volatile unsigned long *) 0x4240228C)
-#define GP4OUT_OUT3_MSK                (0x1   << 3  )
-#define GP4OUT_OUT3                    (0x1   << 3  )
-#define GP4OUT_OUT3_LOW                (0x0   << 3  )
-#define GP4OUT_OUT3_HIGH               (0x1   << 3  )
-
-/* GP4OUT[OUT2] - Data out */
-#define GP4OUT_OUT2_BBA                (*(volatile unsigned long *) 0x42402288)
-#define GP4OUT_OUT2_MSK                (0x1   << 2  )
-#define GP4OUT_OUT2                    (0x1   << 2  )
-#define GP4OUT_OUT2_LOW                (0x0   << 2  )
-#define GP4OUT_OUT2_HIGH               (0x1   << 2  )
-
-/* GP4OUT[OUT1] - Data out */
-#define GP4OUT_OUT1_BBA                (*(volatile unsigned long *) 0x42402284)
-#define GP4OUT_OUT1_MSK                (0x1   << 1  )
-#define GP4OUT_OUT1                    (0x1   << 1  )
-#define GP4OUT_OUT1_LOW                (0x0   << 1  )
-#define GP4OUT_OUT1_HIGH               (0x1   << 1  )
-
-/* GP4OUT[OUT0] - Data out */
-#define GP4OUT_OUT0_BBA                (*(volatile unsigned long *) 0x42402280)
-#define GP4OUT_OUT0_MSK                (0x1   << 0  )
-#define GP4OUT_OUT0                    (0x1   << 0  )
-#define GP4OUT_OUT0_LOW                (0x0   << 0  )
-#define GP4OUT_OUT0_HIGH               (0x1   << 0  )
-
-/* Reset Value for GP4SET*/
-#define GP4SET_RVAL                    0x0 
-
-/* GP4SET[SET7] - Set the output HIGH for the pin */
-#define GP4SET_SET7_BBA                (*(volatile unsigned long *) 0x4240231C)
-#define GP4SET_SET7_MSK                (0x1   << 7  )
-#define GP4SET_SET7                    (0x1   << 7  )
-#define GP4SET_SET7_SET                (0x1   << 7  )
-
-/* GP4SET[SET6] - Set the output HIGH for the pin */
-#define GP4SET_SET6_BBA                (*(volatile unsigned long *) 0x42402318)
-#define GP4SET_SET6_MSK                (0x1   << 6  )
-#define GP4SET_SET6                    (0x1   << 6  )
-#define GP4SET_SET6_SET                (0x1   << 6  )
-
-/* GP4SET[SET5] - Set the output HIGH for the pin */
-#define GP4SET_SET5_BBA                (*(volatile unsigned long *) 0x42402314)
-#define GP4SET_SET5_MSK                (0x1   << 5  )
-#define GP4SET_SET5                    (0x1   << 5  )
-#define GP4SET_SET5_SET                (0x1   << 5  )
-
-/* GP4SET[SET4] - Set the output HIGH for the pin */
-#define GP4SET_SET4_BBA                (*(volatile unsigned long *) 0x42402310)
-#define GP4SET_SET4_MSK                (0x1   << 4  )
-#define GP4SET_SET4                    (0x1   << 4  )
-#define GP4SET_SET4_SET                (0x1   << 4  )
-
-/* GP4SET[SET3] - Set the output HIGH for the pin */
-#define GP4SET_SET3_BBA                (*(volatile unsigned long *) 0x4240230C)
-#define GP4SET_SET3_MSK                (0x1   << 3  )
-#define GP4SET_SET3                    (0x1   << 3  )
-#define GP4SET_SET3_SET                (0x1   << 3  )
-
-/* GP4SET[SET2] - Set the output HIGH for the pin */
-#define GP4SET_SET2_BBA                (*(volatile unsigned long *) 0x42402308)
-#define GP4SET_SET2_MSK                (0x1   << 2  )
-#define GP4SET_SET2                    (0x1   << 2  )
-#define GP4SET_SET2_SET                (0x1   << 2  )
-
-/* GP4SET[SET1] - Set the output HIGH for the pin */
-#define GP4SET_SET1_BBA                (*(volatile unsigned long *) 0x42402304)
-#define GP4SET_SET1_MSK                (0x1   << 1  )
-#define GP4SET_SET1                    (0x1   << 1  )
-#define GP4SET_SET1_SET                (0x1   << 1  )
-
-/* GP4SET[SET0] - Set the output HIGH for the pin */
-#define GP4SET_SET0_BBA                (*(volatile unsigned long *) 0x42402300)
-#define GP4SET_SET0_MSK                (0x1   << 0  )
-#define GP4SET_SET0                    (0x1   << 0  )
-#define GP4SET_SET0_SET                (0x1   << 0  )
-
-/* Reset Value for GP4CLR*/
-#define GP4CLR_RVAL                    0x0 
-
-/* GP4CLR[CLR7] - Set the output low  for the port pin */
-#define GP4CLR_CLR7_BBA                (*(volatile unsigned long *) 0x4240239C)
-#define GP4CLR_CLR7_MSK                (0x1   << 7  )
-#define GP4CLR_CLR7                    (0x1   << 7  )
-#define GP4CLR_CLR7_CLR                (0x1   << 7  )
-
-/* GP4CLR[CLR6] - Set the output low  for the port pin */
-#define GP4CLR_CLR6_BBA                (*(volatile unsigned long *) 0x42402398)
-#define GP4CLR_CLR6_MSK                (0x1   << 6  )
-#define GP4CLR_CLR6                    (0x1   << 6  )
-#define GP4CLR_CLR6_CLR                (0x1   << 6  )
-
-/* GP4CLR[CLR5] - Set the output low  for the port pin */
-#define GP4CLR_CLR5_BBA                (*(volatile unsigned long *) 0x42402394)
-#define GP4CLR_CLR5_MSK                (0x1   << 5  )
-#define GP4CLR_CLR5                    (0x1   << 5  )
-#define GP4CLR_CLR5_CLR                (0x1   << 5  )
-
-/* GP4CLR[CLR4] - Set the output low  for the port pin */
-#define GP4CLR_CLR4_BBA                (*(volatile unsigned long *) 0x42402390)
-#define GP4CLR_CLR4_MSK                (0x1   << 4  )
-#define GP4CLR_CLR4                    (0x1   << 4  )
-#define GP4CLR_CLR4_CLR                (0x1   << 4  )
-
-/* GP4CLR[CLR3] - Set the output low  for the port pin */
-#define GP4CLR_CLR3_BBA                (*(volatile unsigned long *) 0x4240238C)
-#define GP4CLR_CLR3_MSK                (0x1   << 3  )
-#define GP4CLR_CLR3                    (0x1   << 3  )
-#define GP4CLR_CLR3_CLR                (0x1   << 3  )
-
-/* GP4CLR[CLR2] - Set the output low  for the port pin */
-#define GP4CLR_CLR2_BBA                (*(volatile unsigned long *) 0x42402388)
-#define GP4CLR_CLR2_MSK                (0x1   << 2  )
-#define GP4CLR_CLR2                    (0x1   << 2  )
-#define GP4CLR_CLR2_CLR                (0x1   << 2  )
-
-/* GP4CLR[CLR1] - Set the output low  for the port pin */
-#define GP4CLR_CLR1_BBA                (*(volatile unsigned long *) 0x42402384)
-#define GP4CLR_CLR1_MSK                (0x1   << 1  )
-#define GP4CLR_CLR1                    (0x1   << 1  )
-#define GP4CLR_CLR1_CLR                (0x1   << 1  )
-
-/* GP4CLR[CLR0] - Set the output low  for the port pin */
-#define GP4CLR_CLR0_BBA                (*(volatile unsigned long *) 0x42402380)
-#define GP4CLR_CLR0_MSK                (0x1   << 0  )
-#define GP4CLR_CLR0                    (0x1   << 0  )
-#define GP4CLR_CLR0_CLR                (0x1   << 0  )
-
-/* Reset Value for GP4TGL*/
-#define GP4TGL_RVAL                    0x0 
-
-/* GP4TGL[TGL7] - Toggle the output of the port pin */
-#define GP4TGL_TGL7_BBA                (*(volatile unsigned long *) 0x4240241C)
-#define GP4TGL_TGL7_MSK                (0x1   << 7  )
-#define GP4TGL_TGL7                    (0x1   << 7  )
-#define GP4TGL_TGL7_TGL                (0x1   << 7  )
-
-/* GP4TGL[TGL6] - Toggle the output of the port pin */
-#define GP4TGL_TGL6_BBA                (*(volatile unsigned long *) 0x42402418)
-#define GP4TGL_TGL6_MSK                (0x1   << 6  )
-#define GP4TGL_TGL6                    (0x1   << 6  )
-#define GP4TGL_TGL6_TGL                (0x1   << 6  )
-
-/* GP4TGL[TGL5] - Toggle the output of the port pin */
-#define GP4TGL_TGL5_BBA                (*(volatile unsigned long *) 0x42402414)
-#define GP4TGL_TGL5_MSK                (0x1   << 5  )
-#define GP4TGL_TGL5                    (0x1   << 5  )
-#define GP4TGL_TGL5_TGL                (0x1   << 5  )
-
-/* GP4TGL[TGL4] - Toggle the output of the port pin */
-#define GP4TGL_TGL4_BBA                (*(volatile unsigned long *) 0x42402410)
-#define GP4TGL_TGL4_MSK                (0x1   << 4  )
-#define GP4TGL_TGL4                    (0x1   << 4  )
-#define GP4TGL_TGL4_TGL                (0x1   << 4  )
-
-/* GP4TGL[TGL3] - Toggle the output of the port pin */
-#define GP4TGL_TGL3_BBA                (*(volatile unsigned long *) 0x4240240C)
-#define GP4TGL_TGL3_MSK                (0x1   << 3  )
-#define GP4TGL_TGL3                    (0x1   << 3  )
-#define GP4TGL_TGL3_TGL                (0x1   << 3  )
-
-/* GP4TGL[TGL2] - Toggle the output of the port pin */
-#define GP4TGL_TGL2_BBA                (*(volatile unsigned long *) 0x42402408)
-#define GP4TGL_TGL2_MSK                (0x1   << 2  )
-#define GP4TGL_TGL2                    (0x1   << 2  )
-#define GP4TGL_TGL2_TGL                (0x1   << 2  )
-
-/* GP4TGL[TGL1] - Toggle the output of the port pin */
-#define GP4TGL_TGL1_BBA                (*(volatile unsigned long *) 0x42402404)
-#define GP4TGL_TGL1_MSK                (0x1   << 1  )
-#define GP4TGL_TGL1                    (0x1   << 1  )
-#define GP4TGL_TGL1_TGL                (0x1   << 1  )
-
-/* GP4TGL[TGL0] - Toggle the output of the port pin */
-#define GP4TGL_TGL0_BBA                (*(volatile unsigned long *) 0x42402400)
-#define GP4TGL_TGL0_MSK                (0x1   << 0  )
-#define GP4TGL_TGL0                    (0x1   << 0  )
-#define GP4TGL_TGL0_TGL                (0x1   << 0  )
-
-/* Reset Value for GP4ODE*/
-#define GP4ODE_RVAL                    0x0 
-
-/* GP4ODE[ODE7] - Open drain enable */
-#define GP4ODE_ODE7_BBA                (*(volatile unsigned long *) 0x4240249C)
-#define GP4ODE_ODE7_MSK                (0x1   << 7  )
-#define GP4ODE_ODE7                    (0x1   << 7  )
-#define GP4ODE_ODE7_DIS                (0x0   << 7  )
-#define GP4ODE_ODE7_EN                 (0x1   << 7  )
-
-/* GP4ODE[ODE6] - Open drain enable */
-#define GP4ODE_ODE6_BBA                (*(volatile unsigned long *) 0x42402498)
-#define GP4ODE_ODE6_MSK                (0x1   << 6  )
-#define GP4ODE_ODE6                    (0x1   << 6  )
-#define GP4ODE_ODE6_DIS                (0x0   << 6  )
-#define GP4ODE_ODE6_EN                 (0x1   << 6  )
-
-/* GP4ODE[ODE5] - Open drain enable */
-#define GP4ODE_ODE5_BBA                (*(volatile unsigned long *) 0x42402494)
-#define GP4ODE_ODE5_MSK                (0x1   << 5  )
-#define GP4ODE_ODE5                    (0x1   << 5  )
-#define GP4ODE_ODE5_DIS                (0x0   << 5  )
-#define GP4ODE_ODE5_EN                 (0x1   << 5  )
-
-/* GP4ODE[ODE4] - Open drain enable */
-#define GP4ODE_ODE4_BBA                (*(volatile unsigned long *) 0x42402490)
-#define GP4ODE_ODE4_MSK                (0x1   << 4  )
-#define GP4ODE_ODE4                    (0x1   << 4  )
-#define GP4ODE_ODE4_DIS                (0x0   << 4  )
-#define GP4ODE_ODE4_EN                 (0x1   << 4  )
-
-/* GP4ODE[ODE3] - Open drain enable */
-#define GP4ODE_ODE3_BBA                (*(volatile unsigned long *) 0x4240248C)
-#define GP4ODE_ODE3_MSK                (0x1   << 3  )
-#define GP4ODE_ODE3                    (0x1   << 3  )
-#define GP4ODE_ODE3_DIS                (0x0   << 3  )
-#define GP4ODE_ODE3_EN                 (0x1   << 3  )
-
-/* GP4ODE[ODE2] - Open drain enable */
-#define GP4ODE_ODE2_BBA                (*(volatile unsigned long *) 0x42402488)
-#define GP4ODE_ODE2_MSK                (0x1   << 2  )
-#define GP4ODE_ODE2                    (0x1   << 2  )
-#define GP4ODE_ODE2_DIS                (0x0   << 2  )
-#define GP4ODE_ODE2_EN                 (0x1   << 2  )
-
-/* GP4ODE[ODE1] - Open drain enable */
-#define GP4ODE_ODE1_BBA                (*(volatile unsigned long *) 0x42402484)
-#define GP4ODE_ODE1_MSK                (0x1   << 1  )
-#define GP4ODE_ODE1                    (0x1   << 1  )
-#define GP4ODE_ODE1_DIS                (0x0   << 1  )
-#define GP4ODE_ODE1_EN                 (0x1   << 1  )
-
-/* GP4ODE[ODE0] - Open drain enable */
-#define GP4ODE_ODE0_BBA                (*(volatile unsigned long *) 0x42402480)
-#define GP4ODE_ODE0_MSK                (0x1   << 0  )
-#define GP4ODE_ODE0                    (0x1   << 0  )
-#define GP4ODE_ODE0_DIS                (0x0   << 0  )
-#define GP4ODE_ODE0_EN                 (0x1   << 0  )
-#if (__NO_MMR_STRUCTS__==1)
-
-#define          GP5CON                                     (*(volatile unsigned char      *) 0x40020240)
-#define          GP5OE                                      (*(volatile unsigned char      *) 0x40020244)
-#define          GP5PUL                                     (*(volatile unsigned char      *) 0x40020248)
-#define          GP5IE                                      (*(volatile unsigned char      *) 0x4002024C)
-#define          GP5IN                                      (*(volatile unsigned char      *) 0x40020250)
-#define          GP5OUT                                     (*(volatile unsigned char      *) 0x40020254)
-#define          GP5SET                                     (*(volatile unsigned char      *) 0x40020258)
-#define          GP5CLR                                     (*(volatile unsigned char      *) 0x4002025C)
-#define          GP5TGL                                     (*(volatile unsigned char      *) 0x40020260)
-#define          GP5ODE                                     (*(volatile unsigned char      *) 0x40020264)
-#endif // (__NO_MMR_STRUCTS__==1)
-
-/* Reset Value for GP5CON*/
-#define GP5CON_RVAL                    0x0 
-
-/* GP5CON[CON3] - p5.3  configuration bits */
-#define GP5CON_CON3_MSK                (0x3   << 6  )
-#define GP5CON_CON3_GPIO               (0x0   << 6  ) /* GPIO                     */
-#define GP5CON_CON3_VDAC0              (0x1   << 6  ) /* VDAC0                    */
-
-/* GP5CON[CON2] - p5.2  configuration bits */
-#define GP5CON_CON2_MSK                (0x3   << 4  )
-#define GP5CON_CON2_GPIO               (0x0   << 4  ) /* GPIO                     */
-#define GP5CON_CON2_VDAC7              (0x1   << 4  ) /* VDAC7                    */
-
-/* GP5CON[CON1] - p5.1  configuration bits */
-#define GP5CON_CON1_MSK                (0x3   << 2  )
-#define GP5CON_CON1_GPIO               (0x0   << 2  ) /* GPIO                     */
-#define GP5CON_CON1_VDAC6              (0x1   << 2  ) /* VDAC6                    */
-
-/* GP5CON[CON0] - p5.0  configuration bits */
-#define GP5CON_CON0_MSK                (0x3   << 0  )
-#define GP5CON_CON0_GPIO               (0x0   << 0  ) /* GPIO                     */
-#define GP5CON_CON0_VDAC3              (0x1   << 0  ) /* VDAC3                    */
-
-/* Reset Value for GP5OE*/
-#define GP5OE_RVAL                     0x0 
-
-/* GP5OE[OE3] - Pin Output Drive enable */
-#define GP5OE_OE3_BBA                  (*(volatile unsigned long *) 0x4240488C)
-#define GP5OE_OE3_MSK                  (0x1   << 3  )
-#define GP5OE_OE3                      (0x1   << 3  )
-#define GP5OE_OE3_DIS                  (0x0   << 3  )
-#define GP5OE_OE3_EN                   (0x1   << 3  )
-
-/* GP5OE[OE2] - Pin Output Drive enable */
-#define GP5OE_OE2_BBA                  (*(volatile unsigned long *) 0x42404888)
-#define GP5OE_OE2_MSK                  (0x1   << 2  )
-#define GP5OE_OE2                      (0x1   << 2  )
-#define GP5OE_OE2_DIS                  (0x0   << 2  )
-#define GP5OE_OE2_EN                   (0x1   << 2  )
-
-/* GP5OE[OE1] - Pin Output Drive enable */
-#define GP5OE_OE1_BBA                  (*(volatile unsigned long *) 0x42404884)
-#define GP5OE_OE1_MSK                  (0x1   << 1  )
-#define GP5OE_OE1                      (0x1   << 1  )
-#define GP5OE_OE1_DIS                  (0x0   << 1  )
-#define GP5OE_OE1_EN                   (0x1   << 1  )
-
-/* GP5OE[OE0] - Pin Output Drive enable */
-#define GP5OE_OE0_BBA                  (*(volatile unsigned long *) 0x42404880)
-#define GP5OE_OE0_MSK                  (0x1   << 0  )
-#define GP5OE_OE0                      (0x1   << 0  )
-#define GP5OE_OE0_DIS                  (0x0   << 0  )
-#define GP5OE_OE0_EN                   (0x1   << 0  )
-
-/* Reset Value for GP5PUL*/
-#define GP5PUL_RVAL                    0x0 
-
-/* GP5PUL[PUL3] - Pin Pull down enable */
-#define GP5PUL_PUL3_BBA                (*(volatile unsigned long *) 0x4240490C)
-#define GP5PUL_PUL3_MSK                (0x1   << 3  )
-#define GP5PUL_PUL3                    (0x1   << 3  )
-#define GP5PUL_PUL3_DIS                (0x0   << 3  )
-#define GP5PUL_PUL3_EN                 (0x1   << 3  )
-
-/* GP5PUL[PUL2] - Pin Pull down enable */
-#define GP5PUL_PUL2_BBA                (*(volatile unsigned long *) 0x42404908)
-#define GP5PUL_PUL2_MSK                (0x1   << 2  )
-#define GP5PUL_PUL2                    (0x1   << 2  )
-#define GP5PUL_PUL2_DIS                (0x0   << 2  )
-#define GP5PUL_PUL2_EN                 (0x1   << 2  )
-
-/* GP5PUL[PUL1] - Pin Pull down enable */
-#define GP5PUL_PUL1_BBA                (*(volatile unsigned long *) 0x42404904)
-#define GP5PUL_PUL1_MSK                (0x1   << 1  )
-#define GP5PUL_PUL1                    (0x1   << 1  )
-#define GP5PUL_PUL1_DIS                (0x0   << 1  )
-#define GP5PUL_PUL1_EN                 (0x1   << 1  )
-
-/* GP5PUL[PUL0] - Pin Pull down enable */
-#define GP5PUL_PUL0_BBA                (*(volatile unsigned long *) 0x42404900)
-#define GP5PUL_PUL0_MSK                (0x1   << 0  )
-#define GP5PUL_PUL0                    (0x1   << 0  )
-#define GP5PUL_PUL0_DIS                (0x0   << 0  )
-#define GP5PUL_PUL0_EN                 (0x1   << 0  )
-
-/* Reset Value for GP5IE*/
-#define GP5IE_RVAL                     0x0 
-
-/* GP5IE[IEN3] - Input path enable */
-#define GP5IE_IEN3_BBA                 (*(volatile unsigned long *) 0x4240498C)
-#define GP5IE_IEN3_MSK                 (0x1   << 3  )
-#define GP5IE_IEN3                     (0x1   << 3  )
-#define GP5IE_IEN3_DIS                 (0x0   << 3  )
-#define GP5IE_IEN3_EN                  (0x1   << 3  )
-
-/* GP5IE[IEN2] - Input path enable */
-#define GP5IE_IEN2_BBA                 (*(volatile unsigned long *) 0x42404988)
-#define GP5IE_IEN2_MSK                 (0x1   << 2  )
-#define GP5IE_IEN2                     (0x1   << 2  )
-#define GP5IE_IEN2_DIS                 (0x0   << 2  )
-#define GP5IE_IEN2_EN                  (0x1   << 2  )
-
-/* GP5IE[IEN1] - Input path enable */
-#define GP5IE_IEN1_BBA                 (*(volatile unsigned long *) 0x42404984)
-#define GP5IE_IEN1_MSK                 (0x1   << 1  )
-#define GP5IE_IEN1                     (0x1   << 1  )
-#define GP5IE_IEN1_DIS                 (0x0   << 1  )
-#define GP5IE_IEN1_EN                  (0x1   << 1  )
-
-/* GP5IE[IEN0] - Input path enable */
-#define GP5IE_IEN0_BBA                 (*(volatile unsigned long *) 0x42404980)
-#define GP5IE_IEN0_MSK                 (0x1   << 0  )
-#define GP5IE_IEN0                     (0x1   << 0  )
-#define GP5IE_IEN0_DIS                 (0x0   << 0  )
-#define GP5IE_IEN0_EN                  (0x1   << 0  )
-
-/* Reset Value for GP5IN*/
-#define GP5IN_RVAL                     0x0 
-
-/* GP5IN[IN3] - Registered data input */
-#define GP5IN_IN3_BBA                  (*(volatile unsigned long *) 0x42404A0C)
-#define GP5IN_IN3_MSK                  (0x1   << 3  )
-#define GP5IN_IN3                      (0x1   << 3  )
-#define GP5IN_IN3_LOW                  (0x0   << 3  )
-#define GP5IN_IN3_HIGH                 (0x1   << 3  )
-
-/* GP5IN[IN2] - Registered data input */
-#define GP5IN_IN2_BBA                  (*(volatile unsigned long *) 0x42404A08)
-#define GP5IN_IN2_MSK                  (0x1   << 2  )
-#define GP5IN_IN2                      (0x1   << 2  )
-#define GP5IN_IN2_LOW                  (0x0   << 2  )
-#define GP5IN_IN2_HIGH                 (0x1   << 2  )
-
-/* GP5IN[IN1] - Registered data input */
-#define GP5IN_IN1_BBA                  (*(volatile unsigned long *) 0x42404A04)
-#define GP5IN_IN1_MSK                  (0x1   << 1  )
-#define GP5IN_IN1                      (0x1   << 1  )
-#define GP5IN_IN1_LOW                  (0x0   << 1  )
-#define GP5IN_IN1_HIGH                 (0x1   << 1  )
-
-/* GP5IN[IN0] - Registered data input */
-#define GP5IN_IN0_BBA                  (*(volatile unsigned long *) 0x42404A00)
-#define GP5IN_IN0_MSK                  (0x1   << 0  )
-#define GP5IN_IN0                      (0x1   << 0  )
-#define GP5IN_IN0_LOW                  (0x0   << 0  )
-#define GP5IN_IN0_HIGH                 (0x1   << 0  )
-
-/* Reset Value for GP5OUT*/
-#define GP5OUT_RVAL                    0x0 
-
-/* GP5OUT[OUT3] - Data out */
-#define GP5OUT_OUT3_BBA                (*(volatile unsigned long *) 0x42404A8C)
-#define GP5OUT_OUT3_MSK                (0x1   << 3  )
-#define GP5OUT_OUT3                    (0x1   << 3  )
-#define GP5OUT_OUT3_LOW                (0x0   << 3  )
-#define GP5OUT_OUT3_HIGH               (0x1   << 3  )
-
-/* GP5OUT[OUT2] - Data out */
-#define GP5OUT_OUT2_BBA                (*(volatile unsigned long *) 0x42404A88)
-#define GP5OUT_OUT2_MSK                (0x1   << 2  )
-#define GP5OUT_OUT2                    (0x1   << 2  )
-#define GP5OUT_OUT2_LOW                (0x0   << 2  )
-#define GP5OUT_OUT2_HIGH               (0x1   << 2  )
-
-/* GP5OUT[OUT1] - Data out */
-#define GP5OUT_OUT1_BBA                (*(volatile unsigned long *) 0x42404A84)
-#define GP5OUT_OUT1_MSK                (0x1   << 1  )
-#define GP5OUT_OUT1                    (0x1   << 1  )
-#define GP5OUT_OUT1_LOW                (0x0   << 1  )
-#define GP5OUT_OUT1_HIGH               (0x1   << 1  )
-
-/* GP5OUT[OUT0] - Data out */
-#define GP5OUT_OUT0_BBA                (*(volatile unsigned long *) 0x42404A80)
-#define GP5OUT_OUT0_MSK                (0x1   << 0  )
-#define GP5OUT_OUT0                    (0x1   << 0  )
-#define GP5OUT_OUT0_LOW                (0x0   << 0  )
-#define GP5OUT_OUT0_HIGH               (0x1   << 0  )
-
-/* Reset Value for GP5SET*/
-#define GP5SET_RVAL                    0x0 
-
-/* GP5SET[SET3] - Set the output HIGH for the pin */
-#define GP5SET_SET3_BBA                (*(volatile unsigned long *) 0x42404B0C)
-#define GP5SET_SET3_MSK                (0x1   << 3  )
-#define GP5SET_SET3                    (0x1   << 3  )
-#define GP5SET_SET3_SET                (0x1   << 3  )
-
-/* GP5SET[SET2] - Set the output HIGH for the pin */
-#define GP5SET_SET2_BBA                (*(volatile unsigned long *) 0x42404B08)
-#define GP5SET_SET2_MSK                (0x1   << 2  )
-#define GP5SET_SET2                    (0x1   << 2  )
-#define GP5SET_SET2_SET                (0x1   << 2  )
-
-/* GP5SET[SET1] - Set the output HIGH for the pin */
-#define GP5SET_SET1_BBA                (*(volatile unsigned long *) 0x42404B04)
-#define GP5SET_SET1_MSK                (0x1   << 1  )
-#define GP5SET_SET1                    (0x1   << 1  )
-#define GP5SET_SET1_SET                (0x1   << 1  )
-
-/* GP5SET[SET0] - Set the output HIGH for the pin */
-#define GP5SET_SET0_BBA                (*(volatile unsigned long *) 0x42404B00)
-#define GP5SET_SET0_MSK                (0x1   << 0  )
-#define GP5SET_SET0                    (0x1   << 0  )
-#define GP5SET_SET0_SET                (0x1   << 0  )
-
-/* Reset Value for GP5CLR*/
-#define GP5CLR_RVAL                    0x0 
-
-/* GP5CLR[CLR3] - Set the output low  for the port pin */
-#define GP5CLR_CLR3_BBA                (*(volatile unsigned long *) 0x42404B8C)
-#define GP5CLR_CLR3_MSK                (0x1   << 3  )
-#define GP5CLR_CLR3                    (0x1   << 3  )
-#define GP5CLR_CLR3_CLR                (0x1   << 3  )
-
-/* GP5CLR[CLR2] - Set the output low  for the port pin */
-#define GP5CLR_CLR2_BBA                (*(volatile unsigned long *) 0x42404B88)
-#define GP5CLR_CLR2_MSK                (0x1   << 2  )
-#define GP5CLR_CLR2                    (0x1   << 2  )
-#define GP5CLR_CLR2_CLR                (0x1   << 2  )
-
-/* GP5CLR[CLR1] - Set the output low  for the port pin */
-#define GP5CLR_CLR1_BBA                (*(volatile unsigned long *) 0x42404B84)
-#define GP5CLR_CLR1_MSK                (0x1   << 1  )
-#define GP5CLR_CLR1                    (0x1   << 1  )
-#define GP5CLR_CLR1_CLR                (0x1   << 1  )
-
-/* GP5CLR[CLR0] - Set the output low  for the port pin */
-#define GP5CLR_CLR0_BBA                (*(volatile unsigned long *) 0x42404B80)
-#define GP5CLR_CLR0_MSK                (0x1   << 0  )
-#define GP5CLR_CLR0                    (0x1   << 0  )
-#define GP5CLR_CLR0_CLR                (0x1   << 0  )
-
-/* Reset Value for GP5TGL*/
-#define GP5TGL_RVAL                    0x0 
-
-/* GP5TGL[TGL3] - Toggle the output of the port pin */
-#define GP5TGL_TGL3_BBA                (*(volatile unsigned long *) 0x42404C0C)
-#define GP5TGL_TGL3_MSK                (0x1   << 3  )
-#define GP5TGL_TGL3                    (0x1   << 3  )
-#define GP5TGL_TGL3_TGL                (0x1   << 3  )
-
-/* GP5TGL[TGL2] - Toggle the output of the port pin */
-#define GP5TGL_TGL2_BBA                (*(volatile unsigned long *) 0x42404C08)
-#define GP5TGL_TGL2_MSK                (0x1   << 2  )
-#define GP5TGL_TGL2                    (0x1   << 2  )
-#define GP5TGL_TGL2_TGL                (0x1   << 2  )
-
-/* GP5TGL[TGL1] - Toggle the output of the port pin */
-#define GP5TGL_TGL1_BBA                (*(volatile unsigned long *) 0x42404C04)
-#define GP5TGL_TGL1_MSK                (0x1   << 1  )
-#define GP5TGL_TGL1                    (0x1   << 1  )
-#define GP5TGL_TGL1_TGL                (0x1   << 1  )
-
-/* GP5TGL[TGL0] - Toggle the output of the port pin */
-#define GP5TGL_TGL0_BBA                (*(volatile unsigned long *) 0x42404C00)
-#define GP5TGL_TGL0_MSK                (0x1   << 0  )
-#define GP5TGL_TGL0                    (0x1   << 0  )
-#define GP5TGL_TGL0_TGL                (0x1   << 0  )
-
-/* Reset Value for GP5ODE*/
-#define GP5ODE_RVAL                    0x0 
-
-/* GP5ODE[ODE3] - Open drain enable */
-#define GP5ODE_ODE3_BBA                (*(volatile unsigned long *) 0x42404C8C)
-#define GP5ODE_ODE3_MSK                (0x1   << 3  )
-#define GP5ODE_ODE3                    (0x1   << 3  )
-#define GP5ODE_ODE3_DIS                (0x0   << 3  )
-#define GP5ODE_ODE3_EN                 (0x1   << 3  )
-
-/* GP5ODE[ODE2] - Open drain enable */
-#define GP5ODE_ODE2_BBA                (*(volatile unsigned long *) 0x42404C88)
-#define GP5ODE_ODE2_MSK                (0x1   << 2  )
-#define GP5ODE_ODE2                    (0x1   << 2  )
-#define GP5ODE_ODE2_DIS                (0x0   << 2  )
-#define GP5ODE_ODE2_EN                 (0x1   << 2  )
-
-/* GP5ODE[ODE1] - Open drain enable */
-#define GP5ODE_ODE1_BBA                (*(volatile unsigned long *) 0x42404C84)
-#define GP5ODE_ODE1_MSK                (0x1   << 1  )
-#define GP5ODE_ODE1                    (0x1   << 1  )
-#define GP5ODE_ODE1_DIS                (0x0   << 1  )
-#define GP5ODE_ODE1_EN                 (0x1   << 1  )
-
-/* GP5ODE[ODE0] - Open drain enable */
-#define GP5ODE_ODE0_BBA                (*(volatile unsigned long *) 0x42404C80)
-#define GP5ODE_ODE0_MSK                (0x1   << 0  )
-#define GP5ODE_ODE0                    (0x1   << 0  )
-#define GP5ODE_ODE0_DIS                (0x0   << 0  )
-#define GP5ODE_ODE0_EN                 (0x1   << 0  )
 // ------------------------------------------------------------------------------------------------
 // -----                                        PWM                                        -----
 // ------------------------------------------------------------------------------------------------
@@ -8520,7 +4819,6 @@ typedef struct {                            /*!< pADI_GPIO_FIX Structure        
   * @brief PWM (pADI_PWM)
   */
 
-#if (__NO_MMR_STRUCTS__==0)
 typedef struct {                            /*!< pADI_PWM Structure                     */
   __IO uint16_t  PWMCON0;                   /*!< PWM control register                  */
   __I  uint16_t  RESERVED0;
@@ -8560,27 +4858,6 @@ typedef struct {                            /*!< pADI_PWM Structure             
   __I  uint16_t  RESERVED17;
   __IO uint16_t  PWM3LEN;                   /*!< Period value register for PWM6 and PWM7 */
 } ADI_PWM_TypeDef;
-#else // (__NO_MMR_STRUCTS__==0)
-#define          PWMCON0                                    (*(volatile unsigned short int *) 0x40024000)
-#define          PWMCON1                                    (*(volatile unsigned short int *) 0x40024004)
-#define          PWMICLR                                    (*(volatile unsigned short int *) 0x40024008)
-#define          PWM0COM0                                   (*(volatile unsigned short int *) 0x40024010)
-#define          PWM0COM1                                   (*(volatile unsigned short int *) 0x40024014)
-#define          PWM0COM2                                   (*(volatile unsigned short int *) 0x40024018)
-#define          PWM0LEN                                    (*(volatile unsigned short int *) 0x4002401C)
-#define          PWM1COM0                                   (*(volatile unsigned short int *) 0x40024020)
-#define          PWM1COM1                                   (*(volatile unsigned short int *) 0x40024024)
-#define          PWM1COM2                                   (*(volatile unsigned short int *) 0x40024028)
-#define          PWM1LEN                                    (*(volatile unsigned short int *) 0x4002402C)
-#define          PWM2COM0                                   (*(volatile unsigned short int *) 0x40024030)
-#define          PWM2COM1                                   (*(volatile unsigned short int *) 0x40024034)
-#define          PWM2COM2                                   (*(volatile unsigned short int *) 0x40024038)
-#define          PWM2LEN                                    (*(volatile unsigned short int *) 0x4002403C)
-#define          PWM3COM0                                   (*(volatile unsigned short int *) 0x40024040)
-#define          PWM3COM1                                   (*(volatile unsigned short int *) 0x40024044)
-#define          PWM3COM2                                   (*(volatile unsigned short int *) 0x40024048)
-#define          PWM3LEN                                    (*(volatile unsigned short int *) 0x4002404C)
-#endif // (__NO_MMR_STRUCTS__==0)
 
 /* Reset Value for PWMCON0*/
 #define PWMCON0_RVAL                   0x12 
@@ -8839,7 +5116,6 @@ typedef struct {                            /*!< pADI_PWM Structure             
   * @brief clocking (pADI_CLKCTL)
   */
 
-#if (__NO_MMR_STRUCTS__==0)
 typedef struct {                            /*!< pADI_CLKCTL Structure                  */
   __IO uint16_t  CLKCON0;                   /*!< Misc clock settings register          */
   __I  uint16_t  RESERVED0;
@@ -8849,12 +5125,6 @@ typedef struct {                            /*!< pADI_CLKCTL Structure          
   __I  uint16_t  RESERVED2;
   __IO uint16_t  CLKSTAT0;                  /*!< Clocking status                       */
 } ADI_CLKCTL_TypeDef;
-#else // (__NO_MMR_STRUCTS__==0)
-#define          CLKCON0                                    (*(volatile unsigned short int *) 0x40028000)
-#define          CLKCON1                                    (*(volatile unsigned short int *) 0x40028004)
-#define          CLKCON5                                    (*(volatile unsigned short int *) 0x40028014)
-#define          CLKSTAT0                                   (*(volatile unsigned short int *) 0x40028018)
-#endif // (__NO_MMR_STRUCTS__==0)
 
 /* Reset Value for CLKCON0*/
 #define CLKCON0_RVAL                   0x0 
@@ -9016,16 +5286,11 @@ typedef struct {                            /*!< pADI_CLKCTL Structure          
   * @brief dma_ctl (pADI_dma_ctl)
   */
 
-#if (__NO_MMR_STRUCTS__==0)
 typedef struct {                            /*!< pADI_dma_ctl Structure                 */
   __IO uint16_t  GPFDMACTL;                 /*!< DMA Channel Control                   */
   __I  uint16_t  RESERVED0;
   __IO uint32_t  L1SRAMCTL;                 /*!< L1SRAMCTL                             */
 } ADI_dma_ctl_TypeDef;
-#else // (__NO_MMR_STRUCTS__==0)
-#define          GPFDMACTL                                  (*(volatile unsigned short int *) 0x40028100)
-#define          L1SRAMCTL                                  (*(volatile unsigned long      *) 0x40028104)
-#endif // (__NO_MMR_STRUCTS__==0)
 
 /* Reset Value for GPFDMACTL*/
 #define GPFDMACTL_RVAL                 0x0 
@@ -9053,7 +5318,6 @@ typedef struct {                            /*!< pADI_dma_ctl Structure         
   * @brief spi0 (pADI_SPI0)
   */
 
-#if (__NO_MMR_STRUCTS__==0)
 typedef struct {                            /*!< pADI_SPI0 Structure                    */
   __IO uint16_t  SPISTA;                    /*!< Status register                       */
   __I  uint16_t  RESERVED0;
@@ -9069,15 +5333,6 @@ typedef struct {                            /*!< pADI_SPI0 Structure            
   __I  uint16_t  RESERVED5;
   __IO uint16_t  SPICNT;                    /*!< Transfer byte count register          */
 } ADI_SPI_TypeDef;
-#else // (__NO_MMR_STRUCTS__==0)
-#define          SPI0STA                                    (*(volatile unsigned short int *) 0x4002C000)
-#define          SPI0RX                                     (*(volatile unsigned short int *) 0x4002C004)
-#define          SPI0TX                                     (*(volatile unsigned short int *) 0x4002C008)
-#define          SPI0DIV                                    (*(volatile unsigned short int *) 0x4002C00C)
-#define          SPI0CON                                    (*(volatile unsigned short int *) 0x4002C010)
-#define          SPI0DMA                                    (*(volatile unsigned short int *) 0x4002C014)
-#define          SPI0CNT                                    (*(volatile unsigned short int *) 0x4002C018)
-#endif // (__NO_MMR_STRUCTS__==0)
 
 /* Reset Value for SPI0STA*/
 #define SPI0STA_RVAL                   0x0 
@@ -9343,16 +5598,6 @@ typedef struct {                            /*!< pADI_SPI0 Structure            
 
 /* SPI0CNT[COUNT] - Transfer byte count */
 #define SPI0CNT_COUNT_MSK              (0xFF  << 0  )
-#if (__NO_MMR_STRUCTS__==1)
-
-#define          SPI1STA                                    (*(volatile unsigned short int *) 0x40030000)
-#define          SPI1RX                                     (*(volatile unsigned short int *) 0x40030004)
-#define          SPI1TX                                     (*(volatile unsigned short int *) 0x40030008)
-#define          SPI1DIV                                    (*(volatile unsigned short int *) 0x4003000C)
-#define          SPI1CON                                    (*(volatile unsigned short int *) 0x40030010)
-#define          SPI1DMA                                    (*(volatile unsigned short int *) 0x40030014)
-#define          SPI1CNT                                    (*(volatile unsigned short int *) 0x40030018)
-#endif // (__NO_MMR_STRUCTS__==1)
 
 /* Reset Value for SPI1STA*/
 #define SPI1STA_RVAL                   0x0 
@@ -9627,7 +5872,6 @@ typedef struct {                            /*!< pADI_SPI0 Structure            
   * @brief ADC_CORE (pADI_ADC)
   */
 
-#if (__NO_MMR_STRUCTS__==0)
 typedef struct {                            /*!< pADI_ADC Structure                     */
   __IO uint16_t  ADCCON;                    /*!< ADC Configuration                     */
   __I  uint16_t  RESERVED0[8005];
@@ -9644,44 +5888,6 @@ typedef struct {                            /*!< pADI_ADC Structure             
   __IO uint32_t  ADCCMP;                    /*!< Digital comparator configuration      */
   __IO uint32_t  ADCCNVC;                   /*!< ADC conversion  configuration         */
 } ADI_ADC_TypeDef;
-#else // (__NO_MMR_STRUCTS__==0)
-#define          ADCCON                                     (*(volatile unsigned short int *) 0x40082174)
-#define          ADCDAT0                                    (*(volatile unsigned long      *) 0x40086000)
-#define          ADCDAT1                                    (*(volatile unsigned long      *) 0x40086004)
-#define          ADCDAT2                                    (*(volatile unsigned long      *) 0x40086008)
-#define          ADCDAT3                                    (*(volatile unsigned long      *) 0x4008600C)
-#define          ADCDAT4                                    (*(volatile unsigned long      *) 0x40086010)
-#define          ADCDAT5                                    (*(volatile unsigned long      *) 0x40086014)
-#define          ADCDAT6                                    (*(volatile unsigned long      *) 0x40086018)
-#define          ADCDAT7                                    (*(volatile unsigned long      *) 0x4008601C)
-#define          ADCDAT8                                    (*(volatile unsigned long      *) 0x40086020)
-#define          ADCDAT9                                    (*(volatile unsigned long      *) 0x40086024)
-#define          ADCDAT10                                   (*(volatile unsigned long      *) 0x40086028)
-#define          ADCDAT11                                   (*(volatile unsigned long      *) 0x4008602C)
-#define          ADCDAT12                                   (*(volatile unsigned long      *) 0x40086030)
-#define          ADCDAT13                                   (*(volatile unsigned long      *) 0x40086034)
-#define          ADCDAT14                                   (*(volatile unsigned long      *) 0x40086038)
-#define          ADCDAT15                                   (*(volatile unsigned long      *) 0x4008603C)
-#define          ADCDAT16                                   (*(volatile unsigned long      *) 0x40086040)
-#define          ADCDAT17                                   (*(volatile unsigned long      *) 0x40086044)
-#define          ADCDAT18                                   (*(volatile unsigned long      *) 0x40086048)
-#define          ADCDAT19                                   (*(volatile unsigned long      *) 0x4008604C)
-#define          ADCDAT20                                   (*(volatile unsigned long      *) 0x40086050)
-#define          ADCDAT21                                   (*(volatile unsigned long      *) 0x40086054)
-#define          ADCDAT22                                   (*(volatile unsigned long      *) 0x40086058)
-#define          ADCDAT23                                   (*(volatile unsigned long      *) 0x4008605C)
-#define          ADCDAT24                                   (*(volatile unsigned long      *) 0x40086060)
-#define          ADCDAT25                                   (*(volatile unsigned long      *) 0x40086064)
-#define          ADCDAT26                                   (*(volatile unsigned long      *) 0x40086068)
-#define          ADCDAT27                                   (*(volatile unsigned long      *) 0x4008606C)
-#define          ADCCHA                                     (*(volatile unsigned short int *) 0x40086080)
-#define          ADCSEQ                                     (*(volatile unsigned long      *) 0x40086088)
-#define          ADCSEQC                                    (*(volatile unsigned long      *) 0x4008608C)
-#define          ADCGN                                      (*(volatile unsigned short int *) 0x40086090)
-#define          ADCOF                                      (*(volatile unsigned short int *) 0x40086094)
-#define          ADCCMP                                     (*(volatile unsigned long      *) 0x40086098)
-#define          ADCCNVC                                    (*(volatile unsigned long      *) 0x4008609C)
-#endif // (__NO_MMR_STRUCTS__==0)
 
 /* Reset Value for ADCCON*/
 #define ADCCON_RVAL                    0x280 
@@ -9876,16 +6082,11 @@ typedef struct {                            /*!< pADI_ADC Structure             
   * @brief VDAC (pADI_VDAC0)
   */
 
-#if (__NO_MMR_STRUCTS__==0)
 typedef struct {                            /*!< pADI_VDAC0 Structure                   */
   __IO uint16_t  DACCON;                    /*!< DAC0 control register                 */
   __I  uint16_t  RESERVED0[8193];
   __IO uint32_t  DACDAT;                    /*!< DAC0 data register                    */
 } ADI_VDAC_TypeDef;
-#else // (__NO_MMR_STRUCTS__==0)
-#define          DAC0CON                                    (*(volatile unsigned short int *) 0x40082400)
-#define          DAC0DAT                                    (*(volatile unsigned long      *) 0x40086404)
-#endif // (__NO_MMR_STRUCTS__==0)
 
 /* Reset Value for DAC0CON*/
 #define DAC0CON_RVAL                   0x100 
@@ -9908,11 +6109,6 @@ typedef struct {                            /*!< pADI_VDAC0 Structure           
 
 /* DAC0DAT[DAT] - DAC0 data */
 #define DAC0DAT_DAT_MSK                (0xFFF << 16 )
-#if (__NO_MMR_STRUCTS__==1)
-
-#define          DAC1CON                                    (*(volatile unsigned short int *) 0x40082404)
-#define          DAC1DAT                                    (*(volatile unsigned long      *) 0x40086408)
-#endif // (__NO_MMR_STRUCTS__==1)
 
 /* Reset Value for DAC1CON*/
 #define DAC1CON_RVAL                   0x100 
@@ -9935,11 +6131,6 @@ typedef struct {                            /*!< pADI_VDAC0 Structure           
 
 /* DAC1DAT[DAT] - DAC1 data */
 #define DAC1DAT_DAT_MSK                (0xFFF << 16 )
-#if (__NO_MMR_STRUCTS__==1)
-
-#define          DAC2CON                                    (*(volatile unsigned short int *) 0x40082408)
-#define          DAC2DAT                                    (*(volatile unsigned long      *) 0x4008640C)
-#endif // (__NO_MMR_STRUCTS__==1)
 
 /* Reset Value for DAC2CON*/
 #define DAC2CON_RVAL                   0x100 
@@ -9962,11 +6153,6 @@ typedef struct {                            /*!< pADI_VDAC0 Structure           
 
 /* DAC2DAT[DAT] - DAC2 data */
 #define DAC2DAT_DAT_MSK                (0xFFF << 16 )
-#if (__NO_MMR_STRUCTS__==1)
-
-#define          DAC3CON                                    (*(volatile unsigned short int *) 0x4008240C)
-#define          DAC3DAT                                    (*(volatile unsigned long      *) 0x40086410)
-#endif // (__NO_MMR_STRUCTS__==1)
 
 /* Reset Value for DAC3CON*/
 #define DAC3CON_RVAL                   0x100 
@@ -9989,11 +6175,6 @@ typedef struct {                            /*!< pADI_VDAC0 Structure           
 
 /* DAC3DAT[DAT] - DAC3 data */
 #define DAC3DAT_DAT_MSK                (0xFFF << 16 )
-#if (__NO_MMR_STRUCTS__==1)
-
-#define          DAC4CON                                    (*(volatile unsigned short int *) 0x40082410)
-#define          DAC4DAT                                    (*(volatile unsigned long      *) 0x40086414)
-#endif // (__NO_MMR_STRUCTS__==1)
 
 /* Reset Value for DAC4CON*/
 #define DAC4CON_RVAL                   0x100 
@@ -10016,11 +6197,6 @@ typedef struct {                            /*!< pADI_VDAC0 Structure           
 
 /* DAC4DAT[DAT] - DAC4 data */
 #define DAC4DAT_DAT_MSK                (0xFFF << 16 )
-#if (__NO_MMR_STRUCTS__==1)
-
-#define          DAC5CON                                    (*(volatile unsigned short int *) 0x40082414)
-#define          DAC5DAT                                    (*(volatile unsigned long      *) 0x40086418)
-#endif // (__NO_MMR_STRUCTS__==1)
 
 /* Reset Value for DAC5CON*/
 #define DAC5CON_RVAL                   0x100 
@@ -10043,11 +6219,6 @@ typedef struct {                            /*!< pADI_VDAC0 Structure           
 
 /* DAC5DAT[DAT] - DAC5 data */
 #define DAC5DAT_DAT_MSK                (0xFFF << 16 )
-#if (__NO_MMR_STRUCTS__==1)
-
-#define          DAC6CON                                    (*(volatile unsigned short int *) 0x40082418)
-#define          DAC6DAT                                    (*(volatile unsigned long      *) 0x4008641C)
-#endif // (__NO_MMR_STRUCTS__==1)
 
 /* Reset Value for DAC6CON*/
 #define DAC6CON_RVAL                   0x100 
@@ -10070,11 +6241,6 @@ typedef struct {                            /*!< pADI_VDAC0 Structure           
 
 /* DAC6DAT[DAT] - DAC6 data */
 #define DAC6DAT_DAT_MSK                (0xFFF << 16 )
-#if (__NO_MMR_STRUCTS__==1)
-
-#define          DAC7CON                                    (*(volatile unsigned short int *) 0x4008241C)
-#define          DAC7DAT                                    (*(volatile unsigned long      *) 0x40086420)
-#endif // (__NO_MMR_STRUCTS__==1)
 
 /* Reset Value for DAC7CON*/
 #define DAC7CON_RVAL                   0x100 
@@ -10106,13 +6272,9 @@ typedef struct {                            /*!< pADI_VDAC0 Structure           
   * @brief InBuf (pADI_InBuf)
   */
 
-#if (__NO_MMR_STRUCTS__==0)
 typedef struct {                            /*!< pADI_InBuf Structure                   */
   __IO uint16_t  IBUFCON;                   /*!< InBuf control register                */
 } ADI_InBuf_TypeDef;
-#else // (__NO_MMR_STRUCTS__==0)
-#define          IBUFCON                                    (*(volatile unsigned short int *) 0x40081400)
-#endif // (__NO_MMR_STRUCTS__==0)
 
 /* Reset Value for IBUFCON*/
 #define IBUFCON_RVAL                   0xF 
@@ -10146,13 +6308,9 @@ typedef struct {                            /*!< pADI_InBuf Structure           
   * @brief LV_MISC (pADI_LV)
   */
 
-#if (__NO_MMR_STRUCTS__==0)
 typedef struct {                            /*!< pADI_LV Structure                      */
   __IO uint16_t  LVID;                      /*!< Low voltage die ID                    */
 } ADI_LV_TypeDef;
-#else // (__NO_MMR_STRUCTS__==0)
-#define          LVID                                       (*(volatile unsigned short int *) 0x40082C30)
-#endif // (__NO_MMR_STRUCTS__==0)
 
 /* Reset Value for LVID*/
 #define LVID_RVAL                      0x71 
@@ -10168,13 +6326,9 @@ typedef struct {                            /*!< pADI_LV Structure              
   * @brief LV_MISC (pADI_LV_RST)
   */
 
-#if (__NO_MMR_STRUCTS__==0)
 typedef struct {                            /*!< pADI_LV_RST Structure                  */
   __IO uint16_t  LVRST;                     /*!< LV die reset configuration            */
 } ADI_LV_RST_TypeDef;
-#else // (__NO_MMR_STRUCTS__==0)
-#define          LVRST                                      (*(volatile unsigned short int *) 0x40082C34)
-#endif // (__NO_MMR_STRUCTS__==0)
 
 /* Reset Value for LVRST*/
 #define LVRST_RVAL                     0x0 
@@ -10194,7 +6348,6 @@ typedef struct {                            /*!< pADI_LV_RST Structure          
   * @brief LV_INT (pADI_LV_INT)
   */
 
-#if (__NO_MMR_STRUCTS__==0)
 typedef struct {                            /*!< pADI_LV_INT Structure                  */
   __IO uint16_t  INTCLR;                    /*!< Interrupt clear register              */
   __I  uint16_t  RESERVED0;
@@ -10202,11 +6355,6 @@ typedef struct {                            /*!< pADI_LV_INT Structure          
   __I  uint16_t  RESERVED1;
   __IO uint16_t  INTSTA;                    /*!< Interrupt status register             */
 } ADI_LV_INT_TypeDef;
-#else // (__NO_MMR_STRUCTS__==0)
-#define          INTCLR                                     (*(volatile unsigned short int *) 0x40083004)
-#define          INTSEL                                     (*(volatile unsigned short int *) 0x40083008)
-#define          INTSTA                                     (*(volatile unsigned short int *) 0x4008300C)
-#endif // (__NO_MMR_STRUCTS__==0)
 
 /* Reset Value for INTCLR*/
 #define INTCLR_RVAL                    0x0 
@@ -10393,7 +6541,6 @@ typedef struct {                            /*!< pADI_LV_INT Structure          
   * @brief comp_ldo_por_reftop_temp (pADI_AFE)
   */
 
-#if (__NO_MMR_STRUCTS__==0)
 typedef struct {                            /*!< pADI_AFE Structure                     */
   __IO uint8_t   AFETEMPC;                  /*!< Temp sensor configuration register    */
   __I  uint8_t   RESERVED0[3];
@@ -10401,11 +6548,6 @@ typedef struct {                            /*!< pADI_AFE Structure             
   __I  uint8_t   RESERVED1[3];
   __IO uint16_t  AFECOMP;                   /*!< Analog comparator configuration register */
 } ADI_AFE_TypeDef;
-#else // (__NO_MMR_STRUCTS__==0)
-#define          AFETEMPC                                   (*(volatile unsigned char      *) 0x40087830)
-#define          AFEREFC                                    (*(volatile unsigned char      *) 0x40087834)
-#define          AFECOMP                                    (*(volatile unsigned short int *) 0x40087838)
-#endif // (__NO_MMR_STRUCTS__==0)
 
 /* Reset Value for AFETEMPC*/
 #define AFETEMPC_RVAL                  0x0 
@@ -10512,54 +6654,6 @@ typedef struct {                            /*!< pADI_AFE Structure             
   * @brief nvic (pADI_nvic)
   */
 
-#if (__NO_MMR_STRUCTS__==0)
-#else // (__NO_MMR_STRUCTS__==0)
-#define          ICTR                                       (*(volatile unsigned long      *) 0xE000E004)
-#define          STCSR                                      (*(volatile unsigned long      *) 0xE000E010)
-#define          STRVR                                      (*(volatile unsigned long      *) 0xE000E014)
-#define          STCVR                                      (*(volatile unsigned long      *) 0xE000E018)
-#define          STCR                                       (*(volatile unsigned long      *) 0xE000E01C)
-#define          ISER0                                      (*(volatile unsigned long      *) 0xE000E100)
-#define          ISER1                                      (*(volatile unsigned long      *) 0xE000E104)
-#define          ICER0                                      (*(volatile unsigned long      *) 0xE000E180)
-#define          ICER1                                      (*(volatile unsigned long      *) 0xE000E184)
-#define          ISPR0                                      (*(volatile unsigned long      *) 0xE000E200)
-#define          ISPR1                                      (*(volatile unsigned long      *) 0xE000E204)
-#define          ICPR0                                      (*(volatile unsigned long      *) 0xE000E280)
-#define          ICPR1                                      (*(volatile unsigned long      *) 0xE000E284)
-#define          IABR0                                      (*(volatile unsigned long      *) 0xE000E300)
-#define          IABR1                                      (*(volatile unsigned long      *) 0xE000E304)
-#define          IPR0                                       (*(volatile unsigned long      *) 0xE000E400)
-#define          IPR1                                       (*(volatile unsigned long      *) 0xE000E404)
-#define          IPR2                                       (*(volatile unsigned long      *) 0xE000E408)
-#define          IPR3                                       (*(volatile unsigned long      *) 0xE000E40C)
-#define          IPR4                                       (*(volatile unsigned long      *) 0xE000E410)
-#define          IPR5                                       (*(volatile unsigned long      *) 0xE000E414)
-#define          IPR6                                       (*(volatile unsigned long      *) 0xE000E418)
-#define          IPR7                                       (*(volatile unsigned long      *) 0xE000E41C)
-#define          IPR8                                       (*(volatile unsigned long      *) 0xE000E420)
-#define          IPR9                                       (*(volatile unsigned long      *) 0xE000E424)
-#define          IPR10                                      (*(volatile unsigned long      *) 0xE000E428)
-#define          IPR11                                      (*(volatile unsigned long      *) 0xE000E42C)
-#define          IPR12                                      (*(volatile unsigned long      *) 0xE000E430)
-#define          IPR13                                      (*(volatile unsigned long      *) 0xE000E434)
-#define          CPUID                                      (*(volatile unsigned long      *) 0xE000ED00)
-#define          ICSR                                       (*(volatile unsigned long      *) 0xE000ED04)
-#define          VTOR                                       (*(volatile unsigned long      *) 0xE000ED08)
-#define          AIRCR                                      (*(volatile unsigned long      *) 0xE000ED0C)
-#define          SCR                                        (*(volatile unsigned short int *) 0xE000ED10)
-#define          CCR                                        (*(volatile unsigned long      *) 0xE000ED14)
-#define          SHPR1                                      (*(volatile unsigned long      *) 0xE000ED18)
-#define          SHPR2                                      (*(volatile unsigned long      *) 0xE000ED1C)
-#define          SHPR3                                      (*(volatile unsigned long      *) 0xE000ED20)
-#define          SHCRS                                      (*(volatile unsigned long      *) 0xE000ED24)
-#define          CFSR                                       (*(volatile unsigned long      *) 0xE000ED28)
-#define          HFSR                                       (*(volatile unsigned long      *) 0xE000ED2C)
-#define          MMAR                                       (*(volatile unsigned long      *) 0xE000ED34)
-#define          BFAR                                       (*(volatile unsigned long      *) 0xE000ED38)
-#define          AFSR                                       (*(volatile unsigned long      *) 0xE000ED3C)
-#define          STIR                                       (*(volatile unsigned long      *) 0xE000EF00)
-#endif // (__NO_MMR_STRUCTS__==0)
 
 /* Reset Value for ICTR*/
 #define ICTR_RVAL                      0x0 
@@ -10760,9 +6854,9 @@ typedef struct {                            /*!< pADI_AFE Structure             
 #define BIT7     0x80
 
 
-/* ================================================================================ */
-/* ================              Peripheral memory map             ================ */
-/* ================================================================================ */
+/* ========================================================================== */
+/* =============              Peripheral memory map             ============= */
+/* ========================================================================== */
 
 #define ADI_TMR0_ADDR                            0x40000000UL
 #define ADI_TMR1_ADDR                            0x40000400UL
@@ -10780,13 +6874,12 @@ typedef struct {                            /*!< pADI_AFE Structure             
 #define ADI_PLA_ADDR                             0x40005800UL
 #define ADI_DMA_ADDR                             0x40010000UL
 #define ADI_FEE_ADDR                             0x40018000UL
-#define ADI_GP0_ADDR                             0x40020000UL
-#define ADI_GP1_ADDR                             0x40020040UL
-#define ADI_GPIO_FIX_ADDR                        0x40020068UL
-#define ADI_GP2_ADDR                             0x40020080UL
-#define ADI_GP3_ADDR                             0x400200C0UL
-#define ADI_GP4_ADDR                             0x40020100UL
-#define ADI_GP5_ADDR                             0x40020240UL
+#define MMR_GPIO0_ADDR                           0x40020000UL
+#define MMR_GPIO1_ADDR                           0x40020040UL
+#define MMR_GPIO2_ADDR                           0x40020080UL
+#define MMR_GPIO3_ADDR                           0x400200C0UL
+#define MMR_GPIO4_ADDR                           0x40020100UL
+#define MMR_GPIO5_ADDR                           0x40020240UL
 #define ADI_PWM_ADDR                             0x40024000UL
 #define ADI_CLKCTL_ADDR                          0x40028000UL
 #define ADI_dma_ctl_ADDR                         0x40028100UL
@@ -10808,55 +6901,58 @@ typedef struct {                            /*!< pADI_AFE Structure             
 #define ADI_AFE_ADDR                             0x40087830UL
 
 
-/* ================================================================================ */
-/* ================             Peripheral declaration             ================ */
-/* ================================================================================ */
+/* ========================================================================== */
+/* =============             Peripheral declaration             ============= */
+/* ========================================================================== */
 
-#define pADI_TMR0                     ((ADI_TIMER_TypeDef              *)ADI_TMR0_ADDR)
-#define pADI_TMR1                     ((ADI_TIMER_TypeDef              *)ADI_TMR1_ADDR)
-#define pADI_TMR2                     ((ADI_TIMER_TypeDef              *)ADI_TMR2_ADDR)
-#define pADI_ID                       ((ADI_ID_TypeDef                 *)ADI_ID_ADDR)
-#define pADI_PWRCTL                   ((ADI_PWRCTL_TypeDef             *)ADI_PWRCTL_ADDR)
-#define pADI_RESET                    ((ADI_RESET_TypeDef              *)ADI_RESET_ADDR)
-#define pADI_INTERRUPT                ((ADI_INTERRUPT_TypeDef          *)ADI_INTERRUPT_ADDR)
-#define pADI_WDT                      ((ADI_WDT_TypeDef                *)ADI_WDT_ADDR)
-#define pADI_WUT                      ((ADI_WUT_TypeDef                *)ADI_WUT_ADDR)
-#define pADI_I2C0                     ((ADI_I2C_TypeDef                *)ADI_I2C0_ADDR)
-#define pADI_I2C1                     ((ADI_I2C_TypeDef                *)ADI_I2C1_ADDR)
-#define pADI_UART                     ((ADI_UART_TypeDef               *)ADI_UART_ADDR)
-#define pADI_MDIO                     ((ADI_MDIO_TypeDef               *)ADI_MDIO_ADDR)
-#define pADI_PLA                      ((ADI_PLA_TypeDef                *)ADI_PLA_ADDR)
-#define pADI_DMA                      ((ADI_DMA_TypeDef                *)ADI_DMA_ADDR)
-#define pADI_FEE                      ((ADI_FEE_TypeDef                *)ADI_FEE_ADDR)
-#define pADI_GP0                      ((ADI_GPIO_TypeDef               *)ADI_GP0_ADDR)
-#define pADI_GP1                      ((ADI_GPIO_TypeDef               *)ADI_GP1_ADDR)
-#define pADI_GPIO_FIX                 ((ADI_GPIO_FIX_TypeDef           *)ADI_GPIO_FIX_ADDR)
-#define pADI_GP2                      ((ADI_GPIO_TypeDef               *)ADI_GP2_ADDR)
-#define pADI_GP3                      ((ADI_GPIO_TypeDef               *)ADI_GP3_ADDR)
-#define pADI_GP4                      ((ADI_GPIO_TypeDef               *)ADI_GP4_ADDR)
-#define pADI_GP5                      ((ADI_GPIO_TypeDef               *)ADI_GP5_ADDR)
-#define pADI_PWM                      ((ADI_PWM_TypeDef                *)ADI_PWM_ADDR)
-#define pADI_CLKCTL                   ((ADI_CLKCTL_TypeDef             *)ADI_CLKCTL_ADDR)
-#define pADI_dma_ctl                  ((ADI_dma_ctl_TypeDef            *)ADI_dma_ctl_ADDR)
-#define pADI_SPI0                     ((ADI_SPI_TypeDef                *)ADI_SPI0_ADDR)
-#define pADI_SPI1                     ((ADI_SPI_TypeDef                *)ADI_SPI1_ADDR)
-#define pADI_ADC                      ((ADI_ADC_TypeDef                *)ADI_ADC_ADDR)
-#define pADI_VDAC0                    ((ADI_VDAC_TypeDef               *)ADI_VDAC0_ADDR)
-#define pADI_VDAC1                    ((ADI_VDAC_TypeDef               *)ADI_VDAC1_ADDR)
-#define pADI_VDAC2                    ((ADI_VDAC_TypeDef               *)ADI_VDAC2_ADDR)
-#define pADI_VDAC3                    ((ADI_VDAC_TypeDef               *)ADI_VDAC3_ADDR)
-#define pADI_VDAC4                    ((ADI_VDAC_TypeDef               *)ADI_VDAC4_ADDR)
-#define pADI_VDAC5                    ((ADI_VDAC_TypeDef               *)ADI_VDAC5_ADDR)
-#define pADI_VDAC6                    ((ADI_VDAC_TypeDef               *)ADI_VDAC6_ADDR)
-#define pADI_VDAC7                    ((ADI_VDAC_TypeDef               *)ADI_VDAC7_ADDR)
-#define pADI_InBuf                    ((ADI_InBuf_TypeDef              *)ADI_InBuf_ADDR)
-#define pADI_LV                       ((ADI_LV_TypeDef                 *)ADI_LV_ADDR)
-#define pADI_LV_RST                   ((ADI_LV_RST_TypeDef             *)ADI_LV_RST_ADDR)
-#define pADI_LV_INT                   ((ADI_LV_INT_TypeDef             *)ADI_LV_INT_ADDR)
-#define pADI_AFE                      ((ADI_AFE_TypeDef                *)ADI_AFE_ADDR)
+#define pADI_TMR0                 ((ADI_TIMER_TypeDef     *)ADI_TMR0_ADDR)
+#define pADI_TMR1                 ((ADI_TIMER_TypeDef     *)ADI_TMR1_ADDR)
+#define pADI_TMR2                 ((ADI_TIMER_TypeDef     *)ADI_TMR2_ADDR)
+#define pADI_ID                   ((ADI_ID_TypeDef        *)ADI_ID_ADDR)
+#define pADI_PWRCTL               ((ADI_PWRCTL_TypeDef    *)ADI_PWRCTL_ADDR)
+#define pADI_RESET                ((ADI_RESET_TypeDef     *)ADI_RESET_ADDR)
+#define pADI_INTERRUPT            ((ADI_INTERRUPT_TypeDef *)ADI_INTERRUPT_ADDR)
+#define pADI_WDT                  ((ADI_WDT_TypeDef       *)ADI_WDT_ADDR)
+#define pADI_WUT                  ((ADI_WUT_TypeDef       *)ADI_WUT_ADDR)
+#define pADI_I2C0                 ((ADI_I2C_TypeDef       *)ADI_I2C0_ADDR)
+#define pADI_I2C1                 ((ADI_I2C_TypeDef       *)ADI_I2C1_ADDR)
+#define pADI_UART                 ((ADI_UART_TypeDef      *)ADI_UART_ADDR)
+#define pADI_MDIO                 ((ADI_MDIO_TypeDef      *)ADI_MDIO_ADDR)
+#define pADI_PLA                  ((ADI_PLA_TypeDef       *)ADI_PLA_ADDR)
+#define pADI_DMA                  ((ADI_DMA_TypeDef       *)ADI_DMA_ADDR)
+#define pADI_FEE                  ((ADI_FEE_TypeDef       *)ADI_FEE_ADDR)
+#define MMR_GPIO0                 ((MMR_GPIO_t            *)MMR_GPIO0_ADDR)
+#define MMR_GPIO1                 ((MMR_GPIO_t            *)MMR_GPIO1_ADDR)
+#define MMR_GPIO2                 ((MMR_GPIO_t            *)MMR_GPIO2_ADDR)
+#define MMR_GPIO3                 ((MMR_GPIO_t            *)MMR_GPIO3_ADDR)
+#define MMR_GPIO4                 ((MMR_GPIO_t            *)MMR_GPIO4_ADDR)
+#define MMR_GPIO5                 ((MMR_GPIO_t            *)MMR_GPIO5_ADDR)
+#define pADI_PWM                  ((ADI_PWM_TypeDef       *)ADI_PWM_ADDR)
+#define pADI_CLKCTL               ((ADI_CLKCTL_TypeDef    *)ADI_CLKCTL_ADDR)
+#define pADI_dma_ctl              ((ADI_dma_ctl_TypeDef   *)ADI_dma_ctl_ADDR)
+#define pADI_SPI0                 ((ADI_SPI_TypeDef       *)ADI_SPI0_ADDR)
+#define pADI_SPI1                 ((ADI_SPI_TypeDef       *)ADI_SPI1_ADDR)
+#define pADI_ADC                  ((ADI_ADC_TypeDef       *)ADI_ADC_ADDR)
+#define pADI_VDAC0                ((ADI_VDAC_TypeDef      *)ADI_VDAC0_ADDR)
+#define pADI_VDAC1                ((ADI_VDAC_TypeDef      *)ADI_VDAC1_ADDR)
+#define pADI_VDAC2                ((ADI_VDAC_TypeDef      *)ADI_VDAC2_ADDR)
+#define pADI_VDAC3                ((ADI_VDAC_TypeDef      *)ADI_VDAC3_ADDR)
+#define pADI_VDAC4                ((ADI_VDAC_TypeDef      *)ADI_VDAC4_ADDR)
+#define pADI_VDAC5                ((ADI_VDAC_TypeDef      *)ADI_VDAC5_ADDR)
+#define pADI_VDAC6                ((ADI_VDAC_TypeDef      *)ADI_VDAC6_ADDR)
+#define pADI_VDAC7                ((ADI_VDAC_TypeDef      *)ADI_VDAC7_ADDR)
+#define pADI_InBuf                ((ADI_InBuf_TypeDef     *)ADI_InBuf_ADDR)
+#define pADI_LV                   ((ADI_LV_TypeDef        *)ADI_LV_ADDR)
+#define pADI_LV_RST               ((ADI_LV_RST_TypeDef    *)ADI_LV_RST_ADDR)
+#define pADI_LV_INT               ((ADI_LV_INT_TypeDef    *)ADI_LV_INT_ADDR)
+#define pADI_IDAC0                ((ADI_IDAC_TypeDef      *)ADI_IDAC0_ADDR)
+#define pADI_IDAC1                ((ADI_IDAC_TypeDef      *)ADI_IDAC1_ADDR)
+#define pADI_IDAC2                ((ADI_IDAC_TypeDef      *)ADI_IDAC2_ADDR)
+#define pADI_IDAC3                ((ADI_IDAC_TypeDef      *)ADI_IDAC3_ADDR)
+#define pADI_AFE                  ((ADI_AFE_TypeDef       *)ADI_AFE_ADDR)
 
 /** @} */ /* End of group Device_Peripheral_Registers */
-/** @} */ /* End of group ADUCM322 */
+/** @} */ /* End of group ADUCM322I */
 /** @} */ /* End of group CMSIS */
 
 #ifdef __cplusplus
@@ -10864,4 +6960,4 @@ typedef struct {                            /*!< pADI_AFE Structure             
 #endif 
 
 
-#endif  // ADUCM322_H_
+#endif  // ADUCM322I_H_
