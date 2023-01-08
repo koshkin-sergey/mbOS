@@ -45,7 +45,7 @@ Driver_GPIO_t Driver_GPIO##x = {  \
   GPIO##x##_PinRead,              \
   GPIO##x##_PinWrite,             \
   GPIO##x##_PinToggle,            \
-};
+}
 
 /*******************************************************************************
  *  function implementations (scope: module-local)

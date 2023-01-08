@@ -4800,6 +4800,7 @@ typedef struct {                            /*!< MMR_GPIO Structure             
   __IOM uint8_t   GPTGL;                    /*!< GPIO Port pin toggle                */
   __IM  uint8_t   RESERVED8[3];
   __IOM uint8_t   GPODE;                    /*!< GPIO Port open drain enable         */
+  __IM  uint8_t   RESERVED9[3];
 } MMR_GPIO_t;
 
 /********************  Reset Value for registers  *****************************/
