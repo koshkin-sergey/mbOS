@@ -91,10 +91,14 @@ static uint32_t ThreadFlagsCheck(osThread_t *thread, uint32_t flags, uint32_t op
  * @brief       OS Idle Thread.
  * @param[in]   argument
  */
-__WEAK
+__WEAK __NO_RETURN
 void osIdleThread(void *argument)
 {
   (void) argument;
+
+  for (;;) {
+
+  }
 }
 
 /*******************************************************************************
