@@ -13,6 +13,8 @@ DebugConfig/
 Listings/
 Objects/
 Packs*.htm
+JLinkLog.txt
+JLinkSettings.ini
 
 # IAR Project Files
 settings/

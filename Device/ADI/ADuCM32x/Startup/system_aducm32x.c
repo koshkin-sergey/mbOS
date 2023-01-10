@@ -19,6 +19,7 @@
  *  includes
  ******************************************************************************/
 
+#include <asm/aducm32x.h>
 #include <asm/system_aducm32x.h>
 
 /*******************************************************************************
@@ -44,5 +45,5 @@ void SystemCoreClockUpdate(void)
  */
 void SystemInit(void)
 {
-
+  MMR_WDT->T3CON = 0U;
 }

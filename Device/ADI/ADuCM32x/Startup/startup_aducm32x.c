@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2022-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -195,6 +195,8 @@ extern const pFunc __VECTOR_TABLE[];
 __NO_RETURN
 void Reset_Handler(void)
 {
+  __NOP();
+  
   SystemInit();                      /* CMSIS System Initialization           */
   __PROGRAM_START();                 /* Enter PreMain (C library entry point) */
 }
