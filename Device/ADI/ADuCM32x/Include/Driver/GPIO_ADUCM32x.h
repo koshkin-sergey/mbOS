@@ -116,4 +116,15 @@ typedef struct Driver_GPIO {
   void      (*PinToggle)  (GPIO_PIN_t pin);
 } const Driver_GPIO_t;
 
+/*******************************************************************************
+ *  external declarations
+ ******************************************************************************/
+
+extern Driver_GPIO_t Driver_GPIO0;
+extern Driver_GPIO_t Driver_GPIO1;
+extern Driver_GPIO_t Driver_GPIO2;
+extern Driver_GPIO_t Driver_GPIO3;
+extern Driver_GPIO_t Driver_GPIO4;
+extern Driver_GPIO_t Driver_GPIO5;
+
 #endif /* GPIO_ADUCM32X_H_ */
