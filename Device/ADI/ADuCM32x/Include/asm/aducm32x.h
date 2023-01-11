@@ -5164,143 +5164,121 @@ typedef struct MMR_PWM {                    /*!< MMR_PWM Structure              
 
 /* PWM3LEN[LEN] - Period value */
 #define PWM3LEN_LEN_MSK                (0xFFFF << 0  )
-// ------------------------------------------------------------------------------------------------
-// -----                                        CLKCTL                                        -----
-// ------------------------------------------------------------------------------------------------
 
+
+/* ========================================================================== */
+/* ================                  CLKCTL                ================== */
+/* ========================================================================== */
 
 /**
   * @brief clocking (MMR_CLKCTL)
   */
 
-typedef struct MMR_CLKCTL{                  /*!< MMR_CLKCTL Structure                  */
-  __IO uint16_t  CLKCON0;                   /*!< Misc clock settings register          */
+typedef struct MMR_CLKCTL{            /*!< MMR_CLKCTL Structure               */
+  __IO uint16_t  CLKCON0;             /*!< Misc clock settings register       */
   __I  uint16_t  RESERVED0;
-  __IO uint16_t  CLKCON1;                   /*!< Clock dividers register               */
+  __IO uint16_t  CLKCON1;             /*!< Clock dividers register            */
   __I  uint16_t  RESERVED1[7];
-  __IO uint16_t  CLKCON5;                   /*!< User clock gating control register    */
+  __IO uint16_t  CLKCON5;             /*!< User clock gating control register */
   __I  uint16_t  RESERVED2;
-  __IO uint16_t  CLKSTAT0;                  /*!< Clocking status                       */
+  __IO uint16_t  CLKSTAT0;            /*!< Clocking status                    */
+  __I  uint16_t  RESERVED3;
 } MMR_CLKCTL_t;
 
-/* Reset Value for CLKCON0*/
-#define CLKCON0_RVAL                   0x0 
-
 /* CLKCON0[HFXTALIE] - High frequency crystal interrupt enable */
-#define CLKCON0_HFXTALIE_BBA           (*(volatile unsigned long *) 0x4250003C)
-#define CLKCON0_HFXTALIE_MSK           (0x1   << 15 )
-#define CLKCON0_HFXTALIE               (0x1   << 15 )
-#define CLKCON0_HFXTALIE_DIS           (0x0   << 15 ) /* An interrupt to the core will not be generated on a HFXTAL ok or HFXTAL nok */
-#define CLKCON0_HFXTALIE_EN            (0x1   << 15 ) /* An interrupt to the core will be generated on a HFXTAL ok or HFXTAL nok */
+#define CLKCON0_HFXTALIE_Pos          (15U)
+#define CLKCON0_HFXTALIE_Msk          (0x1U << CLKCON0_HFXTALIE_Pos)
+#define CLKCON0_HFXTALIE_DIS          (0x0U << CLKCON0_HFXTALIE_Pos)            /* An interrupt to the core will not be generated on a HFXTAL ok or HFXTAL nok */
+#define CLKCON0_HFXTALIE_EN           (0x1U << CLKCON0_HFXTALIE_Pos)            /* An interrupt to the core will be generated on a HFXTAL ok or HFXTAL nok     */
 
 /* CLKCON0[SPLLIE] - SPLL Interrupt enable */
-#define CLKCON0_SPLLIE_BBA             (*(volatile unsigned long *) 0x42500034)
-#define CLKCON0_SPLLIE_MSK             (0x1   << 13 )
-#define CLKCON0_SPLLIE                 (0x1   << 13 )
-#define CLKCON0_SPLLIE_DIS             (0x0   << 13 ) /* System PLL interrupt will not be generated */
-#define CLKCON0_SPLLIE_EN              (0x1   << 13 ) /* System PLL interrupt will be generated */
+#define CLKCON0_SPLLIE_Pos            (13U)
+#define CLKCON0_SPLLIE_Msk            (0x1U << CLKCON0_SPLLIE_Pos)
+#define CLKCON0_SPLLIE_DIS            (0x0U << CLKCON0_SPLLIE_Pos)              /* System PLL interrupt will not be generated */
+#define CLKCON0_SPLLIE_EN             (0x1U << CLKCON0_SPLLIE_Pos)              /* System PLL interrupt will be generated     */
 
 /* CLKCON0[PLLMUX] - PLL source selection */
-#define CLKCON0_PLLMUX_BBA             (*(volatile unsigned long *) 0x4250002C)
-#define CLKCON0_PLLMUX_MSK             (0x1   << 11 )
-#define CLKCON0_PLLMUX                 (0x1   << 11 )
-#define CLKCON0_PLLMUX_HFOSC           (0x0   << 11 ) /* Internal oscillator is selected (HFOSC) */
-#define CLKCON0_PLLMUX_HFXTAL          (0x1   << 11 ) /* External oscillator is selected (HFXTAL) */
+#define CLKCON0_PLLMUX_Pos            (11U)
+#define CLKCON0_PLLMUX_Msk            (0x1U << CLKCON0_PLLMUX_Pos)
+#define CLKCON0_PLLMUX_HFOSC          (0x0U << CLKCON0_PLLMUX_Pos)              /* Internal oscillator is selected (HFOSC)  */
+#define CLKCON0_PLLMUX_HFXTAL         (0x1U << CLKCON0_PLLMUX_Pos)              /* External oscillator is selected (HFXTAL) */
 
 /* CLKCON0[CLKOUT] - GPIO clk out select */
-#define CLKCON0_CLKOUT_MSK             (0xF   << 4  )
-#define CLKCON0_CLKOUT_ROOT            (0x0   << 4  ) /* Root Clock               */
-#define CLKCON0_CLKOUT_LFOSC           (0x1   << 4  ) /* LFOSC (32 kHz)           */
-#define CLKCON0_CLKOUT_HFOSC           (0x2   << 4  ) /* HFOSC (16 MHz)           */
-#define CLKCON0_CLKOUT_CORE            (0x4   << 4  ) /* Core Clock               */
-#define CLKCON0_CLKOUT_PCLK            (0x5   << 4  ) /* PCLK                     */
-#define CLKCON0_CLKOUT_T0              (0xB   << 4  ) /* Timer 0 Clock            */
-#define CLKCON0_CLKOUT_WUT             (0xC   << 4  ) /* Wake up Timer Clock      */
-#define CLKCON0_CLKOUT_HFXTAL          (0xE   << 4  ) /* HFXTAL                   */
+#define CLKCON0_CLKOUT_Pos            (4U)
+#define CLKCON0_CLKOUT_Msk            (0xFU << CLKCON0_CLKOUT_Pos)
+#define CLKCON0_CLKOUT_ROOT           (0x0U << CLKCON0_CLKOUT_Pos)              /* Root Clock               */
+#define CLKCON0_CLKOUT_LFOSC          (0x1U << CLKCON0_CLKOUT_Pos)              /* LFOSC (32 kHz)           */
+#define CLKCON0_CLKOUT_HFOSC          (0x2U << CLKCON0_CLKOUT_Pos)              /* HFOSC (16 MHz)           */
+#define CLKCON0_CLKOUT_CORE           (0x4U << CLKCON0_CLKOUT_Pos)              /* Core Clock               */
+#define CLKCON0_CLKOUT_PCLK           (0x5U << CLKCON0_CLKOUT_Pos)              /* PCLK                     */
+#define CLKCON0_CLKOUT_T0             (0xBU << CLKCON0_CLKOUT_Pos)              /* Timer 0 Clock            */
+#define CLKCON0_CLKOUT_WUT            (0xCU << CLKCON0_CLKOUT_Pos)              /* Wake up Timer Clock      */
+#define CLKCON0_CLKOUT_HFXTAL         (0xEU << CLKCON0_CLKOUT_Pos)              /* HFXTAL                   */
 
 /* CLKCON0[CLKMUX] - Clock mux select */
-#define CLKCON0_CLKMUX_MSK             (0x3   << 0  )
-#define CLKCON0_CLKMUX_HFOSC           (0x0   << 0  ) /* High frequency internal oscillator (HFOSC) */
-#define CLKCON0_CLKMUX_SPLL            (0x1   << 0  ) /* System PLL is selected (80 MHz) */
-#define CLKCON0_CLKMUX_UPLL            (0x2   << 0  ) /* UPLL is selected (60 MHz) */
-#define CLKCON0_CLKMUX_EXTCLK          (0x3   << 0  ) /* External GPIO port is selected (ECLKIN) */
-
-/* Reset Value for CLKCON1*/
-#define CLKCON1_RVAL                   0xA82 
+#define CLKCON0_CLKMUX_Pos            (0U)
+#define CLKCON0_CLKMUX_Msk            (0x3U << CLKCON0_CLKMUX_Pos)
+#define CLKCON0_CLKMUX_HFOSC          (0x0U << CLKCON0_CLKMUX_Pos)              /* High frequency internal oscillator (HFOSC) */
+#define CLKCON0_CLKMUX_SPLL           (0x1U << CLKCON0_CLKMUX_Pos)              /* System PLL is selected (80 MHz)            */
+#define CLKCON0_CLKMUX_EXTCLK         (0x3U << CLKCON0_CLKMUX_Pos)              /* External GPIO port is selected (ECLKIN)    */
 
 /* CLKCON1[CDD2DCLK] - D2DCLK divide bits */
-#define CLKCON1_CDD2DCLK_BBA           (*(volatile unsigned long *) 0x425000AC)
-#define CLKCON1_CDD2DCLK_MSK           (0x1   << 11 )
-#define CLKCON1_CDD2DCLK               (0x1   << 11 )
-#define CLKCON1_CDD2DCLK_DIV1          (0x0   << 11 ) /* D2D_CLK frequency = HCLK frequency */
-#define CLKCON1_CDD2DCLK_DIV2          (0x1   << 11 ) /* D2D_CLK frequency = half of HCLK frequency */
+#define CLKCON1_CDD2DCLK_Pos          (11U)
+#define CLKCON1_CDD2DCLK_Msk          (0x1U << CLKCON1_CDD2DCLK_Pos)
+#define CLKCON1_CDD2DCLK_DIV1         (0x0U << CLKCON1_CDD2DCLK_Pos)            /* D2D_CLK frequency = HCLK frequency */
+#define CLKCON1_CDD2DCLK_DIV2         (0x1U << CLKCON1_CDD2DCLK_Pos)            /* D2D_CLK frequency = half of HCLK frequency */
 
 /* CLKCON1[CDPCLK] - PCLK divide bits */
-#define CLKCON1_CDPCLK_MSK             (0x7   << 8  )
-#define CLKCON1_CDPCLK_DIV1            (0x0   << 8  ) /* DIV1. Divide by 1 (PCLK is equal to root clock) */
-#define CLKCON1_CDPCLK_DIV2            (0x1   << 8  ) /* DIV2. Divide by 2 (PCLK is half the frequency of root clock) */
-#define CLKCON1_CDPCLK_DIV4            (0x2   << 8  ) /* DIV4. Divide by 4 (PCLK is quarter the frequency of root clock, 20 MHz) */
-#define CLKCON1_CDPCLK_DIV8            (0x3   << 8  ) /* DIV8. Divide by 8        */
-#define CLKCON1_CDPCLK_DIV16           (0x4   << 8  ) /* DIV16. Divide by 16      */
-#define CLKCON1_CDPCLK_DIV32           (0x5   << 8  ) /* DIV32. Divide by 32      */
-#define CLKCON1_CDPCLK_DIV64           (0x6   << 8  ) /* DIV64. Divide by 164     */
-#define CLKCON1_CDPCLK_DIV128          (0x7   << 8  ) /* DIV128. Divide by 128    */
+#define CLKCON1_CDPCLK_Pos            (8U)
+#define CLKCON1_CDPCLK_Msk            (0x7U << CLKCON1_CDPCLK_Pos)
+#define CLKCON1_CDPCLK_DIV4           (0x2U << CLKCON1_CDPCLK_Pos)              /* DIV4. Divide by 4        */
+#define CLKCON1_CDPCLK_DIV8           (0x3U << CLKCON1_CDPCLK_Pos)              /* DIV8. Divide by 8        */
+#define CLKCON1_CDPCLK_DIV16          (0x4U << CLKCON1_CDPCLK_Pos)              /* DIV16. Divide by 16      */
+#define CLKCON1_CDPCLK_DIV32          (0x5U << CLKCON1_CDPCLK_Pos)              /* DIV32. Divide by 32      */
+#define CLKCON1_CDPCLK_DIV64          (0x6U << CLKCON1_CDPCLK_Pos)              /* DIV64. Divide by 64      */
+#define CLKCON1_CDPCLK_DIV128         (0x7U << CLKCON1_CDPCLK_Pos)              /* DIV128. Divide by 128    */
 
 /* CLKCON1[CDHCLK] - HCLK divide bits */
-#define CLKCON1_CDHCLK_MSK             (0x7   << 0  )
-#define CLKCON1_CDHCLK_DIV1            (0x0   << 0  ) /* DIV1. Divide by 1 (HCLK is equal to root clock) */
-#define CLKCON1_CDHCLK_DIV2            (0x1   << 0  ) /* DIV2. Divide by 2 (HCLK is half the frequency of root clock) */
-#define CLKCON1_CDHCLK_DIV4            (0x2   << 0  ) /* DIV4. Divide by 4 (HCLK is quarter the frequency of root clock) */
-#define CLKCON1_CDHCLK_DIV8            (0x3   << 0  ) /* DIV8. Divide by 8        */
-#define CLKCON1_CDHCLK_DIV16           (0x4   << 0  ) /* DIV16.Divide by 16       */
-#define CLKCON1_CDHCLK_DIV32           (0x5   << 0  ) /* DIV32.Divide by 32       */
-#define CLKCON1_CDHCLK_DIV64           (0x6   << 0  ) /* DIV64.Divide by 64       */
-#define CLKCON1_CDHCLK_DIV128          (0x7   << 0  ) /* DIV128. Divide by 128    */
-
-/* Reset Value for CLKCON5*/
-#define CLKCON5_RVAL                   0x0 
-
-/* CLKCON5[D2DCLKOFF] - D2D clock user control */
-#define CLKCON5_D2DCLKOFF_BBA          (*(volatile unsigned long *) 0x42500298)
-#define CLKCON5_D2DCLKOFF_MSK          (0x1   << 6  )
-#define CLKCON5_D2DCLKOFF              (0x1   << 6  )
-#define CLKCON5_D2DCLKOFF_ON           (0x0   << 6  ) /* Clock on                 */
-#define CLKCON5_D2DCLKOFF_OFF          (0x1   << 6  ) /* Clock off                */
+#define CLKCON1_CDHCLK_Pos            (0U)
+#define CLKCON1_CDHCLK_Msk            (0x7U << CLKCON1_CDHCLK_Pos)
+#define CLKCON1_CDHCLK_DIV1           (0x0U << CLKCON1_CDHCLK_Pos)              /* DIV1. Divide by 1        */
+#define CLKCON1_CDHCLK_DIV2           (0x1U << CLKCON1_CDHCLK_Pos)              /* DIV2. Divide by 2        */
+#define CLKCON1_CDHCLK_DIV4           (0x2U << CLKCON1_CDHCLK_Pos)              /* DIV4. Divide by 4        */
+#define CLKCON1_CDHCLK_DIV8           (0x3U << CLKCON1_CDHCLK_Pos)              /* DIV8. Divide by 8        */
+#define CLKCON1_CDHCLK_DIV16          (0x4U << CLKCON1_CDHCLK_Pos)              /* DIV16.Divide by 16       */
+#define CLKCON1_CDHCLK_DIV32          (0x5U << CLKCON1_CDHCLK_Pos)              /* DIV32.Divide by 32       */
+#define CLKCON1_CDHCLK_DIV64          (0x6U << CLKCON1_CDHCLK_Pos)              /* DIV64.Divide by 64       */
+#define CLKCON1_CDHCLK_DIV128         (0x7U << CLKCON1_CDHCLK_Pos)              /* DIV128. Divide by 128    */
 
 /* CLKCON5[UCLKUARTOFF] - UART clock user control */
-#define CLKCON5_UCLKUARTOFF_BBA        (*(volatile unsigned long *) 0x42500294)
-#define CLKCON5_UCLKUARTOFF_MSK        (0x1   << 5  )
-#define CLKCON5_UCLKUARTOFF            (0x1   << 5  )
-#define CLKCON5_UCLKUARTOFF_ON         (0x0   << 5  ) /* Clock on                 */
-#define CLKCON5_UCLKUARTOFF_OFF        (0x1   << 5  ) /* Clock off                */
+#define CLKCON5_UCLKUARTOFF_Pos       (5U)
+#define CLKCON5_UCLKUARTOFF_Msk       (0x1U << CLKCON5_UCLKUARTOFF_Pos)
+#define CLKCON5_UCLKUARTOFF_ON        (0x0U << CLKCON5_UCLKUARTOFF_Pos)         /* Clock on                 */
+#define CLKCON5_UCLKUARTOFF_OFF       (0x1U << CLKCON5_UCLKUARTOFF_Pos)         /* Clock off                */
 
 /* CLKCON5[UCLKI2C1OFF] - I2C1 clock user control */
-#define CLKCON5_UCLKI2C1OFF_BBA        (*(volatile unsigned long *) 0x42500290)
-#define CLKCON5_UCLKI2C1OFF_MSK        (0x1   << 4  )
-#define CLKCON5_UCLKI2C1OFF            (0x1   << 4  )
-#define CLKCON5_UCLKI2C1OFF_ON         (0x0   << 4  ) /* Clock on                 */
-#define CLKCON5_UCLKI2C1OFF_OFF        (0x1   << 4  ) /* Clock off                */
+#define CLKCON5_UCLKI2C1OFF_Pos       (4U)
+#define CLKCON5_UCLKI2C1OFF_Msk       (0x1U << CLKCON5_UCLKI2C1OFF_Pos)
+#define CLKCON5_UCLKI2C1OFF_ON        (0x0U << CLKCON5_UCLKI2C1OFF_Pos)         /* Clock on                 */
+#define CLKCON5_UCLKI2C1OFF_OFF       (0x1U << CLKCON5_UCLKI2C1OFF_Pos)         /* Clock off                */
 
 /* CLKCON5[UCLKI2C0OFF] - I2C0 clock user control */
-#define CLKCON5_UCLKI2C0OFF_BBA        (*(volatile unsigned long *) 0x4250028C)
-#define CLKCON5_UCLKI2C0OFF_MSK        (0x1   << 3  )
-#define CLKCON5_UCLKI2C0OFF            (0x1   << 3  )
-#define CLKCON5_UCLKI2C0OFF_ON         (0x0   << 3  ) /* Clock on                 */
-#define CLKCON5_UCLKI2C0OFF_OFF        (0x1   << 3  ) /* Clock off                */
+#define CLKCON5_UCLKI2C0OFF_Pos       (3U)
+#define CLKCON5_UCLKI2C0OFF_Msk       (0x1U << CLKCON5_UCLKI2C0OFF_Pos)
+#define CLKCON5_UCLKI2C0OFF_ON        (0x0U << CLKCON5_UCLKI2C0OFF_Pos)         /* Clock on                 */
+#define CLKCON5_UCLKI2C0OFF_OFF       (0x1U << CLKCON5_UCLKI2C0OFF_Pos)         /* Clock off                */
 
 /* CLKCON5[UCLKSPI1OFF] - SPI1 clock user control */
-#define CLKCON5_UCLKSPI1OFF_BBA        (*(volatile unsigned long *) 0x42500284)
-#define CLKCON5_UCLKSPI1OFF_MSK        (0x1   << 1  )
-#define CLKCON5_UCLKSPI1OFF            (0x1   << 1  )
-#define CLKCON5_UCLKSPI1OFF_ON         (0x0   << 1  ) /* Clock on                 */
-#define CLKCON5_UCLKSPI1OFF_OFF        (0x1   << 1  ) /* Clock off                */
+#define CLKCON5_UCLKSPI1OFF_Pos       (1U)
+#define CLKCON5_UCLKSPI1OFF_Msk       (0x1U << CLKCON5_UCLKSPI1OFF_Pos)
+#define CLKCON5_UCLKSPI1OFF_ON        (0x0U << CLKCON5_UCLKSPI1OFF_Pos)         /* Clock on                 */
+#define CLKCON5_UCLKSPI1OFF_OFF       (0x1U << CLKCON5_UCLKSPI1OFF_Pos)         /* Clock off                */
 
 /* CLKCON5[UCLKSPI0OFF] - SPI0 clock user control */
-#define CLKCON5_UCLKSPI0OFF_BBA        (*(volatile unsigned long *) 0x42500280)
-#define CLKCON5_UCLKSPI0OFF_MSK        (0x1   << 0  )
-#define CLKCON5_UCLKSPI0OFF            (0x1   << 0  )
-#define CLKCON5_UCLKSPI0OFF_ON         (0x0   << 0  ) /* Clock on                 */
-#define CLKCON5_UCLKSPI0OFF_OFF        (0x1   << 0  ) /* Clock off                */
+#define CLKCON5_UCLKSPI0OFF_Pos       (1U)
+#define CLKCON5_UCLKSPI0OFF_Msk       (0x1U << CLKCON5_UCLKSPI0OFF_Pos)
+#define CLKCON5_UCLKSPI0OFF_ON        (0x0U << CLKCON5_UCLKSPI0OFF_Pos)         /* Clock on                 */
+#define CLKCON5_UCLKSPI0OFF_OFF       (0x1U << CLKCON5_UCLKSPI0OFF_Pos)         /* Clock off                */
 
 /* Reset Value for CLKSTAT0*/
 #define CLKSTAT0_RVAL                  0x0 

@@ -19,8 +19,10 @@
  *  includes
  ******************************************************************************/
 
-#include <asm/aducm32x.h>
 #include <asm/system_aducm32x.h>
+
+#include <asm/aducm32x.h>
+#include <Driver/CLK_ADUCM32x.h>
 
 /*******************************************************************************
  *  global variable definitions (scope: module-exported)
@@ -37,7 +39,9 @@ uint32_t SystemCoreClock;           /*!< System Clock Frequency (Core Clock)  */
  */
 void SystemCoreClockUpdate(void)
 {
-  SystemCoreClock = 80000000U;
+  Driver_CLK_t *Clk = &Driver_CLK;
+
+  SystemCoreClock = Clk->GetFrequency(CLK_FREQ_HCLK);
 }
 
 /**

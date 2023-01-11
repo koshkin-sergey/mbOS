@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2022 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2017-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -34,39 +34,75 @@
  *  typedefs and structures (scope: module-local)
  ******************************************************************************/
 
-typedef enum {
-  CLK_PERIPH_SPI0 = (1U << 0),
-  CLK_PERIPH_SPI1 = (1U << 1),
-  CLK_PERIPH_I2C0 = (1U << 3),
-  CLK_PERIPH_I2C1 = (1U << 4),
-  CLK_PERIPH_UART = (1U << 5),
-  CLK_PERIPH_D2D  = (1U << 6),
-} CLK_PERIPH;
+typedef enum CLK_Freq {
+  CLK_FREQ_HCLK = 0U,
+  CLK_FREQ_PCLK = 1U,
+  CLK_FREQ_ACLK = 2U
+} CLK_Freq_t;
 
-typedef enum {
-  CLOCK_OFF,
-  CLOCK_ON,
-} CLK_MODE;
+typedef enum CLK_Periph {
+  CLK_PERIPH_SPI0 = (uint16_t)(1U << 0U),
+  CLK_PERIPH_SPI1 = (uint16_t)(1U << 1U),
+  CLK_PERIPH_I2C0 = (uint16_t)(1U << 3U),
+  CLK_PERIPH_I2C1 = (uint16_t)(1U << 4U),
+  CLK_PERIPH_UART = (uint16_t)(1U << 5U)
+} CLK_Periph_t;
+
+typedef struct CLK_ClkCfg {
+
+} CLK_ClkCfg_t;
+
+/**
+ * Function documentation
+ *
+ * @fn          void ClkReset(void)
+ * @brief       Setup the clock system. Initialize the default clock
+ *              source.
+ *
+ * @fn          void ClkConfig(const CLK_ClkCfg_t *cfg)
+ * @brief       Initializes the CPU clock according to the specified
+ *              parameters in the cfg argument.
+ * @param[in]   cfg   CLK_ClkCfg_t structure that contains the configuration
+ *                    information for the clock system.
+ *
+ * @fn          uint32_t GetFrequency(CLK_Freq_t type)
+ * @brief       Gets Clock Frequency.
+ * @param[in]   type  CLK_Freq_t.
+ * @return      Returns clock frequency in Hz.
+ *
+ * @fn          void PeriphEnable(CLK_Periph_t periph)
+ * @brief       Enables the peripheral specified by the periph argument.
+ * @param[in]   periph  CLK_Periph_t.
+ *
+ * @fn          void PeriphDisable(CLK_Periph_t periph)
+ * @brief       Disables the peripheral specified by the periph argument.
+ * @param[in]   periph  CLK_Periph_t.
+ *
+ * @fn          uint32_t GetStatePeriph(CLK_Periph_t periph)
+ * @brief       Gets the current state of the peripheral specified
+ *              by the periph argument.
+ * @param[in]   periph  CLK_Periph_t.
+ * @return      Returns state of the peripheral:
+ *                0 - The peripheral is disabled;
+ *                1 - The peripheral is enabled.
+ */
+
+/**
+ * @brief Access structure of the CLK Driver.
+ */
+typedef struct Driver_CLK {
+  void     (*ClkReset)      (void);
+  void     (*ClkConfig)     (const CLK_ClkCfg_t *cfg);
+  uint32_t (*GetFrequency)  (CLK_Freq_t   type);
+  void     (*PeriphEnable)  (CLK_Periph_t periph);
+  void     (*PeriphDisable) (CLK_Periph_t periph);
+  uint32_t (*GetStatePeriph)(CLK_Periph_t periph);
+} const Driver_CLK_t;
 
 /*******************************************************************************
- *  exported variables
+ *  external declarations
  ******************************************************************************/
 
-/*******************************************************************************
- *  exported function prototypes
- ******************************************************************************/
-
-extern
-void CLK_SourceHFXTAL(void);
-extern
-uint32_t CLK_GetFreqHCLK(void);
-extern
-uint32_t CLK_GetFreqPCLK(void);
-extern
-uint32_t CLK_GetFreqD2DCLK(void);
-extern
-void CLK_PeriphGateControl(CLK_PERIPH clk, CLK_MODE mode);
+extern Driver_CLK_t Driver_CLK;
 
 #endif /* CLK_ADUCM32X_H_ */
-
-/* ----------------------------- End of file ---------------------------------*/

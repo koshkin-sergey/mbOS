@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2022 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2017-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -24,6 +24,7 @@
 #include <Driver/CLK_ADUCM32x.h>
 
 #include <asm/aducm32x.h>
+#include <device_config.h>
 
 /*******************************************************************************
  *  external declarations
@@ -33,9 +34,7 @@
  *  defines and macros (scope: module-local)
  ******************************************************************************/
 
-/* define the clock multiplexer input frequencies */
-#define __HFOSC    16000000
-#define __SPLL     80000000
+#define PLL_CLK_VALUE               80000000UL
 
 /*******************************************************************************
  *  typedefs and structures (scope: module-local)
@@ -44,9 +43,6 @@
 /*******************************************************************************
  *  global variable definitions (scope: module-local)
  ******************************************************************************/
-
-/* Frequency of the external clock source connected to P1.0 */
-static uint32_t SystemExtClock = 0;
 
 /*******************************************************************************
  *  function prototypes (scope: module-local)
@@ -59,20 +55,19 @@ static uint32_t SystemExtClock = 0;
 /**
  * @brief   Returns Undivided System Clock Frequency (UCLK)
  */
-static
-uint32_t GetFreqUCLK(void)
+static uint32_t GetFreqUCLK(void)
 {
   uint32_t uClk;
 
-  switch (pADI_CLKCTL->CLKCON0 & CLKCON0_CLKMUX_MSK ) {
+  switch (MMR_CLKCTL->CLKCON0 & CLKCON0_CLKMUX_Msk) {
     case CLKCON0_CLKMUX_HFOSC:
-      uClk = __HFOSC;
+      uClk = HF_CLK_VALUE;
       break;
     case CLKCON0_CLKMUX_SPLL:
-      uClk = __SPLL;
+      uClk = PLL_CLK_VALUE;
       break;
     case CLKCON0_CLKMUX_EXTCLK:
-      uClk = SystemExtClock;
+      uClk = XT_CLK_VALUE;
       break;
     default:
       uClk = 0;
@@ -83,10 +78,6 @@ uint32_t GetFreqUCLK(void)
 }
 
 /*******************************************************************************
- *  global variable definitions  (scope: module-exported)
- ******************************************************************************/
-
-/*******************************************************************************
  *  function implementations (scope: module-exported)
  ******************************************************************************/
 
@@ -94,57 +85,109 @@ uint32_t GetFreqUCLK(void)
  * @brief   Changes the clock source for the 80 MHz SPLL from the internal
  *          16 MHz oscillator to the external HFXTAL.
  */
-void CLK_SourceHFXTAL(void)
+static void CLK_SourceHFXTAL(void)
 {
-  /* Check that HFXTAL is stable */
-  while((pADI_CLKCTL->CLKSTAT0 & CLKSTAT0_HFXTALOK) == 0);
-  /* Change the system clock to the internal 16 MHz oscillator */
-  pADI_CLKCTL->CLKCON0 &= ~CLKCON0_CLKMUX_MSK;
-
-  /* Switch the input to the SPLL */
-  pADI_CLKCTL->CLKSTAT0 = (CLKSTAT0_SPLLUNLOCK | CLKSTAT0_SPLLLOCK);
-  pADI_CLKCTL->CLKCON0 |= CLKCON0_PLLMUX_HFXTAL;
-
-  /* Wait until the SPLL has locked */
-  while((pADI_CLKCTL->CLKSTAT0 & CLKSTAT0_SPLLLOCK) == 0);
-  /* Change the system clock to the SPLL clock */
-  pADI_CLKCTL->CLKCON0 |= CLKCON0_CLKMUX_SPLL;
+//  /* Check that HFXTAL is stable */
+//  while((pADI_CLKCTL->CLKSTAT0 & CLKSTAT0_HFXTALOK) == 0);
+//  /* Change the system clock to the internal 16 MHz oscillator */
+//  pADI_CLKCTL->CLKCON0 &= ~CLKCON0_CLKMUX_MSK;
+//
+//  /* Switch the input to the SPLL */
+//  pADI_CLKCTL->CLKSTAT0 = (CLKSTAT0_SPLLUNLOCK | CLKSTAT0_SPLLLOCK);
+//  pADI_CLKCTL->CLKCON0 |= CLKCON0_PLLMUX_HFXTAL;
+//
+//  /* Wait until the SPLL has locked */
+//  while((pADI_CLKCTL->CLKSTAT0 & CLKSTAT0_SPLLLOCK) == 0);
+//  /* Change the system clock to the SPLL clock */
+//  pADI_CLKCTL->CLKCON0 |= CLKCON0_CLKMUX_SPLL;
 }
 
 /**
- * @brief     Get Core Clock Frequency (HCLK)
- * @return
+ * @brief       Setup the clock system. Initialize the default clock
+ *              source.
  */
-uint32_t CLK_GetFreqHCLK(void)
+static void CLK_ClkReset(void)
 {
-  return (GetFreqUCLK() >> (pADI_CLKCTL->CLKCON1 & CLKCON1_CDHCLK_MSK));
+
 }
 
 /**
- * @brief     Get Peripheral Clock Frequency (PCLK)
- * @return
+ * @brief       Initializes the CPU clock according to the specified
+ *              parameters in the cfg argument.
+ * @param[in]   cfg   CLK_ClkCfg_t structure that contains the configuration
+ *                    information for the clock system.
  */
-uint32_t CLK_GetFreqPCLK(void)
+static void CLK_ClkConfig(const CLK_ClkCfg_t *cfg)
 {
-  return (GetFreqUCLK() >> (pADI_CLKCTL->CLKCON1 & CLKCON1_CDPCLK_MSK));
+
 }
 
 /**
- * @brief     Get D2D Clock Frequency (HCLK)
- * @return
+ * @brief       Gets Clock Frequency.
+ * @param[in]   type  CLK_Freq_t.
+ * @return      Returns clock frequency in Hz.
  */
-uint32_t CLK_GetFreqD2DCLK(void)
+static uint32_t CLK_GetFrequency(CLK_Freq_t type)
 {
-  return (GetFreqUCLK() >> (pADI_CLKCTL->CLKCON1 & CLKCON1_CDD2DCLK_MSK));
+  uint32_t clk;
+
+  clk = GetFreqUCLK();
+
+  switch (type) {
+    case CLK_FREQ_HCLK:
+      clk >>= (MMR_CLKCTL->CLKCON1 & CLKCON1_CDHCLK_Msk) >> CLKCON1_CDHCLK_Pos;
+      break;
+    case CLK_FREQ_PCLK:
+      clk >>= (MMR_CLKCTL->CLKCON1 & CLKCON1_CDPCLK_Msk) >> CLKCON1_CDPCLK_Pos;
+      break;
+    case CLK_FREQ_ACLK:
+      clk >>= 2U;
+      break;
+  }
+
+  return (clk);
 }
 
-
-void CLK_PeriphGateControl(CLK_PERIPH clk, CLK_MODE mode)
+/**
+ * @brief       Enables the peripheral specified by the periph argument.
+ * @param[in]   periph  CLK_Periph_t.
+ */
+static void CLK_PeriphEnable(CLK_Periph_t periph)
 {
-  if (mode == CLOCK_ON)
-    pADI_CLKCTL->CLKCON5 &= ~clk;
-  else
-    pADI_CLKCTL->CLKCON5 |= clk;
+  MMR_CLKCTL->CLKCON5 &= ~(uint16_t)periph;
 }
 
-/* ----------------------------- End of file ---------------------------------*/
+/**
+ * @brief       Disables the peripheral specified by the periph argument.
+ * @param[in]   periph  CLK_Periph_t.
+ */
+static void CLK_PeriphDisable(CLK_Periph_t periph)
+{
+  MMR_CLKCTL->CLKCON5 |= (uint16_t)periph;
+}
+
+/**
+ * @brief       Gets the current state of the peripheral specified
+ *              by the periph argument.
+ * @param[in]   periph  CLK_Periph_t.
+ * @return      Returns state of the peripheral:
+ *                0 - The peripheral is disabled;
+ *                1 - The peripheral is enabled.
+ */
+static uint32_t CLK_GetStatePeriph(CLK_Periph_t periph)
+{
+  return ((uint32_t)((MMR_CLKCTL->CLKCON5 & periph) == 0U));
+}
+
+/*******************************************************************************
+ *  global variable definitions  (scope: module-exported)
+ ******************************************************************************/
+
+Driver_CLK_t Driver_CLK = {
+  CLK_ClkReset,
+  CLK_ClkConfig,
+  CLK_GetFrequency,
+  CLK_PeriphEnable,
+  CLK_PeriphDisable,
+  CLK_GetStatePeriph
+};

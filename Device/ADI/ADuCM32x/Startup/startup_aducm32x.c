@@ -65,7 +65,7 @@ void MDIO_IRQHandler               (void) __attribute__ ((weak, alias("Default_H
 void TIM0_IRQHandler               (void) __attribute__ ((weak, alias("Default_Handler")));
 void TIM1_IRQHandler               (void) __attribute__ ((weak, alias("Default_Handler")));
 void FLASH_IRQHandler              (void) __attribute__ ((weak, alias("Default_Handler")));
-void UART0_IRQHandler              (void) __attribute__ ((weak, alias("Default_Handler")));
+void UART_IRQHandler               (void) __attribute__ ((weak, alias("Default_Handler")));
 void SPI0_IRQHandler               (void) __attribute__ ((weak, alias("Default_Handler")));
 void SPI1_IRQHandler               (void) __attribute__ ((weak, alias("Default_Handler")));
 void I2C0_Slave_IRQHandler         (void) __attribute__ ((weak, alias("Default_Handler")));
@@ -146,7 +146,7 @@ extern const pFunc __VECTOR_TABLE[];
   TIM0_IRQHandler,                  /* Timer0 Interrupt              [15]     */
   TIM1_IRQHandler,                  /* Timer1 Interrupt              [16]     */
   FLASH_IRQHandler,                 /* Flash Memory Interrupt        [17]     */
-  UART0_IRQHandler,                 /* UART Interrupt                [18]     */
+  UART_IRQHandler,                  /* UART Interrupt                [18]     */
   SPI0_IRQHandler,                  /* SPI0 Interrupt                [19]     */
   SPI1_IRQHandler,                  /* SPI1 Interrupt                [20]     */
   I2C0_Slave_IRQHandler,            /* I2C0 Slave Interrupt          [21]     */
@@ -195,8 +195,9 @@ extern const pFunc __VECTOR_TABLE[];
 __NO_RETURN
 void Reset_Handler(void)
 {
+#if defined(__ARMCC_VERSION)
   __NOP();
-  
+#endif
   SystemInit();                      /* CMSIS System Initialization           */
   __PROGRAM_START();                 /* Enter PreMain (C library entry point) */
 }
