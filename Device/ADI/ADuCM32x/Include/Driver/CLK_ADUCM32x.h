@@ -30,6 +30,29 @@
  *  defines and macros (scope: module-local)
  ******************************************************************************/
 
+#define CLK_SPLL_SRC_HFOSC            (0U)
+#define CLK_SPLL_SRC_HFXTAL           (1U)
+
+#define CLK_UCLK_SRC_HFOSC            (0U)
+#define CLK_UCLK_SRC_SPLL             (1U)
+#define CLK_UCLK_SRC_ECLKIN           (3U)
+
+#define CLK_HCLK_DIV_1                (0U)
+#define CLK_HCLK_DIV_2                (1U)
+#define CLK_HCLK_DIV_4                (2U)
+#define CLK_HCLK_DIV_8                (3U)
+#define CLK_HCLK_DIV_16               (4U)
+#define CLK_HCLK_DIV_32               (5U)
+#define CLK_HCLK_DIV_64               (6U)
+#define CLK_HCLK_DIV_128              (7U)
+
+#define CLK_PCLK_DIV_4                (2U)
+#define CLK_PCLK_DIV_8                (3U)
+#define CLK_PCLK_DIV_16               (4U)
+#define CLK_PCLK_DIV_32               (5U)
+#define CLK_PCLK_DIV_64               (6U)
+#define CLK_PCLK_DIV_128              (7U)
+
 /*******************************************************************************
  *  typedefs and structures (scope: module-local)
  ******************************************************************************/
@@ -48,9 +71,12 @@ typedef enum CLK_Periph {
   CLK_PERIPH_UART = (uint16_t)(1U << 5U)
 } CLK_Periph_t;
 
-typedef struct CLK_ClkCfg {
-
-} CLK_ClkCfg_t;
+typedef struct CLK_Cfg {
+  uint16_t SPLL_src;
+  uint16_t UCLK_src;
+  uint16_t HCLK_div;
+  uint16_t PCLK_div;
+} CLK_Cfg_t;
 
 /**
  * Function documentation
@@ -59,10 +85,10 @@ typedef struct CLK_ClkCfg {
  * @brief       Setup the clock system. Initialize the default clock
  *              source.
  *
- * @fn          void ClkConfig(const CLK_ClkCfg_t *cfg)
+ * @fn          void ClkConfig(const CLK_Cfg_t *cfg)
  * @brief       Initializes the CPU clock according to the specified
  *              parameters in the cfg argument.
- * @param[in]   cfg   CLK_ClkCfg_t structure that contains the configuration
+ * @param[in]   cfg   CLK_Cfg_t structure that contains the configuration
  *                    information for the clock system.
  *
  * @fn          uint32_t GetFrequency(CLK_Freq_t type)
@@ -92,7 +118,7 @@ typedef struct CLK_ClkCfg {
  */
 typedef struct Driver_CLK {
   void     (*ClkReset)      (void);
-  void     (*ClkConfig)     (const CLK_ClkCfg_t *cfg);
+  void     (*ClkConfig)     (const CLK_Cfg_t *cfg);
   uint32_t (*GetFrequency)  (CLK_Freq_t   type);
   void     (*PeriphEnable)  (CLK_Periph_t periph);
   void     (*PeriphDisable) (CLK_Periph_t periph);

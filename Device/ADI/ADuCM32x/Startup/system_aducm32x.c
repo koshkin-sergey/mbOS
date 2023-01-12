@@ -39,9 +39,9 @@ uint32_t SystemCoreClock;           /*!< System Clock Frequency (Core Clock)  */
  */
 void SystemCoreClockUpdate(void)
 {
-  Driver_CLK_t *Clk = &Driver_CLK;
+  Driver_CLK_t *clk = &Driver_CLK;
 
-  SystemCoreClock = Clk->GetFrequency(CLK_FREQ_HCLK);
+  SystemCoreClock = clk->GetFrequency(CLK_FREQ_HCLK);
 }
 
 /**
@@ -49,5 +49,8 @@ void SystemCoreClockUpdate(void)
  */
 void SystemInit(void)
 {
+  Driver_CLK_t *clk = &Driver_CLK;
+
+  clk->ClkReset();
   MMR_WDT->T3CON = 0U;
 }

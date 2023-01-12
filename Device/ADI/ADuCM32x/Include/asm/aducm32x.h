@@ -5280,42 +5280,40 @@ typedef struct MMR_CLKCTL{            /*!< MMR_CLKCTL Structure               */
 #define CLKCON5_UCLKSPI0OFF_ON        (0x0U << CLKCON5_UCLKSPI0OFF_Pos)         /* Clock on                 */
 #define CLKCON5_UCLKSPI0OFF_OFF       (0x1U << CLKCON5_UCLKSPI0OFF_Pos)         /* Clock off                */
 
-/* Reset Value for CLKSTAT0*/
-#define CLKSTAT0_RVAL                  0x0 
-
 /* CLKSTAT0[HFXTALNOK] - HF crystal not stable */
-#define CLKSTAT0_HFXTALNOK_BBA         (*(volatile unsigned long *) 0x42500338)
-#define CLKSTAT0_HFXTALNOK_MSK         (0x1   << 14 )
-#define CLKSTAT0_HFXTALNOK             (0x1   << 14 )
+#define CLKSTAT0_HFXTALNOK_Pos        (14U)
+#define CLKSTAT0_HFXTALNOK_Msk        (0x1U << CLKSTAT0_HFXTALNOK_Pos)
+#define CLKSTAT0_HFXTALNOK            CLKSTAT0_HFXTALNOK_Msk
 
 /* CLKSTAT0[HFXTALOK] - HF crystal stable */
-#define CLKSTAT0_HFXTALOK_BBA          (*(volatile unsigned long *) 0x42500334)
-#define CLKSTAT0_HFXTALOK_MSK          (0x1   << 13 )
-#define CLKSTAT0_HFXTALOK              (0x1   << 13 )
+#define CLKSTAT0_HFXTALOK_Pos         (13U)
+#define CLKSTAT0_HFXTALOK_Msk         (0x1U << CLKSTAT0_HFXTALOK_Pos)
+#define CLKSTAT0_HFXTALOK             CLKSTAT0_HFXTALOK_Msk
 
 /* CLKSTAT0[HFXTALSTATUS] - HF crystal status */
-#define CLKSTAT0_HFXTALSTATUS_BBA      (*(volatile unsigned long *) 0x42500330)
-#define CLKSTAT0_HFXTALSTATUS_MSK      (0x1   << 12 )
-#define CLKSTAT0_HFXTALSTATUS          (0x1   << 12 )
+#define CLKSTAT0_HFXTALSTATUS_Pos     (12U)
+#define CLKSTAT0_HFXTALSTATUS_Msk     (0x1U << CLKSTAT0_HFXTALSTATUS_Pos)
+#define CLKSTAT0_HFXTALSTATUS         CLKSTAT0_HFXTALSTATUS_Msk
 
 /* CLKSTAT0[SPLLUNLOCK] - System PLL unlock */
-#define CLKSTAT0_SPLLUNLOCK_BBA        (*(volatile unsigned long *) 0x42500308)
-#define CLKSTAT0_SPLLUNLOCK_MSK        (0x1   << 2  )
-#define CLKSTAT0_SPLLUNLOCK            (0x1   << 2  )
+#define CLKSTAT0_SPLLUNLOCK_Pos       (2U)
+#define CLKSTAT0_SPLLUNLOCK_Msk       (0x1U << CLKSTAT0_SPLLUNLOCK_Pos)
+#define CLKSTAT0_SPLLUNLOCK           CLKSTAT0_SPLLUNLOCK_Msk
 
 /* CLKSTAT0[SPLLLOCK] - System PLL lock */
-#define CLKSTAT0_SPLLLOCK_BBA          (*(volatile unsigned long *) 0x42500304)
-#define CLKSTAT0_SPLLLOCK_MSK          (0x1   << 1  )
-#define CLKSTAT0_SPLLLOCK              (0x1   << 1  )
+#define CLKSTAT0_SPLLLOCK_Pos         (1U)
+#define CLKSTAT0_SPLLLOCK_Msk         (0x1U << CLKSTAT0_SPLLLOCK_Pos)
+#define CLKSTAT0_SPLLLOCK             CLKSTAT0_SPLLLOCK_Msk
 
 /* CLKSTAT0[SPLLSTATUS] - System PLL status */
-#define CLKSTAT0_SPLLSTATUS_BBA        (*(volatile unsigned long *) 0x42500300)
-#define CLKSTAT0_SPLLSTATUS_MSK        (0x1   << 0  )
-#define CLKSTAT0_SPLLSTATUS            (0x1   << 0  )
-// ------------------------------------------------------------------------------------------------
-// -----                                        dma_ctl                                        -----
-// ------------------------------------------------------------------------------------------------
+#define CLKSTAT0_SPLLSTATUS_Pos       (0U)
+#define CLKSTAT0_SPLLSTATUS_Msk       (0x1U << CLKSTAT0_SPLLSTATUS_Pos)
+#define CLKSTAT0_SPLLSTATUS           CLKSTAT0_SPLLSTATUS_Msk
 
+
+/* ========================================================================== */
+/* ================                  DMACTL                ================== */
+/* ========================================================================== */
 
 /**
   * @brief DMACTL (MMR_DMACTL)

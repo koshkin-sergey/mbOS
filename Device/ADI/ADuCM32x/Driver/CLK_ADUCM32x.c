@@ -27,26 +27,10 @@
 #include <device_config.h>
 
 /*******************************************************************************
- *  external declarations
- ******************************************************************************/
-
-/*******************************************************************************
  *  defines and macros (scope: module-local)
  ******************************************************************************/
 
 #define PLL_CLK_VALUE               80000000UL
-
-/*******************************************************************************
- *  typedefs and structures (scope: module-local)
- ******************************************************************************/
-
-/*******************************************************************************
- *  global variable definitions (scope: module-local)
- ******************************************************************************/
-
-/*******************************************************************************
- *  function prototypes (scope: module-local)
- ******************************************************************************/
 
 /*******************************************************************************
  *  function implementations (scope: module-local)
@@ -77,49 +61,85 @@ static uint32_t GetFreqUCLK(void)
   return uClk;
 }
 
-/*******************************************************************************
- *  function implementations (scope: module-exported)
- ******************************************************************************/
-
-/**
- * @brief   Changes the clock source for the 80 MHz SPLL from the internal
- *          16 MHz oscillator to the external HFXTAL.
- */
-static void CLK_SourceHFXTAL(void)
-{
-//  /* Check that HFXTAL is stable */
-//  while((pADI_CLKCTL->CLKSTAT0 & CLKSTAT0_HFXTALOK) == 0);
-//  /* Change the system clock to the internal 16 MHz oscillator */
-//  pADI_CLKCTL->CLKCON0 &= ~CLKCON0_CLKMUX_MSK;
-//
-//  /* Switch the input to the SPLL */
-//  pADI_CLKCTL->CLKSTAT0 = (CLKSTAT0_SPLLUNLOCK | CLKSTAT0_SPLLLOCK);
-//  pADI_CLKCTL->CLKCON0 |= CLKCON0_PLLMUX_HFXTAL;
-//
-//  /* Wait until the SPLL has locked */
-//  while((pADI_CLKCTL->CLKSTAT0 & CLKSTAT0_SPLLLOCK) == 0);
-//  /* Change the system clock to the SPLL clock */
-//  pADI_CLKCTL->CLKCON0 |= CLKCON0_CLKMUX_SPLL;
-}
-
 /**
  * @brief       Setup the clock system. Initialize the default clock
  *              source.
  */
 static void CLK_ClkReset(void)
 {
+  uint16_t reg_val;
 
+  /* Change the system clock to the internal 16 MHz oscillator */
+  reg_val = MMR_CLKCTL->CLKCON0 & ~CLKCON0_CLKMUX_Msk;
+  MMR_CLKCTL->CLKCON0 = reg_val | CLKCON0_CLKMUX_HFOSC;
+
+  /* Wait 5 clock cicles */
+  __NOP();__NOP();__NOP();__NOP();__NOP();
+
+  if ((MMR_CLKCTL->CLKCON0 & CLKCON0_PLLMUX_Msk) != CLKCON0_PLLMUX_HFOSC) {
+    /* Switch the input to the SPLL */
+    MMR_CLKCTL->CLKSTAT0 = (CLKSTAT0_SPLLUNLOCK | CLKSTAT0_SPLLLOCK);
+    reg_val = MMR_CLKCTL->CLKCON0 & ~CLKCON0_PLLMUX_Msk;
+    MMR_CLKCTL->CLKCON0 = reg_val | CLKCON0_PLLMUX_HFOSC;
+
+    /* Wait until the SPLL has locked */
+    while((MMR_CLKCTL->CLKSTAT0 & CLKSTAT0_SPLLLOCK) == 0);
+  }
+
+  /* Change the system clock to the SPLL clock */
+  reg_val = MMR_CLKCTL->CLKCON0 & ~CLKCON0_CLKMUX_Msk;
+  MMR_CLKCTL->CLKCON0 = reg_val | CLKCON0_CLKMUX_SPLL;
+
+  /* Wait 5 clock cicles */
+  __NOP();__NOP();__NOP();__NOP();__NOP();
 }
 
 /**
  * @brief       Initializes the CPU clock according to the specified
  *              parameters in the cfg argument.
- * @param[in]   cfg   CLK_ClkCfg_t structure that contains the configuration
+ * @param[in]   cfg   CLK_Cfg_t structure that contains the configuration
  *                    information for the clock system.
  */
-static void CLK_ClkConfig(const CLK_ClkCfg_t *cfg)
+static void CLK_ClkConfig(const CLK_Cfg_t *cfg)
 {
+  uint16_t reg_val;
 
+  /* Change the system clock to the internal 16 MHz oscillator */
+  reg_val = MMR_CLKCTL->CLKCON0 & ~CLKCON0_CLKMUX_Msk;
+  MMR_CLKCTL->CLKCON0 = reg_val | CLKCON0_CLKMUX_HFOSC;
+
+  /* Wait 5 clock cicles */
+  __NOP();__NOP();__NOP();__NOP();__NOP();
+
+  if (cfg->SPLL_src == CLK_SPLL_SRC_HFXTAL) {
+    /* Check that HFXTAL is stable */
+    while((MMR_CLKCTL->CLKSTAT0 & CLKSTAT0_HFXTALOK) == 0);
+  }
+
+  if ((MMR_CLKCTL->CLKCON0 & CLKCON0_PLLMUX_Msk) != (cfg->SPLL_src << CLKCON0_PLLMUX_Pos)) {
+    /* Switch the input to the SPLL */
+    MMR_CLKCTL->CLKSTAT0 = (CLKSTAT0_SPLLUNLOCK | CLKSTAT0_SPLLLOCK);
+    reg_val = MMR_CLKCTL->CLKCON0 & ~CLKCON0_PLLMUX_Msk;
+    MMR_CLKCTL->CLKCON0 = reg_val | (cfg->SPLL_src << CLKCON0_PLLMUX_Pos);
+
+    /* Wait until the SPLL has locked */
+    while((MMR_CLKCTL->CLKSTAT0 & CLKSTAT0_SPLLLOCK) == 0);
+  }
+
+  /* Change the system clock to the SPLL clock */
+  reg_val = MMR_CLKCTL->CLKCON0 & ~CLKCON0_CLKMUX_Msk;
+  MMR_CLKCTL->CLKCON0 = reg_val | (cfg->UCLK_src << CLKCON0_CLKMUX_Pos);
+
+  /* Wait 5 clock cicles */
+  __NOP();__NOP();__NOP();__NOP();__NOP();
+
+  /* Set HCLK divide */
+  reg_val = MMR_CLKCTL->CLKCON1 & ~CLKCON1_CDHCLK_Msk;
+  MMR_CLKCTL->CLKCON1 = reg_val | (cfg->HCLK_div << CLKCON1_CDHCLK_Pos);
+
+  /* Set PCLK divide */
+  reg_val = MMR_CLKCTL->CLKCON1 & ~CLKCON1_CDPCLK_Msk;
+  MMR_CLKCTL->CLKCON1 = reg_val | (cfg->PCLK_div << CLKCON1_CDPCLK_Pos);
 }
 
 /**

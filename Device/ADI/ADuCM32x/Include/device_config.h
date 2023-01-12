@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2022-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -23,11 +23,15 @@
 //-------- <<< Use Configuration Wizard in Context Menu >>> --------------------
 
 // <h> Clock Configuration
+// <i> Configuration settings for Clock
 //   <o> Low-Frequency Internal Clock (Hz)  <1-999999999>
+//   <i> Low-Frequency Internal Clock
 #define LF_CLK_VALUE                    32000
 //   <o> High-Frequency Internal Clock (Hz) <1-999999999>
+//   <i> High-Frequency Internal Clock
 #define HF_CLK_VALUE                    16000000
 //   <o> External Clock (Hz)            <1-999999999>
+//   <i> Frequency of the external clock source connected to P1.0
 #define XT_CLK_VALUE                    16000000
 // </h>
 
