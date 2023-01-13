@@ -1448,24 +1448,26 @@ typedef struct MMR_RESET {                  /*!< MMR_RESET Structure            
 #define RSTSTA_POR                     (0x1   << 0  )
 #define RSTSTA_POR_DIS                 (0x0   << 0  )
 #define RSTSTA_POR_EN                  (0x1   << 0  )
-// ------------------------------------------------------------------------------------------------
-// -----                                        INTERRUPT                                        -----
-// ------------------------------------------------------------------------------------------------
 
+
+/* ========================================================================== */
+/* ================           EXTERNAL INTERRUPTS          ================== */
+/* ========================================================================== */
 
 /**
-  * @brief always_on (MMR_INTERRUPT)
+  * @brief EXTI (MMR_EXTI)
   */
 
-typedef struct MMR_INTERRUPT {              /*!< MMR_INTERRUPT Structure               */
-  __IO uint16_t  EI0CFG;                    /*!< External Interrupt configuration 0    */
-  __I  uint16_t  RESERVED0;
-  __IO uint16_t  EI1CFG;                    /*!< External Interrupt configuration 1    */
-  __I  uint16_t  RESERVED1;
-  __IO uint16_t  EI2CFG;                    /*!< External Interrupt configuration 2    */
-  __I  uint16_t  RESERVED2[3];
-  __IO uint16_t  EICLR;                     /*!< External Interrupt clear              */
-} MMR_INTERRUPT_t;
+typedef struct MMR_EXTI {             /*!< MMR_EXTI Structure                 */
+  __IOM uint16_t  EI0CFG;             /*!< External Interrupt configuration 0 */
+  __IM  uint16_t  RESERVED0;
+  __IOM uint16_t  EI1CFG;             /*!< External Interrupt configuration 1 */
+  __IM  uint16_t  RESERVED1;
+  __IOM uint16_t  EI2CFG;             /*!< External Interrupt configuration 2 */
+  __IM  uint16_t  RESERVED2[3];
+  __IOM uint16_t  EICLR;              /*!< External Interrupt clear           */
+  __IM  uint16_t  RESERVED3;
+} MMR_EXTI_t;
 
 /* Reset Value for EI0CFG*/
 #define EI0CFG_RVAL                    0x0 
@@ -6957,7 +6959,7 @@ typedef struct MMR_AFE {                    /*!< MMR_AFE Structure              
 #define MMR_ID_ADDR                              0x40002024UL
 #define MMR_PWRCTL_ADDR                          0x40002400UL
 #define MMR_RESET_ADDR                           0x40002408UL
-#define MMR_INTERRUPT_ADDR                       0x40002420UL
+#define MMR_EXTI_ADDR                            0x40002420UL
 #define MMR_WDT_ADDR                             0x40002580UL
 #define MMR_WUT_ADDR                             0x40002500UL
 #define MMR_I2C0_ADDR                            0x40003000UL
@@ -7010,7 +7012,7 @@ typedef struct MMR_AFE {                    /*!< MMR_AFE Structure              
 #define MMR_ID                    ((MMR_ID_t        *)MMR_ID_ADDR)
 #define MMR_PWRCTL                ((MMR_PWRCTL_t    *)MMR_PWRCTL_ADDR)
 #define MMR_RESET                 ((MMR_RESET_t     *)MMR_RESET_ADDR)
-#define MMR_INTERRUPT             ((MMR_INTERRUPT_t *)MMR_INTERRUPT_ADDR)
+#define MMR_EXTI                  ((MMR_EXTI_t      *)MMR_EXTI_ADDR)
 #define MMR_WDT                   ((MMR_WDT_t       *)MMR_WDT_ADDR)
 #define MMR_WUT                   ((MMR_WUT_t       *)MMR_WUT_ADDR)
 #define MMR_I2C0                  ((MMR_I2C_t       *)MMR_I2C0_ADDR)
