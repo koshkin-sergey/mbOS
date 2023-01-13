@@ -64,18 +64,18 @@ typedef enum CLK_Freq {
 } CLK_Freq_t;
 
 typedef enum CLK_Periph {
-  CLK_PERIPH_SPI0 = (uint16_t)(1U << 0U),
-  CLK_PERIPH_SPI1 = (uint16_t)(1U << 1U),
-  CLK_PERIPH_I2C0 = (uint16_t)(1U << 3U),
-  CLK_PERIPH_I2C1 = (uint16_t)(1U << 4U),
-  CLK_PERIPH_UART = (uint16_t)(1U << 5U)
+  CLK_PERIPH_SPI0 = (1U << 0U),
+  CLK_PERIPH_SPI1 = (1U << 1U),
+  CLK_PERIPH_I2C0 = (1U << 3U),
+  CLK_PERIPH_I2C1 = (1U << 4U),
+  CLK_PERIPH_UART = (1U << 5U)
 } CLK_Periph_t;
 
 typedef struct CLK_Cfg {
-  uint16_t SPLL_src;
-  uint16_t UCLK_src;
-  uint16_t HCLK_div;
-  uint16_t PCLK_div;
+  uint32_t SPLL_src;
+  uint32_t UCLK_src;
+  uint32_t HCLK_div;
+  uint32_t PCLK_div;
 } CLK_Cfg_t;
 
 /**

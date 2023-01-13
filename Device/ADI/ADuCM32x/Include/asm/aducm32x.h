@@ -4843,28 +4843,28 @@ typedef struct {                            /*!< MMR_GPIO Structure             
 #define GPIO_ODE_RVAL             (0U)
 
 /********************  Bit definition for GPCON register  *********************/
-#define GPIO_CON(af, pin)         ((uint16_t)(((af) & 3U) << ((pin) << 1U)))
+#define GPIO_CON(af, pin)         (((af) & 3U) << ((pin) << 1U))
 
 /********************  Bit definition for GPOE register  **********************/
-#define GPIO_OE(mode, pin)        ((uint8_t)(((mode) & 1U) << (pin)))
+#define GPIO_OE(mode, pin)        (((mode) & 1U) << (pin))
 
 /********************  Bit definition for GPPUL register  *********************/
-#define GPIO_PUL(mode, pin)       ((uint8_t)(((mode) & 1U) << (pin)))
+#define GPIO_PUL(mode, pin)       (((mode) & 1U) << (pin))
 
 /********************  Bit definition for GPIE register  **********************/
-#define GPIO_IE(mode, pin)        ((uint8_t)(((mode) & 1U) << (pin)))
+#define GPIO_IE(mode, pin)        (((mode) & 1U) << (pin))
 
 /********************  Bit definition for GPSET register  *********************/
-#define GPIO_SET(pin)             ((uint8_t)(1U << (pin)))
+#define GPIO_SET(pin)             (1U << (pin))
 
 /********************  Bit definition for GPCLR register  *********************/
-#define GPIO_CLR(pin)             ((uint8_t)(1U << (pin)))
+#define GPIO_CLR(pin)             (1U << (pin))
 
 /********************  Bit definition for GPTGL register  *********************/
-#define GPIO_TGL(pin)             ((uint8_t)(1U << (pin)))
+#define GPIO_TGL(pin)             (1U << (pin))
 
 /********************  Bit definition for GPODE register  *********************/
-#define GPIO_ODE(mode, pin)       ((uint8_t)(((mode) & 1U) << (pin)))
+#define GPIO_ODE(mode, pin)       (((mode) & 1U) << (pin))
 
 
 // ------------------------------------------------------------------------------------------------
@@ -5174,15 +5174,15 @@ typedef struct MMR_PWM {                    /*!< MMR_PWM Structure              
   * @brief clocking (MMR_CLKCTL)
   */
 
-typedef struct MMR_CLKCTL{            /*!< MMR_CLKCTL Structure               */
-  __IO uint16_t  CLKCON0;             /*!< Misc clock settings register       */
-  __I  uint16_t  RESERVED0;
-  __IO uint16_t  CLKCON1;             /*!< Clock dividers register            */
-  __I  uint16_t  RESERVED1[7];
-  __IO uint16_t  CLKCON5;             /*!< User clock gating control register */
-  __I  uint16_t  RESERVED2;
-  __IO uint16_t  CLKSTAT0;            /*!< Clocking status                    */
-  __I  uint16_t  RESERVED3;
+typedef struct MMR_CLKCTL {           /*!< MMR_CLKCTL Structure               */
+  __IOM uint16_t  CLKCON0;            /*!< Misc clock settings register       */
+  __IM  uint16_t  RESERVED0;
+  __IOM uint16_t  CLKCON1;            /*!< Clock dividers register            */
+  __IM  uint16_t  RESERVED1[7];
+  __IOM uint16_t  CLKCON5;            /*!< User clock gating control register */
+  __IM  uint16_t  RESERVED2;
+  __IOM uint16_t  CLKSTAT0;           /*!< Clocking status                    */
+  __IM  uint16_t  RESERVED3;
 } MMR_CLKCTL_t;
 
 /* CLKCON0[HFXTALIE] - High frequency crystal interrupt enable */
@@ -6649,9 +6649,10 @@ typedef struct MMR_LV_INT {                 /*!< MMR_LV_INT Structure           
   * @brief IDAC (MMR_IDAC)
   */
 
-typedef struct MMR_IDAC {                   /*!< MMR_IDAC Structure                   */
-  __IO uint32_t  IDACDAT;                   /*!< IDAC data register                   */
-  __IO uint8_t   IDACCON;                   /*!< IDAC control register                */
+typedef struct MMR_IDAC {             /*!< MMR_IDAC Structure                 */
+  __IOM uint32_t  IDACDAT;            /*!< IDAC data register                 */
+  __IOM uint8_t   IDACCON;            /*!< IDAC control register              */
+  __IM  uint8_t   RESERVED0[3];
 } MMR_IDAC_t;
 
 /* Reset Value for IDAC0DAT*/

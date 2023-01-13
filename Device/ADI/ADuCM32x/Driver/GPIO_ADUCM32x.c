@@ -59,11 +59,11 @@ Driver_GPIO_t Driver_GPIO##x = {  \
  */
 static void GPIO_PinConfig(GPIO_PIN_t pin, const GPIO_PIN_CFG_t *cfg, MMR_GPIO_t *mmr)
 {
-  uint8_t oer;
-  uint8_t ier;
-  uint8_t pulr;
-  uint8_t oder;
-  uint16_t conr;
+  uint32_t oer;
+  uint32_t ier;
+  uint32_t pulr;
+  uint32_t oder;
+  uint32_t conr;
 
   if (cfg == NULL) {
     return;
@@ -75,11 +75,11 @@ static void GPIO_PinConfig(GPIO_PIN_t pin, const GPIO_PIN_CFG_t *cfg, MMR_GPIO_t
   oder = (mmr->GPODE & ~GPIO_ODE(1U, pin));
   pulr = (mmr->GPPUL & ~GPIO_PUL(1U, pin));
 
-  mmr->GPCON = (conr | GPIO_CON(cfg->func >> 0, pin));
-  mmr->GPIE  = (ier  | GPIO_IE (cfg->mode >> 0, pin));
-  mmr->GPOE  = (oer  | GPIO_OE (cfg->mode >> 1, pin));
-  mmr->GPODE = (oder | GPIO_ODE(cfg->mode >> 2, pin));
-  mmr->GPPUL = (pulr | GPIO_PUL(cfg->pull >> 0, pin));
+  mmr->GPCON = (uint16_t)(conr | GPIO_CON(cfg->func >> 0, pin));
+  mmr->GPIE  = (uint8_t )(ier  | GPIO_IE (cfg->mode >> 0, pin));
+  mmr->GPOE  = (uint8_t )(oer  | GPIO_OE (cfg->mode >> 1, pin));
+  mmr->GPODE = (uint8_t )(oder | GPIO_ODE(cfg->mode >> 2, pin));
+  mmr->GPPUL = (uint8_t )(pulr | GPIO_PUL(cfg->pull >> 0, pin));
 }
 
 /**
@@ -120,9 +120,9 @@ static uint32_t GPIO_PinRead(GPIO_PIN_t pin, MMR_GPIO_t *mmr)
 static void GPIO_PinWrite(GPIO_PIN_t pin, GPIO_PIN_OUT_t value, MMR_GPIO_t *mmr)
 {
   if (value == GPIO_PIN_OUT_HIGH)
-    mmr->GPSET = GPIO_SET(pin);
+    mmr->GPSET = (uint8_t)GPIO_SET(pin);
   else
-    mmr->GPCLR = GPIO_CLR(pin);
+    mmr->GPCLR = (uint8_t)GPIO_CLR(pin);
 }
 
 /**
@@ -132,7 +132,7 @@ static void GPIO_PinWrite(GPIO_PIN_t pin, GPIO_PIN_OUT_t value, MMR_GPIO_t *mmr)
  */
 static void GPIO_PinToggle(GPIO_PIN_t pin, MMR_GPIO_t *mmr)
 {
-  mmr->GPTGL = GPIO_TGL(pin);
+  mmr->GPTGL = (uint8_t)GPIO_TGL(pin);
 }
 
 /*******************************************************************************

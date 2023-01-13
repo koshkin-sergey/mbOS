@@ -67,11 +67,11 @@ static uint32_t GetFreqUCLK(void)
  */
 static void CLK_ClkReset(void)
 {
-  uint16_t reg_val;
+  uint32_t reg_val;
 
   /* Change the system clock to the internal 16 MHz oscillator */
   reg_val = MMR_CLKCTL->CLKCON0 & ~CLKCON0_CLKMUX_Msk;
-  MMR_CLKCTL->CLKCON0 = reg_val | CLKCON0_CLKMUX_HFOSC;
+  MMR_CLKCTL->CLKCON0 = (uint16_t)(reg_val | CLKCON0_CLKMUX_HFOSC);
 
   /* Wait 5 clock cicles */
   __NOP();__NOP();__NOP();__NOP();__NOP();
@@ -80,7 +80,7 @@ static void CLK_ClkReset(void)
     /* Switch the input to the SPLL */
     MMR_CLKCTL->CLKSTAT0 = (CLKSTAT0_SPLLUNLOCK | CLKSTAT0_SPLLLOCK);
     reg_val = MMR_CLKCTL->CLKCON0 & ~CLKCON0_PLLMUX_Msk;
-    MMR_CLKCTL->CLKCON0 = reg_val | CLKCON0_PLLMUX_HFOSC;
+    MMR_CLKCTL->CLKCON0 = (uint16_t)(reg_val | CLKCON0_PLLMUX_HFOSC);
 
     /* Wait until the SPLL has locked */
     while((MMR_CLKCTL->CLKSTAT0 & CLKSTAT0_SPLLLOCK) == 0);
@@ -88,7 +88,7 @@ static void CLK_ClkReset(void)
 
   /* Change the system clock to the SPLL clock */
   reg_val = MMR_CLKCTL->CLKCON0 & ~CLKCON0_CLKMUX_Msk;
-  MMR_CLKCTL->CLKCON0 = reg_val | CLKCON0_CLKMUX_SPLL;
+  MMR_CLKCTL->CLKCON0 = (uint16_t)(reg_val | CLKCON0_CLKMUX_SPLL);
 
   /* Wait 5 clock cicles */
   __NOP();__NOP();__NOP();__NOP();__NOP();
@@ -102,11 +102,11 @@ static void CLK_ClkReset(void)
  */
 static void CLK_ClkConfig(const CLK_Cfg_t *cfg)
 {
-  uint16_t reg_val;
+  uint32_t reg_val;
 
   /* Change the system clock to the internal 16 MHz oscillator */
   reg_val = MMR_CLKCTL->CLKCON0 & ~CLKCON0_CLKMUX_Msk;
-  MMR_CLKCTL->CLKCON0 = reg_val | CLKCON0_CLKMUX_HFOSC;
+  MMR_CLKCTL->CLKCON0 = (uint16_t)(reg_val | CLKCON0_CLKMUX_HFOSC);
 
   /* Wait 5 clock cicles */
   __NOP();__NOP();__NOP();__NOP();__NOP();
@@ -120,7 +120,7 @@ static void CLK_ClkConfig(const CLK_Cfg_t *cfg)
     /* Switch the input to the SPLL */
     MMR_CLKCTL->CLKSTAT0 = (CLKSTAT0_SPLLUNLOCK | CLKSTAT0_SPLLLOCK);
     reg_val = MMR_CLKCTL->CLKCON0 & ~CLKCON0_PLLMUX_Msk;
-    MMR_CLKCTL->CLKCON0 = reg_val | (cfg->SPLL_src << CLKCON0_PLLMUX_Pos);
+    MMR_CLKCTL->CLKCON0 = (uint16_t)(reg_val | (cfg->SPLL_src << CLKCON0_PLLMUX_Pos));
 
     /* Wait until the SPLL has locked */
     while((MMR_CLKCTL->CLKSTAT0 & CLKSTAT0_SPLLLOCK) == 0);
@@ -128,18 +128,18 @@ static void CLK_ClkConfig(const CLK_Cfg_t *cfg)
 
   /* Change the system clock to the SPLL clock */
   reg_val = MMR_CLKCTL->CLKCON0 & ~CLKCON0_CLKMUX_Msk;
-  MMR_CLKCTL->CLKCON0 = reg_val | (cfg->UCLK_src << CLKCON0_CLKMUX_Pos);
+  MMR_CLKCTL->CLKCON0 = (uint16_t)(reg_val | (cfg->UCLK_src << CLKCON0_CLKMUX_Pos));
 
   /* Wait 5 clock cicles */
   __NOP();__NOP();__NOP();__NOP();__NOP();
 
   /* Set HCLK divide */
   reg_val = MMR_CLKCTL->CLKCON1 & ~CLKCON1_CDHCLK_Msk;
-  MMR_CLKCTL->CLKCON1 = reg_val | (cfg->HCLK_div << CLKCON1_CDHCLK_Pos);
+  MMR_CLKCTL->CLKCON1 = (uint16_t)(reg_val | (cfg->HCLK_div << CLKCON1_CDHCLK_Pos));
 
   /* Set PCLK divide */
   reg_val = MMR_CLKCTL->CLKCON1 & ~CLKCON1_CDPCLK_Msk;
-  MMR_CLKCTL->CLKCON1 = reg_val | (cfg->PCLK_div << CLKCON1_CDPCLK_Pos);
+  MMR_CLKCTL->CLKCON1 = (uint16_t)(reg_val | (cfg->PCLK_div << CLKCON1_CDPCLK_Pos));
 }
 
 /**
@@ -174,7 +174,7 @@ static uint32_t CLK_GetFrequency(CLK_Freq_t type)
  */
 static void CLK_PeriphEnable(CLK_Periph_t periph)
 {
-  MMR_CLKCTL->CLKCON5 &= ~(uint16_t)periph;
+  MMR_CLKCTL->CLKCON5 = (uint16_t)(MMR_CLKCTL->CLKCON5 & ~periph);
 }
 
 /**
@@ -183,7 +183,7 @@ static void CLK_PeriphEnable(CLK_Periph_t periph)
  */
 static void CLK_PeriphDisable(CLK_Periph_t periph)
 {
-  MMR_CLKCTL->CLKCON5 |= (uint16_t)periph;
+  MMR_CLKCTL->CLKCON5 = (uint16_t)(MMR_CLKCTL->CLKCON5 | periph);
 }
 
 /**
