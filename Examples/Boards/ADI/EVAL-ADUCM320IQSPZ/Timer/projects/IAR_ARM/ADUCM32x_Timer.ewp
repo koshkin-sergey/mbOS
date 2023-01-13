@@ -2107,6 +2107,9 @@
     <group>
         <name>Device</name>
         <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Device\ADI\ADuCM32x\Driver\CLK_ADUCM32x.c</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\..\..\..\..\..\..\..\Device\ADI\ADuCM32x\Driver\GPIO_ADUCM32x.c</name>
         </file>
         <file>
