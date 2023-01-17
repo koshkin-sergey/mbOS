@@ -101,6 +101,20 @@ typedef enum {
   PWM3_IRQn                 = 54    /* PWM Channel Pair 3 interrupt           */
 } IRQn_Type;
 
+/**
+ * @brief Interrupt Priority Definition
+ */
+typedef enum {
+  IRQ_PriorityRealtime    = 0,
+  IRQ_PriorityAboveHigh   = 1,
+  IRQ_PriorityHigh        = 2,
+  IRQ_PriorityAboveNormal = 3,
+  IRQ_PriorityNormal      = 4,
+  IRQ_PriorityBelowNormal = 5,
+  IRQ_PriorityAboveLow    = 6,
+  IRQ_PriorityLow         = 7,
+} IRQ_Priority_t;
+
 
 /** @addtogroup Configuration_of_CMSIS
   * @{
