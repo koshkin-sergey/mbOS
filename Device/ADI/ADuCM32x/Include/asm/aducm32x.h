@@ -1469,223 +1469,154 @@ typedef struct MMR_EXTI {             /*!< MMR_EXTI Structure                 */
   __IM  uint16_t  RESERVED3;
 } MMR_EXTI_t;
 
-/* Reset Value for EI0CFG*/
-#define EI0CFG_RVAL                    0x0 
-
-/* EI0CFG[IRQ3EN] - External Interrupt 3 enable bit */
-#define EI0CFG_IRQ3EN_BBA              (*(volatile unsigned long *) 0x4204843C)
-#define EI0CFG_IRQ3EN_MSK              (0x1   << 15 )
-#define EI0CFG_IRQ3EN                  (0x1   << 15 )
-#define EI0CFG_IRQ3EN_DIS              (0x0   << 15 ) /* External Interrupt 3 disabled */
-#define EI0CFG_IRQ3EN_EN               (0x1   << 15 ) /* External Interrupt 3 enabled */
-
-/* EI0CFG[IRQ3MDE] - External Interrupt 3 Mode registers */
-#define EI0CFG_IRQ3MDE_MSK             (0x7   << 12 )
-#define EI0CFG_IRQ3MDE_RISE            (0x0   << 12 ) /* Rising edge              */
-#define EI0CFG_IRQ3MDE_FALL            (0x1   << 12 ) /* Falling edge             */
-#define EI0CFG_IRQ3MDE_RISEORFALL      (0x2   << 12 ) /* Rising or falling edge   */
-#define EI0CFG_IRQ3MDE_HIGHLEVEL       (0x3   << 12 ) /* High level               */
-#define EI0CFG_IRQ3MDE_LOWLEVEL        (0x4   << 12 ) /* Low level                */
-
 /* EI0CFG[IRQ2EN] - External Interrupt 2 Enable bit */
-#define EI0CFG_IRQ2EN_BBA              (*(volatile unsigned long *) 0x4204842C)
-#define EI0CFG_IRQ2EN_MSK              (0x1   << 11 )
-#define EI0CFG_IRQ2EN                  (0x1   << 11 )
-#define EI0CFG_IRQ2EN_DIS              (0x0   << 11 ) /* External Interrupt 2 disabled */
-#define EI0CFG_IRQ2EN_EN               (0x1   << 11 ) /* External Interrupt 2 enabled */
+#define EI0CFG_IRQ2EN_Pos             (11U)
+#define EI0CFG_IRQ2EN_Msk             (0x1U << EI0CFG_IRQ2EN_Pos)
+#define EI0CFG_IRQ2EN_DIS             (0x0U << EI0CFG_IRQ2EN_Pos)               /* External Interrupt 2 disabled */
+#define EI0CFG_IRQ2EN_EN              (0x1U << EI0CFG_IRQ2EN_Pos)               /* External Interrupt 2 enabled  */
 
 /* EI0CFG[IRQ2MDE] - External Interrupt 2 Mode registers */
-#define EI0CFG_IRQ2MDE_MSK             (0x7   << 8  )
-#define EI0CFG_IRQ2MDE_RISE            (0x0   << 8  ) /* Rising edge              */
-#define EI0CFG_IRQ2MDE_FALL            (0x1   << 8  ) /* Falling edge             */
-#define EI0CFG_IRQ2MDE_RISEORFALL      (0x2   << 8  ) /* Rising or falling edge   */
-#define EI0CFG_IRQ2MDE_HIGHLEVEL       (0x3   << 8  ) /* High level               */
-#define EI0CFG_IRQ2MDE_LOWLEVEL        (0x4   << 8  ) /* Low level                */
+#define EI0CFG_IRQ2MDE_Pos            (8U)
+#define EI0CFG_IRQ2MDE_Msk            (0x7U << EI0CFG_IRQ2MDE_Pos)
+#define EI0CFG_IRQ2MDE_RISE           (0x0U << EI0CFG_IRQ2MDE_Pos)              /* Rising edge              */
+#define EI0CFG_IRQ2MDE_FALL           (0x1U << EI0CFG_IRQ2MDE_Pos)              /* Falling edge             */
+#define EI0CFG_IRQ2MDE_RISEORFALL     (0x2U << EI0CFG_IRQ2MDE_Pos)              /* Rising or falling edge   */
+#define EI0CFG_IRQ2MDE_HIGHLEVEL      (0x3U << EI0CFG_IRQ2MDE_Pos)              /* High level               */
+#define EI0CFG_IRQ2MDE_LOWLEVEL       (0x4U << EI0CFG_IRQ2MDE_Pos)              /* Low level                */
 
 /* EI0CFG[IRQ1EN] - External Interrupt 1 Enable bit */
-#define EI0CFG_IRQ1EN_BBA              (*(volatile unsigned long *) 0x4204841C)
-#define EI0CFG_IRQ1EN_MSK              (0x1   << 7  )
-#define EI0CFG_IRQ1EN                  (0x1   << 7  )
-#define EI0CFG_IRQ1EN_DIS              (0x0   << 7  ) /* External Interrupt 0 disabled */
-#define EI0CFG_IRQ1EN_EN               (0x1   << 7  ) /* External Interrupt 0 enabled */
+#define EI0CFG_IRQ1EN_Pos             (7U)
+#define EI0CFG_IRQ1EN_Msk             (0x1U << EI0CFG_IRQ1EN_Pos)
+#define EI0CFG_IRQ1EN_DIS             (0x0U << EI0CFG_IRQ1EN_Pos)               /* External Interrupt 1 disabled */
+#define EI0CFG_IRQ1EN_EN              (0x1U << EI0CFG_IRQ1EN_Pos)               /* External Interrupt 1 enabled  */
 
 /* EI0CFG[IRQ1MDE] - External Interrupt 1 Mode registers */
-#define EI0CFG_IRQ1MDE_MSK             (0x7   << 4  )
-#define EI0CFG_IRQ1MDE_RISE            (0x0   << 4  ) /* Rising edge              */
-#define EI0CFG_IRQ1MDE_FALL            (0x1   << 4  ) /* Falling edge             */
-#define EI0CFG_IRQ1MDE_RISEORFALL      (0x2   << 4  ) /* Rising or falling edge   */
-#define EI0CFG_IRQ1MDE_HIGHLEVEL       (0x3   << 4  ) /* High level               */
-#define EI0CFG_IRQ1MDE_LOWLEVEL        (0x4   << 4  ) /* Low level                */
+#define EI0CFG_IRQ1MDE_Pos            (4U)
+#define EI0CFG_IRQ1MDE_Msk            (0x7U << EI0CFG_IRQ1MDE_Pos)
+#define EI0CFG_IRQ1MDE_RISE           (0x0U << EI0CFG_IRQ1MDE_Pos)              /* Rising edge              */
+#define EI0CFG_IRQ1MDE_FALL           (0x1U << EI0CFG_IRQ1MDE_Pos)              /* Falling edge             */
+#define EI0CFG_IRQ1MDE_RISEORFALL     (0x2U << EI0CFG_IRQ1MDE_Pos)              /* Rising or falling edge   */
+#define EI0CFG_IRQ1MDE_HIGHLEVEL      (0x3U << EI0CFG_IRQ1MDE_Pos)              /* High level               */
+#define EI0CFG_IRQ1MDE_LOWLEVEL       (0x4U << EI0CFG_IRQ1MDE_Pos)              /* Low level                */
 
 /* EI0CFG[IRQ0EN] - External Interrupt 0 Enable bit */
-#define EI0CFG_IRQ0EN_BBA              (*(volatile unsigned long *) 0x4204840C)
-#define EI0CFG_IRQ0EN_MSK              (0x1   << 3  )
-#define EI0CFG_IRQ0EN                  (0x1   << 3  )
-#define EI0CFG_IRQ0EN_DIS              (0x0   << 3  ) /* External Interrupt 0 disabled */
-#define EI0CFG_IRQ0EN_EN               (0x1   << 3  ) /* External Interrupt 0 enabled */
+#define EI0CFG_IRQ0EN_Pos             (3U)
+#define EI0CFG_IRQ0EN_Msk             (0x1U << EI0CFG_IRQ0EN_Pos)
+#define EI0CFG_IRQ0EN_DIS             (0x0U << EI0CFG_IRQ0EN_Pos)               /* External Interrupt 0 disabled */
+#define EI0CFG_IRQ0EN_EN              (0x1U << EI0CFG_IRQ0EN_Pos)               /* External Interrupt 0 enabled  */
 
 /* EI0CFG[IRQ0MDE] - External Interrupt 0 Mode registers */
-#define EI0CFG_IRQ0MDE_MSK             (0x7   << 0  )
-#define EI0CFG_IRQ0MDE_RISE            (0x0   << 0  ) /* Rising edge              */
-#define EI0CFG_IRQ0MDE_FALL            (0x1   << 0  ) /* Falling edge             */
-#define EI0CFG_IRQ0MDE_RISEORFALL      (0x2   << 0  ) /* Rising or falling edge   */
-#define EI0CFG_IRQ0MDE_HIGHLEVEL       (0x3   << 0  ) /* High level               */
-#define EI0CFG_IRQ0MDE_LOWLEVEL        (0x4   << 0  ) /* Low level                */
+#define EI0CFG_IRQ0MDE_Pos            (0U)
+#define EI0CFG_IRQ0MDE_Msk            (0x7U << EI0CFG_IRQ0MDE_Pos)
+#define EI0CFG_IRQ0MDE_RISE           (0x0U << EI0CFG_IRQ0MDE_Pos)              /* Rising edge              */
+#define EI0CFG_IRQ0MDE_FALL           (0x1U << EI0CFG_IRQ0MDE_Pos)              /* Falling edge             */
+#define EI0CFG_IRQ0MDE_RISEORFALL     (0x2U << EI0CFG_IRQ0MDE_Pos)              /* Rising or falling edge   */
+#define EI0CFG_IRQ0MDE_HIGHLEVEL      (0x3U << EI0CFG_IRQ0MDE_Pos)              /* High level               */
+#define EI0CFG_IRQ0MDE_LOWLEVEL       (0x4U << EI0CFG_IRQ0MDE_Pos)              /* Low level                */
 
-/* Reset Value for EI1CFG*/
-#define EI1CFG_RVAL                    0x0 
-
-/* EI1CFG[IRQ7EN] - External Interrupt 7 enable bit */
-#define EI1CFG_IRQ7EN_BBA              (*(volatile unsigned long *) 0x420484BC)
-#define EI1CFG_IRQ7EN_MSK              (0x1   << 15 )
-#define EI1CFG_IRQ7EN                  (0x1   << 15 )
-#define EI1CFG_IRQ7EN_DIS              (0x0   << 15 ) /* External Interrupt 7 disabled */
-#define EI1CFG_IRQ7EN_EN               (0x1   << 15 ) /* External Interrupt 7 enabled */
+/* EI1CFG[IRQ7EN] - External Interrupt 7 Enable bit */
+#define EI1CFG_IRQ7EN_Pos             (15U)
+#define EI1CFG_IRQ7EN_Msk             (0x1U << EI1CFG_IRQ7EN_Pos)
+#define EI1CFG_IRQ7EN_DIS             (0x0U << EI1CFG_IRQ7EN_Pos)               /* External Interrupt 7 disabled */
+#define EI1CFG_IRQ7EN_EN              (0x1U << EI1CFG_IRQ7EN_Pos)               /* External Interrupt 7 enabled  */
 
 /* EI1CFG[IRQ7MDE] - External Interrupt 7 Mode registers */
-#define EI1CFG_IRQ7MDE_MSK             (0x7   << 12 )
-#define EI1CFG_IRQ7MDE_RISE            (0x0   << 12 ) /* Rising edge              */
-#define EI1CFG_IRQ7MDE_FALL            (0x1   << 12 ) /* Falling edge             */
-#define EI1CFG_IRQ7MDE_RISEORFALL      (0x2   << 12 ) /* Rising or falling edge   */
-#define EI1CFG_IRQ7MDE_HIGHLEVEL       (0x3   << 12 ) /* High level               */
-#define EI1CFG_IRQ7MDE_LOWLEVEL        (0x4   << 12 ) /* Low level                */
-
-/* EI1CFG[IRQ6EN] - External Interrupt 6 Enable bit */
-#define EI1CFG_IRQ6EN_BBA              (*(volatile unsigned long *) 0x420484AC)
-#define EI1CFG_IRQ6EN_MSK              (0x1   << 11 )
-#define EI1CFG_IRQ6EN                  (0x1   << 11 )
-#define EI1CFG_IRQ6EN_DIS              (0x0   << 11 ) /* External Interrupt 6 disabled */
-#define EI1CFG_IRQ6EN_EN               (0x1   << 11 ) /* External Interrupt 6 enabled */
-
-/* EI1CFG[IRQ6MDE] - External Interrupt 6 Mode registers */
-#define EI1CFG_IRQ6MDE_MSK             (0x7   << 8  )
-#define EI1CFG_IRQ6MDE_RISE            (0x0   << 8  ) /* Rising edge              */
-#define EI1CFG_IRQ6MDE_FALL            (0x1   << 8  ) /* Falling edge             */
-#define EI1CFG_IRQ6MDE_RISEORFALL      (0x2   << 8  ) /* Rising or falling edge   */
-#define EI1CFG_IRQ6MDE_HIGHLEVEL       (0x3   << 8  ) /* High level               */
-#define EI1CFG_IRQ6MDE_LOWLEVEL        (0x4   << 8  ) /* Low level                */
+#define EI1CFG_IRQ7MDE_Pos            (12U)
+#define EI1CFG_IRQ7MDE_Msk            (0x7U << EI1CFG_IRQ7MDE_Pos)
+#define EI1CFG_IRQ7MDE_RISE           (0x0U << EI1CFG_IRQ7MDE_Pos)              /* Rising edge              */
+#define EI1CFG_IRQ7MDE_FALL           (0x1U << EI1CFG_IRQ7MDE_Pos)              /* Falling edge             */
+#define EI1CFG_IRQ7MDE_RISEORFALL     (0x2U << EI1CFG_IRQ7MDE_Pos)              /* Rising or falling edge   */
+#define EI1CFG_IRQ7MDE_HIGHLEVEL      (0x3U << EI1CFG_IRQ7MDE_Pos)              /* High level               */
+#define EI1CFG_IRQ7MDE_LOWLEVEL       (0x4U << EI1CFG_IRQ7MDE_Pos)              /* Low level                */
 
 /* EI1CFG[IRQ5EN] - External Interrupt 5 Enable bit */
-#define EI1CFG_IRQ5EN_BBA              (*(volatile unsigned long *) 0x4204849C)
-#define EI1CFG_IRQ5EN_MSK              (0x1   << 7  )
-#define EI1CFG_IRQ5EN                  (0x1   << 7  )
-#define EI1CFG_IRQ5EN_DIS              (0x0   << 7  ) /* External Interrupt 5 disabled */
-#define EI1CFG_IRQ5EN_EN               (0x1   << 7  ) /* External Interrupt 5 enabled */
+#define EI1CFG_IRQ5EN_Pos             (7U)
+#define EI1CFG_IRQ5EN_Msk             (0x1U << EI1CFG_IRQ5EN_Pos)
+#define EI1CFG_IRQ5EN_DIS             (0x0U << EI1CFG_IRQ5EN_Pos)               /* External Interrupt 5 disabled */
+#define EI1CFG_IRQ5EN_EN              (0x1U << EI1CFG_IRQ5EN_Pos)               /* External Interrupt 5 enabled  */
 
 /* EI1CFG[IRQ5MDE] - External Interrupt 5 Mode registers */
-#define EI1CFG_IRQ5MDE_MSK             (0x7   << 4  )
-#define EI1CFG_IRQ5MDE_RISING          (0x0   << 4  ) /* Rising edge              */
-#define EI1CFG_IRQ5MDE_FALLING         (0x1   << 4  ) /* Falling edge             */
-#define EI1CFG_IRQ5MDE_RISEORFALL      (0x2   << 4  ) /* Rising or falling edge   */
-#define EI1CFG_IRQ5MDE_HIGHLEVEL       (0x3   << 4  ) /* High level               */
-#define EI1CFG_IRQ5MDE_LOWLEVEL        (0x4   << 4  ) /* Low level                */
+#define EI1CFG_IRQ5MDE_Pos            (4U)
+#define EI1CFG_IRQ5MDE_Msk            (0x7U << EI1CFG_IRQ5MDE_Pos)
+#define EI1CFG_IRQ5MDE_RISE           (0x0U << EI1CFG_IRQ5MDE_Pos)              /* Rising edge              */
+#define EI1CFG_IRQ5MDE_FALL           (0x1U << EI1CFG_IRQ5MDE_Pos)              /* Falling edge             */
+#define EI1CFG_IRQ5MDE_RISEORFALL     (0x2U << EI1CFG_IRQ5MDE_Pos)              /* Rising or falling edge   */
+#define EI1CFG_IRQ5MDE_HIGHLEVEL      (0x3U << EI1CFG_IRQ5MDE_Pos)              /* High level               */
+#define EI1CFG_IRQ5MDE_LOWLEVEL       (0x4U << EI1CFG_IRQ5MDE_Pos)              /* Low level                */
 
 /* EI1CFG[IRQ4EN] - External Interrupt 4 Enable bit */
-#define EI1CFG_IRQ4EN_BBA              (*(volatile unsigned long *) 0x4204848C)
-#define EI1CFG_IRQ4EN_MSK              (0x1   << 3  )
-#define EI1CFG_IRQ4EN                  (0x1   << 3  )
-#define EI1CFG_IRQ4EN_DIS              (0x0   << 3  ) /* External Interrupt 4 disabled */
-#define EI1CFG_IRQ4EN_EN               (0x1   << 3  ) /* External Interrupt 4 enabled */
+#define EI1CFG_IRQ4EN_Pos             (3U)
+#define EI1CFG_IRQ4EN_Msk             (0x1U << EI1CFG_IRQ4EN_Pos)
+#define EI1CFG_IRQ4EN_DIS             (0x0U << EI1CFG_IRQ4EN_Pos)               /* External Interrupt 4 disabled */
+#define EI1CFG_IRQ4EN_EN              (0x1U << EI1CFG_IRQ4EN_Pos)               /* External Interrupt 4 enabled  */
 
 /* EI1CFG[IRQ4MDE] - External Interrupt 4 Mode registers */
-#define EI1CFG_IRQ4MDE_MSK             (0x7   << 0  )
-#define EI1CFG_IRQ4MDE_RISE            (0x0   << 0  ) /* Rising edge              */
-#define EI1CFG_IRQ4MDE_FALL            (0x1   << 0  ) /* Falling edge             */
-#define EI1CFG_IRQ4MDE_RISEORFALL      (0x2   << 0  ) /* Rising or falling edge   */
-#define EI1CFG_IRQ4MDE_HIGHLEVEL       (0x3   << 0  ) /* High level               */
-#define EI1CFG_IRQ4MDE_LOWLEVEL        (0x4   << 0  ) /* Low level                */
-
-/* Reset Value for EI2CFG*/
-#define EI2CFG_RVAL                    0x0 
+#define EI1CFG_IRQ4MDE_Pos            (0U)
+#define EI1CFG_IRQ4MDE_Msk            (0x7U << EI1CFG_IRQ4MDE_Pos)
+#define EI1CFG_IRQ4MDE_RISE           (0x0U << EI1CFG_IRQ4MDE_Pos)              /* Rising edge              */
+#define EI1CFG_IRQ4MDE_FALL           (0x1U << EI1CFG_IRQ4MDE_Pos)              /* Falling edge             */
+#define EI1CFG_IRQ4MDE_RISEORFALL     (0x2U << EI1CFG_IRQ4MDE_Pos)              /* Rising or falling edge   */
+#define EI1CFG_IRQ4MDE_HIGHLEVEL      (0x3U << EI1CFG_IRQ4MDE_Pos)              /* High level               */
+#define EI1CFG_IRQ4MDE_LOWLEVEL       (0x4U << EI1CFG_IRQ4MDE_Pos)              /* Low level                */
 
 /* EI2CFG[IRQ8EN] - External Interrupt 8 Enable bit */
-#define EI2CFG_IRQ8EN_BBA              (*(volatile unsigned long *) 0x4204850C)
-#define EI2CFG_IRQ8EN_MSK              (0x1   << 3  )
-#define EI2CFG_IRQ8EN                  (0x1   << 3  )
-#define EI2CFG_IRQ8EN_DIS              (0x0   << 3  ) /* External Interrupt 8 disabled */
-#define EI2CFG_IRQ8EN_EN               (0x1   << 3  ) /* External Interrupt 8 enabled */
+#define EI2CFG_IRQ8EN_Pos             (3U)
+#define EI2CFG_IRQ8EN_Msk             (0x1U << EI2CFG_IRQ8EN_Pos)
+#define EI2CFG_IRQ8EN_DIS             (0x0U << EI2CFG_IRQ8EN_Pos)               /* External Interrupt 8 disabled */
+#define EI2CFG_IRQ8EN_EN              (0x1U << EI2CFG_IRQ8EN_Pos)               /* External Interrupt 8 enabled  */
 
 /* EI2CFG[IRQ8MDE] - External Interrupt 8 Mode registers */
-#define EI2CFG_IRQ8MDE_MSK             (0x7   << 0  )
-#define EI2CFG_IRQ8MDE_RISE            (0x0   << 0  ) /* Rising edge              */
-#define EI2CFG_IRQ8MDE_FALL            (0x1   << 0  ) /* Falling edge             */
-#define EI2CFG_IRQ8MDE_RISEORFALL      (0x2   << 0  ) /* Rising or falling edge   */
-#define EI2CFG_IRQ8MDE_HIGHLEVEL       (0x3   << 0  ) /* High level               */
-#define EI2CFG_IRQ8MDE_LOWLEVEL        (0x4   << 0  ) /* Low level                */
-
-/* Reset Value for EICLR*/
-#define EICLR_RVAL                     0x0 
+#define EI2CFG_IRQ8MDE_Pos            (0U)
+#define EI2CFG_IRQ8MDE_Msk            (0x7U << EI2CFG_IRQ8MDE_Pos)
+#define EI2CFG_IRQ8MDE_RISE           (0x0U << EI2CFG_IRQ8MDE_Pos)              /* Rising edge              */
+#define EI2CFG_IRQ8MDE_FALL           (0x1U << EI2CFG_IRQ8MDE_Pos)              /* Falling edge             */
+#define EI2CFG_IRQ8MDE_RISEORFALL     (0x2U << EI2CFG_IRQ8MDE_Pos)              /* Rising or falling edge   */
+#define EI2CFG_IRQ8MDE_HIGHLEVEL      (0x3U << EI2CFG_IRQ8MDE_Pos)              /* High level               */
+#define EI2CFG_IRQ8MDE_LOWLEVEL       (0x4U << EI2CFG_IRQ8MDE_Pos)              /* Low level                */
 
 /* EICLR[IRQ8] - External interrupt 8 */
-#define EICLR_IRQ8_BBA                 (*(volatile unsigned long *) 0x42048620)
-#define EICLR_IRQ8_MSK                 (0x1   << 8  )
-#define EICLR_IRQ8                     (0x1   << 8  )
-#define EICLR_IRQ8_DIS                 (0x0   << 8  )
-#define EICLR_IRQ8_EN                  (0x1   << 8  )
+#define EICLR_IRQ8_Pos                (8U)
+#define EICLR_IRQ8_Msk                (0x1U << EICLR_IRQ8_Pos)
+#define EICLR_IRQ8_CLR                EICLR_IRQ8_Msk
 
 /* EICLR[IRQ7] - External interrupt 7 */
-#define EICLR_IRQ7_BBA                 (*(volatile unsigned long *) 0x4204861C)
-#define EICLR_IRQ7_MSK                 (0x1   << 7  )
-#define EICLR_IRQ7                     (0x1   << 7  )
-#define EICLR_IRQ7_DIS                 (0x0   << 7  )
-#define EICLR_IRQ7_EN                  (0x1   << 7  )
-
-/* EICLR[IRQ6] - External interrupt 6 */
-#define EICLR_IRQ6_BBA                 (*(volatile unsigned long *) 0x42048618)
-#define EICLR_IRQ6_MSK                 (0x1   << 6  )
-#define EICLR_IRQ6                     (0x1   << 6  )
-#define EICLR_IRQ6_DIS                 (0x0   << 6  )
-#define EICLR_IRQ6_EN                  (0x1   << 6  )
+#define EICLR_IRQ7_Pos                (7U)
+#define EICLR_IRQ7_Msk                (0x1U << EICLR_IRQ7_Pos)
+#define EICLR_IRQ7_CLR                EICLR_IRQ7_Msk
 
 /* EICLR[IRQ5] - External interrupt 5 */
-#define EICLR_IRQ5_BBA                 (*(volatile unsigned long *) 0x42048614)
-#define EICLR_IRQ5_MSK                 (0x1   << 5  )
-#define EICLR_IRQ5                     (0x1   << 5  )
-#define EICLR_IRQ5_DIS                 (0x0   << 5  )
-#define EICLR_IRQ5_EN                  (0x1   << 5  )
+#define EICLR_IRQ5_Pos                (5U)
+#define EICLR_IRQ5_Msk                (0x1U << EICLR_IRQ5_Pos)
+#define EICLR_IRQ5_CLR                EICLR_IRQ5_Msk
 
 /* EICLR[IRQ4] - External interrupt 4 */
-#define EICLR_IRQ4_BBA                 (*(volatile unsigned long *) 0x42048610)
-#define EICLR_IRQ4_MSK                 (0x1   << 4  )
-#define EICLR_IRQ4                     (0x1   << 4  )
-#define EICLR_IRQ4_DIS                 (0x0   << 4  )
-#define EICLR_IRQ4_EN                  (0x1   << 4  )
-
-/* EICLR[IRQ3] - External interrupt 3 */
-#define EICLR_IRQ3_BBA                 (*(volatile unsigned long *) 0x4204860C)
-#define EICLR_IRQ3_MSK                 (0x1   << 3  )
-#define EICLR_IRQ3                     (0x1   << 3  )
-#define EICLR_IRQ3_DIS                 (0x0   << 3  )
-#define EICLR_IRQ3_EN                  (0x1   << 3  )
+#define EICLR_IRQ4_Pos                (4U)
+#define EICLR_IRQ4_Msk                (0x1U << EICLR_IRQ4_Pos)
+#define EICLR_IRQ4_CLR                EICLR_IRQ4_Msk
 
 /* EICLR[IRQ2] - External interrupt 2 */
-#define EICLR_IRQ2_BBA                 (*(volatile unsigned long *) 0x42048608)
-#define EICLR_IRQ2_MSK                 (0x1   << 2  )
-#define EICLR_IRQ2                     (0x1   << 2  )
-#define EICLR_IRQ2_DIS                 (0x0   << 2  )
-#define EICLR_IRQ2_EN                  (0x1   << 2  )
+#define EICLR_IRQ2_Pos                (2U)
+#define EICLR_IRQ2_Msk                (0x1U << EICLR_IRQ2_Pos)
+#define EICLR_IRQ2_CLR                EICLR_IRQ2_Msk
 
 /* EICLR[IRQ1] - External interrupt 1 */
-#define EICLR_IRQ1_BBA                 (*(volatile unsigned long *) 0x42048604)
-#define EICLR_IRQ1_MSK                 (0x1   << 1  )
-#define EICLR_IRQ1                     (0x1   << 1  )
-#define EICLR_IRQ1_DIS                 (0x0   << 1  )
-#define EICLR_IRQ1_EN                  (0x1   << 1  )
+#define EICLR_IRQ1_Pos                (1U)
+#define EICLR_IRQ1_Msk                (0x1U << EICLR_IRQ1_Pos)
+#define EICLR_IRQ1_CLR                EICLR_IRQ1_Msk
 
 /* EICLR[IRQ0] - External interrupt 0 */
-#define EICLR_IRQ0_BBA                 (*(volatile unsigned long *) 0x42048600)
-#define EICLR_IRQ0_MSK                 (0x1   << 0  )
-#define EICLR_IRQ0                     (0x1   << 0  )
-#define EICLR_IRQ0_DIS                 (0x0   << 0  )
-#define EICLR_IRQ0_EN                  (0x1   << 0  )
-// ------------------------------------------------------------------------------------------------
-// -----                                        wdt                                        -----
-// ------------------------------------------------------------------------------------------------
+#define EICLR_IRQ0_Pos                (0U)
+#define EICLR_IRQ0_Msk                (0x1U << EICLR_IRQ0_Pos)
+#define EICLR_IRQ0_CLR                EICLR_IRQ0_Msk
 
+
+/* ========================================================================== */
+/* ================             WATCHDOG TIMER             ================== */
+/* ========================================================================== */
 
 /**
-  * @brief wdt (MMR_WDT)
-  */
+ * @brief WDT (MMR_WDT)
+ */
 
 typedef struct MMR_WDT {                    /*!< MMR_WDT Structure                     */
   __IO uint16_t  T3LD;                      /*!< Load value register                   */
