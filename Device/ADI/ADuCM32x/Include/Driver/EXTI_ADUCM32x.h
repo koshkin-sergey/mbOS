@@ -40,16 +40,10 @@
 /****** EXTI error codes *****/
 #define EXTI_DRIVER_OK                 0                                        ///< Operation succeeded
 #define EXTI_DRIVER_ERROR             -1                                        ///< Unspecified error
-#define EXTI_DRIVER_ERROR_BUSY        -2                                        ///< Driver is busy
-#define EXTI_DRIVER_ERROR_TIMEOUT     -3                                        ///< Timeout occurred
-#define EXTI_DRIVER_ERROR_UNSUPPORTED -4                                        ///< Operation not supported
-#define EXTI_DRIVER_ERROR_PARAMETER   -5                                        ///< Parameter error
+#define EXTI_DRIVER_ERROR_UNSUPPORTED -2                                        ///< Operation not supported
 
 /****** Current driver status flag definition *****/
 #define EXTI_FLAG_INITIALIZED         (1UL << 0)                                ///< EXTI initialized
-#define EXTI_FLAG_POWERED             (1UL << 1)                                ///< EXTI powered on
-#define EXTI_FLAG_CONFIGURED          (1UL << 2)                                ///< EXTI is configured
-#define EXTI_FLAG_ENABLE              (1UL << 3)                                ///< EXTI is enabled
 
 /****** EXTI Control Codes *****/
 #define EXTI_CONTROL_Pos               0
@@ -59,7 +53,7 @@
 
 /*----- EXTI Control Codes: Configuration Parameters: Trigger Mode -----------*/
 #define EXTI_TRG_Pos                   8
-#define EXTI_TRG_Msk                  (3UL << EXTI_TRG_Pos)
+#define EXTI_TRG_Msk                  (7UL << EXTI_TRG_Pos)
 #define EXTI_TRG_RISING_EDGE          (0UL << EXTI_TRG_Pos)                     ///< External IRQ triggers on rising edge (default)
 #define EXTI_TRG_FALLING_EDGE         (1UL << EXTI_TRG_Pos)                     ///< External IRQ triggers on falling edge
 #define EXTI_TRG_RISE_OR_FALL_EDGE    (2UL << EXTI_TRG_Pos)                     ///< External IRQ triggers on rising or falling edge

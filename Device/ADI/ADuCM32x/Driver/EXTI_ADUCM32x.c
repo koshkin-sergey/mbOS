@@ -38,7 +38,6 @@
     #define USE_EXTI0_IRQ
     #define EXTI0_IRQ_GPIO_PORT     DEV_EXTI_IRQ0_PORT
     #define EXTI0_IRQ_GPIO_PIN      DEV_EXTI_IRQ0_PIN
-    #define EXTI0_IRQ_GPIO_FUNC     DEV_EXTI_IRQ0_FUNC
     #define EXTI0_IRQ_PULL_UP       DEV_EXTI_IRQ0_PULL_UP
     #define EXTI0_IRQ_INT_PRIO      DEV_EXTI_IRQ0_INT_PRIO
   #endif
@@ -47,7 +46,6 @@
     #define USE_EXTI1_IRQ
     #define EXTI1_IRQ_GPIO_PORT     DEV_EXTI_IRQ1_PORT
     #define EXTI1_IRQ_GPIO_PIN      DEV_EXTI_IRQ1_PIN
-    #define EXTI1_IRQ_GPIO_FUNC     DEV_EXTI_IRQ1_FUNC
     #define EXTI1_IRQ_PULL_UP       DEV_EXTI_IRQ1_PULL_UP
     #define EXTI1_IRQ_INT_PRIO      DEV_EXTI_IRQ1_INT_PRIO
   #endif
@@ -56,7 +54,6 @@
     #define USE_EXTI2_IRQ
     #define EXTI2_IRQ_GPIO_PORT     DEV_EXTI_IRQ2_PORT
     #define EXTI2_IRQ_GPIO_PIN      DEV_EXTI_IRQ2_PIN
-    #define EXTI2_IRQ_GPIO_FUNC     DEV_EXTI_IRQ2_FUNC
     #define EXTI2_IRQ_PULL_UP       DEV_EXTI_IRQ2_PULL_UP
     #define EXTI2_IRQ_INT_PRIO      DEV_EXTI_IRQ2_INT_PRIO
   #endif
@@ -65,7 +62,6 @@
     #define USE_EXTI4_IRQ
     #define EXTI4_IRQ_GPIO_PORT     DEV_EXTI_IRQ4_PORT
     #define EXTI4_IRQ_GPIO_PIN      DEV_EXTI_IRQ4_PIN
-    #define EXTI4_IRQ_GPIO_FUNC     DEV_EXTI_IRQ4_FUNC
     #define EXTI4_IRQ_PULL_UP       DEV_EXTI_IRQ4_PULL_UP
     #define EXTI4_IRQ_INT_PRIO      DEV_EXTI_IRQ4_INT_PRIO
   #endif
@@ -74,7 +70,6 @@
     #define USE_EXTI5_IRQ
     #define EXTI5_IRQ_GPIO_PORT     DEV_EXTI_IRQ5_PORT
     #define EXTI5_IRQ_GPIO_PIN      DEV_EXTI_IRQ5_PIN
-    #define EXTI5_IRQ_GPIO_FUNC     DEV_EXTI_IRQ5_FUNC
     #define EXTI5_IRQ_PULL_UP       DEV_EXTI_IRQ5_PULL_UP
     #define EXTI5_IRQ_INT_PRIO      DEV_EXTI_IRQ5_INT_PRIO
   #endif
@@ -83,7 +78,6 @@
     #define USE_EXTI7_IRQ
     #define EXTI7_IRQ_GPIO_PORT     DEV_EXTI_IRQ7_PORT
     #define EXTI7_IRQ_GPIO_PIN      DEV_EXTI_IRQ7_PIN
-    #define EXTI7_IRQ_GPIO_FUNC     DEV_EXTI_IRQ7_FUNC
     #define EXTI7_IRQ_PULL_UP       DEV_EXTI_IRQ7_PULL_UP
     #define EXTI7_IRQ_INT_PRIO      DEV_EXTI_IRQ7_INT_PRIO
   #endif
@@ -92,7 +86,6 @@
     #define USE_EXTI8_IRQ
     #define EXTI8_IRQ_GPIO_PORT     DEV_EXTI_IRQ8_PORT
     #define EXTI8_IRQ_GPIO_PIN      DEV_EXTI_IRQ8_PIN
-    #define EXTI8_IRQ_GPIO_FUNC     DEV_EXTI_IRQ8_FUNC
     #define EXTI8_IRQ_PULL_UP       DEV_EXTI_IRQ8_PULL_UP
     #define EXTI8_IRQ_INT_PRIO      DEV_EXTI_IRQ8_INT_PRIO
   #endif
@@ -113,6 +106,16 @@ Driver_EXTI_t Driver_EXTI##x = {  \
   EXTI##x##_Uninitialize,         \
   EXTI##x##_Control,              \
 }
+
+/* External Interrupt Enable bit */
+#define EXTI_IRQ_EN_Pos               (3U)
+#define EXTI_IRQ_EN_Msk               (0x1U << EXTI_IRQ_EN_Pos)
+#define EXTI_IRQ_DISABLE              (0x0U << EXTI_IRQ_EN_Pos)
+#define EXTI_IRQ_ENABLE               (0x1U << EXTI_IRQ_EN_Pos)
+
+/* External Interrupt Mode */
+#define EXTI_IRQ_MODE_Pos             (0U)
+#define EXTI_IRQ_MODE_Msk             (0x7U << EXTI_IRQ_MODE_Pos)
 
 /*******************************************************************************
  *  external declarations
@@ -153,11 +156,13 @@ extern void EXTI8_IRQHandler(void);
 /* EXTI Resource Configuration */
 typedef struct EXTI_Resources {
   __IOM uint16_t              *reg;        // EXTI peripheral register
-        uint32_t           reg_pos;
+  struct pos {
+    uint32_t               clr: 16;
+    uint32_t               ctl: 16;
+  } pos;
   struct pin {
     Driver_GPIO_t            *gpio;        // Pointer to GPIO driver
     GPIO_PIN_t                 pin;        // IO pin
-    GPIO_PIN_FUNC_t           func;        // AF pin configuration
     GPIO_PULL_t             pullup;        // Pin Pull Up
   } pin;
   struct irq {
@@ -181,11 +186,13 @@ static struct info EXTI0_Info;
 /* EXTI0 Resources */
 static EXTI_Resources_t EXTI0_Resources = {
   &MMR_EXTI->EI0CFG,
-  0U,
+  {
+    0U,
+    0U
+  },
   {
     EXTI0_IRQ_GPIO_PORT,
     EXTI0_IRQ_GPIO_PIN,
-    EXTI0_IRQ_GPIO_FUNC,
     EXTI0_IRQ_PULL_UP
   },
   {
@@ -203,11 +210,13 @@ static struct info EXTI1_Info;
 /* EXTI1 Resources */
 static EXTI_Resources_t EXTI1_Resources = {
   &MMR_EXTI->EI0CFG,
-  4U,
+  {
+    1U,
+    4U,
+  },
   {
     EXTI1_IRQ_GPIO_PORT,
     EXTI1_IRQ_GPIO_PIN,
-    EXTI1_IRQ_GPIO_FUNC,
     EXTI1_IRQ_PULL_UP
   },
   {
@@ -225,11 +234,13 @@ static struct info EXTI2_Info;
 /* EXTI2 Resources */
 static EXTI_Resources_t EXTI2_Resources = {
   &MMR_EXTI->EI0CFG,
-  8U,
+  {
+    2U,
+    8U,
+  },
   {
     EXTI2_IRQ_GPIO_PORT,
     EXTI2_IRQ_GPIO_PIN,
-    EXTI2_IRQ_GPIO_FUNC,
     EXTI2_IRQ_PULL_UP
   },
   {
@@ -247,11 +258,13 @@ static struct info EXTI4_Info;
 /* EXTI4 Resources */
 static EXTI_Resources_t EXTI4_Resources = {
   &MMR_EXTI->EI1CFG,
-  0U,
+  {
+    4U,
+    0U,
+  },
   {
     EXTI4_IRQ_GPIO_PORT,
     EXTI4_IRQ_GPIO_PIN,
-    EXTI4_IRQ_GPIO_FUNC,
     EXTI4_IRQ_PULL_UP
   },
   {
@@ -269,11 +282,13 @@ static struct info EXTI5_Info;
 /* EXTI5 Resources */
 static EXTI_Resources_t EXTI5_Resources = {
   &MMR_EXTI->EI1CFG,
-  4U,
+  {
+    5U,
+    4U,
+  },
   {
     EXTI5_IRQ_GPIO_PORT,
     EXTI5_IRQ_GPIO_PIN,
-    EXTI5_IRQ_GPIO_FUNC,
     EXTI5_IRQ_PULL_UP
   },
   {
@@ -291,11 +306,13 @@ static struct info EXTI7_Info;
 /* EXTI7 Resources */
 static EXTI_Resources_t EXTI7_Resources = {
   &MMR_EXTI->EI1CFG,
-  12U,
+  {
+    7U,
+    12U,
+  },
   {
     EXTI7_IRQ_GPIO_PORT,
     EXTI7_IRQ_GPIO_PIN,
-    EXTI7_IRQ_GPIO_FUNC,
     EXTI7_IRQ_PULL_UP
   },
   {
@@ -313,11 +330,13 @@ static struct info EXTI8_Info;
 /* EXTI8 Resources */
 static EXTI_Resources_t EXTI8_Resources = {
   &MMR_EXTI->EI2CFG,
-  0U,
+  {
+    8U,
+    0U,
+  },
   {
     EXTI8_IRQ_GPIO_PORT,
     EXTI8_IRQ_GPIO_PIN,
-    EXTI8_IRQ_GPIO_FUNC,
     EXTI8_IRQ_PULL_UP
   },
   {
@@ -340,6 +359,19 @@ static int32_t EXTI_Initialize(EXTI_SignalEvent_t cb_event, EXTI_Resources_t *ex
     return (EXTI_DRIVER_OK);
   }
 
+  /* Configure EXTI Pins */
+  const GPIO_PIN_CFG_t pin_cfg = {
+    .mode = GPIO_MODE_INPUT,
+    .func = GPIO_PIN_FUNC_0,
+    .pull = exti->pin.pullup
+  };
+  exti->pin.gpio->PinConfig(exti->pin.pin, &pin_cfg);
+
+  /* Clear and Enable EXTI IRQ */
+  NVIC_ClearPendingIRQ(exti->irq.num);
+  NVIC_SetPriority(exti->irq.num, exti->irq.priority);
+  NVIC_EnableIRQ(exti->irq.num);
+
   info->cb_event = cb_event;
   info->flags    = EXTI_FLAG_INITIALIZED;
 
@@ -350,6 +382,21 @@ static int32_t EXTI_Uninitialize(EXTI_Resources_t *exti)
 {
   struct info *info = exti->info;
 
+  /* Disable External Interrupt */
+  *exti->reg &= (uint16_t)~(EXTI_IRQ_ENABLE << exti->pos.ctl);
+
+  /* Configure EXTI Pins */
+  const GPIO_PIN_CFG_t pin_cfg = {
+    .mode = GPIO_MODE_ANALOG,
+    .func = GPIO_PIN_FUNC_0,
+    .pull = GPIO_PULL_DISABLE
+  };
+  exti->pin.gpio->PinConfig(exti->pin.pin, &pin_cfg);
+
+  /* Clear and Disable EXTI IRQ */
+  NVIC_DisableIRQ(exti->irq.num);
+  NVIC_ClearPendingIRQ(exti->irq.num);
+
   info->cb_event = NULL;
   info->flags    = 0U;
 
@@ -358,12 +405,43 @@ static int32_t EXTI_Uninitialize(EXTI_Resources_t *exti)
 
 static int32_t EXTI_Control(uint32_t control, EXTI_Resources_t *exti)
 {
+  uint32_t mode;
+  uint32_t reg;
+
+  if ((exti->info->flags & EXTI_FLAG_INITIALIZED) == 0U) {
+    /* EXTI not initialized */
+    return (EXTI_DRIVER_ERROR);
+  }
+
+  switch (control & EXTI_CONTROL_Msk) {
+    case EXTI_MODE_INACTIVE:
+      /* Disable External Interrupt */
+      *exti->reg &= (uint16_t)~(EXTI_IRQ_ENABLE << exti->pos.ctl);
+      break;
+
+    case EXTI_MODE_ACTIVE:
+      /* Configure EXTI Mode */
+      mode = (control & EXTI_TRG_Msk) >> EXTI_TRG_Pos;
+      /* Enable EXTI IRQ */
+      reg = *exti->reg & ~((EXTI_IRQ_EN_Msk | EXTI_IRQ_MODE_Msk) << exti->pos.ctl);
+      *exti->reg = (uint16_t)(reg | ((EXTI_IRQ_ENABLE | mode) << exti->pos.ctl));
+      break;
+
+    default:
+      return (EXTI_DRIVER_ERROR_UNSUPPORTED);
+  }
+
   return (EXTI_DRIVER_OK);
 }
 
 static void EXTI_IRQHandler(EXTI_Resources_t *exti)
 {
+  if (exti->info->cb_event != NULL) {
+    uint32_t mode = (*exti->reg >> exti->pos.ctl) & EXTI_IRQ_MODE_Msk;
+    exti->info->cb_event(mode);
+  }
 
+  MMR_EXTI->EICLR = EICLR_IRQ0_CLR << exti->pos.clr;
 }
 
 /*******************************************************************************
@@ -376,7 +454,6 @@ static void EXTI_IRQHandler(EXTI_Resources_t *exti)
  */
 void EXTI0_IRQHandler(void)
 {
-  MMR_EXTI->EICLR = EICLR_IRQ0_CLR;
   EXTI_IRQHandler(&EXTI0_Resources);
 }
 #endif
@@ -387,7 +464,6 @@ void EXTI0_IRQHandler(void)
  */
 void EXTI1_IRQHandler(void)
 {
-  MMR_EXTI->EICLR = EICLR_IRQ1_CLR;
   EXTI_IRQHandler(&EXTI1_Resources);
 }
 #endif
@@ -398,7 +474,6 @@ void EXTI1_IRQHandler(void)
  */
 void EXTI2_IRQHandler(void)
 {
-  MMR_EXTI->EICLR = EICLR_IRQ2_CLR;
   EXTI_IRQHandler(&EXTI2_Resources);
 }
 #endif
@@ -409,7 +484,6 @@ void EXTI2_IRQHandler(void)
  */
 void EXTI4_IRQHandler(void)
 {
-  MMR_EXTI->EICLR = EICLR_IRQ4_CLR;
   EXTI_IRQHandler(&EXTI4_Resources);
 }
 #endif
@@ -420,7 +494,6 @@ void EXTI4_IRQHandler(void)
  */
 void EXTI5_IRQHandler(void)
 {
-  MMR_EXTI->EICLR = EICLR_IRQ5_CLR;
   EXTI_IRQHandler(&EXTI5_Resources);
 }
 #endif
@@ -431,7 +504,6 @@ void EXTI5_IRQHandler(void)
  */
 void EXTI7_IRQHandler(void)
 {
-  MMR_EXTI->EICLR = EICLR_IRQ7_CLR;
   EXTI_IRQHandler(&EXTI7_Resources);
 }
 #endif
@@ -442,7 +514,6 @@ void EXTI7_IRQHandler(void)
  */
 void EXTI8_IRQHandler(void)
 {
-  MMR_EXTI->EICLR = EICLR_IRQ8_CLR;
   EXTI_IRQHandler(&EXTI8_Resources);
 }
 #endif
@@ -451,12 +522,32 @@ void EXTI8_IRQHandler(void)
  *  global variable definitions (scope: module-exported)
  ******************************************************************************/
 
+#if defined(USE_EXTI0_IRQ)
 EXTIx_EXPORT_DRIVER(0);
+#endif
+
+#if defined(USE_EXTI1_IRQ)
 EXTIx_EXPORT_DRIVER(1);
+#endif
+
+#if defined(USE_EXTI2_IRQ)
 EXTIx_EXPORT_DRIVER(2);
+#endif
+
+#if defined(USE_EXTI4_IRQ)
 EXTIx_EXPORT_DRIVER(4);
+#endif
+
+#if defined(USE_EXTI5_IRQ)
 EXTIx_EXPORT_DRIVER(5);
+#endif
+
+#if defined(USE_EXTI7_IRQ)
 EXTIx_EXPORT_DRIVER(7);
+#endif
+
+#if defined(USE_EXTI8_IRQ)
 EXTIx_EXPORT_DRIVER(8);
+#endif
 
 #endif // defined(USE_EXTI0_IRQ)...
