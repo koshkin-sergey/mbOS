@@ -38,56 +38,56 @@
     #define USE_EXTI0_IRQ
     #define EXTI0_IRQ_GPIO_PORT     DEV_EXTI_IRQ0_PORT
     #define EXTI0_IRQ_GPIO_PIN      DEV_EXTI_IRQ0_PIN
-    #define EXTI0_IRQ_PULL_UP       DEV_EXTI_IRQ0_PULL_UP
-    #define EXTI0_IRQ_INT_PRIO      DEV_EXTI_IRQ0_INT_PRIO
+    #define EXTI0_IRQ_PULL_UP       (GPIO_PULL_t)DEV_EXTI_IRQ0_PULL_UP
+    #define EXTI0_IRQ_INT_PRIO      (IRQ_Priority_t)DEV_EXTI_IRQ0_INT_PRIO
   #endif
 
   #if defined (DEV_EXTI_IRQ1) && (DEV_EXTI_IRQ1 == 1)
     #define USE_EXTI1_IRQ
     #define EXTI1_IRQ_GPIO_PORT     DEV_EXTI_IRQ1_PORT
     #define EXTI1_IRQ_GPIO_PIN      DEV_EXTI_IRQ1_PIN
-    #define EXTI1_IRQ_PULL_UP       DEV_EXTI_IRQ1_PULL_UP
-    #define EXTI1_IRQ_INT_PRIO      DEV_EXTI_IRQ1_INT_PRIO
+    #define EXTI1_IRQ_PULL_UP       (GPIO_PULL_t)DEV_EXTI_IRQ1_PULL_UP
+    #define EXTI1_IRQ_INT_PRIO      (IRQ_Priority_t)DEV_EXTI_IRQ1_INT_PRIO
   #endif
 
   #if defined (DEV_EXTI_IRQ2) && (DEV_EXTI_IRQ2 == 1)
     #define USE_EXTI2_IRQ
     #define EXTI2_IRQ_GPIO_PORT     DEV_EXTI_IRQ2_PORT
     #define EXTI2_IRQ_GPIO_PIN      DEV_EXTI_IRQ2_PIN
-    #define EXTI2_IRQ_PULL_UP       DEV_EXTI_IRQ2_PULL_UP
-    #define EXTI2_IRQ_INT_PRIO      DEV_EXTI_IRQ2_INT_PRIO
+    #define EXTI2_IRQ_PULL_UP       (GPIO_PULL_t)DEV_EXTI_IRQ2_PULL_UP
+    #define EXTI2_IRQ_INT_PRIO      (IRQ_Priority_t)DEV_EXTI_IRQ2_INT_PRIO
   #endif
 
   #if defined (DEV_EXTI_IRQ4) && (DEV_EXTI_IRQ4 == 1)
     #define USE_EXTI4_IRQ
     #define EXTI4_IRQ_GPIO_PORT     DEV_EXTI_IRQ4_PORT
     #define EXTI4_IRQ_GPIO_PIN      DEV_EXTI_IRQ4_PIN
-    #define EXTI4_IRQ_PULL_UP       DEV_EXTI_IRQ4_PULL_UP
-    #define EXTI4_IRQ_INT_PRIO      DEV_EXTI_IRQ4_INT_PRIO
+    #define EXTI4_IRQ_PULL_UP       (GPIO_PULL_t)DEV_EXTI_IRQ4_PULL_UP
+    #define EXTI4_IRQ_INT_PRIO      (IRQ_Priority_t)DEV_EXTI_IRQ4_INT_PRIO
   #endif
 
   #if defined (DEV_EXTI_IRQ5) && (DEV_EXTI_IRQ5 == 1)
     #define USE_EXTI5_IRQ
     #define EXTI5_IRQ_GPIO_PORT     DEV_EXTI_IRQ5_PORT
     #define EXTI5_IRQ_GPIO_PIN      DEV_EXTI_IRQ5_PIN
-    #define EXTI5_IRQ_PULL_UP       DEV_EXTI_IRQ5_PULL_UP
-    #define EXTI5_IRQ_INT_PRIO      DEV_EXTI_IRQ5_INT_PRIO
+    #define EXTI5_IRQ_PULL_UP       (GPIO_PULL_t)DEV_EXTI_IRQ5_PULL_UP
+    #define EXTI5_IRQ_INT_PRIO      (IRQ_Priority_t)DEV_EXTI_IRQ5_INT_PRIO
   #endif
 
   #if defined (DEV_EXTI_IRQ7) && (DEV_EXTI_IRQ7 == 1)
     #define USE_EXTI7_IRQ
     #define EXTI7_IRQ_GPIO_PORT     DEV_EXTI_IRQ7_PORT
     #define EXTI7_IRQ_GPIO_PIN      DEV_EXTI_IRQ7_PIN
-    #define EXTI7_IRQ_PULL_UP       DEV_EXTI_IRQ7_PULL_UP
-    #define EXTI7_IRQ_INT_PRIO      DEV_EXTI_IRQ7_INT_PRIO
+    #define EXTI7_IRQ_PULL_UP       (GPIO_PULL_t)DEV_EXTI_IRQ7_PULL_UP
+    #define EXTI7_IRQ_INT_PRIO      (IRQ_Priority_t)DEV_EXTI_IRQ7_INT_PRIO
   #endif
 
   #if defined (DEV_EXTI_IRQ8) && (DEV_EXTI_IRQ8 == 1)
     #define USE_EXTI8_IRQ
     #define EXTI8_IRQ_GPIO_PORT     DEV_EXTI_IRQ8_PORT
     #define EXTI8_IRQ_GPIO_PIN      DEV_EXTI_IRQ8_PIN
-    #define EXTI8_IRQ_PULL_UP       DEV_EXTI_IRQ8_PULL_UP
-    #define EXTI8_IRQ_INT_PRIO      DEV_EXTI_IRQ8_INT_PRIO
+    #define EXTI8_IRQ_PULL_UP       (GPIO_PULL_t)DEV_EXTI_IRQ8_PULL_UP
+    #define EXTI8_IRQ_INT_PRIO      (IRQ_Priority_t)DEV_EXTI_IRQ8_INT_PRIO
   #endif
 #endif
 
@@ -441,7 +441,7 @@ static void EXTI_IRQHandler(EXTI_Resources_t *exti)
     exti->info->cb_event(mode);
   }
 
-  MMR_EXTI->EICLR = EICLR_IRQ0_CLR << exti->pos.clr;
+  MMR_EXTI->EICLR = (uint16_t)(EICLR_IRQ0_CLR << exti->pos.clr);
 }
 
 /*******************************************************************************

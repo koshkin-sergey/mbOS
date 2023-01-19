@@ -31,41 +31,46 @@
  ******************************************************************************/
 
 typedef enum {
-  GPIO_PIN_0    = 0,
-  GPIO_PIN_1    = 1,
-  GPIO_PIN_2    = 2,
-  GPIO_PIN_3    = 3,
-  GPIO_PIN_4    = 4,
-  GPIO_PIN_5    = 5,
-  GPIO_PIN_6    = 6,
-  GPIO_PIN_7    = 7,
+  GPIO_PIN_0              = 0,
+  GPIO_PIN_1              = 1,
+  GPIO_PIN_2              = 2,
+  GPIO_PIN_3              = 3,
+  GPIO_PIN_4              = 4,
+  GPIO_PIN_5              = 5,
+  GPIO_PIN_6              = 6,
+  GPIO_PIN_7              = 7,
+  GPIO_PIN_Reserved       = 0x7FFFFFFF
 } GPIO_PIN_t;
 
 typedef enum {
-  GPIO_PIN_FUNC_0 = 0,
-  GPIO_PIN_FUNC_1 = 1,
-  GPIO_PIN_FUNC_2 = 2,
-  GPIO_PIN_FUNC_3 = 3
+  GPIO_PIN_FUNC_0         = 0,
+  GPIO_PIN_FUNC_1         = 1,
+  GPIO_PIN_FUNC_2         = 2,
+  GPIO_PIN_FUNC_3         = 3,
+  GPIO_PIN_FUNC_Reserved  = 0x7FFFFFFF
 } GPIO_PIN_FUNC_t;
 
 typedef enum {
-  GPIO_PIN_OUT_LOW  = 0,
-  GPIO_PIN_OUT_HIGH = 1,
+  GPIO_PIN_OUT_LOW        = 0,
+  GPIO_PIN_OUT_HIGH       = 1,
+  GPIO_PIN_OUT_Reserved   = 0x7FFFFFFF
 } GPIO_PIN_OUT_t;
 
 typedef enum {
-  GPIO_PULL_DISABLE = 0,
-  GPIO_PULL_ENABLE  = 1,
+  GPIO_PULL_DISABLE       = 0,
+  GPIO_PULL_ENABLE        = 1,
+  GPIO_PULL_Reserved      = 0x7FFFFFFF
 } GPIO_PULL_t;
 
 /**
  * Pin Mode
  */
 typedef enum {
-  GPIO_MODE_ANALOG  = 0x00,  //!< Analog Input
-  GPIO_MODE_INPUT   = 0x01,  //!< General-purpose Input
-  GPIO_MODE_OUT_PP  = 0x02,  //!< General-purpose Output push-pull
-  GPIO_MODE_OUT_OD  = 0x06,  //!< General-purpose Output open-drain
+  GPIO_MODE_ANALOG        = 0x00,  //!< Analog Input
+  GPIO_MODE_INPUT         = 0x01,  //!< General-purpose Input
+  GPIO_MODE_OUT_PP        = 0x02,  //!< General-purpose Output push-pull
+  GPIO_MODE_OUT_OD        = 0x06,  //!< General-purpose Output open-drain
+  GPIO_MODE_Reserved      = 0x7FFFFFFF
 } GPIO_MODE_t;
 
 typedef struct _GPIO_PIN_CFG {

@@ -98,21 +98,23 @@ typedef enum {
   PWM0_IRQn                 = 51,   /* PWM Channel Pair 0 interrupt           */
   PWM1_IRQn                 = 52,   /* PWM Channel Pair 1 interrupt           */
   PWM2_IRQn                 = 53,   /* PWM Channel Pair 2 interrupt           */
-  PWM3_IRQn                 = 54    /* PWM Channel Pair 3 interrupt           */
+  PWM3_IRQn                 = 54,   /* PWM Channel Pair 3 interrupt           */
+  IRQn_Reserved             = 0x7FFFFFFF
 } IRQn_Type;
 
 /**
  * @brief Interrupt Priority Definition
  */
 typedef enum {
-  IRQ_PriorityRealtime    = 0,
-  IRQ_PriorityAboveHigh   = 1,
-  IRQ_PriorityHigh        = 2,
-  IRQ_PriorityAboveNormal = 3,
-  IRQ_PriorityNormal      = 4,
-  IRQ_PriorityBelowNormal = 5,
-  IRQ_PriorityAboveLow    = 6,
-  IRQ_PriorityLow         = 7,
+  IRQ_Priority_Realtime     = 0,
+  IRQ_Priority_AboveHigh    = 1,
+  IRQ_Priority_High         = 2,
+  IRQ_Priority_AboveNormal  = 3,
+  IRQ_Priority_Normal       = 4,
+  IRQ_Priority_BelowNormal  = 5,
+  IRQ_Priority_AboveLow     = 6,
+  IRQ_Priority_Low          = 7,
+  IRQ_Priority_Reserved     = 0x7FFFFFFF
 } IRQ_Priority_t;
 
 

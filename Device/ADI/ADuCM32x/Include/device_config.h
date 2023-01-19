@@ -59,7 +59,7 @@
 //     <o2> Internal Pull-Up Resistor <0=>Disable <1=>Enable
 //     <o3> Interrupt Priority <0=>Realtime <1=>Above High <2=>High <3=>Above Normal <4=>Normal <5=>Below Normal <6=>Above Low <7=>Low
 //   </e>
-#define   DEV_EXTI_IRQ1                1
+#define   DEV_EXTI_IRQ1                0
 #define   DEV_EXTI_IRQ1_ID             0
 #define   DEV_EXTI_IRQ1_PULL_UP        0
 #define   DEV_EXTI_IRQ1_INT_PRIO       4
@@ -73,7 +73,7 @@
 //     <o2> Internal Pull-Up Resistor <0=>Disable <1=>Enable
 //     <o3> Interrupt Priority <0=>Realtime <1=>Above High <2=>High <3=>Above Normal <4=>Normal <5=>Below Normal <6=>Above Low <7=>Low
 //   </e>
-#define   DEV_EXTI_IRQ2                1
+#define   DEV_EXTI_IRQ2                0
 #define   DEV_EXTI_IRQ2_ID             0
 #define   DEV_EXTI_IRQ2_PULL_UP        0
 #define   DEV_EXTI_IRQ2_INT_PRIO       4
@@ -87,7 +87,7 @@
 //     <o2> Internal Pull-Up Resistor <0=>Disable <1=>Enable
 //     <o3> Interrupt Priority <0=>Realtime <1=>Above High <2=>High <3=>Above Normal <4=>Normal <5=>Below Normal <6=>Above Low <7=>Low
 //   </e>
-#define   DEV_EXTI_IRQ4                1
+#define   DEV_EXTI_IRQ4                0
 #define   DEV_EXTI_IRQ4_ID             0
 #define   DEV_EXTI_IRQ4_PULL_UP        0
 #define   DEV_EXTI_IRQ4_INT_PRIO       4
@@ -101,7 +101,7 @@
 //     <o2> Internal Pull-Up Resistor <0=>Disable <1=>Enable
 //     <o3> Interrupt Priority <0=>Realtime <1=>Above High <2=>High <3=>Above Normal <4=>Normal <5=>Below Normal <6=>Above Low <7=>Low
 //   </e>
-#define   DEV_EXTI_IRQ5                1
+#define   DEV_EXTI_IRQ5                0
 #define   DEV_EXTI_IRQ5_ID             0
 #define   DEV_EXTI_IRQ5_PULL_UP        0
 #define   DEV_EXTI_IRQ5_INT_PRIO       4
@@ -115,7 +115,7 @@
 //     <o2> Internal Pull-Up Resistor <0=>Disable <1=>Enable
 //     <o3> Interrupt Priority <0=>Realtime <1=>Above High <2=>High <3=>Above Normal <4=>Normal <5=>Below Normal <6=>Above Low <7=>Low
 //   </e>
-#define   DEV_EXTI_IRQ7                1
+#define   DEV_EXTI_IRQ7                0
 #define   DEV_EXTI_IRQ7_ID             0
 #define   DEV_EXTI_IRQ7_PULL_UP        0
 #define   DEV_EXTI_IRQ7_INT_PRIO       4
@@ -129,7 +129,7 @@
 //     <o2> Internal Pull-Up Resistor <0=>Disable <1=>Enable
 //     <o3> Interrupt Priority <0=>Realtime <1=>Above High <2=>High <3=>Above Normal <4=>Normal <5=>Below Normal <6=>Above Low <7=>Low
 //   </e>
-#define   DEV_EXTI_IRQ8                1
+#define   DEV_EXTI_IRQ8                0
 #define   DEV_EXTI_IRQ8_ID             0
 #define   DEV_EXTI_IRQ8_PULL_UP        0
 #define   DEV_EXTI_IRQ8_INT_PRIO       4
