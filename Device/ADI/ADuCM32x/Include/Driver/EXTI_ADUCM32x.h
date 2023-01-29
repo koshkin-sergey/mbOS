@@ -42,9 +42,6 @@
 #define EXTI_DRIVER_ERROR             -1                                        ///< Unspecified error
 #define EXTI_DRIVER_ERROR_UNSUPPORTED -2                                        ///< Operation not supported
 
-/****** Current driver status flag definition *****/
-#define EXTI_FLAG_INITIALIZED         (1UL << 0)                                ///< EXTI initialized
-
 /****** EXTI Control Codes *****/
 #define EXTI_CONTROL_Pos               0
 #define EXTI_CONTROL_Msk              (0xFFUL)

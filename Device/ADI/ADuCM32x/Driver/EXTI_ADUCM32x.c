@@ -117,6 +117,9 @@ Driver_EXTI_t Driver_EXTI##x = {  \
 #define EXTI_IRQ_MODE_Pos             (0U)
 #define EXTI_IRQ_MODE_Msk             (0x7U << EXTI_IRQ_MODE_Pos)
 
+/****** Current driver status flag definition *****/
+#define EXTI_FLAG_INITIALIZED         (1UL << 0)                                ///< EXTI initialized
+
 /*******************************************************************************
  *  external declarations
  ******************************************************************************/
