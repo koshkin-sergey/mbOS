@@ -56,9 +56,9 @@ typedef void (*WDT_SignalEvent_t)(void);
  * @brief Access structure of the WDT Driver.
  */
 typedef struct Driver_WDT {
-  int32_t (*Initialize) (WDT_SignalEvent_t cb_event);
-  int32_t (*Control)    (uint32_t control, uint32_t arg);
-  int32_t (*Reload)     (void);
+  int32_t (*SetSignalEvent) (WDT_SignalEvent_t cb_event);
+  int32_t (*Control)        (uint32_t control, uint32_t arg);
+  int32_t (*Reload)         (void);
 } const Driver_WDT_t;
 
 /*******************************************************************************

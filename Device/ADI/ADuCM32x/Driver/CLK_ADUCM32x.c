@@ -58,7 +58,7 @@ static uint32_t GetFreqUCLK(void)
       break;
   }
 
-  return uClk;
+  return (uClk);
 }
 
 /**

@@ -24,3 +24,63 @@
 #include <Driver/WDT_ADUCM32x.h>
 
 #include <asm/aducm32x.h>
+
+/*******************************************************************************
+ *  global variable definitions (scope: module-local)
+ ******************************************************************************/
+
+static struct info {
+  WDT_SignalEvent_t cb_event;
+} WDT_Info;
+
+/*******************************************************************************
+ *  function implementations (scope: module-local)
+ ******************************************************************************/
+
+static int32_t WDT_SetSignalEvent(WDT_SignalEvent_t cb_event)
+{
+  WDT_Info.cb_event = cb_event;
+
+  return (WDT_DRIVER_OK);
+}
+
+static int32_t WDT_Control(uint32_t control, uint32_t arg)
+{
+  (void) control;
+  (void) arg;
+
+  return (WDT_DRIVER_OK);
+}
+
+static int32_t WDT_Reload(void)
+{
+  int32_t ret = WDT_DRIVER_ERROR;
+
+  if ((MMR_WDT->T3STA & T3STA_CLRI_Msk) == T3STA_CLRI_CLR) {
+    MMR_WDT->T3CLRI = T3CLRI_CLRWDG_VALUE;
+    ret = WDT_DRIVER_OK;
+  }
+
+  return (ret);
+}
+
+/*******************************************************************************
+ *  function implementations (scope: module-export)
+ ******************************************************************************/
+
+extern void WDT_IRQHandler(void);
+
+void WDT_IRQHandler(void)
+{
+
+}
+
+/*******************************************************************************
+ *  global variable definitions  (scope: module-exported)
+ ******************************************************************************/
+
+Driver_WDT_t Driver_WDT = {
+  WDT_SetSignalEvent,
+  WDT_Control,
+  WDT_Reload,
+};

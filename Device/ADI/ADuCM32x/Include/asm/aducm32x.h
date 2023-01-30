@@ -1634,108 +1634,98 @@ typedef struct MMR_EXTI {             /*!< MMR_EXTI Structure                 */
  * @brief WDT (MMR_WDT)
  */
 
-typedef struct MMR_WDT {                    /*!< MMR_WDT Structure                     */
-  __IO uint16_t  T3LD;                      /*!< Load value register                   */
+typedef struct MMR_WDT {              /*!< MMR_WDT Structure                  */
+  __IO uint16_t  T3LD;                /*!< Load value register                */
   __I  uint16_t  RESERVED0;
-  __IO uint16_t  T3VAL;                     /*!< Current count value register          */
+  __IO uint16_t  T3VAL;               /*!< Current count value register       */
   __I  uint16_t  RESERVED1;
-  __IO uint16_t  T3CON;                     /*!< Control register                      */
+  __IO uint16_t  T3CON;               /*!< Control register                   */
   __I  uint16_t  RESERVED2;
-  __IO uint16_t  T3CLRI;                    /*!< Clear interrupt register              */
+  __IO uint16_t  T3CLRI;              /*!< Clear interrupt register           */
   __I  uint16_t  RESERVED3[5];
-  __IO uint16_t  T3STA;                     /*!< Status register                       */
+  __IO uint16_t  T3STA;               /*!< Status register                    */
+  __I  uint16_t  RESERVED4;
 } MMR_WDT_t;
 
-/* Reset Value for T3LD*/
-#define T3LD_RVAL                      0x1000 
-
 /* T3LD[LOAD] - Load value */
-#define T3LD_LOAD_MSK                  (0xFFFF << 0  )
-
-/* Reset Value for T3VAL*/
-#define T3VAL_RVAL                     0x1000 
+#define T3LD_LOAD_Pos                 (0U)
+#define T3LD_LOAD_Msk                 (0xFFFFU << T3LD_LOAD_Pos)
 
 /* T3VAL[CCOUNT] - Current count value */
-#define T3VAL_CCOUNT_MSK               (0xFFFF << 0  )
-
-/* Reset Value for T3CON*/
-#define T3CON_RVAL                     0xE9 
+#define T3VAL_CCOUNT_Pos              (0U)
+#define T3VAL_CCOUNT_Msk              (0xFFFFU << T3VAL_CCOUNT_Pos)
 
 /* T3CON[MOD] - Timer mode */
-#define T3CON_MOD_BBA                  (*(volatile unsigned long *) 0x4204B118)
-#define T3CON_MOD_MSK                  (0x1   << 6  )
-#define T3CON_MOD                      (0x1   << 6  )
-#define T3CON_MOD_FREERUN              (0x0   << 6  ) /* FREERUN. Cleared by user to operate in free running mode. */
-#define T3CON_MOD_PERIODIC             (0x1   << 6  ) /* PERIODIC. Set by user to operate in periodic mode (default). */
+#define T3CON_MOD_Pos                 (6U)
+#define T3CON_MOD_Msk                 (0x1U << T3CON_MOD_Pos)
+#define T3CON_MOD_FREERUN             (0x0U << T3CON_MOD_Pos)                   /* FREERUN. Cleared by user to operate in free running mode. */
+#define T3CON_MOD_PERIODIC            (0x1U << T3CON_MOD_Pos)                   /* PERIODIC. Set by user to operate in periodic mode (default). */
 
 /* T3CON[ENABLE] - Timer enable */
-#define T3CON_ENABLE_BBA               (*(volatile unsigned long *) 0x4204B114)
-#define T3CON_ENABLE_MSK               (0x1   << 5  )
-#define T3CON_ENABLE                   (0x1   << 5  )
-#define T3CON_ENABLE_DIS               (0x0   << 5  ) /* DIS. Cleared by user to disable the timer. */
-#define T3CON_ENABLE_EN                (0x1   << 5  ) /* EN. Set by user to enable the timer (default). */
+#define T3CON_ENABLE_Pos              (5U)
+#define T3CON_ENABLE_MSK              (0x1U << T3CON_ENABLE_Pos)
+#define T3CON_ENABLE_DIS              (0x0U << T3CON_ENABLE_Pos)                /* DIS. Cleared by user to disable the timer. */
+#define T3CON_ENABLE_EN               (0x1U << T3CON_ENABLE_Pos)                /* EN. Set by user to enable the timer (default). */
 
 /* T3CON[PRE] - Prescaler */
-#define T3CON_PRE_MSK                  (0x3   << 2  )
-#define T3CON_PRE_DIV1                 (0x0   << 2  ) /* DIV1.Source clock/1.     */
-#define T3CON_PRE_DIV16                (0x1   << 2  ) /* DIV16. Source clock/16.  */
-#define T3CON_PRE_DIV256               (0x2   << 2  ) /* DIV256. Source clock/256 (default). */
-#define T3CON_PRE_DIV4096              (0x3   << 2  ) /* DIV4096. Source clock/4096 */
+#define T3CON_PRE_Pos                 (2U)
+#define T3CON_PRE_Msk                 (0x3U << T3CON_PRE_Pos)
+#define T3CON_PRE_DIV1                (0x0U << T3CON_PRE_Pos)                   /* DIV1.Source clock/1.     */
+#define T3CON_PRE_DIV16               (0x1U << T3CON_PRE_Pos)                   /* DIV16. Source clock/16.  */
+#define T3CON_PRE_DIV256              (0x2U << T3CON_PRE_Pos)                   /* DIV256. Source clock/256 (default). */
+#define T3CON_PRE_DIV4096             (0x3U << T3CON_PRE_Pos)                   /* DIV4096. Source clock/4096 */
 
 /* T3CON[IRQ] - Timer interrupt */
-#define T3CON_IRQ_BBA                  (*(volatile unsigned long *) 0x4204B104)
-#define T3CON_IRQ_MSK                  (0x1   << 1  )
-#define T3CON_IRQ                      (0x1   << 1  )
-#define T3CON_IRQ_DIS                  (0x0   << 1  ) /* DIS.Cleared by user to generate a reset on a time out (default). */
-#define T3CON_IRQ_EN                   (0x1   << 1  ) /* EN.Set by user to generate an interrupt when the timer times out. This feature is provided for debug purposes and is only available in ACTIVE mode. */
+#define T3CON_IRQ_Pos                 (1U)
+#define T3CON_IRQ_Msk                 (0x1U << T3CON_IRQ_Pos)
+#define T3CON_IRQ_DIS                 (0x0U << T3CON_IRQ_Pos)                   /* DIS.Cleared by user to generate a reset on a time out (default). */
+#define T3CON_IRQ_EN                  (0x1U << T3CON_IRQ_Pos)                   /* EN.Set by user to generate an interrupt when the timer times out. This feature is provided for debug purposes and is only available in ACTIVE mode. */
 
 /* T3CON[PMD] - Power Mode Disable */
-#define T3CON_PMD_BBA                  (*(volatile unsigned long *) 0x4204B100)
-#define T3CON_PMD_MSK                  (0x1   << 0  )
-#define T3CON_PMD                      (0x1   << 0  )
-#define T3CON_PMD_DIS                  (0x0   << 0  ) /* DIS. The watchdog timer will continue its count down while in hibernate mode. */
-#define T3CON_PMD_EN                   (0x1   << 0  ) /* EN. When hibernate mode is entered, the watchdog counter will suspend its count down. As hibernate mode is exited, the count down will resume from its current count value (the count will not be reset). */
-
-/* Reset Value for T3CLRI*/
-#define T3CLRI_RVAL                    0x0 
+#define T3CON_PMD_Pos                 (0U)
+#define T3CON_PMD_Msk                 (0x1U << T3CON_PMD_Pos)
+#define T3CON_PMD_DIS                 (0x0U << T3CON_PMD_Pos)                   /* DIS. The watchdog timer will continue its count down while in hibernate mode. */
+#define T3CON_PMD_EN                  (0x1U << T3CON_PMD_Pos)                   /* EN. When hibernate mode is entered, the watchdog counter will suspend its count down. As hibernate mode is exited, the count down will resume from its current count value (the count will not be reset). */
 
 /* T3CLRI[CLRWDG] - Clear watchdog */
-#define T3CLRI_CLRWDG_MSK              (0xFFFF << 0  )
-
-/* Reset Value for T3STA*/
-#define T3STA_RVAL                     0x0 
+#define T3CLRI_CLRWDG_Pos             (0U)
+#define T3CLRI_CLRWDG_Msk             (0xFFFFU << T3CLRI_CLRWDG_Pos)
+#define T3CLRI_CLRWDG_VALUE           (uint16_t)(0xCCCCU << T3CLRI_CLRWDG_Pos)
 
 /* T3STA[LOCK] - Lock status bit */
-#define T3STA_LOCK_BBA                 (*(volatile unsigned long *) 0x4204B310)
-#define T3STA_LOCK_MSK                 (0x1   << 4  )
-#define T3STA_LOCK                     (0x1   << 4  )
-#define T3STA_LOCK_CLR                 (0x0   << 4  )
-#define T3STA_LOCK_SET                 (0x1   << 4  )
+#define T3STA_LOCK_Pos                (4U)
+#define T3STA_LOCK_Msk                (0x1U << T3STA_LOCK_Pos)
+#define T3STA_LOCK_CLR                (0x0U << T3STA_LOCK_Pos)
+#define T3STA_LOCK_SET                (0x1U << T3STA_LOCK_Pos)
 
 /* T3STA[CON] - T3CON write sync in progress */
-#define T3STA_CON_BBA                  (*(volatile unsigned long *) 0x4204B30C)
-#define T3STA_CON_MSK                  (0x1   << 3  )
-#define T3STA_CON                      (0x1   << 3  )
-#define T3STA_CON_CLR                  (0x0   << 3  ) /* APB and T3 clock domains T3CON configuration values match */
-#define T3STA_CON_SET                  (0x1   << 3  ) /* APB T3CON register values are being synchronized to T3 clock domain */
+#define T3STA_CON_Pos                 (3U)
+#define T3STA_CON_Msk                 (0x1U << T3STA_CON_Pos)
+#define T3STA_CON_CLR                 (0x0U << T3STA_CON_Pos)                   /* APB and T3 clock domains T3CON configuration values match */
+#define T3STA_CON_SET                 (0x1U << T3STA_CON_Pos)                   /* APB T3CON register values are being synchronized to T3 clock domain */
 
 /* T3STA[LD] - T3LD write sync in progress */
-#define T3STA_LD_BBA                   (*(volatile unsigned long *) 0x4204B308)
-#define T3STA_LD_MSK                   (0x1   << 2  )
-#define T3STA_LD                       (0x1   << 2  )
-#define T3STA_LD_CLR                   (0x0   << 2  ) /* APB and T3 clock domains T3LD values match */
-#define T3STA_LD_SET                   (0x1   << 2  ) /* APB T3LD value is being synchronized to T3 clock domain */
+#define T3STA_LD_Pos                  (2U)
+#define T3STA_LD_Msk                  (0x1U << T3STA_LD_Pos)
+#define T3STA_LD_CLR                  (0x0U << T3STA_LD_Pos)                    /* APB and T3 clock domains T3LD values match */
+#define T3STA_LD_SET                  (0x1U << T3STA_LD_Pos)                    /* APB T3LD value is being synchronized to T3 clock domain */
 
 /* T3STA[CLRI] - T3CLRI write sync in progress */
-#define T3STA_CLRI_BBA                 (*(volatile unsigned long *) 0x4204B304)
-#define T3STA_CLRI_MSK                 (0x1   << 1  )
-#define T3STA_CLRI                     (0x1   << 1  )
-#define T3STA_CLRI_CLR                 (0x0   << 1  ) /* APB T3CLRI write sync not done/ */
-#define T3STA_CLRI_SET                 (0x1   << 1  ) /* APB T3CLRI write is being synced to T3 clock domain. T3 will be restarted (if 0xCCCC was written) once sync is complete */
+#define T3STA_CLRI_Pos                (1U)
+#define T3STA_CLRI_Msk                (0x1U << T3STA_CLRI_Pos)
+#define T3STA_CLRI_CLR                (0x0U << T3STA_CLRI_Pos)                  /* APB T3CLRI write sync not done */
+#define T3STA_CLRI_SET                (0x1U << T3STA_CLRI_Pos)                  /* APB T3CLRI write is being synced to T3 clock domain. T3 will be restarted (if 0xCCCC was written) once sync is complete */
+
+/* T3STA[IRQ] - Watchdog timer interrupt */
+#define T3STA_IRQ_Pos                 (0U)
+#define T3STA_IRQ_Msk                 (0x1U << T3STA_IRQ_Pos)
+#define T3STA_IRQ_CLR                 (0x0U << T3STA_IRQ_Pos)                   /* Timer 3 interrupt not pending */
+#define T3STA_IRQ_SET                 (0x1U << T3STA_IRQ_Pos)                   /* Timer 3 interrupt pending */
+
+
 // ------------------------------------------------------------------------------------------------
 // -----                                        wut                                        -----
 // ------------------------------------------------------------------------------------------------
-
 
 /**
   * @brief wut (MMR_WUT)
