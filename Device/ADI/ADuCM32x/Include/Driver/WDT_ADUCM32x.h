@@ -37,11 +37,6 @@
 #define WDT_DRIVER_ERROR_UNSUPPORTED  -3                                        ///< Operation not supported
 #define ARM_DRIVER_ERROR_PARAMETER    -4                                        ///< Parameter error
 
-/****** WDT Control Codes *****/
-#define WDT_CONTROL_Pos                0
-#define WDT_CONTROL_Msk               (0xFFUL)
-
-
 /*******************************************************************************
  *  typedefs and structures
  ******************************************************************************/
@@ -56,9 +51,12 @@ typedef void (*WDT_SignalEvent_t)(void);
  * @brief Access structure of the WDT Driver.
  */
 typedef struct Driver_WDT {
-  int32_t (*SetSignalEvent) (WDT_SignalEvent_t cb_event);
-  int32_t (*Control)        (uint32_t control, uint32_t arg);
-  int32_t (*Reload)         (void);
+  int32_t   (*Setup)        (uint32_t interval, WDT_SignalEvent_t cb_event);
+  int32_t   (*Enable)       (void);
+  int32_t   (*Disable)      (void);
+  uint32_t  (*GetInterval)  (void);
+  uint32_t  (*GetCount)     (void);
+  int32_t   (*Reload)       (void);
 } const Driver_WDT_t;
 
 /*******************************************************************************

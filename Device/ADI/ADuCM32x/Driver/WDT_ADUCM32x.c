@@ -24,6 +24,7 @@
 #include <Driver/WDT_ADUCM32x.h>
 
 #include <asm/aducm32x.h>
+#include <device_config.h>
 
 /*******************************************************************************
  *  global variable definitions (scope: module-local)
@@ -37,19 +38,54 @@ static struct info {
  *  function implementations (scope: module-local)
  ******************************************************************************/
 
-static int32_t WDT_SetSignalEvent(WDT_SignalEvent_t cb_event)
+static int32_t WDT_Setup(uint32_t interval, WDT_SignalEvent_t cb_event)
 {
-  WDT_Info.cb_event = cb_event;
+  int32_t ret = WDT_DRIVER_ERROR;
 
-  return (WDT_DRIVER_OK);
+  if (interval == 0U) {
+    return (ARM_DRIVER_ERROR_PARAMETER);
+  }
+
+  if ((MMR_WDT->T3STA & (T3STA_LOCK_Msk | T3STA_CON_Msk | T3STA_LD_Msk)) == 0U) {
+    WDT_Info.cb_event = cb_event;
+    ret = WDT_DRIVER_OK;
+  }
+
+  return (ret);
 }
 
-static int32_t WDT_Control(uint32_t control, uint32_t arg)
+static int32_t WDT_Enable(void)
 {
-  (void) control;
-  (void) arg;
+  int32_t ret = WDT_DRIVER_ERROR;
 
-  return (WDT_DRIVER_OK);
+  if ((MMR_WDT->T3STA & (T3STA_LOCK_Msk | T3STA_CON_Msk)) == 0U) {
+    MMR_WDT->T3CON |= T3CON_ENABLE_EN;
+    ret = WDT_DRIVER_OK;
+  }
+
+  return (ret);
+}
+
+static int32_t WDT_Disable(void)
+{
+  int32_t ret = WDT_DRIVER_ERROR;
+
+  if ((MMR_WDT->T3STA & (T3STA_LOCK_Msk | T3STA_CON_Msk)) == 0U) {
+    MMR_WDT->T3CON &= ~T3CON_ENABLE_EN;
+    ret = WDT_DRIVER_OK;
+  }
+
+  return (ret);
+}
+
+static uint32_t WDT_GetInterval(void)
+{
+  return (0U);
+}
+
+static uint32_t WDT_GetCount(void)
+{
+  return (MMR_WDT->T3LD - MMR_WDT->T3VAL);
 }
 
 static int32_t WDT_Reload(void)
@@ -80,7 +116,10 @@ void WDT_IRQHandler(void)
  ******************************************************************************/
 
 Driver_WDT_t Driver_WDT = {
-  WDT_SetSignalEvent,
-  WDT_Control,
+  WDT_Setup,
+  WDT_Enable,
+  WDT_Disable,
+  WDT_GetInterval,
+  WDT_GetCount,
   WDT_Reload,
 };
