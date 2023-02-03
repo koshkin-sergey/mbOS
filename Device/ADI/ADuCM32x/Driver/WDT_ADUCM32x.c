@@ -23,6 +23,7 @@
 
 #include <Driver/WDT_ADUCM32x.h>
 
+#include <stddef.h>
 #include <asm/aducm32x.h>
 #include <device_config.h>
 
@@ -40,15 +41,34 @@ static struct info {
 
 static int32_t WDT_Setup(uint32_t interval, WDT_SignalEvent_t cb_event)
 {
+  uint32_t load;
+  uint32_t pre;
   int32_t ret = WDT_DRIVER_ERROR;
 
-  if (interval == 0U) {
+  if (interval == 0U || interval > 8000000U) {
     return (ARM_DRIVER_ERROR_PARAMETER);
   }
 
   if ((MMR_WDT->T3STA & (T3STA_LOCK_Msk | T3STA_CON_Msk | T3STA_LD_Msk)) == 0U) {
-    WDT_Info.cb_event = cb_event;
-    ret = WDT_DRIVER_OK;
+    pre  = 0U;
+    load = LF_CLK_VALUE / 1000U * interval;
+
+    while ((load & ~0xFFFFU) != 0U && (pre & ~0x3U) == 0U) {
+      ++pre;
+      load >>= 4U;
+    };
+
+    if ((pre & ~0x3U) == 0U) {
+      MMR_WDT->T3LD  = (uint16_t)load;
+      MMR_WDT->T3CON = (uint16_t)((MMR_WDT->T3CON & ~T3CON_PRE_Msk) | (pre << T3CON_PRE_Pos));
+
+      if (cb_event != NULL) {
+        MMR_WDT->T3CON |= T3CON_IRQ_EN;
+      }
+
+      WDT_Info.cb_event = cb_event;
+      ret = WDT_DRIVER_OK;
+    }
   }
 
   return (ret);
@@ -59,7 +79,7 @@ static int32_t WDT_Enable(void)
   int32_t ret = WDT_DRIVER_ERROR;
 
   if ((MMR_WDT->T3STA & (T3STA_LOCK_Msk | T3STA_CON_Msk)) == 0U) {
-    MMR_WDT->T3CON |= T3CON_ENABLE_EN;
+    MMR_WDT->T3CON |= (uint16_t)T3CON_ENABLE;
     ret = WDT_DRIVER_OK;
   }
 
@@ -71,7 +91,7 @@ static int32_t WDT_Disable(void)
   int32_t ret = WDT_DRIVER_ERROR;
 
   if ((MMR_WDT->T3STA & (T3STA_LOCK_Msk | T3STA_CON_Msk)) == 0U) {
-    MMR_WDT->T3CON &= ~T3CON_ENABLE_EN;
+    MMR_WDT->T3CON &= (uint16_t)~T3CON_ENABLE;
     ret = WDT_DRIVER_OK;
   }
 
@@ -80,7 +100,7 @@ static int32_t WDT_Disable(void)
 
 static uint32_t WDT_GetInterval(void)
 {
-  return (0U);
+  return (MMR_WDT->T3LD * 1000U / LF_CLK_VALUE);
 }
 
 static uint32_t WDT_GetCount(void)
@@ -108,7 +128,9 @@ extern void WDT_IRQHandler(void);
 
 void WDT_IRQHandler(void)
 {
-
+  if (WDT_Info.cb_event != NULL) {
+    WDT_Info.cb_event();
+  }
 }
 
 /*******************************************************************************

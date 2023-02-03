@@ -1664,8 +1664,7 @@ typedef struct MMR_WDT {              /*!< MMR_WDT Structure                  */
 /* T3CON[ENABLE] - Timer enable */
 #define T3CON_ENABLE_Pos              (5U)
 #define T3CON_ENABLE_MSK              (0x1U << T3CON_ENABLE_Pos)
-#define T3CON_ENABLE_DIS              (0x0U << T3CON_ENABLE_Pos)                /* DIS. Cleared by user to disable the timer. */
-#define T3CON_ENABLE_EN               (0x1U << T3CON_ENABLE_Pos)                /* EN. Set by user to enable the timer (default). */
+#define T3CON_ENABLE                  T3CON_ENABLE_MSK
 
 /* T3CON[PRE] - Prescaler */
 #define T3CON_PRE_Pos                 (2U)
