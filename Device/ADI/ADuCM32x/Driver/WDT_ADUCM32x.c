@@ -71,7 +71,7 @@ static int32_t WDT_Setup(uint32_t interval, WDT_SignalEvent_t cb_event)
     while ((load & ~0xFFFFU) != 0U && (pre & ~0x3U) == 0U) {
       ++pre;
       load >>= 4U;
-    };
+    }
 
     if ((pre & ~0x3U) == 0U) {
       con = (MMR_WDT->T3CON & ~T3CON_PRE_Msk) |
@@ -168,7 +168,9 @@ static uint32_t WDT_GetInterval(void)
  */
 static uint32_t WDT_GetCount(void)
 {
-  return (MMR_WDT->T3LD - MMR_WDT->T3VAL);
+  uint32_t load = MMR_WDT->T3LD;
+  
+  return (load - MMR_WDT->T3VAL);
 }
 
 /**

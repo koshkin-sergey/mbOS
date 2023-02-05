@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2022-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -21,8 +21,8 @@
 
 #include <asm/system_aducm32x.h>
 
-#include <asm/aducm32x.h>
 #include <Driver/CLK_ADUCM32x.h>
+#include <Driver/WDT_ADUCM32x.h>
 
 /*******************************************************************************
  *  global variable definitions (scope: module-exported)
@@ -50,7 +50,8 @@ void SystemCoreClockUpdate(void)
 void SystemInit(void)
 {
   Driver_CLK_t *clk = &Driver_CLK;
+  Driver_WDT_t *wdt = &Driver_WDT;
 
+  wdt->Disable();
   clk->ClkReset();
-  MMR_WDT->T3CON = 0U;
 }
