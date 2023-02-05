@@ -31,11 +31,9 @@
  ******************************************************************************/
 
 /****** WDT error codes *****/
-#define WDT_DRIVER_OK                  0                                        ///< Operation succeeded
-#define WDT_DRIVER_ERROR              -1                                        ///< Unspecified error
-#define ARM_DRIVER_ERROR_BUSY         -2                                        ///< Driver is busy
-#define WDT_DRIVER_ERROR_UNSUPPORTED  -3                                        ///< Operation not supported
-#define ARM_DRIVER_ERROR_PARAMETER    -4                                        ///< Parameter error
+#define WDT_DRIVER_OK                  0      ///< Operation succeeded
+#define WDT_DRIVER_ERROR              -1      ///< Unspecified error
+#define ARM_DRIVER_ERROR_PARAMETER    -2      ///< Parameter error
 
 /*******************************************************************************
  *  typedefs and structures
@@ -46,6 +44,36 @@
  * @brief       Signal WatchDog Timer Event.
  */
 typedef void (*WDT_SignalEvent_t)(void);
+
+/**
+ * Function documentation
+ *
+ * @fn          int32_t WDT_Setup(uint32_t interval, WDT_SignalEvent_t cb_event)
+ * @brief       Setup Watchdog timer to generate periodic interrupts or resets.
+ * @param[in]   interval  Watchdog interval in msec.
+ * @param[in]   cb_event  Watchdog event hadler.
+ * @return      status code that indicates the execution status of the function.
+ *
+ * @fn          int32_t WDT_Enable(void)
+ * @brief       Enable Watchdog Tick timer.
+ * @return      status code that indicates the execution status of the function.
+ *
+ * @fn          int32_t WDT_Disable(void)
+ * @brief       Disable Watchdog Tick timer.
+ * @return      status code that indicates the execution status of the function.
+ *
+ * @fn          uint32_t WDT_GetInterval(void)
+ * @brief       Get Watchdog timer interval reload value.
+ * @return      Watchdog timer interval reload value in msec.
+ *
+ * @fn          uint32_t WDT_GetCount(void)
+ * @brief       Get Watchdog timer counter value.
+ * @return      Watchdog timer counter value.
+ *
+ * @fn          int32_t WDT_Reload(void)
+ * @brief       Clear Watchdog.
+ * @return      status code that indicates the execution status of the function.
+ */
 
 /**
  * @brief Access structure of the WDT Driver.

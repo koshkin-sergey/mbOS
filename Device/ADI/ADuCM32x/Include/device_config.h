@@ -141,4 +141,13 @@
 // </e>
 
 
+// <e> WDT (Watchdog Timer) [Driver_WDT]
+// <i> Configuration settings for Driver_WDT
+#define DEV_WDT                        1
+
+// <o> Interrupt Priority <0=>Realtime <1=>Above High <2=>High <3=>Above Normal <4=>Normal <5=>Below Normal <6=>Above Low <7=>Low
+#define DEV_WDT_INT_PRIO               4
+
+// </e>
+
 #endif  /* __DEVICE_CONFIG_H */
