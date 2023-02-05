@@ -2121,6 +2121,9 @@
         <file>
             <name>$PROJ_DIR$\..\..\..\..\..\..\..\Device\ADI\ADuCM32x\Startup\system_aducm32x.c</name>
         </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Device\ADI\ADuCM32x\Driver\WDT_ADUCM32x.c</name>
+        </file>
     </group>
     <group>
         <name>Kernel</name>
