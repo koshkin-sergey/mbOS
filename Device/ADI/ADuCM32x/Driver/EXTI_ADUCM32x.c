@@ -97,10 +97,12 @@
     defined(USE_EXTI8_IRQ)
 
 #define EXTIx_EXPORT_DRIVER(x)    \
-static int32_t EXTI##x##_Initialize   (EXTI_SignalEvent_t cb_event)             { return (EXTI_Initialize   (cb_event, &EXTI##x##_Resources)); } \
-static int32_t EXTI##x##_Uninitialize (void)                                    { return (EXTI_Uninitialize (          &EXTI##x##_Resources)); } \
-static int32_t EXTI##x##_Control      (uint32_t control)                        { return (EXTI_Control      (control,  &EXTI##x##_Resources)); } \
-\
+static int32_t EXTI##x##_Initialize   (EXTI_SignalEvent_t cb_event)             { return (EXTI_Initialize   (cb_event, &EXTI##x##_Resources)); }  \
+static int32_t EXTI##x##_Uninitialize (void)                                    { return (EXTI_Uninitialize (          &EXTI##x##_Resources)); }  \
+static int32_t EXTI##x##_Control      (uint32_t control)                        { return (EXTI_Control      (control,  &EXTI##x##_Resources)); }  \
+extern void    EXTI##x##_IRQHandler   (void);                                                                                                     \
+       void    EXTI##x##_IRQHandler   (void)                                    {         EXTI_IRQHandler   (          &EXTI##x##_Resources) ; }  \
+                                  \
 Driver_EXTI_t Driver_EXTI##x = {  \
   EXTI##x##_Initialize,           \
   EXTI##x##_Uninitialize,         \
@@ -119,38 +121,6 @@ Driver_EXTI_t Driver_EXTI##x = {  \
 
 /****** Current driver status flag definition *****/
 #define EXTI_FLAG_INITIALIZED         (1UL << 0)                                ///< EXTI initialized
-
-/*******************************************************************************
- *  external declarations
- ******************************************************************************/
-
-#if defined(USE_EXTI0_IRQ)
-extern void EXTI0_IRQHandler(void);
-#endif
-
-#if defined(USE_EXTI1_IRQ)
-extern void EXTI1_IRQHandler(void);
-#endif
-
-#if defined(USE_EXTI2_IRQ)
-extern void EXTI2_IRQHandler(void);
-#endif
-
-#if defined(USE_EXTI4_IRQ)
-extern void EXTI4_IRQHandler(void);
-#endif
-
-#if defined(USE_EXTI5_IRQ)
-extern void EXTI5_IRQHandler(void);
-#endif
-
-#if defined(USE_EXTI7_IRQ)
-extern void EXTI7_IRQHandler(void);
-#endif
-
-#if defined(USE_EXTI8_IRQ)
-extern void EXTI8_IRQHandler(void);
-#endif
 
 /*******************************************************************************
  *  typedefs and structures (scope: module-local)
@@ -354,6 +324,12 @@ static EXTI_Resources_t EXTI8_Resources = {
  *  function implementations (scope: module-local)
  ******************************************************************************/
 
+/**
+ * @brief       Initialize External Interrupt Interface.
+ * @param[in]   cb_event  External Interrupt event hadler.
+ * @param[in]   exti      Pointer to EXTI resources.
+ * @return      status code that indicates the execution status of the function.
+ */
 static int32_t EXTI_Initialize(EXTI_SignalEvent_t cb_event, EXTI_Resources_t *exti)
 {
   struct info *info = exti->info;
@@ -381,6 +357,11 @@ static int32_t EXTI_Initialize(EXTI_SignalEvent_t cb_event, EXTI_Resources_t *ex
   return (EXTI_DRIVER_OK);
 }
 
+/**
+ * @brief       De-initialize External Interrupt Interface.
+ * @param[in]   exti  Pointer to EXTI resources.
+ * @return      status code that indicates the execution status of the function.
+ */
 static int32_t EXTI_Uninitialize(EXTI_Resources_t *exti)
 {
   struct info *info = exti->info;
@@ -406,6 +387,12 @@ static int32_t EXTI_Uninitialize(EXTI_Resources_t *exti)
   return (EXTI_DRIVER_OK);
 }
 
+/**
+ * @brief       Control External Interrupt Interface.
+ * @param[in]   control   Operation.
+ * @param[in]   exti      Pointer to EXTI resources.
+ * @return      status code that indicates the execution status of the function.
+ */
 static int32_t EXTI_Control(uint32_t control, EXTI_Resources_t *exti)
 {
   uint32_t mode;
@@ -437,6 +424,10 @@ static int32_t EXTI_Control(uint32_t control, EXTI_Resources_t *exti)
   return (EXTI_DRIVER_OK);
 }
 
+/**
+ * @brief       EXTI common interrupt handler.
+ * @param[in]   exti  Pointer to EXTI resources.
+ */
 static void EXTI_IRQHandler(EXTI_Resources_t *exti)
 {
   if (exti->info->cb_event != NULL) {
@@ -446,80 +437,6 @@ static void EXTI_IRQHandler(EXTI_Resources_t *exti)
 
   MMR_EXTI->EICLR = (uint16_t)(EICLR_IRQ0_CLR << exti->pos.clr);
 }
-
-/*******************************************************************************
- *  function implementations (scope: module-export)
- ******************************************************************************/
-
-#if defined(USE_EXTI0_IRQ)
-/**
- * @brief       EXT IRQ0 Interrupt handler.
- */
-void EXTI0_IRQHandler(void)
-{
-  EXTI_IRQHandler(&EXTI0_Resources);
-}
-#endif
-
-#if defined(USE_EXTI1_IRQ)
-/**
- * @brief       EXT IRQ1 Interrupt handler.
- */
-void EXTI1_IRQHandler(void)
-{
-  EXTI_IRQHandler(&EXTI1_Resources);
-}
-#endif
-
-#if defined(USE_EXTI2_IRQ)
-/**
- * @brief       EXT IRQ2 Interrupt handler.
- */
-void EXTI2_IRQHandler(void)
-{
-  EXTI_IRQHandler(&EXTI2_Resources);
-}
-#endif
-
-#if defined(USE_EXTI4_IRQ)
-/**
- * @brief       EXT IRQ4 Interrupt handler.
- */
-void EXTI4_IRQHandler(void)
-{
-  EXTI_IRQHandler(&EXTI4_Resources);
-}
-#endif
-
-#if defined(USE_EXTI5_IRQ)
-/**
- * @brief       EXT IRQ5 Interrupt handler.
- */
-void EXTI5_IRQHandler(void)
-{
-  EXTI_IRQHandler(&EXTI5_Resources);
-}
-#endif
-
-#if defined(USE_EXTI7_IRQ)
-/**
- * @brief       EXT IRQ7 Interrupt handler.
- */
-void EXTI7_IRQHandler(void)
-{
-  EXTI_IRQHandler(&EXTI7_Resources);
-}
-#endif
-
-#if defined(USE_EXTI8_IRQ)
-/**
- * @brief       EXT IRQ8 Interrupt handler.
- */
-void EXTI8_IRQHandler(void)
-{
-  EXTI_IRQHandler(&EXTI8_Resources);
-}
-#endif
 
 /*******************************************************************************
  *  global variable definitions (scope: module-exported)

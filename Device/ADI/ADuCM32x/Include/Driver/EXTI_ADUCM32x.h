@@ -69,6 +69,24 @@
 typedef void (*EXTI_SignalEvent_t)(uint32_t event);
 
 /**
+ * Function documentation
+ *
+ * @fn          int32_t EXTI_Initialize(EXTI_SignalEvent_t cb_event)
+ * @brief       Initialize External Interrupt Interface.
+ * @param[in]   cb_event  External Interrupt event hadler.
+ * @return      status code that indicates the execution status of the function.
+ *
+ * @fn          int32_t EXTI_Uninitialize(void)
+ * @brief       De-initialize External Interrupt Interface.
+ * @return      status code that indicates the execution status of the function.
+ *
+ * @fn          int32_t EXTI_Control(uint32_t control)
+ * @brief       Control External Interrupt Interface.
+ * @param[in]   control   Operation.
+ * @return      status code that indicates the execution status of the function.
+ */
+
+/**
  * @brief Access structure of the EXTI Driver.
  */
 typedef struct Driver_EXTI {
