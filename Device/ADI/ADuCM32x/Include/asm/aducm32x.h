@@ -474,447 +474,6 @@ typedef enum {
 /* SPICNT[COUNT] - Transfer byte count */
 #define SPICNT_COUNT_MSK               (0xFF  << 0  )
 
-/* I2CMCON[PRESTOP_BUS_CLR] - Prestop Bus-Clear */
-#define I2CMCON_PRESTOP_BUS_CLR_MSK    (0x1   << 13 )
-#define I2CMCON_PRESTOP_BUS_CLR        (0x1   << 13 )
-#define I2CMCON_PRESTOP_BUS_CLR_DIS    (0x0   << 13 )
-#define I2CMCON_PRESTOP_BUS_CLR_EN     (0x1   << 13 )
-
-/* I2CMCON[BUS_CLR_EN] - Bus-Clear Enable */
-#define I2CMCON_BUS_CLR_EN_MSK         (0x1   << 12 )
-#define I2CMCON_BUS_CLR_EN             (0x1   << 12 )
-#define I2CMCON_BUS_CLR_EN_DIS         (0x0   << 12 )
-#define I2CMCON_BUS_CLR_EN_EN          (0x1   << 12 )
-
-/* I2CMCON[MTXDMA] - Enable master Tx DMA request */
-#define I2CMCON_MTXDMA_MSK             (0x1   << 11 )
-#define I2CMCON_MTXDMA                 (0x1   << 11 )
-#define I2CMCON_MTXDMA_DIS             (0x0   << 11 ) /* Disable DMA mode         */
-#define I2CMCON_MTXDMA_EN              (0x1   << 11 ) /* Enable I2C master DMA Tx requests. */
-
-/* I2CMCON[MRXDMA] - Enable master Rx DMA request */
-#define I2CMCON_MRXDMA_MSK             (0x1   << 10 )
-#define I2CMCON_MRXDMA                 (0x1   << 10 )
-#define I2CMCON_MRXDMA_DIS             (0x0   << 10 ) /* Disable DMA mode         */
-#define I2CMCON_MRXDMA_EN              (0x1   << 10 ) /* Enable I2C master DMA Rx requests. */
-
-/* I2CMCON[MXMITDEC] - Decrement master TX FIFO status when a byte has been transmitted */
-#define I2CMCON_MXMITDEC_MSK           (0x1   << 9  )
-#define I2CMCON_MXMITDEC               (0x1   << 9  )
-#define I2CMCON_MXMITDEC_DIS           (0x0   << 9  )
-#define I2CMCON_MXMITDEC_EN            (0x1   << 9  )
-
-/* I2CMCON[IENCMP] - Transaction completed (or stop detected) interrupt enable */
-#define I2CMCON_IENCMP_MSK             (0x1   << 8  )
-#define I2CMCON_IENCMP                 (0x1   << 8  )
-#define I2CMCON_IENCMP_DIS             (0x0   << 8  ) /* An interrupt is not generated when a STOP is detected. */
-#define I2CMCON_IENCMP_EN              (0x1   << 8  ) /* An interrupt is generated when a STOP is detected. */
-
-/* I2CMCON[IENACK] - ACK not received interrupt enable */
-#define I2CMCON_IENACK_MSK             (0x1   << 7  )
-#define I2CMCON_IENACK                 (0x1   << 7  )
-#define I2CMCON_IENACK_DIS             (0x0   << 7  ) /* ACK not received interrupt disable */
-#define I2CMCON_IENACK_EN              (0x1   << 7  ) /* ACK not received interrupt enable */
-
-/* I2CMCON[IENALOST] - Arbitration lost interrupt enable */
-#define I2CMCON_IENALOST_MSK           (0x1   << 6  )
-#define I2CMCON_IENALOST               (0x1   << 6  )
-#define I2CMCON_IENALOST_DIS           (0x0   << 6  ) /* Arbitration lost interrupt disable */
-#define I2CMCON_IENALOST_EN            (0x1   << 6  ) /* Arbitration lost interrupt enable */
-
-/* I2CMCON[IENMTX] - Transmit request interrupt enable */
-#define I2CMCON_IENMTX_MSK             (0x1   << 5  )
-#define I2CMCON_IENMTX                 (0x1   << 5  )
-#define I2CMCON_IENMTX_DIS             (0x0   << 5  ) /* Transmit request interrupt disable */
-#define I2CMCON_IENMTX_EN              (0x1   << 5  ) /* Transmit request interrupt enable */
-
-/* I2CMCON[IENMRX] - Receive request interrupt enable */
-#define I2CMCON_IENMRX_MSK             (0x1   << 4  )
-#define I2CMCON_IENMRX                 (0x1   << 4  )
-#define I2CMCON_IENMRX_DIS             (0x0   << 4  ) /* Receive request interrupt disable */
-#define I2CMCON_IENMRX_EN              (0x1   << 4  ) /* Receive request interrupt enable */
-
-/* I2CMCON[STRETCH] - Stretch SCL enable */
-#define I2CMCON_STRETCH_MSK            (0x1   << 3  )
-#define I2CMCON_STRETCH                (0x1   << 3  )
-#define I2CMCON_STRETCH_DIS            (0x0   << 3  ) /* Disable Clock stretching */
-#define I2CMCON_STRETCH_EN             (0x1   << 3  ) /* Setting this bit tells the device if SCL is 0 hold it at 0;. Or if SCL is 1 then when it next goes to 0 hold it at 0. */
-
-/* I2CMCON[LOOPBACK] - Internal loopback enable */
-#define I2CMCON_LOOPBACK_MSK           (0x1   << 2  )
-#define I2CMCON_LOOPBACK               (0x1   << 2  )
-#define I2CMCON_LOOPBACK_DIS           (0x0   << 2  ) /* SCL and SDA out of the device are not muxed onto their corresponding inputs. */
-#define I2CMCON_LOOPBACK_EN            (0x1   << 2  ) /* SCL and SDA out of the device are muxed onto their corresponding inputs. */
-
-/* I2CMCON[COMPETE] - Start back-off disable */
-#define I2CMCON_COMPETE_MSK            (0x1   << 1  )
-#define I2CMCON_COMPETE                (0x1   << 1  )
-#define I2CMCON_COMPETE_DIS            (0x0   << 1  )
-#define I2CMCON_COMPETE_EN             (0x1   << 1  )
-
-/* I2CMCON[MASEN] - Master enable */
-#define I2CMCON_MASEN_MSK              (0x1   << 0  )
-#define I2CMCON_MASEN                  (0x1   << 0  )
-#define I2CMCON_MASEN_DIS              (0x0   << 0  ) /* Master is disabled       */
-#define I2CMCON_MASEN_EN               (0x1   << 0  ) /* Master is enabled        */
-
-/* I2CMSTA[SCL_FILTERED] - State of SCL Line */
-#define I2CMSTA_SCL_FILTERED_MSK       (0x1   << 14 )
-#define I2CMSTA_SCL_FILTERED           (0x1   << 14 )
-#define I2CMSTA_SCL_FILTERED_CLR       (0x0   << 14 )
-#define I2CMSTA_SCL_FILTERED_SET       (0x1   << 14 )
-
-/* I2CMSTA[SDA_FILTERED] - State of SDA Line */
-#define I2CMSTA_SDA_FILTERED_MSK       (0x1   << 13 )
-#define I2CMSTA_SDA_FILTERED           (0x1   << 13 )
-#define I2CMSTA_SDA_FILTERED_CLR       (0x0   << 13 )
-#define I2CMSTA_SDA_FILTERED_SET       (0x1   << 13 )
-
-/* I2CMSTA[MTXUFLOW] - Master Transmit Underflow */
-#define I2CMSTA_MTXUFLOW_MSK           (0x1   << 12 )
-#define I2CMSTA_MTXUFLOW               (0x1   << 12 )
-#define I2CMSTA_MTXUFLOW_CLR           (0x0   << 12 )
-#define I2CMSTA_MTXUFLOW_SET           (0x1   << 12 )
-
-/* I2CMSTA[MSTOP] - STOP driven by this I2C Master */
-#define I2CMSTA_MSTOP_MSK              (0x1   << 11 )
-#define I2CMSTA_MSTOP                  (0x1   << 11 )
-#define I2CMSTA_MSTOP_CLR              (0x0   << 11 )
-#define I2CMSTA_MSTOP_SET              (0x1   << 11 )
-
-/* I2CMSTA[LINEBUSY] - Line is busy */
-#define I2CMSTA_LINEBUSY_MSK           (0x1   << 10 )
-#define I2CMSTA_LINEBUSY               (0x1   << 10 )
-#define I2CMSTA_LINEBUSY_CLR           (0x0   << 10 )
-#define I2CMSTA_LINEBUSY_SET           (0x1   << 10 )
-
-/* I2CMSTA[MRXOF] - Master Receive FIFO overflow */
-#define I2CMSTA_MRXOF_MSK              (0x1   << 9  )
-#define I2CMSTA_MRXOF                  (0x1   << 9  )
-#define I2CMSTA_MRXOF_CLR              (0x0   << 9  )
-#define I2CMSTA_MRXOF_SET              (0x1   << 9  )
-
-/* I2CMSTA[TCOMP] - Transaction complete or stop detected */
-#define I2CMSTA_TCOMP_MSK              (0x1   << 8  )
-#define I2CMSTA_TCOMP                  (0x1   << 8  )
-#define I2CMSTA_TCOMP_CLR              (0x0   << 8  )
-#define I2CMSTA_TCOMP_SET              (0x1   << 8  )
-
-/* I2CMSTA[NACKDATA] - ACK not received in response to data write */
-#define I2CMSTA_NACKDATA_MSK           (0x1   << 7  )
-#define I2CMSTA_NACKDATA               (0x1   << 7  )
-#define I2CMSTA_NACKDATA_CLR           (0x0   << 7  )
-#define I2CMSTA_NACKDATA_SET           (0x1   << 7  )
-
-/* I2CMSTA[MBUSY] - Master busy */
-#define I2CMSTA_MBUSY_MSK              (0x1   << 6  )
-#define I2CMSTA_MBUSY                  (0x1   << 6  )
-#define I2CMSTA_MBUSY_CLR              (0x0   << 6  )
-#define I2CMSTA_MBUSY_SET              (0x1   << 6  )
-
-/* I2CMSTA[ALOST] - Arbitration lost */
-#define I2CMSTA_ALOST_MSK              (0x1   << 5  )
-#define I2CMSTA_ALOST                  (0x1   << 5  )
-#define I2CMSTA_ALOST_CLR              (0x0   << 5  )
-#define I2CMSTA_ALOST_SET              (0x1   << 5  )
-
-/* I2CMSTA[NACKADDR] - ACK not received in response to an address */
-#define I2CMSTA_NACKADDR_MSK           (0x1   << 4  )
-#define I2CMSTA_NACKADDR               (0x1   << 4  )
-#define I2CMSTA_NACKADDR_CLR           (0x0   << 4  )
-#define I2CMSTA_NACKADDR_SET           (0x1   << 4  )
-
-/* I2CMSTA[MRXREQ] - Master Receive request */
-#define I2CMSTA_MRXREQ_MSK             (0x1   << 3  )
-#define I2CMSTA_MRXREQ                 (0x1   << 3  )
-#define I2CMSTA_MRXREQ_CLR             (0x0   << 3  )
-#define I2CMSTA_MRXREQ_SET             (0x1   << 3  )
-
-/* I2CMSTA[MTXREQ] - Master Transmit request */
-#define I2CMSTA_MTXREQ_MSK             (0x1   << 2  )
-#define I2CMSTA_MTXREQ                 (0x1   << 2  )
-#define I2CMSTA_MTXREQ_CLR             (0x0   << 2  )
-#define I2CMSTA_MTXREQ_SET             (0x1   << 2  )
-
-/* I2CMSTA[MTXFSTA] - Master Transmit FIFO status */
-#define I2CMSTA_MTXFSTA_MSK            (0x3   << 0  )
-
-/* I2CMRX[ICMRX] - Master receive register */
-#define I2CMRX_ICMRX_MSK               (0xFF  << 0  )
-
-/* I2CMTX[I2CMTX] - Master transmit register */
-#define I2CMTX_I2CMTX_MSK              (0xFF  << 0  )
-
-/* I2CMRXCNT[EXTEND] - Extended read */
-#define I2CMRXCNT_EXTEND_MSK           (0x1   << 8  )
-#define I2CMRXCNT_EXTEND               (0x1   << 8  )
-#define I2CMRXCNT_EXTEND_DIS           (0x0   << 8  )
-#define I2CMRXCNT_EXTEND_EN            (0x1   << 8  )
-
-/* I2CMRXCNT[COUNT] - Receive count */
-#define I2CMRXCNT_COUNT_MSK            (0xFF  << 0  )
-
-/* I2CMCRXCNT[COUNT] - Current receive count */
-#define I2CMCRXCNT_COUNT_MSK           (0xFF  << 0  )
-
-/* I2CADR0[ADR0] - Address byte 0 */
-#define I2CADR0_ADR0_MSK               (0xFF  << 0  )
-
-/* I2CADR1[ADR1] - Address byte 1 */
-#define I2CADR1_ADR1_MSK               (0xFF  << 0  )
-
-/* I2CDIV[HIGH] - Serial clock high time */
-#define I2CDIV_HIGH_MSK                (0xFF  << 8  )
-
-/* I2CDIV[LOW] - Serial clock low time */
-#define I2CDIV_LOW_MSK                 (0xFF  << 0  )
-
-/* I2CSCON[STXDMA] - Enable slave Tx DMA request */
-#define I2CSCON_STXDMA_MSK             (0x1   << 14 )
-#define I2CSCON_STXDMA                 (0x1   << 14 )
-#define I2CSCON_STXDMA_DIS             (0x0   << 14 )
-#define I2CSCON_STXDMA_EN              (0x1   << 14 )
-
-/* I2CSCON[SRXDMA] - Enable slave Rx DMA request */
-#define I2CSCON_SRXDMA_MSK             (0x1   << 13 )
-#define I2CSCON_SRXDMA                 (0x1   << 13 )
-#define I2CSCON_SRXDMA_DIS             (0x0   << 13 )
-#define I2CSCON_SRXDMA_EN              (0x1   << 13 )
-
-/* I2CSCON[IENREPST] - Repeated start interrupt enable */
-#define I2CSCON_IENREPST_MSK           (0x1   << 12 )
-#define I2CSCON_IENREPST               (0x1   << 12 )
-#define I2CSCON_IENREPST_DIS           (0x0   << 12 )
-#define I2CSCON_IENREPST_EN            (0x1   << 12 )
-
-/* I2CSCON[SXMITDEC] - Decrement Slave Tx FIFO status when a byte has been transmitted */
-#define I2CSCON_SXMITDEC_MSK           (0x1   << 11 )
-#define I2CSCON_SXMITDEC               (0x1   << 11 )
-#define I2CSCON_SXMITDEC_DIS           (0x0   << 11 )
-#define I2CSCON_SXMITDEC_EN            (0x1   << 11 )
-
-/* I2CSCON[IENSTX] - Slave Transmit request interrupt enable */
-#define I2CSCON_IENSTX_MSK             (0x1   << 10 )
-#define I2CSCON_IENSTX                 (0x1   << 10 )
-#define I2CSCON_IENSTX_DIS             (0x0   << 10 )
-#define I2CSCON_IENSTX_EN              (0x1   << 10 )
-
-/* I2CSCON[IENSRX] - Slave Receive request interrupt enable */
-#define I2CSCON_IENSRX_MSK             (0x1   << 9  )
-#define I2CSCON_IENSRX                 (0x1   << 9  )
-#define I2CSCON_IENSRX_DIS             (0x0   << 9  )
-#define I2CSCON_IENSRX_EN              (0x1   << 9  )
-
-/* I2CSCON[IENSTOP] - Stop condition detected interrupt enable */
-#define I2CSCON_IENSTOP_MSK            (0x1   << 8  )
-#define I2CSCON_IENSTOP                (0x1   << 8  )
-#define I2CSCON_IENSTOP_DIS            (0x0   << 8  )
-#define I2CSCON_IENSTOP_EN             (0x1   << 8  )
-
-/* I2CSCON[NACK] - NACK next communication */
-#define I2CSCON_NACK_MSK               (0x1   << 7  )
-#define I2CSCON_NACK                   (0x1   << 7  )
-#define I2CSCON_NACK_DIS               (0x0   << 7  )
-#define I2CSCON_NACK_EN                (0x1   << 7  )
-
-/* I2CSCON[STRETCHSCL] - Stretch SCL enable */
-#define I2CSCON_STRETCHSCL_MSK         (0x1   << 6  )
-#define I2CSCON_STRETCHSCL             (0x1   << 6  )
-#define I2CSCON_STRETCHSCL_DIS         (0x0   << 6  )
-#define I2CSCON_STRETCHSCL_EN          (0x1   << 6  )
-
-/* I2CSCON[EARLYTXR] - Early transmit request mode */
-#define I2CSCON_EARLYTXR_MSK           (0x1   << 5  )
-#define I2CSCON_EARLYTXR               (0x1   << 5  )
-#define I2CSCON_EARLYTXR_DIS           (0x0   << 5  )
-#define I2CSCON_EARLYTXR_EN            (0x1   << 5  )
-
-/* I2CSCON[GCSBCLR] - General call status bit clear */
-#define I2CSCON_GCSBCLR_MSK            (0x1   << 4  )
-#define I2CSCON_GCSBCLR                (0x1   << 4  )
-#define I2CSCON_GCSBCLR_DIS            (0x0   << 4  )
-#define I2CSCON_GCSBCLR_EN             (0x1   << 4  )
-
-/* I2CSCON[HGCEN] - Hardware general call enable */
-#define I2CSCON_HGCEN_MSK              (0x1   << 3  )
-#define I2CSCON_HGCEN                  (0x1   << 3  )
-#define I2CSCON_HGCEN_DIS              (0x0   << 3  )
-#define I2CSCON_HGCEN_EN               (0x1   << 3  )
-
-/* I2CSCON[GCEN] - General call enable */
-#define I2CSCON_GCEN_MSK               (0x1   << 2  )
-#define I2CSCON_GCEN                   (0x1   << 2  )
-#define I2CSCON_GCEN_DIS               (0x0   << 2  )
-#define I2CSCON_GCEN_EN                (0x1   << 2  )
-
-/* I2CSCON[ADR10EN] - Enabled 10-bit addressing */
-#define I2CSCON_ADR10EN_MSK            (0x1   << 1  )
-#define I2CSCON_ADR10EN                (0x1   << 1  )
-#define I2CSCON_ADR10EN_DIS            (0x0   << 1  )
-#define I2CSCON_ADR10EN_EN             (0x1   << 1  )
-
-/* I2CSCON[SLVEN] - Slave enable */
-#define I2CSCON_SLVEN_MSK              (0x1   << 0  )
-#define I2CSCON_SLVEN                  (0x1   << 0  )
-#define I2CSCON_SLVEN_DIS              (0x0   << 0  )
-#define I2CSCON_SLVEN_EN               (0x1   << 0  )
-
-/* I2CSSTA[START] - Start and matching address */
-#define I2CSSTA_START_MSK              (0x1   << 14 )
-#define I2CSSTA_START                  (0x1   << 14 )
-#define I2CSSTA_START_CLR              (0x0   << 14 )
-#define I2CSSTA_START_SET              (0x1   << 14 )
-
-/* I2CSSTA[REPSTART] - Repeated start and matching address */
-#define I2CSSTA_REPSTART_MSK           (0x1   << 13 )
-#define I2CSSTA_REPSTART               (0x1   << 13 )
-#define I2CSSTA_REPSTART_CLR           (0x0   << 13 )
-#define I2CSSTA_REPSTART_SET           (0x1   << 13 )
-
-/* I2CSSTA[IDMAT] - Device ID matched */
-#define I2CSSTA_IDMAT_MSK              (0x3   << 11 )
-
-/* I2CSSTA[STOP] - Stop after start and matching address */
-#define I2CSSTA_STOP_MSK               (0x1   << 10 )
-#define I2CSSTA_STOP                   (0x1   << 10 )
-#define I2CSSTA_STOP_CLR               (0x0   << 10 )
-#define I2CSSTA_STOP_SET               (0x1   << 10 )
-
-/* I2CSSTA[GCID] - General ID */
-#define I2CSSTA_GCID_MSK               (0x3   << 8  )
-
-/* I2CSSTA[GCINT] - General call interrupt */
-#define I2CSSTA_GCINT_MSK              (0x1   << 7  )
-#define I2CSSTA_GCINT                  (0x1   << 7  )
-#define I2CSSTA_GCINT_CLR              (0x0   << 7  )
-#define I2CSSTA_GCINT_SET              (0x1   << 7  )
-
-/* I2CSSTA[SBUSY] - Slave busy */
-#define I2CSSTA_SBUSY_MSK              (0x1   << 6  )
-#define I2CSSTA_SBUSY                  (0x1   << 6  )
-#define I2CSSTA_SBUSY_CLR              (0x0   << 6  )
-#define I2CSSTA_SBUSY_SET              (0x1   << 6  )
-
-/* I2CSSTA[NOACK] - Ack not generated by the slave */
-#define I2CSSTA_NOACK_MSK              (0x1   << 5  )
-#define I2CSSTA_NOACK                  (0x1   << 5  )
-#define I2CSSTA_NOACK_CLR              (0x0   << 5  )
-#define I2CSSTA_NOACK_SET              (0x1   << 5  )
-
-/* I2CSSTA[SRXOF] - Slave Receive FIFO overflow */
-#define I2CSSTA_SRXOF_MSK              (0x1   << 4  )
-#define I2CSSTA_SRXOF                  (0x1   << 4  )
-#define I2CSSTA_SRXOF_CLR              (0x0   << 4  )
-#define I2CSSTA_SRXOF_SET              (0x1   << 4  )
-
-/* I2CSSTA[SRXREQ] - Slave Receive request */
-#define I2CSSTA_SRXREQ_MSK             (0x1   << 3  )
-#define I2CSSTA_SRXREQ                 (0x1   << 3  )
-#define I2CSSTA_SRXREQ_CLR             (0x0   << 3  )
-#define I2CSSTA_SRXREQ_SET             (0x1   << 3  )
-
-/* I2CSSTA[STXREQ] - Slave Transmit request */
-#define I2CSSTA_STXREQ_MSK             (0x1   << 2  )
-#define I2CSSTA_STXREQ                 (0x1   << 2  )
-#define I2CSSTA_STXREQ_CLR             (0x0   << 2  )
-#define I2CSSTA_STXREQ_SET             (0x1   << 2  )
-
-/* I2CSSTA[STXUR] - Slave Transmit FIFO underflow */
-#define I2CSSTA_STXUR_MSK              (0x1   << 1  )
-#define I2CSSTA_STXUR                  (0x1   << 1  )
-#define I2CSSTA_STXUR_CLR              (0x0   << 1  )
-#define I2CSSTA_STXUR_SET              (0x1   << 1  )
-
-/* I2CSSTA[STXFSEREQ] - Slave Tx FIFO Status or early request */
-#define I2CSSTA_STXFSEREQ_MSK          (0x1   << 0  )
-#define I2CSSTA_STXFSEREQ              (0x1   << 0  )
-#define I2CSSTA_STXFSEREQ_CLR          (0x0   << 0  )
-#define I2CSSTA_STXFSEREQ_SET          (0x1   << 0  )
-
-/* I2CSRX[I2CSRX] - Slave receive register */
-#define I2CSRX_I2CSRX_MSK              (0xFF  << 0  )
-
-/* I2CSTX[I2CSTX] - Slave transmit register */
-#define I2CSTX_I2CSTX_MSK              (0xFF  << 0  )
-
-/* I2CALT[ALT] - Slave Alt */
-#define I2CALT_ALT_MSK                 (0xFF  << 0  )
-
-/* I2CID0[ID0] - Slave device ID 0 */
-#define I2CID0_ID0_MSK                 (0xFF  << 0  )
-
-/* I2CID1[ID1] - Slave device ID 1 */
-#define I2CID1_ID1_MSK                 (0xFF  << 0  )
-
-/* I2CID2[ID2] - Slave device ID 2 */
-#define I2CID2_ID2_MSK                 (0xFF  << 0  )
-
-/* I2CID3[ID3] - Slave device ID 3 */
-#define I2CID3_ID3_MSK                 (0xFF  << 0  )
-
-/* I2CFSTA[MFLUSH] - Flush the master transmit FIFO */
-#define I2CFSTA_MFLUSH_MSK             (0x1   << 9  )
-#define I2CFSTA_MFLUSH                 (0x1   << 9  )
-#define I2CFSTA_MFLUSH_DIS             (0x0   << 9  ) /* Clearing to 0 has no effect. */
-#define I2CFSTA_MFLUSH_EN              (0x1   << 9  ) /* Set to 1 to flush the master transmit FIFO. The master transmit FIFO will have to flushed if arbitration is lost or a slave responds with a NACK. */
-
-/* I2CFSTA[SFLUSH] - Flush the slave transmit FIFO */
-#define I2CFSTA_SFLUSH_MSK             (0x1   << 8  )
-#define I2CFSTA_SFLUSH                 (0x1   << 8  )
-#define I2CFSTA_SFLUSH_DIS             (0x0   << 8  ) /* Clearing to 0 has no effect. */
-#define I2CFSTA_SFLUSH_EN              (0x1   << 8  ) /* Set to 1 to flush the slave transmit FIFO. */
-
-/* I2CFSTA[MRXFSTA] - Master receive FIFO status */
-#define I2CFSTA_MRXFSTA_MSK            (0x3   << 6  )
-#define I2CFSTA_MRXFSTA_EMPTY          (0x0   << 6  ) /* FIFO empty               */
-#define I2CFSTA_MRXFSTA_ONEBYTE        (0x1   << 6  ) /* 1 bytes in the FIFO      */
-#define I2CFSTA_MRXFSTA_TWOBYTES       (0x2   << 6  ) /* 2 bytes in the FIFO      */
-
-/* I2CFSTA[MTXFSTA] - Master transmit FIFO status */
-#define I2CFSTA_MTXFSTA_MSK            (0x3   << 4  )
-#define I2CFSTA_MTXFSTA_EMPTY          (0x0   << 4  ) /* FIFO empty               */
-#define I2CFSTA_MTXFSTA_ONEBYTE        (0x1   << 4  ) /* 1 bytes in the FIFO      */
-#define I2CFSTA_MTXFSTA_TWOBYTES       (0x2   << 4  ) /* 2 bytes in the FIFO      */
-
-/* I2CFSTA[SRXFSTA] - Slave receive FIFO status */
-#define I2CFSTA_SRXFSTA_MSK            (0x3   << 2  )
-#define I2CFSTA_SRXFSTA_EMPTY          (0x0   << 2  ) /* FIFO empty               */
-#define I2CFSTA_SRXFSTA_ONEBYTE        (0x1   << 2  ) /* 1 bytes in the FIFO      */
-#define I2CFSTA_SRXFSTA_TWOBYTES       (0x2   << 2  ) /* 2 bytes in the FIFO      */
-
-/* I2CFSTA[STXFSTA] - Slave transmit FIFO status */
-#define I2CFSTA_STXFSTA_MSK            (0x3   << 0  )
-#define I2CFSTA_STXFSTA_EMPTY          (0x0   << 0  ) /* FIFO empty               */
-#define I2CFSTA_STXFSTA_ONEBYTE        (0x1   << 0  ) /* 1 bytes in the FIFO      */
-#define I2CFSTA_STXFSTA_TWOBYTES       (0x2   << 0  ) /* 2 bytes in the FIFO      */
-
-/* I2CSHCON[RESET] - Reset START STOP detect circuit */
-#define I2CSHCON_RESET_MSK             (0x1   << 0  )
-#define I2CSHCON_RESET                 (0x1   << 0  )
-#define I2CSHCON_RESET_DIS             (0x0   << 0  )
-#define I2CSHCON_RESET_EN              (0x1   << 0  )
-
-#if defined(ADUCM320I) | defined(ADUCM322) | defined(ADUCM322I)
-
-/* I2CASSCL[SSRTSTA] - stretch timeout for slave */
-#define I2CASSCL_SSRTSTA_MSK           (0x1   << 9  )
-#define I2CASSCL_SSRTSTA               (0x1   << 9  )
-#define I2CASSCL_SSRTSTA_DIS           (0x0   << 9  )
-#define I2CASSCL_SSRTSTA_EN            (0x1   << 9  )
-
-/* I2CASSCL[MSRTSTA] - stretch timeout for master */
-#define I2CASSCL_MSRTSTA_MSK           (0x1   << 8  )
-#define I2CASSCL_MSRTSTA               (0x1   << 8  )
-#define I2CASSCL_MSRTSTA_DIS           (0x0   << 8  )
-#define I2CASSCL_MSRTSTA_EN            (0x1   << 8  )
-
-/* I2CASSCL[SSTRCON] - automatic stretch mode for slave */
-#define I2CASSCL_SSTRCON_MSK           (0xF   << 4  )
-
-/* I2CASSCL[MSTRCON] - automatic stretch mode for master */
-#define I2CASSCL_MSTRCON_MSK           (0xF   << 0  )
-
-#endif
 
 /* DACCON[PD] - DAC0 power down */
 #define DACCON_PD_MSK                  (0x1   << 8  )
@@ -2013,1184 +1572,488 @@ typedef struct MMR_WUT {                    /*!< MMR_WUT Structure              
 
 /* T4WUFA1[T4WUFAH] - Wakeup field A High */
 #define T4WUFA1_T4WUFAH_MSK            (0xFFFF << 0  )
-// ------------------------------------------------------------------------------------------------
-// -----                                        I2C                                        -----
-// ------------------------------------------------------------------------------------------------
 
+
+/* ========================================================================== */
+/* ================                   I2C                  ================== */
+/* ========================================================================== */
 
 /**
-  * @brief i2cms (MMR_I2C0)
+  * @brief I2C (MMR_I2C0)
   */
 
-typedef struct MMR_I2C {                    /*!< MMR_I2C0 Structure                    */
-  __IO uint16_t  I2CMCON;                   /*!< Master control register               */
+typedef struct MMR_I2C {          /*!< MMR_I2C0 Structure                     */
+  __IO uint16_t  I2CMCON;         /*!< Master control register                */
   __I  uint16_t  RESERVED0;
-  __IO uint16_t  I2CMSTA;                   /*!< Master status register                */
+  __IO uint16_t  I2CMSTA;         /*!< Master status register                 */
   __I  uint16_t  RESERVED1;
-  __IO uint16_t  I2CMRX;                    /*!< Master receive data register          */
+  __IO uint16_t  I2CMRX;          /*!< Master receive data register           */
   __I  uint16_t  RESERVED2;
-  __IO uint16_t  I2CMTX;                    /*!< Master transmit data register         */
+  __IO uint16_t  I2CMTX;          /*!< Master transmit data register          */
   __I  uint16_t  RESERVED3;
-  __IO uint16_t  I2CMRXCNT;                 /*!< Master receive data count register    */
+  __IO uint16_t  I2CMRXCNT;       /*!< Master receive data count register     */
   __I  uint16_t  RESERVED4;
-  __IO uint16_t  I2CMCRXCNT;                /*!< Master current receive data count register */
+  __IO uint16_t  I2CMCRXCNT;      /*!< Master current receive data count register */
   __I  uint16_t  RESERVED5;
-  __IO uint16_t  I2CADR0;                   /*!< 1st master address byte register      */
+  __IO uint16_t  I2CADR0;         /*!< 1st master address byte register       */
   __I  uint16_t  RESERVED6;
-  __IO uint16_t  I2CADR1;                   /*!< 2nd master address byte register      */
+  __IO uint16_t  I2CADR1;         /*!< 2nd master address byte register       */
   __I  uint16_t  RESERVED7[3];
-  __IO uint16_t  I2CDIV;                    /*!< Serial clock period divisor register  */
+  __IO uint16_t  I2CDIV;          /*!< Serial clock period divisor register   */
   __I  uint16_t  RESERVED8;
-  __IO uint16_t  I2CSCON;                   /*!< Slave control register                */
+  __IO uint16_t  I2CSCON;         /*!< Slave control register                 */
   __I  uint16_t  RESERVED9;
-  __IO uint16_t  I2CSSTA;                   /*!< Slave I2C Status/Error/IRQ register   */
+  __IO uint16_t  I2CSSTA;         /*!< Slave I2C Status/Error/IRQ register    */
   __I  uint16_t  RESERVED10;
-  __IO uint16_t  I2CSRX;                    /*!< Slave receive register                */
+  __IO uint16_t  I2CSRX;          /*!< Slave receive register                 */
   __I  uint16_t  RESERVED11;
-  __IO uint16_t  I2CSTX;                    /*!< Slave transmit register               */
+  __IO uint16_t  I2CSTX;          /*!< Slave transmit register                */
   __I  uint16_t  RESERVED12;
-  __IO uint16_t  I2CALT;                    /*!< Hardware general call ID register     */
+  __IO uint16_t  I2CALT;          /*!< Hardware general call ID register      */
   __I  uint16_t  RESERVED13;
-  __IO uint16_t  I2CID0;                    /*!< 1st slave address device ID register  */
+  __IO uint16_t  I2CID0;          /*!< 1st slave address device ID register   */
   __I  uint16_t  RESERVED14;
-  __IO uint16_t  I2CID1;                    /*!< 2nd slave address device ID register  */
+  __IO uint16_t  I2CID1;          /*!< 2nd slave address device ID register   */
   __I  uint16_t  RESERVED15;
-  __IO uint16_t  I2CID2;                    /*!< 3rd slave address device ID register  */
+  __IO uint16_t  I2CID2;          /*!< 3rd slave address device ID register   */
   __I  uint16_t  RESERVED16;
-  __IO uint16_t  I2CID3;                    /*!< 4th slave address device ID register  */
+  __IO uint16_t  I2CID3;          /*!< 4th slave address device ID register   */
   __I  uint16_t  RESERVED17;
-  __IO uint16_t  I2CFSTA;                   /*!< Master and slave FIFO status register */
+  __IO uint16_t  I2CFSTA;         /*!< Master and slave FIFO status register  */
   __I  uint16_t  RESERVED18;
-  __IO uint16_t  I2CSHCON;                  /*!< Shared control register               */
-  __I  uint16_t  RESERVED19;
+  __IO uint16_t  I2CSHCON;        /*!< Shared control register                */
+  __I  uint16_t  RESERVED19[3];
 #if defined(ADUCM320I) | defined(ADUCM322) | defined(ADUCM322I)
-  __I  uint32_t  RESERVED20;
-  __IO uint16_t  I2CASSCL;                  /*!< Automatic Stretch control register    */
-  __I  uint16_t  RESERVED21;
+  __IO uint16_t  I2CASSCL;        /*!< Automatic Stretch control register     */
+  __I  uint16_t  RESERVED20;
 #endif
 } MMR_I2C_t;
 
-/* Reset Value for I2C0MCON*/
-#define I2C0MCON_RVAL                  0x0 
-
-/* I2C0MCON[PRESTOP_BUS_CLR] - Prestop Bus-Clear */
-#define I2C0MCON_PRESTOP_BUS_CLR_BBA   (*(volatile unsigned long *) 0x42060034)
-#define I2C0MCON_PRESTOP_BUS_CLR_MSK   (0x1   << 13 )
-#define I2C0MCON_PRESTOP_BUS_CLR       (0x1   << 13 )
-#define I2C0MCON_PRESTOP_BUS_CLR_DIS   (0x0   << 13 )
-#define I2C0MCON_PRESTOP_BUS_CLR_EN    (0x1   << 13 )
-
-/* I2C0MCON[BUS_CLR_EN] - Bus-Clear Enable */
-#define I2C0MCON_BUS_CLR_EN_BBA        (*(volatile unsigned long *) 0x42060030)
-#define I2C0MCON_BUS_CLR_EN_MSK        (0x1   << 12 )
-#define I2C0MCON_BUS_CLR_EN            (0x1   << 12 )
-#define I2C0MCON_BUS_CLR_EN_DIS        (0x0   << 12 )
-#define I2C0MCON_BUS_CLR_EN_EN         (0x1   << 12 )
-
-/* I2C0MCON[MTXDMA] - Enable master Tx DMA request */
-#define I2C0MCON_MTXDMA_BBA            (*(volatile unsigned long *) 0x4206002C)
-#define I2C0MCON_MTXDMA_MSK            (0x1   << 11 )
-#define I2C0MCON_MTXDMA                (0x1   << 11 )
-#define I2C0MCON_MTXDMA_DIS            (0x0   << 11 ) /* Disable DMA mode         */
-#define I2C0MCON_MTXDMA_EN             (0x1   << 11 ) /* Enable I2C master DMA Tx requests. */
-
-/* I2C0MCON[MRXDMA] - Enable master Rx DMA request */
-#define I2C0MCON_MRXDMA_BBA            (*(volatile unsigned long *) 0x42060028)
-#define I2C0MCON_MRXDMA_MSK            (0x1   << 10 )
-#define I2C0MCON_MRXDMA                (0x1   << 10 )
-#define I2C0MCON_MRXDMA_DIS            (0x0   << 10 ) /* Disable DMA mode         */
-#define I2C0MCON_MRXDMA_EN             (0x1   << 10 ) /* Enable I2C master DMA Rx requests. */
-
-/* I2C0MCON[MXMITDEC] - Decrement master TX FIFO status when a byte has been transmitted */
-#define I2C0MCON_MXMITDEC_BBA          (*(volatile unsigned long *) 0x42060024)
-#define I2C0MCON_MXMITDEC_MSK          (0x1   << 9  )
-#define I2C0MCON_MXMITDEC              (0x1   << 9  )
-#define I2C0MCON_MXMITDEC_DIS          (0x0   << 9  )
-#define I2C0MCON_MXMITDEC_EN           (0x1   << 9  )
-
-/* I2C0MCON[IENCMP] - Transaction completed (or stop detected) interrupt enable */
-#define I2C0MCON_IENCMP_BBA            (*(volatile unsigned long *) 0x42060020)
-#define I2C0MCON_IENCMP_MSK            (0x1   << 8  )
-#define I2C0MCON_IENCMP                (0x1   << 8  )
-#define I2C0MCON_IENCMP_DIS            (0x0   << 8  ) /* An interrupt is not generated when a STOP is detected. */
-#define I2C0MCON_IENCMP_EN             (0x1   << 8  ) /* An interrupt is generated when a STOP is detected. */
-
-/* I2C0MCON[IENACK] - ACK not received interrupt enable */
-#define I2C0MCON_IENACK_BBA            (*(volatile unsigned long *) 0x4206001C)
-#define I2C0MCON_IENACK_MSK            (0x1   << 7  )
-#define I2C0MCON_IENACK                (0x1   << 7  )
-#define I2C0MCON_IENACK_DIS            (0x0   << 7  ) /* ACK not received interrupt disable */
-#define I2C0MCON_IENACK_EN             (0x1   << 7  ) /* ACK not received interrupt enable */
-
-/* I2C0MCON[IENALOST] - Arbitration lost interrupt enable */
-#define I2C0MCON_IENALOST_BBA          (*(volatile unsigned long *) 0x42060018)
-#define I2C0MCON_IENALOST_MSK          (0x1   << 6  )
-#define I2C0MCON_IENALOST              (0x1   << 6  )
-#define I2C0MCON_IENALOST_DIS          (0x0   << 6  ) /* Arbitration lost interrupt disable */
-#define I2C0MCON_IENALOST_EN           (0x1   << 6  ) /* Arbitration lost interrupt enable */
-
-/* I2C0MCON[IENMTX] - Transmit request interrupt enable */
-#define I2C0MCON_IENMTX_BBA            (*(volatile unsigned long *) 0x42060014)
-#define I2C0MCON_IENMTX_MSK            (0x1   << 5  )
-#define I2C0MCON_IENMTX                (0x1   << 5  )
-#define I2C0MCON_IENMTX_DIS            (0x0   << 5  ) /* Transmit request interrupt disable */
-#define I2C0MCON_IENMTX_EN             (0x1   << 5  ) /* Transmit request interrupt enable */
-
-/* I2C0MCON[IENMRX] - Receive request interrupt enable */
-#define I2C0MCON_IENMRX_BBA            (*(volatile unsigned long *) 0x42060010)
-#define I2C0MCON_IENMRX_MSK            (0x1   << 4  )
-#define I2C0MCON_IENMRX                (0x1   << 4  )
-#define I2C0MCON_IENMRX_DIS            (0x0   << 4  ) /* Receive request interrupt disable */
-#define I2C0MCON_IENMRX_EN             (0x1   << 4  ) /* Receive request interrupt enable */
-
-/* I2C0MCON[STRETCH] - Stretch SCL enable */
-#define I2C0MCON_STRETCH_BBA           (*(volatile unsigned long *) 0x4206000C)
-#define I2C0MCON_STRETCH_MSK           (0x1   << 3  )
-#define I2C0MCON_STRETCH               (0x1   << 3  )
-#define I2C0MCON_STRETCH_DIS           (0x0   << 3  ) /* Disable Clock stretching */
-#define I2C0MCON_STRETCH_EN            (0x1   << 3  ) /* Setting this bit tells the device if SCL is 0 hold it at 0;. Or if SCL is 1 then when it next goes to 0 hold it at 0. */
-
-/* I2C0MCON[LOOPBACK] - Internal loopback enable */
-#define I2C0MCON_LOOPBACK_BBA          (*(volatile unsigned long *) 0x42060008)
-#define I2C0MCON_LOOPBACK_MSK          (0x1   << 2  )
-#define I2C0MCON_LOOPBACK              (0x1   << 2  )
-#define I2C0MCON_LOOPBACK_DIS          (0x0   << 2  ) /* SCL and SDA out of the device are not muxed onto their corresponding inputs. */
-#define I2C0MCON_LOOPBACK_EN           (0x1   << 2  ) /* SCL and SDA out of the device are muxed onto their corresponding inputs. */
-
-/* I2C0MCON[COMPETE] - Start back-off disable */
-#define I2C0MCON_COMPETE_BBA           (*(volatile unsigned long *) 0x42060004)
-#define I2C0MCON_COMPETE_MSK           (0x1   << 1  )
-#define I2C0MCON_COMPETE               (0x1   << 1  )
-#define I2C0MCON_COMPETE_DIS           (0x0   << 1  )
-#define I2C0MCON_COMPETE_EN            (0x1   << 1  )
-
-/* I2C0MCON[MASEN] - Master enable */
-#define I2C0MCON_MASEN_BBA             (*(volatile unsigned long *) 0x42060000)
-#define I2C0MCON_MASEN_MSK             (0x1   << 0  )
-#define I2C0MCON_MASEN                 (0x1   << 0  )
-#define I2C0MCON_MASEN_DIS             (0x0   << 0  ) /* Master is disabled       */
-#define I2C0MCON_MASEN_EN              (0x1   << 0  ) /* Master is enabled        */
-
-/* Reset Value for I2C0MSTA*/
-#define I2C0MSTA_RVAL                  0x6000 
-
-/* I2C0MSTA[SCL_FILTERED] - State of SCL Line */
-#define I2C0MSTA_SCL_FILTERED_BBA      (*(volatile unsigned long *) 0x420600B8)
-#define I2C0MSTA_SCL_FILTERED_MSK      (0x1   << 14 )
-#define I2C0MSTA_SCL_FILTERED          (0x1   << 14 )
-#define I2C0MSTA_SCL_FILTERED_CLR      (0x0   << 14 )
-#define I2C0MSTA_SCL_FILTERED_SET      (0x1   << 14 )
-
-/* I2C0MSTA[SDA_FILTERED] - State of SDA Line */
-#define I2C0MSTA_SDA_FILTERED_BBA      (*(volatile unsigned long *) 0x420600B4)
-#define I2C0MSTA_SDA_FILTERED_MSK      (0x1   << 13 )
-#define I2C0MSTA_SDA_FILTERED          (0x1   << 13 )
-#define I2C0MSTA_SDA_FILTERED_CLR      (0x0   << 13 )
-#define I2C0MSTA_SDA_FILTERED_SET      (0x1   << 13 )
-
-/* I2C0MSTA[MTXUFLOW] - Master Transmit Underflow */
-#define I2C0MSTA_MTXUFLOW_BBA          (*(volatile unsigned long *) 0x420600B0)
-#define I2C0MSTA_MTXUFLOW_MSK          (0x1   << 12 )
-#define I2C0MSTA_MTXUFLOW              (0x1   << 12 )
-#define I2C0MSTA_MTXUFLOW_CLR          (0x0   << 12 )
-#define I2C0MSTA_MTXUFLOW_SET          (0x1   << 12 )
-
-/* I2C0MSTA[MSTOP] - STOP driven by this I2C Master */
-#define I2C0MSTA_MSTOP_BBA             (*(volatile unsigned long *) 0x420600AC)
-#define I2C0MSTA_MSTOP_MSK             (0x1   << 11 )
-#define I2C0MSTA_MSTOP                 (0x1   << 11 )
-#define I2C0MSTA_MSTOP_CLR             (0x0   << 11 )
-#define I2C0MSTA_MSTOP_SET             (0x1   << 11 )
-
-/* I2C0MSTA[LINEBUSY] - Line is busy */
-#define I2C0MSTA_LINEBUSY_BBA          (*(volatile unsigned long *) 0x420600A8)
-#define I2C0MSTA_LINEBUSY_MSK          (0x1   << 10 )
-#define I2C0MSTA_LINEBUSY              (0x1   << 10 )
-#define I2C0MSTA_LINEBUSY_CLR          (0x0   << 10 )
-#define I2C0MSTA_LINEBUSY_SET          (0x1   << 10 )
-
-/* I2C0MSTA[MRXOF] - Master Receive FIFO overflow */
-#define I2C0MSTA_MRXOF_BBA             (*(volatile unsigned long *) 0x420600A4)
-#define I2C0MSTA_MRXOF_MSK             (0x1   << 9  )
-#define I2C0MSTA_MRXOF                 (0x1   << 9  )
-#define I2C0MSTA_MRXOF_CLR             (0x0   << 9  )
-#define I2C0MSTA_MRXOF_SET             (0x1   << 9  )
-
-/* I2C0MSTA[TCOMP] - Transaction complete or stop detected */
-#define I2C0MSTA_TCOMP_BBA             (*(volatile unsigned long *) 0x420600A0)
-#define I2C0MSTA_TCOMP_MSK             (0x1   << 8  )
-#define I2C0MSTA_TCOMP                 (0x1   << 8  )
-#define I2C0MSTA_TCOMP_CLR             (0x0   << 8  )
-#define I2C0MSTA_TCOMP_SET             (0x1   << 8  )
-
-/* I2C0MSTA[NACKDATA] - ACK not received in response to data write */
-#define I2C0MSTA_NACKDATA_BBA          (*(volatile unsigned long *) 0x4206009C)
-#define I2C0MSTA_NACKDATA_MSK          (0x1   << 7  )
-#define I2C0MSTA_NACKDATA              (0x1   << 7  )
-#define I2C0MSTA_NACKDATA_CLR          (0x0   << 7  )
-#define I2C0MSTA_NACKDATA_SET          (0x1   << 7  )
-
-/* I2C0MSTA[MBUSY] - Master busy */
-#define I2C0MSTA_MBUSY_BBA             (*(volatile unsigned long *) 0x42060098)
-#define I2C0MSTA_MBUSY_MSK             (0x1   << 6  )
-#define I2C0MSTA_MBUSY                 (0x1   << 6  )
-#define I2C0MSTA_MBUSY_CLR             (0x0   << 6  )
-#define I2C0MSTA_MBUSY_SET             (0x1   << 6  )
-
-/* I2C0MSTA[ALOST] - Arbitration lost */
-#define I2C0MSTA_ALOST_BBA             (*(volatile unsigned long *) 0x42060094)
-#define I2C0MSTA_ALOST_MSK             (0x1   << 5  )
-#define I2C0MSTA_ALOST                 (0x1   << 5  )
-#define I2C0MSTA_ALOST_CLR             (0x0   << 5  )
-#define I2C0MSTA_ALOST_SET             (0x1   << 5  )
-
-/* I2C0MSTA[NACKADDR] - ACK not received in response to an address */
-#define I2C0MSTA_NACKADDR_BBA          (*(volatile unsigned long *) 0x42060090)
-#define I2C0MSTA_NACKADDR_MSK          (0x1   << 4  )
-#define I2C0MSTA_NACKADDR              (0x1   << 4  )
-#define I2C0MSTA_NACKADDR_CLR          (0x0   << 4  )
-#define I2C0MSTA_NACKADDR_SET          (0x1   << 4  )
-
-/* I2C0MSTA[MRXREQ] - Master Receive request */
-#define I2C0MSTA_MRXREQ_BBA            (*(volatile unsigned long *) 0x4206008C)
-#define I2C0MSTA_MRXREQ_MSK            (0x1   << 3  )
-#define I2C0MSTA_MRXREQ                (0x1   << 3  )
-#define I2C0MSTA_MRXREQ_CLR            (0x0   << 3  )
-#define I2C0MSTA_MRXREQ_SET            (0x1   << 3  )
-
-/* I2C0MSTA[MTXREQ] - Master Transmit request */
-#define I2C0MSTA_MTXREQ_BBA            (*(volatile unsigned long *) 0x42060088)
-#define I2C0MSTA_MTXREQ_MSK            (0x1   << 2  )
-#define I2C0MSTA_MTXREQ                (0x1   << 2  )
-#define I2C0MSTA_MTXREQ_CLR            (0x0   << 2  )
-#define I2C0MSTA_MTXREQ_SET            (0x1   << 2  )
-
-/* I2C0MSTA[MTXFSTA] - Master Transmit FIFO status */
-#define I2C0MSTA_MTXFSTA_MSK           (0x3   << 0  )
-
-/* Reset Value for I2C0MRX*/
-#define I2C0MRX_RVAL                   0x0 
-
-/* I2C0MRX[ICMRX] - Master receive register */
-#define I2C0MRX_ICMRX_MSK              (0xFF  << 0  )
-
-/* Reset Value for I2C0MTX*/
-#define I2C0MTX_RVAL                   0x0 
-
-/* I2C0MTX[I2CMTX] - Master transmit register */
-#define I2C0MTX_I2CMTX_MSK             (0xFF  << 0  )
-
-/* Reset Value for I2C0MRXCNT*/
-#define I2C0MRXCNT_RVAL                0x0 
-
-/* I2C0MRXCNT[EXTEND] - Extended read */
-#define I2C0MRXCNT_EXTEND_BBA          (*(volatile unsigned long *) 0x42060220)
-#define I2C0MRXCNT_EXTEND_MSK          (0x1   << 8  )
-#define I2C0MRXCNT_EXTEND              (0x1   << 8  )
-#define I2C0MRXCNT_EXTEND_DIS          (0x0   << 8  )
-#define I2C0MRXCNT_EXTEND_EN           (0x1   << 8  )
-
-/* I2C0MRXCNT[COUNT] - Receive count */
-#define I2C0MRXCNT_COUNT_MSK           (0xFF  << 0  )
-
-/* Reset Value for I2C0MCRXCNT*/
-#define I2C0MCRXCNT_RVAL               0x0 
-
-/* I2C0MCRXCNT[COUNT] - Current receive count */
-#define I2C0MCRXCNT_COUNT_MSK          (0xFF  << 0  )
-
-/* Reset Value for I2C0ADR0*/
-#define I2C0ADR0_RVAL                  0x0 
-
-/* I2C0ADR0[ADR0] - Address byte 0 */
-#define I2C0ADR0_ADR0_MSK              (0xFF  << 0  )
-
-/* Reset Value for I2C0ADR1*/
-#define I2C0ADR1_RVAL                  0x0 
-
-/* I2C0ADR1[ADR1] - Address byte 1 */
-#define I2C0ADR1_ADR1_MSK              (0xFF  << 0  )
-
-/* Reset Value for I2C0DIV*/
-#define I2C0DIV_RVAL                   0x1F1F 
-
-/* I2C0DIV[HIGH] - Serial clock high time */
-#define I2C0DIV_HIGH_MSK               (0xFF  << 8  )
-
-/* I2C0DIV[LOW] - Serial clock low time */
-#define I2C0DIV_LOW_MSK                (0xFF  << 0  )
-
-/* Reset Value for I2C0SCON*/
-#define I2C0SCON_RVAL                  0x0 
-
-/* I2C0SCON[STXDMA] - Enable slave Tx DMA request */
-#define I2C0SCON_STXDMA_BBA            (*(volatile unsigned long *) 0x42060538)
-#define I2C0SCON_STXDMA_MSK            (0x1   << 14 )
-#define I2C0SCON_STXDMA                (0x1   << 14 )
-#define I2C0SCON_STXDMA_DIS            (0x0   << 14 )
-#define I2C0SCON_STXDMA_EN             (0x1   << 14 )
-
-/* I2C0SCON[SRXDMA] - Enable slave Rx DMA request */
-#define I2C0SCON_SRXDMA_BBA            (*(volatile unsigned long *) 0x42060534)
-#define I2C0SCON_SRXDMA_MSK            (0x1   << 13 )
-#define I2C0SCON_SRXDMA                (0x1   << 13 )
-#define I2C0SCON_SRXDMA_DIS            (0x0   << 13 )
-#define I2C0SCON_SRXDMA_EN             (0x1   << 13 )
-
-/* I2C0SCON[IENREPST] - Repeated start interrupt enable */
-#define I2C0SCON_IENREPST_BBA          (*(volatile unsigned long *) 0x42060530)
-#define I2C0SCON_IENREPST_MSK          (0x1   << 12 )
-#define I2C0SCON_IENREPST              (0x1   << 12 )
-#define I2C0SCON_IENREPST_DIS          (0x0   << 12 )
-#define I2C0SCON_IENREPST_EN           (0x1   << 12 )
-
-/* I2C0SCON[SXMITDEC] - Decrement Slave Tx FIFO status when a byte has been transmitted */
-#define I2C0SCON_SXMITDEC_BBA          (*(volatile unsigned long *) 0x4206052C)
-#define I2C0SCON_SXMITDEC_MSK          (0x1   << 11 )
-#define I2C0SCON_SXMITDEC              (0x1   << 11 )
-#define I2C0SCON_SXMITDEC_DIS          (0x0   << 11 )
-#define I2C0SCON_SXMITDEC_EN           (0x1   << 11 )
-
-/* I2C0SCON[IENSTX] - Slave Transmit request interrupt enable */
-#define I2C0SCON_IENSTX_BBA            (*(volatile unsigned long *) 0x42060528)
-#define I2C0SCON_IENSTX_MSK            (0x1   << 10 )
-#define I2C0SCON_IENSTX                (0x1   << 10 )
-#define I2C0SCON_IENSTX_DIS            (0x0   << 10 )
-#define I2C0SCON_IENSTX_EN             (0x1   << 10 )
-
-/* I2C0SCON[IENSRX] - Slave Receive request interrupt enable */
-#define I2C0SCON_IENSRX_BBA            (*(volatile unsigned long *) 0x42060524)
-#define I2C0SCON_IENSRX_MSK            (0x1   << 9  )
-#define I2C0SCON_IENSRX                (0x1   << 9  )
-#define I2C0SCON_IENSRX_DIS            (0x0   << 9  )
-#define I2C0SCON_IENSRX_EN             (0x1   << 9  )
-
-/* I2C0SCON[IENSTOP] - Stop condition detected interrupt enable */
-#define I2C0SCON_IENSTOP_BBA           (*(volatile unsigned long *) 0x42060520)
-#define I2C0SCON_IENSTOP_MSK           (0x1   << 8  )
-#define I2C0SCON_IENSTOP               (0x1   << 8  )
-#define I2C0SCON_IENSTOP_DIS           (0x0   << 8  )
-#define I2C0SCON_IENSTOP_EN            (0x1   << 8  )
-
-/* I2C0SCON[NACK] - NACK next communication */
-#define I2C0SCON_NACK_BBA              (*(volatile unsigned long *) 0x4206051C)
-#define I2C0SCON_NACK_MSK              (0x1   << 7  )
-#define I2C0SCON_NACK                  (0x1   << 7  )
-#define I2C0SCON_NACK_DIS              (0x0   << 7  )
-#define I2C0SCON_NACK_EN               (0x1   << 7  )
-
-/* I2C0SCON[STRETCHSCL] - Stretch SCL enable */
-#define I2C0SCON_STRETCHSCL_BBA        (*(volatile unsigned long *) 0x42060518)
-#define I2C0SCON_STRETCHSCL_MSK        (0x1   << 6  )
-#define I2C0SCON_STRETCHSCL            (0x1   << 6  )
-#define I2C0SCON_STRETCHSCL_DIS        (0x0   << 6  )
-#define I2C0SCON_STRETCHSCL_EN         (0x1   << 6  )
-
-/* I2C0SCON[EARLYTXR] - Early transmit request mode */
-#define I2C0SCON_EARLYTXR_BBA          (*(volatile unsigned long *) 0x42060514)
-#define I2C0SCON_EARLYTXR_MSK          (0x1   << 5  )
-#define I2C0SCON_EARLYTXR              (0x1   << 5  )
-#define I2C0SCON_EARLYTXR_DIS          (0x0   << 5  )
-#define I2C0SCON_EARLYTXR_EN           (0x1   << 5  )
-
-/* I2C0SCON[GCSBCLR] - General call status bit clear */
-#define I2C0SCON_GCSBCLR_BBA           (*(volatile unsigned long *) 0x42060510)
-#define I2C0SCON_GCSBCLR_MSK           (0x1   << 4  )
-#define I2C0SCON_GCSBCLR               (0x1   << 4  )
-#define I2C0SCON_GCSBCLR_DIS           (0x0   << 4  )
-#define I2C0SCON_GCSBCLR_EN            (0x1   << 4  )
-
-/* I2C0SCON[HGCEN] - Hardware general call enable */
-#define I2C0SCON_HGCEN_BBA             (*(volatile unsigned long *) 0x4206050C)
-#define I2C0SCON_HGCEN_MSK             (0x1   << 3  )
-#define I2C0SCON_HGCEN                 (0x1   << 3  )
-#define I2C0SCON_HGCEN_DIS             (0x0   << 3  )
-#define I2C0SCON_HGCEN_EN              (0x1   << 3  )
-
-/* I2C0SCON[GCEN] - General call enable */
-#define I2C0SCON_GCEN_BBA              (*(volatile unsigned long *) 0x42060508)
-#define I2C0SCON_GCEN_MSK              (0x1   << 2  )
-#define I2C0SCON_GCEN                  (0x1   << 2  )
-#define I2C0SCON_GCEN_DIS              (0x0   << 2  )
-#define I2C0SCON_GCEN_EN               (0x1   << 2  )
-
-/* I2C0SCON[ADR10EN] - Enabled 10-bit addressing */
-#define I2C0SCON_ADR10EN_BBA           (*(volatile unsigned long *) 0x42060504)
-#define I2C0SCON_ADR10EN_MSK           (0x1   << 1  )
-#define I2C0SCON_ADR10EN               (0x1   << 1  )
-#define I2C0SCON_ADR10EN_DIS           (0x0   << 1  )
-#define I2C0SCON_ADR10EN_EN            (0x1   << 1  )
-
-/* I2C0SCON[SLVEN] - Slave enable */
-#define I2C0SCON_SLVEN_BBA             (*(volatile unsigned long *) 0x42060500)
-#define I2C0SCON_SLVEN_MSK             (0x1   << 0  )
-#define I2C0SCON_SLVEN                 (0x1   << 0  )
-#define I2C0SCON_SLVEN_DIS             (0x0   << 0  )
-#define I2C0SCON_SLVEN_EN              (0x1   << 0  )
-
-/* Reset Value for I2C0SSTA*/
-#define I2C0SSTA_RVAL                  0x1 
-
-/* I2C0SSTA[START] - Start and matching address */
-#define I2C0SSTA_START_BBA             (*(volatile unsigned long *) 0x420605B8)
-#define I2C0SSTA_START_MSK             (0x1   << 14 )
-#define I2C0SSTA_START                 (0x1   << 14 )
-#define I2C0SSTA_START_CLR             (0x0   << 14 )
-#define I2C0SSTA_START_SET             (0x1   << 14 )
-
-/* I2C0SSTA[REPSTART] - Repeated start and matching address */
-#define I2C0SSTA_REPSTART_BBA          (*(volatile unsigned long *) 0x420605B4)
-#define I2C0SSTA_REPSTART_MSK          (0x1   << 13 )
-#define I2C0SSTA_REPSTART              (0x1   << 13 )
-#define I2C0SSTA_REPSTART_CLR          (0x0   << 13 )
-#define I2C0SSTA_REPSTART_SET          (0x1   << 13 )
-
-/* I2C0SSTA[IDMAT] - Device ID matched */
-#define I2C0SSTA_IDMAT_MSK             (0x3   << 11 )
-
-/* I2C0SSTA[STOP] - Stop after start and matching address */
-#define I2C0SSTA_STOP_BBA              (*(volatile unsigned long *) 0x420605A8)
-#define I2C0SSTA_STOP_MSK              (0x1   << 10 )
-#define I2C0SSTA_STOP                  (0x1   << 10 )
-#define I2C0SSTA_STOP_CLR              (0x0   << 10 )
-#define I2C0SSTA_STOP_SET              (0x1   << 10 )
-
-/* I2C0SSTA[GCID] - General ID */
-#define I2C0SSTA_GCID_MSK              (0x3   << 8  )
-
-/* I2C0SSTA[GCINT] - General call interrupt */
-#define I2C0SSTA_GCINT_BBA             (*(volatile unsigned long *) 0x4206059C)
-#define I2C0SSTA_GCINT_MSK             (0x1   << 7  )
-#define I2C0SSTA_GCINT                 (0x1   << 7  )
-#define I2C0SSTA_GCINT_CLR             (0x0   << 7  )
-#define I2C0SSTA_GCINT_SET             (0x1   << 7  )
-
-/* I2C0SSTA[SBUSY] - Slave busy */
-#define I2C0SSTA_SBUSY_BBA             (*(volatile unsigned long *) 0x42060598)
-#define I2C0SSTA_SBUSY_MSK             (0x1   << 6  )
-#define I2C0SSTA_SBUSY                 (0x1   << 6  )
-#define I2C0SSTA_SBUSY_CLR             (0x0   << 6  )
-#define I2C0SSTA_SBUSY_SET             (0x1   << 6  )
-
-/* I2C0SSTA[NOACK] - Ack not generated by the slave */
-#define I2C0SSTA_NOACK_BBA             (*(volatile unsigned long *) 0x42060594)
-#define I2C0SSTA_NOACK_MSK             (0x1   << 5  )
-#define I2C0SSTA_NOACK                 (0x1   << 5  )
-#define I2C0SSTA_NOACK_CLR             (0x0   << 5  )
-#define I2C0SSTA_NOACK_SET             (0x1   << 5  )
-
-/* I2C0SSTA[SRXOF] - Slave Receive FIFO overflow */
-#define I2C0SSTA_SRXOF_BBA             (*(volatile unsigned long *) 0x42060590)
-#define I2C0SSTA_SRXOF_MSK             (0x1   << 4  )
-#define I2C0SSTA_SRXOF                 (0x1   << 4  )
-#define I2C0SSTA_SRXOF_CLR             (0x0   << 4  )
-#define I2C0SSTA_SRXOF_SET             (0x1   << 4  )
-
-/* I2C0SSTA[SRXREQ] - Slave Receive request */
-#define I2C0SSTA_SRXREQ_BBA            (*(volatile unsigned long *) 0x4206058C)
-#define I2C0SSTA_SRXREQ_MSK            (0x1   << 3  )
-#define I2C0SSTA_SRXREQ                (0x1   << 3  )
-#define I2C0SSTA_SRXREQ_CLR            (0x0   << 3  )
-#define I2C0SSTA_SRXREQ_SET            (0x1   << 3  )
-
-/* I2C0SSTA[STXREQ] - Slave Transmit request */
-#define I2C0SSTA_STXREQ_BBA            (*(volatile unsigned long *) 0x42060588)
-#define I2C0SSTA_STXREQ_MSK            (0x1   << 2  )
-#define I2C0SSTA_STXREQ                (0x1   << 2  )
-#define I2C0SSTA_STXREQ_CLR            (0x0   << 2  )
-#define I2C0SSTA_STXREQ_SET            (0x1   << 2  )
-
-/* I2C0SSTA[STXUR] - Slave Transmit FIFO underflow */
-#define I2C0SSTA_STXUR_BBA             (*(volatile unsigned long *) 0x42060584)
-#define I2C0SSTA_STXUR_MSK             (0x1   << 1  )
-#define I2C0SSTA_STXUR                 (0x1   << 1  )
-#define I2C0SSTA_STXUR_CLR             (0x0   << 1  )
-#define I2C0SSTA_STXUR_SET             (0x1   << 1  )
-
-/* I2C0SSTA[STXFSEREQ] - Slave Tx FIFO Status or early request */
-#define I2C0SSTA_STXFSEREQ_BBA         (*(volatile unsigned long *) 0x42060580)
-#define I2C0SSTA_STXFSEREQ_MSK         (0x1   << 0  )
-#define I2C0SSTA_STXFSEREQ             (0x1   << 0  )
-#define I2C0SSTA_STXFSEREQ_CLR         (0x0   << 0  )
-#define I2C0SSTA_STXFSEREQ_SET         (0x1   << 0  )
-
-/* Reset Value for I2C0SRX*/
-#define I2C0SRX_RVAL                   0x0 
-
-/* I2C0SRX[I2CSRX] - Slave receive register */
-#define I2C0SRX_I2CSRX_MSK             (0xFF  << 0  )
-
-/* Reset Value for I2C0STX*/
-#define I2C0STX_RVAL                   0x0 
-
-/* I2C0STX[I2CSTX] - Slave transmit register */
-#define I2C0STX_I2CSTX_MSK             (0xFF  << 0  )
-
-/* Reset Value for I2C0ALT*/
-#define I2C0ALT_RVAL                   0x0 
-
-/* I2C0ALT[ALT] - Slave Alt */
-#define I2C0ALT_ALT_MSK                (0xFF  << 0  )
-
-/* Reset Value for I2C0ID0*/
-#define I2C0ID0_RVAL                   0x0 
-
-/* I2C0ID0[ID0] - Slave device ID 0 */
-#define I2C0ID0_ID0_MSK                (0xFF  << 0  )
-
-/* Reset Value for I2C0ID1*/
-#define I2C0ID1_RVAL                   0x0 
-
-/* I2C0ID1[ID1] - Slave device ID 1 */
-#define I2C0ID1_ID1_MSK                (0xFF  << 0  )
-
-/* Reset Value for I2C0ID2*/
-#define I2C0ID2_RVAL                   0x0 
-
-/* I2C0ID2[ID2] - Slave device ID 2 */
-#define I2C0ID2_ID2_MSK                (0xFF  << 0  )
-
-/* Reset Value for I2C0ID3*/
-#define I2C0ID3_RVAL                   0x0 
-
-/* I2C0ID3[ID3] - Slave device ID 3 */
-#define I2C0ID3_ID3_MSK                (0xFF  << 0  )
-
-/* Reset Value for I2C0FSTA*/
-#define I2C0FSTA_RVAL                  0x0 
-
-/* I2C0FSTA[MFLUSH] - Flush the master transmit FIFO */
-#define I2C0FSTA_MFLUSH_BBA            (*(volatile unsigned long *) 0x420609A4)
-#define I2C0FSTA_MFLUSH_MSK            (0x1   << 9  )
-#define I2C0FSTA_MFLUSH                (0x1   << 9  )
-#define I2C0FSTA_MFLUSH_DIS            (0x0   << 9  ) /* Clearing to 0 has no effect. */
-#define I2C0FSTA_MFLUSH_EN             (0x1   << 9  ) /* Set to 1 to flush the master transmit FIFO. The master transmit FIFO will have to flushed if arbitration is lost or a slave responds with a NACK. */
-
-/* I2C0FSTA[SFLUSH] - Flush the slave transmit FIFO */
-#define I2C0FSTA_SFLUSH_BBA            (*(volatile unsigned long *) 0x420609A0)
-#define I2C0FSTA_SFLUSH_MSK            (0x1   << 8  )
-#define I2C0FSTA_SFLUSH                (0x1   << 8  )
-#define I2C0FSTA_SFLUSH_DIS            (0x0   << 8  ) /* Clearing to 0 has no effect. */
-#define I2C0FSTA_SFLUSH_EN             (0x1   << 8  ) /* Set to 1 to flush the slave transmit FIFO. */
-
-/* I2C0FSTA[MRXFSTA] - Master receive FIFO status */
-#define I2C0FSTA_MRXFSTA_MSK           (0x3   << 6  )
-#define I2C0FSTA_MRXFSTA_EMPTY         (0x0   << 6  ) /* FIFO empty               */
-#define I2C0FSTA_MRXFSTA_ONEBYTE       (0x1   << 6  ) /* 1 bytes in the FIFO      */
-#define I2C0FSTA_MRXFSTA_TWOBYTES      (0x2   << 6  ) /* 2 bytes in the FIFO      */
-
-/* I2C0FSTA[MTXFSTA] - Master transmit FIFO status */
-#define I2C0FSTA_MTXFSTA_MSK           (0x3   << 4  )
-#define I2C0FSTA_MTXFSTA_EMPTY         (0x0   << 4  ) /* FIFO empty               */
-#define I2C0FSTA_MTXFSTA_ONEBYTE       (0x1   << 4  ) /* 1 bytes in the FIFO      */
-#define I2C0FSTA_MTXFSTA_TWOBYTES      (0x2   << 4  ) /* 2 bytes in the FIFO      */
-
-/* I2C0FSTA[SRXFSTA] - Slave receive FIFO status */
-#define I2C0FSTA_SRXFSTA_MSK           (0x3   << 2  )
-#define I2C0FSTA_SRXFSTA_EMPTY         (0x0   << 2  ) /* FIFO empty               */
-#define I2C0FSTA_SRXFSTA_ONEBYTE       (0x1   << 2  ) /* 1 bytes in the FIFO      */
-#define I2C0FSTA_SRXFSTA_TWOBYTES      (0x2   << 2  ) /* 2 bytes in the FIFO      */
-
-/* I2C0FSTA[STXFSTA] - Slave transmit FIFO status */
-#define I2C0FSTA_STXFSTA_MSK           (0x3   << 0  )
-#define I2C0FSTA_STXFSTA_EMPTY         (0x0   << 0  ) /* FIFO empty               */
-#define I2C0FSTA_STXFSTA_ONEBYTE       (0x1   << 0  ) /* 1 bytes in the FIFO      */
-#define I2C0FSTA_STXFSTA_TWOBYTES      (0x2   << 0  ) /* 2 bytes in the FIFO      */
-
-/* Reset Value for I2C0SHCON*/
-#define I2C0SHCON_RVAL                 0x0 
-
-/* I2C0SHCON[RESET] - Reset START STOP detect circuit */
-#define I2C0SHCON_RESET_BBA            (*(volatile unsigned long *) 0x42060A00)
-#define I2C0SHCON_RESET_MSK            (0x1   << 0  )
-#define I2C0SHCON_RESET                (0x1   << 0  )
-#define I2C0SHCON_RESET_DIS            (0x0   << 0  )
-#define I2C0SHCON_RESET_EN             (0x1   << 0  )
-
-/* Reset Value for I2C0ASSCL*/
-#define I2C0ASSCL_RVAL                 0x0 
-
-/* I2C0ASSCL[SSRTSTA] - stretch timeout for slave */
-#define I2C0ASSCL_SSRTSTA_BBA          (*(volatile unsigned long *) 0x42060B24)
-#define I2C0ASSCL_SSRTSTA_MSK          (0x1   << 9  )
-#define I2C0ASSCL_SSRTSTA              (0x1   << 9  )
-#define I2C0ASSCL_SSRTSTA_DIS          (0x0   << 9  )
-#define I2C0ASSCL_SSRTSTA_EN           (0x1   << 9  )
-
-/* I2C0ASSCL[MSRTSTA] - stretch timeout for master */
-#define I2C0ASSCL_MSRTSTA_BBA          (*(volatile unsigned long *) 0x42060B20)
-#define I2C0ASSCL_MSRTSTA_MSK          (0x1   << 8  )
-#define I2C0ASSCL_MSRTSTA              (0x1   << 8  )
-#define I2C0ASSCL_MSRTSTA_DIS          (0x0   << 8  )
-#define I2C0ASSCL_MSRTSTA_EN           (0x1   << 8  )
-
-/* I2C0ASSCL[SSTRCON] - automatic stretch mode for slave */
-#define I2C0ASSCL_SSTRCON_MSK          (0xF   << 4  )
-
-/* I2C0ASSCL[MSTRCON] - automatic stretch mode for master */
-#define I2C0ASSCL_MSTRCON_MSK          (0xF   << 0  )
-
-/* Reset Value for I2C1MCON*/
-#define I2C1MCON_RVAL                  0x0 
-
-/* I2C1MCON[PRESTOP_BUS_CLR] - Prestop Bus-Clear */
-#define I2C1MCON_PRESTOP_BUS_CLR_BBA   (*(volatile unsigned long *) 0x42068034)
-#define I2C1MCON_PRESTOP_BUS_CLR_MSK   (0x1   << 13 )
-#define I2C1MCON_PRESTOP_BUS_CLR       (0x1   << 13 )
-#define I2C1MCON_PRESTOP_BUS_CLR_DIS   (0x0   << 13 )
-#define I2C1MCON_PRESTOP_BUS_CLR_EN    (0x1   << 13 )
-
-/* I2C1MCON[BUS_CLR_EN] - Bus-Clear Enable */
-#define I2C1MCON_BUS_CLR_EN_BBA        (*(volatile unsigned long *) 0x42068030)
-#define I2C1MCON_BUS_CLR_EN_MSK        (0x1   << 12 )
-#define I2C1MCON_BUS_CLR_EN            (0x1   << 12 )
-#define I2C1MCON_BUS_CLR_EN_DIS        (0x0   << 12 )
-#define I2C1MCON_BUS_CLR_EN_EN         (0x1   << 12 )
-
-/* I2C1MCON[MTXDMA] - Enable master Tx DMA request */
-#define I2C1MCON_MTXDMA_BBA            (*(volatile unsigned long *) 0x4206802C)
-#define I2C1MCON_MTXDMA_MSK            (0x1   << 11 )
-#define I2C1MCON_MTXDMA                (0x1   << 11 )
-#define I2C1MCON_MTXDMA_DIS            (0x0   << 11 ) /* Disable DMA mode         */
-#define I2C1MCON_MTXDMA_EN             (0x1   << 11 ) /* Enable I2C master DMA Tx requests. */
-
-/* I2C1MCON[MRXDMA] - Enable master Rx DMA request */
-#define I2C1MCON_MRXDMA_BBA            (*(volatile unsigned long *) 0x42068028)
-#define I2C1MCON_MRXDMA_MSK            (0x1   << 10 )
-#define I2C1MCON_MRXDMA                (0x1   << 10 )
-#define I2C1MCON_MRXDMA_DIS            (0x0   << 10 ) /* Disable DMA mode         */
-#define I2C1MCON_MRXDMA_EN             (0x1   << 10 ) /* Enable I2C master DMA Rx requests. */
-
-/* I2C1MCON[MXMITDEC] - Decrement master TX FIFO status when a byte has been transmitted */
-#define I2C1MCON_MXMITDEC_BBA          (*(volatile unsigned long *) 0x42068024)
-#define I2C1MCON_MXMITDEC_MSK          (0x1   << 9  )
-#define I2C1MCON_MXMITDEC              (0x1   << 9  )
-#define I2C1MCON_MXMITDEC_DIS          (0x0   << 9  )
-#define I2C1MCON_MXMITDEC_EN           (0x1   << 9  )
-
-/* I2C1MCON[IENCMP] - Transaction completed (or stop detected) interrupt enable */
-#define I2C1MCON_IENCMP_BBA            (*(volatile unsigned long *) 0x42068020)
-#define I2C1MCON_IENCMP_MSK            (0x1   << 8  )
-#define I2C1MCON_IENCMP                (0x1   << 8  )
-#define I2C1MCON_IENCMP_DIS            (0x0   << 8  ) /* An interrupt is not generated when a STOP is detected. */
-#define I2C1MCON_IENCMP_EN             (0x1   << 8  ) /* An interrupt is generated when a STOP is detected. */
-
-/* I2C1MCON[IENACK] - ACK not received interrupt enable */
-#define I2C1MCON_IENACK_BBA            (*(volatile unsigned long *) 0x4206801C)
-#define I2C1MCON_IENACK_MSK            (0x1   << 7  )
-#define I2C1MCON_IENACK                (0x1   << 7  )
-#define I2C1MCON_IENACK_DIS            (0x0   << 7  ) /* ACK not received interrupt disable */
-#define I2C1MCON_IENACK_EN             (0x1   << 7  ) /* ACK not received interrupt enable */
-
-/* I2C1MCON[IENALOST] - Arbitration lost interrupt enable */
-#define I2C1MCON_IENALOST_BBA          (*(volatile unsigned long *) 0x42068018)
-#define I2C1MCON_IENALOST_MSK          (0x1   << 6  )
-#define I2C1MCON_IENALOST              (0x1   << 6  )
-#define I2C1MCON_IENALOST_DIS          (0x0   << 6  ) /* Arbitration lost interrupt disable */
-#define I2C1MCON_IENALOST_EN           (0x1   << 6  ) /* Arbitration lost interrupt enable */
-
-/* I2C1MCON[IENMTX] - Transmit request interrupt enable. */
-#define I2C1MCON_IENMTX_BBA            (*(volatile unsigned long *) 0x42068014)
-#define I2C1MCON_IENMTX_MSK            (0x1   << 5  )
-#define I2C1MCON_IENMTX                (0x1   << 5  )
-#define I2C1MCON_IENMTX_DIS            (0x0   << 5  ) /* Transmit request interrupt disable */
-#define I2C1MCON_IENMTX_EN             (0x1   << 5  ) /* Transmit request interrupt enable */
-
-/* I2C1MCON[IENMRX] - Receive request interrupt enable */
-#define I2C1MCON_IENMRX_BBA            (*(volatile unsigned long *) 0x42068010)
-#define I2C1MCON_IENMRX_MSK            (0x1   << 4  )
-#define I2C1MCON_IENMRX                (0x1   << 4  )
-#define I2C1MCON_IENMRX_DIS            (0x0   << 4  ) /* Receive request interrupt disable */
-#define I2C1MCON_IENMRX_EN             (0x1   << 4  ) /* Receive request interrupt enable */
-
-/* I2C1MCON[STRETCH] - Stretch SCL enable */
-#define I2C1MCON_STRETCH_BBA           (*(volatile unsigned long *) 0x4206800C)
-#define I2C1MCON_STRETCH_MSK           (0x1   << 3  )
-#define I2C1MCON_STRETCH               (0x1   << 3  )
-#define I2C1MCON_STRETCH_DIS           (0x0   << 3  ) /* Disable Clock stretching */
-#define I2C1MCON_STRETCH_EN            (0x1   << 3  ) /* Setting this bit tells the device if SCL is 0 hold it at 0;. Or if SCL is 1 then when it next goes to 0 hold it at 0. */
-
-/* I2C1MCON[LOOPBACK] - Internal loopback enable */
-#define I2C1MCON_LOOPBACK_BBA          (*(volatile unsigned long *) 0x42068008)
-#define I2C1MCON_LOOPBACK_MSK          (0x1   << 2  )
-#define I2C1MCON_LOOPBACK              (0x1   << 2  )
-#define I2C1MCON_LOOPBACK_DIS          (0x0   << 2  ) /* SCL and SDA out of the device are not muxed onto their corresponding inputs. */
-#define I2C1MCON_LOOPBACK_EN           (0x1   << 2  ) /* SCL and SDA out of the device are muxed onto their corresponding inputs. */
-
-/* I2C1MCON[COMPETE] - Start back-off disable */
-#define I2C1MCON_COMPETE_BBA           (*(volatile unsigned long *) 0x42068004)
-#define I2C1MCON_COMPETE_MSK           (0x1   << 1  )
-#define I2C1MCON_COMPETE               (0x1   << 1  )
-#define I2C1MCON_COMPETE_DIS           (0x0   << 1  )
-#define I2C1MCON_COMPETE_EN            (0x1   << 1  )
-
-/* I2C1MCON[MASEN] - Master enable */
-#define I2C1MCON_MASEN_BBA             (*(volatile unsigned long *) 0x42068000)
-#define I2C1MCON_MASEN_MSK             (0x1   << 0  )
-#define I2C1MCON_MASEN                 (0x1   << 0  )
-#define I2C1MCON_MASEN_DIS             (0x0   << 0  ) /* Master is disabled       */
-#define I2C1MCON_MASEN_EN              (0x1   << 0  ) /* Master is enabled        */
-
-/* Reset Value for I2C1MSTA*/
-#define I2C1MSTA_RVAL                  0x6000 
-
-/* I2C1MSTA[SCL_FILTERED] - State of SCL Line */
-#define I2C1MSTA_SCL_FILTERED_BBA      (*(volatile unsigned long *) 0x420680B8)
-#define I2C1MSTA_SCL_FILTERED_MSK      (0x1   << 14 )
-#define I2C1MSTA_SCL_FILTERED          (0x1   << 14 )
-#define I2C1MSTA_SCL_FILTERED_CLR      (0x0   << 14 )
-#define I2C1MSTA_SCL_FILTERED_SET      (0x1   << 14 )
-
-/* I2C1MSTA[SDA_FILTERED] - State of SDA Line */
-#define I2C1MSTA_SDA_FILTERED_BBA      (*(volatile unsigned long *) 0x420680B4)
-#define I2C1MSTA_SDA_FILTERED_MSK      (0x1   << 13 )
-#define I2C1MSTA_SDA_FILTERED          (0x1   << 13 )
-#define I2C1MSTA_SDA_FILTERED_CLR      (0x0   << 13 )
-#define I2C1MSTA_SDA_FILTERED_SET      (0x1   << 13 )
-
-/* I2C1MSTA[MTXUFLOW] - Master Transmit Underflow */
-#define I2C1MSTA_MTXUFLOW_BBA          (*(volatile unsigned long *) 0x420680B0)
-#define I2C1MSTA_MTXUFLOW_MSK          (0x1   << 12 )
-#define I2C1MSTA_MTXUFLOW              (0x1   << 12 )
-#define I2C1MSTA_MTXUFLOW_CLR          (0x0   << 12 )
-#define I2C1MSTA_MTXUFLOW_SET          (0x1   << 12 )
-
-/* I2C1MSTA[MSTOP] - STOP driven by this I2C Master */
-#define I2C1MSTA_MSTOP_BBA             (*(volatile unsigned long *) 0x420680AC)
-#define I2C1MSTA_MSTOP_MSK             (0x1   << 11 )
-#define I2C1MSTA_MSTOP                 (0x1   << 11 )
-#define I2C1MSTA_MSTOP_CLR             (0x0   << 11 )
-#define I2C1MSTA_MSTOP_SET             (0x1   << 11 )
-
-/* I2C1MSTA[LINEBUSY] - Line is busy */
-#define I2C1MSTA_LINEBUSY_BBA          (*(volatile unsigned long *) 0x420680A8)
-#define I2C1MSTA_LINEBUSY_MSK          (0x1   << 10 )
-#define I2C1MSTA_LINEBUSY              (0x1   << 10 )
-#define I2C1MSTA_LINEBUSY_CLR          (0x0   << 10 )
-#define I2C1MSTA_LINEBUSY_SET          (0x1   << 10 )
-
-/* I2C1MSTA[MRXOF] - Master Receive FIFO overflow */
-#define I2C1MSTA_MRXOF_BBA             (*(volatile unsigned long *) 0x420680A4)
-#define I2C1MSTA_MRXOF_MSK             (0x1   << 9  )
-#define I2C1MSTA_MRXOF                 (0x1   << 9  )
-#define I2C1MSTA_MRXOF_CLR             (0x0   << 9  )
-#define I2C1MSTA_MRXOF_SET             (0x1   << 9  )
-
-/* I2C1MSTA[TCOMP] - Transaction complete or stop detected */
-#define I2C1MSTA_TCOMP_BBA             (*(volatile unsigned long *) 0x420680A0)
-#define I2C1MSTA_TCOMP_MSK             (0x1   << 8  )
-#define I2C1MSTA_TCOMP                 (0x1   << 8  )
-#define I2C1MSTA_TCOMP_CLR             (0x0   << 8  )
-#define I2C1MSTA_TCOMP_SET             (0x1   << 8  )
-
-/* I2C1MSTA[NACKDATA] - ACK not received in response to data write */
-#define I2C1MSTA_NACKDATA_BBA          (*(volatile unsigned long *) 0x4206809C)
-#define I2C1MSTA_NACKDATA_MSK          (0x1   << 7  )
-#define I2C1MSTA_NACKDATA              (0x1   << 7  )
-#define I2C1MSTA_NACKDATA_CLR          (0x0   << 7  )
-#define I2C1MSTA_NACKDATA_SET          (0x1   << 7  )
-
-/* I2C1MSTA[MBUSY] - Master busy */
-#define I2C1MSTA_MBUSY_BBA             (*(volatile unsigned long *) 0x42068098)
-#define I2C1MSTA_MBUSY_MSK             (0x1   << 6  )
-#define I2C1MSTA_MBUSY                 (0x1   << 6  )
-#define I2C1MSTA_MBUSY_CLR             (0x0   << 6  )
-#define I2C1MSTA_MBUSY_SET             (0x1   << 6  )
-
-/* I2C1MSTA[ALOST] - Arbitration lost */
-#define I2C1MSTA_ALOST_BBA             (*(volatile unsigned long *) 0x42068094)
-#define I2C1MSTA_ALOST_MSK             (0x1   << 5  )
-#define I2C1MSTA_ALOST                 (0x1   << 5  )
-#define I2C1MSTA_ALOST_CLR             (0x0   << 5  )
-#define I2C1MSTA_ALOST_SET             (0x1   << 5  )
-
-/* I2C1MSTA[NACKADDR] - ACK not received in response to an address */
-#define I2C1MSTA_NACKADDR_BBA          (*(volatile unsigned long *) 0x42068090)
-#define I2C1MSTA_NACKADDR_MSK          (0x1   << 4  )
-#define I2C1MSTA_NACKADDR              (0x1   << 4  )
-#define I2C1MSTA_NACKADDR_CLR          (0x0   << 4  )
-#define I2C1MSTA_NACKADDR_SET          (0x1   << 4  )
-
-/* I2C1MSTA[MRXREQ] - Master Receive request */
-#define I2C1MSTA_MRXREQ_BBA            (*(volatile unsigned long *) 0x4206808C)
-#define I2C1MSTA_MRXREQ_MSK            (0x1   << 3  )
-#define I2C1MSTA_MRXREQ                (0x1   << 3  )
-#define I2C1MSTA_MRXREQ_CLR            (0x0   << 3  )
-#define I2C1MSTA_MRXREQ_SET            (0x1   << 3  )
-
-/* I2C1MSTA[MTXREQ] - Master Transmit request */
-#define I2C1MSTA_MTXREQ_BBA            (*(volatile unsigned long *) 0x42068088)
-#define I2C1MSTA_MTXREQ_MSK            (0x1   << 2  )
-#define I2C1MSTA_MTXREQ                (0x1   << 2  )
-#define I2C1MSTA_MTXREQ_CLR            (0x0   << 2  )
-#define I2C1MSTA_MTXREQ_SET            (0x1   << 2  )
-
-/* I2C1MSTA[MTXFSTA] - Master Transmit FIFO status */
-#define I2C1MSTA_MTXFSTA_MSK           (0x3   << 0  )
-
-/* Reset Value for I2C1MRX*/
-#define I2C1MRX_RVAL                   0x0 
-
-/* I2C1MRX[ICMRX] - Master receive register */
-#define I2C1MRX_ICMRX_MSK              (0xFF  << 0  )
-
-/* Reset Value for I2C1MTX*/
-#define I2C1MTX_RVAL                   0x0 
-
-/* I2C1MTX[I2CMTX] - Master transmit register */
-#define I2C1MTX_I2CMTX_MSK             (0xFF  << 0  )
-
-/* Reset Value for I2C1MRXCNT*/
-#define I2C1MRXCNT_RVAL                0x0 
-
-/* I2C1MRXCNT[EXTEND] - Extended read */
-#define I2C1MRXCNT_EXTEND_BBA          (*(volatile unsigned long *) 0x42068220)
-#define I2C1MRXCNT_EXTEND_MSK          (0x1   << 8  )
-#define I2C1MRXCNT_EXTEND              (0x1   << 8  )
-#define I2C1MRXCNT_EXTEND_DIS          (0x0   << 8  )
-#define I2C1MRXCNT_EXTEND_EN           (0x1   << 8  )
-
-/* I2C1MRXCNT[COUNT] - Receive count */
-#define I2C1MRXCNT_COUNT_MSK           (0xFF  << 0  )
-
-/* Reset Value for I2C1MCRXCNT*/
-#define I2C1MCRXCNT_RVAL               0x0 
-
-/* I2C1MCRXCNT[COUNT] - Current receive count */
-#define I2C1MCRXCNT_COUNT_MSK          (0xFF  << 0  )
-
-/* Reset Value for I2C1ADR0*/
-#define I2C1ADR0_RVAL                  0x0 
-
-/* I2C1ADR0[ADR0] - Address byte 0 */
-#define I2C1ADR0_ADR0_MSK              (0xFF  << 0  )
-
-/* Reset Value for I2C1ADR1*/
-#define I2C1ADR1_RVAL                  0x0 
-
-/* I2C1ADR1[ADR1] - Address byte 1 */
-#define I2C1ADR1_ADR1_MSK              (0xFF  << 0  )
-
-/* Reset Value for I2C1DIV*/
-#define I2C1DIV_RVAL                   0x1F1F 
-
-/* I2C1DIV[HIGH] - Serial clock high time */
-#define I2C1DIV_HIGH_MSK               (0xFF  << 8  )
-
-/* I2C1DIV[LOW] - Serial clock low time */
-#define I2C1DIV_LOW_MSK                (0xFF  << 0  )
-
-/* Reset Value for I2C1SCON*/
-#define I2C1SCON_RVAL                  0x0 
-
-/* I2C1SCON[STXDMA] - Enable slave Tx DMA request */
-#define I2C1SCON_STXDMA_BBA            (*(volatile unsigned long *) 0x42068538)
-#define I2C1SCON_STXDMA_MSK            (0x1   << 14 )
-#define I2C1SCON_STXDMA                (0x1   << 14 )
-#define I2C1SCON_STXDMA_DIS            (0x0   << 14 )
-#define I2C1SCON_STXDMA_EN             (0x1   << 14 )
-
-/* I2C1SCON[SRXDMA] - Enable slave Rx DMA request */
-#define I2C1SCON_SRXDMA_BBA            (*(volatile unsigned long *) 0x42068534)
-#define I2C1SCON_SRXDMA_MSK            (0x1   << 13 )
-#define I2C1SCON_SRXDMA                (0x1   << 13 )
-#define I2C1SCON_SRXDMA_DIS            (0x0   << 13 )
-#define I2C1SCON_SRXDMA_EN             (0x1   << 13 )
-
-/* I2C1SCON[IENREPST] - Repeated start interrupt enable */
-#define I2C1SCON_IENREPST_BBA          (*(volatile unsigned long *) 0x42068530)
-#define I2C1SCON_IENREPST_MSK          (0x1   << 12 )
-#define I2C1SCON_IENREPST              (0x1   << 12 )
-#define I2C1SCON_IENREPST_DIS          (0x0   << 12 )
-#define I2C1SCON_IENREPST_EN           (0x1   << 12 )
-
-/* I2C1SCON[SXMITDEC] - Decrement Slave Tx FIFO status when a byte has been transmitted */
-#define I2C1SCON_SXMITDEC_BBA          (*(volatile unsigned long *) 0x4206852C)
-#define I2C1SCON_SXMITDEC_MSK          (0x1   << 11 )
-#define I2C1SCON_SXMITDEC              (0x1   << 11 )
-#define I2C1SCON_SXMITDEC_DIS          (0x0   << 11 )
-#define I2C1SCON_SXMITDEC_EN           (0x1   << 11 )
-
-/* I2C1SCON[IENSTX] - Slave Transmit request interrupt enable */
-#define I2C1SCON_IENSTX_BBA            (*(volatile unsigned long *) 0x42068528)
-#define I2C1SCON_IENSTX_MSK            (0x1   << 10 )
-#define I2C1SCON_IENSTX                (0x1   << 10 )
-#define I2C1SCON_IENSTX_DIS            (0x0   << 10 )
-#define I2C1SCON_IENSTX_EN             (0x1   << 10 )
-
-/* I2C1SCON[IENSRX] - Slave Receive request interrupt enable */
-#define I2C1SCON_IENSRX_BBA            (*(volatile unsigned long *) 0x42068524)
-#define I2C1SCON_IENSRX_MSK            (0x1   << 9  )
-#define I2C1SCON_IENSRX                (0x1   << 9  )
-#define I2C1SCON_IENSRX_DIS            (0x0   << 9  )
-#define I2C1SCON_IENSRX_EN             (0x1   << 9  )
-
-/* I2C1SCON[IENSTOP] - Stop condition detected interrupt enable */
-#define I2C1SCON_IENSTOP_BBA           (*(volatile unsigned long *) 0x42068520)
-#define I2C1SCON_IENSTOP_MSK           (0x1   << 8  )
-#define I2C1SCON_IENSTOP               (0x1   << 8  )
-#define I2C1SCON_IENSTOP_DIS           (0x0   << 8  )
-#define I2C1SCON_IENSTOP_EN            (0x1   << 8  )
-
-/* I2C1SCON[NACK] - NACK next communication */
-#define I2C1SCON_NACK_BBA              (*(volatile unsigned long *) 0x4206851C)
-#define I2C1SCON_NACK_MSK              (0x1   << 7  )
-#define I2C1SCON_NACK                  (0x1   << 7  )
-#define I2C1SCON_NACK_DIS              (0x0   << 7  )
-#define I2C1SCON_NACK_EN               (0x1   << 7  )
-
-/* I2C1SCON[STRETCHSCL] - Stretch SCL enable */
-#define I2C1SCON_STRETCHSCL_BBA        (*(volatile unsigned long *) 0x42068518)
-#define I2C1SCON_STRETCHSCL_MSK        (0x1   << 6  )
-#define I2C1SCON_STRETCHSCL            (0x1   << 6  )
-#define I2C1SCON_STRETCHSCL_DIS        (0x0   << 6  )
-#define I2C1SCON_STRETCHSCL_EN         (0x1   << 6  )
-
-/* I2C1SCON[EARLYTXR] - Early transmit request mode */
-#define I2C1SCON_EARLYTXR_BBA          (*(volatile unsigned long *) 0x42068514)
-#define I2C1SCON_EARLYTXR_MSK          (0x1   << 5  )
-#define I2C1SCON_EARLYTXR              (0x1   << 5  )
-#define I2C1SCON_EARLYTXR_DIS          (0x0   << 5  )
-#define I2C1SCON_EARLYTXR_EN           (0x1   << 5  )
-
-/* I2C1SCON[GCSBCLR] - General call status bit clear */
-#define I2C1SCON_GCSBCLR_BBA           (*(volatile unsigned long *) 0x42068510)
-#define I2C1SCON_GCSBCLR_MSK           (0x1   << 4  )
-#define I2C1SCON_GCSBCLR               (0x1   << 4  )
-#define I2C1SCON_GCSBCLR_DIS           (0x0   << 4  )
-#define I2C1SCON_GCSBCLR_EN            (0x1   << 4  )
-
-/* I2C1SCON[HGCEN] - Hardware general call enable */
-#define I2C1SCON_HGCEN_BBA             (*(volatile unsigned long *) 0x4206850C)
-#define I2C1SCON_HGCEN_MSK             (0x1   << 3  )
-#define I2C1SCON_HGCEN                 (0x1   << 3  )
-#define I2C1SCON_HGCEN_DIS             (0x0   << 3  )
-#define I2C1SCON_HGCEN_EN              (0x1   << 3  )
-
-/* I2C1SCON[GCEN] - General call enable */
-#define I2C1SCON_GCEN_BBA              (*(volatile unsigned long *) 0x42068508)
-#define I2C1SCON_GCEN_MSK              (0x1   << 2  )
-#define I2C1SCON_GCEN                  (0x1   << 2  )
-#define I2C1SCON_GCEN_DIS              (0x0   << 2  )
-#define I2C1SCON_GCEN_EN               (0x1   << 2  )
-
-/* I2C1SCON[ADR10EN] - Enabled 10-bit addressing */
-#define I2C1SCON_ADR10EN_BBA           (*(volatile unsigned long *) 0x42068504)
-#define I2C1SCON_ADR10EN_MSK           (0x1   << 1  )
-#define I2C1SCON_ADR10EN               (0x1   << 1  )
-#define I2C1SCON_ADR10EN_DIS           (0x0   << 1  )
-#define I2C1SCON_ADR10EN_EN            (0x1   << 1  )
-
-/* I2C1SCON[SLVEN] - Slave enable */
-#define I2C1SCON_SLVEN_BBA             (*(volatile unsigned long *) 0x42068500)
-#define I2C1SCON_SLVEN_MSK             (0x1   << 0  )
-#define I2C1SCON_SLVEN                 (0x1   << 0  )
-#define I2C1SCON_SLVEN_DIS             (0x0   << 0  )
-#define I2C1SCON_SLVEN_EN              (0x1   << 0  )
-
-/* Reset Value for I2C1SSTA*/
-#define I2C1SSTA_RVAL                  0x1 
-
-/* I2C1SSTA[START] - Start and matching address */
-#define I2C1SSTA_START_BBA             (*(volatile unsigned long *) 0x420685B8)
-#define I2C1SSTA_START_MSK             (0x1   << 14 )
-#define I2C1SSTA_START                 (0x1   << 14 )
-#define I2C1SSTA_START_CLR             (0x0   << 14 )
-#define I2C1SSTA_START_SET             (0x1   << 14 )
-
-/* I2C1SSTA[REPSTART] - Repeated start and matching address */
-#define I2C1SSTA_REPSTART_BBA          (*(volatile unsigned long *) 0x420685B4)
-#define I2C1SSTA_REPSTART_MSK          (0x1   << 13 )
-#define I2C1SSTA_REPSTART              (0x1   << 13 )
-#define I2C1SSTA_REPSTART_CLR          (0x0   << 13 )
-#define I2C1SSTA_REPSTART_SET          (0x1   << 13 )
-
-/* I2C1SSTA[IDMAT] - Device ID matched */
-#define I2C1SSTA_IDMAT_MSK             (0x3   << 11 )
-
-/* I2C1SSTA[STOP] - Stop after start and matching address */
-#define I2C1SSTA_STOP_BBA              (*(volatile unsigned long *) 0x420685A8)
-#define I2C1SSTA_STOP_MSK              (0x1   << 10 )
-#define I2C1SSTA_STOP                  (0x1   << 10 )
-#define I2C1SSTA_STOP_CLR              (0x0   << 10 )
-#define I2C1SSTA_STOP_SET              (0x1   << 10 )
-
-/* I2C1SSTA[GCID] - General ID */
-#define I2C1SSTA_GCID_MSK              (0x3   << 8  )
-
-/* I2C1SSTA[GCINT] - General call interrupt */
-#define I2C1SSTA_GCINT_BBA             (*(volatile unsigned long *) 0x4206859C)
-#define I2C1SSTA_GCINT_MSK             (0x1   << 7  )
-#define I2C1SSTA_GCINT                 (0x1   << 7  )
-#define I2C1SSTA_GCINT_CLR             (0x0   << 7  )
-#define I2C1SSTA_GCINT_SET             (0x1   << 7  )
-
-/* I2C1SSTA[SBUSY] - Slave busy */
-#define I2C1SSTA_SBUSY_BBA             (*(volatile unsigned long *) 0x42068598)
-#define I2C1SSTA_SBUSY_MSK             (0x1   << 6  )
-#define I2C1SSTA_SBUSY                 (0x1   << 6  )
-#define I2C1SSTA_SBUSY_CLR             (0x0   << 6  )
-#define I2C1SSTA_SBUSY_SET             (0x1   << 6  )
-
-/* I2C1SSTA[NOACK] - Ack not generated by the slave */
-#define I2C1SSTA_NOACK_BBA             (*(volatile unsigned long *) 0x42068594)
-#define I2C1SSTA_NOACK_MSK             (0x1   << 5  )
-#define I2C1SSTA_NOACK                 (0x1   << 5  )
-#define I2C1SSTA_NOACK_CLR             (0x0   << 5  )
-#define I2C1SSTA_NOACK_SET             (0x1   << 5  )
-
-/* I2C1SSTA[SRXOF] - Slave Receive FIFO overflow */
-#define I2C1SSTA_SRXOF_BBA             (*(volatile unsigned long *) 0x42068590)
-#define I2C1SSTA_SRXOF_MSK             (0x1   << 4  )
-#define I2C1SSTA_SRXOF                 (0x1   << 4  )
-#define I2C1SSTA_SRXOF_CLR             (0x0   << 4  )
-#define I2C1SSTA_SRXOF_SET             (0x1   << 4  )
-
-/* I2C1SSTA[SRXREQ] - Slave Receive request */
-#define I2C1SSTA_SRXREQ_BBA            (*(volatile unsigned long *) 0x4206858C)
-#define I2C1SSTA_SRXREQ_MSK            (0x1   << 3  )
-#define I2C1SSTA_SRXREQ                (0x1   << 3  )
-#define I2C1SSTA_SRXREQ_CLR            (0x0   << 3  )
-#define I2C1SSTA_SRXREQ_SET            (0x1   << 3  )
-
-/* I2C1SSTA[STXREQ] - Slave Transmit request */
-#define I2C1SSTA_STXREQ_BBA            (*(volatile unsigned long *) 0x42068588)
-#define I2C1SSTA_STXREQ_MSK            (0x1   << 2  )
-#define I2C1SSTA_STXREQ                (0x1   << 2  )
-#define I2C1SSTA_STXREQ_CLR            (0x0   << 2  )
-#define I2C1SSTA_STXREQ_SET            (0x1   << 2  )
-
-/* I2C1SSTA[STXUR] - Slave Transmit FIFO underflow */
-#define I2C1SSTA_STXUR_BBA             (*(volatile unsigned long *) 0x42068584)
-#define I2C1SSTA_STXUR_MSK             (0x1   << 1  )
-#define I2C1SSTA_STXUR                 (0x1   << 1  )
-#define I2C1SSTA_STXUR_CLR             (0x0   << 1  )
-#define I2C1SSTA_STXUR_SET             (0x1   << 1  )
-
-/* I2C1SSTA[STXFSEREQ] - Slave Tx FIFO Status or early request */
-#define I2C1SSTA_STXFSEREQ_BBA         (*(volatile unsigned long *) 0x42068580)
-#define I2C1SSTA_STXFSEREQ_MSK         (0x1   << 0  )
-#define I2C1SSTA_STXFSEREQ             (0x1   << 0  )
-#define I2C1SSTA_STXFSEREQ_CLR         (0x0   << 0  )
-#define I2C1SSTA_STXFSEREQ_SET         (0x1   << 0  )
-
-/* Reset Value for I2C1SRX*/
-#define I2C1SRX_RVAL                   0x0 
-
-/* I2C1SRX[I2CSRX] - Slave receive register */
-#define I2C1SRX_I2CSRX_MSK             (0xFF  << 0  )
-
-/* Reset Value for I2C1STX*/
-#define I2C1STX_RVAL                   0x0 
-
-/* I2C1STX[I2CSTX] - Slave transmit register */
-#define I2C1STX_I2CSTX_MSK             (0xFF  << 0  )
-
-/* Reset Value for I2C1ALT*/
-#define I2C1ALT_RVAL                   0x0 
-
-/* I2C1ALT[ALT] - Slave Alt */
-#define I2C1ALT_ALT_MSK                (0xFF  << 0  )
-
-/* Reset Value for I2C1ID0*/
-#define I2C1ID0_RVAL                   0x0 
-
-/* I2C1ID0[ID0] - Slave device ID 0 */
-#define I2C1ID0_ID0_MSK                (0xFF  << 0  )
-
-/* Reset Value for I2C1ID1*/
-#define I2C1ID1_RVAL                   0x0 
-
-/* I2C1ID1[ID1] - Slave device ID 1 */
-#define I2C1ID1_ID1_MSK                (0xFF  << 0  )
-
-/* Reset Value for I2C1ID2*/
-#define I2C1ID2_RVAL                   0x0 
-
-/* I2C1ID2[ID2] - Slave device ID 2 */
-#define I2C1ID2_ID2_MSK                (0xFF  << 0  )
-
-/* Reset Value for I2C1ID3*/
-#define I2C1ID3_RVAL                   0x0 
-
-/* I2C1ID3[ID3] - Slave device ID 3 */
-#define I2C1ID3_ID3_MSK                (0xFF  << 0  )
-
-/* Reset Value for I2C1FSTA*/
-#define I2C1FSTA_RVAL                  0x0 
-
-/* I2C1FSTA[MFLUSH] - Flush the master transmit FIFO */
-#define I2C1FSTA_MFLUSH_BBA            (*(volatile unsigned long *) 0x420689A4)
-#define I2C1FSTA_MFLUSH_MSK            (0x1   << 9  )
-#define I2C1FSTA_MFLUSH                (0x1   << 9  )
-#define I2C1FSTA_MFLUSH_DIS            (0x0   << 9  ) /* Clearing to 0 has no effect. */
-#define I2C1FSTA_MFLUSH_EN             (0x1   << 9  ) /* Set to 1 to flush the master transmit FIFO. The master transmit FIFO will have to flushed if arbitration is lost or a slave responds with a NACK. */
-
-/* I2C1FSTA[SFLUSH] - Flush the slave transmit FIFO */
-#define I2C1FSTA_SFLUSH_BBA            (*(volatile unsigned long *) 0x420689A0)
-#define I2C1FSTA_SFLUSH_MSK            (0x1   << 8  )
-#define I2C1FSTA_SFLUSH                (0x1   << 8  )
-#define I2C1FSTA_SFLUSH_DIS            (0x0   << 8  ) /* Clearing to 0 has no effect. */
-#define I2C1FSTA_SFLUSH_EN             (0x1   << 8  ) /* Set to 1 to flush the slave transmit FIFO. */
-
-/* I2C1FSTA[MRXFSTA] - Master receive FIFO status */
-#define I2C1FSTA_MRXFSTA_MSK           (0x3   << 6  )
-#define I2C1FSTA_MRXFSTA_EMPTY         (0x0   << 6  ) /* FIFO empty               */
-#define I2C1FSTA_MRXFSTA_ONEBYTE       (0x1   << 6  ) /* 1 bytes in the FIFO      */
-#define I2C1FSTA_MRXFSTA_TWOBYTES      (0x2   << 6  ) /* 2 bytes in the FIFO      */
-
-/* I2C1FSTA[MTXFSTA] - Master transmit FIFO status */
-#define I2C1FSTA_MTXFSTA_MSK           (0x3   << 4  )
-#define I2C1FSTA_MTXFSTA_EMPTY         (0x0   << 4  ) /* FIFO empty               */
-#define I2C1FSTA_MTXFSTA_ONEBYTE       (0x1   << 4  ) /* 1 bytes in the FIFO      */
-#define I2C1FSTA_MTXFSTA_TWOBYTES      (0x2   << 4  ) /* 2 bytes in the FIFO      */
-
-/* I2C1FSTA[SRXFSTA] - Slave receive FIFO status */
-#define I2C1FSTA_SRXFSTA_MSK           (0x3   << 2  )
-#define I2C1FSTA_SRXFSTA_EMPTY         (0x0   << 2  ) /* FIFO empty               */
-#define I2C1FSTA_SRXFSTA_ONEBYTE       (0x1   << 2  ) /* 1 bytes in the FIFO      */
-#define I2C1FSTA_SRXFSTA_TWOBYTES      (0x2   << 2  ) /* 2 bytes in the FIFO      */
-
-/* I2C1FSTA[STXFSTA] - Slave transmit FIFO status */
-#define I2C1FSTA_STXFSTA_MSK           (0x3   << 0  )
-#define I2C1FSTA_STXFSTA_EMPTY         (0x0   << 0  ) /* FIFO empty               */
-#define I2C1FSTA_STXFSTA_ONEBYTE       (0x1   << 0  ) /* 1 bytes in the FIFO      */
-#define I2C1FSTA_STXFSTA_TWOBYTES      (0x2   << 0  ) /* 2 bytes in the FIFO      */
-
-/* Reset Value for I2C1SHCON*/
-#define I2C1SHCON_RVAL                 0x0 
-
-/* I2C1SHCON[RESET] - Reset START STOP detect circuit */
-#define I2C1SHCON_RESET_BBA            (*(volatile unsigned long *) 0x42068A00)
-#define I2C1SHCON_RESET_MSK            (0x1   << 0  )
-#define I2C1SHCON_RESET                (0x1   << 0  )
-#define I2C1SHCON_RESET_DIS            (0x0   << 0  )
-#define I2C1SHCON_RESET_EN             (0x1   << 0  )
+/* I2CMCON[PRESTOP_BUS_CLR] - Prestop Bus-Clear */
+#define I2CMCON_PRESTOP_BUS_CLR_Pos    (13U)
+#define I2CMCON_PRESTOP_BUS_CLR_Msk    (0x1U << I2CMCON_PRESTOP_BUS_CLR_Pos)
+#define I2CMCON_PRESTOP_BUS_CLR                 I2CMCON_PRESTOP_BUS_CLR_Msk
+
+/* I2CMCON[BUS_CLR_EN] - Bus-Clear Enable */
+#define I2CMCON_BUS_CLR_EN_Pos         (12U)
+#define I2CMCON_BUS_CLR_EN_Msk         (0x1U << I2CMCON_BUS_CLR_EN_Pos)
+#define I2CMCON_BUS_CLR_EN                      I2CMCON_BUS_CLR_EN_Msk
+
+/* I2CMCON[MTXDMA] - Enable master Tx DMA request */
+#define I2CMCON_MTXDMA_Pos             (11U)
+#define I2CMCON_MTXDMA_Msk             (0x1U << I2CMCON_MTXDMA_Pos)
+#define I2CMCON_MTXDMA                          I2CMCON_MTXDMA_Msk
+
+/* I2CMCON[MRXDMA] - Enable master Rx DMA request */
+#define I2CMCON_MRXDMA_Pos             (10U)
+#define I2CMCON_MRXDMA_Msk             (0x1U << I2CMCON_MRXDMA_Pos)
+#define I2CMCON_MRXDMA                          I2CMCON_MRXDMA_Msk
+
+/* I2CMCON[MXMITDEC] - Decrement master TX FIFO status when a byte has been transmitted */
+#define I2CMCON_MXMITDEC_Pos           (9U)
+#define I2CMCON_MXMITDEC_Msk           (0x1U << I2CMCON_MXMITDEC_Pos)
+#define I2CMCON_MXMITDEC                        I2CMCON_MXMITDEC_Msk
+
+/* I2CMCON[IENCMP] - Transaction completed (or stop detected) interrupt enable */
+#define I2CMCON_IENCMP_Pos             (8U)
+#define I2CMCON_IENCMP_Msk             (0x1U << I2CMCON_IENCMP_Pos)
+#define I2CMCON_IENCMP                          I2CMCON_IENCMP_Msk
+
+/* I2CMCON[IENACK] - ACK not received interrupt enable */
+#define I2CMCON_IENACK_Pos             (7U)
+#define I2CMCON_IENACK_Msk             (0x1U << I2CMCON_IENACK_Pos)
+#define I2CMCON_IENACK                          I2CMCON_IENACK_Msk
+
+/* I2CMCON[IENALOST] - Arbitration lost interrupt enable */
+#define I2CMCON_IENALOST_Pos           (6U)
+#define I2CMCON_IENALOST_Msk           (0x1U << I2CMCON_IENALOST_Pos)
+#define I2CMCON_IENALOST                        I2CMCON_IENALOST_Msk
+
+/* I2CMCON[IENMTX] - Transmit request interrupt enable */
+#define I2CMCON_IENMTX_Pos             (5U)
+#define I2CMCON_IENMTX_Msk             (0x1U << I2CMCON_IENMTX_Pos)
+#define I2CMCON_IENMTX                          I2CMCON_IENMTX_Msk
+
+/* I2CMCON[IENMRX] - Receive request interrupt enable */
+#define I2CMCON_IENMRX_Pos             (4U)
+#define I2CMCON_IENMRX_Msk             (0x1U << I2CMCON_IENMRX_Pos)
+#define I2CMCON_IENMRX                          I2CMCON_IENMRX_Msk
+
+/* I2CMCON[STRETCH] - Stretch SCL enable */
+#define I2CMCON_STRETCH_Pos            (3U)
+#define I2CMCON_STRETCH_Msk            (0x1U << I2CMCON_STRETCH_Pos)
+#define I2CMCON_STRETCH                         I2CMCON_STRETCH_Msk
+
+/* I2CMCON[LOOPBACK] - Internal loopback enable */
+#define I2CMCON_LOOPBACK_Pos           (2U)
+#define I2CMCON_LOOPBACK_Msk           (0x1U << I2CMCON_LOOPBACK_Pos)
+#define I2CMCON_LOOPBACK                        I2CMCON_LOOPBACK_Msk
+
+/* I2CMCON[COMPETE] - Start back-off disable */
+#define I2CMCON_COMPETE_Pos            (1U)
+#define I2CMCON_COMPETE_Msk            (0x1U << I2CMCON_COMPETE_Pos)
+#define I2CMCON_COMPETE                         I2CMCON_COMPETE_Msk
+
+/* I2CMCON[MASEN] - Master enable */
+#define I2CMCON_MASEN_Pos              (0U)
+#define I2CMCON_MASEN_Msk              (0x1U << I2CMCON_MASEN_Pos)
+#define I2CMCON_MASEN                           I2CMCON_MASEN_Msk
+
+/* I2CMSTA[SCL_FILTERED] - State of SCL Line */
+#define I2CMSTA_SCL_FILTERED_Msk       (0x1   << 14 )
+#define I2CMSTA_SCL_FILTERED           (0x1   << 14 )
+#define I2CMSTA_SCL_FILTERED_CLR       (0x0   << 14 )
+#define I2CMSTA_SCL_FILTERED_SET       (0x1   << 14 )
+
+/* I2CMSTA[SDA_FILTERED] - State of SDA Line */
+#define I2CMSTA_SDA_FILTERED_Msk       (0x1   << 13 )
+#define I2CMSTA_SDA_FILTERED           (0x1   << 13 )
+#define I2CMSTA_SDA_FILTERED_CLR       (0x0   << 13 )
+#define I2CMSTA_SDA_FILTERED_SET       (0x1   << 13 )
+
+/* I2CMSTA[MTXUFLOW] - Master Transmit Underflow */
+#define I2CMSTA_MTXUFLOW_Msk           (0x1   << 12 )
+#define I2CMSTA_MTXUFLOW               (0x1   << 12 )
+#define I2CMSTA_MTXUFLOW_CLR           (0x0   << 12 )
+#define I2CMSTA_MTXUFLOW_SET           (0x1   << 12 )
+
+/* I2CMSTA[MSTOP] - STOP driven by this I2C Master */
+#define I2CMSTA_MSTOP_Msk              (0x1   << 11 )
+#define I2CMSTA_MSTOP                  (0x1   << 11 )
+#define I2CMSTA_MSTOP_CLR              (0x0   << 11 )
+#define I2CMSTA_MSTOP_SET              (0x1   << 11 )
+
+/* I2CMSTA[LINEBUSY] - Line is busy */
+#define I2CMSTA_LINEBUSY_Msk           (0x1   << 10 )
+#define I2CMSTA_LINEBUSY               (0x1   << 10 )
+#define I2CMSTA_LINEBUSY_CLR           (0x0   << 10 )
+#define I2CMSTA_LINEBUSY_SET           (0x1   << 10 )
+
+/* I2CMSTA[MRXOF] - Master Receive FIFO overflow */
+#define I2CMSTA_MRXOF_Msk              (0x1   << 9  )
+#define I2CMSTA_MRXOF                  (0x1   << 9  )
+#define I2CMSTA_MRXOF_CLR              (0x0   << 9  )
+#define I2CMSTA_MRXOF_SET              (0x1   << 9  )
+
+/* I2CMSTA[TCOMP] - Transaction complete or stop detected */
+#define I2CMSTA_TCOMP_Msk              (0x1   << 8  )
+#define I2CMSTA_TCOMP                  (0x1   << 8  )
+#define I2CMSTA_TCOMP_CLR              (0x0   << 8  )
+#define I2CMSTA_TCOMP_SET              (0x1   << 8  )
+
+/* I2CMSTA[NACKDATA] - ACK not received in response to data write */
+#define I2CMSTA_NACKDATA_Msk           (0x1   << 7  )
+#define I2CMSTA_NACKDATA               (0x1   << 7  )
+#define I2CMSTA_NACKDATA_CLR           (0x0   << 7  )
+#define I2CMSTA_NACKDATA_SET           (0x1   << 7  )
+
+/* I2CMSTA[MBUSY] - Master busy */
+#define I2CMSTA_MBUSY_Msk              (0x1   << 6  )
+#define I2CMSTA_MBUSY                  (0x1   << 6  )
+#define I2CMSTA_MBUSY_CLR              (0x0   << 6  )
+#define I2CMSTA_MBUSY_SET              (0x1   << 6  )
+
+/* I2CMSTA[ALOST] - Arbitration lost */
+#define I2CMSTA_ALOST_Msk              (0x1   << 5  )
+#define I2CMSTA_ALOST                  (0x1   << 5  )
+#define I2CMSTA_ALOST_CLR              (0x0   << 5  )
+#define I2CMSTA_ALOST_SET              (0x1   << 5  )
+
+/* I2CMSTA[NACKADDR] - ACK not received in response to an address */
+#define I2CMSTA_NACKADDR_Msk           (0x1   << 4  )
+#define I2CMSTA_NACKADDR               (0x1   << 4  )
+#define I2CMSTA_NACKADDR_CLR           (0x0   << 4  )
+#define I2CMSTA_NACKADDR_SET           (0x1   << 4  )
+
+/* I2CMSTA[MRXREQ] - Master Receive request */
+#define I2CMSTA_MRXREQ_Msk             (0x1   << 3  )
+#define I2CMSTA_MRXREQ                 (0x1   << 3  )
+#define I2CMSTA_MRXREQ_CLR             (0x0   << 3  )
+#define I2CMSTA_MRXREQ_SET             (0x1   << 3  )
+
+/* I2CMSTA[MTXREQ] - Master Transmit request */
+#define I2CMSTA_MTXREQ_Msk             (0x1   << 2  )
+#define I2CMSTA_MTXREQ                 (0x1   << 2  )
+#define I2CMSTA_MTXREQ_CLR             (0x0   << 2  )
+#define I2CMSTA_MTXREQ_SET             (0x1   << 2  )
+
+/* I2CMSTA[MTXFSTA] - Master Transmit FIFO status */
+#define I2CMSTA_MTXFSTA_Msk            (0x3   << 0  )
+
+/* I2CMRX[ICMRX] - Master receive register */
+#define I2CMRX_ICMRX_Msk               (0xFF  << 0  )
+
+/* I2CMTX[I2CMTX] - Master transmit register */
+#define I2CMTX_I2CMTX_Msk              (0xFF  << 0  )
+
+/* I2CMRXCNT[EXTEND] - Extended read */
+#define I2CMRXCNT_EXTEND_Msk           (0x1   << 8  )
+#define I2CMRXCNT_EXTEND               (0x1   << 8  )
+#define I2CMRXCNT_EXTEND_DIS           (0x0   << 8  )
+#define I2CMRXCNT_EXTEND_EN            (0x1   << 8  )
+
+/* I2CMRXCNT[COUNT] - Receive count */
+#define I2CMRXCNT_COUNT_Msk            (0xFF  << 0  )
+
+/* I2CMCRXCNT[COUNT] - Current receive count */
+#define I2CMCRXCNT_COUNT_Msk           (0xFF  << 0  )
+
+/* I2CADR0[ADR0] - Address byte 0 */
+#define I2CADR0_ADR0_Msk               (0xFF  << 0  )
+
+/* I2CADR1[ADR1] - Address byte 1 */
+#define I2CADR1_ADR1_Msk               (0xFF  << 0  )
+
+/* I2CDIV[HIGH] - Serial clock high time */
+#define I2CDIV_HIGH_Msk                (0xFF  << 8  )
+
+/* I2CDIV[LOW] - Serial clock low time */
+#define I2CDIV_LOW_Msk                 (0xFF  << 0  )
+
+/* I2CSCON[STXDMA] - Enable slave Tx DMA request */
+#define I2CSCON_STXDMA_Msk             (0x1   << 14 )
+#define I2CSCON_STXDMA                 (0x1   << 14 )
+#define I2CSCON_STXDMA_DIS             (0x0   << 14 )
+#define I2CSCON_STXDMA_EN              (0x1   << 14 )
+
+/* I2CSCON[SRXDMA] - Enable slave Rx DMA request */
+#define I2CSCON_SRXDMA_Msk             (0x1   << 13 )
+#define I2CSCON_SRXDMA                 (0x1   << 13 )
+#define I2CSCON_SRXDMA_DIS             (0x0   << 13 )
+#define I2CSCON_SRXDMA_EN              (0x1   << 13 )
+
+/* I2CSCON[IENREPST] - Repeated start interrupt enable */
+#define I2CSCON_IENREPST_Msk           (0x1   << 12 )
+#define I2CSCON_IENREPST               (0x1   << 12 )
+#define I2CSCON_IENREPST_DIS           (0x0   << 12 )
+#define I2CSCON_IENREPST_EN            (0x1   << 12 )
+
+/* I2CSCON[SXMITDEC] - Decrement Slave Tx FIFO status when a byte has been transmitted */
+#define I2CSCON_SXMITDEC_Msk           (0x1   << 11 )
+#define I2CSCON_SXMITDEC               (0x1   << 11 )
+#define I2CSCON_SXMITDEC_DIS           (0x0   << 11 )
+#define I2CSCON_SXMITDEC_EN            (0x1   << 11 )
+
+/* I2CSCON[IENSTX] - Slave Transmit request interrupt enable */
+#define I2CSCON_IENSTX_Msk             (0x1   << 10 )
+#define I2CSCON_IENSTX                 (0x1   << 10 )
+#define I2CSCON_IENSTX_DIS             (0x0   << 10 )
+#define I2CSCON_IENSTX_EN              (0x1   << 10 )
+
+/* I2CSCON[IENSRX] - Slave Receive request interrupt enable */
+#define I2CSCON_IENSRX_Msk             (0x1   << 9  )
+#define I2CSCON_IENSRX                 (0x1   << 9  )
+#define I2CSCON_IENSRX_DIS             (0x0   << 9  )
+#define I2CSCON_IENSRX_EN              (0x1   << 9  )
+
+/* I2CSCON[IENSTOP] - Stop condition detected interrupt enable */
+#define I2CSCON_IENSTOP_Msk            (0x1   << 8  )
+#define I2CSCON_IENSTOP                (0x1   << 8  )
+#define I2CSCON_IENSTOP_DIS            (0x0   << 8  )
+#define I2CSCON_IENSTOP_EN             (0x1   << 8  )
+
+/* I2CSCON[NACK] - NACK next communication */
+#define I2CSCON_NACK_Msk               (0x1   << 7  )
+#define I2CSCON_NACK                   (0x1   << 7  )
+#define I2CSCON_NACK_DIS               (0x0   << 7  )
+#define I2CSCON_NACK_EN                (0x1   << 7  )
+
+/* I2CSCON[STRETCHSCL] - Stretch SCL enable */
+#define I2CSCON_STRETCHSCL_Msk         (0x1   << 6  )
+#define I2CSCON_STRETCHSCL             (0x1   << 6  )
+#define I2CSCON_STRETCHSCL_DIS         (0x0   << 6  )
+#define I2CSCON_STRETCHSCL_EN          (0x1   << 6  )
+
+/* I2CSCON[EARLYTXR] - Early transmit request mode */
+#define I2CSCON_EARLYTXR_Msk           (0x1   << 5  )
+#define I2CSCON_EARLYTXR               (0x1   << 5  )
+#define I2CSCON_EARLYTXR_DIS           (0x0   << 5  )
+#define I2CSCON_EARLYTXR_EN            (0x1   << 5  )
+
+/* I2CSCON[GCSBCLR] - General call status bit clear */
+#define I2CSCON_GCSBCLR_Msk            (0x1   << 4  )
+#define I2CSCON_GCSBCLR                (0x1   << 4  )
+#define I2CSCON_GCSBCLR_DIS            (0x0   << 4  )
+#define I2CSCON_GCSBCLR_EN             (0x1   << 4  )
+
+/* I2CSCON[HGCEN] - Hardware general call enable */
+#define I2CSCON_HGCEN_Msk              (0x1   << 3  )
+#define I2CSCON_HGCEN                  (0x1   << 3  )
+#define I2CSCON_HGCEN_DIS              (0x0   << 3  )
+#define I2CSCON_HGCEN_EN               (0x1   << 3  )
+
+/* I2CSCON[GCEN] - General call enable */
+#define I2CSCON_GCEN_Msk               (0x1   << 2  )
+#define I2CSCON_GCEN                   (0x1   << 2  )
+#define I2CSCON_GCEN_DIS               (0x0   << 2  )
+#define I2CSCON_GCEN_EN                (0x1   << 2  )
+
+/* I2CSCON[ADR10EN] - Enabled 10-bit addressing */
+#define I2CSCON_ADR10EN_Msk            (0x1   << 1  )
+#define I2CSCON_ADR10EN                (0x1   << 1  )
+#define I2CSCON_ADR10EN_DIS            (0x0   << 1  )
+#define I2CSCON_ADR10EN_EN             (0x1   << 1  )
+
+/* I2CSCON[SLVEN] - Slave enable */
+#define I2CSCON_SLVEN_Msk              (0x1   << 0  )
+#define I2CSCON_SLVEN                  (0x1   << 0  )
+#define I2CSCON_SLVEN_DIS              (0x0   << 0  )
+#define I2CSCON_SLVEN_EN               (0x1   << 0  )
+
+/* I2CSSTA[START] - Start and matching address */
+#define I2CSSTA_START_Msk              (0x1   << 14 )
+#define I2CSSTA_START                  (0x1   << 14 )
+#define I2CSSTA_START_CLR              (0x0   << 14 )
+#define I2CSSTA_START_SET              (0x1   << 14 )
+
+/* I2CSSTA[REPSTART] - Repeated start and matching address */
+#define I2CSSTA_REPSTART_Msk           (0x1   << 13 )
+#define I2CSSTA_REPSTART               (0x1   << 13 )
+#define I2CSSTA_REPSTART_CLR           (0x0   << 13 )
+#define I2CSSTA_REPSTART_SET           (0x1   << 13 )
+
+/* I2CSSTA[IDMAT] - Device ID matched */
+#define I2CSSTA_IDMAT_Msk              (0x3   << 11 )
+
+/* I2CSSTA[STOP] - Stop after start and matching address */
+#define I2CSSTA_STOP_Msk               (0x1   << 10 )
+#define I2CSSTA_STOP                   (0x1   << 10 )
+#define I2CSSTA_STOP_CLR               (0x0   << 10 )
+#define I2CSSTA_STOP_SET               (0x1   << 10 )
+
+/* I2CSSTA[GCID] - General ID */
+#define I2CSSTA_GCID_Msk               (0x3   << 8  )
+
+/* I2CSSTA[GCINT] - General call interrupt */
+#define I2CSSTA_GCINT_Msk              (0x1   << 7  )
+#define I2CSSTA_GCINT                  (0x1   << 7  )
+#define I2CSSTA_GCINT_CLR              (0x0   << 7  )
+#define I2CSSTA_GCINT_SET              (0x1   << 7  )
+
+/* I2CSSTA[SBUSY] - Slave busy */
+#define I2CSSTA_SBUSY_Msk              (0x1   << 6  )
+#define I2CSSTA_SBUSY                  (0x1   << 6  )
+#define I2CSSTA_SBUSY_CLR              (0x0   << 6  )
+#define I2CSSTA_SBUSY_SET              (0x1   << 6  )
+
+/* I2CSSTA[NOACK] - Ack not generated by the slave */
+#define I2CSSTA_NOACK_Msk              (0x1   << 5  )
+#define I2CSSTA_NOACK                  (0x1   << 5  )
+#define I2CSSTA_NOACK_CLR              (0x0   << 5  )
+#define I2CSSTA_NOACK_SET              (0x1   << 5  )
+
+/* I2CSSTA[SRXOF] - Slave Receive FIFO overflow */
+#define I2CSSTA_SRXOF_Msk              (0x1   << 4  )
+#define I2CSSTA_SRXOF                  (0x1   << 4  )
+#define I2CSSTA_SRXOF_CLR              (0x0   << 4  )
+#define I2CSSTA_SRXOF_SET              (0x1   << 4  )
+
+/* I2CSSTA[SRXREQ] - Slave Receive request */
+#define I2CSSTA_SRXREQ_Msk             (0x1   << 3  )
+#define I2CSSTA_SRXREQ                 (0x1   << 3  )
+#define I2CSSTA_SRXREQ_CLR             (0x0   << 3  )
+#define I2CSSTA_SRXREQ_SET             (0x1   << 3  )
+
+/* I2CSSTA[STXREQ] - Slave Transmit request */
+#define I2CSSTA_STXREQ_Msk             (0x1   << 2  )
+#define I2CSSTA_STXREQ                 (0x1   << 2  )
+#define I2CSSTA_STXREQ_CLR             (0x0   << 2  )
+#define I2CSSTA_STXREQ_SET             (0x1   << 2  )
+
+/* I2CSSTA[STXUR] - Slave Transmit FIFO underflow */
+#define I2CSSTA_STXUR_Msk              (0x1   << 1  )
+#define I2CSSTA_STXUR                  (0x1   << 1  )
+#define I2CSSTA_STXUR_CLR              (0x0   << 1  )
+#define I2CSSTA_STXUR_SET              (0x1   << 1  )
+
+/* I2CSSTA[STXFSEREQ] - Slave Tx FIFO Status or early request */
+#define I2CSSTA_STXFSEREQ_Msk          (0x1   << 0  )
+#define I2CSSTA_STXFSEREQ              (0x1   << 0  )
+#define I2CSSTA_STXFSEREQ_CLR          (0x0   << 0  )
+#define I2CSSTA_STXFSEREQ_SET          (0x1   << 0  )
+
+/* I2CSRX[I2CSRX] - Slave receive register */
+#define I2CSRX_I2CSRX_Msk              (0xFF  << 0  )
+
+/* I2CSTX[I2CSTX] - Slave transmit register */
+#define I2CSTX_I2CSTX_Msk              (0xFF  << 0  )
+
+/* I2CALT[ALT] - Slave Alt */
+#define I2CALT_ALT_Msk                 (0xFF  << 0  )
+
+/* I2CID0[ID0] - Slave device ID 0 */
+#define I2CID0_ID0_Msk                 (0xFF  << 0  )
+
+/* I2CID1[ID1] - Slave device ID 1 */
+#define I2CID1_ID1_Msk                 (0xFF  << 0  )
+
+/* I2CID2[ID2] - Slave device ID 2 */
+#define I2CID2_ID2_Msk                 (0xFF  << 0  )
+
+/* I2CID3[ID3] - Slave device ID 3 */
+#define I2CID3_ID3_Msk                 (0xFF  << 0  )
+
+/* I2CFSTA[MFLUSH] - Flush the master transmit FIFO */
+#define I2CFSTA_MFLUSH_Msk             (0x1   << 9  )
+#define I2CFSTA_MFLUSH                 (0x1   << 9  )
+#define I2CFSTA_MFLUSH_DIS             (0x0   << 9  ) /* Clearing to 0 has no effect. */
+#define I2CFSTA_MFLUSH_EN              (0x1   << 9  ) /* Set to 1 to flush the master transmit FIFO. The master transmit FIFO will have to flushed if arbitration is lost or a slave responds with a NACK. */
+
+/* I2CFSTA[SFLUSH] - Flush the slave transmit FIFO */
+#define I2CFSTA_SFLUSH_Msk             (0x1   << 8  )
+#define I2CFSTA_SFLUSH                 (0x1   << 8  )
+#define I2CFSTA_SFLUSH_DIS             (0x0   << 8  ) /* Clearing to 0 has no effect. */
+#define I2CFSTA_SFLUSH_EN              (0x1   << 8  ) /* Set to 1 to flush the slave transmit FIFO. */
+
+/* I2CFSTA[MRXFSTA] - Master receive FIFO status */
+#define I2CFSTA_MRXFSTA_Msk            (0x3   << 6  )
+#define I2CFSTA_MRXFSTA_EMPTY          (0x0   << 6  ) /* FIFO empty               */
+#define I2CFSTA_MRXFSTA_ONEBYTE        (0x1   << 6  ) /* 1 bytes in the FIFO      */
+#define I2CFSTA_MRXFSTA_TWOBYTES       (0x2   << 6  ) /* 2 bytes in the FIFO      */
+
+/* I2CFSTA[MTXFSTA] - Master transmit FIFO status */
+#define I2CFSTA_MTXFSTA_Msk            (0x3   << 4  )
+#define I2CFSTA_MTXFSTA_EMPTY          (0x0   << 4  ) /* FIFO empty               */
+#define I2CFSTA_MTXFSTA_ONEBYTE        (0x1   << 4  ) /* 1 bytes in the FIFO      */
+#define I2CFSTA_MTXFSTA_TWOBYTES       (0x2   << 4  ) /* 2 bytes in the FIFO      */
+
+/* I2CFSTA[SRXFSTA] - Slave receive FIFO status */
+#define I2CFSTA_SRXFSTA_Msk            (0x3   << 2  )
+#define I2CFSTA_SRXFSTA_EMPTY          (0x0   << 2  ) /* FIFO empty               */
+#define I2CFSTA_SRXFSTA_ONEBYTE        (0x1   << 2  ) /* 1 bytes in the FIFO      */
+#define I2CFSTA_SRXFSTA_TWOBYTES       (0x2   << 2  ) /* 2 bytes in the FIFO      */
+
+/* I2CFSTA[STXFSTA] - Slave transmit FIFO status */
+#define I2CFSTA_STXFSTA_Msk            (0x3   << 0  )
+#define I2CFSTA_STXFSTA_EMPTY          (0x0   << 0  ) /* FIFO empty               */
+#define I2CFSTA_STXFSTA_ONEBYTE        (0x1   << 0  ) /* 1 bytes in the FIFO      */
+#define I2CFSTA_STXFSTA_TWOBYTES       (0x2   << 0  ) /* 2 bytes in the FIFO      */
+
+/* I2CSHCON[RESET] - Reset START STOP detect circuit */
+#define I2CSHCON_RESET_Msk             (0x1   << 0  )
+#define I2CSHCON_RESET                 (0x1   << 0  )
+#define I2CSHCON_RESET_DIS             (0x0   << 0  )
+#define I2CSHCON_RESET_EN              (0x1   << 0  )
 
 #if defined(ADUCM320I) | defined(ADUCM322) | defined(ADUCM322I)
 
-/* Reset Value for I2C1ASSCL*/
-#define I2C1ASSCL_RVAL                 0x0 
+/* I2CASSCL[SSRTSTA] - stretch timeout for slave */
+#define I2CASSCL_SSRTSTA_Msk           (0x1   << 9  )
+#define I2CASSCL_SSRTSTA               (0x1   << 9  )
+#define I2CASSCL_SSRTSTA_DIS           (0x0   << 9  )
+#define I2CASSCL_SSRTSTA_EN            (0x1   << 9  )
 
-/* I2C1ASSCL[SSRTSTA] - stretch timeout for slave */
-#define I2C1ASSCL_SSRTSTA_BBA          (*(volatile unsigned long *) 0x42068B24)
-#define I2C1ASSCL_SSRTSTA_MSK          (0x1   << 9  )
-#define I2C1ASSCL_SSRTSTA              (0x1   << 9  )
-#define I2C1ASSCL_SSRTSTA_DIS          (0x0   << 9  )
-#define I2C1ASSCL_SSRTSTA_EN           (0x1   << 9  )
+/* I2CASSCL[MSRTSTA] - stretch timeout for master */
+#define I2CASSCL_MSRTSTA_Msk           (0x1   << 8  )
+#define I2CASSCL_MSRTSTA               (0x1   << 8  )
+#define I2CASSCL_MSRTSTA_DIS           (0x0   << 8  )
+#define I2CASSCL_MSRTSTA_EN            (0x1   << 8  )
 
-/* I2C1ASSCL[MSRTSTA] - stretch timeout for master */
-#define I2C1ASSCL_MSRTSTA_BBA          (*(volatile unsigned long *) 0x42068B20)
-#define I2C1ASSCL_MSRTSTA_MSK          (0x1   << 8  )
-#define I2C1ASSCL_MSRTSTA              (0x1   << 8  )
-#define I2C1ASSCL_MSRTSTA_DIS          (0x0   << 8  )
-#define I2C1ASSCL_MSRTSTA_EN           (0x1   << 8  )
+/* I2CASSCL[SSTRCON] - automatic stretch mode for slave */
+#define I2CASSCL_SSTRCON_Msk           (0xF   << 4  )
 
-/* I2C1ASSCL[SSTRCON] - automatic stretch mode for slave */
-#define I2C1ASSCL_SSTRCON_MSK          (0xF   << 4  )
-
-/* I2C1ASSCL[MSTRCON] - automatic stretch mode for master */
-#define I2C1ASSCL_MSTRCON_MSK          (0xF   << 0  )
+/* I2CASSCL[MSTRCON] - automatic stretch mode for master */
+#define I2CASSCL_MSTRCON_Msk           (0xF   << 0  )
 
 #endif
 
