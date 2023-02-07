@@ -1700,217 +1700,196 @@ typedef struct MMR_I2C {          /*!< MMR_I2C0 Structure                     */
 #define I2CMCON_MASEN                           I2CMCON_MASEN_Msk
 
 /* I2CMSTA[SCL_FILTERED] - State of SCL Line */
-#define I2CMSTA_SCL_FILTERED_Msk       (0x1   << 14 )
-#define I2CMSTA_SCL_FILTERED           (0x1   << 14 )
-#define I2CMSTA_SCL_FILTERED_CLR       (0x0   << 14 )
-#define I2CMSTA_SCL_FILTERED_SET       (0x1   << 14 )
+#define I2CMSTA_SCL_FILTERED_Pos       (14U)
+#define I2CMSTA_SCL_FILTERED_Msk       (0x1U << I2CMSTA_SCL_FILTERED_Pos)
+#define I2CMSTA_SCL_FILTERED                    I2CMSTA_SCL_FILTERED_Msk
 
 /* I2CMSTA[SDA_FILTERED] - State of SDA Line */
-#define I2CMSTA_SDA_FILTERED_Msk       (0x1   << 13 )
-#define I2CMSTA_SDA_FILTERED           (0x1   << 13 )
-#define I2CMSTA_SDA_FILTERED_CLR       (0x0   << 13 )
-#define I2CMSTA_SDA_FILTERED_SET       (0x1   << 13 )
+#define I2CMSTA_SDA_FILTERED_Pos       (13U)
+#define I2CMSTA_SDA_FILTERED_Msk       (0x1U << I2CMSTA_SDA_FILTERED_Pos)
+#define I2CMSTA_SDA_FILTERED                    I2CMSTA_SDA_FILTERED_Msk
 
 /* I2CMSTA[MTXUFLOW] - Master Transmit Underflow */
-#define I2CMSTA_MTXUFLOW_Msk           (0x1   << 12 )
-#define I2CMSTA_MTXUFLOW               (0x1   << 12 )
-#define I2CMSTA_MTXUFLOW_CLR           (0x0   << 12 )
-#define I2CMSTA_MTXUFLOW_SET           (0x1   << 12 )
+#define I2CMSTA_MTXUFLOW_Pos           (12U)
+#define I2CMSTA_MTXUFLOW_Msk           (0x1U << I2CMSTA_MTXUFLOW_Pos)
+#define I2CMSTA_MTXUFLOW                        I2CMSTA_MTXUFLOW_Msk
 
 /* I2CMSTA[MSTOP] - STOP driven by this I2C Master */
-#define I2CMSTA_MSTOP_Msk              (0x1   << 11 )
-#define I2CMSTA_MSTOP                  (0x1   << 11 )
-#define I2CMSTA_MSTOP_CLR              (0x0   << 11 )
-#define I2CMSTA_MSTOP_SET              (0x1   << 11 )
+#define I2CMSTA_MSTOP_Pos              (11U)
+#define I2CMSTA_MSTOP_Msk              (0x1U << I2CMSTA_MSTOP_Pos)
+#define I2CMSTA_MSTOP                           I2CMSTA_MSTOP_Msk
 
 /* I2CMSTA[LINEBUSY] - Line is busy */
-#define I2CMSTA_LINEBUSY_Msk           (0x1   << 10 )
-#define I2CMSTA_LINEBUSY               (0x1   << 10 )
-#define I2CMSTA_LINEBUSY_CLR           (0x0   << 10 )
-#define I2CMSTA_LINEBUSY_SET           (0x1   << 10 )
+#define I2CMSTA_LINEBUSY_Pos           (10U)
+#define I2CMSTA_LINEBUSY_Msk           (0x1U << I2CMSTA_LINEBUSY_Pos)
+#define I2CMSTA_LINEBUSY                        I2CMSTA_LINEBUSY_Msk
 
 /* I2CMSTA[MRXOF] - Master Receive FIFO overflow */
-#define I2CMSTA_MRXOF_Msk              (0x1   << 9  )
-#define I2CMSTA_MRXOF                  (0x1   << 9  )
-#define I2CMSTA_MRXOF_CLR              (0x0   << 9  )
-#define I2CMSTA_MRXOF_SET              (0x1   << 9  )
+#define I2CMSTA_MRXOF_Pos              (9U)
+#define I2CMSTA_MRXOF_Msk              (0x1U << I2CMSTA_MRXOF_Pos)
+#define I2CMSTA_MRXOF                           I2CMSTA_MRXOF_Msk
 
 /* I2CMSTA[TCOMP] - Transaction complete or stop detected */
-#define I2CMSTA_TCOMP_Msk              (0x1   << 8  )
-#define I2CMSTA_TCOMP                  (0x1   << 8  )
-#define I2CMSTA_TCOMP_CLR              (0x0   << 8  )
-#define I2CMSTA_TCOMP_SET              (0x1   << 8  )
+#define I2CMSTA_TCOMP_Pos              (8U)
+#define I2CMSTA_TCOMP_Msk              (0x1U << I2CMSTA_TCOMP_Pos)
+#define I2CMSTA_TCOMP                           I2CMSTA_TCOMP_Msk
 
 /* I2CMSTA[NACKDATA] - ACK not received in response to data write */
-#define I2CMSTA_NACKDATA_Msk           (0x1   << 7  )
-#define I2CMSTA_NACKDATA               (0x1   << 7  )
-#define I2CMSTA_NACKDATA_CLR           (0x0   << 7  )
-#define I2CMSTA_NACKDATA_SET           (0x1   << 7  )
+#define I2CMSTA_NACKDATA_Pos           (7U)
+#define I2CMSTA_NACKDATA_Msk           (0x1U << I2CMSTA_NACKDATA_Pos)
+#define I2CMSTA_NACKDATA                        I2CMSTA_NACKDATA_Msk
 
 /* I2CMSTA[MBUSY] - Master busy */
-#define I2CMSTA_MBUSY_Msk              (0x1   << 6  )
-#define I2CMSTA_MBUSY                  (0x1   << 6  )
-#define I2CMSTA_MBUSY_CLR              (0x0   << 6  )
-#define I2CMSTA_MBUSY_SET              (0x1   << 6  )
+#define I2CMSTA_MBUSY_Pos              (6U)
+#define I2CMSTA_MBUSY_Msk              (0x1U << I2CMSTA_MBUSY_Pos)
+#define I2CMSTA_MBUSY                           I2CMSTA_MBUSY_Msk
 
 /* I2CMSTA[ALOST] - Arbitration lost */
-#define I2CMSTA_ALOST_Msk              (0x1   << 5  )
-#define I2CMSTA_ALOST                  (0x1   << 5  )
-#define I2CMSTA_ALOST_CLR              (0x0   << 5  )
-#define I2CMSTA_ALOST_SET              (0x1   << 5  )
+#define I2CMSTA_ALOST_Pos              (5U)
+#define I2CMSTA_ALOST_Msk              (0x1U << I2CMSTA_ALOST_Pos)
+#define I2CMSTA_ALOST                           I2CMSTA_ALOST_Msk
 
 /* I2CMSTA[NACKADDR] - ACK not received in response to an address */
-#define I2CMSTA_NACKADDR_Msk           (0x1   << 4  )
-#define I2CMSTA_NACKADDR               (0x1   << 4  )
-#define I2CMSTA_NACKADDR_CLR           (0x0   << 4  )
-#define I2CMSTA_NACKADDR_SET           (0x1   << 4  )
+#define I2CMSTA_NACKADDR_Pos           (4U)
+#define I2CMSTA_NACKADDR_Msk           (0x1U << I2CMSTA_NACKADDR_Pos)
+#define I2CMSTA_NACKADDR                        I2CMSTA_NACKADDR_Msk
 
 /* I2CMSTA[MRXREQ] - Master Receive request */
-#define I2CMSTA_MRXREQ_Msk             (0x1   << 3  )
-#define I2CMSTA_MRXREQ                 (0x1   << 3  )
-#define I2CMSTA_MRXREQ_CLR             (0x0   << 3  )
-#define I2CMSTA_MRXREQ_SET             (0x1   << 3  )
+#define I2CMSTA_MRXREQ_Pos             (3U)
+#define I2CMSTA_MRXREQ_Msk             (0x1U << I2CMSTA_MRXREQ_Pos)
+#define I2CMSTA_MRXREQ                          I2CMSTA_MRXREQ_Msk
 
 /* I2CMSTA[MTXREQ] - Master Transmit request */
-#define I2CMSTA_MTXREQ_Msk             (0x1   << 2  )
-#define I2CMSTA_MTXREQ                 (0x1   << 2  )
-#define I2CMSTA_MTXREQ_CLR             (0x0   << 2  )
-#define I2CMSTA_MTXREQ_SET             (0x1   << 2  )
+#define I2CMSTA_MTXREQ_Pos             (2U)
+#define I2CMSTA_MTXREQ_Msk             (0x1U << I2CMSTA_MTXREQ_Pos)
+#define I2CMSTA_MTXREQ                          I2CMSTA_MTXREQ_Msk
 
 /* I2CMSTA[MTXFSTA] - Master Transmit FIFO status */
-#define I2CMSTA_MTXFSTA_Msk            (0x3   << 0  )
+#define I2CMSTA_MTXFSTA_Pos            (0U)
+#define I2CMSTA_MTXFSTA_Msk            (0x3U << I2CMSTA_MTXFSTA_Pos)
+#define I2CMSTA_MTXFSTA_EMPTY          (0x0U << I2CMSTA_MTXFSTA_Pos)
+#define I2CMSTA_MTXFSTA_ONEBYTE        (0x2U << I2CMSTA_MTXFSTA_Pos)
+#define I2CMSTA_MTXFSTA_TWOBYTES       (0x3U << I2CMSTA_MTXFSTA_Pos)
 
 /* I2CMRX[ICMRX] - Master receive register */
-#define I2CMRX_ICMRX_Msk               (0xFF  << 0  )
+#define I2CMRX_ICMRX_Pos               (0U)
+#define I2CMRX_ICMRX_Msk               (0xFFU << I2CMRX_ICMRX_Pos)
 
 /* I2CMTX[I2CMTX] - Master transmit register */
-#define I2CMTX_I2CMTX_Msk              (0xFF  << 0  )
+#define I2CMTX_I2CMTX_Pos              (0U)
+#define I2CMTX_I2CMTX_Msk              (0xFFU << I2CMTX_I2CMTX_Pos)
 
 /* I2CMRXCNT[EXTEND] - Extended read */
-#define I2CMRXCNT_EXTEND_Msk           (0x1   << 8  )
-#define I2CMRXCNT_EXTEND               (0x1   << 8  )
-#define I2CMRXCNT_EXTEND_DIS           (0x0   << 8  )
-#define I2CMRXCNT_EXTEND_EN            (0x1   << 8  )
+#define I2CMRXCNT_EXTEND_Pos           (8U)
+#define I2CMRXCNT_EXTEND_Msk           (0x1U << I2CMRXCNT_EXTEND_Pos)
+#define I2CMRXCNT_EXTEND                        I2CMRXCNT_EXTEND_Msk
 
 /* I2CMRXCNT[COUNT] - Receive count */
-#define I2CMRXCNT_COUNT_Msk            (0xFF  << 0  )
+#define I2CMRXCNT_COUNT_Pos            (0U)
+#define I2CMRXCNT_COUNT_Msk            (0xFFU << I2CMRXCNT_COUNT_Pos)
 
 /* I2CMCRXCNT[COUNT] - Current receive count */
-#define I2CMCRXCNT_COUNT_Msk           (0xFF  << 0  )
+#define I2CMCRXCNT_COUNT_Pos           (0U)
+#define I2CMCRXCNT_COUNT_Msk           (0xFFU << I2CMCRXCNT_COUNT_Pos)
 
 /* I2CADR0[ADR0] - Address byte 0 */
-#define I2CADR0_ADR0_Msk               (0xFF  << 0  )
+#define I2CADR0_ADR0_Pos               (0U)
+#define I2CADR0_ADR0_Msk               (0xFFU << I2CADR0_ADR0_Pos)
 
 /* I2CADR1[ADR1] - Address byte 1 */
-#define I2CADR1_ADR1_Msk               (0xFF  << 0  )
+#define I2CADR1_ADR1_Pos               (0U)
+#define I2CADR1_ADR1_Msk               (0xFFU << I2CADR1_ADR1_Pos)
 
 /* I2CDIV[HIGH] - Serial clock high time */
-#define I2CDIV_HIGH_Msk                (0xFF  << 8  )
+#define I2CDIV_HIGH_Pos                (8U)
+#define I2CDIV_HIGH_Msk                (0xFFU << I2CDIV_HIGH_Pos)
 
 /* I2CDIV[LOW] - Serial clock low time */
-#define I2CDIV_LOW_Msk                 (0xFF  << 0  )
+#define I2CDIV_LOW_Pos                 (0U)
+#define I2CDIV_LOW_Msk                 (0xFFU << I2CDIV_LOW_Pos)
 
 /* I2CSCON[STXDMA] - Enable slave Tx DMA request */
-#define I2CSCON_STXDMA_Msk             (0x1   << 14 )
-#define I2CSCON_STXDMA                 (0x1   << 14 )
-#define I2CSCON_STXDMA_DIS             (0x0   << 14 )
-#define I2CSCON_STXDMA_EN              (0x1   << 14 )
+#define I2CSCON_STXDMA_Pos             (14U)
+#define I2CSCON_STXDMA_Msk             (0x1U << I2CSCON_STXDMA_Pos)
+#define I2CSCON_STXDMA                          I2CSCON_STXDMA_Msk
 
 /* I2CSCON[SRXDMA] - Enable slave Rx DMA request */
-#define I2CSCON_SRXDMA_Msk             (0x1   << 13 )
-#define I2CSCON_SRXDMA                 (0x1   << 13 )
-#define I2CSCON_SRXDMA_DIS             (0x0   << 13 )
-#define I2CSCON_SRXDMA_EN              (0x1   << 13 )
+#define I2CSCON_SRXDMA_Pos             (13U)
+#define I2CSCON_SRXDMA_Msk             (0x1U << I2CSCON_SRXDMA_Pos)
+#define I2CSCON_SRXDMA                          I2CSCON_SRXDMA_Msk
 
 /* I2CSCON[IENREPST] - Repeated start interrupt enable */
-#define I2CSCON_IENREPST_Msk           (0x1   << 12 )
-#define I2CSCON_IENREPST               (0x1   << 12 )
-#define I2CSCON_IENREPST_DIS           (0x0   << 12 )
-#define I2CSCON_IENREPST_EN            (0x1   << 12 )
+#define I2CSCON_IENREPST_Pos           (12U)
+#define I2CSCON_IENREPST_Msk           (0x1U << I2CSCON_IENREPST_Pos)
+#define I2CSCON_IENREPST                        I2CSCON_IENREPST_Msk
 
 /* I2CSCON[SXMITDEC] - Decrement Slave Tx FIFO status when a byte has been transmitted */
-#define I2CSCON_SXMITDEC_Msk           (0x1   << 11 )
-#define I2CSCON_SXMITDEC               (0x1   << 11 )
-#define I2CSCON_SXMITDEC_DIS           (0x0   << 11 )
-#define I2CSCON_SXMITDEC_EN            (0x1   << 11 )
+#define I2CSCON_SXMITDEC_Pos           (11U)
+#define I2CSCON_SXMITDEC_Msk           (0x1U << I2CSCON_SXMITDEC_Pos)
+#define I2CSCON_SXMITDEC                        I2CSCON_SXMITDEC_Msk
 
 /* I2CSCON[IENSTX] - Slave Transmit request interrupt enable */
-#define I2CSCON_IENSTX_Msk             (0x1   << 10 )
-#define I2CSCON_IENSTX                 (0x1   << 10 )
-#define I2CSCON_IENSTX_DIS             (0x0   << 10 )
-#define I2CSCON_IENSTX_EN              (0x1   << 10 )
+#define I2CSCON_IENSTX_Pos             (10U)
+#define I2CSCON_IENSTX_Msk             (0x1U << I2CSCON_IENSTX_Pos)
+#define I2CSCON_IENSTX                          I2CSCON_IENSTX_Msk
 
 /* I2CSCON[IENSRX] - Slave Receive request interrupt enable */
-#define I2CSCON_IENSRX_Msk             (0x1   << 9  )
-#define I2CSCON_IENSRX                 (0x1   << 9  )
-#define I2CSCON_IENSRX_DIS             (0x0   << 9  )
-#define I2CSCON_IENSRX_EN              (0x1   << 9  )
+#define I2CSCON_IENSRX_Pos             (9U)
+#define I2CSCON_IENSRX_Msk             (0x1U << I2CSCON_IENSRX_Pos)
+#define I2CSCON_IENSRX                          I2CSCON_IENSRX_Msk
 
 /* I2CSCON[IENSTOP] - Stop condition detected interrupt enable */
-#define I2CSCON_IENSTOP_Msk            (0x1   << 8  )
-#define I2CSCON_IENSTOP                (0x1   << 8  )
-#define I2CSCON_IENSTOP_DIS            (0x0   << 8  )
-#define I2CSCON_IENSTOP_EN             (0x1   << 8  )
+#define I2CSCON_IENSTOP_Pos            (8U)
+#define I2CSCON_IENSTOP_Msk            (0x1U << I2CSCON_IENSTOP_Pos)
+#define I2CSCON_IENSTOP                         I2CSCON_IENSTOP_Msk
 
 /* I2CSCON[NACK] - NACK next communication */
-#define I2CSCON_NACK_Msk               (0x1   << 7  )
-#define I2CSCON_NACK                   (0x1   << 7  )
-#define I2CSCON_NACK_DIS               (0x0   << 7  )
-#define I2CSCON_NACK_EN                (0x1   << 7  )
+#define I2CSCON_NACK_Pos               (7U)
+#define I2CSCON_NACK_Msk               (0x1U << I2CSCON_NACK_Pos)
+#define I2CSCON_NACK                            I2CSCON_NACK_Msk
 
 /* I2CSCON[STRETCHSCL] - Stretch SCL enable */
-#define I2CSCON_STRETCHSCL_Msk         (0x1   << 6  )
-#define I2CSCON_STRETCHSCL             (0x1   << 6  )
-#define I2CSCON_STRETCHSCL_DIS         (0x0   << 6  )
-#define I2CSCON_STRETCHSCL_EN          (0x1   << 6  )
+#define I2CSCON_STRETCHSCL_Pos         (6U)
+#define I2CSCON_STRETCHSCL_Msk         (0x1U << I2CSCON_STRETCHSCL_Pos)
+#define I2CSCON_STRETCHSCL                      I2CSCON_STRETCHSCL_Msk
 
 /* I2CSCON[EARLYTXR] - Early transmit request mode */
-#define I2CSCON_EARLYTXR_Msk           (0x1   << 5  )
-#define I2CSCON_EARLYTXR               (0x1   << 5  )
-#define I2CSCON_EARLYTXR_DIS           (0x0   << 5  )
-#define I2CSCON_EARLYTXR_EN            (0x1   << 5  )
+#define I2CSCON_EARLYTXR_Pos           (5U)
+#define I2CSCON_EARLYTXR_Msk           (0x1U << I2CSCON_EARLYTXR_Pos)
+#define I2CSCON_EARLYTXR                        I2CSCON_EARLYTXR_Msk
 
 /* I2CSCON[GCSBCLR] - General call status bit clear */
-#define I2CSCON_GCSBCLR_Msk            (0x1   << 4  )
-#define I2CSCON_GCSBCLR                (0x1   << 4  )
-#define I2CSCON_GCSBCLR_DIS            (0x0   << 4  )
-#define I2CSCON_GCSBCLR_EN             (0x1   << 4  )
+#define I2CSCON_GCSBCLR_Pos            (4U)
+#define I2CSCON_GCSBCLR_Msk            (0x1U << I2CSCON_GCSBCLR_Pos)
+#define I2CSCON_GCSBCLR                         I2CSCON_GCSBCLR_Msk
 
 /* I2CSCON[HGCEN] - Hardware general call enable */
-#define I2CSCON_HGCEN_Msk              (0x1   << 3  )
-#define I2CSCON_HGCEN                  (0x1   << 3  )
-#define I2CSCON_HGCEN_DIS              (0x0   << 3  )
-#define I2CSCON_HGCEN_EN               (0x1   << 3  )
+#define I2CSCON_HGCEN_Pos              (3U)
+#define I2CSCON_HGCEN_Msk              (0x1U << I2CSCON_HGCEN_Pos)
+#define I2CSCON_HGCEN                           I2CSCON_HGCEN_Msk
 
 /* I2CSCON[GCEN] - General call enable */
-#define I2CSCON_GCEN_Msk               (0x1   << 2  )
-#define I2CSCON_GCEN                   (0x1   << 2  )
-#define I2CSCON_GCEN_DIS               (0x0   << 2  )
-#define I2CSCON_GCEN_EN                (0x1   << 2  )
+#define I2CSCON_GCEN_Pos               (2U)
+#define I2CSCON_GCEN_Msk               (0x1U << I2CSCON_GCEN_Pos)
+#define I2CSCON_GCEN                            I2CSCON_GCEN_Msk
 
 /* I2CSCON[ADR10EN] - Enabled 10-bit addressing */
-#define I2CSCON_ADR10EN_Msk            (0x1   << 1  )
-#define I2CSCON_ADR10EN                (0x1   << 1  )
-#define I2CSCON_ADR10EN_DIS            (0x0   << 1  )
-#define I2CSCON_ADR10EN_EN             (0x1   << 1  )
+#define I2CSCON_ADR10EN_Pos            (1U)
+#define I2CSCON_ADR10EN_Msk            (0x1U << I2CSCON_ADR10EN_Pos)
+#define I2CSCON_ADR10EN                         I2CSCON_ADR10EN_Msk
 
 /* I2CSCON[SLVEN] - Slave enable */
-#define I2CSCON_SLVEN_Msk              (0x1   << 0  )
-#define I2CSCON_SLVEN                  (0x1   << 0  )
-#define I2CSCON_SLVEN_DIS              (0x0   << 0  )
-#define I2CSCON_SLVEN_EN               (0x1   << 0  )
+#define I2CSCON_SLVEN_Pos              (0U)
+#define I2CSCON_SLVEN_Msk              (0x1U << I2CSCON_SLVEN_Pos)
+#define I2CSCON_SLVEN                           I2CSCON_SLVEN_Msk
 
 /* I2CSSTA[START] - Start and matching address */
 #define I2CSSTA_START_Msk              (0x1   << 14 )
 #define I2CSSTA_START                  (0x1   << 14 )
-#define I2CSSTA_START_CLR              (0x0   << 14 )
-#define I2CSSTA_START_SET              (0x1   << 14 )
 
 /* I2CSSTA[REPSTART] - Repeated start and matching address */
 #define I2CSSTA_REPSTART_Msk           (0x1   << 13 )
 #define I2CSSTA_REPSTART               (0x1   << 13 )
-#define I2CSSTA_REPSTART_CLR           (0x0   << 13 )
-#define I2CSSTA_REPSTART_SET           (0x1   << 13 )
 
 /* I2CSSTA[IDMAT] - Device ID matched */
 #define I2CSSTA_IDMAT_Msk              (0x3   << 11 )
@@ -1918,8 +1897,6 @@ typedef struct MMR_I2C {          /*!< MMR_I2C0 Structure                     */
 /* I2CSSTA[STOP] - Stop after start and matching address */
 #define I2CSSTA_STOP_Msk               (0x1   << 10 )
 #define I2CSSTA_STOP                   (0x1   << 10 )
-#define I2CSSTA_STOP_CLR               (0x0   << 10 )
-#define I2CSSTA_STOP_SET               (0x1   << 10 )
 
 /* I2CSSTA[GCID] - General ID */
 #define I2CSSTA_GCID_Msk               (0x3   << 8  )
@@ -1927,50 +1904,34 @@ typedef struct MMR_I2C {          /*!< MMR_I2C0 Structure                     */
 /* I2CSSTA[GCINT] - General call interrupt */
 #define I2CSSTA_GCINT_Msk              (0x1   << 7  )
 #define I2CSSTA_GCINT                  (0x1   << 7  )
-#define I2CSSTA_GCINT_CLR              (0x0   << 7  )
-#define I2CSSTA_GCINT_SET              (0x1   << 7  )
 
 /* I2CSSTA[SBUSY] - Slave busy */
 #define I2CSSTA_SBUSY_Msk              (0x1   << 6  )
 #define I2CSSTA_SBUSY                  (0x1   << 6  )
-#define I2CSSTA_SBUSY_CLR              (0x0   << 6  )
-#define I2CSSTA_SBUSY_SET              (0x1   << 6  )
 
 /* I2CSSTA[NOACK] - Ack not generated by the slave */
 #define I2CSSTA_NOACK_Msk              (0x1   << 5  )
 #define I2CSSTA_NOACK                  (0x1   << 5  )
-#define I2CSSTA_NOACK_CLR              (0x0   << 5  )
-#define I2CSSTA_NOACK_SET              (0x1   << 5  )
 
 /* I2CSSTA[SRXOF] - Slave Receive FIFO overflow */
 #define I2CSSTA_SRXOF_Msk              (0x1   << 4  )
 #define I2CSSTA_SRXOF                  (0x1   << 4  )
-#define I2CSSTA_SRXOF_CLR              (0x0   << 4  )
-#define I2CSSTA_SRXOF_SET              (0x1   << 4  )
 
 /* I2CSSTA[SRXREQ] - Slave Receive request */
 #define I2CSSTA_SRXREQ_Msk             (0x1   << 3  )
 #define I2CSSTA_SRXREQ                 (0x1   << 3  )
-#define I2CSSTA_SRXREQ_CLR             (0x0   << 3  )
-#define I2CSSTA_SRXREQ_SET             (0x1   << 3  )
 
 /* I2CSSTA[STXREQ] - Slave Transmit request */
 #define I2CSSTA_STXREQ_Msk             (0x1   << 2  )
 #define I2CSSTA_STXREQ                 (0x1   << 2  )
-#define I2CSSTA_STXREQ_CLR             (0x0   << 2  )
-#define I2CSSTA_STXREQ_SET             (0x1   << 2  )
 
 /* I2CSSTA[STXUR] - Slave Transmit FIFO underflow */
 #define I2CSSTA_STXUR_Msk              (0x1   << 1  )
 #define I2CSSTA_STXUR                  (0x1   << 1  )
-#define I2CSSTA_STXUR_CLR              (0x0   << 1  )
-#define I2CSSTA_STXUR_SET              (0x1   << 1  )
 
 /* I2CSSTA[STXFSEREQ] - Slave Tx FIFO Status or early request */
 #define I2CSSTA_STXFSEREQ_Msk          (0x1   << 0  )
 #define I2CSSTA_STXFSEREQ              (0x1   << 0  )
-#define I2CSSTA_STXFSEREQ_CLR          (0x0   << 0  )
-#define I2CSSTA_STXFSEREQ_SET          (0x1   << 0  )
 
 /* I2CSRX[I2CSRX] - Slave receive register */
 #define I2CSRX_I2CSRX_Msk              (0xFF  << 0  )
@@ -1996,14 +1957,10 @@ typedef struct MMR_I2C {          /*!< MMR_I2C0 Structure                     */
 /* I2CFSTA[MFLUSH] - Flush the master transmit FIFO */
 #define I2CFSTA_MFLUSH_Msk             (0x1   << 9  )
 #define I2CFSTA_MFLUSH                 (0x1   << 9  )
-#define I2CFSTA_MFLUSH_DIS             (0x0   << 9  ) /* Clearing to 0 has no effect. */
-#define I2CFSTA_MFLUSH_EN              (0x1   << 9  ) /* Set to 1 to flush the master transmit FIFO. The master transmit FIFO will have to flushed if arbitration is lost or a slave responds with a NACK. */
 
 /* I2CFSTA[SFLUSH] - Flush the slave transmit FIFO */
 #define I2CFSTA_SFLUSH_Msk             (0x1   << 8  )
 #define I2CFSTA_SFLUSH                 (0x1   << 8  )
-#define I2CFSTA_SFLUSH_DIS             (0x0   << 8  ) /* Clearing to 0 has no effect. */
-#define I2CFSTA_SFLUSH_EN              (0x1   << 8  ) /* Set to 1 to flush the slave transmit FIFO. */
 
 /* I2CFSTA[MRXFSTA] - Master receive FIFO status */
 #define I2CFSTA_MRXFSTA_Msk            (0x3   << 6  )
@@ -2032,22 +1989,16 @@ typedef struct MMR_I2C {          /*!< MMR_I2C0 Structure                     */
 /* I2CSHCON[RESET] - Reset START STOP detect circuit */
 #define I2CSHCON_RESET_Msk             (0x1   << 0  )
 #define I2CSHCON_RESET                 (0x1   << 0  )
-#define I2CSHCON_RESET_DIS             (0x0   << 0  )
-#define I2CSHCON_RESET_EN              (0x1   << 0  )
 
 #if defined(ADUCM320I) | defined(ADUCM322) | defined(ADUCM322I)
 
 /* I2CASSCL[SSRTSTA] - stretch timeout for slave */
 #define I2CASSCL_SSRTSTA_Msk           (0x1   << 9  )
 #define I2CASSCL_SSRTSTA               (0x1   << 9  )
-#define I2CASSCL_SSRTSTA_DIS           (0x0   << 9  )
-#define I2CASSCL_SSRTSTA_EN            (0x1   << 9  )
 
 /* I2CASSCL[MSRTSTA] - stretch timeout for master */
 #define I2CASSCL_MSRTSTA_Msk           (0x1   << 8  )
 #define I2CASSCL_MSRTSTA               (0x1   << 8  )
-#define I2CASSCL_MSRTSTA_DIS           (0x0   << 8  )
-#define I2CASSCL_MSRTSTA_EN            (0x1   << 8  )
 
 /* I2CASSCL[SSTRCON] - automatic stretch mode for slave */
 #define I2CASSCL_SSTRCON_Msk           (0xF   << 4  )
