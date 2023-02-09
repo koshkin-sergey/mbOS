@@ -153,7 +153,7 @@
 
 // <e> I2C0 (Inter-integrated Circuit Interface) [Driver_I2C0]
 // <i> Configuration settings for Driver_I2C0 in component ::CMSIS Driver:I2C
-#define DEV_I2C0                       0
+#define DEV_I2C0                       1
 
 //   <o> SCL Pin <0=>P0.4
 #define   DEV_I2C0_SCL_PORT_ID         0
@@ -182,7 +182,7 @@
 
 // <e> I2C1 (Inter-integrated Circuit Interface) [Driver_I2C1]
 // <i> Configuration settings for Driver_I2C1 in component ::CMSIS Driver:I2C
-#define DEV_I2C1                       0
+#define DEV_I2C1                       1
 
 //   <o> SCL Pin <0=>P0.6
 #define   DEV_I2C1_SCL_PORT_ID         0

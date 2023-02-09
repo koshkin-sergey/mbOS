@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2022 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2017-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -22,12 +22,9 @@
  ******************************************************************************/
 
 #include "I2C_ADUCM32x.h"
-
 #include <string.h>
 
-/*******************************************************************************
- *  external declarations
- ******************************************************************************/
+#if defined(USE_I2C0) || defined(USE_I2C1)
 
 /*******************************************************************************
  *  defines and macros (scope: module-local)
@@ -39,10 +36,6 @@
 #define RX_DIRECTION    1U
 
 #define ARM_I2C_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(1,0) /* driver version */
-
-/*******************************************************************************
- *  typedefs and structures (scope: module-local)
- ******************************************************************************/
 
 /*******************************************************************************
  *  global variable definitions (scope: module-local)
@@ -60,63 +53,47 @@ static const ARM_I2C_CAPABILITIES DriverCapabilities = {
 };
 
 #if defined(USE_I2C0)
-
-/* I2C0 Control Information */
-static I2C_CTRL I2C0_Ctrl = { 0 };
-
-static const GPIO_PIN_ID_t I2C0_pin_scl = {
-    I2C0_SCL_GPIO_PORT, I2C0_SCL_GPIO_PIN, I2C0_SCL_GPIO_FUNC
-};
-
-static const GPIO_PIN_ID_t I2C0_pin_sda = {
-    I2C0_SDA_GPIO_PORT, I2C0_SDA_GPIO_PIN, I2C0_SDA_GPIO_FUNC
-};
+/* I2C0 Information (Run-Time) */
+static I2C_Info_t I2C0_Info;
 
 /* I2C0 Resources */
-static I2C_RESOURCES I2C0_Resources = {
-  pADI_I2C0,
+static I2C_Resources_t I2C0_Resources = {
+  MMR_I2C0,
   {
-      &I2C0_pin_scl,
-      &I2C0_pin_sda,
+    {I2C0_SCL_GPIO_PORT, I2C0_SCL_GPIO_PIN, I2C0_SCL_GPIO_FUNC},
+    {I2C0_SDA_GPIO_PORT, I2C0_SDA_GPIO_PIN, I2C0_SDA_GPIO_FUNC},
   },
-  I2C0M_IRQn,
-  I2C0S_IRQn,
   CLK_PERIPH_I2C0,
-  &I2C0_Ctrl,
+  {
+    I2C0_INT_PRIORITY,
+    I2C0_Master_IRQn,
+    I2C0_Slave_IRQn,
+  },
+  &I2C0_Info,
 };
 #endif /* USE_I2C0 */
 
 
 #if defined(USE_I2C1)
-
-/* I2C1 Control Information */
-static I2C_CTRL I2C1_Ctrl = { 0 };
-
-static const GPIO_PIN_ID_t I2C1_pin_scl = {
-    I2C1_SCL_GPIO_PORT, I2C1_SCL_GPIO_PIN, I2C1_SCL_GPIO_FUNC
-};
-
-static const GPIO_PIN_ID_t I2C1_pin_sda = {
-    I2C1_SDA_GPIO_PORT, I2C1_SDA_GPIO_PIN, I2C1_SDA_GPIO_FUNC
-};
+/* I2C1 Information (Run-Time) */
+static I2C_Info_t I2C1_Info;
 
 /* I2C1 Resources */
-static I2C_RESOURCES I2C1_Resources = {
-  pADI_I2C1,
+static I2C_Resources_t I2C1_Resources = {
+  MMR_I2C1,
   {
-      &I2C1_pin_scl,
-      &I2C1_pin_sda,
+    {I2C1_SCL_GPIO_PORT, I2C1_SCL_GPIO_PIN, I2C1_SCL_GPIO_FUNC},
+    {I2C1_SDA_GPIO_PORT, I2C1_SDA_GPIO_PIN, I2C1_SDA_GPIO_FUNC},
   },
-  I2C1M_IRQn,
-  I2C1S_IRQn,
   CLK_PERIPH_I2C1,
-  &I2C1_Ctrl,
+  {
+    I2C1_INT_PRIORITY,
+    I2C1_Master_IRQn,
+    I2C1_Slave_IRQn,
+  },
+  &I2C1_Info,
 };
 #endif /* USE_I2C1 */
-
-/*******************************************************************************
- *  function prototypes (scope: module-local)
- ******************************************************************************/
 
 /*******************************************************************************
  *  function implementations (scope: module-local)
@@ -128,7 +105,7 @@ static I2C_RESOURCES I2C1_Resources = {
  * @return
  */
 __attribute__((always_inline)) static
-uint32_t GetMasterRxFifoCnt(I2C_RESOURCES *i2c)
+uint32_t GetMasterRxFifoCnt(I2C_Resources_t *i2c)
 {
   return ((i2c->reg->I2CFSTA & I2CFSTA_MRXFSTA_MSK) >> 6);
 }
@@ -139,7 +116,7 @@ uint32_t GetMasterRxFifoCnt(I2C_RESOURCES *i2c)
  * @return
  */
 __attribute__((always_inline)) static
-uint32_t GetMasterTxFifoCnt(I2C_RESOURCES *i2c)
+uint32_t GetMasterTxFifoCnt(I2C_Resources_t *i2c)
 {
   return ((i2c->reg->I2CFSTA & I2CFSTA_MTXFSTA_MSK) >> 4);
 }
@@ -150,7 +127,7 @@ uint32_t GetMasterTxFifoCnt(I2C_RESOURCES *i2c)
  * @return
  */
 __attribute__((always_inline)) static
-uint32_t GetSlaveTxFifoCnt(I2C_RESOURCES *i2c)
+uint32_t GetSlaveTxFifoCnt(I2C_Resources_t *i2c)
 {
   return (i2c->reg->I2CFSTA & I2CFSTA_STXFSTA_MSK);
 }
@@ -185,27 +162,37 @@ ARM_I2C_CAPABILITIES I2C_GetCapabilities(void)
  * @return      \ref execution_status
  */
 static
-int32_t I2Cx_Initialize(ARM_I2C_SignalEvent_t cb_event, I2C_RESOURCES *i2c)
+int32_t I2C_Initialize(ARM_I2C_SignalEvent_t cb_event, I2C_Resources_t *i2c)
 {
-  I2C_CTRL *ctrl = i2c->ctrl;
-  I2C_PIN *pin = &i2c->pin;
+  I2C_Info_t     *info;
+  I2C_IO_t       *io;
+  GPIO_PIN_CFG_t  pin_cfg;
 
-  if (ctrl->flags & I2C_FLAG_INIT) {
-    return ARM_DRIVER_OK;
+  if (i2c->info->flags & I2C_FLAG_INIT) {
+    return (ARM_DRIVER_OK);
   }
 
+  io   = &i2c->io;
+  info = i2c->info;
+
+  pin_cfg.mode = GPIO_MODE_ANALOG;
+  pin_cfg.pull = GPIO_PULL_DISABLE;
+
   /* Configure SCL Pin */
-  GPIO_AFConfig(pin->scl->port, pin->scl->pin, pin->scl->func);
+  pin_cfg.func = io->scl.func;
+  io->scl.gpio->PinConfig(io->scl.pin, &pin_cfg);
+
   /* Configure SDA Pin */
-  GPIO_AFConfig(pin->sda->port, pin->sda->pin, pin->sda->func);
+  pin_cfg.func = io->sda.func;
+  io->sda.gpio->PinConfig(io->sda.pin, &pin_cfg);
 
   /* Reset Run-Time information structure */
-  memset(ctrl, 0x00, sizeof(I2C_CTRL));
+  memset(info, 0x00, sizeof(I2C_Info_t));
 
-  ctrl->cb_event = cb_event;
-  ctrl->flags    = I2C_FLAG_INIT;
+  info->cb_event = cb_event;
+  info->flags    = I2C_FLAG_INIT;
 
-  return ARM_DRIVER_OK;
+  return (ARM_DRIVER_OK);
 }
 
 /**
@@ -215,16 +202,24 @@ int32_t I2Cx_Initialize(ARM_I2C_SignalEvent_t cb_event, I2C_RESOURCES *i2c)
  * @return      \ref execution_status
  */
 static
-int32_t I2Cx_Uninitialize(I2C_RESOURCES *i2c)
+int32_t I2C_Uninitialize(I2C_Resources_t *i2c)
 {
-  I2C_PIN *pin = &i2c->pin;
+  I2C_IO_t       *io;
+  GPIO_PIN_CFG_t  pin_cfg;
+
+  io = &i2c->io;
+
+  pin_cfg.func = GPIO_PIN_FUNC_0;
+  pin_cfg.mode = GPIO_MODE_ANALOG;
+  pin_cfg.pull = GPIO_PULL_DISABLE;
 
   /* Unconfigure SCL Pin */
-  GPIO_AFConfig(pin->scl->port, pin->scl->pin, GPIO_PIN_FUNC_0);
-  /* Unconfigure SDA Pin */
-  GPIO_AFConfig(pin->sda->port, pin->sda->pin, GPIO_PIN_FUNC_0);
+  io->scl.gpio->PinConfig(io->scl.pin, &pin_cfg);
 
-  i2c->ctrl->flags = 0;
+  /* Unconfigure SDA Pin */
+  io->sda.gpio->PinConfig(io->sda.pin, &pin_cfg);
+
+  i2c->info->flags = 0U;
 
   return ARM_DRIVER_OK;
 }
@@ -237,68 +232,63 @@ int32_t I2Cx_Uninitialize(I2C_RESOURCES *i2c)
  * @return      \ref execution_status
  */
 static
-int32_t I2Cx_PowerControl(ARM_POWER_STATE state, I2C_RESOURCES *i2c)
+int32_t I2C_PowerControl(ARM_POWER_STATE state, I2C_Resources_t *i2c)
 {
-  ADI_I2C_TypeDef *reg = i2c->reg;
-  I2C_CTRL *ctrl = i2c->ctrl;
+  MMR_I2C_t  *mmr  = i2c->mmr;
+  I2C_Info_t *info = i2c->info;
+  I2C_Irq_t  *irq  = &i2c->irq;
+  Driver_CLK_t *clk = &Driver_CLK;
 
   switch (state) {
     case ARM_POWER_OFF:
-      /* Disable I2C interrupts */
-      NVIC_Disable_IRQ(i2c->i2c_master_irq);
-      NVIC_Disable_IRQ(i2c->i2c_slave_irq);
-
-      ctrl->status.busy             = 0U;
-      ctrl->status.mode             = 0U;
-      ctrl->status.direction        = 0U;
-      ctrl->status.general_call     = 0U;
-      ctrl->status.arbitration_lost = 0U;
-      ctrl->status.bus_error        = 0U;
-
-      ctrl->num = 0U;
-
-      ctrl->flags  &= ~I2C_FLAG_POWER;
-
       /* Reset I2C peripheral */
-      reg->I2CMCON &= ~I2CMCON_MASEN;
-      reg->I2CSCON &= ~I2CSCON_SLVEN;
-      reg->I2CSHCON |= I2CSHCON_RESET;
+      mmr->I2CMCON  = 0U;
+      mmr->I2CSCON  = 0U;
+      mmr->I2CSHCON |= I2CSHCON_RESET;
 
       /* Disable I2C peripheral clock */
-      CLK_PeriphGateControl(i2c->clk_periph, CLOCK_OFF);
+      clk->PeriphDisable(i2c->clk_periph);
+
+      /* Disable I2C interrupts */
+      NVIC_DisableIRQ(irq->master_num);
+      NVIC_DisableIRQ(irq->slave_num);
+
+      info->status = 0U;
+      info->flags &= (uint16_t)~I2C_FLAG_POWER;
       break;
 
     case ARM_POWER_FULL:
-      if ((ctrl->flags & I2C_FLAG_INIT) == 0U) {
-        return ARM_DRIVER_ERROR;
+      if ((info->flags & I2C_FLAG_INIT) == 0U) {
+        return (ARM_DRIVER_ERROR);
       }
 
-      if ((ctrl->flags & I2C_FLAG_POWER) != 0U) {
-        return ARM_DRIVER_OK;
+      if ((info->flags & I2C_FLAG_POWER) != 0U) {
+        return (ARM_DRIVER_OK);
       }
 
       /* Enable I2C peripheral clock */
-      CLK_PeriphGateControl(i2c->clk_periph, CLOCK_ON);
-
-      /* Reset I2C peripheral */
-      reg->I2CMCON &= ~I2CMCON_MASEN;
-      reg->I2CSCON &= ~I2CSCON_SLVEN;
-      reg->I2CSHCON |= I2CSHCON_RESET;
+      clk->PeriphEnable(i2c->clk_periph);
 
       /* Enable I2C interrupts */
-      NVIC_ClearPendingIRQ(i2c->i2c_master_irq);
-      NVIC_ClearPendingIRQ(i2c->i2c_slave_irq);
-      NVIC_Enable_IRQ(i2c->i2c_master_irq, HAL_I2C_INT_PRIO);
-      NVIC_Enable_IRQ(i2c->i2c_slave_irq, HAL_I2C_INT_PRIO);
+      NVIC_ClearPendingIRQ(irq->master_num);
+      NVIC_ClearPendingIRQ(irq->slave_num);
+      NVIC_SetPriority(irq->master_num, irq->priority);
+      NVIC_SetPriority(irq->slave_num, irq->priority);
+      NVIC_EnableIRQ(irq->master_num);
+      NVIC_EnableIRQ(irq->slave_num);
 
-      ctrl->flags |= I2C_FLAG_POWER;
+      /* Initial peripheral setup */
+      mmr->I2CMCON = 0U;
+      mmr->I2CSCON = 0U;
+
+      info->flags |= I2C_FLAG_POWER;
       break;
 
     default:
-      return ARM_DRIVER_ERROR_UNSUPPORTED;
+      return (ARM_DRIVER_ERROR_UNSUPPORTED);
   }
 
-  return ARM_DRIVER_OK;
+  return (ARM_DRIVER_OK);
 }
 
 /**
@@ -310,7 +300,7 @@ int32_t I2Cx_PowerControl(ARM_POWER_STATE state, I2C_RESOURCES *i2c)
  * @return      \ref execution_status
  */
 static
-int32_t I2Cx_Control(uint32_t control, uint32_t arg, I2C_RESOURCES *i2c)
+int32_t I2C_Control(uint32_t control, uint32_t arg, I2C_Resources_t *i2c)
 {
   ADI_I2C_TypeDef *reg = i2c->reg;
   I2C_CTRL *ctrl = i2c->ctrl;
@@ -396,8 +386,8 @@ int32_t I2Cx_Control(uint32_t control, uint32_t arg, I2C_RESOURCES *i2c)
  * @return      \ref execution_status
  */
 static
-int32_t I2Cx_MasterTransmit(uint32_t addr, const uint8_t *data, uint32_t num,
-    bool xfer_pending, I2C_RESOURCES *i2c)
+int32_t I2C_MasterTransmit(uint32_t addr, const uint8_t *data, uint32_t num,
+    bool xfer_pending, I2C_Resources_t *i2c)
 {
   ADI_I2C_TypeDef *reg = i2c->reg;
   I2C_CTRL *ctrl = i2c->ctrl;
@@ -453,8 +443,8 @@ int32_t I2Cx_MasterTransmit(uint32_t addr, const uint8_t *data, uint32_t num,
  * @return                    \ref execution_status
  */
 static
-int32_t I2Cx_MasterReceive(uint32_t addr, uint8_t *data, uint32_t num,
-    bool xfer_pending, I2C_RESOURCES *i2c)
+int32_t I2C_MasterReceive(uint32_t addr, uint8_t *data, uint32_t num,
+    bool xfer_pending, I2C_Resources_t *i2c)
 {
   ADI_I2C_TypeDef *reg = i2c->reg;
   I2C_CTRL *ctrl = i2c->ctrl;
@@ -506,7 +496,7 @@ int32_t I2Cx_MasterReceive(uint32_t addr, uint8_t *data, uint32_t num,
  * @return      \ref execution_status
  */
 static
-int32_t I2Cx_SlaveTransmit(const uint8_t *data, uint32_t num, I2C_RESOURCES *i2c)
+int32_t I2C_SlaveTransmit(const uint8_t *data, uint32_t num, I2C_Resources_t *i2c)
 {
   I2C_CTRL *ctrl = i2c->ctrl;
 
@@ -551,7 +541,7 @@ int32_t I2Cx_SlaveTransmit(const uint8_t *data, uint32_t num, I2C_RESOURCES *i2c
  * @return      \ref execution_status
  */
 static
-int32_t I2Cx_SlaveReceive(uint8_t *data, uint32_t num, I2C_RESOURCES *i2c)
+int32_t I2C_SlaveReceive(uint8_t *data, uint32_t num, I2C_Resources_t *i2c)
 {
   I2C_CTRL *ctrl = i2c->ctrl;
 
@@ -586,7 +576,7 @@ int32_t I2Cx_SlaveReceive(uint8_t *data, uint32_t num, I2C_RESOURCES *i2c)
  *              -1 when Slave is not addressed by Master
  */
 static
-int32_t I2Cx_GetDataCount(I2C_RESOURCES *i2c)
+int32_t I2C_GetDataCount(I2C_Resources_t *i2c)
 {
   int32_t cnt = i2c->ctrl->cnt;
   I2C_CTRL *ctrl = i2c->ctrl;
@@ -614,7 +604,7 @@ int32_t I2Cx_GetDataCount(I2C_RESOURCES *i2c)
  * @return      I2C status \ref ARM_I2C_STATUS
  */
 static
-ARM_I2C_STATUS I2Cx_GetStatus(I2C_RESOURCES *i2c)
+ARM_I2C_STATUS I2C_GetStatus(I2C_Resources_t *i2c)
 {
   return (i2c->ctrl->status);
 }
@@ -625,7 +615,7 @@ ARM_I2C_STATUS I2Cx_GetStatus(I2C_RESOURCES *i2c)
  * @param[in]   i2c   Pointer to I2C resources
  */
 static
-void I2Cx_MasterHandler(I2C_RESOURCES *i2c)
+void I2C_Master_IRQHandler(I2C_Resources_t *i2c)
 {
   uint32_t event  = 0UL;
   register ADI_I2C_TypeDef *reg = i2c->reg;
@@ -712,7 +702,7 @@ void I2Cx_MasterHandler(I2C_RESOURCES *i2c)
  * @param[in]   i2c   Pointer to I2C resources
  */
 static
-void I2Cx_SlaveHandler(I2C_RESOURCES *i2c)
+void I2C_Slave_IRQHandler(I2C_Resources_t *i2c)
 {
   uint32_t event  = 0U;
   register ADI_I2C_TypeDef *reg = i2c->reg;
@@ -808,318 +798,16 @@ stop:
   }
 }
 
-#if defined(USE_I2C0)
-/* I2C0 Driver wrapper functions */
-/**
- *
- * @param cb_event
- * @return
- */
-static
-int32_t I2C0_Initialize(ARM_I2C_SignalEvent_t cb_event)
-{
-  return (I2Cx_Initialize(cb_event, &I2C0_Resources));
-}
-
-/**
- *
- * @return
- */
-static
-int32_t I2C0_Uninitialize(void)
-{
-  return (I2Cx_Uninitialize(&I2C0_Resources));
-}
-
-/**
- *
- * @param state
- * @return
- */
-static
-int32_t I2C0_PowerControl(ARM_POWER_STATE state)
-{
-  return (I2Cx_PowerControl(state, &I2C0_Resources));
-}
-
-/**
- *
- * @param addr
- * @param data
- * @param num
- * @param xfer_pending
- * @return
- */
-static
-int32_t I2C0_MasterTransmit(uint32_t addr, const uint8_t *data, uint32_t num, bool xfer_pending)
-{
-  return (I2Cx_MasterTransmit(addr, data, num, xfer_pending, &I2C0_Resources));
-}
-
-/**
- *
- * @param addr
- * @param data
- * @param num
- * @param xfer_pending
- * @return
- */
-static
-int32_t I2C0_MasterReceive(uint32_t addr, uint8_t *data, uint32_t num, bool xfer_pending)
-{
-  return (I2Cx_MasterReceive(addr, data, num, xfer_pending, &I2C0_Resources));
-}
-
-/**
- *
- * @param data
- * @param num
- * @return
- */
-static
-int32_t I2C0_SlaveTransmit(const uint8_t *data, uint32_t num)
-{
-  return (I2Cx_SlaveTransmit(data, num, &I2C0_Resources));
-}
-
-/**
- *
- * @param data
- * @param num
- * @return
- */
-static
-int32_t I2C0_SlaveReceive(uint8_t *data, uint32_t num)
-{
-  return (I2Cx_SlaveReceive(data, num, &I2C0_Resources));
-}
-
-/**
- *
- * @return
- */
-static
-int32_t I2C0_GetDataCount(void)
-{
-  return (I2Cx_GetDataCount(&I2C0_Resources));
-}
-
-/**
- *
- * @param control
- * @param arg
- * @return
- */
-static
-int32_t I2C0_Control(uint32_t control, uint32_t arg)
-{
-  return (I2Cx_Control(control, arg, &I2C0_Resources));
-}
-
-/**
- *
- * @return
- */
-static
-ARM_I2C_STATUS I2C0_GetStatus(void)
-{
-  return (I2Cx_GetStatus(&I2C0_Resources));
-}
-
-/**
- *
- */
-void I2C0_Slave_Int_Handler(void)
-{
-  I2Cx_SlaveHandler(&I2C0_Resources);
-}
-
-/**
- *
- */
-void I2C0_Master_Int_Handler(void)
-{
-  I2Cx_MasterHandler(&I2C0_Resources);
-}
-#endif
-
-#if defined(USE_I2C1)
-/* I2C1 Driver wrapper functions */
-/**
- *
- * @param cb_event
- * @return
- */
-static
-int32_t I2C1_Initialize(ARM_I2C_SignalEvent_t cb_event)
-{
-  return (I2Cx_Initialize(cb_event, &I2C1_Resources));
-}
-
-/**
- *
- * @return
- */
-static
-int32_t I2C1_Uninitialize(void)
-{
-  return (I2Cx_Uninitialize(&I2C1_Resources));
-}
-
-/**
- *
- * @param state
- * @return
- */
-static
-int32_t I2C1_PowerControl(ARM_POWER_STATE state)
-{
-  return (I2Cx_PowerControl(state, &I2C1_Resources));
-}
-
-/**
- *
- * @param addr
- * @param data
- * @param num
- * @param xfer_pending
- * @return
- */
-static
-int32_t I2C1_MasterTransmit(uint32_t addr, const uint8_t *data, uint32_t num, bool xfer_pending)
-{
-  return (I2Cx_MasterTransmit(addr, data, num, xfer_pending, &I2C1_Resources));
-}
-
-/**
- *
- * @param addr
- * @param data
- * @param num
- * @param xfer_pending
- * @return
- */
-static
-int32_t I2C1_MasterReceive(uint32_t addr, uint8_t *data, uint32_t num, bool xfer_pending)
-{
-  return (I2Cx_MasterReceive(addr, data, num, xfer_pending, &I2C1_Resources));
-}
-
-/**
- *
- * @param data
- * @param num
- * @return
- */
-static
-int32_t I2C1_SlaveTransmit(const uint8_t *data, uint32_t num)
-{
-  return (I2Cx_SlaveTransmit(data, num, &I2C1_Resources));
-}
-
-/**
- *
- * @param data
- * @param num
- * @return
- */
-static
-int32_t I2C1_SlaveReceive(uint8_t *data, uint32_t num)
-{
-  return (I2Cx_SlaveReceive(data, num, &I2C1_Resources));
-}
-
-/**
- *
- * @return
- */
-static
-int32_t I2C1_GetDataCount(void)
-{
-  return (I2Cx_GetDataCount(&I2C1_Resources));
-}
-
-/**
- *
- * @param control
- * @param arg
- * @return
- */
-static
-int32_t I2C1_Control(uint32_t control, uint32_t arg)
-{
-  return (I2Cx_Control(control, arg, &I2C1_Resources));
-}
-
-/**
- *
- * @return
- */
-static
-ARM_I2C_STATUS I2C1_GetStatus(void)
-{
-  return (I2Cx_GetStatus(&I2C1_Resources));
-}
-
-/**
- *
- */
-void I2C1_Slave_Int_Handler(void)
-{
-  I2Cx_SlaveHandler(&I2C1_Resources);
-}
-
-/**
- *
- */
-void I2C1_Master_Int_Handler(void)
-{
-  I2Cx_MasterHandler(&I2C1_Resources);
-}
-#endif
-
 /*******************************************************************************
  *  global variable definitions  (scope: module-exported)
  ******************************************************************************/
 
 #if defined(USE_I2C0)
-/* I2C0 Driver Control Block */
-ARM_DRIVER_I2C Driver_I2C0 = {
-  I2C_GetVersion,
-  I2C_GetCapabilities,
-  I2C0_Initialize,
-  I2C0_Uninitialize,
-  I2C0_PowerControl,
-  I2C0_MasterTransmit,
-  I2C0_MasterReceive,
-  I2C0_SlaveTransmit,
-  I2C0_SlaveReceive,
-  I2C0_GetDataCount,
-  I2C0_Control,
-  I2C0_GetStatus
-};
+  I2Cx_EXPORT_DRIVER(0);
 #endif
 
 #if defined(USE_I2C1)
-/* I2C1 Driver Control Block */
-ARM_DRIVER_I2C Driver_I2C1 = {
-  I2C_GetVersion,
-  I2C_GetCapabilities,
-  I2C1_Initialize,
-  I2C1_Uninitialize,
-  I2C1_PowerControl,
-  I2C1_MasterTransmit,
-  I2C1_MasterReceive,
-  I2C1_SlaveTransmit,
-  I2C1_SlaveReceive,
-  I2C1_GetDataCount,
-  I2C1_Control,
-  I2C1_GetStatus
-};
+  I2Cx_EXPORT_DRIVER(1);
 #endif
 
-/*******************************************************************************
- *  function implementations (scope: module-exported)
- ******************************************************************************/
-
-/* ----------------------------- End of file ---------------------------------*/
+#endif /* defined(USE_I2C0) || defined(USE_I2C0) */
