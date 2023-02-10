@@ -35,6 +35,12 @@
 #define TX_DIRECTION    0U
 #define RX_DIRECTION    1U
 
+#define SCL_HIGH_TIME_100K        (5000U) // HIGH period of the SCL clock in ns.
+#define SCL_LOW_TIME_100K         (5000U) // LOW period of the SCL clock in ns.
+
+#define SCL_HIGH_TIME_400K        (1200U) // HIGH period of the SCL clock in ns.
+#define SCL_LOW_TIME_400K         (1300U) // LOW period of the SCL clock in ns.
+
 #define ARM_I2C_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(1,0) /* driver version */
 
 /*******************************************************************************
@@ -99,37 +105,36 @@ static I2C_Resources_t I2C1_Resources = {
  *  function implementations (scope: module-local)
  ******************************************************************************/
 
-/**
- *
- * @param i2c
- * @return
- */
-__attribute__((always_inline)) static
-uint32_t GetMasterRxFifoCnt(I2C_Resources_t *i2c)
+static
+uint32_t GetFifoCntSlaveTx(MMR_I2C_t *mmr)
 {
-  return ((i2c->reg->I2CFSTA & I2CFSTA_MRXFSTA_MSK) >> 6);
+  uint32_t cnt = _FLD2VAL(I2CFSTA_STXFSTA, mmr->I2CFSTA);
+
+  return (cnt);
 }
 
-/**
- *
- * @param i2c
- * @return
- */
-__attribute__((always_inline)) static
-uint32_t GetMasterTxFifoCnt(I2C_Resources_t *i2c)
+static
+uint32_t GetFifoCntSlaveRx(MMR_I2C_t *mmr)
 {
-  return ((i2c->reg->I2CFSTA & I2CFSTA_MTXFSTA_MSK) >> 4);
+  uint32_t cnt = _FLD2VAL(I2CFSTA_SRXFSTA, mmr->I2CFSTA);
+
+  return (cnt);
 }
 
-/**
- *
- * @param i2c
- * @return
- */
-__attribute__((always_inline)) static
-uint32_t GetSlaveTxFifoCnt(I2C_Resources_t *i2c)
+static
+uint32_t GetFifoCntMasterTx(MMR_I2C_t *mmr)
 {
-  return (i2c->reg->I2CFSTA & I2CFSTA_STXFSTA_MSK);
+  uint32_t cnt = _FLD2VAL(I2CFSTA_MTXFSTA, mmr->I2CFSTA);
+
+  return (cnt);
+}
+
+static
+uint32_t GetFifoCntMasterRx(MMR_I2C_t *mmr)
+{
+  uint32_t cnt = _FLD2VAL(I2CFSTA_MRXFSTA, mmr->I2CFSTA);
+
+  return (cnt);
 }
 
 /**
@@ -302,77 +307,81 @@ int32_t I2C_PowerControl(ARM_POWER_STATE state, I2C_Resources_t *i2c)
 static
 int32_t I2C_Control(uint32_t control, uint32_t arg, I2C_Resources_t *i2c)
 {
-  ADI_I2C_TypeDef *reg = i2c->reg;
-  I2C_CTRL *ctrl = i2c->ctrl;
+  MMR_I2C_t  *mmr  = i2c->mmr;
+  I2C_Info_t *info = i2c->info;
 
-  if (!(ctrl->flags & I2C_FLAG_POWER)) {
+  if ((info->flags & I2C_FLAG_POWER) == 0U) {
     /* Driver not powered */
-    return ARM_DRIVER_ERROR;
+    return (ARM_DRIVER_ERROR);
   }
 
   switch (control) {
-    case ARM_I2C_OWN_ADDRESS:
+    case ARM_I2C_OWN_ADDRESS: {
+      uint16_t reg_val;
+
       /* Set Own Slave Address */
       if (arg == 0) {
         /* Disable slave */
-        reg->I2CSCON = 0;
+        reg_val = 0U;
       }
       else {
-        uint16_t val = (I2CSCON_IENREPST | I2CSCON_IENSRX | I2CSCON_IENSTX |
-            I2CSCON_IENSTOP | I2CSCON_EARLYTXR | I2CSCON_SLVEN);
+        reg_val = I2CSCON_IENSRX | I2CSCON_IENSTX | I2CSCON_EARLYTXR | I2CSCON_SLVEN;
 
         if (arg & ARM_I2C_ADDRESS_GC) {
           /* General call enable */
-          val |= I2CSCON_GCEN;
+          reg_val |= I2CSCON_GCEN;
         }
-
-        reg->I2CID0 = (uint16_t)((arg << 1) & 0xFF);
-        reg->I2CSCON = val;
       }
+
+      mmr->I2CID0  = (uint16_t)((arg << 1) & 0xFFU);
+      mmr->I2CSCON = reg_val;
+    }
       break;
 
-    case ARM_I2C_BUS_SPEED:
-    {
-      uint16_t div;
-      uint32_t clk;
+    case ARM_I2C_BUS_SPEED: {
+      Driver_CLK_t *clk = &Driver_CLK;
+      uint64_t clk_val;
+      uint16_t low;
+      uint16_t high;
 
       /* Set Bus Speed */
-      clk = CLK_GetFreqPCLK();
+      clk_val = clk->GetFrequency(CLK_FREQ_PCLK);
 
       switch (arg) {
         case ARM_I2C_BUS_SPEED_STANDARD:
           /* Standard Speed (100kHz) */
-          clk /= 100000;
+          low  = (uint16_t)(SCL_HIGH_TIME_100K * clk_val / 1000000000U - 1U);
+          high = (uint16_t)(SCL_LOW_TIME_100K  * clk_val / 1000000000U - 2U);
           break;
+
         case ARM_I2C_BUS_SPEED_FAST:
-          /* Fast Speed     (400kHz) */
-          clk /= 400000;
+          /* Fast Speed (400kHz) */
+          low  = (uint16_t)(SCL_HIGH_TIME_400K * clk_val / 1000000000U - 1U);
+          high = (uint16_t)(SCL_LOW_TIME_400K  * clk_val / 1000000000U - 2U);
           break;
+
         default:
           return ARM_DRIVER_ERROR_UNSUPPORTED;
       }
 
-      div = ((clk >> 1) - 1);
-      div |= (((clk >> 1) - 2) << 8);
+      mmr->I2CDIV = (uint16_t)(_VAL2FLD(I2CDIV_HIGH, high) |
+                               _VAL2FLD(I2CDIV_LOW, low));
 
-      reg->I2CDIV = div;
-      reg->I2CMCON = (I2CMCON_IENCMP | I2CMCON_IENACK | I2CMCON_IENALOST);
-
-      /* Speed configured, I2C Master active */
-      ctrl->flags |= I2C_FLAG_SETUP;
+      /* Master configured, clock set */
+      info->flags |= I2C_FLAG_SETUP;
     }
       break;
 
     case ARM_I2C_BUS_CLEAR:
-      return ARM_DRIVER_ERROR_UNSUPPORTED;
+      return (ARM_DRIVER_ERROR_UNSUPPORTED);
 
     case ARM_I2C_ABORT_TRANSFER:
-      return ARM_DRIVER_ERROR_UNSUPPORTED;
+      return (ARM_DRIVER_ERROR_UNSUPPORTED);
 
     default:
-      return ARM_DRIVER_ERROR_UNSUPPORTED;
+      return (ARM_DRIVER_ERROR_UNSUPPORTED);
   }
-  return ARM_DRIVER_OK;
+  return (ARM_DRIVER_OK);
 }
 
 /**
@@ -386,50 +395,60 @@ int32_t I2C_Control(uint32_t control, uint32_t arg, I2C_Resources_t *i2c)
  * @return      \ref execution_status
  */
 static
-int32_t I2C_MasterTransmit(uint32_t addr, const uint8_t *data, uint32_t num,
-    bool xfer_pending, I2C_Resources_t *i2c)
+int32_t I2C_MasterTransmit(uint32_t         addr,
+                           const uint8_t   *data,
+                           uint32_t         num,
+                           bool             xfer_pending,
+                           I2C_Resources_t *i2c)
 {
-  ADI_I2C_TypeDef *reg = i2c->reg;
-  I2C_CTRL *ctrl = i2c->ctrl;
+  MMR_I2C_t  *mmr  = i2c->mmr;
+  I2C_Info_t *info = i2c->info;
+  I2C_TX_XferInfo_t *tx = &info->tx;
 
-  if (!data || !num || (addr > 0x7F)) {
-    /* Invalid parameters */
-    return ARM_DRIVER_ERROR_PARAMETER;
+  if ((data == NULL) || (num == 0U)) {
+    return (ARM_DRIVER_ERROR_PARAMETER);
   }
 
-  if (!(ctrl->flags & I2C_FLAG_SETUP)) {
+  if ((addr & ~((uint32_t)ARM_I2C_ADDRESS_10BIT | (uint32_t)ARM_I2C_ADDRESS_GC)) > 0x3FFU) {
+    return (ARM_DRIVER_ERROR_PARAMETER);
+  }
+
+  if ((info->flags & I2C_FLAG_SETUP) == 0U) {
     /* Driver not yet configured */
-    return ARM_DRIVER_ERROR;
+    return (ARM_DRIVER_ERROR);
   }
 
-  if (ctrl->flags & I2C_FLAG_TX_RESTART)
-    return ARM_DRIVER_ERROR_UNSUPPORTED;
-
-  if (ctrl->status.busy) {
+  if ((info->status & I2C_STATUS_BUSY) != 0U) {
     /* Transfer operation in progress */
-    return ARM_DRIVER_ERROR_BUSY;
+    return (ARM_DRIVER_ERROR_BUSY);
   }
 
-  /* Set control variables */
-  ctrl->flags &= ~(I2C_FLAG_TX_RESTART | I2C_FLAG_RX_RESTART);
-  if (xfer_pending) {
-    ctrl->flags |= I2C_FLAG_TX_RESTART;
+  if ((info->xfer_ctrl & XFER_CTRL_XPENDING) == 0U) {
+    /* New transfer, check the line is busy */
+    if ((mmr->I2CMSTA & I2CMSTA_LINEBUSY) != 0U) {
+      /* Bus is busy or locked */
+      return (ARM_DRIVER_ERROR_BUSY);
+    }
   }
-  ctrl->data = (uint8_t *)data;
-  ctrl->num  = num;
-  ctrl->cnt  = 0;
 
-  /* Update driver status */
-  ctrl->status.busy             = 1U;
-  ctrl->status.mode             = MASTER_MODE;
-  ctrl->status.direction        = TX_DIRECTION;
-  ctrl->status.arbitration_lost = 0U;
-  ctrl->status.bus_error        = 0U;
+  info->status    = I2C_STATUS_BUSY | I2C_STATUS_MASTER;
+  info->xfer_ctrl = 0U;
 
-  reg->I2CMCON |= (I2CMCON_IENMTX | I2CMCON_MASEN);
-  reg->I2CADR0 = (addr << 1) & 0xFE;
+  if (xfer_pending != false) {
+    info->xfer_ctrl = XFER_CTRL_XPENDING;
+  }
 
-  return ARM_DRIVER_OK;
+  tx->data = data;
+  tx->num  = num;
+  tx->cnt  = 0U;
+
+  mmr->I2CMCON = (uint16_t)(I2CMCON_IENACK   |
+                            I2CMCON_IENALOST |
+                            I2CMCON_IENMTX   |
+                            I2CMCON_MASEN);
+  mmr->I2CADR0 = (uint16_t)((addr << 1) & I2CADR0_ADR0_Msk);
+
+  return (ARM_DRIVER_OK);
 }
 
 /**
@@ -606,7 +625,9 @@ int32_t I2C_GetDataCount(I2C_Resources_t *i2c)
 static
 ARM_I2C_STATUS I2C_GetStatus(I2C_Resources_t *i2c)
 {
-  return (i2c->ctrl->status);
+  ARM_I2C_STATUS *status = (ARM_I2C_STATUS *)&i2c->info->status;
+
+  return (*status);
 }
 
 /**

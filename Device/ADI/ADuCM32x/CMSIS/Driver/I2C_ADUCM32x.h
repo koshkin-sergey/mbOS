@@ -108,15 +108,27 @@ ARM_DRIVER_I2C Driver_I2C##x = {  \
 }
 
 /* I2C Driver state flags */
-#define I2C_FLAG_INIT             (1UL << 0)    // Driver initialized
-#define I2C_FLAG_POWER            (1UL << 1)    // Driver power on
-#define I2C_FLAG_SETUP            (1UL << 2)    // Master configured, clock set
-#define I2C_FLAG_SLAVE_RX         (1UL << 3)    // Slave receive registered
-#define I2C_FLAG_SLAVE_ADDR       (1UL << 4)    // Addressed Slave
-#define I2C_FLAG_TX_RESTART       (1UL << 5)
-#define I2C_FLAG_RX_RESTART       (1UL << 6)
-#define I2C_FLAG_ADDRESS_NACK     (1UL << 7)
-#define I2C_FLAG_SLAVE_BUF_EMPTY  (1UL << 8)
+#define I2C_FLAG_INIT                 (1UL << 0)    // Driver initialized
+#define I2C_FLAG_POWER                (1UL << 1)    // Driver power on
+#define I2C_FLAG_SETUP                (1UL << 2)    // Master configured, clock set
+#define I2C_FLAG_SLAVE_RX             (1UL << 3)    // Slave receive registered
+#define I2C_FLAG_SLAVE_ADDR           (1UL << 4)    // Addressed Slave
+#define I2C_FLAG_TX_RESTART           (1UL << 5)
+#define I2C_FLAG_RX_RESTART           (1UL << 6)
+#define I2C_FLAG_ADDRESS_NACK         (1UL << 7)
+#define I2C_FLAG_SLAVE_BUF_EMPTY      (1UL << 8)
+
+/* I2C status flags definitions */
+#define I2C_STATUS_BUSY               (1UL << 0)
+#define I2C_STATUS_MASTER             (1UL << 1)
+#define I2C_STATUS_RECEIVER           (1UL << 2)
+#define I2C_STATUS_GENERAL_CALL       (1UL << 3)
+#define I2C_STATUS_ARBITRATION_LOST   (1UL << 4)
+#define I2C_STATUS_BUS_ERROR          (1UL << 5)
+
+/* Transfer status flags definitions */
+#define XFER_CTRL_XPENDING            (uint16_t)(1U << 0) // Transfer pending
+#define XFER_CTRL_ADDR_DONE           (uint16_t)(1U << 1) // Addressing done
 
 /*******************************************************************************
  *  typedefs and structures

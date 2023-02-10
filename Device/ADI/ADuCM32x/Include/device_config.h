@@ -26,7 +26,7 @@
 // <i> Configuration settings for Clock
 //   <o> Low-Frequency Internal Clock (Hz)  <1-999999999>
 //   <i> Low-Frequency Internal Clock
-#define LF_CLK_VALUE                    32000
+#define LF_CLK_VALUE                    32768
 //   <o> High-Frequency Internal Clock (Hz) <1-999999999>
 //   <i> High-Frequency Internal Clock
 #define HF_CLK_VALUE                    16000000
