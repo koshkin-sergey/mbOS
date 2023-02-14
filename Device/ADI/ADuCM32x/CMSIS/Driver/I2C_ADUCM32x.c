@@ -437,12 +437,23 @@ int32_t I2C_MasterTransmit(uint32_t         addr,
   tx->data = data;
   tx->num  = num;
   tx->cnt  = 0U;
+  tx->dummy_cnt = 0U;
+
+  /* Enable master */
+  mmr->I2CMCON = (uint16_t)I2CMCON_MASEN;
+
+  /* Fill the TX FIFO */
+  mmr->I2CMTX = tx->data[tx->cnt++];
+  if (tx->cnt == tx->num) {
+    mmr->I2CMTX = DUMMY_BYTE;
+    tx->dummy_cnt++;
+  }
+  else {
+    mmr->I2CMTX = tx->data[tx->cnt++];
+  }
 
   /* Enable transmit interrupt */
-  mmr->I2CMCON = (uint16_t)(I2CMCON_IENACK   |
-                            I2CMCON_IENALOST |
-                            I2CMCON_IENMTX   |
-                            I2CMCON_MASEN);
+  mmr->I2CMCON |= (uint16_t)(I2CMCON_IENCMP | I2CMCON_IENALOST | I2CMCON_IENMTX);
   /* Set slave address, transfer direction and generate start */
   mmr->I2CADR0 = (uint16_t)((addr << 1) & I2CADR0_ADR0_Msk);
 
@@ -507,15 +518,13 @@ int32_t I2C_MasterReceive(uint32_t         addr,
   rx->num  = num;
   rx->cnt  = 0U;
 
+  mmr->I2CMCON = (uint16_t)I2CMCON_MASEN;
   /* Set number of bytes to transfer */
   mmr->I2CMRXCNT = (uint16_t)((num - 1U) & I2CMRXCNT_COUNT_Msk);
   /* Enable receive interrupt */
-  mmr->I2CMCON = (uint16_t)(I2CMCON_IENACK   |
-                            I2CMCON_IENALOST |
-                            I2CMCON_IENMRX   |
-                            I2CMCON_MASEN);
+  mmr->I2CMCON |= (uint16_t)(I2CMCON_IENCMP | I2CMCON_IENALOST | I2CMCON_IENMRX);
   /* Set slave address, transfer direction and generate start */
-  mmr->I2CADR0 = (uint16_t)((addr << 1) & I2CADR0_ADR0_Msk);
+  mmr->I2CADR0 = (uint16_t)(((addr << 1) | 1UL) & I2CADR0_ADR0_Msk);
 
   return (ARM_DRIVER_OK);
 }
@@ -620,7 +629,7 @@ int32_t I2C_GetDataCount(I2C_Resources_t *i2c)
   MMR_I2C_t  *mmr  = i2c->mmr;
   I2C_Info_t *info = i2c->info;
 
-  if ((info->status & I2C_STATUS_MASTER)             == 0U &&
+  if ((info->status & I2C_STATUS_MASTER)      == 0U &&
       (info->xfer_ctrl & XFER_CTRL_ADDR_DONE) == 0U) {
     return (-1);
   }
@@ -628,17 +637,21 @@ int32_t I2C_GetDataCount(I2C_Resources_t *i2c)
   if ((info->status & I2C_STATUS_RECEIVER) == 0U) {
     val = info->tx.cnt;
 
-    if (val > 0) {
+    if (val > 0U) {
       if ((info->status & I2C_STATUS_MASTER) == 0U) {
         fifo_cnt = GetFifoCntSlaveTx(mmr);
-        val -= fifo_cnt - info->tx.dummy_cnt;
       }
+      else {
+        fifo_cnt = GetFifoCntMasterTx(mmr);
+      }
+
+      val -= fifo_cnt - info->tx.dummy_cnt;
     }
   }
   else {
     val = info->rx.cnt;
 
-    if (val > 0) {
+    if (val > 0U) {
       if ((info->status & I2C_STATUS_MASTER) == 0U) {
         fifo_cnt = GetFifoCntSlaveRx(mmr);
       }
@@ -650,7 +663,7 @@ int32_t I2C_GetDataCount(I2C_Resources_t *i2c)
     }
   }
 
-  return (val);
+  return ((int32_t)val);
 }
 
 /**
@@ -675,82 +688,84 @@ ARM_I2C_STATUS I2C_GetStatus(I2C_Resources_t *i2c)
 static
 void I2C_Master_IRQHandler(I2C_Resources_t *i2c)
 {
-  uint32_t event  = 0UL;
-  register ADI_I2C_TypeDef *reg = i2c->reg;
-  register I2C_CTRL *ctrl = i2c->ctrl;
-  uint16_t status = reg->I2CMSTA;
+  register uint32_t  state;
+  register uint32_t  event;
+  I2C_Info_t        *info;
+  MMR_I2C_t         *mmr;
+  I2C_RX_XferInfo_t *rx;
+  I2C_TX_XferInfo_t *tx;
 
-  if (status & I2CMSTA_MBUSY) {
-    if (status & I2CMSTA_MTXREQ) {
-      if (ctrl->cnt < ctrl->num) {
-        reg->I2CMTX = ctrl->data[ctrl->cnt++];
+  mmr    = i2c->mmr;
+  state  = mmr->I2CMSTA;
+  event  = 0U;
+  info   = i2c->info;
+  rx     = &info->rx;
+  tx     = &info->tx;
 
-        if (ctrl->cnt == ctrl->num) {
-          reg->I2CMCON &= ~I2CMCON_IENMTX;
+  if ((state & I2CMSTA_MBUSY) != 0U) {
+    if ((state & I2CMSTA_MTXREQ) != 0U) {
+      if (tx->cnt != tx->num) {
+        mmr->I2CMTX = tx->data[tx->cnt++];
+      }
+      else {
+        if (tx->dummy_cnt != 0U) {
+          tx->dummy_cnt = 0U;
+          mmr->I2CFSTA = I2CFSTA_MFLUSH;
+        }
+        mmr->I2CMCON &= (uint16_t)~I2CMCON_IENMTX;
+        if ((info->xfer_ctrl & XFER_CTRL_XPENDING) != 0U) {
+          info->status &= ~I2C_STATUS_BUSY;
+          event = ARM_I2C_EVENT_TRANSFER_DONE;
+        }
+      }
+    }
 
-          if (ctrl->flags & I2C_FLAG_TX_RESTART) {
-            ctrl->status.busy = 0;
+    if ((state & I2CMSTA_MRXREQ) != 0U) {
+      if (rx->cnt < rx->num) {
+        rx->data[rx->cnt++] = (uint8_t)mmr->I2CMRX;
+        if (rx->cnt == rx->num) {
+          mmr->I2CMCON &= (uint16_t)~I2CMCON_IENMRX;
+          if ((info->xfer_ctrl & XFER_CTRL_XPENDING) != 0U) {
+            info->status &= ~I2C_STATUS_BUSY;
             event = ARM_I2C_EVENT_TRANSFER_DONE;
           }
         }
       }
     }
-    else if (status & I2CMSTA_MRXREQ) {
-      uint32_t rx_cnt = GetMasterRxFifoCnt(i2c);
-
-      while (rx_cnt--) {
-        ctrl->data[ctrl->cnt++] = (uint8_t)reg->I2CMRX;
-      }
-
-      if (ctrl->cnt == ctrl->num) {
-        if (ctrl->flags & I2C_FLAG_RX_RESTART) {
-          ctrl->status.busy = 0;
-          event = ARM_I2C_EVENT_TRANSFER_DONE;
-        }
-      }
-    }
-    else if (status & (I2CMSTA_NACKADDR | I2CMSTA_NACKDATA)) {
-      if (ctrl->status.direction == TX_DIRECTION) {
-        uint32_t fifo_cnt = GetMasterTxFifoCnt(i2c);
-
-        if (fifo_cnt != 0) {
-          ctrl->cnt -= fifo_cnt;
-          reg->I2CFSTA = I2CFSTA_MFLUSH;
-        }
-      }
-
-      if (status & I2CMSTA_NACKADDR) {
-        ctrl->cnt--;
-        ctrl->flags |= I2C_FLAG_ADDRESS_NACK;
-      }
-    }
-    else if (status & I2CMSTA_ALOST) {
-      ctrl->status.arbitration_lost = 1U;
-    }
-  }
-  else if (status & I2C0MSTA_MSTOP) {
-    reg->I2CMCON &= ~I2CMCON_MASEN;
-
-    event = ARM_I2C_EVENT_TRANSFER_DONE;
-
-    if (ctrl->flags & I2C_FLAG_ADDRESS_NACK)
-      event |= ARM_I2C_EVENT_ADDRESS_NACK;
-
-    if (ctrl->status.arbitration_lost == 1U)
-      event |= ARM_I2C_EVENT_ARBITRATION_LOST;
-
-    if (ctrl->cnt < ctrl->num)
-      event |= ARM_I2C_EVENT_TRANSFER_INCOMPLETE;
-
-    ctrl->data = NULL;
-    ctrl->flags &= ~(I2C_FLAG_TX_RESTART | I2C_FLAG_RX_RESTART | I2C_FLAG_ADDRESS_NACK);
-    ctrl->status.busy = 0U;
-    ctrl->status.mode = SLAVE_MODE;
   }
 
-  /* Callback event notification */
-  if (event && ctrl->cb_event) {
-    ctrl->cb_event(event);
+  if ((state & I2CMSTA_ALOST) != 0U) {
+    info->status |= I2C_STATUS_ARBITRATION_LOST;
+  }
+
+  if ((state & I2CMSTA_MSTOP) != 0U) {
+    /* Disable master */
+    mmr->I2CMCON = 0U;
+
+    if ((info->status & I2C_STATUS_BUSY) != 0U) {
+      info->status &= ~I2C_STATUS_BUSY;
+      event = ARM_I2C_EVENT_TRANSFER_DONE;
+
+      if ((info->status & I2C_STATUS_ARBITRATION_LOST) != 0U) {
+        event |= ARM_I2C_EVENT_ARBITRATION_LOST;
+      }
+
+      if ((state & I2CMSTA_NACKADDR) != 0U) {
+        tx->cnt = 0U;
+        event |= ARM_I2C_EVENT_ADDRESS_NACK;
+      }
+
+      if ((state & I2CMSTA_NACKDATA) != 0U) {
+        event |= ARM_I2C_EVENT_TRANSFER_INCOMPLETE;
+        tx->cnt -= GetFifoCntMasterTx(mmr) - info->tx.dummy_cnt + 1U;
+        mmr->I2CFSTA = I2CFSTA_MFLUSH;
+      }
+    }
+  }
+
+  /* Send events */
+  if ((event != 0U) && (info->cb_event)) {
+    info->cb_event(event);
   }
 }
 
@@ -762,98 +777,98 @@ void I2C_Master_IRQHandler(I2C_Resources_t *i2c)
 static
 void I2C_Slave_IRQHandler(I2C_Resources_t *i2c)
 {
-  uint32_t event  = 0U;
-  register ADI_I2C_TypeDef *reg = i2c->reg;
-  register I2C_CTRL *ctrl = i2c->ctrl;
-  uint16_t status = reg->I2CSSTA;
-
-  if (status & I2CSSTA_SBUSY) {
-    if (status & I2CSSTA_REPSTART) {
-      goto stop;
-    }
-    
-		if (!(ctrl->flags & I2C_FLAG_SLAVE_ADDR)) {
-      if (status & I2CSSTA_STXREQ) {
-        ctrl->status.direction = TX_DIRECTION;
-        event = ARM_I2C_EVENT_SLAVE_TRANSMIT;
-      }
-      else if (status & I2CSSTA_SRXREQ) {
-        ctrl->status.direction = RX_DIRECTION;
-        event = ARM_I2C_EVENT_SLAVE_RECEIVE;
-      }
-
-      if ((ctrl->data == NULL) ||
-          ((status & I2CSSTA_STXREQ) && (ctrl->flags & I2C_FLAG_SLAVE_RX)) ||
-          ((status & I2CSSTA_SRXREQ) && !(ctrl->flags & I2C_FLAG_SLAVE_RX)))
-      {
-        /* Buffer unavailable */
-        if (ctrl->cb_event) {
-          ctrl->cb_event(event);
-        }
-      }
-
-      event = 0;
-      ctrl->status.busy = 1;
-      ctrl->cnt = 0;
-      ctrl->flags |= I2C_FLAG_SLAVE_ADDR;
-    }
-
-    if (status & I2CSSTA_STXREQ) {
-      reg->I2CSTX = ctrl->data[ctrl->data_cnt++];
-      ctrl->cnt++;
-
-      if (ctrl->data_cnt == ctrl->num) {
-        /* Disable slave transmit request interrupt */
-        reg->I2CSCON &= ~I2CSCON_IENSTX;
-        ctrl->status.busy = 0;
-        ctrl->flags |= I2C_FLAG_SLAVE_BUF_EMPTY;
-        event = ARM_I2C_EVENT_SLAVE_TRANSMIT;
-      }
-    }
-    else if (status & I2CSSTA_SRXREQ) {
-      uint8_t rx_data = (uint8_t)reg->I2CSRX;
-
-      if (ctrl->cnt < ctrl->num) {
-        ctrl->data[ctrl->cnt++] = rx_data;
-      }
-    }
-  }
-  else if (status & I2CSSTA_STOP) {
-    /* STOP received */
-stop:
-    if (ctrl->status.direction == TX_DIRECTION) {
-      uint32_t fifo_cnt = GetSlaveTxFifoCnt(i2c);
-
-      if (fifo_cnt != 0) {
-        ctrl->cnt -= fifo_cnt;
-        reg->I2CFSTA = I2CFSTA_SFLUSH;
-      }
-
-      /* Enable slave transmit request interrupt */
-      reg->I2CSCON |= I2CSCON_IENSTX;
-    }
-
-    ctrl->status.busy = 0;
-    /* Slave operation completed, generate events */
-    event = ARM_I2C_EVENT_TRANSFER_DONE;
-
-    if (ctrl->status.general_call) {
-      event |= ARM_I2C_EVENT_GENERAL_CALL;
-    }
-
-    if (ctrl->cnt < ctrl->num) {
-      event |= ARM_I2C_EVENT_TRANSFER_INCOMPLETE;
-    }
-
-    ctrl->data = NULL;
-    ctrl->flags &= ~(I2C_FLAG_SLAVE_ADDR | I2C_FLAG_SLAVE_BUF_EMPTY);
-  }
-
-
-  /* Callback event notification */
-  if (event && ctrl->cb_event) {
-    ctrl->cb_event(event);
-  }
+//  uint32_t event  = 0U;
+//  register ADI_I2C_TypeDef *reg = i2c->reg;
+//  register I2C_CTRL *ctrl = i2c->ctrl;
+//  uint16_t status = reg->I2CSSTA;
+//
+//  if (status & I2CSSTA_SBUSY) {
+//    if (status & I2CSSTA_REPSTART) {
+//      goto stop;
+//    }
+//
+//		if (!(ctrl->flags & I2C_FLAG_SLAVE_ADDR)) {
+//      if (status & I2CSSTA_STXREQ) {
+//        ctrl->status.direction = TX_DIRECTION;
+//        event = ARM_I2C_EVENT_SLAVE_TRANSMIT;
+//      }
+//      else if (status & I2CSSTA_SRXREQ) {
+//        ctrl->status.direction = RX_DIRECTION;
+//        event = ARM_I2C_EVENT_SLAVE_RECEIVE;
+//      }
+//
+//      if ((ctrl->data == NULL) ||
+//          ((status & I2CSSTA_STXREQ) && (ctrl->flags & I2C_FLAG_SLAVE_RX)) ||
+//          ((status & I2CSSTA_SRXREQ) && !(ctrl->flags & I2C_FLAG_SLAVE_RX)))
+//      {
+//        /* Buffer unavailable */
+//        if (ctrl->cb_event) {
+//          ctrl->cb_event(event);
+//        }
+//      }
+//
+//      event = 0;
+//      ctrl->status.busy = 1;
+//      ctrl->cnt = 0;
+//      ctrl->flags |= I2C_FLAG_SLAVE_ADDR;
+//    }
+//
+//    if (status & I2CSSTA_STXREQ) {
+//      reg->I2CSTX = ctrl->data[ctrl->data_cnt++];
+//      ctrl->cnt++;
+//
+//      if (ctrl->data_cnt == ctrl->num) {
+//        /* Disable slave transmit request interrupt */
+//        reg->I2CSCON &= ~I2CSCON_IENSTX;
+//        ctrl->status.busy = 0;
+//        ctrl->flags |= I2C_FLAG_SLAVE_BUF_EMPTY;
+//        event = ARM_I2C_EVENT_SLAVE_TRANSMIT;
+//      }
+//    }
+//    else if (status & I2CSSTA_SRXREQ) {
+//      uint8_t rx_data = (uint8_t)reg->I2CSRX;
+//
+//      if (ctrl->cnt < ctrl->num) {
+//        ctrl->data[ctrl->cnt++] = rx_data;
+//      }
+//    }
+//  }
+//  else if (status & I2CSSTA_STOP) {
+//    /* STOP received */
+//stop:
+//    if (ctrl->status.direction == TX_DIRECTION) {
+//      uint32_t fifo_cnt = GetSlaveTxFifoCnt(i2c);
+//
+//      if (fifo_cnt != 0) {
+//        ctrl->cnt -= fifo_cnt;
+//        reg->I2CFSTA = I2CFSTA_SFLUSH;
+//      }
+//
+//      /* Enable slave transmit request interrupt */
+//      reg->I2CSCON |= I2CSCON_IENSTX;
+//    }
+//
+//    ctrl->status.busy = 0;
+//    /* Slave operation completed, generate events */
+//    event = ARM_I2C_EVENT_TRANSFER_DONE;
+//
+//    if (ctrl->status.general_call) {
+//      event |= ARM_I2C_EVENT_GENERAL_CALL;
+//    }
+//
+//    if (ctrl->cnt < ctrl->num) {
+//      event |= ARM_I2C_EVENT_TRANSFER_INCOMPLETE;
+//    }
+//
+//    ctrl->data = NULL;
+//    ctrl->flags &= ~(I2C_FLAG_SLAVE_ADDR | I2C_FLAG_SLAVE_BUF_EMPTY);
+//  }
+//
+//
+//  /* Callback event notification */
+//  if (event && ctrl->cb_event) {
+//    ctrl->cb_event(event);
+//  }
 }
 
 /*******************************************************************************
