@@ -186,7 +186,7 @@
 
 // <e> I2C1 (Inter-integrated Circuit Interface) [Driver_I2C1]
 // <i> Configuration settings for Driver_I2C1 in component ::CMSIS Driver:I2C
-#define DEV_I2C1                       0
+#define DEV_I2C1                       1
 
 //   <o> SCL Pin <0=>P0.6 <1=>P1.6
 #define   DEV_I2C1_SCL_PORT_ID         1

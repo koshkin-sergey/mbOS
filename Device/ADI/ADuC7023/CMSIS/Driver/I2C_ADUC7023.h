@@ -55,7 +55,7 @@
   #define I2C0_SDA_GPIO_PIN         DEV_I2C0_SDA_PIN
   #define I2C0_SDA_GPIO_FUNC        DEV_I2C0_SDA_FUNC
 
-  #define I2C0_INT_PRIORITY         DEV_I2C0_INT_PRIO
+  #define I2C0_INT_PRIORITY         (IRQ_Priority_t)DEV_I2C0_INT_PRIO
 #endif
 
 /* I2C1 configuration definitions */
@@ -75,7 +75,7 @@
   #define I2C1_SDA_GPIO_PIN         DEV_I2C1_SDA_PIN
   #define I2C1_SDA_GPIO_FUNC        DEV_I2C1_SDA_FUNC
 
-  #define I2C1_INT_PRIORITY         DEV_I2C1_INT_PRIO
+  #define I2C1_INT_PRIORITY         (IRQ_Priority_t)DEV_I2C1_INT_PRIO
 #endif
 
 #define I2Cx_EXPORT_DRIVER(x)                                                                                                                                                                                 \
