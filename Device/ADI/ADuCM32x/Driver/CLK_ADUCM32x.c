@@ -163,6 +163,9 @@ static uint32_t CLK_GetFrequency(CLK_Freq_t type)
     case CLK_FREQ_ACLK:
       clk >>= 2U;
       break;
+    case CLK_FREQ_Reserved:
+    default:
+      break;
   }
 
   return (clk);

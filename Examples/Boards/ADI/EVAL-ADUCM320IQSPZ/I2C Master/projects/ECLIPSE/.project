@@ -47,7 +47,7 @@
 		<link>
 			<name>src/Device/CMSIS</name>
 			<type>2</type>
-			<location>D:/Projects/mbOS/Device/ADI/ADuCM32x/CMSIS</location>
+			<locationURI>PARENT-7-PROJECT_LOC/Device/ADI/ADuCM32x/CMSIS</locationURI>
 		</link>
 		<link>
 			<name>src/Device/Driver</name>
