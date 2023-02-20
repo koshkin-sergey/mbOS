@@ -111,12 +111,6 @@ ARM_DRIVER_I2C Driver_I2C##x = {  \
 #define I2C_FLAG_INIT                 (1UL << 0)    // Driver initialized
 #define I2C_FLAG_POWER                (1UL << 1)    // Driver power on
 #define I2C_FLAG_SETUP                (1UL << 2)    // Master configured, clock set
-#define I2C_FLAG_SLAVE_RX             (1UL << 3)    // Slave receive registered
-#define I2C_FLAG_SLAVE_ADDR           (1UL << 4)    // Addressed Slave
-#define I2C_FLAG_TX_RESTART           (1UL << 5)
-#define I2C_FLAG_RX_RESTART           (1UL << 6)
-#define I2C_FLAG_ADDRESS_NACK         (1UL << 7)
-#define I2C_FLAG_SLAVE_BUF_EMPTY      (1UL << 8)
 
 /* I2C status flags definitions */
 #define I2C_STATUS_BUSY               (1UL << 0)

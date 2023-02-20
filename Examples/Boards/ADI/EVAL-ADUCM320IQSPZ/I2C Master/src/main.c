@@ -71,7 +71,7 @@ static const osEventFlagsAttr_t evf_i2c_attr = {
     .cb_size   = sizeof(evf_i2c_cb)
 };
 
-static uint8_t test_rd_buf[16];
+static uint8_t test_rd_buf[3];
 
 static Driver_GPIO_t *gpio = &Driver_GPIO2;
 
@@ -161,7 +161,7 @@ __NO_RETURN static void main_proc(void *param)
   GPIO_Init();
   osTimerStart(timer_id, TIMEOUT);
 
-  pooling = true;
+  pooling = false;
 
   /* Initialize I2C Driver */
   if (pooling == false) {

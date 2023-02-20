@@ -706,46 +706,42 @@ static
 void I2C_Master_IRQHandler(I2C_Resources_t *i2c)
 {
   register uint32_t  state;
+  register uint32_t  ctrl;
   register uint32_t  event;
-  I2C_Info_t        *info;
-  MMR_I2C_t         *mmr;
-  I2C_RX_XferInfo_t *rx;
-  I2C_TX_XferInfo_t *tx;
+  I2C_Info_t        *info = i2c->info;
+  MMR_I2C_t         *mmr  = i2c->mmr;
+  I2C_RX_XferInfo_t *rx   = &info->rx;
+  I2C_TX_XferInfo_t *tx   = &info->tx;
 
-  mmr    = i2c->mmr;
+  ctrl   = mmr->I2CMCON;
   state  = mmr->I2CMSTA;
   event  = 0U;
-  info   = i2c->info;
-  rx     = &info->rx;
-  tx     = &info->tx;
 
-  if ((state & I2CMSTA_MBUSY) != 0U) {
-    if ((state & I2CMSTA_MTXREQ) != 0U) {
-      if (tx->cnt != tx->num) {
-        mmr->I2CMTX = tx->data[tx->cnt++];
+  if ((ctrl & I2CMCON_IENMTX) != 0U && (state & I2CMSTA_MTXREQ) != 0U) {
+    if (tx->cnt != tx->num) {
+      mmr->I2CMTX = tx->data[tx->cnt++];
+    }
+    else {
+      if (tx->dummy_cnt != 0U) {
+        tx->dummy_cnt = 0U;
+        mmr->I2CFSTA = I2CFSTA_MFLUSH;
       }
-      else {
-        if (tx->dummy_cnt != 0U) {
-          tx->dummy_cnt = 0U;
-          mmr->I2CFSTA = I2CFSTA_MFLUSH;
-        }
-        mmr->I2CMCON &= (uint16_t)~I2CMCON_IENMTX;
+      mmr->I2CMCON &= (uint16_t)~I2CMCON_IENMTX;
+      if ((info->xfer_ctrl & XFER_CTRL_XPENDING) != 0U) {
+        info->status &= ~I2C_STATUS_BUSY;
+        event = ARM_I2C_EVENT_TRANSFER_DONE;
+      }
+    }
+  }
+
+  if ((ctrl & I2CMCON_IENMRX) != 0U && (state & I2CMSTA_MRXREQ) != 0U) {
+    if (rx->cnt < rx->num) {
+      rx->data[rx->cnt++] = (uint8_t)mmr->I2CMRX;
+      if (rx->cnt == rx->num) {
+        mmr->I2CMCON &= (uint16_t)~I2CMCON_IENMRX;
         if ((info->xfer_ctrl & XFER_CTRL_XPENDING) != 0U) {
           info->status &= ~I2C_STATUS_BUSY;
           event = ARM_I2C_EVENT_TRANSFER_DONE;
-        }
-      }
-    }
-
-    if ((state & I2CMSTA_MRXREQ) != 0U) {
-      if (rx->cnt < rx->num) {
-        rx->data[rx->cnt++] = (uint8_t)mmr->I2CMRX;
-        if (rx->cnt == rx->num) {
-          mmr->I2CMCON &= (uint16_t)~I2CMCON_IENMRX;
-          if ((info->xfer_ctrl & XFER_CTRL_XPENDING) != 0U) {
-            info->status &= ~I2C_STATUS_BUSY;
-            event = ARM_I2C_EVENT_TRANSFER_DONE;
-          }
         }
       }
     }
