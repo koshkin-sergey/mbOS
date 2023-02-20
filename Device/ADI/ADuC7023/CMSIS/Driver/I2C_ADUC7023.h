@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2021-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -89,40 +89,44 @@ static int32_t        I2C##x##_SlaveReceive     (                     uint8_t *d
 static int32_t        I2C##x##_GetDataCount     (void)                                                                { return (I2C_GetDataCount     (&I2C##x##_Resources));                                } \
 static int32_t        I2C##x##_Control          (uint32_t control, uint32_t arg)                                      { return (I2C_Control          (control, arg, &I2C##x##_Resources));                  } \
 static ARM_I2C_STATUS I2C##x##_GetStatus        (void)                                                                { return (I2C_GetStatus        (&I2C##x##_Resources));                                } \
+extern void           I2C##x##_Master_IRQHandler(void);                                                                                                                                                       \
+extern void           I2C##x##_Slave_IRQHandler (void);                                                                                                                                                       \
        void           I2C##x##_Master_IRQHandler(void)                                                                {         I2C_Master_IRQHandler(&I2C##x##_Resources);                                 } \
        void           I2C##x##_Slave_IRQHandler (void)                                                                {         I2C_Slave_IRQHandler (&I2C##x##_Resources);                                 } \
-                                                                                                                                                                                                              \
-ARM_DRIVER_I2C Driver_I2C##x = { \
-  I2Cx_GetVersion,               \
-  I2Cx_GetCapabilities,          \
-  I2C##x##_Initialize,           \
-  I2C##x##_Uninitialize,         \
-  I2C##x##_PowerControl,         \
-  I2C##x##_MasterTransmit,       \
-  I2C##x##_MasterReceive,        \
-  I2C##x##_SlaveTransmit,        \
-  I2C##x##_SlaveReceive,         \
-  I2C##x##_GetDataCount,         \
-  I2C##x##_Control,              \
-  I2C##x##_GetStatus             \
+                                  \
+extern                            \
+ARM_DRIVER_I2C Driver_I2C##x;     \
+ARM_DRIVER_I2C Driver_I2C##x = {  \
+  I2Cx_GetVersion,                \
+  I2Cx_GetCapabilities,           \
+  I2C##x##_Initialize,            \
+  I2C##x##_Uninitialize,          \
+  I2C##x##_PowerControl,          \
+  I2C##x##_MasterTransmit,        \
+  I2C##x##_MasterReceive,         \
+  I2C##x##_SlaveTransmit,         \
+  I2C##x##_SlaveReceive,          \
+  I2C##x##_GetDataCount,          \
+  I2C##x##_Control,               \
+  I2C##x##_GetStatus              \
 }
 
 /* Current driver status flag definition */
-#define I2C_INIT              ((uint16_t)0x01)    // I2C initialized
-#define I2C_POWER             ((uint16_t)0x02)    // I2C powered on
-#define I2C_SETUP             ((uint16_t)0x04)    // I2C Master configured, clock set
+#define I2C_FLAG_INIT                 ((uint16_t)0x01)  // I2C initialized
+#define I2C_FLAG_POWER                ((uint16_t)0x02)  // I2C powered on
+#define I2C_FLAG_SETUP                ((uint16_t)0x04)  // I2C Master configured, clock set
 
 /* I2C status flags definitions */
-#define I2C_BUSY              (1UL << 0U)
-#define I2C_MASTER            (1UL << 1U)
-#define I2C_RECEIVER          (1UL << 2U)
-#define I2C_GENERAL_CALL      (1UL << 3U)
-#define I2C_ARBITRATION_LOST  (1UL << 4U)
-#define I2C_BUS_ERROR         (1UL << 5U)
+#define I2C_STATUS_BUSY               (1UL << 0U)
+#define I2C_STATUS_MASTER             (1UL << 1U)
+#define I2C_STATUS_RECEIVER           (1UL << 2U)
+#define I2C_STATUS_GENERAL_CALL       (1UL << 3U)
+#define I2C_STATUS_ARBITRATION_LOST   (1UL << 4U)
+#define I2C_STATUS_BUS_ERROR          (1UL << 5U)
 
 /* Transfer status flags definitions */
-#define XFER_CTRL_XPENDING    ((uint16_t)0x0001)  // Transfer pending
-#define XFER_CTRL_ADDR_DONE   ((uint16_t)0x0002)  // Addressing done
+#define XFER_CTRL_XPENDING            ((uint16_t)0x0001)  // Transfer pending
+#define XFER_CTRL_ADDR_DONE           ((uint16_t)0x0002)  // Addressing done
 
 /*******************************************************************************
  *  typedefs and structures (scope: module-local)
