@@ -125,8 +125,14 @@ ARM_DRIVER_I2C Driver_I2C##x = {  \
 #define I2C_STATUS_BUS_ERROR          (1UL << 5U)
 
 /* Transfer status flags definitions */
-#define XFER_CTRL_XPENDING            ((uint16_t)0x0001)  // Transfer pending
-#define XFER_CTRL_ADDR_DONE           ((uint16_t)0x0002)  // Addressing done
+#define XFER_PENDING                  (uint16_t)(1U << 0) // Transfer pending
+#define XFER_ADDR_DONE                (uint16_t)(1U << 1) // Addressing done
+#define XFER_MASTER_TX                (uint16_t)(1U << 2) // Master stalled on transmit
+#define XFER_MASTER_RX                (uint16_t)(1U << 3) // Master stalled on receive
+#define XFER_SLAVE_TX                 (uint16_t)(1U << 4) // Slave stalled on transmit
+#define XFER_SLAVE_RX                 (uint16_t)(1U << 5) // Slave stalled on receive
+#define XFER_MASTER                   (XFER_MASTER_TX | XFER_MASTER_RX)
+#define XFER_SLAVE                    (XFER_SLAVE_TX | XFER_SLAVE_RX)
 
 /*******************************************************************************
  *  typedefs and structures (scope: module-local)
@@ -167,7 +173,7 @@ typedef struct _I2C_INFO {
   I2C_RX_XFER_INFO      rx;                 // RX transfer information
   I2C_TX_XFER_INFO      tx;                 // TX transfer information
   uint16_t              flags;              // Current I2C state flags
-  uint16_t              xfer_ctrl;          // Transfer control (current)
+  uint16_t              xfer;               // Transfer control (current)
 } I2C_INFO;
 
 /* I2C IRQ Configuration */
