@@ -40,8 +40,8 @@
 								<option id="gnu.c.compiler.option.warnings.pedantic.1599403453" name="Pedantic (-pedantic)" superClass="gnu.c.compiler.option.warnings.pedantic" value="false" valueType="boolean"/>
 								<option id="gnu.c.compiler.option.misc.other.2035638513" name="Other flags" superClass="gnu.c.compiler.option.misc.other" value="-c -fmessage-length=0 -mclr -std=gnu99 -Wa,-adhlns=&quot;$@.lst&quot; -ffunction-sections -fdata-sections" valueType="string"/>
 								<option id="gnu.c.compiler.option.include.paths.183908372" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="../../../src/Device"/>
 									<listOptionValue builtIn="false" value="../../../../../../../../Include"/>
-									<listOptionValue builtIn="false" value="../../../../../../../../Examples/Boards/KMX32/KRECHET_BOARD/I2C_Master/src/Device"/>
 									<listOptionValue builtIn="false" value="../../../../../../../../Device/KMX32/Krechet1/Include"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1586239259" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>

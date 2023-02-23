@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2022-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -65,13 +65,13 @@ static const osThreadAttr_t init_attr = {
     .priority   = osPriorityNormal,
 };
 
-static osTimerId_t         timer1;
-static osTimer_t           timer1_cb;
-static const osTimerAttr_t timer1_attr = {
+static osTimerId_t         timer_id;
+static osTimer_t           timer_cb;
+static const osTimerAttr_t timer_attr = {
     .name      = NULL,
     .attr_bits = 0U,
-    .cb_mem    = &timer1_cb,
-    .cb_size   = sizeof(timer1_cb)
+    .cb_mem    = &timer_cb,
+    .cb_size   = sizeof(timer_cb)
 };
 
 static osEventFlagsId_t         evf_i2c;
@@ -93,6 +93,62 @@ void I2C_Callback(uint32_t event)
   osEventFlagsSet(evf_i2c, event);
 }
 
+static
+int32_t TestTransferEvent(uint8_t *wr_buf, uint8_t wr_size,
+                          uint8_t *rd_buf, uint8_t rd_size)
+{
+  uint32_t flags;
+
+  i2c->MasterTransmit(SLAVE_ADDR, wr_buf, wr_size, true);
+  /* Wait until transfer completed */
+  flags = osEventFlagsWait(evf_i2c,
+                           ARM_I2C_EVENT_TRANSFER_DONE |
+                           ARM_I2C_EVENT_TRANSFER_INCOMPLETE,
+                           osFlagsWaitAny,
+                           I2C_TIMEOUT);
+  /* Check if all data transferred */
+  if ((flags & (ARM_I2C_EVENT_TRANSFER_INCOMPLETE | osFlagsError)) != 0U) {
+    return (-1);
+  }
+
+  i2c->MasterReceive(SLAVE_ADDR, rd_buf, rd_size, false);
+  /* Wait until transfer completed */
+  flags = osEventFlagsWait(evf_i2c,
+                           ARM_I2C_EVENT_TRANSFER_DONE |
+                           ARM_I2C_EVENT_TRANSFER_INCOMPLETE,
+                           osFlagsWaitAny,
+                           I2C_TIMEOUT);
+  /* Check if all data transferred */
+  if ((flags & (ARM_I2C_EVENT_TRANSFER_INCOMPLETE | osFlagsError)) != 0U) {
+    return (-1);
+  }
+
+  return (0U);
+}
+
+static
+int32_t TestTransferPool(uint8_t *wr_buf, uint8_t wr_size,
+                         uint8_t *rd_buf, uint8_t rd_size)
+{
+  i2c->MasterTransmit(SLAVE_ADDR, wr_buf, wr_size, true);
+  /* Wait until transfer completed */
+  while (i2c->GetStatus().busy != 0U);
+  /* Check if all data transferred */
+  if (i2c->GetDataCount() != wr_size) {
+    return (-1);
+  }
+
+  i2c->MasterReceive(SLAVE_ADDR, rd_buf, rd_size, false);
+  /* Wait until transfer completed */
+  while (i2c->GetStatus().busy != 0U);
+  /* Check if all data transferred */
+  if (i2c->GetDataCount() != rd_size) {
+    return (-1);
+  }
+
+  return (0U);
+}
+
 static void GPIO_Init(void)
 {
   adsu->PeriphEnable(ADSU_Periph_GPIO);
@@ -101,66 +157,42 @@ static void GPIO_Init(void)
   __set_PeriphReg(GPIO_DIR_REG, LED1_G);
 }
 
-void i2c_write(const uint8_t *buf, size_t size, bool xfer_pending)
-{
-  int32_t ret;
-
-  ret = i2c->MasterTransmit(SLAVE_ADDR, buf, size, xfer_pending);
-  if (ret == ARM_DRIVER_OK) {
-    osEventFlagsWait(
-        evf_i2c,
-        ARM_I2C_EVENT_TRANSFER_DONE       |
-        ARM_I2C_EVENT_TRANSFER_INCOMPLETE |
-        ARM_I2C_EVENT_ADDRESS_NACK        |
-        ARM_I2C_EVENT_ARBITRATION_LOST    |
-        ARM_I2C_EVENT_BUS_ERROR,
-        osFlagsWaitAny,
-        I2C_TIMEOUT);
-  }
-}
-
-void i2c_read(uint8_t *buf, size_t size)
-{
-  int32_t ret;
-
-  ret = i2c->MasterReceive(SLAVE_ADDR, buf, size, false);
-  if (ret == ARM_DRIVER_OK) {
-    osEventFlagsWait(
-        evf_i2c,
-        ARM_I2C_EVENT_TRANSFER_DONE       |
-        ARM_I2C_EVENT_TRANSFER_INCOMPLETE |
-        ARM_I2C_EVENT_ADDRESS_NACK        |
-        ARM_I2C_EVENT_ARBITRATION_LOST    |
-        ARM_I2C_EVENT_BUS_ERROR,
-        osFlagsWaitAny,
-        I2C_TIMEOUT);
-  }
-}
-
-static void init_proc(void *param)
+static void main_proc(void *param)
 {
   (void) param;
-  uint8_t addr[] = {0U};
-  uint8_t buf[]  = {1U,2U,3U,4U};
+  bool pooling;
 
   GPIO_Init();
+  osTimerStart(timer_id, LED_TIMEOUT);
+
+  pooling = true;
 
   /* Initialize I2C Driver */
-  i2c->Initialize(I2C_Callback);
+  if (pooling == false) {
+    i2c->Initialize(I2C_Callback);
+  }
+  else {
+    i2c->Initialize(NULL);
+  }
   /* Configure I2C Driver */
   i2c->PowerControl(ARM_POWER_FULL);
   i2c->Control(ARM_I2C_BUS_SPEED, ARM_I2C_BUS_SPEED_STANDARD);
 
-  osTimerStart(timer1, LED_TIMEOUT);
+  uint8_t wr_buf[] = {0U};
+  uint8_t rd_buf[16];
 
   for (;;) {
-    i2c_write(&addr[0], sizeof(addr), true);
-    i2c_read(&buf[0], sizeof(buf));
-    osDelay(2U);
+    if (pooling == false) {
+      TestTransferEvent(&wr_buf[0], sizeof(wr_buf), &rd_buf[0], sizeof(rd_buf));
+    }
+    else {
+      TestTransferPool(&wr_buf[0], sizeof(wr_buf), &rd_buf[0], sizeof(rd_buf));
+    }
+    osDelay(10U);
   }
 }
 
-static void timer1_func(void *argument)
+static void timer_proc(void *argument)
 {
   (void) argument;
 
@@ -176,13 +208,13 @@ int main(void)
 
   status = osKernelInitialize();
   if (status == osOK) {
-    init_id = osThreadNew(init_proc, NULL, &init_attr);
+    init_id = osThreadNew(main_proc, NULL, &init_attr);
     if (init_id == NULL) {
         goto error;
     }
 
-    timer1 = osTimerNew(timer1_func, osTimerPeriodic, NULL, &timer1_attr);
-    if (timer1 == NULL) {
+    timer_id = osTimerNew(timer_proc, osTimerPeriodic, NULL, &timer_attr);
+    if (timer_id == NULL) {
         goto error;
     }
 

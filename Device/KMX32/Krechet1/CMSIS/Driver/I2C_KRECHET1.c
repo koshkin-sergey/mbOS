@@ -618,6 +618,9 @@ void I2C_IRQHandler(I2C_RESOURCES *i2c)
         info->xfer_ctrl |= XFER_CTRL_ADDR_DONE;
         info->status    |= I2C_BUSY;
       }
+      else {
+        __set_PeriphReg(I2C_TDAT_REG, I2C_TDat_Cond_Slv | I2C_TDat_NoAck | 0xFFU);
+      }
     }
     else {
       if (rx->num == 0U) {
@@ -638,10 +641,10 @@ void I2C_IRQHandler(I2C_RESOURCES *i2c)
 
   /* RX Ready */
   if ((flags & I2C_Flags_RxIF) != 0U) {
-    if ((state & I2C_Stat_Slave) != 0U) {
-
-    }
-    else {
+//    if ((state & I2C_Stat_Slave) != 0U) {
+//
+//    }
+//    else {
       cnt = (state & I2C_Stat_RxCnt_Msk) >> I2C_Stat_RxCnt_Pos;
       while (cnt-- > 0U) {
         data = __get_PeriphReg(I2C_RDAT_REG);
@@ -649,7 +652,7 @@ void I2C_IRQHandler(I2C_RESOURCES *i2c)
           rx->data[rx->cnt++] = (uint8_t)data;
         }
       }
-    }
+//    }
   }
 
   /* TX Ready */
