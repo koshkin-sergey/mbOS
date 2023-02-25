@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2009-2019 Arm Limited.
- * Copyright (C) 2019-2020 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2019-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -24,7 +24,7 @@
 
 /*---------------------- Flash Configuration ----------------------------------
 //  <h> Flash Configuration
-//    <o0> Flash Base Address <0x0-0xFFFFFFFF:8>
+//    <o0> Flash Base Address    <0x0-0xFFFFFFFF:8>
 //    <o1> Flash Size (in Bytes) <0x0-0xFFFFFFFF:8>
 //  </h>
  -----------------------------------------------------------------------------*/
@@ -43,7 +43,7 @@ __RAM_SIZE = 0x00008000;
 /*--------------------- Stack / Heap Configuration ----------------------------
 //  <h> Stack / Heap Configuration
 //    <o0> Stack Size (in Bytes) <0x0-0xFFFFFFFF:8>
-//    <o1> Heap Size (in Bytes) <0x0-0xFFFFFFFF:8>
+//    <o1> Heap Size (in Bytes)  <0x0-0xFFFFFFFF:8>
 //  </h>
  -----------------------------------------------------------------------------*/
 __STACK_SIZE = 0x00000400;
