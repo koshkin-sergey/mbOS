@@ -278,7 +278,7 @@ int32_t I2C_PowerControl(ARM_POWER_STATE state, I2C_Resources_t *i2c)
       info->flags |= I2C_FLAG_POWER;
       break;
 
-    default:
+    case ARM_POWER_LOW:
       return (ARM_DRIVER_ERROR_UNSUPPORTED);
   }
 
