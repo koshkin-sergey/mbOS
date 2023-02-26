@@ -17,6 +17,9 @@
  * limitations under the License.
  */
 
+/*******************************************************************************
+ *  includes
+ ******************************************************************************/
 
 #include <stddef.h>
 #include <Kernel/kernel.h>
@@ -40,16 +43,16 @@
  *  global variable definitions (scope: module-local)
  ******************************************************************************/
 
-static osThreadId_t init_id;
-static osThread_t   init_cb;
-static uint64_t     init_stack[THREAD_STACK_SIZE/8U];
-static const osThreadAttr_t init_attr = {
+static osThreadId_t         thread_id;
+static osThread_t           thread_cb;
+static uint64_t             thread_stack[THREAD_STACK_SIZE/8U];
+static const osThreadAttr_t thread_attr = {
     .name       = NULL,
     .attr_bits  = 0U,
-    .cb_mem     = &init_cb,
-    .cb_size    = sizeof(init_cb),
-    .stack_mem  = &init_stack[0],
-    .stack_size = sizeof(init_stack),
+    .cb_mem     = &thread_cb,
+    .cb_size    = sizeof(thread_cb),
+    .stack_mem  = &thread_stack[0],
+    .stack_size = sizeof(thread_stack),
     .priority   = osPriorityNormal,
 };
 
@@ -153,7 +156,8 @@ static void GPIO_Init(void)
   gpio->PinConfig(LED_PIN, &led_cfg);
 }
 
-__NO_RETURN static void main_proc(void *param)
+__NO_RETURN
+static void main_proc(void *param)
 {
   (void) param;
   bool pooling;
@@ -188,7 +192,7 @@ __NO_RETURN static void main_proc(void *param)
   }
 }
 
-static void timer_func(void *argument)
+static void timer_proc(void *argument)
 {
   (void) argument;
 
@@ -203,12 +207,12 @@ int main(void)
 
   status = osKernelInitialize();
   if (status == osOK) {
-    init_id = osThreadNew(main_proc, NULL, &init_attr);
-    if (init_id == NULL) {
+    thread_id = osThreadNew(main_proc, NULL, &thread_attr);
+    if (thread_id == NULL) {
       goto error;
     }
 
-    timer_id = osTimerNew(timer_func, osTimerPeriodic, NULL, &timer_attr);
+    timer_id = osTimerNew(timer_proc, osTimerPeriodic, NULL, &timer_attr);
     if (timer_id == NULL) {
       goto error;
     }
