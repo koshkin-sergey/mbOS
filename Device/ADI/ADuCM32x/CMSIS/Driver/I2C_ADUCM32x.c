@@ -313,7 +313,11 @@ int32_t I2C_Control(uint32_t control, uint32_t arg, I2C_Resources_t *i2c)
         reg_val = 0U;
       }
       else {
-        reg_val = I2CSCON_IENSRX | I2CSCON_IENSTX | I2CSCON_EARLYTXR | I2CSCON_SLVEN;
+        reg_val = I2CSCON_IENSRX   |
+                  I2CSCON_IENSTX   |
+                  I2CSCON_IENSTOP  |
+                  I2CSCON_EARLYTXR |
+                  I2CSCON_SLVEN;
 
         if (arg & ARM_I2C_ADDRESS_GC) {
           /* General call enable */
@@ -843,7 +847,7 @@ void I2C_Slave_IRQHandler(I2C_Resources_t *i2c)
 
     if ((info->xfer & XFER_ADDR_DONE) == 0U) {
       info->xfer |= XFER_ADDR_DONE;
-      info->status    |= (I2C_STATUS_BUSY | I2C_STATUS_RECEIVER);
+      info->status |= I2C_STATUS_BUSY | I2C_STATUS_RECEIVER;
     }
 
     if (rx->cnt != rx->num) {
