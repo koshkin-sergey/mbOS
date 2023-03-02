@@ -22,6 +22,7 @@
  ******************************************************************************/
 
 #include <stddef.h>
+#include <string.h>
 #include <Kernel/kernel.h>
 #include <asm/system_aducm32x.h>
 #include <Driver/GPIO_ADUCM32x.h>
@@ -37,6 +38,9 @@
 #define LED_TIMEOUT                   (500UL)
 
 #define SLAVE_ADDR                    (0xA0 >> 1U)
+
+#define I2C_XFER_TRANSMIT             (0U)
+#define I2C_XFER_RECEIVE              (1U)
 
 /*******************************************************************************
  *  global variable definitions (scope: module-local)
@@ -69,26 +73,48 @@ static Driver_GPIO_t *gpio = &Driver_GPIO2;
 extern ARM_DRIVER_I2C Driver_I2C0;
 static ARM_DRIVER_I2C *i2c = &Driver_I2C0;
 
-static uint8_t wr_buf[] = {0U, 1U, 2U, 3U, 4U, 5U, 6U, 7U, 8U, 9U, 10U};
-static uint8_t rd_buf[10];
+static uint8_t mem_page[128] = {0U};
+static uint8_t offset;
+static uint8_t rd_buf[4] = {0U};
+static uint32_t last_xfer;
 
 /*******************************************************************************
  *  function implementations (scope: module-local)
  ******************************************************************************/
 
 static
-void StartTrasfer(uint8_t *wr_buf, uint8_t wr_size,
-                  uint8_t *rd_buf, uint8_t rd_size)
-{
-  i2c->SlaveTransmit(wr_buf, wr_size);
-  i2c->SlaveReceive(rd_buf, rd_size);
-}
-
-static
 void I2C_Callback(uint32_t event)
 {
-  if ((event & ARM_I2C_EVENT_TRANSFER_DONE) != 0U) {
-    StartTrasfer(&wr_buf[0], sizeof(wr_buf), &rd_buf[0], sizeof(rd_buf));
+  if ((event & ARM_I2C_EVENT_SLAVE_RECEIVE) != 0U) {
+    uint8_t *buf_ptr;
+    uint32_t buf_size;
+
+    if (last_xfer == I2C_XFER_TRANSMIT) {
+      buf_ptr = &offset;
+      buf_size = sizeof(offset);
+    }
+    else {
+      buf_ptr = &rd_buf[0];
+      buf_size = sizeof(rd_buf);
+    }
+    i2c->SlaveReceive(buf_ptr, buf_size);
+  }
+  else if ((event & ARM_I2C_EVENT_TRANSFER_DONE) != 0U) {
+    int32_t count = i2c->GetDataCount();
+    ARM_I2C_STATUS status = i2c->GetStatus();
+
+    offset &= 0x7FU;
+    i2c->SlaveTransmit(&mem_page[offset], sizeof(mem_page) - offset);
+
+    if (last_xfer == I2C_XFER_RECEIVE && status.direction == I2C_XFER_RECEIVE) {
+      last_xfer = I2C_XFER_TRANSMIT;
+      if (count > 0) {
+        memcpy(&mem_page[offset], &rd_buf[0], (size_t)count);
+      }
+    }
+    else {
+      last_xfer = status.direction;
+    }
   }
 }
 
@@ -117,7 +143,8 @@ void main_proc(void *param)
   i2c->PowerControl(ARM_POWER_FULL);
   i2c->Control(ARM_I2C_OWN_ADDRESS, SLAVE_ADDR);
 
-  StartTrasfer(&wr_buf[0], sizeof(wr_buf), &rd_buf[0], sizeof(rd_buf));
+  last_xfer = I2C_XFER_TRANSMIT;
+  i2c->SlaveTransmit(&mem_page[offset], sizeof(mem_page));
 }
 
 static void timer_proc(void *argument)
