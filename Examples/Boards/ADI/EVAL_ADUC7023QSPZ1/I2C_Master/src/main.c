@@ -17,8 +17,10 @@
  * limitations under the License.
  */
 
+/*******************************************************************************
+ *  includes
+ ******************************************************************************/
 
-#include <stddef.h>
 #include <Kernel/kernel.h>
 #include <asm/system_aduc7023.h>
 #include <Driver/GPIO_ADUC7023.h>
@@ -28,28 +30,30 @@
  *  defines and macros (scope: module-local)
  ******************************************************************************/
 
-#define TIMEOUT                       (500UL)
 #define THREAD_STACK_SIZE             (256U)
 
 #define LED_PIN                       (GPIO_PIN_7)
+#define LED_TIMEOUT                   (500UL)
 
 #define SLAVE_ADDR                    (0xA0 >> 1U)
-#define I2C_TIMEOUT                   (50U)
+
+#define I2C_XFER_TRANSMIT             (0U)
+#define I2C_XFER_RECEIVE              (1U)
 
 /*******************************************************************************
  *  global variable definitions (scope: module-local)
  ******************************************************************************/
 
-static osThreadId_t init_id;
-static osThread_t   init_cb;
-static uint64_t     init_stack[THREAD_STACK_SIZE/8U];
-static const osThreadAttr_t init_attr = {
+static osThreadId_t         thread_id;
+static osThread_t           thread_cb;
+static uint64_t             thread_stack[THREAD_STACK_SIZE/8U];
+static const osThreadAttr_t thread_attr = {
     .name       = NULL,
     .attr_bits  = 0U,
-    .cb_mem     = &init_cb,
-    .cb_size    = sizeof(init_cb),
-    .stack_mem  = &init_stack[0],
-    .stack_size = sizeof(init_stack),
+    .cb_mem     = &thread_cb,
+    .cb_size    = sizeof(thread_cb),
+    .stack_mem  = &thread_stack[0],
+    .stack_size = sizeof(thread_stack),
     .priority   = osPriorityNormal,
 };
 
@@ -62,19 +66,15 @@ static const osTimerAttr_t timer_attr = {
     .cb_size   = sizeof(timer_cb)
 };
 
-static osEventFlagsId_t         evf_i2c;
-static osEventFlags_t           evf_i2c_cb;
-static const osEventFlagsAttr_t evf_i2c_attr = {
-    .name      = NULL,
-    .attr_bits = 0U,
-    .cb_mem    = &evf_i2c_cb,
-    .cb_size   = sizeof(evf_i2c_cb)
-};
-
 static DRIVER_GPIO *gpio = &DRIVER_GPIO0;
 
 extern ARM_DRIVER_I2C Driver_I2C1;
 static ARM_DRIVER_I2C *i2c = &Driver_I2C1;
+
+static uint8_t mem_page[128] = {0U};
+static uint8_t offset;
+static uint8_t rd_buf[4] = {0U};
+static uint32_t last_xfer;
 
 /*******************************************************************************
  *  function implementations (scope: module-local)
@@ -83,68 +83,46 @@ static ARM_DRIVER_I2C *i2c = &Driver_I2C1;
 static
 void I2C_Callback(uint32_t event)
 {
-  osEventFlagsSet(evf_i2c, event);
-}
+  if ((event & ARM_I2C_EVENT_SLAVE_RECEIVE) != 0U) {
+    uint8_t *buf_ptr;
+    uint32_t buf_size;
 
-static
-int32_t TestTransferEvent(uint8_t *wr_buf, uint8_t wr_size,
-                          uint8_t *rd_buf, uint8_t rd_size)
-{
-  uint32_t flags;
-
-  i2c->MasterTransmit(SLAVE_ADDR, wr_buf, wr_size, true);
-  /* Wait until transfer completed */
-  flags = osEventFlagsWait(evf_i2c,
-                           ARM_I2C_EVENT_TRANSFER_DONE |
-                           ARM_I2C_EVENT_TRANSFER_INCOMPLETE,
-                           osFlagsWaitAny,
-                           I2C_TIMEOUT);
-  /* Check if all data transferred */
-  if ((flags & (ARM_I2C_EVENT_TRANSFER_INCOMPLETE | osFlagsError)) != 0U) {
-    return (-1);
+    if (last_xfer == I2C_XFER_TRANSMIT) {
+      buf_ptr = &offset;
+      buf_size = sizeof(offset);
+    }
+    else {
+      buf_ptr = &rd_buf[0];
+      buf_size = sizeof(rd_buf);
+    }
+    i2c->SlaveReceive(buf_ptr, buf_size);
   }
+  else if ((event & ARM_I2C_EVENT_TRANSFER_DONE) != 0U) {
+    int32_t count = i2c->GetDataCount();
+    ARM_I2C_STATUS status = i2c->GetStatus();
 
-  i2c->MasterReceive(SLAVE_ADDR, rd_buf, rd_size, false);
-  /* Wait until transfer completed */
-  flags = osEventFlagsWait(evf_i2c,
-                           ARM_I2C_EVENT_TRANSFER_DONE |
-                           ARM_I2C_EVENT_TRANSFER_INCOMPLETE,
-                           osFlagsWaitAny,
-                           I2C_TIMEOUT);
-  /* Check if all data transferred */
-  if ((flags & (ARM_I2C_EVENT_TRANSFER_INCOMPLETE | osFlagsError)) != 0U) {
-    return (-1);
+    if (last_xfer == I2C_XFER_RECEIVE && status.direction == I2C_XFER_RECEIVE) {
+      last_xfer = I2C_XFER_TRANSMIT;
+      for (int32_t i = 0; i < count; ++i) {
+        mem_page[(offset + (uint8_t)i) & 0x7FU] = rd_buf[i];
+      }
+    }
+    else {
+      last_xfer = status.direction;
+    }
+
+    if (last_xfer == I2C_XFER_TRANSMIT) {
+      offset += (uint8_t)count;
+    }
+    offset &= 0x7FU;
+
+    i2c->SlaveTransmit(&mem_page[offset], sizeof(mem_page) - offset);
   }
-
-  return (0U);
-}
-
-static
-int32_t TestTransferPool(uint8_t *wr_buf, uint8_t wr_size,
-                         uint8_t *rd_buf, uint8_t rd_size)
-{
-  i2c->MasterTransmit(SLAVE_ADDR, wr_buf, wr_size, true);
-  /* Wait until transfer completed */
-  while (i2c->GetStatus().busy != 0U);
-  /* Check if all data transferred */
-  if (i2c->GetDataCount() != wr_size) {
-    return (-1);
-  }
-
-  i2c->MasterReceive(SLAVE_ADDR, rd_buf, rd_size, false);
-  /* Wait until transfer completed */
-  while (i2c->GetStatus().busy != 0U);
-  /* Check if all data transferred */
-  if (i2c->GetDataCount() != rd_size) {
-    return (-1);
-  }
-
-  return (0U);
 }
 
 static void GPIO_Init(void)
 {
-  const GPIO_PIN_CFG_t pin_cfg = {
+  static const GPIO_PIN_CFG_t pin_cfg = {
     .func      = GPIO_PIN_FUNC_0,
     .mode      = GPIO_MODE_OUTPUT,
     .pull_mode = GPIO_PULL_DISABLE,
@@ -154,46 +132,29 @@ static void GPIO_Init(void)
   gpio->PinConfig(LED_PIN, &pin_cfg);
 }
 
-__NO_RETURN static void main_proc(void *param)
+static
+void main_proc(void *param)
 {
   (void) param;
-  bool pooling;
 
   GPIO_Init();
-  osTimerStart(timer_id, TIMEOUT);
-
-  pooling = true;
+  osTimerStart(timer_id, LED_TIMEOUT);
 
   /* Initialize I2C Driver */
-  if (pooling == false) {
-    i2c->Initialize(I2C_Callback);
-  }
-  else {
-    i2c->Initialize(NULL);
-  }
+  i2c->Initialize(I2C_Callback);
   /* Configure I2C Driver */
   i2c->PowerControl(ARM_POWER_FULL);
-  i2c->Control(ARM_I2C_BUS_SPEED, ARM_I2C_BUS_SPEED_FAST);
+  i2c->Control(ARM_I2C_OWN_ADDRESS, SLAVE_ADDR);
 
-  uint8_t wr_buf[] = {0U};
-  uint8_t rd_buf[16];
-
-  for (;;) {
-    if (pooling == false) {
-      TestTransferEvent(&wr_buf[0], sizeof(wr_buf), &rd_buf[0], sizeof(rd_buf));
-    }
-    else {
-      TestTransferPool(&wr_buf[0], sizeof(wr_buf), &rd_buf[0], sizeof(rd_buf));
-    }
-    osDelay(10U);
-  }
+  last_xfer = I2C_XFER_TRANSMIT;
+  i2c->SlaveTransmit(&mem_page[offset], sizeof(mem_page));
 }
 
-static void timer_func(void *argument)
+static void timer_proc(void *argument)
 {
   (void) argument;
 
-  gpio->PinToggle(GPIO_PIN_7);
+  gpio->PinToggle(LED_PIN);
 }
 
 int main(void)
@@ -204,18 +165,13 @@ int main(void)
 
   status = osKernelInitialize();
   if (status == osOK) {
-    init_id = osThreadNew(main_proc, NULL, &init_attr);
-    if (init_id == NULL) {
+    thread_id = osThreadNew(main_proc, NULL, &thread_attr);
+    if (thread_id == NULL) {
       goto error;
     }
 
-    timer_id = osTimerNew(timer_func, osTimerPeriodic, NULL, &timer_attr);
+    timer_id = osTimerNew(timer_proc, osTimerPeriodic, NULL, &timer_attr);
     if (timer_id == NULL) {
-      goto error;
-    }
-
-    evf_i2c = osEventFlagsNew(&evf_i2c_attr);
-    if (evf_i2c == NULL) {
       goto error;
     }
 
