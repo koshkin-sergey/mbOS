@@ -122,7 +122,7 @@ void I2C_Callback(uint32_t event)
 
 static void GPIO_Init(void)
 {
-  const GPIO_PIN_CFG_t led_cfg = {
+  static const GPIO_PIN_CFG_t led_cfg = {
     .func = GPIO_PIN_FUNC_0,
     .mode = GPIO_MODE_OUT_PP,
     .pull = GPIO_PULL_DISABLE
