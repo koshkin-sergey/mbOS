@@ -21,8 +21,6 @@
  *  includes
  ******************************************************************************/
 
-#include <stddef.h>
-#include <string.h>
 #include <Kernel/kernel.h>
 #include <asm/system_aducm32x.h>
 #include <Driver/GPIO_ADUCM32x.h>
@@ -103,18 +101,22 @@ void I2C_Callback(uint32_t event)
     int32_t count = i2c->GetDataCount();
     ARM_I2C_STATUS status = i2c->GetStatus();
 
-    offset &= 0x7FU;
-    i2c->SlaveTransmit(&mem_page[offset], sizeof(mem_page) - offset);
-
     if (last_xfer == I2C_XFER_RECEIVE && status.direction == I2C_XFER_RECEIVE) {
       last_xfer = I2C_XFER_TRANSMIT;
-      if (count > 0) {
-        memcpy(&mem_page[offset], &rd_buf[0], (size_t)count);
+      for (int32_t i = 0; i < count; ++i) {
+        mem_page[(offset + (uint8_t)i) & 0x7FU] = rd_buf[i];
       }
     }
     else {
       last_xfer = status.direction;
     }
+
+    if (last_xfer == I2C_XFER_TRANSMIT) {
+      offset += (uint8_t)count;
+    }
+    offset &= 0x7FU;
+
+    i2c->SlaveTransmit(&mem_page[offset], sizeof(mem_page) - offset);
   }
 }
 
