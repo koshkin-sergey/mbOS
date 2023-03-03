@@ -829,9 +829,7 @@ void I2C_Slave_IRQHandler(I2C_Resources_t *i2c)
           }
         }
       }
-
-      state = mmr->I2CSSTA;
-    } while ((state & I2CSSTA_SRXREQ) != 0U);
+    } while ((mmr->I2CFSTA & I2CFSTA_MRXFSTA_Msk) != 0U);
   }
 
   /* Slave Stop Condition */
