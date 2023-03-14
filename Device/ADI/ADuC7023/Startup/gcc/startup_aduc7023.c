@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2021-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -20,6 +20,12 @@
 #include "asm/aduc7023.h"
 
 #pragma GCC target ("arm")
+
+/*----------------------------------------------------------------------------
+  External References
+ *----------------------------------------------------------------------------*/
+extern __NO_RETURN void __PROGRAM_START(void);
+extern             void _exit(int code);
 
 /*----------------------------------------------------------------------------
   Internal References
@@ -87,9 +93,26 @@ void __do_reset(void)
   __PROGRAM_START();                 /* Enter PreMain (C library entry point) */
 }
 
-/*----------------------------------------------------------------------------
-  Default Handler for Exceptions / Interrupts
- *----------------------------------------------------------------------------*/
-void Default_Handler(void) {
-  while(1);
+/**
+ * @brief       Default Handler for Exceptions / Interrupts.
+ */
+void Default_Handler(void)
+{
+  for (;;);
+}
+
+/**
+ * @brief       On Release, call the hardware reset procedure.
+ *              On Debug we just enter an infinite loop,
+ *              to be used as landmark when halting the debugger.
+ * @param[in]   code
+ */
+void _exit(int code __attribute__((unused)))
+{
+#if !defined (DEBUG)
+  /* Software Reset */
+  SYS->RSTSTA |= SYS_RSTSTA_SWR;
+#endif
+
+  for (;;);
 }

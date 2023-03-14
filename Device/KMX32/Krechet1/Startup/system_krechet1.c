@@ -19,7 +19,7 @@
  *  includes
  ******************************************************************************/
 
-#include <Kernel/irq.h>
+#include <Driver/ADSU_KRECHET1.h>
 
 /*******************************************************************************
  *  global variable definitions (scope: module-exported)
@@ -27,6 +27,12 @@
 
 /*!< System Clock Frequency (Core Clock)  */
 uint32_t SystemCoreClock = 12000000U;
+
+/*******************************************************************************
+ *  global variable definitions (scope: module-local)
+ ******************************************************************************/
+
+extern Driver_ADSU_t Driver_ADSU;
 
 /*******************************************************************************
  *  function implementations (scope: module-exported)
@@ -37,7 +43,7 @@ uint32_t SystemCoreClock = 12000000U;
  */
 void SystemCoreClockUpdate(void)
 {
-  SystemCoreClock = 12000000U;
+  SystemCoreClock = Driver_ADSU.GetFrequency(ADSU_FREQ_SYS);
 }
 
 /**
@@ -45,5 +51,16 @@ void SystemCoreClockUpdate(void)
  */
 void SystemInit(void)
 {
-//  IRQ_Initialize();
+  const Driver_ADSU_t *adsu = &Driver_ADSU;
+
+  static const ADSU_ClkCfg_t clk_cfg = {
+    .clk_src      = ADSU_OSC_XT,
+    .clk_div      = ADSU_CLK_DIV_1,
+    .clk_out      = ADSU_CLK_OUT_DISABLE,
+    .flash_delay  = 0U
+  };
+
+  adsu->ClkReset();
+  adsu->OscConfig(ADSU_OSC_XT, ADSU_OSC_ENABLE);
+  adsu->ClkConfig(&clk_cfg);
 }

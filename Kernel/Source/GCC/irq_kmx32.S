@@ -17,39 +17,35 @@
  * Project: mbOS real-time kernel
  */
 
-                .equ   IE_BIT,          0x10        // When IE bit is set, IRQ is enabled
-
-                .equ   K_STATE_RUNNING, 2           // osKernelState_t::osKernelRunning
-                .equ   I_K_STATE_OFS,   16          // osInfo.kernel.state offset
-
-                .equ   ModeHandler,     0
-                .equ   ModeThread,      1
-
+                .equ    IE_BIT,           0x10      // When IE bit is set, IRQ is enabled
+                .equ    PSW_IL_BIT,       0x0100
+                .equ    K_STATE_RUNNING,  2         // osKernelState_t::osKernelRunning
+                .equ    I_K_STATE_OFS,    16        // osInfo.kernel.state offset
 
                 .section ".rodata"
 
                 .global  irqLib                     // Non weak library reference
-irqLib:
-                .byte    0
+irqLib:         .byte    0
 
 
                 .section ".data"
 
                 .global  IRQ_PendSV
 IRQ_PendSV:     .long    0                          // Pending SVC flag
+
+                .global  IRQ_NestLevel
 IRQ_NestLevel:  .long    0                          // IRQ nesting level counter
+
+                .global  MSP
 MSP:            .long    0
-OldMode:        .long    0
-CurrentMode:    .long    0
 
 
                 .section ".text.os.handlers"
+                .align   1
 
                 .type   SWI_Handler, %function
                 .global SWI_Handler
 SWI_Handler:
-                cst     IE_BIT                      // Disable interrupts
-
                 pushr   LC
                 pushr   SMC
                 pushr   CLR
@@ -64,24 +60,21 @@ SWI_Handler:
                 pushr   FA
 
                 mtprs   USP, c7
-                lda     DP1, CurrentMode
-                sta     OldMode, DP1
-
-                cmpl    DP1, ModeHandler
-                beq     1$
+                lda     dp1, osInfo + I_K_STATE_OFS // Load kernel state
+                cmpl    dp1, K_STATE_RUNNING        // Check osKernelRunning
+                blt     1$                          // Continue if kernel is not running
                 lda     c7, MSP                     // Switch to Main Stack
-                movl    DP1, ModeHandler
-                sta     CurrentMode, DP1
-
 1$:
                 srfa    8
+                srfb    1
+
+                mov     b0, dp1
 
                 lda     a0, IRQ_NestLevel
                 addl    a0, 1                       // Increment IRQ nesting level
                 sta     IRQ_NestLevel, a0
 
-                lda     a0, osInfo + I_K_STATE_OFS  // Load kernel state
-                cmpl    a0, K_STATE_RUNNING         // Check osKernelRunning
+                cmpl    b0, K_STATE_RUNNING         // Check osKernelRunning
                 blt     SWI_FuncCall                // Continue if kernel is not running
                 jsr     osTickDisableIRQ            // Disable OS Tick interrupt
 
@@ -105,8 +98,7 @@ SWI_FuncCall:
                 pop     c1
                 pop     c0
 
-                lda     a0, osInfo + I_K_STATE_OFS  // Load kernel state
-                cmpl    a0, K_STATE_RUNNING         // Check osKernelRunning
+                cmpl    b0, K_STATE_RUNNING         // Check osKernelRunning
                 blt     SWI_ContextCheck            // Continue if kernel is not running
                 jsr     osTickEnableIRQ             // Enable OS Tick interrupt
 
@@ -117,10 +109,8 @@ SWI_ContextCheck:
                 subl    a0, 1                       // Decrement IRQ nesting level
                 sta     IRQ_NestLevel, a0
 
+                rsfb    1
                 rsfa    8
-
-                lda     DP1, OldMode
-                sta     CurrentMode, DP1
 
                 sta     MSP, c7
                 mfprs   c7, USP
@@ -158,22 +148,15 @@ SysTick_Handler:
                 pushr   FB
                 pushr   FA
 
-                mtprs   USP, c7
-                lda     DP1, CurrentMode
-                sta     OldMode, DP1
-
-                cmpl    DP1, ModeHandler
-                beq     1$
+                lda     dp1, IRQ_NestLevel
+                bne     1$                          // if IRQ_NestLevel = 0
+                mtprs   USP, c7                     // Save Thread Stack to USP
                 lda     c7, MSP                     // Switch to Main Stack
-                movl    DP1, ModeHandler
-                sta     CurrentMode, DP1
-
 1$:
-                srfa    8
+                addl    dp1, 1                      // Increment IRQ nesting level
+                sta     IRQ_NestLevel, dp1
 
-                lda     a0, IRQ_NestLevel
-                addl    a0, 1                       // Increment IRQ nesting level
-                sta     IRQ_NestLevel, a0
+                srfa    8
 
                 jsr     osTickDisableIRQ            // Disable OS Tick interrupt
 
@@ -185,17 +168,15 @@ SysTick_Handler:
 
                 jsr     ContextSwitch               // Continue in context switcher
 
-                lda     a0, IRQ_NestLevel
-                subl    a0, 1                       // Decrement IRQ nesting level
-                sta     IRQ_NestLevel, a0
-
                 rsfa    8
 
-                lda     DP1, OldMode
-                sta     CurrentMode, DP1
-
-                sta     MSP, c7
-                mfprs   c7, USP
+                lda     dp1, IRQ_NestLevel
+                subl    dp1, 1                      // Decrement IRQ nesting level
+                bne     2$                          // if IRQ_NestLevel = 0
+                sta     MSP, c7                     // Save Main Stack to MSP
+                mfprs   c7, USP                     // Switch to Thread Stack
+2$:
+                sta     IRQ_NestLevel, dp1
 
                 popr    FA
                 popr    FB
@@ -252,7 +233,7 @@ PostProcess:
                 bne     ContextRestore              // Skip post processing if not pending
 
                 pushr   CLR
-                push    b0
+                srfb    2
 
                 mov     b0, c7
                 movl    a4, 4
@@ -261,11 +242,11 @@ PostProcess:
 
                 jsr     osTickDisableIRQ            // Disable OS Tick interrupt
 
-                movl    a4, 0                       // Set PendSV clear value
+                movl    b1, 0                       // Set PendSV clear value
                 jmp     PendCheck
 
 PendExec:
-                sta     IRQ_PendSV, a4              // Clear PendSV flag
+                sta     IRQ_PendSV, b1              // Clear PendSV flag
                 sst     IE_BIT                      // Re-enable interrupts
                 jsr     osPendSV_Handler            // Post process pending objects
                 cst     IE_BIT                      // Disable interrupts
@@ -281,11 +262,11 @@ PendCheck:
 
                 add     c7, b0                      // Restore stack adjustment
 
-                pop     b0
+                rsfb    2
                 popr    CLR
 
 ContextRestore:
-                lda     c0, osInfo + 4              // Load osInfo.thread.run.next to c6
+                lda     c0, osInfo
                 ldd     dp1, (c0)
                 mtprs   USP, dp1
                 popu    c0
@@ -297,9 +278,6 @@ ContextRestore:
                 popu    c6
                 addl    dp1, 0x20
                 mtprs   USP, dp1
-
-                movl    a0, ModeThread
-                sta     OldMode, a0
 
 ContextExit:
                 rts

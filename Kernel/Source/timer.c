@@ -51,18 +51,15 @@ static osTimerFinfo_t *TimerGetFinfo(void)
 
   if (!isQueueEmpty(timer_queue)) {
     timer = GetTimerByQueue(timer_queue->next);
-    if (time_after(timer->time, osInfo.kernel.tick)) {
-      timer_finfo = NULL;
-    }
-    else {
+    if (time_before_eq(timer->time, osInfo.kernel.tick)) {
       krnTimerRemove(timer);
-      timer_finfo = &timer->finfo;
       if (timer->type == osTimerPeriodic) {
         krnTimerInsert(timer, timer->load);
       }
       else {
         timer->state = osTimerStopped;
       }
+      timer_finfo = &timer->finfo;
     }
   }
 

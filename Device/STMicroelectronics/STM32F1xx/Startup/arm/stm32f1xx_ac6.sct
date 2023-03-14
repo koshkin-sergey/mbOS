@@ -1,4 +1,4 @@
-#! armclang -E --target=arm-arm-none-eabi -mcpu=cortex-m4 -xc
+#! armclang -E --target=arm-arm-none-eabi -mcpu=cortex-m3 -xc
 ; command above MUST be in first line (no comment above!)
 
 /*

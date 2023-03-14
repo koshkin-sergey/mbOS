@@ -18,7 +18,6 @@
  */
 
 #include "Kernel/tick.h"
-//#include "Kernel/irq.h"
 #include "asm/krechet1.h"
 
 /**
@@ -30,19 +29,27 @@
 int32_t osTickSetup(uint32_t freq, IRQHandler_t handler)
 {
   (void)   handler;
-  uint32_t load;
+  uint32_t value;
 
   if (freq == 0U) {
     return (-1);
   }
 
-  load = SystemCoreClock / freq;
+  value = SystemCoreClock / freq;
 
   __set_CpuReg(CPU_PRW_REG, PRW_ADSU);
-  __set_PeriphReg(ADSU_GATE_REG, __get_PeriphReg(ADSU_GATE_REG) | (1UL << 12));
+  __set_PeriphReg(ADSU_GATE_REG, __get_PeriphReg(ADSU_GATE_REG) | ADSU_Gate_TMR0 | ADSU_Gate_ChIN);
+
   __set_CpuReg(CPU_PRW_REG, PRW_TMR0);
-  __set_PeriphReg(TMR0_CFG_REG, TIM_CFG_IE);
-  __set_PeriphReg(TMR0_RANGE_REG, load - 1);
+  __set_PeriphReg(TMR_CFG_REG, TIM_CFG_IE);
+  __set_PeriphReg(TMR_RANGE_REG, value - 1U);
+
+  __set_CpuReg(CPU_PRW_REG, PRW_CHIN);
+  value = __get_PeriphReg(CHIN_CFG3_REG) & ~0xFFUL;
+  __set_PeriphReg(CHIN_CFG3_REG, value | (22UL << 0U));
+
+  __set_CpuReg(CPU_PRW_REG, PRW_ADSU);
+  __set_PeriphReg(ADSU_GATE_REG, __get_PeriphReg(ADSU_GATE_REG) & ~ADSU_Gate_ChIN);
 
   return (0);
 }
@@ -53,7 +60,7 @@ int32_t osTickSetup(uint32_t freq, IRQHandler_t handler)
 void osTickEnable(void)
 {
   __set_CpuReg(CPU_PRW_REG, PRW_TMR0);
-  __set_PeriphReg(TMR0_CON_REG, __get_PeriphReg(TMR0_CON_REG) | TIM_CON_ST);
+  __set_PeriphReg(TMR_CON_REG, __get_PeriphReg(TMR_CON_REG) | TIM_CON_ST);
 }
 
 /**
@@ -62,7 +69,7 @@ void osTickEnable(void)
 void osTickDisable(void)
 {
   __set_CpuReg(CPU_PRW_REG, PRW_TMR0);
-  __set_PeriphReg(TMR0_CON_REG, __get_PeriphReg(TMR0_CON_REG) & ~TIM_CON_ST);
+  __set_PeriphReg(TMR_CON_REG, __get_PeriphReg(TMR_CON_REG) & ~TIM_CON_ST);
 }
 
 /**
@@ -72,7 +79,7 @@ void osTickDisable(void)
 void osTickEnableIRQ(void)
 {
   __set_CpuReg(CPU_PRW_REG, PRW_TMR0);
-  __set_PeriphReg(TMR0_CFG_REG, __get_PeriphReg(TMR0_CFG_REG) | TIM_CFG_IE);
+  __set_PeriphReg(TMR_CFG_REG, __get_PeriphReg(TMR_CFG_REG) | TIM_CFG_IE);
 }
 
 /**
@@ -82,7 +89,7 @@ void osTickEnableIRQ(void)
 void osTickDisableIRQ(void)
 {
   __set_CpuReg(CPU_PRW_REG, PRW_TMR0);
-  __set_PeriphReg(TMR0_CFG_REG, __get_PeriphReg(TMR0_CFG_REG) & ~TIM_CFG_IE);
+  __set_PeriphReg(TMR_CFG_REG, __get_PeriphReg(TMR_CFG_REG) & ~TIM_CFG_IE);
 }
 
 /**
@@ -91,7 +98,7 @@ void osTickDisableIRQ(void)
 void osTickAcknowledgeIRQ(void)
 {
   __set_CpuReg(CPU_PRW_REG, PRW_TMR0);
-  __set_PeriphReg(TMR0_CON_REG, __get_PeriphReg(TMR0_CON_REG));
+  __set_PeriphReg(TMR_CON_REG, __get_PeriphReg(TMR_CON_REG));
 }
 
 /**
@@ -112,7 +119,7 @@ uint32_t osTickGetInterval(void)
   uint32_t interval;
 
   __set_CpuReg(CPU_PRW_REG, PRW_TMR0);
-  interval = __get_PeriphReg(TMR0_RANGE_REG);
+  interval = __get_PeriphReg(TMR_RANGE_REG);
   if (interval != 0U) {
     ++interval;
   }
@@ -129,7 +136,7 @@ uint32_t osTickGetCount(void)
   uint32_t count;
 
   __set_CpuReg(CPU_PRW_REG, PRW_TMR0);
-  count = __get_PeriphReg(TMR0_COUNT_REG);
+  count = __get_PeriphReg(TMR_COUNT_REG);
 
   return (count);
 }
@@ -143,7 +150,7 @@ uint32_t osTickGetOverflow(void)
   uint32_t ovf;
 
   __set_CpuReg(CPU_PRW_REG, PRW_TMR0);
-  ovf = (__get_PeriphReg(TMR0_CON_REG) & TIM_CON_ERR_Msk) >> TIM_CON_ERR_Pos;
+  ovf = (__get_PeriphReg(TMR_CON_REG) & TIM_CON_ERR_Msk) >> TIM_CON_ERR_Pos;
 
   return (ovf);
 }

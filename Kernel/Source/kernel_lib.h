@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2022 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2017-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -31,8 +31,8 @@
 
 /* Kernel Information */
 #define osVersionAPI         020010003        ///< API version (2.1.3)
-#define osVersionKernel      010030000        ///< Kernel version (1.3.0)
-#define osKernelId           "Kernel V1.3.0"  ///< Kernel identification string
+#define osVersionKernel      010030000        ///< Kernel version (1.3.1)
+#define osKernelId           "Kernel V1.3.1"  ///< Kernel identification string
 
 /* Object Identifier definitions */
 #define ID_INVALID                  (uint8_t)0x00

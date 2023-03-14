@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?fileVersion 4.0.0?><cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
+	<storageModule moduleId="org.eclipse.cdt.core.settings">
+		<cconfiguration id="ru.kmx.toolchain.debug.ctype.1402046811">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="ru.kmx.toolchain.debug.ctype.1402046811" moduleId="org.eclipse.cdt.core.settings" name="Debug">
+				<externalSettings/>
+				<extensions>
+					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
+					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+				</extensions>
+			</storageModule>
+			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+				<configuration artifactExtension="elf" artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe,org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug" cleanCommand="rm -f" description="Debug configuration" id="ru.kmx.toolchain.debug.ctype.1402046811" name="Debug" parent="ru.kmx.toolchain.debug.ctype" postbuildStep="&quot;${system:ECLIPSE_HOME}/tools/cross/bin/kmx-objcopy&quot; -O binary ${ProjName}.elf ${ProjName}.bin; &quot;${system:ECLIPSE_HOME}/tools/cross/bin/kmx-size&quot; ${ProjName}.elf">
+					<folderInfo id="ru.kmx.toolchain.debug.ctype.1402046811." name="/" resourcePath="">
+						<toolChain id="ru.kmx.toolchain.toolChain.c.315496462" name="KMX C Toolchain" resourceTypeBasedDiscovery="true" superClass="ru.kmx.toolchain.toolChain.c">
+							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="ru.kmx.toolchain.targetPlatform1.2145853594" isAbstract="false" name="Debug Platform" superClass="ru.kmx.toolchain.targetPlatform1"/>
+							<builder buildPath="${workspace_loc:/test/Debug}" id="ru.kmx.toolchain.builder1.1701805502" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="GNU Make" superClass="ru.kmx.toolchain.builder1"/>
+							<tool id="ru.kmx.toolchain.as.1320127459" name="KMX Assembler" superClass="ru.kmx.toolchain.as"/>
+							<tool id="ru.kmx.toolchain.ld.993862269" name="KMX Linker" superClass="ru.kmx.toolchain.ld">
+								<option id="ru.kmx.toolchain.linker.c.linkerscript.477756109" name="Linker Script" superClass="ru.kmx.toolchain.linker.c.linkerscript" value="../krechet1.ld" valueType="string"/>
+								<option id="ru.kmx.toolchain.c.link.option.ldflags.1199181072" name="Linker flags" superClass="ru.kmx.toolchain.c.link.option.ldflags" value="-Wl,-Map=&quot;${ProjName}.map&quot;" valueType="string"/>
+								<option id="ru.kmx.toolchain.c.link.option.noshared.536262909" name="No shared libraries (-static)" superClass="ru.kmx.toolchain.c.link.option.noshared" value="false" valueType="boolean"/>
+								<option id="ru.kmx.toolchain.c.link.option.nostart.1987869770" name="Do not use standard start files (-nostartfiles)" superClass="ru.kmx.toolchain.c.link.option.nostart" value="true" valueType="boolean"/>
+								<option id="ru.kmx.toolchain.c.link.option.other.945332895" name="Other options (-Xlinker [option])" superClass="ru.kmx.toolchain.c.link.option.other" valueType="stringList">
+									<listOptionValue builtIn="false" value="--gc-sections"/>
+								</option>
+								<inputType id="ru.kmx.toolchain.inputType.ld.715556804" superClass="ru.kmx.toolchain.inputType.ld">
+									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
+									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
+								</inputType>
+							</tool>
+							<tool id="ru.kmx.toolchain.c.compiler.ctype.1771233988" name="KMX C Compiler" superClass="ru.kmx.toolchain.c.compiler.ctype">
+								<option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.option.optimization.level.976033840" name="Optimization Level" superClass="gnu.c.compiler.option.optimization.level" value="gnu.c.optimization.level.more" valueType="enumerated"/>
+								<option id="gnu.c.compiler.option.debugging.level.1458180842" name="Debug Level" superClass="gnu.c.compiler.option.debugging.level" value="gnu.c.debugging.level.default" valueType="enumerated"/>
+								<option id="gnu.c.compiler.option.warnings.extrawarn.1726569020" name="Extra warnings (-Wextra)" superClass="gnu.c.compiler.option.warnings.extrawarn" value="true" valueType="boolean"/>
+								<option id="gnu.c.compiler.option.warnings.pedantic.1599403453" name="Pedantic (-pedantic)" superClass="gnu.c.compiler.option.warnings.pedantic" value="true" valueType="boolean"/>
+								<option id="gnu.c.compiler.option.misc.other.2035638513" name="Other flags" superClass="gnu.c.compiler.option.misc.other" value="-c -fmessage-length=0 -mclr -std=gnu99 -Wa,-adhlns=&quot;$@.lst&quot; -ffunction-sections -fdata-sections" valueType="string"/>
+								<option id="gnu.c.compiler.option.include.paths.183908372" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="../../../../../../../../Include"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Device/KMX32/Krechet1/Include"/>
+								</option>
+								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1586239259" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
+							</tool>
+						</toolChain>
+					</folderInfo>
+					<sourceEntries>
+						<entry excluding="Kernel/Source/ARM/|Kernel/Source/GCC/irq_arm.S|Kernel/Source/GCC/irq_cm0.S|Kernel/Source/GCC/irq_cm3.S|Kernel/Source/GCC/irq_cm4f.S|Kernel/Source/IAR/" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="src"/>
+					</sourceEntries>
+				</configuration>
+			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+		</cconfiguration>
+	</storageModule>
+	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+		<project id="test.ru.kmx.toolchain.projectType1.502373377" name="KMX Project (C)" projectType="ru.kmx.toolchain.projectType1"/>
+	</storageModule>
+	<storageModule moduleId="refreshScope" versionNumber="1">
+		<resource resourceType="PROJECT" workspacePath="/Krechet_Board_Switch_Time"/>
+	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
+	<storageModule moduleId="scannerConfiguration">
+		<autodiscovery enabled="false" problemReportingEnabled="true" selectedProfileId=""/>
+		<scannerConfigBuildInfo instanceId="ru.kmx.toolchain.debug.ctype.1402046811">
+			<autodiscovery enabled="false" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC"/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="ru.kmx.toolchain.debug.ctype.1402046811;ru.kmx.toolchain.debug.ctype.1402046811.;ru.kmx.toolchain.c.compiler.ctype.1771233988;cdt.managedbuild.tool.gnu.c.compiler.input.1586239259">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC"/>
+			<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC">
+				<buildOutputProvider>
+					<openAction enabled="true" filePath=""/>
+					<parser enabled="true"/>
+				</buildOutputProvider>
+				<scannerInfoProvider id="specsFile">
+					<runAction arguments="-E -P -v -dD &quot;${plugin_state_location}/specs.c&quot;" command="kmx-gcc.exe" useDefault="true"/>
+					<parser enabled="true"/>
+				</scannerInfoProvider>
+			</profile>
+		</scannerConfigBuildInfo>
+	</storageModule>
+</cproject>

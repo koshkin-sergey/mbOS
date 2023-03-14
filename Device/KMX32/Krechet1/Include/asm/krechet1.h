@@ -98,195 +98,135 @@ typedef enum {
 /**
  * @brief PRW Register Value
  */
-#define PRW_CPU                   0U
-#define PRW_WDT                   1U
-#define PRW_DBG                   1U
-#define PRW_ADSU                  1U
-#define PRW_CHIN                  2U
-#define PRW_DMA                   3U
-#define PRW_FMCU                  4U
-#define PRW_GPIO                  5U
-#define PRW_SPI0                  8U
-#define PRW_SPI1                  9U
-#define PRW_I2C0                  10U
-#define PRW_I2C1                  11U
-#define PRW_UART0                 12U
-#define PRW_UART1                 13U
-#define PRW_UART2                 14U
-#define PRW_UART3                 15U
-#define PRW_TMR0                  16U
-#define PRW_TMR1                  17U
-#define PRW_PWM0                  18U
-#define PRW_PWM1                  19U
+typedef enum Periph_Wnd {
+  PRW_CPU  = 0U,
+  PRW_WDT  = 1U,
+  PRW_DBG  = 1U,
+  PRW_ADSU = 1U,
+  PRW_CHIN = 2U,
+  PRW_DMA  = 3U,
+  PRW_FMCU = 4U,
+  PRW_GPIO = 5U,
+  PRW_SPI0 = 8U,
+  PRW_SPI1 = 9U,
+  PRW_I2C0 = 10U,
+  PRW_I2C1 = 11U,
+  PRW_UART0= 12U,
+  PRW_UART1= 13U,
+  PRW_UART2= 14U,
+  PRW_UART3= 15U,
+  PRW_TMR0 = 16U,
+  PRW_TMR1 = 17U,
+  PRW_PWM0 = 18U,
+  PRW_PWM1 = 19U
+} Periph_Wnd_t;
 
 /**
  * @brief Peripheral Register Address
  */
 /****** PRW = 1 ***************************************************************/
-#define WDT_CON_REG               0U
+#define WDT_CON_REG               0
 
-#define DBG_CFG_REG               1U
-#define DBG_ADDR_REG              2U
-#define DBG_BP1_ADDR_REG          3U
-#define DBG_BP2_ADDR_REG          4U
-#define DBG_BP3_ADDR_REG          5U
-#define DBG_PC_REG                6U
-#define DBG_IPC_REG               7U
-#define DBG_BP4_ADDR_REG          8U
-#define DBG_BP5_ADDR_REG          9U
+#define DBG_CFG_REG               1
+#define DBG_ADDR_REG              2
+#define DBG_BP1_ADDR_REG          3
+#define DBG_BP2_ADDR_REG          4
+#define DBG_BP3_ADDR_REG          5
+#define DBG_PC_REG                6
+#define DBG_IPC_REG               7
+#define DBG_BP4_ADDR_REG          8
+#define DBG_BP5_ADDR_REG          9
 
-#define ADSU_CLKCON_REG           17U
-#define ADSU_CLKCFG_REG           18U
-#define ADSU_GATE_REG             19U
-#define ADSU_WAKECFG_REG          20U
-#define ADSU_MAXLOAD_REG          23U
-#define ADSU_TRIM_REG             24U
+#define ADSU_CLKCON_REG           17
+#define ADSU_CLKCFG_REG           18
+#define ADSU_GATE_REG             19
+#define ADSU_WAKECFG_REG          20
+#define ADSU_MAXLOAD_REG          23
+#define ADSU_TRIM_REG             24
 
 /****** PRW = 2 ***************************************************************/
-#define CHIN_CFG0_REG             0U
-#define CHIN_CFG1_REG             1U
-#define CHIN_CFG2_REG             2U
-#define CHIN_CFG3_REG             3U
-#define CHIN_CFG4_REG             4U
-#define CHIN_CHECK_REG            8U
-#define CHIN_CON_REG              30U
-#define CHIN_TST_REG              31U
+#define CHIN_CFG0_REG             0
+#define CHIN_CFG1_REG             1
+#define CHIN_CFG2_REG             2
+#define CHIN_CFG3_REG             3
+#define CHIN_CFG4_REG             4
+#define CHIN_CHECK_REG            8
+#define CHIN_CON_REG              30
+#define CHIN_TST_REG              31
 
 /****** PRW = 3 ***************************************************************/
-#define DMA_CHAN_REG              0U
-#define DMA_CON_REG               1U
-#define DMA_CFG_REG               2U
-#define DMA_SRC_REG               3U
-#define DMA_DST_REG               4U
-#define DMA_DCNT_REG              5U
-#define DMA_STAT_REG              6U
+#define DMA_CHAN_REG              0
+#define DMA_CON_REG               1
+#define DMA_CFG_REG               2
+#define DMA_SRC_REG               3
+#define DMA_DST_REG               4
+#define DMA_DCNT_REG              5
+#define DMA_STAT_REG              6
 
 /****** PRW = 4 ***************************************************************/
-#define FMCU_CON_REG              0U
-#define FMCU_ADDR_REG             1U
-#define FMCU_ABUF_REG             2U
-#define FMCU_DCNT_REG             3U
-#define FMCU_ACCESS_REG           4U
-#define FMCU_1US_CYCLE_REG        5U
+#define FMCU_CON_REG              0
+#define FMCU_ADDR_REG             1
+#define FMCU_ABUF_REG             2
+#define FMCU_DCNT_REG             3
+#define FMCU_ACCESS_REG           4
+#define FMCU_1US_CYCLE_REG        5
 
 /****** PRW = 5 ***************************************************************/
-#define GPIO_IN_REG               0U
-#define GPIO_DIR_REG              1U
-#define GPIO_OUT_REG              2U
-#define GPIO_RISE_IE_REG          3U
-#define GPIO_DROP_IE_REG          4U
-#define GPIO_RISE_IF_REG          5U
-#define GPIO_DROP_IF_REG          6U
-#define GPIO_FILTER_REG           7U
-#define GPIO_PULL_REG             8U
+#define GPIO_IN_REG               0
+#define GPIO_DIR_REG              1
+#define GPIO_OUT_REG              2
+#define GPIO_RISE_IE_REG          3
+#define GPIO_DROP_IE_REG          4
+#define GPIO_RISE_IF_REG          5
+#define GPIO_DROP_IF_REG          6
+#define GPIO_FILTER_REG           7
+#define GPIO_PULL_REG             8
 
-/****** PRW = 8 ***************************************************************/
-#define SPI0_CFG_REG              0U
-#define SPI0_INT_REG              1U
-#define SPI0_STAT_REG             2U
-#define SPI0_DAT_REG              3U
+/****** PRW = 8 & PRW = 9 *****************************************************/
+#define SPI_CFG_REG               0
+#define SPI_INT_REG               1
+#define SPI_STAT_REG              2
+#define SPI_DAT_REG               3
 
-/****** PRW = 9 ***************************************************************/
-#define SPI1_CFG_REG              0U
-#define SPI1_INT_REG              1U
-#define SPI1_STAT_REG             2U
-#define SPI1_DAT_REG              3U
+/****** PRW = 10 & PRW = 11 ***************************************************/
+#define I2C_CFG_REG               0
+#define I2C_INT_REG               1
+#define I2C_FIFO_REG              2
+#define I2C_FLAGS_REG             3
+#define I2C_CON_REG               3
+#define I2C_STAT_REG              4
+#define I2C_TDAT_REG              5
+#define I2C_RDAT_REG              6
 
-/****** PRW = 10 **************************************************************/
-#define I2C0_CFG_REG              0U
-#define I2C0_INT_REG              1U
-#define I2C0_FIFO_REG             2U
-#define I2C0_FLAGS_REG            3U
-#define I2C0_CON_REG              3U
-#define I2C0_STAT_REG             4U
-#define I2C0_TDAT_REG             5U
-#define I2C0_RDAT_REG             6U
+/****** PRW = 12 & PRW = 13 & PRW = 14 & PRW = 15 *****************************/
+#define UART_CFG_REG              0
+#define UART_INT_REG              1
+#define UART_STAT_REG             2
+#define UART_FIFO_REG             3
+#define UART_CON_REG              4
+#define UART_RDAT_REG             5
+#define UART_TDAT_REG             6
 
-/****** PRW = 11 **************************************************************/
-#define I2C1_CFG_REG              0U
-#define I2C1_INT_REG              1U
-#define I2C1_FIFO_REG             2U
-#define I2C1_FLAGS_REG            3U
-#define I2C1_CON_REG              3U
-#define I2C1_STAT_REG             4U
-#define I2C1_TDAT_REG             5U
-#define I2C1_RDAT_REG             6U
+/****** PRW = 16 & PRW = 17 ***************************************************/
+#define TMR_CFG_REG               0
+#define TMR_CON_REG               1
+#define TMR_RANGE_REG             2
+#define TMR_COUNT_REG             3
 
-/****** PRW = 12 **************************************************************/
-#define UART0_CFG_REG             0U
-#define UART0_INT_REG             1U
-#define UART0_STAT_REG            2U
-#define UART0_FIFO_REG            3U
-#define UART0_CON_REG             4U
-#define UART0_RDAT_REG            5U
-#define UART0_TDAT_REG            6U
+/****** PRW = 18 & PRW = 19 ***************************************************/
+#define PWM_CON_REG               0
+#define PWM_CFG_REG               1
+#define PWM_STAT_REG              2
+#define PWM_COUNT_A_REG           3
+#define PWM_COUNT_B_REG           4
+#define PWM_COUNT_C_REG           5
+#define PWM_RANGE_A_REG           6
+#define PWM_RANGE_B_REG           7
+#define PWM_RANGE_C_REG           8
+#define PWM_CMP_A_REG             9
+#define PWM_CMP_B_REG             10
+#define PWM_CMP_C_REG             11
 
-/****** PRW = 13 **************************************************************/
-#define UART1_CFG_REG             0U
-#define UART1_INT_REG             1U
-#define UART1_STAT_REG            2U
-#define UART1_FIFO_REG            3U
-#define UART1_CON_REG             4U
-#define UART1_RDAT_REG            5U
-#define UART1_TDAT_REG            6U
-
-/****** PRW = 14 **************************************************************/
-#define UART2_CFG_REG             0U
-#define UART2_INT_REG             1U
-#define UART2_STAT_REG            2U
-#define UART2_FIFO_REG            3U
-#define UART2_CON_REG             4U
-#define UART2_RDAT_REG            5U
-#define UART2_TDAT_REG            6U
-
-/****** PRW = 15 **************************************************************/
-#define UART3_CFG_REG             0U
-#define UART3_INT_REG             1U
-#define UART3_STAT_REG            2U
-#define UART3_FIFO_REG            3U
-#define UART3_CON_REG             4U
-#define UART3_RDAT_REG            5U
-#define UART3_TDAT_REG            6U
-
-/****** PRW = 16 **************************************************************/
-#define TMR0_CFG_REG              0U
-#define TMR0_CON_REG              1U
-#define TMR0_RANGE_REG            2U
-#define TMR0_COUNT_REG            3U
-
-/****** PRW = 17 **************************************************************/
-#define TMR1_CFG_REG              0U
-#define TMR1_CON_REG              1U
-#define TMR1_RANGE_REG            2U
-#define TMR1_COUNT_REG            3U
-
-/****** PRW = 18 **************************************************************/
-#define PWM0_CON_REG              0U
-#define PWM0_CFG_REG              1U
-#define PWM0_STAT_REG             2U
-#define PWM0_COUNT_A_REG          3U
-#define PWM0_COUNT_B_REG          4U
-#define PWM0_COUNT_C_REG          5U
-#define PWM0_RANGE_A_REG          6U
-#define PWM0_RANGE_B_REG          7U
-#define PWM0_RANGE_C_REG          8U
-#define PWM0_CMP_A_REG            9U
-#define PWM0_CMP_B_REG            10U
-#define PWM0_CMP_C_REG            11U
-
-/****** PRW = 19 **************************************************************/
-#define PWM1_CON_REG              0U
-#define PWM1_CFG_REG              1U
-#define PWM1_STAT_REG             2U
-#define PWM1_COUNT_A_REG          3U
-#define PWM1_COUNT_B_REG          4U
-#define PWM1_COUNT_C_REG          5U
-#define PWM1_RANGE_A_REG          6U
-#define PWM1_RANGE_B_REG          7U
-#define PWM1_RANGE_C_REG          8U
-#define PWM1_CMP_A_REG            9U
-#define PWM1_CMP_B_REG            10U
-#define PWM1_CMP_C_REG            11U
 
 /*------------------------------------------------------------------------------
  *                                ADSU
@@ -450,6 +390,68 @@ typedef enum {
 
 
 /*------------------------------------------------------------------------------
+ *                                 FMCU
+ *----------------------------------------------------------------------------*/
+/********************  Bit definition for FMCU_Con register  ******************/
+#define FMCU_Con_Prog_Pos         (0U)
+#define FMCU_Con_Prog_Msk         (0x1UL << FMCU_Con_Prog_Pos)
+#define FMCU_Con_Prog             FMCU_Con_Prog_Msk
+
+#define FMCU_Con_Ers_Pos          (1U)
+#define FMCU_Con_Ers_Msk          (0x1UL << FMCU_Con_Ers_Pos)
+#define FMCU_Con_Ers              FMCU_Con_Ers_Msk
+
+#define FMCU_Con_Info_Pos         (4U)
+#define FMCU_Con_Info_Msk         (0x1UL << FMCU_Con_Info_Pos)
+#define FMCU_Con_Info             FMCU_Con_Info_Msk
+
+#define FMCU_Con_MErs_Pos         (8U)
+#define FMCU_Con_MErs_Msk         (0x7UL << FMCU_Con_MErs_Pos)
+
+#define FMCU_Con_Sleep_Pos        (13U)
+#define FMCU_Con_Sleep_Msk        (0x1UL << FMCU_Con_Sleep_Pos)
+#define FMCU_Con_Sleep            FMCU_Con_Sleep_Msk
+
+#define FMCU_Con_PDM25_Pos        (14U)
+#define FMCU_Con_PDM25_Msk        (0x1UL << FMCU_Con_PDM25_Pos)
+#define FMCU_Con_PDM25            FMCU_Con_PDM25_Msk
+
+#define FMCU_Con_ErsOfRef_Pos     (15U)
+#define FMCU_Con_ErsOfRef_Msk     (0x1UL << FMCU_Con_ErsOfRef_Pos)
+#define FMCU_Con_ErsOfRef         FMCU_Con_ErsOfRef_Msk
+
+#define FMCU_Con_EnNAct_Pos       (16U)
+#define FMCU_Con_EnNAct_Msk       (0x1UL << FMCU_Con_EnNAct_Pos)
+#define FMCU_Con_EnNAct           FMCU_Con_EnNAct_Msk
+
+/********************  Bit definition for FMCU_Addr register  *****************/
+#define FMCU_Addr_DW_Pos          (2U)
+#define FMCU_Addr_DW_Msk          (0x7FUL << FMCU_Addr_DW_Pos)
+
+#define FMCU_Addr_Str_Pos         (9U)
+#define FMCU_Addr_Str_Msk         (0x7UL << FMCU_Addr_Str_Pos)
+
+#define FMCU_Addr_Page_Pos        (12U)
+#define FMCU_Addr_Page_Msk        (0x7FUL << FMCU_Addr_Page_Pos)
+
+/********************  Bit definition for FMCU_ABuf register  *****************/
+#define FMCU_ABuf_DWAddr_Pos      (0U)
+#define FMCU_ABuf_DWAddr_Msk      (0xFFFFUL << FMCU_ABuf_DWAddr_Pos)
+
+/********************  Bit definition for FMCU_DCnt register  *****************/
+#define FMCU_DCnt_Bytes_Pos       (0U)
+#define FMCU_DCnt_Bytes_Msk       (0x1FFUL << FMCU_DCnt_Bytes_Pos)
+
+/********************  Bit definition for FMCU_Access register  ***************/
+#define FMCU_Access_Delay_Pos     (0U)
+#define FMCU_Access_Delay_Msk     (0x3FUL << FMCU_Access_Delay_Pos)
+
+/********************  Bit definition for FMCU_1usCycle register  *************/
+#define FMCU_1usCycle_Scale_Pos   (0U)
+#define FMCU_1usCycle_Scale_Msk   (0x3FFUL << FMCU_1usCycle_Scale_Pos)
+
+
+/*------------------------------------------------------------------------------
  *                                 I2C
  *----------------------------------------------------------------------------*/
 /********************  Bit definition for I2C_Cfg register  *******************/
@@ -461,6 +463,9 @@ typedef enum {
 
 #define I2C_Cfg_AMode_Pos         (11U)
 #define I2C_Cfg_AMode_Msk         (0x3UL << I2C_Cfg_AMode_Pos)
+#define I2C_Cfg_AMode_7           (0x1UL << I2C_Cfg_AMode_Pos)
+#define I2C_Cfg_AMode_10          (0x2UL << I2C_Cfg_AMode_Pos)
+#define I2C_Cfg_AMode_7_10        (0x3UL << I2C_Cfg_AMode_Pos)
 
 #define I2C_Cfg_EnMTS_Pos         (13U)
 #define I2C_Cfg_EnMTS_Msk         (0x1UL << I2C_Cfg_EnMTS_Pos)
@@ -486,61 +491,61 @@ typedef enum {
 #define I2C_Cfg_PullUp                      I2C_Cfg_PullUp_Msk
 
 /********************  Bit definition for I2C_Int register  *******************/
-#define I2C_Cfg_ArbErrIE_Pos      (0U)
-#define I2C_Cfg_ArbErrIE_Msk      (0x1UL << I2C_Cfg_ArbErrIE_Pos)
-#define I2C_Cfg_ArbErrIE                    I2C_Cfg_ArbErrIE_Msk
+#define I2C_Int_ArbErrIE_Pos      (0U)
+#define I2C_Int_ArbErrIE_Msk      (0x1UL << I2C_Int_ArbErrIE_Pos)
+#define I2C_Int_ArbErrIE                    I2C_Int_ArbErrIE_Msk
 
-#define I2C_Cfg_DatErrIE_Pos      (1U)
-#define I2C_Cfg_DatErrIE_Msk      (0x1UL << I2C_Cfg_DatErrIE_Pos)
-#define I2C_Cfg_DatErrIE                    I2C_Cfg_DatErrIE_Msk
+#define I2C_Int_NoAckIE_Pos       (1U)
+#define I2C_Int_NoAckIE_Msk       (0x1UL << I2C_Int_NoAckIE_Pos)
+#define I2C_Int_NoAckIE                     I2C_Int_NoAckIE_Msk
 
-#define I2C_Cfg_AdrErrIE_Pos      (2U)
-#define I2C_Cfg_AdrErrIE_Msk      (0x1UL << I2C_Cfg_AdrErrIE_Pos)
-#define I2C_Cfg_AdrErrIE                    I2C_Cfg_AdrErrIE_Msk
+#define I2C_Int_BusErrIE_Pos      (2U)
+#define I2C_Int_BusErrIE_Msk      (0x1UL << I2C_Int_BusErrIE_Pos)
+#define I2C_Int_BusErrIE                    I2C_Int_BusErrIE_Msk
 
-#define I2C_Cfg_RxIE_Pos          (3U)
-#define I2C_Cfg_RxIE_Msk          (0x1UL << I2C_Cfg_RxIE_Pos)
-#define I2C_Cfg_RxIE                        I2C_Cfg_RxIE_Msk
+#define I2C_Int_RxIE_Pos          (3U)
+#define I2C_Int_RxIE_Msk          (0x1UL << I2C_Int_RxIE_Pos)
+#define I2C_Int_RxIE                        I2C_Int_RxIE_Msk
 
-#define I2C_Cfg_TxIE_Pos          (4U)
-#define I2C_Cfg_TxIE_Msk          (0x1UL << I2C_Cfg_TxIE_Pos)
-#define I2C_Cfg_TxIE                        I2C_Cfg_TxIE_Msk
+#define I2C_Int_TxIE_Pos          (4U)
+#define I2C_Int_TxIE_Msk          (0x1UL << I2C_Int_TxIE_Pos)
+#define I2C_Int_TxIE                        I2C_Int_TxIE_Msk
 
-#define I2C_Cfg_RxOvfIE_Pos       (5U)
-#define I2C_Cfg_RxOvfIE_Msk       (0x1UL << I2C_Cfg_RxOvfIE_Pos)
-#define I2C_Cfg_RxOvfIE                     I2C_Cfg_RxOvfIE_Msk
+#define I2C_Int_RxOvfIE_Pos       (5U)
+#define I2C_Int_RxOvfIE_Msk       (0x1UL << I2C_Int_RxOvfIE_Pos)
+#define I2C_Int_RxOvfIE                     I2C_Int_RxOvfIE_Msk
 
-#define I2C_Cfg_GenCIE_Pos        (6U)
-#define I2C_Cfg_GenCIE_Msk        (0x1UL << I2C_Cfg_GenCIE_Pos)
-#define I2C_Cfg_GenCIE                      I2C_Cfg_GenCIE_Msk
+#define I2C_Int_GenCIE_Pos        (6U)
+#define I2C_Int_GenCIE_Msk        (0x1UL << I2C_Int_GenCIE_Pos)
+#define I2C_Int_GenCIE                      I2C_Int_GenCIE_Msk
 
-#define I2C_Cfg_StBytIE_Pos       (7U)
-#define I2C_Cfg_StBytIE_Msk       (0x1UL << I2C_Cfg_StBytIE_Pos)
-#define I2C_Cfg_StBytIE                     I2C_Cfg_StBytIE_Msk
+#define I2C_Int_StBytIE_Pos       (7U)
+#define I2C_Int_StBytIE_Msk       (0x1UL << I2C_Int_StBytIE_Pos)
+#define I2C_Int_StBytIE                     I2C_Int_StBytIE_Msk
 
-#define I2C_Cfg_CBusIE_Pos        (8U)
-#define I2C_Cfg_CBusIE_Msk        (0x1UL << I2C_Cfg_CBusIE_Pos)
-#define I2C_Cfg_CBusIE                      I2C_Cfg_CBusIE_Msk
+#define I2C_Int_CBusIE_Pos        (8U)
+#define I2C_Int_CBusIE_Msk        (0x1UL << I2C_Int_CBusIE_Pos)
+#define I2C_Int_CBusIE                      I2C_Int_CBusIE_Msk
 
-#define I2C_Cfg_HSIE_Pos          (9U)
-#define I2C_Cfg_HSIE_Msk          (0x1UL << I2C_Cfg_HSIE_Pos)
-#define I2C_Cfg_HSIE                        I2C_Cfg_HSIE_Msk
+#define I2C_Int_HSIE_Pos          (9U)
+#define I2C_Int_HSIE_Msk          (0x1UL << I2C_Int_HSIE_Pos)
+#define I2C_Int_HSIE                        I2C_Int_HSIE_Msk
 
-#define I2C_Cfg_SlvAdrIE_Pos      (10U)
-#define I2C_Cfg_SlvAdrIE_Msk      (0x1UL << I2C_Cfg_SlvAdrIE_Pos)
-#define I2C_Cfg_SlvAdrIE                    I2C_Cfg_SlvAdrIE_Msk
+#define I2C_Int_SlvAdrIE_Pos      (10U)
+#define I2C_Int_SlvAdrIE_Msk      (0x1UL << I2C_Int_SlvAdrIE_Pos)
+#define I2C_Int_SlvAdrIE                    I2C_Int_SlvAdrIE_Msk
 
-#define I2C_Cfg_Master_Pos        (11U)
-#define I2C_Cfg_Master_Msk        (0x1UL << I2C_Cfg_Master_Pos)
-#define I2C_Cfg_Master                      I2C_Cfg_Master_Msk
+#define I2C_Int_Master_Pos        (11U)
+#define I2C_Int_Master_Msk        (0x1UL << I2C_Int_Master_Pos)
+#define I2C_Int_Master                      I2C_Int_Master_Msk
 
-#define I2C_Cfg_DMARqEn_Pos       (12U)
-#define I2C_Cfg_DMARqEn_Msk       (0x1UL << I2C_Cfg_DMARqEn_Pos)
-#define I2C_Cfg_DMARqEn                     I2C_Cfg_DMARqEn_Msk
+#define I2C_Int_DMARqEn_Pos       (12U)
+#define I2C_Int_DMARqEn_Msk       (0x1UL << I2C_Int_DMARqEn_Pos)
+#define I2C_Int_DMARqEn                     I2C_Int_DMARqEn_Msk
 
-#define I2C_Cfg_TxDMARq_Pos       (13U)
-#define I2C_Cfg_TxDMARq_Msk       (0x1UL << I2C_Cfg_TxDMARq_Pos)
-#define I2C_Cfg_TxDMARq                     I2C_Cfg_TxDMARq_Msk
+#define I2C_Int_TxDMARq_Pos       (13U)
+#define I2C_Int_TxDMARq_Msk       (0x1UL << I2C_Int_TxDMARq_Pos)
+#define I2C_Int_TxDMARq                     I2C_Int_TxDMARq_Msk
 
 /********************  Bit definition for I2C_FIFO register  ******************/
 #define I2C_FIFO_RxCntLim_Pos     (0U)
@@ -550,10 +555,6 @@ typedef enum {
 #define I2C_FIFO_TxCntLim_Msk     (0xFUL << I2C_FIFO_TxCntLim_Pos)
 
 /********************  Bit definition for I2C_Flags register  *****************/
-#define I2C_Flags_Attentn_Pos     (0U)
-#define I2C_Flags_Attentn_Msk     (0x1UL << I2C_Flags_Attentn_Pos)
-#define I2C_Flags_Attentn                   I2C_Flags_Attentn_Msk
-
 #define I2C_Flags_StartErrIF_Pos  (1U)
 #define I2C_Flags_StartErrIF_Msk  (0x1UL << I2C_Flags_StartErrIF_Pos)
 #define I2C_Flags_StartErrIF                I2C_Flags_StartErrIF_Msk
@@ -570,13 +571,13 @@ typedef enum {
 #define I2C_Flags_StopErrIF_Msk   (0x1UL << I2C_Flags_StopErrIF_Pos)
 #define I2C_Flags_StopErrIF                 I2C_Flags_StopErrIF_Msk
 
-#define I2C_Flags_DatErrIF_Pos    (5U)
-#define I2C_Flags_DatErrIF_Msk    (0x1UL << I2C_Flags_DatErrIF_Pos)
-#define I2C_Flags_DatErrIF                  I2C_Flags_DatErrIF_Msk
+#define I2C_Flags_MstNoAckIF_Pos  (5U)
+#define I2C_Flags_MstNoAckIF_Msk  (0x1UL << I2C_Flags_MstNoAckIF_Pos)
+#define I2C_Flags_MstNoAckIF                I2C_Flags_MstNoAckIF_Msk
 
-#define I2C_Flags_AdrErrIF_Pos    (6U)
-#define I2C_Flags_AdrErrIF_Msk    (0x1UL << I2C_Flags_AdrErrIF_Pos)
-#define I2C_Flags_AdrErrIF                  I2C_Flags_AdrErrIF_Msk
+#define I2C_Flags_BusErrIF_Pos    (6U)
+#define I2C_Flags_BusErrIF_Msk    (0x1UL << I2C_Flags_BusErrIF_Pos)
+#define I2C_Flags_BusErrIF                  I2C_Flags_BusErrIF_Msk
 
 #define I2C_Flags_RxIF_Pos        (7U)
 #define I2C_Flags_RxIF_Msk        (0x1UL << I2C_Flags_RxIF_Pos)
@@ -635,13 +636,13 @@ typedef enum {
 #define I2C_Con_StopErrIF_Msk     (0x1UL << I2C_Con_StopErrIF_Pos)
 #define I2C_Con_StopErrIF                   I2C_Con_StopErrIF_Msk
 
-#define I2C_Con_DatErrIF_Pos      (5U)
-#define I2C_Con_DatErrIF_Msk      (0x1UL << I2C_Con_DatErrIF_Pos)
-#define I2C_Con_DatErrIF                    I2C_Con_DatErrIF_Msk
+#define I2C_Con_MstNoAckIF_Pos    (5U)
+#define I2C_Con_MstNoAckIF_Msk    (0x1UL << I2C_Con_MstNoAckIF_Pos)
+#define I2C_Con_MstNoAckIF                  I2C_Con_MstNoAckIF_Msk
 
-#define I2C_Con_AdrErrIF_Pos      (6U)
-#define I2C_Con_AdrErrIF_Msk      (0x1UL << I2C_Con_AdrErrIF_Pos)
-#define I2C_Con_AdrErrIF                    I2C_Con_AdrErrIF_Msk
+#define I2C_Con_BusErrIF_Pos      (6U)
+#define I2C_Con_BusErrIF_Msk      (0x1UL << I2C_Con_BusErrIF_Pos)
+#define I2C_Con_BusErrIF                    I2C_Con_BusErrIF_Msk
 
 #define I2C_Con_RxOvfIF_Pos       (9U)
 #define I2C_Con_RxOvfIF_Msk       (0x1UL << I2C_Con_RxOvfIF_Pos)
@@ -708,6 +709,10 @@ typedef enum {
 
 #define I2C_TDat_Cond_Pos         (9U)
 #define I2C_TDat_Cond_Msk         (0x3UL << I2C_TDat_Cond_Pos)
+#define I2C_TDat_Cond_Data        (0x0UL << I2C_TDat_Cond_Pos)
+#define I2C_TDat_Cond_Start       (0x1UL << I2C_TDat_Cond_Pos)
+#define I2C_TDat_Cond_Stop        (0x2UL << I2C_TDat_Cond_Pos)
+#define I2C_TDat_Cond_Slv         (0x3UL << I2C_TDat_Cond_Pos)
 
 /********************  Bit definition for I2C_RDat register  ******************/
 #define I2C_RDat_Data_Pos         (0U)
