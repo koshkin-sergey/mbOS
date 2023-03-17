@@ -499,22 +499,16 @@ int32_t I2C_SlaveTransmit(const uint8_t *data, uint32_t num, I2C_RESOURCES *i2c)
   info->status &= ~(I2C_STATUS_GENERAL_CALL | I2C_STATUS_BUS_ERROR);
   info->xfer = 0U;
 
-  tx->data      = data;
-  tx->num       = num;
-  tx->cnt       = 0U;
-  tx->dummy_cnt = 0U;
-
-  /* Flush the Slave TX FIFO */
-  reg->FSTA = I2CFSTA_FSTX;
+  tx->data = data;
+  tx->num  = num;
+  tx->cnt  = 0U;
 
   /* Fill the Slave TX FIFO */
-  reg->STX = tx->data[tx->cnt++];
-  if (tx->cnt == tx->num) {
-    reg->STX = DUMMY_BYTE;
-    tx->dummy_cnt++;
-  }
-  else {
+  while ((reg->FSTA & I2CFSTA_STXSTA_Msk) != I2CFSTA_STXSTA_TWOBYTES) {
     reg->STX = tx->data[tx->cnt++];
+    if (tx->cnt == tx->num) {
+      break;
+    }
   }
 
   /* Enable TX interrupt */
@@ -837,7 +831,6 @@ void I2C_Slave_IRQHandler(I2C_RESOURCES *i2c)
   register uint32_t  state;
   register uint32_t  event;
   uint8_t            data;
-  uint32_t           fifo_cnt;
   I2C_INFO          *info = i2c->info;
   I2C_t             *reg  = i2c->reg;
   I2C_RX_XFER_INFO  *rx   = &info->rx;
@@ -867,14 +860,11 @@ void I2C_Slave_IRQHandler(I2C_RESOURCES *i2c)
     }
 
     if (tx->num != 0U) {
-      if (tx->cnt != tx->num) {
+      if (tx->cnt < tx->num) {
         reg->STX = tx->data[tx->cnt++];
       }
-      else if (tx->dummy_cnt == 0U) {
-        reg->STX = DUMMY_BYTE;
-        tx->dummy_cnt++;
-      }
-      else {
+      if (tx->cnt == tx->num) {
+        reg->SCON &= ~I2CSCON_STXENI;
         info->status &= ~I2C_STATUS_BUSY;
         info->xfer &= ~XFER_SLAVE_TX;
         tx->num = 0U;
@@ -905,9 +895,11 @@ void I2C_Slave_IRQHandler(I2C_RESOURCES *i2c)
 
         info->status |= I2C_STATUS_RECEIVER | I2C_STATUS_BUSY;
         info->xfer |= XFER_SLAVE_ADDR | XFER_SLAVE_RX;
+        /* Flush the Slave TX FIFO */
+        reg->FSTA = I2CFSTA_FSTX;
       }
 
-      if (rx->num != 0U && rx->cnt != rx->num) {
+      if (rx->num != 0U && rx->cnt < rx->num) {
         rx->data[rx->cnt++] = data;
         if (rx->cnt == rx->num) {
           info->status &= ~I2C_STATUS_BUSY;
@@ -934,10 +926,9 @@ void I2C_Slave_IRQHandler(I2C_RESOURCES *i2c)
       event = ARM_I2C_EVENT_TRANSFER_DONE;
 
       if ((info->status & I2C_STATUS_RECEIVER) == 0U) {
-        fifo_cnt = GetFifoCntSlaveTx(reg);
-        if (fifo_cnt != tx->dummy_cnt) {
+        tx->cnt -= GetFifoCntSlaveTx(reg);
+        if (tx->cnt < tx->num) {
           event |= ARM_I2C_EVENT_TRANSFER_INCOMPLETE;
-          tx->cnt -= fifo_cnt - info->tx.dummy_cnt;
         }
         tx->num = 0U;
       }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021-2022 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2021-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -1074,19 +1074,32 @@ typedef struct I2C_s {
 /*******************  Bit definition for I2CFSTA register  ********************/
 #define I2CFSTA_STXSTA_Pos        (0U)
 #define I2CFSTA_STXSTA_Msk        (0x3UL << I2CFSTA_STXSTA_Pos)
-#define I2CFSTA_STXSTA            I2CFSTA_STXSTA_Msk
+#define I2CFSTA_STXSTA_EMPTY      (0x0UL << I2CFSTA_STXSTA_Pos)
+#define I2CFSTA_STXSTA_ONEBYTE    (0x2UL << I2CFSTA_STXSTA_Pos)
+#define I2CFSTA_STXSTA_TWOBYTES   (0x3UL << I2CFSTA_STXSTA_Pos)
+
 #define I2CFSTA_SRXSTA_Pos        (2U)
 #define I2CFSTA_SRXSTA_Msk        (0x3UL << I2CFSTA_SRXSTA_Pos)
-#define I2CFSTA_SRXSTA            I2CFSTA_SRXSTA_Msk
+#define I2CFSTA_SRXSTA_EMPTY      (0x0UL << I2CFSTA_SRXSTA_Pos)
+#define I2CFSTA_SRXSTA_ONEBYTE    (0x2UL << I2CFSTA_SRXSTA_Pos)
+#define I2CFSTA_SRXSTA_TWOBYTES   (0x3UL << I2CFSTA_SRXSTA_Pos)
+
 #define I2CFSTA_MTXSTA_Pos        (4U)
 #define I2CFSTA_MTXSTA_Msk        (0x3UL << I2CFSTA_MTXSTA_Pos)
-#define I2CFSTA_MTXSTA            I2CFSTA_MTXSTA_Msk
+#define I2CFSTA_MTXSTA_EMPTY      (0x0UL << I2CFSTA_MTXSTA_Pos)
+#define I2CFSTA_MTXSTA_ONEBYTE    (0x2UL << I2CFSTA_MTXSTA_Pos)
+#define I2CFSTA_MTXSTA_TWOBYTES   (0x3UL << I2CFSTA_MTXSTA_Pos)
+
 #define I2CFSTA_MRXSTA_Pos        (6U)
 #define I2CFSTA_MRXSTA_Msk        (0x3UL << I2CFSTA_MRXSTA_Pos)
-#define I2CFSTA_MRXSTA            I2CFSTA_MRXSTA_Msk
+#define I2CFSTA_MRXSTA_EMPTY      (0x0UL << I2CFSTA_MRXSTA_Pos)
+#define I2CFSTA_MRXSTA_ONEBYTE    (0x2UL << I2CFSTA_MRXSTA_Pos)
+#define I2CFSTA_MRXSTA_TWOBYTES   (0x3UL << I2CFSTA_MRXSTA_Pos)
+
 #define I2CFSTA_FSTX_Pos          (8U)
 #define I2CFSTA_FSTX_Msk          (0x1UL << I2CFSTA_FSTX_Pos)
 #define I2CFSTA_FSTX              I2CFSTA_FSTX_Msk
+
 #define I2CFSTA_FMTX_Pos          (9U)
 #define I2CFSTA_FMTX_Msk          (0x1UL << I2CFSTA_FMTX_Pos)
 #define I2CFSTA_FMTX              I2CFSTA_FMTX_Msk
