@@ -328,9 +328,9 @@ int32_t I2C_MasterTransmit(uint32_t       addr,
                            bool           xfer_pending,
                            I2C_RESOURCES *i2c)
 {
-  I2C_t            *reg  = i2c->reg;
-  I2C_INFO         *info = i2c->info;
-  I2C_TX_XFER_INFO *tx   = &info->tx;
+  I2C_t         *reg  = i2c->reg;
+  I2C_INFO      *info = i2c->info;
+  I2C_XFER_INFO *tx   = &info->tx;
 
   if ((data == NULL) || (num == 0U)) {
     return (ARM_DRIVER_ERROR_PARAMETER);
@@ -350,10 +350,9 @@ int32_t I2C_MasterTransmit(uint32_t       addr,
     return (ARM_DRIVER_ERROR_BUSY);
   }
 
-  tx->data = data;
+  tx->data = (uint8_t *)data;
   tx->num  = num;
   tx->cnt  = 0U;
-  tx->dummy_cnt = 0U;
 
   if ((info->xfer & XFER_MASTER) == 0U) {
     /* New transfer, check the line is busy */
@@ -376,15 +375,17 @@ int32_t I2C_MasterTransmit(uint32_t       addr,
 
   /* Enable master */
   reg->MCON = (uint16_t)(I2CMCON_ALENI | I2CMCON_MEN);
-  /* Fill the TX FIFO */
-  reg->MTX = tx->data[tx->cnt++];
-  if (tx->cnt == tx->num) {
-    reg->MTX = DUMMY_BYTE;
-    tx->dummy_cnt++;
+
+  /* Fill the Master TX FIFO */
+  while ((reg->FSTA & I2CFSTA_MTXSTA_Msk) != I2CFSTA_MTXSTA_TWOBYTES) {
+    if (tx->cnt < tx->num) {
+      reg->MTX = tx->data[tx->cnt++];
+    }
+    else {
+      reg->MTX = DUMMY_BYTE;
+    }
   }
-  else {
-    reg->MTX = tx->data[tx->cnt++];
-  }
+
   /* Set slave address, transfer direction and generate start */
   reg->ADR0 = (addr << 1U) & I2CADR0;
   /* Enable transmit interrupt */
@@ -414,9 +415,9 @@ int32_t I2C_MasterReceive(uint32_t       addr,
                           bool           xfer_pending,
                           I2C_RESOURCES *i2c)
 {
-  I2C_t            *reg  = i2c->reg;
-  I2C_INFO         *info = i2c->info;
-  I2C_RX_XFER_INFO *rx   = &info->rx;
+  I2C_t         *reg  = i2c->reg;
+  I2C_INFO      *info = i2c->info;
+  I2C_XFER_INFO *rx   = &info->rx;
 
   if ((data == NULL) || (num == 0U)) {
     return (ARM_DRIVER_ERROR_PARAMETER);
@@ -484,9 +485,9 @@ int32_t I2C_MasterReceive(uint32_t       addr,
 static
 int32_t I2C_SlaveTransmit(const uint8_t *data, uint32_t num, I2C_RESOURCES *i2c)
 {
-  I2C_t            *reg  = i2c->reg;
-  I2C_INFO         *info = i2c->info;
-  I2C_TX_XFER_INFO *tx   = &info->tx;
+  I2C_t         *reg  = i2c->reg;
+  I2C_INFO      *info = i2c->info;
+  I2C_XFER_INFO *tx   = &info->tx;
 
   if ((data == NULL) || (num == 0U)) {
     return (ARM_DRIVER_ERROR_PARAMETER);
@@ -499,7 +500,7 @@ int32_t I2C_SlaveTransmit(const uint8_t *data, uint32_t num, I2C_RESOURCES *i2c)
   info->status &= ~(I2C_STATUS_GENERAL_CALL | I2C_STATUS_BUS_ERROR);
   info->xfer = 0U;
 
-  tx->data = data;
+  tx->data = (uint8_t *)data;
   tx->num  = num;
   tx->cnt  = 0U;
 
@@ -530,8 +531,8 @@ int32_t I2C_SlaveTransmit(const uint8_t *data, uint32_t num, I2C_RESOURCES *i2c)
 static
 int32_t I2C_SlaveReceive(uint8_t *data, uint32_t num, I2C_RESOURCES *i2c)
 {
-  I2C_INFO         *info = i2c->info;
-  I2C_RX_XFER_INFO *rx   = &info->rx;
+  I2C_INFO      *info = i2c->info;
+  I2C_XFER_INFO *rx   = &info->rx;
 
   if ((data == NULL) || (num == 0U)) {
     return (ARM_DRIVER_ERROR_PARAMETER);
@@ -607,7 +608,10 @@ int32_t I2C_Control(uint32_t control, uint32_t arg, I2C_RESOURCES *i2c)
       }
       else {
         /* Enable slave */
-        val = I2CSCON_STXENI | I2CSCON_SRXENI | I2CSCON_SSENI | I2CSCON_SETEN |
+        val = I2CSCON_STXENI |
+              I2CSCON_SRXENI |
+              I2CSCON_SSENI  |
+              I2CSCON_SETEN  |
               I2CSCON_SEN;
 
         if (arg & ARM_I2C_ADDRESS_GC) {
@@ -738,22 +742,18 @@ void I2C_Master_IRQHandler(I2C_RESOURCES *i2c)
   uint8_t            data;
   I2C_INFO          *info = i2c->info;
   I2C_t             *reg  = i2c->reg;
-  I2C_RX_XFER_INFO  *rx   = &info->rx;
-  I2C_TX_XFER_INFO  *tx   = &info->tx;
+  I2C_XFER_INFO     *rx   = &info->rx;
+  I2C_XFER_INFO     *tx   = &info->tx;
 
   ctrl  = reg->MCON;
   state = reg->MSTA;
   event = 0U;
 
   if ((ctrl & I2CMCON_MTENI) != 0U && (state & I2CMSTA_TXQ) != 0U) {
-    if (tx->cnt != tx->num) {
+    if (tx->cnt < tx->num) {
       reg->MTX = tx->data[tx->cnt++];
     }
-    else {
-      if (tx->dummy_cnt != 0U) {
-        tx->dummy_cnt = 0U;
-        reg->FSTA = I2CFSTA_FMTX;
-      }
+    if (tx->cnt == tx->num) {
       ctrl &= ~I2CMCON_MTENI;
       if ((info->xfer & XFER_PENDING) != 0U) {
         info->xfer |= XFER_MASTER_TX;
@@ -762,6 +762,9 @@ void I2C_Master_IRQHandler(I2C_RESOURCES *i2c)
         event = ARM_I2C_EVENT_TRANSFER_DONE;
       }
       reg->MCON = (uint16_t)ctrl;
+      if (tx->num == 1U) {
+        reg->FSTA = I2CFSTA_FMTX;
+      }
     }
   }
 
@@ -797,16 +800,17 @@ void I2C_Master_IRQHandler(I2C_RESOURCES *i2c)
       info->status &= ~I2C_STATUS_BUSY;
       event = ARM_I2C_EVENT_TRANSFER_DONE;
 
-      if ((state & I2CMSTA_NADDR) != 0U) {
-        tx->cnt = 0U;
-        reg->FSTA = I2CFSTA_FMTX;
-        event |= ARM_I2C_EVENT_ADDRESS_NACK | ARM_I2C_EVENT_TRANSFER_INCOMPLETE;
-      }
-
-      if ((state & I2CMSTA_NDATA) != 0U) {
-        tx->cnt -= GetFifoCntMasterTx(reg) + 1U;
+      if ((state & (I2CMSTA_NADDR | I2CMSTA_NDATA)) != 0U) {
         reg->FSTA = I2CFSTA_FMTX;
         event |= ARM_I2C_EVENT_TRANSFER_INCOMPLETE;
+
+        if ((state & I2CMSTA_NADDR) != 0U) {
+          event |= ARM_I2C_EVENT_ADDRESS_NACK;
+          tx->cnt = 0U;
+        }
+        else {
+          tx->cnt -= GetFifoCntMasterTx(reg) + 1U;
+        }
       }
 
       /* Disable master */
@@ -833,8 +837,8 @@ void I2C_Slave_IRQHandler(I2C_RESOURCES *i2c)
   uint8_t            data;
   I2C_INFO          *info = i2c->info;
   I2C_t             *reg  = i2c->reg;
-  I2C_RX_XFER_INFO  *rx   = &info->rx;
-  I2C_TX_XFER_INFO  *tx   = &info->tx;
+  I2C_XFER_INFO     *rx   = &info->rx;
+  I2C_XFER_INFO     *tx   = &info->tx;
 
   state = reg->SSTA;
 

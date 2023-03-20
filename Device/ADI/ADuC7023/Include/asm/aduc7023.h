@@ -860,28 +860,39 @@ typedef struct I2C_s {
 /*******************  Bit definition for I2CMCON register  ********************/
 #define I2CMCON_MEN_Pos           (0U)
 #define I2CMCON_MEN_Msk           (0x1UL << I2CMCON_MEN_Pos)
-#define I2CMCON_MEN               I2CMCON_MEN_Msk
+#define I2CMCON_MEN                         I2CMCON_MEN_Msk
+
 #define I2CMCON_BD_Pos            (1U)
 #define I2CMCON_BD_Msk            (0x1UL << I2CMCON_BD_Pos)
-#define I2CMCON_BD                I2CMCON_BD_Msk
+#define I2CMCON_BD                          I2CMCON_BD_Msk
+
 #define I2CMCON_ILEN_Pos          (2U)
 #define I2CMCON_ILEN_Msk          (0x1UL << I2CMCON_ILEN_Pos)
-#define I2CMCON_ILEN              I2CMCON_ILEN_Msk
+#define I2CMCON_ILEN                        I2CMCON_ILEN_Msk
+
+#define I2CMCON_STRETCH_Pos       (3U)
+#define I2CMCON_STRETCH_Msk       (0x1U << I2CMCON_STRETCH_Pos)
+#define I2CMCON_STRETCH                    I2CMCON_STRETCH_Msk
+
 #define I2CMCON_MRENI_Pos         (4U)
 #define I2CMCON_MRENI_Msk         (0x1UL << I2CMCON_MRENI_Pos)
-#define I2CMCON_MRENI             I2CMCON_MRENI_Msk
+#define I2CMCON_MRENI                       I2CMCON_MRENI_Msk
+
 #define I2CMCON_MTENI_Pos         (5U)
 #define I2CMCON_MTENI_Msk         (0x1UL << I2CMCON_MTENI_Pos)
-#define I2CMCON_MTENI             I2CMCON_MTENI_Msk
+#define I2CMCON_MTENI                       I2CMCON_MTENI_Msk
+
 #define I2CMCON_ALENI_Pos         (6U)
 #define I2CMCON_ALENI_Msk         (0x1UL << I2CMCON_ALENI_Pos)
-#define I2CMCON_ALENI             I2CMCON_ALENI_Msk
+#define I2CMCON_ALENI                       I2CMCON_ALENI_Msk
+
 #define I2CMCON_NACKENI_Pos       (7U)
 #define I2CMCON_NACKENI_Msk       (0x1UL << I2CMCON_NACKENI_Pos)
-#define I2CMCON_NACKENI           I2CMCON_NACKENI_Msk
+#define I2CMCON_NACKENI                     I2CMCON_NACKENI_Msk
+
 #define I2CMCON_MCENI_Pos         (8U)
 #define I2CMCON_MCENI_Msk         (0x1UL << I2CMCON_MCENI_Pos)
-#define I2CMCON_MCENI             I2CMCON_MCENI_Msk
+#define I2CMCON_MCENI                       I2CMCON_MCENI_Msk
 
 /*******************  Bit definition for I2CMSTA register  ********************/
 #define I2CMSTA_TFSTA_Pos         (0U)
@@ -962,34 +973,47 @@ typedef struct I2C_s {
 /*******************  Bit definition for I2CSCON register  ********************/
 #define I2CSCON_SEN_Pos           (0U)
 #define I2CSCON_SEN_Msk           (0x1UL << I2CSCON_SEN_Pos)
-#define I2CSCON_SEN               I2CSCON_SEN_Msk
+#define I2CSCON_SEN                         I2CSCON_SEN_Msk
+
 #define I2CSCON_ADR10EN_Pos       (1U)
 #define I2CSCON_ADR10EN_Msk       (0x1UL << I2CSCON_ADR10EN_Pos)
-#define I2CSCON_ADR10EN           I2CSCON_ADR10EN_Msk
+#define I2CSCON_ADR10EN                     I2CSCON_ADR10EN_Msk
+
 #define I2CSCON_GCEN_Pos          (2U)
 #define I2CSCON_GCEN_Msk          (0x1UL << I2CSCON_GCEN_Pos)
-#define I2CSCON_GCEN              I2CSCON_GCEN_Msk
+#define I2CSCON_GCEN                        I2CSCON_GCEN_Msk
+
 #define I2CSCON_HGCEN_Pos         (3U)
 #define I2CSCON_HGCEN_Msk         (0x1UL << I2CSCON_HGCEN_Pos)
-#define I2CSCON_HGCEN             I2CSCON_HGCEN_Msk
+#define I2CSCON_HGCEN                       I2CSCON_HGCEN_Msk
+
 #define I2CSCON_GCCLR_Pos         (4U)
 #define I2CSCON_GCCLR_Msk         (0x1UL << I2CSCON_GCCLR_Pos)
-#define I2CSCON_GCCLR             I2CSCON_GCCLR_Msk
+#define I2CSCON_GCCLR                       I2CSCON_GCCLR_Msk
+
 #define I2CSCON_SETEN_Pos         (5U)
 #define I2CSCON_SETEN_Msk         (0x1UL << I2CSCON_SETEN_Pos)
-#define I2CSCON_SETEN             I2CSCON_SETEN_Msk
+#define I2CSCON_SETEN                       I2CSCON_SETEN_Msk
+
+#define I2CSCON_STRETCHSCL_Pos    (6U)
+#define I2CSCON_STRETCHSCL_Msk    (0x1U << I2CSCON_STRETCHSCL_Pos)
+#define I2CSCON_STRETCHSCL                 I2CSCON_STRETCHSCL_Msk
+
 #define I2CSCON_NACKEN_Pos        (7U)
 #define I2CSCON_NACKEN_Msk        (0x1UL << I2CSCON_NACKEN_Pos)
-#define I2CSCON_NACKEN            I2CSCON_NACKEN_Msk
+#define I2CSCON_NACKEN                      I2CSCON_NACKEN_Msk
+
 #define I2CSCON_SSENI_Pos         (8U)
 #define I2CSCON_SSENI_Msk         (0x1UL << I2CSCON_SSENI_Pos)
-#define I2CSCON_SSENI             I2CSCON_SSENI_Msk
+#define I2CSCON_SSENI                       I2CSCON_SSENI_Msk
+
 #define I2CSCON_SRXENI_Pos        (9U)
 #define I2CSCON_SRXENI_Msk        (0x1UL << I2CSCON_SRXENI_Pos)
-#define I2CSCON_SRXENI            I2CSCON_SRXENI_Msk
+#define I2CSCON_SRXENI                      I2CSCON_SRXENI_Msk
+
 #define I2CSCON_STXENI_Pos        (10U)
 #define I2CSCON_STXENI_Msk        (0x1UL << I2CSCON_STXENI_Pos)
-#define I2CSCON_STXENI            I2CSCON_STXENI_Msk
+#define I2CSCON_STXENI                      I2CSCON_STXENI_Msk
 
 /*******************  Bit definition for I2CSSTA register  ********************/
 #define I2CSSTA_ETSTA_Pos         (0U)

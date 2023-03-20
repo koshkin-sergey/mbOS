@@ -151,27 +151,19 @@ typedef const struct _I2C_IO {
   I2C_PIN              *sda;                // Pointer to SDA pin configuration
 } I2C_IO;
 
-/* I2C RX Transfer Information (Run-Time) */
-typedef struct _I2C_RX_XFER_INFO {
+/* I2C Transfer Information (Run-Time) */
+typedef struct _I2C_XFER_INFO {
   uint8_t              *data;               // Data pointer
   uint32_t              num;                // Number of data to transfer
   uint32_t              cnt;                // Data transfer counter
-} I2C_RX_XFER_INFO;
-
-/* I2C TX Transfer Information (Run-Time) */
-typedef struct _I2C_TX_XFER_INFO {
-  const uint8_t        *data;               // Data pointer
-  uint32_t              num;                // Number of data to transfer
-  uint32_t              cnt;                // Data transfer counter
-  uint32_t              dummy_cnt;          // Dummy byte counter
-} I2C_TX_XFER_INFO;
+} I2C_XFER_INFO;
 
 /* I2C Information (Run-Time) */
 typedef struct _I2C_INFO {
   ARM_I2C_SignalEvent_t cb_event;           // Event Callback
   uint32_t              status;             // Status flags
-  I2C_RX_XFER_INFO      rx;                 // RX transfer information
-  I2C_TX_XFER_INFO      tx;                 // TX transfer information
+  I2C_XFER_INFO         rx;                 // RX transfer information
+  I2C_XFER_INFO         tx;                 // TX transfer information
   uint16_t              flags;              // Current I2C state flags
   uint16_t              xfer;               // Transfer control (current)
 } I2C_INFO;
