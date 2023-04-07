@@ -3196,420 +3196,332 @@ typedef struct MMR_DMA {                    /*!< MMR_DMA Structure              
 
 /* DMABSCLR[CHBSWAPCLR] - Disable byte swap */
 #define DMABSCLR_CHBSWAPCLR_MSK        (0x3FFF << 0  )
-// ------------------------------------------------------------------------------------------------
-// -----                                        FEE                                        -----
-// ------------------------------------------------------------------------------------------------
 
+
+/* ========================================================================== */
+/* ================         FLASH CONTROLLER               ================== */
+/* ========================================================================== */
 
 /**
   * @brief FEE (MMR_FEE)
   */
 
-typedef struct MMR_FEE {                    /*!< MMR_FEE Structure                     */
-  __IO uint32_t  FEESTA;                    /*!< Status register                       */
-  __IO uint32_t  FEECON0;                   /*!< Command Control register: interrupt enable register */
-  __IO uint32_t  FEECMD;                    /*!< Command register                      */
-  __IO uint32_t  FEEFLADR;                  /*!< Flash address key - hole register     */
-  __IO uint32_t  FEEFLDATA0;                /*!< Flash Data register: key-hole interface lower 32 bits */
-  __IO uint32_t  FEEFLDATA1;                /*!< Flash Data register: key-hole interface upper 32 bits */
-  __IO uint32_t  FEEADR0;                   /*!< Lower page address register           */
-  __IO uint32_t  FEEADR1;                   /*!< Upper page address register           */
-  __IO uint32_t  FEEKEY;                    /*!< Flash Key register.                   */
+typedef struct MMR_FEE {              // MMR_FEE Structure
+  __I  uint32_t  FEESTA;              // Status register
+  __IO uint32_t  FEECON0;             // Command Control register: interrupt enable register
+  __IO uint32_t  FEECMD;              // Command register
+  __IO uint32_t  FEEFLADR;            // Flash address key - hole register
+  __IO uint32_t  FEEFLDATA0;          // Flash Data register: key-hole interface lower 32 bits
+  __IO uint32_t  FEEFLDATA1;          // Flash Data register: key-hole interface upper 32 bits
+  __IO uint32_t  FEEADR0;             // Lower page address register
+  __IO uint32_t  FEEADR1;             // Upper page address register
+  __O  uint32_t  FEEKEY;              // Flash Key register.
   __I  uint32_t  RESERVED0;
-  __IO uint32_t  FEEPRO0;                   /*!< write protection register for flash0  */
-  __IO uint32_t  FEEPRO1;                   /*!< write protection register for flash1  */
+  __IO uint32_t  FEEPRO0;             // Write protection register for flash0
+  __IO uint32_t  FEEPRO1;             // Write protection register for flash1
   __I  uint32_t  RESERVED1;
-  __IO uint32_t  FEESIG;                    /*!< Flash Signature                       */
-  __IO uint32_t  FEECON1;                   /*!< User Setup register                   */
+  __I  uint32_t  FEESIG;              // Flash Signature
+  __IO uint32_t  FEECON1;             // User Setup register
   __I  uint32_t  RESERVED2;
-  __IO uint32_t  FEEWRADDRA;                /*!< write abort address register          */
+  __I  uint32_t  FEEWRADDRA;          // Write abort address register
   __I  uint32_t  RESERVED3;
-  __IO uint32_t  FEEAEN0;                   /*!< Interrupt abort enable register. Interrupt 31 to Interrupt 0. */
-  __IO uint32_t  FEEAEN1;                   /*!< Interrupt abort enable register. Interrupt 54 to Interrupt 32. */
+  __IO uint32_t  FEEAEN0;             // Interrupt abort enable register. Interrupt 31 to Interrupt 0.
+  __IO uint32_t  FEEAEN1;             // Interrupt abort enable register. Interrupt 54 to Interrupt 32.
   __I  uint32_t  RESERVED4[5];
-  __IO uint32_t  FEEECCCONFIG;              /*!< Configurable ECC enable/disable, error response */
+  __IO uint32_t  FEEECCCONFIG;        // Configurable ECC enable/disable, error response
   __I  uint32_t  RESERVED5[3];
-  __IO uint32_t  FEEECCADDR0;               /*!< Flash 0 ECC Error Address             */
-  __IO uint32_t  FEEECCADDR1;               /*!< Flash 1 ECC Error Address             */
+  __I  uint32_t  FEEECCADDR0;         // Flash 0 ECC Error Address
+  __I  uint32_t  FEEECCADDR1;         // Flash 1 ECC Error Address
   __I  uint32_t  RESERVED6[17];
-  __IO uint32_t  CACHESTAT;                 /*!< Cache Status register                 */
-  __IO uint32_t  CACHESETUP;                /*!< Cache Setup register                  */
-  __IO uint32_t  CACHEKEY;                  /*!< Cache Key register                    */
+  __I  uint32_t  CACHESTAT;           // Cache Status register
+  __IO uint32_t  CACHESETUP;          // Cache Setup register
+  __O  uint32_t  CACHEKEY;            // Cache Key register
 } MMR_FEE_t;
 
-/* Reset Value for FEESTA*/
-#define FEESTA_RVAL                    0x0 
-
-/* FEESTA[INIT] - Initialization upload in progress. */
-#define FEESTA_INIT_BBA                (*(volatile unsigned long *) 0x42300038)
-#define FEESTA_INIT_MSK                (0x1   << 14 )
-#define FEESTA_INIT                    (0x1   << 14 )
-#define FEESTA_INIT_CLR                (0x0   << 14 )
-#define FEESTA_INIT_SET                (0x1   << 14 )
-
 /* FEESTA[SIGNERR] - Information space signature check on reset error. */
-#define FEESTA_SIGNERR_BBA             (*(volatile unsigned long *) 0x42300034)
-#define FEESTA_SIGNERR_MSK             (0x1   << 13 )
-#define FEESTA_SIGNERR                 (0x1   << 13 )
-#define FEESTA_SIGNERR_CLR             (0x0   << 13 )
-#define FEESTA_SIGNERR_SET             (0x1   << 13 )
+#define FEESTA_SIGNERR_Pos             (13U)
+#define FEESTA_SIGNERR_Msk             (0x1U << FEESTA_SIGNERR_Pos)
+#define FEESTA_SIGNERR                          FEESTA_SIGNERR_Msk
 
 /* FEESTA[CMDRES] - These two bits indicate the status of a command on completion or the status of a write. */
-#define FEESTA_CMDRES_MSK              (0x3   << 4  )
-#define FEESTA_CMDRES_SUCCESS          (0x0   << 4  ) /* Successful completion of a command or a write */
-#define FEESTA_CMDRES_IGNORED          (0x1   << 4  ) /* Attempted signcheck, write or erase of a protected location. */
-#define FEESTA_CMDRES_READERROR        (0x2   << 4  ) /* Read verify error. After an erase the controller reads the corresponding word(s) to verify that the transaction completed successfully. If data read is not all 'F's this is the resulting status.If the Sign command is executed and the resulting signature does not match the data in the upper 4 bytes of the upper page in a block then this is the resulting status. */
-#define FEESTA_CMDRES_ABORTED          (0x3   << 4  ) /* Indicates that a command or a write was aborted by an abort command or a system interrupt has caused an abort */
+#define FEESTA_CMDRES_Pos              (4U)
+#define FEESTA_CMDRES_Msk              (0x3U << FEESTA_CMDRES_Pos)
+#define FEESTA_CMDRES_SUCCESS          (0x0U << FEESTA_CMDRES_Pos)              /* Successful completion of a command or a write */
+#define FEESTA_CMDRES_IGNORED          (0x1U << FEESTA_CMDRES_Pos)              /* Attempted signcheck, write or erase of a protected location. */
+#define FEESTA_CMDRES_READERROR        (0x2U << FEESTA_CMDRES_Pos)              /* Read verify error. After an erase the controller reads the corresponding word(s) to verify that the transaction completed successfully. If data read is not all 'F's this is the resulting status.If the Sign command is executed and the resulting signature does not match the data in the upper 4 bytes of the upper page in a block then this is the resulting status. */
+#define FEESTA_CMDRES_ABORTED          (0x3U << FEESTA_CMDRES_Pos)              /* Indicates that a command or a write was aborted by an abort command or a system interrupt has caused an abort */
 
 /* FEESTA[WRALMOSTDONE] - Write almost Complete - key-hole registers open for access. This bit flags the earliest point at which the flash controller data and address may be updated for the next command without affecting an active flash command operation. */
-#define FEESTA_WRALMOSTDONE_BBA        (*(volatile unsigned long *) 0x4230000C)
-#define FEESTA_WRALMOSTDONE_MSK        (0x1   << 3  )
-#define FEESTA_WRALMOSTDONE            (0x1   << 3  )
-#define FEESTA_WRALMOSTDONE_CLR        (0x0   << 3  ) /* Cleared to 0 when read   */
-#define FEESTA_WRALMOSTDONE_SET        (0x1   << 3  ) /* Set to 1 when a write completes */
+#define FEESTA_WRALMOSTDONE_Pos        (3U)
+#define FEESTA_WRALMOSTDONE_Msk        (0x1U << FEESTA_WRALMOSTDONE_Pos)
+#define FEESTA_WRALMOSTDONE                     FEESTA_WRALMOSTDONE_Msk
 
 /* FEESTA[CMDDONE] - This bit asserts when a command completes. */
-#define FEESTA_CMDDONE_BBA             (*(volatile unsigned long *) 0x42300008)
-#define FEESTA_CMDDONE_MSK             (0x1   << 2  )
-#define FEESTA_CMDDONE                 (0x1   << 2  )
-#define FEESTA_CMDDONE_CLR             (0x0   << 2  ) /* Cleared to 0 when read   */
-#define FEESTA_CMDDONE_SET             (0x1   << 2  ) /* Set to 1 when a command completes */
+#define FEESTA_CMDDONE_Pos             (2U)
+#define FEESTA_CMDDONE_Msk             (0x1U << FEESTA_CMDDONE_Pos)
+#define FEESTA_CMDDONE                          FEESTA_CMDDONE_Msk
 
 /* FEESTA[WRCLOSE] - This bit is asserted when the user has written all key-hole registers for flash write and the controller has started the write. */
-#define FEESTA_WRCLOSE_BBA             (*(volatile unsigned long *) 0x42300004)
-#define FEESTA_WRCLOSE_MSK             (0x1   << 1  )
-#define FEESTA_WRCLOSE                 (0x1   << 1  )
-#define FEESTA_WRCLOSE_CLR             (0x0   << 1  )
-#define FEESTA_WRCLOSE_SET             (0x1   << 1  )
+#define FEESTA_WRCLOSE_Pos             (1U)
+#define FEESTA_WRCLOSE_Msk             (0x1U << FEESTA_WRCLOSE_Pos)
+#define FEESTA_WRCLOSE                          FEESTA_WRCLOSE_Msk
 
 /* FEESTA[CMDBUSY] - Command busy. */
-#define FEESTA_CMDBUSY_BBA             (*(volatile unsigned long *) 0x42300000)
-#define FEESTA_CMDBUSY_MSK             (0x1   << 0  )
-#define FEESTA_CMDBUSY                 (0x1   << 0  )
-#define FEESTA_CMDBUSY_CLR             (0x0   << 0  )
-#define FEESTA_CMDBUSY_SET             (0x1   << 0  )
+#define FEESTA_CMDBUSY_Pos             (0U)
+#define FEESTA_CMDBUSY_Msk             (0x1U << FEESTA_CMDBUSY_Pos)
+#define FEESTA_CMDBUSY                          FEESTA_CMDBUSY_Msk
 
-/* Reset Value for FEECON0*/
-#define FEECON0_RVAL                   0x0 
 
 /* FEECON0[IENERR] - Command fail interrupt enable */
-#define FEECON0_IENERR_BBA             (*(volatile unsigned long *) 0x42300088)
-#define FEECON0_IENERR_MSK             (0x1   << 2  )
-#define FEECON0_IENERR                 (0x1   << 2  )
-#define FEECON0_IENERR_DIS             (0x0   << 2  ) /* Disable                  */
-#define FEECON0_IENERR_EN              (0x1   << 2  ) /* Enable                   */
+#define FEECON0_IENERR_Pos             (2U)
+#define FEECON0_IENERR_Msk             (0x1U << FEECON0_IENERR_Pos)
+#define FEECON0_IENERR                          FEECON0_IENERR_Msk
 
 /* FEECON0[IWRALCOMP] - Write almost complete interrupt enable */
-#define FEECON0_IWRALCOMP_BBA          (*(volatile unsigned long *) 0x42300084)
-#define FEECON0_IWRALCOMP_MSK          (0x1   << 1  )
-#define FEECON0_IWRALCOMP              (0x1   << 1  )
-#define FEECON0_IWRALCOMP_DIS          (0x0   << 1  ) /* Disable                  */
-#define FEECON0_IWRALCOMP_EN           (0x1   << 1  ) /* Enable                   */
+#define FEECON0_IWRALCOMP_Pos          (1U)
+#define FEECON0_IWRALCOMP_Msk          (0x1U << FEECON0_IWRALCOMP_Pos)
+#define FEECON0_IWRALCOMP                       FEECON0_IWRALCOMP_Msk
 
 /* FEECON0[IENCMD] - Command complete interrupt enable */
-#define FEECON0_IENCMD_BBA             (*(volatile unsigned long *) 0x42300080)
-#define FEECON0_IENCMD_MSK             (0x1   << 0  )
-#define FEECON0_IENCMD                 (0x1   << 0  )
-#define FEECON0_IENCMD_DIS             (0x0   << 0  ) /* Disable                  */
-#define FEECON0_IENCMD_EN              (0x1   << 0  ) /* Enable                   */
+#define FEECON0_IENCMD_Pos             (0U)
+#define FEECON0_IENCMD_Msk             (0x1U << FEECON0_IENCMD_Pos)
+#define FEECON0_IENCMD                          FEECON0_IENCMD_Msk
 
-/* Reset Value for FEECMD*/
-#define FEECMD_RVAL                    0x0 
 
 /* FEECMD[CMD] - Commands */
-#define FEECMD_CMD_MSK                 (0x1F  << 0  )
-#define FEECMD_CMD_IDLE                (0x0   << 0  ) /* IDLE. No command executed. */
-#define FEECMD_CMD_PAGEERASE           (0x1   << 0  ) /* PAGEERASE. Write the address of the page to be erased to the FEEADR0 register, then write this code to the FEECMD and the flash will erase the page. When the erase has completed the flash will read every location in the page to verify all words in the page are erased.  If there is a read verify error this will be indicated in the Status register.  To erase multiple pages wait until a previous page erase has completed - check the status then issue a command to start the next page erase.  Before entering this command  0xF123F456 must first be written to the FEEKEY register. */
-#define FEECMD_CMD_SIGN                (0x2   << 0  ) /* SIGN. Use this command to generate a signature for a block of data.  The signature is generated on a page by page basis.  To generate a signature the address of the first page of the block is entered in the FEEADR0 register, the address of the last page is written to the FEEADR1 register, then write this code to the FEECMD register.  When the command has completed the signature is available for reading in the Sign register.  The last 4 bytes of the last page in a block is reserved for storing the signature. Before entering this command 0xF123F456 must first be written to the FEEKEY register. */
-#define FEECMD_CMD_WRITE               (0x4   << 0  ) /* WRITE. Use this command to write to flash locations. This command needs a UserKey for writing into write protection location and userfaakey location. No key is required for other flash locations. This command takes the address, data from FEEADR, FEEFLDATA key-hole registers. */
-#define FEECMD_CMD_MASSERASE0          (0x5   << 0  ) /* MASSERASE0. Erase all of flash0 user space. To enable this operation 0xF123F456 must first be written to the FEEKEY register (this is to prevent accidental erases).  When the mass erase has completed the controller will read every location to verify that all locations are 0xFFFFFFFFFFFFFFFF.  If there is a read verify error this will be indicated in the Status register. */
-#define FEECMD_CMD_MASSERASE1          (0x6   << 0  ) /* MASSERASE1. Erase all of flash1 user space. To enable this operation 0xF123F456 must first be written to the FEEKEY register (this is to prevent accidental erases).  When the mass erase has completed the controller will read every location to verify that all locations are 0xFFFFFFFFFFFFFFFF.  If there is a read verify error this will be indicated in the Status register. */
-#define FEECMD_CMD_ABORT               (0x8   << 0  ) /* ABORT. If this command is issued then any command currently in progress will be stopped.  The status will indicate command completed with an error status (FEESTA[5:4] = 0x3).  Note that this is the only command that can be issued while another command is already in progress.  This command can also be used to stop a write that may be in progress. If a write or erase is aborted then the flash timing will be violated and it is not possible to determine if the write or erase completed successfully.  To enable this operation 0xF123F456 must first be written to the FEEKEY register (this is to prevent accidental aborts). */
+#define FEECMD_CMD_Pos                 (0U)
+#define FEECMD_CMD_Msk                 (0x1FU << FEECMD_CMD_Pos)
+#define FEECMD_CMD_IDLE                (0x00U << FEECMD_CMD_Pos)                /* IDLE. No command executed. */
+#define FEECMD_CMD_PAGEERASE           (0x01U << FEECMD_CMD_Pos)                /* PAGEERASE. Write the address of the page to be erased to the FEEADR0 register, then write this code to the FEECMD and the flash will erase the page. When the erase has completed the flash will read every location in the page to verify all words in the page are erased.  If there is a read verify error this will be indicated in the Status register.  To erase multiple pages wait until a previous page erase has completed - check the status then issue a command to start the next page erase.  Before entering this command  0xF123F456 must first be written to the FEEKEY register. */
+#define FEECMD_CMD_SIGN                (0x02U << FEECMD_CMD_Pos)                /* SIGN. Use this command to generate a signature for a block of data.  The signature is generated on a page by page basis.  To generate a signature the address of the first page of the block is entered in the FEEADR0 register, the address of the last page is written to the FEEADR1 register, then write this code to the FEECMD register.  When the command has completed the signature is available for reading in the Sign register.  The last 4 bytes of the last page in a block is reserved for storing the signature. Before entering this command 0xF123F456 must first be written to the FEEKEY register. */
+#define FEECMD_CMD_WRITE               (0x04U << FEECMD_CMD_Pos)                /* WRITE. Use this command to write to flash locations. This command needs a UserKey for writing into write protection location and userfaakey location. No key is required for other flash locations. This command takes the address, data from FEEADR, FEEFLDATA key-hole registers. */
+#define FEECMD_CMD_MASSERASE0          (0x05U << FEECMD_CMD_Pos)                /* MASSERASE0. Erase all of flash0 user space. To enable this operation 0xF123F456 must first be written to the FEEKEY register (this is to prevent accidental erases).  When the mass erase has completed the controller will read every location to verify that all locations are 0xFFFFFFFFFFFFFFFF.  If there is a read verify error this will be indicated in the Status register. */
+#define FEECMD_CMD_MASSERASE1          (0x06U << FEECMD_CMD_Pos)                /* MASSERASE1. Erase all of flash1 user space. To enable this operation 0xF123F456 must first be written to the FEEKEY register (this is to prevent accidental erases).  When the mass erase has completed the controller will read every location to verify that all locations are 0xFFFFFFFFFFFFFFFF.  If there is a read verify error this will be indicated in the Status register. */
+#define FEECMD_CMD_ABORT               (0x08U << FEECMD_CMD_Pos)                /* ABORT. If this command is issued then any command currently in progress will be stopped.  The status will indicate command completed with an error status (FEESTA[5:4] = 0x3).  Note that this is the only command that can be issued while another command is already in progress.  This command can also be used to stop a write that may be in progress. If a write or erase is aborted then the flash timing will be violated and it is not possible to determine if the write or erase completed successfully.  To enable this operation 0xF123F456 must first be written to the FEEKEY register (this is to prevent accidental aborts). */
 
-/* Reset Value for FEEFLADR*/
-#define FEEFLADR_RVAL                  0x0 
 
-/* FEEFLADR[FLAddr] - Memory mapped address for the flash location */
-#define FEEFLADR_FLAddr_MSK            (0xFFFF << 3  )
+/* FEEFLADR[FLADDR] - Memory mapped address for the flash location */
+#define FEEFLADR_FLADDR_Pos            (3U)
+#define FEEFLADR_FLADDR_Msk            (0xFFFFU << FEEFLADR_FLADDR_Pos)
 
-/* Reset Value for FEEFLDATA0*/
-#define FEEFLDATA0_RVAL                0x0 
 
 /* FEEFLDATA0[FLDATA0] - FLDATA0 forms the lower 32 bit of 64 bit data to be written to flash */
-#define FEEFLDATA0_FLDATA0_MSK         (0xFFFFFFFF << 0  )
+#define FEEFLDATA0_FLDATA0_Pos         (0U)
+#define FEEFLDATA0_FLDATA0_Msk         (0xFFFFFFFFU << FEEFLDATA0_FLDATA0_Pos)
 
-/* Reset Value for FEEFLDATA1*/
-#define FEEFLDATA1_RVAL                0x0 
 
 /* FEEFLDATA1[FLDATA1] - FLDATA1 forms the upper 32 bit of 64 bit data to be written to flash */
-#define FEEFLDATA1_FLDATA1_MSK         (0xFFFFFFFF << 0  )
+#define FEEFLDATA0_FLDATA1_Pos         (0U)
+#define FEEFLDATA0_FLDATA1_Msk         (0xFFFFFFFFU << FEEFLDATA0_FLDATA1_Pos)
 
-/* Reset Value for FEEADR0*/
-#define FEEADR0_RVAL                   0x0 
 
-/* FEEADR0[PageAddr0] - Used by SIGN and PAGEERASE commands for specifying page address. See the description of these commands in FEECMD */
-#define FEEADR0_PageAddr0_MSK          (0xFF  << 11 )
+/* FEEADR0[PAGEADDR0] - Used by SIGN and PAGEERASE commands for specifying page address. See the description of these commands in FEECMD */
+#define FEEADR0_PAGEADDR0_Pos          (11U)
+#define FEEADR0_PAGEADDR0_Msk          (0xFFU << FEEADR0_PAGEADDR0_Pos)
 
-/* Reset Value for FEEADR1*/
-#define FEEADR1_RVAL                   0x0 
 
-/* FEEADR1[PageAddr1] - Used by SIGN command for specifying the end page address. See description of this command in FEECMD */
-#define FEEADR1_PageAddr1_MSK          (0xFF  << 11 )
+/* FEEADR1[PAGEADDR1] - Used by SIGN command for specifying the end page address. See description of this command in FEECMD */
+#define FEEADR0_PAGEADDR1_Pos          (11U)
+#define FEEADR0_PAGEADDR1_Msk          (0xFFU << FEEADR0_PAGEADDR1_Pos)
 
-/* Reset Value for FEEKEY*/
-#define FEEKEY_RVAL                    0x0 
 
 /* FEEKEY[KEY] - Enter 0xF123F456 to allow key protected operations. Returns 0x0 if read. */
-#define FEEKEY_KEY_MSK                 (0xFFFFFFFF << 0  )
+#define FEEKEY_KEY_Pos                 (0U)
+#define FEEKEY_KEY_Msk                 (0xFFFFFFFFU << FEEKEY_KEY_Pos)
+#define FEEKEY_KEY                     (0xF123F456U << FEEKEY_KEY_Pos)
 
-/* Reset Value for FEEPRO0*/
-#define FEEPRO0_RVAL                   0xFFFFFFFF 
 
-/* FEEPRO0[WrProt0] - Write protection for flash0 - 32 bits. */
-#define FEEPRO0_WrProt0_MSK            (0xFFFFFFFF << 0  )
+/* FEEPRO0[WRPROT0] - Write protection for flash0 - 32 bits. */
+#define FEEPRO0_WRPROT0_Pos            (0U)
+#define FEEPRO0_WRPROT0_Msk            (0xFFFFFFFFU << FEEPRO0_WRPROT0_Pos)
 
-/* Reset Value for FEEPRO1*/
-#define FEEPRO1_RVAL                   0xFFFFFFFF 
 
-/* FEEPRO1[WrProt1] - Write protection for flash1 - 32 bits. */
-#define FEEPRO1_WrProt1_MSK            (0xFFFFFFFF << 0  )
+/* FEEPRO1[WRPROT1] - Write protection for flash1 - 32 bits. */
+#define FEEPRO1_WRPROT1_Pos            (0U)
+#define FEEPRO1_WRPROT1_Msk            (0xFFFFFFFFU << FEEPRO1_WRPROT1_Pos)
 
-/* Reset Value for FEESIG*/
-#define FEESIG_RVAL                    0x0 
 
 /* FEESIG[SIGN] - 24 bit signature. */
-#define FEESIG_SIGN_MSK                (0xFFFFFF << 0  )
+#define FEESIG_SIGN_Pos                (0U)
+#define FEESIG_SIGN_Msk                (0xFFFFFFU << FEESIG_SIGN_Pos)
 
-/* Reset Value for FEECON1*/
-#define FEECON1_RVAL                   0x1 
 
 /* FEECON1[MDIO] - MDIO mode */
-#define FEECON1_MDIO_BBA               (*(volatile unsigned long *) 0x42300710)
-#define FEECON1_MDIO_MSK               (0x1   << 4  )
-#define FEECON1_MDIO                   (0x1   << 4  )
-#define FEECON1_MDIO_DIS               (0x0   << 4  )
-#define FEECON1_MDIO_EN                (0x1   << 4  )
+#define FEECON1_MDIO_Pos               (4U)
+#define FEECON1_MDIO_Msk               (0x1U << FEECON1_MDIO_Pos)
+#define FEECON1_MDIO                            FEECON1_MDIO_Msk
 
 /* FEECON1[SWAP] - Swap program code for MDIO mode. */
-#define FEECON1_SWAP_BBA               (*(volatile unsigned long *) 0x4230070C)
-#define FEECON1_SWAP_MSK               (0x1   << 3  )
-#define FEECON1_SWAP                   (0x1   << 3  )
-#define FEECON1_SWAP_DIS               (0x0   << 3  )
-#define FEECON1_SWAP_EN                (0x1   << 3  )
+#define FEECON1_SWAP_Pos               (3U)
+#define FEECON1_SWAP_Msk               (0x1U << FEECON1_SWAP_Pos)
+#define FEECON1_SWAP                            FEECON1_SWAP_Msk
 
 /* FEECON1[INCR] - Auto increment FEEFLAADR for non DMA operation. */
-#define FEECON1_INCR_BBA               (*(volatile unsigned long *) 0x42300708)
-#define FEECON1_INCR_MSK               (0x1   << 2  )
-#define FEECON1_INCR                   (0x1   << 2  )
-#define FEECON1_INCR_DIS               (0x0   << 2  ) /* Disable auto address increment */
-#define FEECON1_INCR_EN                (0x1   << 2  ) /* Enable auto address increment */
+#define FEECON1_INCR_Pos               (2U)
+#define FEECON1_INCR_Msk               (0x1U << FEECON1_INCR_Pos)
+#define FEECON1_INCR                            FEECON1_INCR_Msk
 
 /* FEECON1[KHDMA] - Key-hole DMA enable. */
-#define FEECON1_KHDMA_BBA              (*(volatile unsigned long *) 0x42300704)
-#define FEECON1_KHDMA_MSK              (0x1   << 1  )
-#define FEECON1_KHDMA                  (0x1   << 1  )
-#define FEECON1_KHDMA_DIS              (0x0   << 1  ) /* Disable DMA mode         */
-#define FEECON1_KHDMA_EN               (0x1   << 1  ) /* Enable DMA mode          */
+#define FEECON1_KHDMA_Pos              (1U)
+#define FEECON1_KHDMA_Msk              (0x1U << FEECON1_KHDMA_Pos)
+#define FEECON1_KHDMA                           FEECON1_KHDMA_Msk
 
 /* FEECON1[DBG] - JTAG debug enable */
-#define FEECON1_DBG_BBA                (*(volatile unsigned long *) 0x42300700)
-#define FEECON1_DBG_MSK                (0x1   << 0  )
-#define FEECON1_DBG                    (0x1   << 0  )
-#define FEECON1_DBG_DIS                (0x0   << 0  ) /* Disable JTAG access      */
-#define FEECON1_DBG_EN                 (0x1   << 0  ) /* Enable JTAG access       */
+#define FEECON1_DBG_Pos                (0U)
+#define FEECON1_DBG_Msk                (0x1U << FEECON1_DBG_Pos)
+#define FEECON1_DBG                             FEECON1_DBG_Msk
 
-/* Reset Value for FEEWRADDRA*/
-#define FEEWRADDRA_RVAL                0x0 
 
-/* FEEWRADDRA[WrAbortAddr] - If a write is aborted then this will contain the address of the location been written when the write was aborted. This register has appropriate value if command abort happened. This has to be read after the command is aborted. And this has to be read before any other command is given. After reset the value will be random. */
-#define FEEWRADDRA_WrAbortAddr_MSK     (0xFFFFFFFF << 0  )
+/* FEEWRADDRA[WRABORTADDR] - If a write is aborted then this will contain the address of the location been written when the write was aborted. This register has appropriate value if command abort happened. This has to be read after the command is aborted. And this has to be read before any other command is given. After reset the value will be random. */
+#define FEEWRADDRA_WRABORTADDR_Pos     (0U)
+#define FEEWRADDRA_WRABORTADDR_Msk     (0xFFFFFFFFU << FEEWRADDRA_WRABORTADDR_Pos)
 
-/* Reset Value for FEEAEN0*/
-#define FEEAEN0_RVAL                   0x0 
 
-/* FEEAEN0[SysIrqAbortEn] - Lower 32 bits of System Interrupt Abort Enable. To allow a system interrupt to abort a command (write, erase, sign or mass verify) then write a '1' to the appropriate bit in this register. */
-#define FEEAEN0_SysIrqAbortEn_MSK      (0xFFFFFFFF << 0  )
+/* FEEAEN0[SYSIRQABORTEN] - Lower 32 bits of System Interrupt Abort Enable. To allow a system interrupt to abort a command (write, erase, sign or mass verify) then write a '1' to the appropriate bit in this register. */
+#define FEEAEN0_SYSIRQABORTEN_Pos      (0U)
+#define FEEAEN0_SYSIRQABORTEN_Msk      (0xFFFFFFFFU << FEEAEN0_SYSIRQABORTEN_Pos)
 
-/* Reset Value for FEEAEN1*/
-#define FEEAEN1_RVAL                   0x0 
 
-/* FEEAEN1[SysIrqAbortEn] - Upper 23 bits of System Interrupt Abort Enable. To allow a system interrupt to abort a command (write, erase, sign or mass verify) then write a '1' to the appropriate bit in this register. */
-#define FEEAEN1_SysIrqAbortEn_MSK      (0x7FFFFF << 0  )
+/* FEEAEN1[SYSIRQABORTEN] - Upper 23 bits of System Interrupt Abort Enable. To allow a system interrupt to abort a command (write, erase, sign or mass verify) then write a '1' to the appropriate bit in this register. */
+#define FEEAEN1_SYSIRQABORTEN_Pos      (0U)
+#define FEEAEN1_SYSIRQABORTEN_Msk      (0x7FFFFFU << FEEAEN1_SYSIRQABORTEN_Pos)
 
-/* Reset Value for FEEECCCONFIG*/
-#define FEEECCCONFIG_RVAL              0x0 
 
 /* FEEECCCONFIG[INT] - Interrupt enable when a ECC error happens during an AHB read from program or data flash. */
-#define FEEECCCONFIG_INT_MSK           (0x3   << 3  )
+#define FEEECCCONFIG_INT_Pos           (3U)
+#define FEEECCCONFIG_INT_Msk           (0x3U << FEEECCCONFIG_INT_Pos)
 
 /* FEEECCCONFIG[FAULT] - Signifies when to generate AHB error (HRESP = 1) when an ECC error happens - 1 bit error or 2 bit error. */
-#define FEEECCCONFIG_FAULT_MSK         (0x3   << 1  )
+#define FEEECCCONFIG_FAULT_Pos         (1U)
+#define FEEECCCONFIG_FAULT_Msk         (0x3U << FEEECCCONFIG_FAULT_Pos)
 
 /* FEEECCCONFIG[DIS] - ECC Disable bit. */
-#define FEEECCCONFIG_DIS_BBA           (*(volatile unsigned long *) 0x42300C80)
-#define FEEECCCONFIG_DIS_MSK           (0x1   << 0  )
-#define FEEECCCONFIG_DIS               (0x1   << 0  )
-#define FEEECCCONFIG_DIS_DIS           (0x0   << 0  )
-#define FEEECCCONFIG_DIS_EN            (0x1   << 0  )
+#define FEEECCCONFIG_DIS_Pos           (0U)
+#define FEEECCCONFIG_DIS_Msk           (0x1U << FEEECCCONFIG_DIS_Pos)
+#define FEEECCCONFIG_DIS                        FEEECCCONFIG_DIS_Msk
 
-/* Reset Value for FEEECCADDR0*/
-#define FEEECCADDR0_RVAL               0x0 
 
-/* FEEECCADDR0[ADDR0] - This register has the address of flash0 for which ECC error is detected. */
-#define FEEECCADDR0_ADDR0_MSK          (0x7FFFF << 0  )
+/* FEEECCADDR0[VALUE] - This register has the address of flash0 for which ECC error is detected. */
+#define FEEECCADDR0_VALUE_Pos          (0U)
+#define FEEECCADDR0_VALUE_Msk          (0x7FFFFU << FEEECCADDR0_VALUE_Msk)
 
-/* Reset Value for FEEECCADDR1*/
-#define FEEECCADDR1_RVAL               0x0 
 
-/* FEEECCADDR1[ADDR1] - This register has the address of flash1 for which ECC error is detected. */
-#define FEEECCADDR1_ADDR1_MSK          (0x7FFFF << 0  )
+/* FEEECCADDR1[VALUE] - This register has the address of flash1 for which ECC error is detected. */
+#define FEEECCADDR1_VALUE_Pos          (0U)
+#define FEEECCADDR1_VALUE_Msk          (0x7FFFFU << FEEECCADDR1_VALUE_Msk)
 
-/* Reset Value for CACHESTAT*/
-#define CACHESTAT_RVAL                 0x2 
 
 /* CACHESTAT[DLOCK] - This bit is set when D-Cache is locked and cleared when D-cache is unlocked. */
-#define CACHESTAT_DLOCK_BBA            (*(volatile unsigned long *) 0x42301848)
-#define CACHESTAT_DLOCK_MSK            (0x1   << 18 )
-#define CACHESTAT_DLOCK                (0x1   << 18 )
-#define CACHESTAT_DLOCK_CLR            (0x0   << 18 )
-#define CACHESTAT_DLOCK_SET            (0x1   << 18 )
+#define CACHESTAT_DLOCK_Pos            (18U)
+#define CACHESTAT_DLOCK_Msk            (0x1U << CACHESTAT_DLOCK_Pos)
+#define CACHESTAT_DLOCK                         CACHESTAT_DLOCK_Msk
 
 /* CACHESTAT[DEN] - If this bit is set then D-Cache is enabled and when cleared D-Cache is disabled. This is also cleared when CACHESTAT[16] is set. */
-#define CACHESTAT_DEN_BBA              (*(volatile unsigned long *) 0x42301844)
-#define CACHESTAT_DEN_MSK              (0x1   << 17 )
-#define CACHESTAT_DEN                  (0x1   << 17 )
-#define CACHESTAT_DEN_CLR              (0x0   << 17 )
-#define CACHESTAT_DEN_SET              (0x1   << 17 )
+#define CACHESTAT_DEN_Pos              (17U)
+#define CACHESTAT_DEN_Msk              (0x1U << CACHESTAT_DEN_Pos)
+#define CACHESTAT_DEN                           CACHESTAT_DEN_Msk
 
 /* CACHESTAT[DINIT] - It is set when D-cache memory initialization starts and clears when initialization is done. D-Cache is disabled when this bit is set. */
-#define CACHESTAT_DINIT_BBA            (*(volatile unsigned long *) 0x42301840)
-#define CACHESTAT_DINIT_MSK            (0x1   << 16 )
-#define CACHESTAT_DINIT                (0x1   << 16 )
-#define CACHESTAT_DINIT_CLR            (0x0   << 16 )
-#define CACHESTAT_DINIT_SET            (0x1   << 16 )
+#define CACHESTAT_DINIT_Pos            (16U)
+#define CACHESTAT_DINIT_Msk            (0x1U << CACHESTAT_DINIT_Pos)
+#define CACHESTAT_DINIT                         CACHESTAT_DINIT_Msk
 
 /* CACHESTAT[ILOCK] - This bit is set when I-Cache is locked and cleared when I-cache is unlocked. */
-#define CACHESTAT_ILOCK_BBA            (*(volatile unsigned long *) 0x42301808)
-#define CACHESTAT_ILOCK_MSK            (0x1   << 2  )
-#define CACHESTAT_ILOCK                (0x1   << 2  )
-#define CACHESTAT_ILOCK_CLR            (0x0   << 2  )
-#define CACHESTAT_ILOCK_SET            (0x1   << 2  )
+#define CACHESTAT_ILOCK_Pos            (2U)
+#define CACHESTAT_ILOCK_Msk            (0x1U << CACHESTAT_ILOCK_Pos)
+#define CACHESTAT_ILOCK                         CACHESTAT_ILOCK_Msk
 
 /* CACHESTAT[IEN] - If this bit is set then I-Cache is enabled and when cleared I-Cache is disabled. This is also cleared when CACHESTAT[0] is set. */
-#define CACHESTAT_IEN_BBA              (*(volatile unsigned long *) 0x42301804)
-#define CACHESTAT_IEN_MSK              (0x1   << 1  )
-#define CACHESTAT_IEN                  (0x1   << 1  )
-#define CACHESTAT_IEN_CLR              (0x0   << 1  )
-#define CACHESTAT_IEN_SET              (0x1   << 1  )
+#define CACHESTAT_IEN_Pos              (1U)
+#define CACHESTAT_IEN_Msk              (0x1U << CACHESTAT_IEN_Pos)
+#define CACHESTAT_IEN                           CACHESTAT_IEN_Msk
 
 /* CACHESTAT[IINIT] - It is set when I-cache memory initialization starts and clears when initialization is done. I-Cache is disabled when this bit is set. */
-#define CACHESTAT_IINIT_BBA            (*(volatile unsigned long *) 0x42301800)
-#define CACHESTAT_IINIT_MSK            (0x1   << 0  )
-#define CACHESTAT_IINIT                (0x1   << 0  )
-#define CACHESTAT_IINIT_CLR            (0x0   << 0  )
-#define CACHESTAT_IINIT_SET            (0x1   << 0  )
+#define CACHESTAT_IINIT_Pos            (0U)
+#define CACHESTAT_IINIT_Msk            (0x1U << CACHESTAT_IINIT_Pos)
+#define CACHESTAT_IINIT                         CACHESTAT_IINIT_Msk
 
-/* Reset Value for CACHESETUP*/
-#define CACHESETUP_RVAL                0x2 
 
 /* CACHESETUP[DWRBUF] - If this bit is set, then for every AHB access, hit from WrBuffer is not checked. */
-#define CACHESETUP_DWRBUF_BBA          (*(volatile unsigned long *) 0x423018CC)
-#define CACHESETUP_DWRBUF_MSK          (0x1   << 19 )
-#define CACHESETUP_DWRBUF              (0x1   << 19 )
-#define CACHESETUP_DWRBUF_EN           (0x0   << 19 )
-#define CACHESETUP_DWRBUF_DIS          (0x1   << 19 )
+#define CACHESETUP_DWRBUF_Pos          (19U)
+#define CACHESETUP_DWRBUF_Msk          (0x1U << CACHESETUP_DWRBUF_Pos)
+#define CACHESETUP_DWRBUF                       CACHESETUP_DWRBUF_Msk
 
 /* CACHESETUP[DLOCK] - If this bit is set, then D-cache contents are locked. Any new misses will not be replaced in D-Cache. This bit is cleared when CACHESETUP[16] is set. */
-#define CACHESETUP_DLOCK_BBA           (*(volatile unsigned long *) 0x423018C8)
-#define CACHESETUP_DLOCK_MSK           (0x1   << 18 )
-#define CACHESETUP_DLOCK               (0x1   << 18 )
-#define CACHESETUP_DLOCK_DIS           (0x0   << 18 )
-#define CACHESETUP_DLOCK_EN            (0x1   << 18 )
+#define CACHESETUP_DLOCK_Pos           (18U)
+#define CACHESETUP_DLOCK_Msk           (0x1U << CACHESETUP_DLOCK_Pos)
+#define CACHESETUP_DLOCK                        CACHESETUP_DLOCK_Msk
 
 /* CACHESETUP[DEN] - If this bit set, then D-Cache is enabled for AHB accesses. If 0, then D-cache is disabled, and all AHB accesses will be via Flash memory. This bit is cleared when CACHESETUP[16] is set. */
-#define CACHESETUP_DEN_BBA             (*(volatile unsigned long *) 0x423018C4)
-#define CACHESETUP_DEN_MSK             (0x1   << 17 )
-#define CACHESETUP_DEN                 (0x1   << 17 )
-#define CACHESETUP_DEN_DIS             (0x0   << 17 )
-#define CACHESETUP_DEN_EN              (0x1   << 17 )
+#define CACHESETUP_DEN_Pos             (17U)
+#define CACHESETUP_DEN_Msk             (0x1U << CACHESETUP_DEN_Pos)
+#define CACHESETUP_DEN                          CACHESETUP_DEN_Msk
 
 /* CACHESETUP[DINIT] - If this bit is set then the D-cache contents are initialized to all zeros. This bit will be cleared once the initialization starts. */
-#define CACHESETUP_DINIT_BBA           (*(volatile unsigned long *) 0x423018C0)
-#define CACHESETUP_DINIT_MSK           (0x1   << 16 )
-#define CACHESETUP_DINIT               (0x1   << 16 )
-#define CACHESETUP_DINIT_DIS           (0x0   << 16 )
-#define CACHESETUP_DINIT_EN            (0x1   << 16 )
+#define CACHESETUP_DINIT_Pos           (16U)
+#define CACHESETUP_DINIT_Msk           (0x1U << CACHESETUP_DINIT_Pos)
+#define CACHESETUP_DINIT                        CACHESETUP_DINIT_Msk
 
 /* CACHESETUP[IRDBUF] - If this bit is set, then for every AHB access, hit from Read Buffer is not checked. */
-#define CACHESETUP_IRDBUF_BBA          (*(volatile unsigned long *) 0x42301890)
-#define CACHESETUP_IRDBUF_MSK          (0x1   << 4  )
-#define CACHESETUP_IRDBUF              (0x1   << 4  )
-#define CACHESETUP_IRDBUF_EN           (0x0   << 4  )
-#define CACHESETUP_IRDBUF_DIS          (0x1   << 4  )
+#define CACHESETUP_IRDBUF_Pos          (4U)
+#define CACHESETUP_IRDBUF_Msk          (0x1U << CACHESETUP_IRDBUF_Pos)
+#define CACHESETUP_IRDBUF                       CACHESETUP_IRDBUF_Msk
 
 /* CACHESETUP[IWRBUF] - If this bit is set, then for every AHB access, hit from Write Buffer is not checked. */
-#define CACHESETUP_IWRBUF_BBA          (*(volatile unsigned long *) 0x4230188C)
-#define CACHESETUP_IWRBUF_MSK          (0x1   << 3  )
-#define CACHESETUP_IWRBUF              (0x1   << 3  )
-#define CACHESETUP_IWRBUF_EN           (0x0   << 3  )
-#define CACHESETUP_IWRBUF_DIS          (0x1   << 3  )
+#define CACHESETUP_IWRBUF_Pos          (3U)
+#define CACHESETUP_IWRBUF_Msk          (0x1U << CACHESETUP_IWRBUF_Pos)
+#define CACHESETUP_IWRBUF                       CACHESETUP_IWRBUF_Msk
 
 /* CACHESETUP[ILOCK] - If this bit is set, then I-cache contents are locked. Any new misses won�t be replaced in I-Cache. This bit is cleared when CACHESETUP[0] is set. */
-#define CACHESETUP_ILOCK_BBA           (*(volatile unsigned long *) 0x42301888)
-#define CACHESETUP_ILOCK_MSK           (0x1   << 2  )
-#define CACHESETUP_ILOCK               (0x1   << 2  )
-#define CACHESETUP_ILOCK_DIS           (0x0   << 2  )
-#define CACHESETUP_ILOCK_EN            (0x1   << 2  )
+#define CACHESETUP_ILOCK_Pos           (2U)
+#define CACHESETUP_ILOCK_Msk           (0x1U << CACHESETUP_ILOCK_Pos)
+#define CACHESETUP_ILOCK                        CACHESETUP_ILOCK_Msk
 
 /* CACHESETUP[IEN] - If this bit set, then I-Cache is enabled for AHB accesses. If 0, then I-cache is disabled, and all AHB accesses will be via Flash memory. This bit is cleared when CACHESETUP[0] is set. */
-#define CACHESETUP_IEN_BBA             (*(volatile unsigned long *) 0x42301884)
-#define CACHESETUP_IEN_MSK             (0x1   << 1  )
-#define CACHESETUP_IEN                 (0x1   << 1  )
-#define CACHESETUP_IEN_DIS             (0x0   << 1  )
-#define CACHESETUP_IEN_EN              (0x1   << 1  )
+#define CACHESETUP_IEN_Pos             (1U)
+#define CACHESETUP_IEN_Msk             (0x1U << CACHESETUP_IEN_Pos)
+#define CACHESETUP_IEN                          CACHESETUP_IEN_Msk
 
 /* CACHESETUP[IINIT] - If this bit is set then the I-cache contents are initialized to all zeros. This bit will be cleared once the initialization starts. */
-#define CACHESETUP_IINIT_BBA           (*(volatile unsigned long *) 0x42301880)
-#define CACHESETUP_IINIT_MSK           (0x1   << 0  )
-#define CACHESETUP_IINIT               (0x1   << 0  )
-#define CACHESETUP_IINIT_DIS           (0x0   << 0  )
-#define CACHESETUP_IINIT_EN            (0x1   << 0  )
-
-/* Reset Value for CACHEKEY*/
-#define CACHEKEY_RVAL                  0x0 
-
-/* CACHEKEY[Key] - Cache Key register */
-#define CACHEKEY_Key_MSK               (0xFFFFFFFF << 0  )
+#define CACHESETUP_IINIT_Pos           (0U)
+#define CACHESETUP_IINIT_Msk           (0x1U << CACHESETUP_IINIT_Pos)
+#define CACHESETUP_IINIT                        CACHESETUP_IINIT_Msk
 
 
-/*------------------------------------------------------------------------------
- *                                  GPIO
- *----------------------------------------------------------------------------*/
+/* CACHEKEY[KEY] - Cache Key register */
+#define CACHEKEY_KEY_Pos               (0U)
+#define CACHEKEY_KEY_Msk               (0xFFFFFFFFU << CACHEKEY_KEY_Pos)
+#define CACHEKEY_KEY                   (0xF123F456U << CACHEKEY_KEY_Pos)
+
+
+/* ========================================================================== */
+/* ================                 GPIO                   ================== */
+/* ========================================================================== */
 
 /**
  * @brief GPIO (MMR_GPIO)
  */
 
-typedef struct {                            /*!< MMR_GPIO Structure                     */
-  __IOM uint16_t  GPCON;                    /*!< GPIO Port configuration             */
+typedef struct {                            // MMR_GPIO Structure
+  __IOM uint16_t  GPCON;                    // GPIO Port configuration
   __IM  uint16_t  RESERVED0;
-  __IOM uint8_t   GPOE;                     /*!< GPIO Port output enable             */
+  __IOM uint8_t   GPOE;                     // GPIO Port output enable
   __IM  uint8_t   RESERVED1[3];
-  __IOM uint8_t   GPPUL;                    /*!< GPIO Port pullup enable             */
+  __IOM uint8_t   GPPUL;                    // GPIO Port pullup enable
   __IM  uint8_t   RESERVED2[3];
-  __IOM uint8_t   GPIE;                     /*!< GPIO Port input path enable         */
+  __IOM uint8_t   GPIE;                     // GPIO Port input path enable
   __IM  uint8_t   RESERVED3[3];
-  __IOM uint8_t   GPIN;                     /*!< GPIO Port registered data input     */
+  __IOM uint8_t   GPIN;                     // GPIO Port registered data input
   __IM  uint8_t   RESERVED4[3];
-  __IOM uint8_t   GPOUT;                    /*!< GPIO Port data output               */
+  __IOM uint8_t   GPOUT;                    // GPIO Port data output
   __IM  uint8_t   RESERVED5[3];
-  __IOM uint8_t   GPSET;                    /*!< GPIO Port data out set              */
+  __IOM uint8_t   GPSET;                    // GPIO Port data out set
   __IM  uint8_t   RESERVED6[3];
-  __IOM uint8_t   GPCLR;                    /*!< GPIO Port data out clear            */
+  __IOM uint8_t   GPCLR;                    // GPIO Port data out clear
   __IM  uint8_t   RESERVED7[3];
-  __IOM uint8_t   GPTGL;                    /*!< GPIO Port pin toggle                */
+  __IOM uint8_t   GPTGL;                    // GPIO Port pin toggle
   __IM  uint8_t   RESERVED8[3];
-  __IOM uint8_t   GPODE;                    /*!< GPIO Port open drain enable         */
+  __IOM uint8_t   GPODE;                    // GPIO Port open drain enable
   __IM  uint8_t   RESERVED9[3];
 } MMR_GPIO_t;
 
