@@ -18,7 +18,7 @@
  */
 
 #include "Kernel/tick.h"
-#include "Kernel/irq.h"
+#include "CMSIS/Core/Arm/irq_ctrl.h"
 #include "asm/aduc7023.h"
 
 #define RTIM_IRQ_PRIORITY           (uint32_t)IRQ_PriorityLow
