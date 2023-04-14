@@ -75,6 +75,17 @@ static FlashInstance_t FlashInstance;
  *  function implementations (scope: module-local)
  ******************************************************************************/
 
+static void ProgramTwoWord(FlashXfer_t *xfer)
+{
+  MMR_FEE_t *mmr = MMR_FEE;
+
+  mmr->FEEKEY     = FEEKEY_KEY;
+  mmr->FEEFLADR   = (uint32_t)xfer->addr++;
+  mmr->FEEFLDATA0 = (uint32_t)xfer->data++;
+  mmr->FEEFLDATA1 = (uint32_t)xfer->data++;
+  mmr->FEECMD     = FEECMD_CMD_WRITE;
+}
+
 static ARM_DRIVER_VERSION Flash_GetVersion(void)
 {
   return (DriverVersion);
@@ -93,7 +104,7 @@ static int32_t Flash_Initialize(ARM_Flash_SignalEvent_t cb_event)
     return (ARM_DRIVER_OK);
   }
 
-  memset(ins, 0, sizeof(ins));
+  memset(ins, 0, sizeof(FlashInstance_t));
 
   ins->cb_event = cb_event;
   ins->flags    = FEE_FLAG_INIT;
@@ -105,7 +116,7 @@ static int32_t Flash_Uninitialize(void)
 {
   FlashInstance_t *ins = &FlashInstance;
 
-  memset(ins, 0, sizeof(ins));
+  memset(ins, 0, sizeof(FlashInstance_t));
 
   return (ARM_DRIVER_OK);
 }
@@ -180,7 +191,6 @@ static int32_t Flash_ProgramData(uint32_t addr, const void *data, uint32_t cnt)
 {
   MMR_FEE_t *mmr = MMR_FEE;
   FlashInstance_t *ins = &FlashInstance;
-  const uint32_t *pdata = (const uint32_t *)data;
 
   if (                   data == NULL ||
                          cnt  == 0U   ||
@@ -201,11 +211,11 @@ static int32_t Flash_ProgramData(uint32_t addr, const void *data, uint32_t cnt)
   ins->status.busy  = 1U;
   ins->status.error = 0U;
 
-  mmr->FEEKEY     = FEEKEY_KEY;
-  mmr->FEEFLADR   = addr;
-  mmr->FEEFLDATA0 = *pdata++;
-  mmr->FEEFLDATA1 = *pdata++;
-  mmr->FEECMD     = FEECMD_CMD_WRITE;
+  ins->xfer.addr = (const uint64_t *)addr;
+  ins->xfer.data = (const uint32_t *)data;
+  ins->xfer.cnt  = cnt;
+
+  ProgramTwoWord(&ins->xfer);
 
   return (ARM_DRIVER_OK);
 }

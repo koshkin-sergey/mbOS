@@ -44,7 +44,7 @@
   #define FEE_INT_PRIORITY          (IRQ_Priority_t)DEV_FEE_INT_PRIO
 #endif
 
-/* Falsh driver flag definitions */
+/* Flash driver flag definitions */
 #define FEE_FLAG_INIT               (1UL << 0)    // Driver initialized
 #define FEE_FLAG_POWER              (1UL << 1)    // Driver powered on
 
@@ -52,15 +52,19 @@
  *  typedefs and structures
  ******************************************************************************/
 
+typedef struct FlashXfer {
+  const uint64_t *addr;
+  const uint32_t *data;
+  size_t          cnt;
+} FlashXfer_t;
+
 /**
  * @brief Flash driver runtime information
  */
 typedef struct FlashInstance {
   ARM_Flash_SignalEvent_t   cb_event;
   ARM_FLASH_STATUS          status;
-  uint32_t                  addr;
-  const uint32_t           *data;
-  size_t                    size;
+  FlashXfer_t               xfer;
   uint32_t volatile         flags;
 } FlashInstance_t;
 
