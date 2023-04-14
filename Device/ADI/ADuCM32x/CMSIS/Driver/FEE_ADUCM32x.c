@@ -21,6 +21,8 @@
  *  includes
  ******************************************************************************/
 
+#include <string.h>
+
 #include "FEE_ADUCM32x.h"
 
 #if defined(USE_FEE)
@@ -53,9 +55,6 @@ static ARM_FLASH_INFO FlashInfo = {
   {0U, 0U, 0U}
 };
 
-/* Flash Status */
-static ARM_FLASH_STATUS FlashStatus;
-
 /* Driver Version */
 static const ARM_DRIVER_VERSION DriverVersion = {
   ARM_FLASH_API_VERSION,
@@ -66,9 +65,11 @@ static const ARM_DRIVER_VERSION DriverVersion = {
 static const ARM_FLASH_CAPABILITIES DriverCapabilities = {
   1U, /* event_ready */
   2U, /* data_width = 0:8-bit, 1:16-bit, 2:32-bit */
-  1U, /* erase_chip */
+  0U, /* erase_chip */
   0U  /* reserved (must be zero) */
 };
+
+static FlashInstance_t FlashInstance;
 
 /*******************************************************************************
  *  function implementations (scope: module-local)
@@ -86,25 +87,67 @@ static ARM_FLASH_CAPABILITIES Flash_GetCapabilities(void)
 
 static int32_t Flash_Initialize(ARM_Flash_SignalEvent_t cb_event)
 {
+  FlashInstance_t *ins = &FlashInstance;
+
+  if (ins->flags == FEE_FLAG_INIT) {
+    return (ARM_DRIVER_OK);
+  }
+
+  memset(ins, 0, sizeof(ins));
+
+  ins->cb_event = cb_event;
+  ins->flags    = FEE_FLAG_INIT;
+
   return (ARM_DRIVER_OK);
 }
 
 static int32_t Flash_Uninitialize(void)
 {
+  FlashInstance_t *ins = &FlashInstance;
+
+  memset(ins, 0, sizeof(ins));
+
   return (ARM_DRIVER_OK);
 }
 
 static int32_t Flash_PowerControl(ARM_POWER_STATE state)
 {
+  MMR_FEE_t *mmr = MMR_FEE;
+  FlashInstance_t *ins = &FlashInstance;
+
   switch (state) {
     case ARM_POWER_OFF:
-      break;
+      /* Disable interrupts */
+      NVIC_DisableIRQ(FLASH_IRQn);
 
-    case ARM_POWER_LOW:
+      mmr->FEECON0 = 0U;
+
+      ins->status.busy  = 0U;
+      ins->status.error = 0U;
+      ins->flags &= ~FEE_FLAG_POWER;
       break;
 
     case ARM_POWER_FULL:
+      if ((ins->flags & FEE_FLAG_INIT) == 0U) {
+        return (ARM_DRIVER_ERROR);
+      }
+
+      if ((ins->flags & FEE_FLAG_POWER) != 0U) {
+        return (ARM_DRIVER_OK);
+      }
+
+      mmr->FEECON0 = FEECON0_IENERR | FEECON0_IWRALCOMP | FEECON0_IENCMD;
+
+      /* Enable interrupt */
+      NVIC_ClearPendingIRQ(FLASH_IRQn);
+      NVIC_SetPriority(FLASH_IRQn, FEE_INT_PRIORITY);
+      NVIC_EnableIRQ(FLASH_IRQn);
+
+      ins->flags |= FEE_FLAG_POWER;
       break;
+
+    case ARM_POWER_LOW:
+      return (ARM_DRIVER_ERROR_UNSUPPORTED);
   }
 
   return (ARM_DRIVER_OK);
@@ -112,27 +155,96 @@ static int32_t Flash_PowerControl(ARM_POWER_STATE state)
 
 static int32_t Flash_ReadData(uint32_t addr, void *data, uint32_t cnt)
 {
-  return (ARM_DRIVER_OK);
+  uint32_t recv;
+
+  if (                   data == NULL ||
+                         cnt  == 0U   ||
+      (          addr & 0x3U) != 0U   ||
+      ((uint32_t)data & 0x3U) != 0U)
+  {
+    return (ARM_DRIVER_ERROR_PARAMETER);
+  }
+
+  if ((MMR_FEE->FEESTA & FEESTA_CMDBUSY) != 0U) {
+    return (ARM_DRIVER_ERROR_BUSY);
+  }
+
+  for (recv = 0U; recv < cnt; ++recv) {
+    *(uint32_t *)data = *(uint32_t *)addr;
+  }
+
+  return ((int32_t)recv);
 }
 
 static int32_t Flash_ProgramData(uint32_t addr, const void *data, uint32_t cnt)
 {
+  MMR_FEE_t *mmr = MMR_FEE;
+  FlashInstance_t *ins = &FlashInstance;
+  const uint32_t *pdata = (const uint32_t *)data;
+
+  if (                   data == NULL ||
+                         cnt  == 0U   ||
+      (          addr & 0x7U) != 0U   ||
+      ((uint32_t)data & 0x3U) != 0U)
+  {
+    return (ARM_DRIVER_ERROR_PARAMETER);
+  }
+
+  if ((ins->flags & FEE_FLAG_POWER) == 0U) {
+    return (ARM_DRIVER_ERROR);
+  }
+
+  if ((mmr->FEESTA & FEESTA_CMDBUSY) != 0U) {
+    return (ARM_DRIVER_ERROR_BUSY);
+  }
+
+  ins->status.busy  = 1U;
+  ins->status.error = 0U;
+
+  mmr->FEEKEY     = FEEKEY_KEY;
+  mmr->FEEFLADR   = addr;
+  mmr->FEEFLDATA0 = *pdata++;
+  mmr->FEEFLDATA1 = *pdata++;
+  mmr->FEECMD     = FEECMD_CMD_WRITE;
+
   return (ARM_DRIVER_OK);
 }
 
 static int32_t Flash_EraseSector(uint32_t addr)
 {
+  MMR_FEE_t *mmr = MMR_FEE;
+  FlashInstance_t *ins = &FlashInstance;
+
+  if ((addr & 0x3U) != 0U) {
+    return (ARM_DRIVER_ERROR_PARAMETER);
+  }
+
+  if ((ins->flags & FEE_FLAG_POWER) == 0U) {
+    return (ARM_DRIVER_ERROR);
+  }
+
+  if ((mmr->FEESTA & FEESTA_CMDBUSY) != 0U) {
+    return (ARM_DRIVER_ERROR_BUSY);
+  }
+
+  ins->status.busy  = 1U;
+  ins->status.error = 0U;
+
+  mmr->FEEKEY  = FEEKEY_KEY;
+  mmr->FEEADR0 = addr;
+  mmr->FEECMD  = FEECMD_CMD_PAGEERASE;
+
   return (ARM_DRIVER_OK);
 }
 
 static int32_t Flash_EraseChip(void)
 {
-  return (ARM_DRIVER_OK);
+  return (ARM_DRIVER_ERROR_UNSUPPORTED);
 }
 
 static ARM_FLASH_STATUS Flash_GetStatus(void)
 {
-  return (FlashStatus);
+  return (FlashInstance.status);
 }
 
 static ARM_FLASH_INFO* Flash_GetInfo(void)
