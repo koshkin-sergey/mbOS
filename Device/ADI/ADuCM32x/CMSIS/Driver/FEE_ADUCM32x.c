@@ -81,21 +81,34 @@ static void ProgramTwoWord(FlashXfer_t *xfer)
 
   mmr->FEEKEY     = FEEKEY_KEY;
   mmr->FEEFLADR   = (uint32_t)xfer->addr++;
-  mmr->FEEFLDATA0 = (uint32_t)xfer->data++;
-  mmr->FEEFLDATA1 = (uint32_t)xfer->data++;
+  mmr->FEEFLDATA0 = *xfer->data++;
+  mmr->FEEFLDATA1 = *xfer->data++;
   mmr->FEECMD     = FEECMD_CMD_WRITE;
 }
 
+/**
+ * @brief       Get driver version.
+ * @return      \ref ARM_DRIVER_VERSION
+ */
 static ARM_DRIVER_VERSION Flash_GetVersion(void)
 {
   return (DriverVersion);
 }
 
+/**
+ * @brief       Get driver capabilities.
+ * @return      \ref ARM_FLASH_CAPABILITIES
+ */
 static ARM_FLASH_CAPABILITIES Flash_GetCapabilities(void)
 {
   return (DriverCapabilities);
 }
 
+/**
+ * @brief       Initialize the Flash Interface.
+ * @param[in]   cb_event  Pointer to \ref ARM_Flash_SignalEvent
+ * @return      \ref execution_status
+ */
 static int32_t Flash_Initialize(ARM_Flash_SignalEvent_t cb_event)
 {
   FlashInstance_t *ins = &FlashInstance;
@@ -112,6 +125,10 @@ static int32_t Flash_Initialize(ARM_Flash_SignalEvent_t cb_event)
   return (ARM_DRIVER_OK);
 }
 
+/**
+ * @brief       De-initialize the Flash Interface.
+ * @return      \ref execution_status
+ */
 static int32_t Flash_Uninitialize(void)
 {
   FlashInstance_t *ins = &FlashInstance;
@@ -121,6 +138,11 @@ static int32_t Flash_Uninitialize(void)
   return (ARM_DRIVER_OK);
 }
 
+/**
+ * @brief       Control the Flash interface power.
+ * @param[in]   state  Power state
+ * @return      \ref execution_status
+ */
 static int32_t Flash_PowerControl(ARM_POWER_STATE state)
 {
   MMR_FEE_t *mmr = MMR_FEE;
@@ -164,9 +186,18 @@ static int32_t Flash_PowerControl(ARM_POWER_STATE state)
   return (ARM_DRIVER_OK);
 }
 
+/**
+ * @brief       Read data from Flash.
+ * @param[in]   addr  Data address.
+ * @param[out]  data  Pointer to a buffer storing the data read from Flash.
+ * @param[in]   cnt   Number of data items to read.
+ * @return      number of data items read or \ref execution_status
+ */
 static int32_t Flash_ReadData(uint32_t addr, void *data, uint32_t cnt)
 {
   uint32_t recv;
+  uint32_t *from;
+  uint32_t *to;
 
   if (                   data == NULL ||
                          cnt  == 0U   ||
@@ -180,13 +211,23 @@ static int32_t Flash_ReadData(uint32_t addr, void *data, uint32_t cnt)
     return (ARM_DRIVER_ERROR_BUSY);
   }
 
+  from = (uint32_t *)addr;
+  to   = (uint32_t *)data;
+
   for (recv = 0U; recv < cnt; ++recv) {
-    *(uint32_t *)data = *(uint32_t *)addr;
+    *to++ = *from++;
   }
 
   return ((int32_t)recv);
 }
 
+/**
+ * @brief       Program data to Flash.
+ * @param[in]   addr  Data address.
+ * @param[in]   data  Pointer to a buffer containing the data to be programmed to Flash.
+ * @param[in]   cnt   Number of data items to program.
+ * @return      number of data items programmed or \ref execution_status
+ */
 static int32_t Flash_ProgramData(uint32_t addr, const void *data, uint32_t cnt)
 {
   MMR_FEE_t *mmr = MMR_FEE;
@@ -220,6 +261,11 @@ static int32_t Flash_ProgramData(uint32_t addr, const void *data, uint32_t cnt)
   return (ARM_DRIVER_OK);
 }
 
+/**
+ * @brief       Erase Flash Sector.
+ * @param[in]   addr  Sector address
+ * @return      \ref execution_status
+ */
 static int32_t Flash_EraseSector(uint32_t addr)
 {
   MMR_FEE_t *mmr = MMR_FEE;
@@ -247,26 +293,75 @@ static int32_t Flash_EraseSector(uint32_t addr)
   return (ARM_DRIVER_OK);
 }
 
+/**
+ * @brief       Erase complete Flash.
+ *              Optional function for faster full chip erase.
+ * @return      \ref execution_status
+ */
 static int32_t Flash_EraseChip(void)
 {
   return (ARM_DRIVER_ERROR_UNSUPPORTED);
 }
 
+/**
+ * @brief       Get Flash status.
+ * @return      Flash status \ref ARM_FLASH_STATUS
+ */
 static ARM_FLASH_STATUS Flash_GetStatus(void)
 {
   return (FlashInstance.status);
 }
 
+/**
+ * @brief       Get Flash information.
+ * @return      Pointer to Flash information \ref ARM_FLASH_INFO
+ */
 static ARM_FLASH_INFO* Flash_GetInfo(void)
 {
   return (&FlashInfo);
 }
 
+/**
+ * @brief       Interrupt handler
+ */
 extern \
 void FLASH_IRQHandler(void);
 void FLASH_IRQHandler(void)
 {
+  uint32_t status;
+  uint32_t event;
+  MMR_FEE_t *mmr = MMR_FEE;
+  FlashInstance_t *ins = &FlashInstance;
 
+  event = 0U;
+  status = mmr->FEESTA;
+
+  if ((status & FEESTA_CMDRES_Msk) != 0U) {
+    ins->status.busy = 0U;
+    ins->status.error = 1U;
+    event = ARM_FLASH_EVENT_READY | ARM_FLASH_EVENT_ERROR;
+  }
+  else {
+    if ((status & FEESTA_CMDDONE) != 0U) {
+      ins->status.busy = 0U;
+      event = ARM_FLASH_EVENT_READY;
+    }
+
+    if ((status & FEESTA_WRALMOSTDONE) != 0U) {
+      ins->xfer.cnt--;
+      if (ins->xfer.cnt > 0U) {
+        ProgramTwoWord(&ins->xfer);
+      }
+      else {
+        ins->status.busy = 0U;
+        event = ARM_FLASH_EVENT_READY;
+      }
+    }
+  }
+
+  if (event != 0U && ins->cb_event != NULL) {
+    ins->cb_event(event);
+  }
 }
 
 /*******************************************************************************
@@ -274,8 +369,8 @@ void FLASH_IRQHandler(void)
  ******************************************************************************/
 
 extern \
-ARM_DRIVER_FLASH Driver_Flash;
-ARM_DRIVER_FLASH Driver_Flash = {
+ARM_DRIVER_FLASH Driver_Flash0;
+ARM_DRIVER_FLASH Driver_Flash0 = {
   Flash_GetVersion,
   Flash_GetCapabilities,
   Flash_Initialize,
