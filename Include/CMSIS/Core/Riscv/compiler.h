@@ -1,3 +1,9 @@
+/**************************************************************************//**
+ * @file     compiler.h
+ * @brief    RISC-V compiler specific macros, functions, instructions
+ * @version  V1.0.0
+ * @date     12. June 2023
+ ******************************************************************************/
 /*
  * Copyright (C) 2023 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
@@ -15,9 +21,28 @@
  * limitations under the License.
  */
 
-#ifndef __RISCV_ICC_H
-#define __RISCV_ICC_H
+#ifndef __COMPILER_H
+#define __COMPILER_H
+
+#include <stdint.h>
+
+/*
+ * GNU Compiler
+ */
+#if   defined ( __GNUC__ )
+  #include "gcc.h"
 
 
+/*
+ * IAR Compiler
+ */
+#elif defined ( __ICCRISCV__ )
+  #include "iccriscv.h"
 
-#endif /* __RISCV_ICC_H */
+
+#else
+  #error Unknown compiler.
+#endif
+
+
+#endif /* __COMPILER_H */

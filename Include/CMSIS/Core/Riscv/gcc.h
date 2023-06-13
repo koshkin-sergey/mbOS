@@ -15,8 +15,8 @@
  * limitations under the License.
  */
 
-#ifndef __RISCV_GCC_H
-#define __RISCV_GCC_H
+#ifndef __GCC_H
+#define __GCC_H
 
 /* CMSIS compiler specific defines */
 
@@ -101,4 +101,4 @@
   #define __INTERRUPT                            __attribute__((interrupt))
 #endif
 
-#endif /* __RISCV_GCC_H */
+#endif /* __GCC_H */
