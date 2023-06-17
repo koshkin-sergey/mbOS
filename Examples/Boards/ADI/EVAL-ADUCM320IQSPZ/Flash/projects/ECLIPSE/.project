@@ -45,11 +45,6 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>src/Device/CMSIS</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
 			<name>src/Device/Driver</name>
 			<type>2</type>
 			<locationURI>PARENT-7-PROJECT_LOC/Device/ADI/ADuCM32x/Driver</locationURI>
@@ -75,7 +70,7 @@
 			<locationURI>PARENT-7-PROJECT_LOC/Kernel/Library</locationURI>
 		</link>
 		<link>
-			<name>src/Device/CMSIS/Driver</name>
+			<name>src/Device/Driver</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
@@ -90,14 +85,14 @@
 			<locationURI>PARENT-7-PROJECT_LOC/Device/ADI/ADuCM32x/Startup/system_aducm32x.c</locationURI>
 		</link>
 		<link>
-			<name>src/Device/CMSIS/Driver/FEE_ADUCM32x.c</name>
+			<name>src/Device/Driver/FEE_ADUCM32x.c</name>
 			<type>1</type>
-			<locationURI>PARENT-7-PROJECT_LOC/Device/ADI/ADuCM32x/CMSIS/Driver/FEE_ADUCM32x.c</locationURI>
+			<locationURI>PARENT-7-PROJECT_LOC/Device/ADI/ADuCM32x/Driver/FEE_ADUCM32x.c</locationURI>
 		</link>
 		<link>
-			<name>src/Device/CMSIS/Driver/FEE_ADUCM32x.h</name>
+			<name>src/Device/Driver/FEE_ADUCM32x.h</name>
 			<type>1</type>
-			<locationURI>PARENT-7-PROJECT_LOC/Device/ADI/ADuCM32x/CMSIS/Driver/FEE_ADUCM32x.h</locationURI>
+			<locationURI>PARENT-7-PROJECT_LOC/Device/ADI/ADuCM32x/Driver/FEE_ADUCM32x.h</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

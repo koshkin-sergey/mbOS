@@ -91,11 +91,6 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>src/Device/CMSIS</name>
-			<type>2</type>
-			<locationURI>PARENT-7-PROJECT_LOC/Device/KMX32/Krechet1/CMSIS</locationURI>
-		</link>
-		<link>
 			<name>src/Device/Driver</name>
 			<type>2</type>
 			<locationURI>PARENT-7-PROJECT_LOC/Device/KMX32/Krechet1/Driver</locationURI>
