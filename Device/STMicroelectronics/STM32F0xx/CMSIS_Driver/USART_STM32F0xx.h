@@ -28,7 +28,7 @@
 #include <stdbool.h>
 #include <string.h>
 
-#include "CMSIS/Driver/Driver_USART.h"
+#include "Driver/Driver_USART.h"
 
 #include "device_config.h"
 

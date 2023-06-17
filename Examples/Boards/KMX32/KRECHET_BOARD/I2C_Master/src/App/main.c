@@ -23,7 +23,7 @@
 
 #include <asm/krechet1.h>
 #include <Kernel/kernel.h>
-#include <CMSIS/Driver/Driver_I2C.h>
+#include <Driver/Driver_I2C.h>
 #include <Driver/ADSU_KRECHET1.h>
 
 /*******************************************************************************

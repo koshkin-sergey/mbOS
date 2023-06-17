@@ -29,7 +29,7 @@ extern "C"
  *  includes
  ******************************************************************************/
 
-#include "CMSIS/Driver/Driver_Common.h"
+#include "Driver/Driver_Common.h"
 
 /*******************************************************************************
  *  defines and macros (scope: module-local)

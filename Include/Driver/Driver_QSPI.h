@@ -35,7 +35,7 @@ extern "C"
 {
 #endif
 
-#include "CMSIS/Driver/Driver_Common.h"
+#include "Driver/Driver_Common.h"
 
 #define QSPI_API_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(1,0)  /* API version */
 

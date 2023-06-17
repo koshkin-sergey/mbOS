@@ -135,7 +135,7 @@ typedef enum {
 /** @} */ /* End of group Configuration_of_CMSIS */
 
 
-#include <CMSIS/Core/Cortex/core_cm3.h>
+#include <Core/Cortex/core_cm3.h>
 #include "system_aducm32x.h"
 #include <stdint.h>
 

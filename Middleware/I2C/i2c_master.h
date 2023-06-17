@@ -26,7 +26,7 @@
 
 #include <stdint.h>
 #include <Kernel/kernel.h>
-#include <CMSIS/Driver/Driver_I2C.h>
+#include <Driver/Driver_I2C.h>
 
 #ifdef  __cplusplus
 extern "C" {

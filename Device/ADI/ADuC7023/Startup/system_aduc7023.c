@@ -19,7 +19,7 @@
  *  includes
  ******************************************************************************/
 
-#include <CMSIS/Core/Arm/irq_ctrl.h>
+#include <Core/Arm/irq_ctrl.h>
 #include <Driver/PCC_ADUC7023.h>
 
 uint32_t SystemCoreClock;           /*!< System Clock Frequency (Core Clock)  */

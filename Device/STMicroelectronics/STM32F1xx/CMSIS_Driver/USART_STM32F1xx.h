@@ -34,7 +34,7 @@
 #include "asm/RCC_STM32F1xx.h"
 #include "asm/stm32f1xx.h"
 
-#include "CMSIS/Driver/Driver_USART.h"
+#include "Driver/Driver_USART.h"
 
 
 /*******************************************************************************

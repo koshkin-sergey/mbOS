@@ -27,8 +27,8 @@
 #include <stdbool.h>
 
 #include <asm/aduc7023.h>
-#include <CMSIS/Core/Arm/irq_ctrl.h>
-#include <CMSIS/Driver/Driver_I2C.h>
+#include <Core/Arm/irq_ctrl.h>
+#include <Driver/Driver_I2C.h>
 
 #include <device_config.h>
 #include <Driver/GPIO_ADUC7023.h>

@@ -31,7 +31,7 @@
 #include <stdio.h>
 #include "Debug/debug.h"
 #include "Kernel/kernel.h"
-#include "CMSIS/Driver/Driver_USART.h"
+#include "Driver/Driver_USART.h"
 
 #if defined(DEBUG)
 

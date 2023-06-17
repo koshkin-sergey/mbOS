@@ -25,7 +25,7 @@
  ******************************************************************************/
 
 #include <stdbool.h>
-#include "CMSIS/Core/Arm/cmsis_compiler.h"
+#include "Core/Arm/cmsis_compiler.h"
 
 extern uint32_t GetModeCPU(void);
 extern uint32_t DisableIRQ(void);

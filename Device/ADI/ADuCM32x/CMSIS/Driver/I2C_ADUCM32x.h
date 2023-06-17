@@ -28,7 +28,7 @@
 #include <device_config.h>
 #include <Driver/CLK_ADUCM32x.h>
 #include <Driver/GPIO_ADUCM32x.h>
-#include <CMSIS/Driver/Driver_I2C.h>
+#include <Driver/Driver_I2C.h>
 
 /*******************************************************************************
  *  defines and macros

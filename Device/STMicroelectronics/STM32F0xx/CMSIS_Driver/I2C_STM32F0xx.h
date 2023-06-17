@@ -26,7 +26,7 @@
 
 #include <stdbool.h>
 
-#include "CMSIS/Driver/Driver_I2C.h"
+#include "Driver/Driver_I2C.h"
 #include "device_config.h"
 
 /*******************************************************************************

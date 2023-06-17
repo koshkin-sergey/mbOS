@@ -31,7 +31,7 @@
 #include "asm/RCC_STM32F7xx.h"
 #include "asm/DMA_STM32F7xx.h"
 
-#include "CMSIS/Driver/Driver_I2C.h"
+#include "Driver/Driver_I2C.h"
 
 #include "device_config.h"
 

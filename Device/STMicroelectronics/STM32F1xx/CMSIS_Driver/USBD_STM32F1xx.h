@@ -21,7 +21,7 @@
 #define USBD_STM32F1XX_H_
 
 #include "device_config.h"
-#include "CMSIS/Driver/Driver_USBD.h"
+#include "Driver/Driver_USBD.h"
 
 #include "asm/stm32f1xx.h"
 #include "asm/RCC_STM32F1xx.h"

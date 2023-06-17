@@ -23,7 +23,7 @@
 #include <asm/system_aducm32x.h>
 #include <Driver/GPIO_ADUCM32x.h>
 #include <Driver/EXTI_ADUCM32x.h>
-#include <CMSIS/Driver/Driver_Flash.h>
+#include <Driver/Driver_Flash.h>
 
 /*******************************************************************************
  *  defines and macros (scope: module-local)

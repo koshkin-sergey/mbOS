@@ -25,7 +25,7 @@
 #include <Kernel/kernel.h>
 #include <asm/system_aduc7023.h>
 #include <Driver/GPIO_ADUC7023.h>
-#include "CMSIS/Driver/Driver_I2C.h"
+#include "Driver/Driver_I2C.h"
 
 /*******************************************************************************
  *  defines and macros (scope: module-local)

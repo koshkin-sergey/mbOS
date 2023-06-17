@@ -25,7 +25,7 @@
 #include "asm/RCC_STM32F4xx.h"
 #include "asm/system_stm32f4xx.h"
 #include "Kernel/kernel.h"
-#include "CMSIS/Driver/Driver_I2C.h"
+#include "Driver/Driver_I2C.h"
 
 /*******************************************************************************
  *  defines and macros (scope: module-local)

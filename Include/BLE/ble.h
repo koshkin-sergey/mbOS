@@ -26,7 +26,7 @@
 #ifndef BLE_H_
 #define BLE_H_
 
-#include <CMSIS/Core/cmsis_compiler.h>
+#include <Core/cmsis_compiler.h>
 
 /**
  * @brief     HCI packet indicator

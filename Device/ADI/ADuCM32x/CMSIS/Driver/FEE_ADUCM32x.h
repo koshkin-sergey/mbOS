@@ -26,7 +26,7 @@
 
 #include <asm/aducm32x.h>
 #include <device_config.h>
-#include <CMSIS/Driver/Driver_Flash.h>
+#include <Driver/Driver_Flash.h>
 
 /*******************************************************************************
  *  defines and macros

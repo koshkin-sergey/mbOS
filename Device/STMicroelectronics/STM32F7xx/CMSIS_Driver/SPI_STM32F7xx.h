@@ -32,7 +32,7 @@
 #include "asm/GPIO_STM32F7xx.h"
 #include "asm/DMA_STM32F7xx.h"
 
-#include "CMSIS/Driver/Driver_SPI.h"
+#include "Driver/Driver_SPI.h"
 
 #include "device_config.h"
 

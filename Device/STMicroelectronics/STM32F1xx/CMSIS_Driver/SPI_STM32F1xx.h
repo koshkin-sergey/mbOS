@@ -33,7 +33,7 @@
 #include "asm/GPIO_STM32F1xx.h"
 #include "asm/RCC_STM32F1xx.h"
 
-#include "CMSIS/Driver/Driver_SPI.h"
+#include "Driver/Driver_SPI.h"
 
 
 /*******************************************************************************

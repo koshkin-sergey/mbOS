@@ -19,7 +19,7 @@
 
 #include <stddef.h>
 #include <string.h>
-#include "CMSIS/Core/Arm/irq_ctrl.h"
+#include "Core/Arm/irq_ctrl.h"
 #include "asm/aduc7023.h"
 
 #define RAM_INTVEC_SIZE   16U

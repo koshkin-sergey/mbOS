@@ -32,7 +32,7 @@
 #include <BLE/ble.h>
 #include <asm/GPIO_STM32F7xx.h>
 #include <asm/EXTI_STM32F7xx.h>
-#include <CMSIS/Driver/Driver_SPI.h>
+#include <Driver/Driver_SPI.h>
 
 /*******************************************************************************
  *  defines and macros (scope: module-local)

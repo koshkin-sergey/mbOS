@@ -32,7 +32,7 @@
 #include "asm/GPIO_STM32F4xx.h"
 #include "asm/DMA_STM32F4xx.h"
 
-#include "CMSIS/Driver/Driver_SAI.h"
+#include "Driver/Driver_SAI.h"
 
 #include "device_config.h"
 

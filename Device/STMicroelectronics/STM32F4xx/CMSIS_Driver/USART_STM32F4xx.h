@@ -31,7 +31,7 @@
 #include "asm/RCC_STM32F4xx.h"
 #include "asm/GPIO_STM32F4xx.h"
 
-#include "CMSIS/Driver/Driver_USART.h"
+#include "Driver/Driver_USART.h"
 
 #include "device_config.h"
 

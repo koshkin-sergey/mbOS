@@ -33,7 +33,7 @@
 #include "asm/GPIO_STM32F7xx.h"
 #include "asm/DMA_STM32F7xx.h"
 
-#include "CMSIS/Driver/Driver_USART.h"
+#include "Driver/Driver_USART.h"
 
 #include "device_config.h"
 
