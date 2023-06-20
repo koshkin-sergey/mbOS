@@ -2110,7 +2110,7 @@
             <name>$PROJ_DIR$\..\..\..\..\..\..\..\Device\ADI\ADuC7023\Driver\GPIO_ADUC7023.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Device\ADI\ADuC7023\CMSIS\Driver\I2C_ADUC7023.c</name>
+            <name>$PROJ_DIR$\..\..\..\..\..\..\..\Device\ADI\ADuC7023\Driver\I2C_ADUC7023.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\..\..\..\..\Device\ADI\ADuC7023\Driver\IRQ_ADUC7023.c</name>

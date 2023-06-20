@@ -465,7 +465,7 @@
             <File>
               <FileName>I2C_ADUC7023.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Device\ADI\ADuC7023\CMSIS\Driver\I2C_ADUC7023.c</FilePath>
+              <FilePath>..\..\..\..\..\..\..\Device\ADI\ADuC7023\Driver\I2C_ADUC7023.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -301,7 +301,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\..\Device\ADI\ADuC7023\CMSIS\Driver\I2C_ADUC7023.c</PathWithFileName>
+      <PathWithFileName>..\..\..\..\..\..\..\Device\ADI\ADuC7023\Driver\I2C_ADUC7023.c</PathWithFileName>
       <FilenameWithoutPath>I2C_ADUC7023.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>

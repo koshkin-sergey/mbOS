@@ -426,7 +426,7 @@
             <File>
               <FileName>FEE_ADUCM32x.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Device\ADI\ADuCM32x\CMSIS\Driver\FEE_ADUCM32x.c</FilePath>
+              <FilePath>..\..\..\..\..\..\..\Device\ADI\ADuCM32x\Driver\FEE_ADUCM32x.c</FilePath>
             </File>
           </Files>
         </Group>

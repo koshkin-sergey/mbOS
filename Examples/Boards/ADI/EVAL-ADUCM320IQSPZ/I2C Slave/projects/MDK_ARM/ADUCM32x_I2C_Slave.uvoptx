@@ -287,7 +287,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\..\Device\ADI\ADuCM32x\CMSIS\Driver\I2C_ADUCM32x.c</PathWithFileName>
+      <PathWithFileName>..\..\..\..\..\..\..\Device\ADI\ADuCM32x\Driver\I2C_ADUCM32x.c</PathWithFileName>
       <FilenameWithoutPath>I2C_ADUCM32x.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
