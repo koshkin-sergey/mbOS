@@ -24,12 +24,12 @@
  *  includes
  ******************************************************************************/
 
-#include <aducm32x.h>
+#include <asm/aducm32x.h>
 #include <device_config.h>
 #include <Driver/CLK_ADUCM32x.h>
 #include <Driver/DMA_ADUCM32x.h>
 #include <Driver/GPIO_ADUCM32x.h>
-#include <Driver_USART.h>
+#include <Driver/Driver_USART.h>
 
 /*******************************************************************************
  *  defines and macros

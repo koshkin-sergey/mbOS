@@ -47,7 +47,7 @@
 		<link>
 			<name>src/Device/Driver</name>
 			<type>2</type>
-			<locationURI>PARENT-7-PROJECT_LOC/Device/ADI/ADuCM32x/Driver</locationURI>
+			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
 			<name>src/Device/Include</name>
@@ -68,6 +68,26 @@
 			<name>src/Kernel/Library</name>
 			<type>2</type>
 			<locationURI>PARENT-7-PROJECT_LOC/Kernel/Library</locationURI>
+		</link>
+		<link>
+			<name>src/Device/Driver/CLK_ADUCM32x.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Device/ADI/ADuCM32x/Driver/CLK_ADUCM32x.c</locationURI>
+		</link>
+		<link>
+			<name>src/Device/Driver/GPIO_ADUCM32x.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Device/ADI/ADuCM32x/Driver/GPIO_ADUCM32x.c</locationURI>
+		</link>
+		<link>
+			<name>src/Device/Driver/I2C_ADUCM32x.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Device/ADI/ADuCM32x/Driver/I2C_ADUCM32x.c</locationURI>
+		</link>
+		<link>
+			<name>src/Device/Driver/WDT_ADUCM32x.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Device/ADI/ADuCM32x/Driver/WDT_ADUCM32x.c</locationURI>
 		</link>
 		<link>
 			<name>src/Device/Startup/startup_aducm32x.c</name>
