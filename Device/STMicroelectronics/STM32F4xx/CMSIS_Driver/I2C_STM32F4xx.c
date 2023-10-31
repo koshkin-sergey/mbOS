@@ -1132,7 +1132,13 @@ void I2C_ER_IRQHandler(I2C_RESOURCES *i2c)
     /* Acknowledge failure */
     /* Reset the communication */
     reg->CR1 |= I2C_CR1_STOP;
-    info->status.mode = 0U;
+
+    if (info->status.mode != 0U) {
+      if (info->xfer.cnt > 0U) {
+        info->xfer.cnt--;
+      }
+      info->status.mode = 0U;
+    }
 
     if ((info->xfer.ctrl & XFER_CTRL_ADDR_DONE) == 0U) {
       /* Addressing not done */
