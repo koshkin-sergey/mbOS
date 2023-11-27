@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021-2022 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2021-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -221,25 +221,24 @@ uint32_t IRQ_GetEnableState(IRQn_ID_t irqn)
  */
 int32_t IRQ_SetMode(IRQn_ID_t irqn, uint32_t mode)
 {
-   int32_t status;
-  uint32_t val;
   uint32_t mask;
 
-  status = 0;
-
-  if ((irqn >= 0) && (irqn < IRQ_VECTOR_COUNT)) {
-    /* Check interrupt type */
-    val = mode & IRQ_MODE_TYPE_Msk;
-    mask = 1UL << irqn;
-    if (val == IRQ_MODE_TYPE_IRQ) {
-      irq_mode.type &= ~mask;
-    }
-    else {
-      irq_mode.type |= mask;
-    }
+  if ((irqn < 0) || (irqn >= IRQ_VECTOR_COUNT)) {
+    return (-1);
   }
 
-  return (status);
+  mask = 1UL << irqn;
+  switch (mode & IRQ_MODE_TYPE_Msk) {
+    case IRQ_MODE_TYPE_IRQ:
+      irq_mode.type &= ~mask;
+      break;
+
+    case IRQ_MODE_TYPE_FIQ:
+      irq_mode.type |= mask;
+      break;
+  }
+
+  return (0);
 }
 
 /**
@@ -251,19 +250,16 @@ int32_t IRQ_SetMode(IRQn_ID_t irqn, uint32_t mode)
 uint32_t IRQ_GetMode(IRQn_ID_t irqn)
 {
   uint32_t mode;
-  uint32_t mask;
 
-  if ((irqn >= 0) && (irqn < IRQ_VECTOR_COUNT)) {
-    mask = 1UL << irqn;
-    if ((irq_mode.type & mask) == 0UL) {
-      mode = IRQ_MODE_TYPE_IRQ;
-    }
-    else {
-      mode = IRQ_MODE_TYPE_FIQ;
-    }
+  if ((irqn < 0) || (irqn >= IRQ_VECTOR_COUNT)) {
+    return (IRQ_MODE_ERROR);
+  }
+
+  if ((irq_mode.type & (1UL << irqn)) == 0UL) {
+    mode = IRQ_MODE_TYPE_IRQ;
   }
   else {
-    mode = IRQ_MODE_ERROR;
+    mode = IRQ_MODE_TYPE_FIQ;
   }
 
   return (mode);
@@ -326,9 +322,20 @@ int32_t IRQ_SetPending(IRQn_ID_t irqn)
  */
 uint32_t IRQ_GetPending(IRQn_ID_t irqn)
 {
-  (void) irqn;
+  uint32_t sig;
 
-  return (0U);
+  if (irqn < 0 || irqn >= IRQ_VECTOR_COUNT) {
+    return (0U);
+  }
+
+  if ((irq_mode.type & (1UL << irqn)) == 0UL) {
+    sig = IRQ->SIG;
+  }
+  else {
+    sig = FIQ->SIG;
+  }
+
+  return ((sig >> irqn) & 1UL);
 }
 
 /**
