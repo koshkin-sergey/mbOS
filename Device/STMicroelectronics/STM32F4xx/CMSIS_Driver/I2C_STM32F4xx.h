@@ -31,7 +31,7 @@
 #include "asm/RCC_STM32F4xx.h"
 #include "asm/GPIO_STM32F4xx.h"
 
-#include "Driver/Driver_I2C.h"
+#include <Driver/Driver_I2C.h>
 
 #include "device_config.h"
 
@@ -40,6 +40,7 @@
  ******************************************************************************/
 
 #define I2C_BUSY_TIMEOUT_US         1000
+#define I2C_CLR_TIMEOUT_US          5
 
 /* I2C1 configuration definitions */
 #if defined (RTE_I2C1) && (RTE_I2C1 == 1)

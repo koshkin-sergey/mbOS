@@ -144,16 +144,14 @@ static I2C_RESOURCES I2C3_Resources = {
  ******************************************************************************/
 
 static
-__attribute__((optimize("-O2")))
 void delay(uint32_t us)
 {
-  uint32_t timeout;
+  const uint32_t timeout = GetSysTimerFreq() / 1000000U * us;
+  const uint32_t tick = GetSysTimerCount();
 
-  timeout = SystemCoreClock / 1000000U / 4U * us;
-
-  do {
+  while ((GetSysTimerCount() - tick) < timeout) {
     __NOP();
-  } while (--timeout != 0U);
+  };
 }
 
 static
@@ -436,7 +434,7 @@ int32_t I2C_Control(uint32_t control, uint32_t arg, I2C_RESOURCES *i2c)
       GPIO_PinWrite(io->sda_port, io->sda_pin, GPIO_PIN_OUT_HIGH);
       GPIO_PinWrite(io->scl_port, io->scl_pin, GPIO_PIN_OUT_HIGH);
 
-      delay(5);
+      delay(I2C_CLR_TIMEOUT_US);
 
       for (uint32_t i = 0; i < 9U; ++i) {
         if (GPIO_PinRead(io->sda_port, io->sda_pin) == 1U) {
@@ -444,18 +442,18 @@ int32_t I2C_Control(uint32_t control, uint32_t arg, I2C_RESOURCES *i2c)
         }
 
         GPIO_PinWrite(io->scl_port, io->scl_pin, GPIO_PIN_OUT_HIGH);
-        delay(5);
+        delay(I2C_CLR_TIMEOUT_US);
 
         GPIO_PinWrite(io->scl_port, io->scl_pin, GPIO_PIN_OUT_LOW);
-        delay(5);
+        delay(I2C_CLR_TIMEOUT_US);
       }
 
       GPIO_PinWrite(io->sda_port, io->sda_pin, GPIO_PIN_OUT_LOW);
-      delay(5);
+      delay(I2C_CLR_TIMEOUT_US);
       GPIO_PinWrite(io->scl_port, io->scl_pin, GPIO_PIN_OUT_HIGH);
-      delay(5);
+      delay(I2C_CLR_TIMEOUT_US);
       GPIO_PinWrite(io->sda_port, io->sda_pin, GPIO_PIN_OUT_HIGH);
-      delay(5);
+      delay(I2C_CLR_TIMEOUT_US);
 
       SoftwareReset(reg);
 
@@ -543,10 +541,11 @@ int32_t I2C_MasterTransmit(uint32_t addr, const uint8_t *data, uint32_t num,
 
   if ((info->xfer.ctrl & XFER_CTRL_XPENDING) == 0U) {
     /* New transfer */
-    uint32_t timeout = SystemCoreClock / 1000000U / 5U * I2C_BUSY_TIMEOUT_US;
+    const uint32_t timeout = GetSysTimerFreq() / 1000000U * I2C_BUSY_TIMEOUT_US;
+    const uint32_t tick = GetSysTimerCount();
     /* Wait until bus released */
     while ((reg->SR2 & I2C_SR2_BUSY) != 0U) {
-      if (--timeout == 0U) {
+      if ((GetSysTimerCount() - tick) > timeout) {
         return (ARM_DRIVER_ERROR_BUSY);
       }
     }
@@ -616,10 +615,11 @@ int32_t I2C_MasterReceive(uint32_t addr, uint8_t *data, uint32_t num,
 
   if ((info->xfer.ctrl & XFER_CTRL_XPENDING) == 0U) {
     /* New transfer */
-    uint32_t timeout = SystemCoreClock / 1000000U / 5U * I2C_BUSY_TIMEOUT_US;
+    const uint32_t timeout = GetSysTimerFreq() / 1000000U * I2C_BUSY_TIMEOUT_US;
+    const uint32_t tick = GetSysTimerCount();
     /* Wait until bus released */
     while ((reg->SR2 & I2C_SR2_BUSY) != 0U) {
-      if (--timeout == 0U) {
+      if ((GetSysTimerCount() - tick) > timeout) {
         return (ARM_DRIVER_ERROR_BUSY);
       }
     }
