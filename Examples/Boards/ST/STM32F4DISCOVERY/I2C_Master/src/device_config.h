@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2018-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -17,10 +17,15 @@
  * Project: Device Configuration for STMicroelectronics STM32F4xx
  */
 
-//-------- <<< Use Configuration Wizard in Context Menu >>> --------------------
-
 #ifndef DEVICE_CONFIG_H_
 #define DEVICE_CONFIG_H_
+
+/*******************************************************************************
+ *  external declarations
+ ******************************************************************************/
+
+extern uint32_t osKernelGetSysTimerFreq(void);
+extern uint32_t osKernelGetSysTimerCount(void);
 
 /*******************************************************************************
  *  defines and macros
@@ -42,7 +47,14 @@
 #define RTE_USART_DMA_INT_PRIORITY      (1U)
 #define RTE_SPI_INT_PRIORITY            (1U)
 #define RTE_SPI_DMA_INT_PRIORITY        (1U)
+#define RTE_USB_FS_INT_PRIORITY         (1U)
+#define RTE_USB_FS_WKUP_INT_PRIORITY    (1U)
 #define RTE_EXTI_INT_PRIORITY           (1U)
+
+#define GetSysTimerFreq()               osKernelGetSysTimerFreq()
+#define GetSysTimerCount()              osKernelGetSysTimerCount()
+
+//-------- <<< Use Configuration Wizard in Context Menu >>> --------------------
 
 // <e> USART1 (Universal synchronous asynchronous receiver transmitter) [Driver_USART1]
 // <i> Configuration settings for Driver_USART1 in component ::CMSIS Driver:USART
@@ -2302,6 +2314,73 @@
 #define RTE_SPI6_TX_DMA_STREAM          5
 #define RTE_SPI6_TX_DMA_CHANNEL         1
 #define RTE_SPI6_TX_DMA_PRIORITY        0
+
+// </e>
+
+
+// <e> USB FS (Universal Serial Bus Fast Speed) [Driver_USB_FS]
+// <i> Configuration settings for Driver_USB_FS in component ::CMSIS Driver:USB_FS
+#define RTE_USB_FS                      1
+
+//   <o> USB_FS ID Pin <0=>Not Used <1=>PA10
+#define   RTE_USB_FS_ID_ID              0
+#if      (RTE_USB_FS_ID_ID == 0)
+  #define RTE_USB_FS_ID                 0
+#elif    (RTE_USB_FS_ID_ID == 1)
+  #define RTE_USB_FS_ID                 1
+  #define RTE_USB_FS_ID_PORT            GPIO_PORT_A
+  #define RTE_USB_FS_ID_PIN             GPIO_PIN_10
+  #define RTE_USB_FS_ID_FUNC            GPIO_PIN_FUNC_10
+#else
+  #error "Invalid USB_FS_ID Pin Configuration!"
+#endif
+
+//   <o> USB_FS DP Pin <0=>PA12
+#define   RTE_USB_FS_DP_ID              0
+#if      (RTE_USB_FS_DP_ID == 0)
+  #define RTE_USB_FS_DP                 1
+  #define RTE_USB_FS_DP_PORT            GPIO_PORT_A
+  #define RTE_USB_FS_DP_PIN             GPIO_PIN_12
+  #define RTE_USB_FS_DP_FUNC            GPIO_PIN_FUNC_10
+#else
+  #error "Invalid USB_FS_DP Pin Configuration!"
+#endif
+
+//   <o> USB_FS DM Pin <0=>PA11
+#define   RTE_USB_FS_DM_ID              0
+#if      (RTE_USB_FS_DM_ID == 0)
+  #define RTE_USB_FS_DM                 1
+  #define RTE_USB_FS_DM_PORT            GPIO_PORT_A
+  #define RTE_USB_FS_DM_PIN             GPIO_PIN_11
+  #define RTE_USB_FS_DM_FUNC            GPIO_PIN_FUNC_10
+#else
+  #error "Invalid USB_FS_DM Pin Configuration!"
+#endif
+
+//   <o> USB_FS VBUS Pin <0=>Not Used <1=>PA9
+#define   RTE_USB_FS_VBUS_ID            1
+#if      (RTE_USB_FS_VBUS_ID == 0)
+  #define RTE_USB_FS_VBUS               0
+#elif    (RTE_USB_FS_VBUS_ID == 1)
+  #define RTE_USB_FS_VBUS               1
+  #define RTE_USB_FS_VBUS_PORT          GPIO_PORT_A
+  #define RTE_USB_FS_VBUS_PIN           GPIO_PIN_9
+#else
+  #error "Invalid USB_FS_VBUS Pin Configuration!"
+#endif
+
+//   <o> USB_FS SOF Pin <0=>Not Used <1=>PA10
+#define   RTE_USB_FS_SOF_ID             0
+#if      (RTE_USB_FS_SOF_ID == 0)
+  #define RTE_USB_FS_SOF                0
+#elif    (RTE_USB_FS_SOF_ID == 1)
+  #define RTE_USB_FS_SOF                1
+  #define RTE_USB_FS_SOF_PORT           GPIO_PORT_A
+  #define RTE_USB_FS_SOF_PIN            GPIO_PIN_8
+  #define RTE_USB_FS_SOF_FUNC           GPIO_PIN_FUNC_10
+#else
+  #error "Invalid USB_FS_SOF Pin Configuration!"
+#endif
 
 // </e>
 
