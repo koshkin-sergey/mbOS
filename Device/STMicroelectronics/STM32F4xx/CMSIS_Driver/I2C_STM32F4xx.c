@@ -79,10 +79,11 @@ static I2C_RESOURCES I2C1_Resources = {
       I2C1_SDA_GPIO_PIN,
       I2C1_SDA_GPIO_FUNC,
   },
+  &I2C1_Info,
+  RCC_PERIPH_I2C1,
   I2C1_EV_IRQn,
   I2C1_ER_IRQn,
-  RCC_PERIPH_I2C1,
-  &I2C1_Info,
+  {0}
 };
 #endif /* USE_I2C1 */
 
@@ -104,10 +105,11 @@ static I2C_RESOURCES I2C2_Resources = {
       I2C2_SDA_GPIO_PIN,
       I2C2_SDA_GPIO_FUNC,
   },
+  &I2C2_Info,
+  RCC_PERIPH_I2C2,
   I2C2_EV_IRQn,
   I2C2_ER_IRQn,
-  RCC_PERIPH_I2C2,
-  &I2C2_Info,
+  {0}
 };
 #endif /* USE_I2C2 */
 
@@ -128,10 +130,11 @@ static I2C_RESOURCES I2C3_Resources = {
       I2C3_SDA_GPIO_PIN,
       I2C3_SDA_GPIO_FUNC,
   },
+  &I2C3_Info,
+  RCC_PERIPH_I2C3,
   I2C3_EV_IRQn,
   I2C3_ER_IRQn,
-  RCC_PERIPH_I2C3,
-  &I2C3_Info,
+  {0}
 };
 #endif /* USE_I2C3 */
 
@@ -560,7 +563,7 @@ int32_t I2C_MasterTransmit(uint32_t addr, const uint8_t *data, uint32_t num,
   info->xfer.num  = num;
   info->xfer.cnt  = 0U;
   info->xfer.data = (uint8_t *)data;
-  info->xfer.addr = (uint16_t)(addr);
+  info->xfer.addr = addr;
   info->xfer.ctrl = 0U;
 
   if (xfer_pending) {
@@ -634,7 +637,7 @@ int32_t I2C_MasterReceive(uint32_t addr, uint8_t *data, uint32_t num,
   info->xfer.num  = num;
   info->xfer.cnt  = 0U;
   info->xfer.data = data;
-  info->xfer.addr = (uint16_t)(addr);
+  info->xfer.addr = addr;
   info->xfer.ctrl = 0U;
 
   if (xfer_pending) {

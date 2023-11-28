@@ -122,17 +122,17 @@ ARM_DRIVER_I2C Driver_I2C##x = {  \
 }
 
 /* Current driver status flag definition */
-#define I2C_FLAG_INIT       ((uint8_t)0x01)   // I2C initialized
-#define I2C_FLAG_POWER      ((uint8_t)0x02)   // I2C powered on
-#define I2C_FLAG_SETUP      ((uint8_t)0x04)   // I2C Master configured, clock set
+#define I2C_FLAG_INIT       (1UL << 0)      // I2C initialized
+#define I2C_FLAG_POWER      (1UL << 1)      // I2C powered on
+#define I2C_FLAG_SETUP      (1UL << 2)      // I2C Master configured, clock set
 
 /* Transfer status flags definitions */
-#define XFER_CTRL_XPENDING  ((uint8_t)0x01)   // Transfer pending
-#define XFER_CTRL_RSTART    ((uint8_t)0x02)   // Generate repeated start and readdress
-#define XFER_CTRL_ADDR_DONE ((uint8_t)0x04)   // Addressing done
-#define XFER_CTRL_DMA_DONE  ((uint8_t)0x08)   // DMA transfer done
-#define XFER_CTRL_WAIT_BTF  ((uint8_t)0x10)   // Wait for byte transfer finished
-#define XFER_CTRL_XACTIVE   ((uint8_t)0x20)   // Transfer active
+#define XFER_CTRL_XPENDING  (1UL << 0)      // Transfer pending
+#define XFER_CTRL_RSTART    (1UL << 1)      // Generate repeated start and readdress
+#define XFER_CTRL_ADDR_DONE (1UL << 2)      // Addressing done
+#define XFER_CTRL_DMA_DONE  (1UL << 3)      // DMA transfer done
+#define XFER_CTRL_WAIT_BTF  (1UL << 4)      // Wait for byte transfer finished
+#define XFER_CTRL_XACTIVE   (1UL << 5)      // Transfer active
 
 /*******************************************************************************
  *  typedefs and structures (scope: module-local)
@@ -155,8 +155,8 @@ typedef struct _I2C_TRANSFER_INFO {
   uint32_t              num;                // Number of data to transfer
   uint32_t              cnt;                // Data transfer counter
   uint8_t              *data;               // Data pointer
-  uint16_t              addr;               // Device address
-  uint8_t               ctrl;               // Transfer control flags
+  uint32_t              addr;               // Device address
+  uint32_t              ctrl;               // Transfer control flags
 } I2C_TRANSFER_INFO;
 
 /* I2C Information (Run-Time) */
@@ -164,7 +164,7 @@ typedef struct _I2C_INFO {
   ARM_I2C_SignalEvent_t cb_event;           // Event Callback
   ARM_I2C_STATUS        status;             // Status flags
   I2C_TRANSFER_INFO     xfer;               // Transfer information
-  uint8_t               flags;              // Current I2C state flags
+  uint32_t              flags;              // Current I2C state flags
 } I2C_INFO;
 
 /* I2C Resource Configuration */
@@ -173,10 +173,11 @@ typedef struct {
   I2C_DMA              *dma_rx;             // I2C DMA Configuration
   I2C_DMA              *dma_tx;             // I2C DMA Configuration
   I2C_IO                io;                 // I2C Input/Output pins
+  I2C_INFO             *info;               // Run-Time information
+  RCC_Periph_t          rcc;                // RCC Clock/Reset registers
   IRQn_Type             ev_irq_num;         // I2C Event IRQ Number
   IRQn_Type             er_irq_num;         // I2C Error IRQ Number
-  RCC_Periph_t          rcc;                // RCC Clock/Reset registers
-  I2C_INFO             *info;               // Run-Time information
+  uint8_t               reserved[6];
 } const I2C_RESOURCES;
 
 #endif /* I2C_STM32F4XX_H_ */
