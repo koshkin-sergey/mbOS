@@ -35,6 +35,11 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
+			<name>src/Include</name>
+			<type>2</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Include</locationURI>
+		</link>
+		<link>
 			<name>src/Kernel</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
@@ -47,7 +52,7 @@
 		<link>
 			<name>src/Device/Driver</name>
 			<type>2</type>
-			<locationURI>PARENT-7-PROJECT_LOC/Device/ADI/ADuC7023/Driver</locationURI>
+			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
 			<name>src/Device/Include</name>
@@ -62,22 +67,112 @@
 		<link>
 			<name>src/Kernel/Config</name>
 			<type>2</type>
-			<locationURI>PARENT-3-PROJECT_LOC/Common/Config</locationURI>
+			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
 			<name>src/Kernel/Library</name>
 			<type>2</type>
-			<locationURI>PARENT-7-PROJECT_LOC/Kernel/Library</locationURI>
+			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>src/Device/Startup/startup_aduc7023.c</name>
+			<name>src/Device/Driver/ADC_ADUC7023.c</name>
 			<type>1</type>
-			<locationURI>PARENT-7-PROJECT_LOC/Device/ADI/ADuC7023/Startup/gcc/startup_aduc7023.c</locationURI>
+			<locationURI>PARENT-7-PROJECT_LOC/Device/ADI/ADuC7023/Driver/ADC_ADUC7023.c</locationURI>
+		</link>
+		<link>
+			<name>src/Device/Driver/DAC_ADUC7023.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Device/ADI/ADuC7023/Driver/DAC_ADUC7023.c</locationURI>
+		</link>
+		<link>
+			<name>src/Device/Driver/EXTI_ADUC7023.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Device/ADI/ADuC7023/Driver/EXTI_ADUC7023.c</locationURI>
+		</link>
+		<link>
+			<name>src/Device/Driver/FLASH_ADUC7023.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Device/ADI/ADuC7023/Driver/FLASH_ADUC7023.c</locationURI>
+		</link>
+		<link>
+			<name>src/Device/Driver/GPIO_ADUC7023.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Device/ADI/ADuC7023/Driver/GPIO_ADUC7023.c</locationURI>
+		</link>
+		<link>
+			<name>src/Device/Driver/I2C_ADUC7023.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Device/ADI/ADuC7023/Driver/I2C_ADUC7023.c</locationURI>
+		</link>
+		<link>
+			<name>src/Device/Driver/I2C_ADUC7023.h</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Device/ADI/ADuC7023/Driver/I2C_ADUC7023.h</locationURI>
+		</link>
+		<link>
+			<name>src/Device/Driver/IRQ_ADUC7023.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Device/ADI/ADuC7023/Driver/IRQ_ADUC7023.c</locationURI>
+		</link>
+		<link>
+			<name>src/Device/Driver/PCC_ADUC7023.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Device/ADI/ADuC7023/Driver/PCC_ADUC7023.c</locationURI>
+		</link>
+		<link>
+			<name>src/Device/Driver/PWM_ADUC7023.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Device/ADI/ADuC7023/Driver/PWM_ADUC7023.c</locationURI>
+		</link>
+		<link>
+			<name>src/Device/Driver/RTOS_TIMER_ADUC7023.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Device/ADI/ADuC7023/Driver/RTOS_TIMER_ADUC7023.c</locationURI>
+		</link>
+		<link>
+			<name>src/Device/Driver/WDG_TIMER_ADUC7023.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Device/ADI/ADuC7023/Driver/WDG_TIMER_ADUC7023.c</locationURI>
+		</link>
+		<link>
+			<name>src/Device/Startup/gcc</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
 			<name>src/Device/Startup/system_aduc7023.c</name>
 			<type>1</type>
 			<locationURI>PARENT-7-PROJECT_LOC/Device/ADI/ADuC7023/Startup/system_aduc7023.c</locationURI>
+		</link>
+		<link>
+			<name>src/Kernel/Config/kernel_config.h</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/Common/Config/kernel_config.h</locationURI>
+		</link>
+		<link>
+			<name>src/Kernel/Config/kernel_lib.c</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/Common/Config/kernel_lib.c</locationURI>
+		</link>
+		<link>
+			<name>src/Kernel/Library/GCC</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>src/Device/Startup/gcc/startup_aduc7023.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Device/ADI/ADuC7023/Startup/gcc/startup_aduc7023.c</locationURI>
+		</link>
+		<link>
+			<name>src/Kernel/Library/GCC/libKernel_ARM16.a</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Kernel/Library/GCC/libKernel_ARM16.a</locationURI>
+		</link>
+		<link>
+			<name>src/Kernel/Library/GCC/libKernel_ARM32.a</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Kernel/Library/GCC/libKernel_ARM32.a</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>
