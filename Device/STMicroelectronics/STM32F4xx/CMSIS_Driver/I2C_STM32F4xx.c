@@ -160,7 +160,7 @@ void delay(uint32_t us)
 static
 void SoftwareReset(I2C_TypeDef *reg)
 {
-  uint32_t _CR1   = reg->CR1;
+  uint32_t _CR1   = reg->CR1 & ~I2C_CR1_START;
   uint32_t _CR2   = reg->CR2;
   uint32_t _CCR   = reg->CCR;
   uint32_t _TRISE = reg->TRISE;
@@ -431,32 +431,35 @@ int32_t I2C_Control(uint32_t control, uint32_t arg, I2C_RESOURCES *i2c)
     {
       I2C_IO *io = &i2c->io;
 
+      GPIO_PinWrite(io->sda_port, io->sda_pin, GPIO_PIN_OUT_HIGH);
+      GPIO_PinWrite(io->scl_port, io->scl_pin, GPIO_PIN_OUT_HIGH);
+
       GPIO_PinConfig(io->sda_port, io->sda_pin, &I2C_pin_cfg_open_drain);
       GPIO_PinConfig(io->scl_port, io->scl_pin, &I2C_pin_cfg_open_drain);
 
-      GPIO_PinWrite(io->sda_port, io->sda_pin, GPIO_PIN_OUT_HIGH);
-      GPIO_PinWrite(io->scl_port, io->scl_pin, GPIO_PIN_OUT_HIGH);
-
       delay(I2C_CLR_TIMEOUT_US);
 
-      for (uint32_t i = 0; i < 9U; ++i) {
-        if (GPIO_PinRead(io->sda_port, io->sda_pin) == 1U) {
-          break;
+      if (GPIO_PinRead(io->sda_port, io->sda_pin) == 0U) {
+        for (uint32_t i = 0; i < 9U; ++i) {
+          GPIO_PinWrite(io->scl_port, io->scl_pin, GPIO_PIN_OUT_LOW);
+          delay(I2C_CLR_TIMEOUT_US);
+
+          GPIO_PinWrite(io->scl_port, io->scl_pin, GPIO_PIN_OUT_HIGH);
+          delay(I2C_CLR_TIMEOUT_US);
+
+          if (GPIO_PinRead(io->sda_port, io->sda_pin) == 1U) {
+            break;
+          }
         }
 
+        GPIO_PinWrite(io->scl_port, io->scl_pin, GPIO_PIN_OUT_LOW);
+        GPIO_PinWrite(io->sda_port, io->sda_pin, GPIO_PIN_OUT_LOW);
+        delay(I2C_CLR_TIMEOUT_US);
         GPIO_PinWrite(io->scl_port, io->scl_pin, GPIO_PIN_OUT_HIGH);
         delay(I2C_CLR_TIMEOUT_US);
-
-        GPIO_PinWrite(io->scl_port, io->scl_pin, GPIO_PIN_OUT_LOW);
+        GPIO_PinWrite(io->sda_port, io->sda_pin, GPIO_PIN_OUT_HIGH);
         delay(I2C_CLR_TIMEOUT_US);
       }
-
-      GPIO_PinWrite(io->sda_port, io->sda_pin, GPIO_PIN_OUT_LOW);
-      delay(I2C_CLR_TIMEOUT_US);
-      GPIO_PinWrite(io->scl_port, io->scl_pin, GPIO_PIN_OUT_HIGH);
-      delay(I2C_CLR_TIMEOUT_US);
-      GPIO_PinWrite(io->sda_port, io->sda_pin, GPIO_PIN_OUT_HIGH);
-      delay(I2C_CLR_TIMEOUT_US);
 
       SoftwareReset(reg);
 
@@ -475,7 +478,7 @@ int32_t I2C_Control(uint32_t control, uint32_t arg, I2C_RESOURCES *i2c)
       /* Generate stop */
       /* Master generates stop after the current byte transfer */
       /* Slave releases SCL and SDA after the current byte transfer */
-      i2c->reg->CR1 |= I2C_CR1_STOP;
+      reg->CR1 |= I2C_CR1_STOP;
 
       info->xfer.num = 0U;
       info->xfer.cnt = 0U;
@@ -542,18 +545,6 @@ int32_t I2C_MasterTransmit(uint32_t addr, const uint8_t *data, uint32_t num,
     return (ARM_DRIVER_ERROR_BUSY);
   }
 
-  if ((info->xfer.ctrl & XFER_CTRL_XPENDING) == 0U) {
-    /* New transfer */
-    const uint32_t timeout = GetSysTimerFreq() / 1000000U * I2C_BUSY_TIMEOUT_US;
-    const uint32_t tick = GetSysTimerCount();
-    /* Wait until bus released */
-    while ((reg->SR2 & I2C_SR2_BUSY) != 0U) {
-      if ((GetSysTimerCount() - tick) > timeout) {
-        return (ARM_DRIVER_ERROR_BUSY);
-      }
-    }
-  }
-
   info->status.busy             = 1U;
   info->status.mode             = 1U;
   info->status.direction        = 0U;
@@ -614,18 +605,6 @@ int32_t I2C_MasterReceive(uint32_t addr, uint8_t *data, uint32_t num,
 
   if (info->status.busy) {
     return (ARM_DRIVER_ERROR_BUSY);
-  }
-
-  if ((info->xfer.ctrl & XFER_CTRL_XPENDING) == 0U) {
-    /* New transfer */
-    const uint32_t timeout = GetSysTimerFreq() / 1000000U * I2C_BUSY_TIMEOUT_US;
-    const uint32_t tick = GetSysTimerCount();
-    /* Wait until bus released */
-    while ((reg->SR2 & I2C_SR2_BUSY) != 0U) {
-      if ((GetSysTimerCount() - tick) > timeout) {
-        return (ARM_DRIVER_ERROR_BUSY);
-      }
-    }
   }
 
   info->status.busy             = 1U;

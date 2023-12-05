@@ -39,7 +39,6 @@
  *  defines and macros (scope: module-local)
  ******************************************************************************/
 
-#define I2C_BUSY_TIMEOUT_US         1000
 #define I2C_CLR_TIMEOUT_US          5
 
 /* I2C1 configuration definitions */
