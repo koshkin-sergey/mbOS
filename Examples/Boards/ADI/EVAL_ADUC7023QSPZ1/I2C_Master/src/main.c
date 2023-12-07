@@ -87,32 +87,56 @@ void I2C_Callback(uint32_t event)
 }
 
 static
-int32_t TestTransferEvent(uint8_t *wr_buf, uint8_t wr_size,
-                          uint8_t *rd_buf, uint8_t rd_size)
+int32_t WaitTransferEvent(void)
 {
   uint32_t flags;
 
-  i2c->MasterTransmit(SLAVE_ADDR, wr_buf, wr_size, true);
-  /* Wait until transfer completed */
   flags = osEventFlagsWait(evf_i2c,
                            ARM_I2C_EVENT_TRANSFER_DONE |
                            ARM_I2C_EVENT_TRANSFER_INCOMPLETE,
                            osFlagsWaitAny,
                            I2C_TIMEOUT);
-  /* Check if all data transferred */
-  if ((flags & (ARM_I2C_EVENT_TRANSFER_INCOMPLETE | osFlagsError)) != 0U) {
+  if ((flags & osFlagsError) != 0U) {
+    if (flags == osFlagsErrorTimeout) {
+      i2c->Control(ARM_I2C_ABORT_TRANSFER, 0U);
+      i2c->Control(ARM_I2C_BUS_CLEAR, 0U);
+    }
     return (-1);
   }
 
-  i2c->MasterReceive(SLAVE_ADDR, rd_buf, rd_size, false);
-  /* Wait until transfer completed */
-  flags = osEventFlagsWait(evf_i2c,
-                           ARM_I2C_EVENT_TRANSFER_DONE |
-                           ARM_I2C_EVENT_TRANSFER_INCOMPLETE,
-                           osFlagsWaitAny,
-                           I2C_TIMEOUT);
   /* Check if all data transferred */
-  if ((flags & (ARM_I2C_EVENT_TRANSFER_INCOMPLETE | osFlagsError)) != 0U) {
+  if ((flags & ARM_I2C_EVENT_TRANSFER_INCOMPLETE) != 0U) {
+    return (-1);
+  }
+
+  return (0);
+}
+
+static
+int32_t TestTransferEvent(uint8_t *wr_buf, uint8_t wr_size,
+                          uint8_t *rd_buf, uint8_t rd_size)
+{
+  int32_t rc;
+
+  rc = i2c->MasterTransmit(SLAVE_ADDR, wr_buf, wr_size, true);
+  if (rc != ARM_DRIVER_OK) {
+    return (-1);
+  }
+
+  /* Wait until transfer completed */
+  rc = WaitTransferEvent();
+  if (rc != 0) {
+    return (-1);
+  }
+
+  rc = i2c->MasterReceive(SLAVE_ADDR, rd_buf, rd_size, false);
+  if (rc != ARM_DRIVER_OK) {
+    return (-1);
+  }
+
+  /* Wait until transfer completed */
+  rc = WaitTransferEvent();
+  if (rc != 0) {
     return (-1);
   }
 
@@ -120,22 +144,56 @@ int32_t TestTransferEvent(uint8_t *wr_buf, uint8_t wr_size,
 }
 
 static
-int32_t TestTransferPool(uint8_t *wr_buf, uint8_t wr_size,
-                         uint8_t *rd_buf, uint8_t rd_size)
+int32_t WaitTransferPool(void)
 {
-  i2c->MasterTransmit(SLAVE_ADDR, wr_buf, wr_size, true);
-  /* Wait until transfer completed */
-  while (i2c->GetStatus().busy != 0U);
-  /* Check if all data transferred */
-  if (i2c->GetDataCount() != wr_size) {
+  uint32_t timeout;
+  ARM_I2C_STATUS state;
+
+  timeout = osKernelGetTickCount() + I2C_TIMEOUT;
+
+  do {
+    state = i2c->GetStatus();
+    if (state.busy == 0U) {
+      break;
+    }
+  } while (time_before(osKernelGetTickCount(), timeout));
+
+  if (state.busy != 0U) {
+    i2c->Control(ARM_I2C_ABORT_TRANSFER, 0U);
+    i2c->Control(ARM_I2C_BUS_CLEAR, 0U);
     return (-1);
   }
 
-  i2c->MasterReceive(SLAVE_ADDR, rd_buf, rd_size, false);
+  return (0);
+}
+
+static
+int32_t TestTransferPool(uint8_t *wr_buf, uint8_t wr_size,
+                         uint8_t *rd_buf, uint8_t rd_size)
+{
+  int32_t rc;
+
+  rc = i2c->MasterTransmit(SLAVE_ADDR, wr_buf, wr_size, true);
+  if (rc != ARM_DRIVER_OK) {
+    return (-1);
+  }
+
   /* Wait until transfer completed */
-  while (i2c->GetStatus().busy != 0U);
+  rc = WaitTransferPool();
   /* Check if all data transferred */
-  if (i2c->GetDataCount() != rd_size) {
+  if (rc != 0 || i2c->GetDataCount() != wr_size) {
+    return (-1);
+  }
+
+  rc = i2c->MasterReceive(SLAVE_ADDR, rd_buf, rd_size, false);
+  if (rc != ARM_DRIVER_OK) {
+    return (-1);
+  }
+
+  /* Wait until transfer completed */
+  rc = WaitTransferPool();
+  /* Check if all data transferred */
+  if (rc != 0 || i2c->GetDataCount() != rd_size) {
     return (-1);
   }
 
@@ -173,7 +231,7 @@ __NO_RETURN static void main_proc(void *param)
   }
   /* Configure I2C Driver */
   i2c->PowerControl(ARM_POWER_FULL);
-  i2c->Control(ARM_I2C_BUS_SPEED, ARM_I2C_BUS_SPEED_FAST);
+  i2c->Control(ARM_I2C_BUS_SPEED, ARM_I2C_BUS_SPEED_STANDARD);
 
   uint8_t wr_buf[] = {0U};
   uint8_t rd_buf[16];
@@ -185,7 +243,7 @@ __NO_RETURN static void main_proc(void *param)
     else {
       TestTransferPool(&wr_buf[0], sizeof(wr_buf), &rd_buf[0], sizeof(rd_buf));
     }
-    osDelay(10U);
+    osDelay(5U);
   }
 }
 
