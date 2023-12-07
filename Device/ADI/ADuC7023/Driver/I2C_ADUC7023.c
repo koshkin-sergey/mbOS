@@ -54,7 +54,7 @@ static const ARM_I2C_CAPABILITIES DriverCapabilities = {
   0,           /* supports 10-bit addressing */
 };
 
-static const GPIO_PIN_CFG_t in_pin_cfg = {
+static const GPIO_PIN_CFG_t pin_cfg_gpio_in = {
     GPIO_PIN_FUNC_0, GPIO_MODE_INPUT, GPIO_PULL_DISABLE, GPIO_STRENGTH_MEDIUM
 };
 
@@ -63,11 +63,25 @@ static const GPIO_PIN_CFG_t in_pin_cfg = {
 static I2C_INFO I2C0_Info;
 
 static I2C_PIN I2C0_scl = {
-    I2C0_SCL_GPIO_PORT, I2C0_SCL_GPIO_PIN, I2C0_SCL_GPIO_FUNC
+  I2C0_SCL_GPIO_PORT,
+  I2C0_SCL_GPIO_PIN,
+  {
+    I2C0_SCL_GPIO_FUNC,
+    GPIO_MODE_INPUT,
+    GPIO_PULL_DISABLE,
+    GPIO_STRENGTH_MEDIUM,
+  }
 };
 
 static I2C_PIN I2C0_sda = {
-    I2C0_SDA_GPIO_PORT, I2C0_SDA_GPIO_PIN, I2C0_SDA_GPIO_FUNC
+  I2C0_SDA_GPIO_PORT,
+  I2C0_SDA_GPIO_PIN,
+  {
+    I2C0_SDA_GPIO_FUNC,
+    GPIO_MODE_INPUT,
+    GPIO_PULL_DISABLE,
+    GPIO_STRENGTH_MEDIUM,
+  }
 };
 
 static void I2C0_Master_IRQHandler(void);
@@ -97,11 +111,25 @@ static I2C_RESOURCES I2C0_Resources = {
 static I2C_INFO I2C1_Info;
 
 static I2C_PIN I2C1_scl = {
-    I2C1_SCL_GPIO_PORT, I2C1_SCL_GPIO_PIN, I2C1_SCL_GPIO_FUNC
+  I2C1_SCL_GPIO_PORT,
+  I2C1_SCL_GPIO_PIN,
+  {
+    I2C1_SCL_GPIO_FUNC,
+    GPIO_MODE_INPUT,
+    GPIO_PULL_DISABLE,
+    GPIO_STRENGTH_MEDIUM,
+  }
 };
 
 static I2C_PIN I2C1_sda = {
-    I2C1_SDA_GPIO_PORT, I2C1_SDA_GPIO_PIN, I2C1_SDA_GPIO_FUNC
+  I2C1_SDA_GPIO_PORT,
+  I2C1_SDA_GPIO_PIN,
+  {
+    I2C1_SDA_GPIO_FUNC,
+    GPIO_MODE_INPUT,
+    GPIO_PULL_DISABLE,
+    GPIO_STRENGTH_MEDIUM,
+  }
 };
 
 static void I2C1_Master_IRQHandler(void);
@@ -190,23 +218,19 @@ ARM_I2C_CAPABILITIES I2Cx_GetCapabilities(void)
 static
 int32_t I2C_Initialize(ARM_I2C_SignalEvent_t cb_event, I2C_RESOURCES *i2c)
 {
-  I2C_IO         *io;
-  GPIO_PIN_CFG_t  pin_cfg;
-  I2C_INFO       *info = i2c->info;
+  I2C_IO   *io;
+  I2C_INFO *info = i2c->info;
 
   if (info->flags & I2C_FLAG_INIT) {
     return (ARM_DRIVER_OK);
   }
 
-  io      = &i2c->io;
-  pin_cfg = in_pin_cfg;
+  io = &i2c->io;
 
   /* Configure SCL Pin */
-  pin_cfg.func = io->scl->func;
-  io->scl->gpio->PinConfig(io->scl->pin, &pin_cfg);
+  io->scl->gpio->PinConfig(io->scl->pin, &io->scl->cfg);
   /* Configure SDA Pin */
-  pin_cfg.func = io->sda->func;
-  io->sda->gpio->PinConfig(io->sda->pin, &pin_cfg);
+  io->sda->gpio->PinConfig(io->sda->pin, &io->sda->cfg);
 
   /* Reset Run-Time information structure */
   memset(info, 0x00, sizeof(I2C_INFO));
@@ -229,9 +253,9 @@ int32_t I2C_Uninitialize(I2C_RESOURCES *i2c)
   I2C_IO *io = &i2c->io;
 
   /* Unconfigure SCL Pin */
-  io->scl->gpio->PinConfig(io->scl->pin, &in_pin_cfg);
+  io->scl->gpio->PinConfig(io->scl->pin, &pin_cfg_gpio_in);
   /* Unconfigure SDA Pin */
-  io->sda->gpio->PinConfig(io->sda->pin, &in_pin_cfg);
+  io->sda->gpio->PinConfig(io->sda->pin, &pin_cfg_gpio_in);
 
   i2c->info->flags = 0U;
 
@@ -354,22 +378,6 @@ int32_t I2C_MasterTransmit(uint32_t       addr,
   tx->num  = num;
   tx->cnt  = 0U;
 
-  if ((info->xfer & XFER_MASTER) == 0U) {
-    /* New transfer, check the line is busy */
-    if ((reg->MSTA & I2CMSTA_BBUSY) != 0U) {
-      /* Bus is busy or locked */
-      info->status = I2C_STATUS_BUS_ERROR;
-
-      if (info->cb_event != NULL) {
-        info->cb_event(ARM_I2C_EVENT_TRANSFER_DONE       |
-                       ARM_I2C_EVENT_TRANSFER_INCOMPLETE |
-                       ARM_I2C_EVENT_BUS_ERROR);
-      }
-
-      return (ARM_DRIVER_OK);
-    }
-  }
-
   info->status = I2C_STATUS_BUSY | I2C_STATUS_MASTER;
   info->xfer = xfer_pending ? XFER_PENDING : 0U;
 
@@ -440,22 +448,6 @@ int32_t I2C_MasterReceive(uint32_t       addr,
   rx->data = data;
   rx->num  = num;
   rx->cnt  = 0U;
-
-  if ((info->xfer & XFER_MASTER) == 0U) {
-    /* New transfer, check the line is busy */
-    if ((reg->MSTA & I2CMSTA_BBUSY) != 0U) {
-      /* Bus is busy or locked */
-      info->status = I2C_STATUS_BUS_ERROR;
-
-      if (info->cb_event != NULL) {
-        info->cb_event(ARM_I2C_EVENT_TRANSFER_DONE       |
-                       ARM_I2C_EVENT_TRANSFER_INCOMPLETE |
-                       ARM_I2C_EVENT_BUS_ERROR);
-      }
-
-      return (ARM_DRIVER_OK);
-    }
-  }
 
   info->status = I2C_STATUS_BUSY | I2C_STATUS_MASTER | I2C_STATUS_RECEIVER;
   info->xfer = xfer_pending ? XFER_PENDING : 0U;
@@ -651,39 +643,39 @@ int32_t I2C_Control(uint32_t control, uint32_t arg, I2C_RESOURCES *i2c)
 
     case ARM_I2C_BUS_CLEAR:
     {
-      GPIO_PIN_CFG_t  pin_cfg;
       const I2C_PIN  *pin;
+      I2C_IO         *io = &i2c->io;
 
-      pin = i2c->io.sda;
-      pin_cfg = in_pin_cfg;
-      pin_cfg.mode = GPIO_MODE_OUTPUT;
-      pin->gpio->PinWrite(pin->pin, GPIO_PIN_OUT_LOW);
-      pin->gpio->PinConfig(pin->pin, &pin_cfg);
+      /* Configure SDA Pin as GPIO */
+      pin = io->sda;
+      pin->gpio->PinConfig(pin->pin, &pin_cfg_gpio_in);
 
-      pin = i2c->io.scl;
-      /* Configure SCL Pin as GPIO */
-      pin_cfg = in_pin_cfg;
-      pin->gpio->PinConfig(pin->pin, &pin_cfg);
-      pin->gpio->PinWrite(pin->pin, GPIO_PIN_OUT_LOW);
+      if (pin->gpio->PinRead(pin->pin) == 0U) {
+        GPIO_PIN_CFG_t pin_cfg = pin_cfg_gpio_in;
 
-      for (uint32_t i = 0; i < 20U; ++i) {
-        if ((i & 1U) == 0U) {
-        pin_cfg.mode = GPIO_MODE_OUTPUT;
+        /* Configure SCL Pin as GPIO */
+        pin = io->scl;
+        pin->gpio->PinConfig(pin->pin, &pin_cfg_gpio_in);
+        pin->gpio->PinWrite(pin->pin, GPIO_PIN_OUT_LOW);
+
+        for (uint32_t i = 0; i < 18U; ++i) {
+          if ((i & 1U) == 0U) {
+            pin_cfg.mode = GPIO_MODE_OUTPUT;
+          }
+          else {
+            pin_cfg.mode = GPIO_MODE_INPUT;
+          }
+
+          pin->gpio->PinConfig(pin->pin, &pin_cfg);
         }
-        else {
-        pin_cfg.mode = GPIO_MODE_INPUT;
-        }
 
-        pin->gpio->PinConfig(pin->pin, &pin_cfg);
+        /* Configure SCL Pin as I2C */
+        pin->gpio->PinConfig(pin->pin, &pin->cfg);
       }
 
-      /* Configure SCL Pin as  */
-      pin_cfg.func = pin->func;
-      pin->gpio->PinConfig(pin->pin, &pin_cfg);
-
-      pin = i2c->io.sda;
-      pin_cfg.func = pin->func;
-      pin->gpio->PinConfig(pin->pin, &pin_cfg);
+      /* Configure SDA Pin as I2C */
+      pin = io->sda;
+      pin->gpio->PinConfig(pin->pin, &pin->cfg);
     }
       break;
 
@@ -698,13 +690,13 @@ int32_t I2C_Control(uint32_t control, uint32_t arg, I2C_RESOURCES *i2c)
       (void)reg->SSTA;
       reg->SCON = val;
 
-      info->rx.num    = 0U;
-      info->rx.cnt    = 0U;
-      info->tx.num    = 0U;
-      info->tx.cnt    = 0U;
+      info->rx.num = 0U;
+      info->rx.cnt = 0U;
+      info->tx.num = 0U;
+      info->tx.cnt = 0U;
 
-      info->xfer = 0U;
-      info->status    = 0U;
+      info->xfer   = 0U;
+      info->status = 0U;
       break;
 
     default:
@@ -740,20 +732,20 @@ void I2C_Master_IRQHandler(I2C_RESOURCES *i2c)
   register uint32_t  ctrl;
   register uint32_t  event;
   uint8_t            data;
+  I2C_XFER_INFO     *xx;
   I2C_INFO          *info = i2c->info;
   I2C_t             *reg  = i2c->reg;
-  I2C_XFER_INFO     *rx   = &info->rx;
-  I2C_XFER_INFO     *tx   = &info->tx;
 
   ctrl  = reg->MCON;
   state = reg->MSTA;
   event = 0U;
 
   if ((ctrl & I2CMCON_MTENI) != 0U && (state & I2CMSTA_TXQ) != 0U) {
-    if (tx->cnt < tx->num) {
-      reg->MTX = tx->data[tx->cnt++];
+    xx = &info->tx;
+    if (xx->cnt < xx->num) {
+      reg->MTX = xx->data[xx->cnt++];
     }
-    if (tx->cnt == tx->num) {
+    if (xx->cnt == xx->num) {
       ctrl &= ~I2CMCON_MTENI;
       if ((info->xfer & XFER_PENDING) != 0U) {
         info->xfer |= XFER_MASTER_TX;
@@ -762,7 +754,7 @@ void I2C_Master_IRQHandler(I2C_RESOURCES *i2c)
         event = ARM_I2C_EVENT_TRANSFER_DONE;
       }
       reg->MCON = (uint16_t)ctrl;
-      if (tx->num == 1U) {
+      if (xx->num == 1U) {
         reg->FSTA = I2CFSTA_FMTX;
       }
     }
@@ -770,10 +762,11 @@ void I2C_Master_IRQHandler(I2C_RESOURCES *i2c)
 
   if ((ctrl & I2CMCON_MRENI) != 0U && (state & I2CMSTA_RXQ) != 0U) {
     data = (uint8_t)reg->MRX;
-    if (rx->cnt < rx->num) {
-      rx->data[rx->cnt++] = data;
+    xx = &info->rx;
+    if (xx->cnt < xx->num) {
+      xx->data[xx->cnt++] = data;
 #if 0
-      if (rx->cnt == rx->num) {
+      if (xx->cnt == xx->num) {
         ctrl &= ~I2CMCON_MRENI;
         if ((info->xfer & XFER_PENDING) != 0U) {
           info->xfer |= XFER_MASTER_RX;
@@ -800,17 +793,25 @@ void I2C_Master_IRQHandler(I2C_RESOURCES *i2c)
       info->status &= ~I2C_STATUS_BUSY;
       event = ARM_I2C_EVENT_TRANSFER_DONE;
 
-      if ((state & (I2CMSTA_NADDR | I2CMSTA_NDATA)) != 0U) {
-        reg->FSTA = I2CFSTA_FMTX;
-        event |= ARM_I2C_EVENT_TRANSFER_INCOMPLETE;
+      if ((info->status & I2C_STATUS_RECEIVER) == 0U) {
+        xx = &info->tx;
+        if ((state & (I2CMSTA_NADDR | I2CMSTA_NDATA)) != 0U) {
+          if ((state & I2CMSTA_NADDR) != 0U) {
+            event |= ARM_I2C_EVENT_ADDRESS_NACK;
+            xx->cnt = 0U;
+          }
+          else {
+            xx->cnt -= GetFifoCntMasterTx(reg) + 1U;
+          }
+          reg->FSTA = I2CFSTA_FMTX;
+        }
+      }
+      else {
+        xx = &info->rx;
+      }
 
-        if ((state & I2CMSTA_NADDR) != 0U) {
-          event |= ARM_I2C_EVENT_ADDRESS_NACK;
-          tx->cnt = 0U;
-        }
-        else {
-          tx->cnt -= GetFifoCntMasterTx(reg) + 1U;
-        }
+      if (xx->cnt < xx->num) {
+        event |= ARM_I2C_EVENT_TRANSFER_INCOMPLETE;
       }
 
       /* Disable master */
