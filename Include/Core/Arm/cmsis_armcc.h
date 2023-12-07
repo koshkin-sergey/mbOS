@@ -94,6 +94,13 @@
 #endif
 
 /* ##########################  Core Instruction Access  ######################### */
+
+/**
+  \brief   No Operation
+  \details No Operation does nothing. This instruction can be used for code alignment purposes.
+ */
+#define __NOP                             __nop
+
 /**
   \brief   Reverse byte order (32 bit)
   \details Reverses the byte order in unsigned integer value. For example, 0x12345678 becomes 0x78563412.

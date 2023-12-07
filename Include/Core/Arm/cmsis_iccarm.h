@@ -249,6 +249,7 @@
   }
 
   #define __ROR     __iar_builtin_ROR
+  #define __NOP     __iar_builtin_no_operation
 
 #else /* __ICCARM_INTRINSICS_VERSION__ == 2 */
 
@@ -260,6 +261,8 @@
 
   #pragma diag_suppress=Pe940
   #pragma diag_suppress=Pe177
+
+  #define __NOP           __no_operation
 
   __IAR_FT void __set_mode(uint32_t mode)
   {

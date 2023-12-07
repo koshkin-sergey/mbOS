@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2021-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -155,6 +155,13 @@ __STATIC_FORCEINLINE __NO_RETURN void __cmsis_start(void)
 #endif
 
 /* ##########################  Core Instruction Access  ######################### */
+
+/**
+  \brief   No Operation
+  \details No Operation does nothing. This instruction can be used for code alignment purposes.
+ */
+#define __NOP()                             __ASM volatile ("nop")
+
 /**
   \brief   Reverse byte order (32 bit)
   \details Reverses the byte order in unsigned integer value. For example, 0x12345678 becomes 0x78563412.
