@@ -1,9 +1,3 @@
-/******************************************************************************
- * @file    IWDG_STM32F7xx.h
- * @brief   This file provides IWDG driver for STMicroelectronics STM32F7xx.
- * @author  Sergey Koshkin
- * @version V1.0.0
- ******************************************************************************/
 /*
  * Copyright (C) 2020 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved.

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2019-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -23,8 +23,8 @@
 
 #include <string.h>
 
-#include "asm/stm32f7xx.h"
-#include "asm/QSPI_STM32F7xx.h"
+#include <asm/stm32f7xx.h>
+#include <Driver/QSPI_STM32F7xx.h>
 
 #if defined(USE_QSPI0)
 

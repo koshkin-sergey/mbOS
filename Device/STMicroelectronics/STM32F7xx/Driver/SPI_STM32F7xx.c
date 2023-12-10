@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2020 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2019-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -28,18 +28,10 @@
     defined(USE_SPI4) || defined(USE_SPI5) || defined(USE_SPI6)
 
 /*******************************************************************************
- *  external declarations
- ******************************************************************************/
-
-/*******************************************************************************
  *  defines and macros (scope: module-local)
  ******************************************************************************/
 
 #define ARM_SPI_DRV_VERSION    ARM_DRIVER_VERSION_MAJOR_MINOR(1, 0) /* driver version */
-
-/*******************************************************************************
- *  typedefs and structures (scope: module-local)
- ******************************************************************************/
 
 /*******************************************************************************
  *  function prototypes (scope: module-local)

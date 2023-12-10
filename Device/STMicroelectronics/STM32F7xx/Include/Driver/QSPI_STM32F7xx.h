@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2019-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -24,14 +24,14 @@
  *  includes
  ******************************************************************************/
 
-#include "stm32f7xx.h"
-#include "RCC_STM32F7xx.h"
-#include "GPIO_STM32F7xx.h"
-#include "DMA_STM32F7xx.h"
+#include <asm/stm32f7xx.h>
+#include <Driver/RCC_STM32F7xx.h>
+#include <Driver/GPIO_STM32F7xx.h>
+#include <Driver/DMA_STM32F7xx.h>
 
-#include "Driver/Driver_QSPI.h"
+#include <Driver/Driver_QSPI.h>
 
-#include "device_config.h"
+#include <device_config.h>
 
 /*******************************************************************************
  *  defines and macros (scope: module-local)

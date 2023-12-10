@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2019-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -27,7 +27,7 @@
 #include <stdint.h>
 #include <stddef.h>
 
-#include "stm32f7xx.h"
+#include <asm/stm32f7xx.h>
 
 /*******************************************************************************
  *  defines and macros
@@ -269,5 +269,3 @@ void DMA_Abort(DMA_Resources_t *res);
 void DMA_WaitAbort(DMA_Resources_t *res);
 
 #endif /* DMA_STM32F7XX_H_ */
-
-/* ----------------------------- End of file ---------------------------------*/

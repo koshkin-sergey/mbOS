@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2019-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -25,7 +25,7 @@
  ******************************************************************************/
 
 #include <stdint.h>
-#include "stm32f7xx.h"
+#include <asm/stm32f7xx.h>
 
 /*******************************************************************************
  *  defines and macros

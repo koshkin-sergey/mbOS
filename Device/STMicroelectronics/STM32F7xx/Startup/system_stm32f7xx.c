@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2021 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2019-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -20,6 +20,10 @@
  ******************************************************************************/
 
 #include "asm/system_stm32f7xx.h"
+
+/*******************************************************************************
+ *  global variable definitions  (scope: module-exported)
+ ******************************************************************************/
 
 uint32_t SystemCoreClock;           /*!< System Clock Frequency (Core Clock)  */
 
