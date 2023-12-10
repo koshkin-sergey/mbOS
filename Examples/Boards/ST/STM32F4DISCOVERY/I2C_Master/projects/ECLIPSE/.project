@@ -75,11 +75,6 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>src/Device/STMicroelectronics/STM32F4xx/CMSIS_Driver</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
 			<name>src/Device/STMicroelectronics/STM32F4xx/Driver</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
@@ -95,59 +90,14 @@
 			<locationURI>PARENT-7-PROJECT_LOC/Kernel/Library/GCC/libKernel_CM4F.a</locationURI>
 		</link>
 		<link>
-			<name>src/Device/STMicroelectronics/STM32F4xx/CMSIS_Driver/I2C_STM32F4xx.c</name>
-			<type>1</type>
-			<locationURI>PARENT-7-PROJECT_LOC/Device/STMicroelectronics/STM32F4xx/CMSIS_Driver/I2C_STM32F4xx.c</locationURI>
-		</link>
-		<link>
-			<name>src/Device/STMicroelectronics/STM32F4xx/CMSIS_Driver/I2C_STM32F4xx.h</name>
-			<type>1</type>
-			<locationURI>PARENT-7-PROJECT_LOC/Device/STMicroelectronics/STM32F4xx/CMSIS_Driver/I2C_STM32F4xx.h</locationURI>
-		</link>
-		<link>
-			<name>src/Device/STMicroelectronics/STM32F4xx/CMSIS_Driver/I2S_STM32F4xx.c</name>
-			<type>1</type>
-			<locationURI>PARENT-7-PROJECT_LOC/Device/STMicroelectronics/STM32F4xx/CMSIS_Driver/I2S_STM32F4xx.c</locationURI>
-		</link>
-		<link>
-			<name>src/Device/STMicroelectronics/STM32F4xx/CMSIS_Driver/I2S_STM32F4xx.h</name>
-			<type>1</type>
-			<locationURI>PARENT-7-PROJECT_LOC/Device/STMicroelectronics/STM32F4xx/CMSIS_Driver/I2S_STM32F4xx.h</locationURI>
-		</link>
-		<link>
-			<name>src/Device/STMicroelectronics/STM32F4xx/CMSIS_Driver/SPI_STM32F4xx.c</name>
-			<type>1</type>
-			<locationURI>PARENT-7-PROJECT_LOC/Device/STMicroelectronics/STM32F4xx/CMSIS_Driver/SPI_STM32F4xx.c</locationURI>
-		</link>
-		<link>
-			<name>src/Device/STMicroelectronics/STM32F4xx/CMSIS_Driver/SPI_STM32F4xx.h</name>
-			<type>1</type>
-			<locationURI>PARENT-7-PROJECT_LOC/Device/STMicroelectronics/STM32F4xx/CMSIS_Driver/SPI_STM32F4xx.h</locationURI>
-		</link>
-		<link>
-			<name>src/Device/STMicroelectronics/STM32F4xx/CMSIS_Driver/USART_STM32F4xx.c</name>
-			<type>1</type>
-			<locationURI>PARENT-7-PROJECT_LOC/Device/STMicroelectronics/STM32F4xx/CMSIS_Driver/USART_STM32F4xx.c</locationURI>
-		</link>
-		<link>
-			<name>src/Device/STMicroelectronics/STM32F4xx/CMSIS_Driver/USART_STM32F4xx.h</name>
-			<type>1</type>
-			<locationURI>PARENT-7-PROJECT_LOC/Device/STMicroelectronics/STM32F4xx/CMSIS_Driver/USART_STM32F4xx.h</locationURI>
-		</link>
-		<link>
-			<name>src/Device/STMicroelectronics/STM32F4xx/Driver/DMA_STM32F4xx.c</name>
-			<type>1</type>
-			<locationURI>PARENT-7-PROJECT_LOC/Device/STMicroelectronics/STM32F4xx/Driver/DMA_STM32F4xx.c</locationURI>
-		</link>
-		<link>
-			<name>src/Device/STMicroelectronics/STM32F4xx/Driver/EXTI_STM32F4xx.c</name>
-			<type>1</type>
-			<locationURI>PARENT-7-PROJECT_LOC/Device/STMicroelectronics/STM32F4xx/Driver/EXTI_STM32F4xx.c</locationURI>
-		</link>
-		<link>
 			<name>src/Device/STMicroelectronics/STM32F4xx/Driver/GPIO_STM32F4xx.c</name>
 			<type>1</type>
 			<locationURI>PARENT-7-PROJECT_LOC/Device/STMicroelectronics/STM32F4xx/Driver/GPIO_STM32F4xx.c</locationURI>
+		</link>
+		<link>
+			<name>src/Device/STMicroelectronics/STM32F4xx/Driver/I2C_STM32F4xx.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Device/STMicroelectronics/STM32F4xx/Driver/I2C_STM32F4xx.c</locationURI>
 		</link>
 		<link>
 			<name>src/Device/STMicroelectronics/STM32F4xx/Driver/RCC_STM32F4xx.c</name>
