@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2019-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -30,12 +30,13 @@ typedef void( *pFunc )( void );
 extern uint32_t __INITIAL_SP;
 
 extern __NO_RETURN void __PROGRAM_START(void);
+extern             void _exit(int code);
 
 /*----------------------------------------------------------------------------
   Internal References
  *----------------------------------------------------------------------------*/
-void __NO_RETURN Default_Handler(void);
-void __NO_RETURN Reset_Handler  (void);
+__NO_RETURN void Reset_Handler  (void);
+            void Default_Handler(void);
 
 /*----------------------------------------------------------------------------
   Exception / Interrupt Handler
@@ -134,16 +135,42 @@ extern const pFunc __VECTOR_TABLE[];
 /*----------------------------------------------------------------------------
   Reset Handler called on controller reset
  *----------------------------------------------------------------------------*/
+__NO_RETURN
 void Reset_Handler(void)
 {
   SystemInit();                      /* CMSIS System Initialization           */
   __PROGRAM_START();                 /* Enter PreMain (C library entry point) */
 }
 
-/*----------------------------------------------------------------------------
-  Default Handler for Exceptions / Interrupts
- *----------------------------------------------------------------------------*/
+#if defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
+  #pragma clang diagnostic push
+  #pragma clang diagnostic ignored "-Wmissing-noreturn"
+  #pragma clang diagnostic ignored "-Wunreachable-code"
+#endif
+
+/**
+ * @brief       Default Handler for Exceptions / Interrupts.
+ */
 void Default_Handler(void)
 {
-  while(1);
+  for (;;);
 }
+
+/**
+ * @brief       On Release, call the hardware reset procedure.
+ *              On Debug we just enter an infinite loop,
+ *              to be used as landmark when halting the debugger.
+ * @param[in]   code
+ */
+void _exit(int code __attribute__((unused)))
+{
+#if !defined (DEBUG)
+  NVIC_SystemReset();
+#endif
+
+  for (;;);
+}
+
+#if defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
+  #pragma clang diagnostic pop
+#endif
