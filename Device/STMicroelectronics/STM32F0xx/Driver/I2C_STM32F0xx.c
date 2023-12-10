@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2017-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -21,15 +21,14 @@
  *  includes
  ******************************************************************************/
 
-#include <string.h>
 #include "I2C_STM32F0xx.h"
-#include "asm/stm32f0xx.h"
-#include "asm/GPIO_STM32F0xx.h"
-#include "asm/RCC_STM32F0xx.h"
 
-/*******************************************************************************
- *  external declarations
- ******************************************************************************/
+#include <string.h>
+#include <asm/stm32f0xx.h>
+#include <Driver/GPIO_STM32F0xx.h>
+#include <Driver/RCC_STM32F0xx.h>
+
+#if defined(USE_I2C1) || defined(USE_I2C2)
 
 /*******************************************************************************
  *  defines and macros (scope: module-local)
@@ -49,10 +48,6 @@
 #define FST_MODE_SCLDEL       4UL   // 4*tI2CCLK = 500 ns
 
 #define ARM_I2C_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(1,0) /* driver version */
-
-/*******************************************************************************
- *  typedefs and structures (scope: module-local)
- ******************************************************************************/
 
 /*******************************************************************************
  *  global variable definitions (scope: module-local)
@@ -125,10 +120,6 @@ static I2C_RESOURCES I2C2_Resources = {
 #endif /* HAL_I2C2 */
 
 /*******************************************************************************
- *  function prototypes (scope: module-local)
- ******************************************************************************/
-
-/*******************************************************************************
  *  function implementations (scope: module-local)
  ******************************************************************************/
 
@@ -147,7 +138,7 @@ uint32_t GetI2CCLK(I2C_RESOURCES *i2c)
 
   clk = RCC_GetFreq(freq_type) / 1000000;
 
-  return clk;
+  return (clk);
 }
 
 /**
@@ -158,7 +149,7 @@ uint32_t GetI2CCLK(I2C_RESOURCES *i2c)
 static
 ARM_DRIVER_VERSION I2C_GetVersion(void)
 {
-  return DriverVersion;
+  return (DriverVersion);
 }
 
 /**
@@ -169,7 +160,7 @@ ARM_DRIVER_VERSION I2C_GetVersion(void)
 static
 ARM_I2C_CAPABILITIES I2C_GetCapabilities(void)
 {
-  return DriverCapabilities;
+  return (DriverCapabilities);
 }
 
 /**
@@ -182,8 +173,9 @@ ARM_I2C_CAPABILITIES I2C_GetCapabilities(void)
 static
 int32_t I2Cx_Initialize(ARM_I2C_SignalEvent_t cb_event, I2C_RESOURCES *i2c)
 {
-  if (i2c->info->flags & I2C_FLAG_INIT)
-    return ARM_DRIVER_OK;
+  if (i2c->info->flags & I2C_FLAG_INIT) {
+    return (ARM_DRIVER_OK);
+  }
 
   I2C_IO *io = &i2c->io;
   I2C_INFO *info = i2c->info;
@@ -203,7 +195,7 @@ int32_t I2Cx_Initialize(ARM_I2C_SignalEvent_t cb_event, I2C_RESOURCES *i2c)
   info->cb_event = cb_event;
   info->flags    = I2C_FLAG_INIT;
 
-  return ARM_DRIVER_OK;
+  return (ARM_DRIVER_OK);
 }
 
 /**
@@ -224,7 +216,7 @@ int32_t I2Cx_Uninitialize(I2C_RESOURCES *i2c)
 
   i2c->info->flags = 0U;
 
-  return ARM_DRIVER_OK;
+  return (ARM_DRIVER_OK);
 }
 
 /**
@@ -266,11 +258,13 @@ int32_t I2Cx_PowerControl(ARM_POWER_STATE state, I2C_RESOURCES *i2c)
       break;
 
     case ARM_POWER_FULL:
-      if ((info->flags & I2C_FLAG_INIT) == 0U)
-        return ARM_DRIVER_ERROR;
+      if ((info->flags & I2C_FLAG_INIT) == 0U) {
+        return (ARM_DRIVER_ERROR);
+      }
 
-      if ((info->flags & I2C_FLAG_POWER) != 0U)
-        return ARM_DRIVER_OK;
+      if ((info->flags & I2C_FLAG_POWER) != 0U) {
+        return (ARM_DRIVER_OK);
+      }
 
       /* Enable I2C clock */
       RCC->APB1ENR |= i2c->rcc_mask;
@@ -293,15 +287,19 @@ int32_t I2Cx_PowerControl(ARM_POWER_STATE state, I2C_RESOURCES *i2c)
             I2C_CR1_ADDRIE ; /* Address match interrupt enabled     */
 
       /* Enable IRQ/DMA rx/tx requests */
-      if (i2c->dma_rx == NULL)
+      if (i2c->dma_rx == NULL) {
         cr1 |= I2C_CR1_RXIE;
-      else
+      }
+      else {
         cr1 |= I2C_CR1_RXDMAEN;
+      }
 
-      if (i2c->dma_tx == NULL)
+      if (i2c->dma_tx == NULL) {
         cr1 |= I2C_CR1_TXIE;
-      else
+      }
+      else {
         cr1 |= I2C_CR1_TXDMAEN;
+      }
 
       /* Apply setup and enable peripheral */
       reg->CR1 = cr1 | I2C_CR1_PE;
@@ -311,10 +309,10 @@ int32_t I2Cx_PowerControl(ARM_POWER_STATE state, I2C_RESOURCES *i2c)
       break;
 
     default:
-      return ARM_DRIVER_ERROR_UNSUPPORTED;
+      return (ARM_DRIVER_ERROR_UNSUPPORTED);
   }
 
-  return ARM_DRIVER_OK;
+  return (ARM_DRIVER_OK);
 }
 
 /**
@@ -332,7 +330,7 @@ int32_t I2Cx_Control(uint32_t control, uint32_t arg, I2C_RESOURCES *i2c)
 
   if ((info->flags & I2C_FLAG_POWER) == 0U) {
     /* I2C not powered */
-    return ARM_DRIVER_ERROR;
+    return (ARM_DRIVER_ERROR);
   }
 
   switch (control) {
@@ -368,8 +366,9 @@ int32_t I2Cx_Control(uint32_t control, uint32_t arg, I2C_RESOURCES *i2c)
       uint32_t i2cclk = GetI2CCLK(i2c);
       int32_t presc = ((T_I2CCLK * i2cclk / 1000) - 1);
 
-      if (presc < 0)
-        return ARM_DRIVER_ERROR_UNSUPPORTED;
+      if (presc < 0) {
+        return (ARM_DRIVER_ERROR_UNSUPPORTED);
+      }
 
       switch (arg) {
       case ARM_I2C_BUS_SPEED_STANDARD:
@@ -381,7 +380,7 @@ int32_t I2Cx_Control(uint32_t control, uint32_t arg, I2C_RESOURCES *i2c)
             (FST_MODE_SDADEL << 16) | ((FST_MODE_SCLH-1) << 8) | (FST_MODE_SCLL-1));
         break;
       default:
-        return ARM_DRIVER_ERROR_UNSUPPORTED;
+        return (ARM_DRIVER_ERROR_UNSUPPORTED);
       }
 
       reg->CR1 &= ~I2C_CR1_PE;
@@ -394,16 +393,16 @@ int32_t I2Cx_Control(uint32_t control, uint32_t arg, I2C_RESOURCES *i2c)
     break;
 
     case ARM_I2C_BUS_CLEAR:
-      return ARM_DRIVER_ERROR_UNSUPPORTED;
+      return (ARM_DRIVER_ERROR_UNSUPPORTED);
 
     case ARM_I2C_ABORT_TRANSFER:
-      return ARM_DRIVER_ERROR_UNSUPPORTED;
+      return (ARM_DRIVER_ERROR_UNSUPPORTED);
 
     default:
-      return ARM_DRIVER_ERROR_UNSUPPORTED;
+      return (ARM_DRIVER_ERROR_UNSUPPORTED);
   }
 
-  return ARM_DRIVER_OK;
+  return (ARM_DRIVER_OK);
 }
 
 /**
@@ -419,22 +418,23 @@ static
 int32_t I2Cx_MasterTransmit(uint32_t addr, const uint8_t *data, uint32_t num,
     bool xfer_pending, I2C_RESOURCES *i2c)
 {
-  uint32_t cr2, cnt;
+  uint32_t cr2;
+  uint32_t cnt;
   bool restart;
   I2C_INFO *info = i2c->info;
   I2C_TypeDef *i2c_reg = i2c->reg;
 
   if ((data == NULL) || (num == 0U)) {
-    return ARM_DRIVER_ERROR_PARAMETER;
+    return (ARM_DRIVER_ERROR_PARAMETER);
   }
 
   if ((addr & ~(ARM_I2C_ADDRESS_10BIT | ARM_I2C_ADDRESS_GC)) > 0x3FFU) {
-    return ARM_DRIVER_ERROR_PARAMETER;
+    return (ARM_DRIVER_ERROR_PARAMETER);
   }
 
   if (!(info->flags & I2C_FLAG_SETUP)) {
     /* Driver not yet configured */
-    return ARM_DRIVER_ERROR;
+    return (ARM_DRIVER_ERROR);
   }
 
   if (info->status.busy) {
@@ -495,7 +495,7 @@ int32_t I2Cx_MasterTransmit(uint32_t addr, const uint8_t *data, uint32_t num,
   /* Enable transfer complete interrupt */
   i2c_reg->CR1 |= I2C_CR1_TCIE;
 
-  return ARM_DRIVER_OK;
+  return (ARM_DRIVER_OK);
 }
 
 /**
@@ -511,24 +511,28 @@ static
 int32_t I2Cx_MasterReceive(uint32_t addr, uint8_t *data, uint32_t num,
     bool xfer_pending, I2C_RESOURCES *i2c)
 {
-  uint32_t cr2, cnt;
+  uint32_t cr2;
+  uint32_t cnt;
   bool restart;
   I2C_INFO *info = i2c->info;
   I2C_TypeDef *i2c_reg = i2c->reg;
 
-  if ((data == NULL) || (num == 0U))
-    return ARM_DRIVER_ERROR_PARAMETER;
+  if ((data == NULL) || (num == 0U)) {
+    return (ARM_DRIVER_ERROR_PARAMETER);
+  }
 
-  if ((addr & ~(ARM_I2C_ADDRESS_10BIT | ARM_I2C_ADDRESS_GC)) > 0x3FFU)
-    return ARM_DRIVER_ERROR_PARAMETER;
+  if ((addr & ~(ARM_I2C_ADDRESS_10BIT | ARM_I2C_ADDRESS_GC)) > 0x3FFU) {
+    return (ARM_DRIVER_ERROR_PARAMETER);
+  }
 
   if (!(info->flags & I2C_FLAG_SETUP)) {
     /* Driver not yet configured */
-    return ARM_DRIVER_ERROR;
+    return (ARM_DRIVER_ERROR);
   }
 
-  if (info->status.busy)
+  if (info->status.busy) {
     return (ARM_DRIVER_ERROR_BUSY);
+  }
 
   restart = (info->xfer.ctrl & XFER_CTRL_RESTART) != 0U;
 
@@ -584,7 +588,7 @@ int32_t I2Cx_MasterReceive(uint32_t addr, uint8_t *data, uint32_t num,
   /* Enable transfer complete interrupt */
   i2c_reg->CR1 |= I2C_CR1_TCIE;
 
-  return ARM_DRIVER_OK;
+  return (ARM_DRIVER_OK);
 }
 
 /**
@@ -604,7 +608,7 @@ int32_t I2Cx_SlaveTransmit(const uint8_t *data, uint32_t num, I2C_RESOURCES *i2c
   I2C_TypeDef *i2c_reg = i2c->reg;
 
   if ((data == NULL) || (num == 0U)) {
-    return ARM_DRIVER_ERROR_PARAMETER;
+    return (ARM_DRIVER_ERROR_PARAMETER);
   }
 
   if (info->status.busy) {
@@ -628,7 +632,7 @@ int32_t I2Cx_SlaveTransmit(const uint8_t *data, uint32_t num, I2C_RESOURCES *i2c
     i2c_reg->CR2 = (255 << 16) | I2C_CR2_RELOAD;
   }
 
-  return ARM_DRIVER_OK;
+  return (ARM_DRIVER_OK);
 }
 
 /**
@@ -648,7 +652,7 @@ int32_t I2Cx_SlaveReceive(uint8_t *data, uint32_t num, I2C_RESOURCES *i2c)
   I2C_TypeDef *i2c_reg = i2c->reg;
 
   if ((data == NULL) || (num == 0U)) {
-    return ARM_DRIVER_ERROR_PARAMETER;
+    return (ARM_DRIVER_ERROR_PARAMETER);
   }
 
   if (info->status.busy) {
@@ -672,7 +676,7 @@ int32_t I2Cx_SlaveReceive(uint8_t *data, uint32_t num, I2C_RESOURCES *i2c)
     i2c_reg->CR2 = (255 << 16) | I2C_CR2_RELOAD;
   }
 
-  return ARM_DRIVER_OK;
+  return (ARM_DRIVER_OK);
 }
 
 /**
@@ -684,7 +688,7 @@ int32_t I2Cx_SlaveReceive(uint8_t *data, uint32_t num, I2C_RESOURCES *i2c)
 static
 int32_t I2Cx_GetDataCount(I2C_RESOURCES *i2c)
 {
-  return i2c->info->xfer.cnt;
+  return (i2c->info->xfer.cnt);
 }
 
 /**
@@ -695,7 +699,7 @@ int32_t I2Cx_GetDataCount(I2C_RESOURCES *i2c)
 static
 ARM_I2C_STATUS I2Cx_GetStatus(I2C_RESOURCES *i2c)
 {
-  return i2c->info->status;
+  return (i2c->info->status);
 }
 
 /**
@@ -1180,8 +1184,4 @@ ARM_DRIVER_I2C Driver_I2C2 = {
 };
 #endif
 
-/*******************************************************************************
- *  function implementations (scope: module-exported)
- ******************************************************************************/
-
-/* ----------------------------- End of file ---------------------------------*/
+#endif /* defined(USE_I2C1) || defined(USE_I2C2) */

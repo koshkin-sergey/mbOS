@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2019-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -22,9 +22,10 @@
  ******************************************************************************/
 
 #include "USART_STM32F0xx.h"
-#include "asm/GPIO_STM32F0xx.h"
-#include "asm/RCC_STM32F0xx.h"
-#include "asm/stm32f0xx.h"
+
+#include <Driver/GPIO_STM32F0xx.h>
+#include <Driver/RCC_STM32F0xx.h>
+#include <asm/stm32f0xx.h>
 
 #if defined(USE_USART1) || defined(USE_USART2) || defined(USE_USART3) || \
     defined(USE_USART4) || defined(USE_USART5) || defined(USE_USART6) || \

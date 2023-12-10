@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2017-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -26,8 +26,8 @@
 
 #include <stdbool.h>
 
-#include "Driver/Driver_I2C.h"
-#include "device_config.h"
+#include <Driver/Driver_I2C.h>
+#include <device_config.h>
 
 /*******************************************************************************
  *  defines and macros (scope: module-local)

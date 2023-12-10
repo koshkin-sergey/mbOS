@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2017-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -26,7 +26,7 @@
 
 #include <stdint.h>
 
-#include "stm32f0xx.h"
+#include <asm/stm32f0xx.h>
 
 /*******************************************************************************
  *  defines and macros
@@ -194,10 +194,6 @@ typedef enum {
 } RCC_Periph_t;
 
 /*******************************************************************************
- *  exported variables
- ******************************************************************************/
-
-/*******************************************************************************
  *  exported function prototypes
  ******************************************************************************/
 
@@ -249,5 +245,3 @@ uint32_t RCC_GetStatePeriph(RCC_Periph_t periph);
 void RCC_ResetPeriph(RCC_Periph_t periph);
 
 #endif /* RCC_STM32F0XX_H_ */
-
-/* ----------------------------- End of file ---------------------------------*/

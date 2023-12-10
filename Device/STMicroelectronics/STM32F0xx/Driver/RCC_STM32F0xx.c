@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2017-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -21,17 +21,8 @@
  *  includes
  ******************************************************************************/
 
-#include "asm/RCC_STM32F0xx.h"
-
-#include "device_config.h"
-
-/*******************************************************************************
- *  external declarations
- ******************************************************************************/
-
-/*******************************************************************************
- *  defines and macros (scope: module-local)
- ******************************************************************************/
+#include <Driver/RCC_STM32F0xx.h>
+#include <device_config.h>
 
 /*******************************************************************************
  *  typedefs and structures (scope: module-local)
@@ -43,10 +34,6 @@ typedef struct {
 } Reg_Mask_t;
 
 /*******************************************************************************
- *  global variable definitions  (scope: module-exported)
- ******************************************************************************/
-
-/*******************************************************************************
  *  global variable definitions (scope: module-local)
  ******************************************************************************/
 
@@ -55,10 +42,6 @@ uint8_t AHBPrescTable[16] = {0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 6, 7, 8, 9};
 
 static const
 uint8_t APBPrescTable[8] = {0, 0, 0, 0, 1, 2, 3, 4};
-
-/*******************************************************************************
- *  function prototypes (scope: module-local)
- ******************************************************************************/
 
 /*******************************************************************************
  *  function implementations (scope: module-local)
@@ -174,7 +157,8 @@ uint32_t RCC_GetFreq(RCC_FREQ_t type)
     return (RTE_HSE);
   }
 
-  uint32_t pllmull  = 0U, predivfactor = 0U;
+  uint32_t pllmull  = 0U;
+  uint32_t predivfactor = 0U;
   uint32_t sysclk   = 0U;
   uint32_t rcc_cfgr = RCC->CFGR;
 
@@ -258,7 +242,7 @@ uint32_t RCC_GetPeriphFreq(RCC_Periph_t periph)
     type = RCC_FREQ_APB;
   }
 
-  return RCC_GetFreq(type);
+  return (RCC_GetFreq(type));
 }
 
 /**
@@ -297,7 +281,7 @@ uint32_t RCC_GetStatePeriph(RCC_Periph_t periph)
 
   GetClockEnableReg(periph, &tmp);
 
-  return (uint32_t)(*tmp.reg & tmp.mask);
+  return ((uint32_t)(*tmp.reg & tmp.mask));
 }
 
 /**
