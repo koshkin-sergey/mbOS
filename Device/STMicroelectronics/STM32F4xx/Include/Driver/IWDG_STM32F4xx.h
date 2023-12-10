@@ -1,9 +1,3 @@
-/******************************************************************************
- * @file    IWDG_STM32F4xx.h
- * @brief   This file provides IWDG driver for STMicroelectronics STM32F4xx.
- * @author  Sergey Koshkin
- * @version V1.0.0
- ******************************************************************************/
 /*
  * Copyright (C) 2023 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved.
@@ -23,14 +17,14 @@
  * limitations under the License.
  */
 
+#ifndef IWDG_STM32F4XX_H_
+#define IWDG_STM32F4XX_H_
+
 /*******************************************************************************
  *  includes
  ******************************************************************************/
 
 #include <stdint.h>
-
-#ifndef IWDG_STM32F4XX_H_
-#define IWDG_STM32F4XX_H_
 
 /*******************************************************************************
  *  defines and macros

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2018-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -23,9 +23,9 @@
 
 #include <stddef.h>
 
-#include "asm/stm32f4xx.h"
-#include "asm/EXTI_STM32F4xx.h"
-#include "asm/RCC_STM32F4xx.h"
+#include <asm/stm32f4xx.h>
+#include <Driver/EXTI_STM32F4xx.h>
+#include <Driver/RCC_STM32F4xx.h>
 #include "device_config.h"
 
 /*******************************************************************************
@@ -144,7 +144,11 @@ void EXTI_IRQHandler(EXTI_Line_t line)
  */
 void EXTI_Initialize(EXTI_Line_t line, EXTI_Mode_t mode, EXTI_trigger_t trigger, EXTI_SignalEvent_t cb)
 {
-  uint32_t exti_imr, exti_emr, exti_rtsr, exti_ftsr, mask;
+  uint32_t exti_imr;
+  uint32_t exti_emr;
+  uint32_t exti_rtsr;
+  uint32_t exti_ftsr;
+  uint32_t mask;
   IRQn_Type irq_num;
 
   exti_imr = EXTI->IMR;
@@ -236,7 +240,9 @@ void EXTI_Uninitialize(EXTI_Line_t line)
  */
 void EXTI_LineMapping(EXTI_Line_t line, EXTI_Port_t port)
 {
-  uint32_t value, reg_num, offset;
+  uint32_t value;
+  uint32_t reg_num;
+  uint32_t offset;
 
   if (line <= EXTI_LINE_15) {
     /* Enable SYSCFG clock */

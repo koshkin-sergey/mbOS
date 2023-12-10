@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2018-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -21,13 +21,9 @@
  *  includes
  ******************************************************************************/
 
-#include "asm/stm32f4xx.h"
-#include "asm/DMA_STM32F4xx.h"
-#include "device_config.h"
-
-/*******************************************************************************
- *  external declarations
- ******************************************************************************/
+#include <asm/stm32f4xx.h>
+#include <Driver/DMA_STM32F4xx.h>
+#include <device_config.h>
 
 /*******************************************************************************
  *  defines and macros (scope: module-local)
@@ -40,27 +36,11 @@
 #define DMA_FLAG_TCIF                 (1U << 5) ///< Stream transfer complete interrupt flag
 
 /*******************************************************************************
- *  typedefs and structures (scope: module-local)
- ******************************************************************************/
-
-/*******************************************************************************
- *  global variable definitions  (scope: module-exported)
- ******************************************************************************/
-
-/*******************************************************************************
  *  global variable definitions (scope: module-local)
  ******************************************************************************/
 
 /* lookup table for necessary bitshift of flags within status registers */
 static const uint8_t flag_offset[] = {0U, 6U, 16U, 22U};
-
-/*******************************************************************************
- *  function prototypes (scope: module-local)
- ******************************************************************************/
-
-/*******************************************************************************
- *  function implementations (scope: module-local)
- ******************************************************************************/
 
 /*******************************************************************************
  *  function implementations (scope: module-exported)
@@ -248,7 +228,9 @@ void DMA_StreamDisable(DMA_Resources_t *res)
  */
 void DMA_IRQ_Handle(DMA_Resources_t *res)
 {
-  uint32_t event = 0U, isr, cr;
+  uint32_t isr;
+  uint32_t cr;
+  uint32_t event = 0U;
   DMA_Handle_t *handle = res->handle;
   DMA_Base_Reg_t *dma = handle->dma_reg;
   DMA_Stream_TypeDef *stream = res->stream;

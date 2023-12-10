@@ -27,13 +27,13 @@
 #include <stdbool.h>
 #include <string.h>
 
-#include "asm/stm32f4xx.h"
-#include "asm/RCC_STM32F4xx.h"
-#include "asm/GPIO_STM32F4xx.h"
+#include <asm/stm32f4xx.h>
+#include <Driver/RCC_STM32F4xx.h>
+#include <Driver/GPIO_STM32F4xx.h>
 
 #include <Driver/Driver_I2C.h>
 
-#include "device_config.h"
+#include <device_config.h>
 
 /*******************************************************************************
  *  defines and macros (scope: module-local)
