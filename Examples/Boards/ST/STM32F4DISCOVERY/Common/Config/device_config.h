@@ -2320,7 +2320,7 @@ extern uint32_t osKernelGetSysTimerCount(void);
 
 // <e> USB FS (Universal Serial Bus Fast Speed) [Driver_USB_FS]
 // <i> Configuration settings for Driver_USB_FS in component ::CMSIS Driver:USB_FS
-#define RTE_USB_FS                      1
+#define RTE_USB_FS                      0
 
 //   <o> USB_FS ID Pin <0=>Not Used <1=>PA10
 #define   RTE_USB_FS_ID_ID              0

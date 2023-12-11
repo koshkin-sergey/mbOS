@@ -30,6 +30,11 @@
 			<locationURI>PARENT-2-PROJECT_LOC/src</locationURI>
 		</link>
 		<link>
+			<name>src/Config</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
 			<name>src/Device</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
@@ -40,12 +45,22 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>src/Device/STMicroelectronics</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
+			<name>src/Config/device_config.h</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/Common/Config/device_config.h</locationURI>
 		</link>
 		<link>
-			<name>src/Kernel/Config</name>
+			<name>src/Config/kernel_config.h</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/Common/Config/kernel_config.h</locationURI>
+		</link>
+		<link>
+			<name>src/Config/kernel_lib.c</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/Common/Config/kernel_lib.c</locationURI>
+		</link>
+		<link>
+			<name>src/Device/STMicroelectronics</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
@@ -58,16 +73,6 @@
 			<name>src/Device/STMicroelectronics/STM32F4xx</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>src/Kernel/Config/kernel_config.h</name>
-			<type>1</type>
-			<locationURI>PARENT-3-PROJECT_LOC/Common/Config/kernel_config.h</locationURI>
-		</link>
-		<link>
-			<name>src/Kernel/Config/kernel_lib.c</name>
-			<type>1</type>
-			<locationURI>PARENT-3-PROJECT_LOC/Common/Config/kernel_lib.c</locationURI>
 		</link>
 		<link>
 			<name>src/Kernel/Library/GCC</name>
