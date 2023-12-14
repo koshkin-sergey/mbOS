@@ -154,27 +154,20 @@ typedef const struct I2C_Irq {
   IRQn_Type             slave_num;          // I2C Slave IRQ Number
 } I2C_Irq_t;
 
-/* I2C RX Transfer Information (Run-Time) */
-typedef struct I2C_RX_XferInfo {
+/* I2C Transfer Information (Run-Time) */
+typedef struct I2C_XferInfo {
   uint8_t              *data;               // Data pointer
   uint32_t              num;                // Number of data to transfer
-  uint32_t              cnt;                // Data transfer counter
-} I2C_RX_XferInfo_t;
-
-/* I2C TX Transfer Information (Run-Time) */
-typedef struct I2C_TX_XferInfo {
-  const uint8_t        *data;               // Data pointer
-  uint32_t              num;                // Number of data to transfer
-  uint32_t              cnt;                // Data transfer counter
-  uint32_t              dummy_cnt;          // Dummy byte counter
-} I2C_TX_XferInfo_t;
+  uint32_t              idx;                // Data index
+} I2C_XferInfo_t;
 
 /* I2C Information (Run-Time) */
 typedef struct I2C_Info {
   ARM_I2C_SignalEvent_t cb_event;           // Event Callback
   uint32_t              status;             // Status flags
-  I2C_RX_XferInfo_t     rx;                 // RX transfer information
-  I2C_TX_XferInfo_t     tx;                 // TX transfer information
+  I2C_XferInfo_t        rx;                 // RX transfer information
+  I2C_XferInfo_t        tx;                 // TX transfer information
+   int32_t              cnt;                // Data transfer counter
   uint16_t              flags;              // Current I2C state flags
   uint16_t              xfer;               // Transfer control (current)
 } I2C_Info_t;
