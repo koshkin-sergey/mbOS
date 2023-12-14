@@ -411,22 +411,6 @@ int32_t I2C_MasterTransmit(uint32_t         addr,
   tx->cnt  = 0U;
   tx->dummy_cnt = 0U;
 
-  if ((info->xfer & XFER_MASTER) == 0U) {
-    /* New transfer, check the SDA line is busy */
-    if ((mmr->I2CMSTA & I2CMSTA_LINEBUSY) != 0U) {
-      /* Bus is busy or locked */
-      info->status = I2C_STATUS_BUS_ERROR;
-
-      if (info->cb_event != NULL) {
-        info->cb_event(ARM_I2C_EVENT_TRANSFER_DONE       |
-                       ARM_I2C_EVENT_TRANSFER_INCOMPLETE |
-                       ARM_I2C_EVENT_BUS_ERROR);
-      }
-
-      return (ARM_DRIVER_OK);
-    }
-  }
-
   info->status = I2C_STATUS_BUSY | I2C_STATUS_MASTER;
   info->xfer = xfer_pending ? XFER_PENDING : 0U;
 
@@ -491,22 +475,6 @@ int32_t I2C_MasterReceive(uint32_t         addr,
   rx->data = data;
   rx->num  = num;
   rx->cnt  = 0U;
-
-  if ((info->xfer & XFER_MASTER) == 0U) {
-    /* New transfer, check the SDA line is busy */
-    if ((mmr->I2CMSTA & I2CMSTA_LINEBUSY) != 0U) {
-      /* Bus is busy or locked */
-      info->status = I2C_STATUS_BUS_ERROR;
-
-      if (info->cb_event != NULL) {
-        info->cb_event(ARM_I2C_EVENT_TRANSFER_DONE       |
-                       ARM_I2C_EVENT_TRANSFER_INCOMPLETE |
-                       ARM_I2C_EVENT_BUS_ERROR);
-      }
-
-      return (ARM_DRIVER_OK);
-    }
-  }
 
   info->status = I2C_STATUS_BUSY | I2C_STATUS_MASTER | I2C_STATUS_RECEIVER;
   info->xfer = xfer_pending ? XFER_PENDING : 0U;
