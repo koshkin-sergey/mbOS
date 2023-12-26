@@ -138,7 +138,7 @@ ARM_DRIVER_I2C Driver_I2C##x = {  \
 typedef const struct I2C_Pin {
   Driver_GPIO_t        *gpio;               // Pointer to GPIO driver
   GPIO_PIN_t            pin;                // IO pin
-  GPIO_PIN_FUNC_t       func;               // AF pin configuration
+  GPIO_PIN_CFG_t        cfg;                // AF pin configuration
 } I2C_Pin_t;
 
 /* I2C Input/Output Configuration */

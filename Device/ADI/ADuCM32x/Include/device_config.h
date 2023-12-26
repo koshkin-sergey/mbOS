@@ -20,6 +20,21 @@
 #ifndef __DEVICE_CONFIG_H
 #define __DEVICE_CONFIG_H
 
+/*******************************************************************************
+ *  external declarations
+ ******************************************************************************/
+
+extern uint32_t osKernelGetSysTimerFreq(void);
+extern uint32_t osKernelGetSysTimerCount(void);
+
+/*******************************************************************************
+ *  defines and macros
+ ******************************************************************************/
+
+#define GetSysTimerFreq()               osKernelGetSysTimerFreq()
+#define GetSysTimerCount()              osKernelGetSysTimerCount()
+
+
 //-------- <<< Use Configuration Wizard in Context Menu >>> --------------------
 
 // <h> Clock Configuration

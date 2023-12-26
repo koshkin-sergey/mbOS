@@ -36,6 +36,8 @@
 #define SCL_HIGH_TIME_400K        (1200U) // HIGH period of the SCL clock in ns.
 #define SCL_LOW_TIME_400K         (1300U) // LOW period of the SCL clock in ns.
 
+#define SCL_TIME_CLR              (SCL_LOW_TIME_100K / 1000U)
+
 #define CLOCK_STRETCH_TIME        (5)
 
 #define DUMMY_BYTE                ((uint8_t)0xFF)
@@ -57,6 +59,18 @@ static const ARM_I2C_CAPABILITIES DriverCapabilities = {
   0            /* supports 10-bit addressing */
 };
 
+static const GPIO_PIN_CFG_t pin_cfg_gpio_in = {
+  GPIO_PIN_FUNC_0,
+  GPIO_MODE_ANALOG,
+  GPIO_PULL_DISABLE,
+};
+
+static const GPIO_PIN_CFG_t pin_cfg_gpio_od = {
+  GPIO_PIN_FUNC_0,
+  GPIO_MODE_OUT_OD,
+  GPIO_PULL_DISABLE,
+};
+
 #if defined(USE_I2C0)
 /* I2C0 Information (Run-Time) */
 static I2C_Info_t I2C0_Info;
@@ -65,8 +79,24 @@ static I2C_Info_t I2C0_Info;
 static I2C_Resources_t I2C0_Resources = {
   MMR_I2C0,
   {
-    {I2C0_SCL_GPIO_PORT, I2C0_SCL_GPIO_PIN, I2C0_SCL_GPIO_FUNC},
-    {I2C0_SDA_GPIO_PORT, I2C0_SDA_GPIO_PIN, I2C0_SDA_GPIO_FUNC},
+    {
+      I2C0_SCL_GPIO_PORT,
+      I2C0_SCL_GPIO_PIN,
+      {
+        I2C0_SCL_GPIO_FUNC,
+        GPIO_MODE_ANALOG,
+        GPIO_PULL_DISABLE,
+      }
+    },
+    {
+      I2C0_SDA_GPIO_PORT,
+      I2C0_SDA_GPIO_PIN,
+      {
+        I2C0_SDA_GPIO_FUNC,
+        GPIO_MODE_ANALOG,
+        GPIO_PULL_DISABLE,
+      }
+    },
   },
   CLK_PERIPH_I2C0,
   {
@@ -87,8 +117,24 @@ static I2C_Info_t I2C1_Info;
 static I2C_Resources_t I2C1_Resources = {
   MMR_I2C1,
   {
-    {I2C1_SCL_GPIO_PORT, I2C1_SCL_GPIO_PIN, I2C1_SCL_GPIO_FUNC},
-    {I2C1_SDA_GPIO_PORT, I2C1_SDA_GPIO_PIN, I2C1_SDA_GPIO_FUNC},
+    {
+      I2C1_SCL_GPIO_PORT,
+      I2C1_SCL_GPIO_PIN,
+      {
+        I2C1_SCL_GPIO_FUNC,
+        GPIO_MODE_ANALOG,
+        GPIO_PULL_DISABLE,
+      }
+    },
+    {
+      I2C1_SDA_GPIO_PORT,
+      I2C1_SDA_GPIO_PIN,
+      {
+        I2C1_SDA_GPIO_FUNC,
+        GPIO_MODE_ANALOG,
+        GPIO_PULL_DISABLE,
+      }
+    },
   },
   CLK_PERIPH_I2C1,
   {
@@ -105,6 +151,18 @@ static I2C_Resources_t I2C1_Resources = {
  ******************************************************************************/
 
 static
+void delay(uint32_t us)
+{
+  const uint32_t timeout = GetSysTimerFreq() / 1000000U * us;
+  const uint32_t tick = GetSysTimerCount();
+
+  while ((GetSysTimerCount() - tick) < timeout) {
+    __NOP();
+  };
+}
+
+#if 0
+static
 uint32_t GetFifoCntSlaveTx(MMR_I2C_t *mmr)
 {
   uint32_t cnt = _FLD2VAL(I2CFSTA_STXFSTA, mmr->I2CFSTA);
@@ -119,6 +177,7 @@ uint32_t GetFifoCntMasterTx(MMR_I2C_t *mmr)
 
   return (cnt);
 }
+#endif
 
 /**
  * @brief   Get driver capabilities.
@@ -149,9 +208,8 @@ ARM_I2C_CAPABILITIES I2C_GetCapabilities(void)
 static
 int32_t I2C_Initialize(ARM_I2C_SignalEvent_t cb_event, I2C_Resources_t *i2c)
 {
-  I2C_Info_t     *info;
-  I2C_IO_t       *io;
-  GPIO_PIN_CFG_t  pin_cfg;
+  I2C_Info_t *info;
+  I2C_IO_t   *io;
 
   if (i2c->info->flags & I2C_FLAG_INIT) {
     return (ARM_DRIVER_OK);
@@ -160,16 +218,11 @@ int32_t I2C_Initialize(ARM_I2C_SignalEvent_t cb_event, I2C_Resources_t *i2c)
   io   = &i2c->io;
   info = i2c->info;
 
-  pin_cfg.mode = GPIO_MODE_ANALOG;
-  pin_cfg.pull = GPIO_PULL_DISABLE;
-
   /* Configure SCL Pin */
-  pin_cfg.func = io->scl.func;
-  io->scl.gpio->PinConfig(io->scl.pin, &pin_cfg);
+  io->scl.gpio->PinConfig(io->scl.pin, &io->scl.cfg);
 
   /* Configure SDA Pin */
-  pin_cfg.func = io->sda.func;
-  io->sda.gpio->PinConfig(io->sda.pin, &pin_cfg);
+  io->sda.gpio->PinConfig(io->sda.pin, &io->sda.cfg);
 
   /* Reset Run-Time information structure */
   memset(info, 0x00, sizeof(I2C_Info_t));
@@ -188,20 +241,13 @@ int32_t I2C_Initialize(ARM_I2C_SignalEvent_t cb_event, I2C_Resources_t *i2c)
 static
 int32_t I2C_Uninitialize(I2C_Resources_t *i2c)
 {
-  I2C_IO_t       *io;
-  GPIO_PIN_CFG_t  pin_cfg;
-
-  io = &i2c->io;
-
-  pin_cfg.func = GPIO_PIN_FUNC_0;
-  pin_cfg.mode = GPIO_MODE_ANALOG;
-  pin_cfg.pull = GPIO_PULL_DISABLE;
+  I2C_IO_t *io = &i2c->io;
 
   /* Unconfigure SCL Pin */
-  io->scl.gpio->PinConfig(io->scl.pin, &pin_cfg);
+  io->scl.gpio->PinConfig(io->scl.pin, &pin_cfg_gpio_in);
 
   /* Unconfigure SDA Pin */
-  io->sda.gpio->PinConfig(io->sda.pin, &pin_cfg);
+  io->sda.gpio->PinConfig(io->sda.pin, &pin_cfg_gpio_in);
 
   i2c->info->flags = 0U;
 
@@ -356,10 +402,77 @@ int32_t I2C_Control(uint32_t control, uint32_t arg, I2C_Resources_t *i2c)
       break;
 
     case ARM_I2C_BUS_CLEAR:
-      return (ARM_DRIVER_ERROR_UNSUPPORTED);
+      /* Disable I2C interrupts */
+      NVIC_DisableIRQ(i2c->irq.master_num);
 
-    case ARM_I2C_ABORT_TRANSFER:
-      return (ARM_DRIVER_ERROR_UNSUPPORTED);
+      if ((mmr->I2CMSTA & I2CMSTA_LINEBUSY) != 0U) {
+        I2C_IO_t *io = &i2c->io;
+
+        /* Disable I2C master */
+        mmr->I2CMCON = 0U;
+
+        /* Configure SDA Pin as GPIO */
+        io->sda.gpio->PinWrite(io->sda.pin, GPIO_PIN_OUT_HIGH);
+        io->sda.gpio->PinConfig(io->sda.pin, &pin_cfg_gpio_od);
+        delay(SCL_TIME_CLR);
+
+        if (io->sda.gpio->PinRead(io->sda.pin) == 0U) {
+          /* Configure SCL Pin as GPIO */
+          io->scl.gpio->PinWrite(io->scl.pin, GPIO_PIN_OUT_HIGH);
+          io->scl.gpio->PinConfig(io->scl.pin, &pin_cfg_gpio_od);
+          delay(SCL_TIME_CLR);
+
+          for (uint32_t i = 0; i < 9U; ++i) {
+            io->scl.gpio->PinWrite(io->scl.pin, GPIO_PIN_OUT_LOW);
+            delay(SCL_TIME_CLR);
+            io->scl.gpio->PinWrite(io->scl.pin, GPIO_PIN_OUT_HIGH);
+            delay(SCL_TIME_CLR);
+          }
+
+          /* Configure SCL Pin as I2C */
+          io->scl.gpio->PinConfig(io->scl.pin, &io->scl.cfg);
+        }
+
+        /* Configure SDA Pin as I2C */
+        io->sda.gpio->PinConfig(io->sda.pin, &io->sda.cfg);
+
+        /* Reset I2C block */
+        mmr->I2CSHCON |= I2CSHCON_RESET;
+
+        /* Clear status flags */
+        (void)mmr->I2CMSTA;
+      }
+
+      info->status = 0U;
+      info->xfer   = 0U;
+
+      /* Enable I2C interrupts */
+      NVIC_ClearPendingIRQ(i2c->irq.master_num);
+      NVIC_EnableIRQ(i2c->irq.master_num);
+      break;
+
+    case ARM_I2C_ABORT_TRANSFER: {
+        I2C_Irq_t *irq = &i2c->irq;
+
+        /* Disable I2C interrupts */
+        NVIC_DisableIRQ(irq->master_num);
+
+        if ((info->status & I2C_STATUS_RECEIVER) == 0U) {
+          mmr->I2CMCON &= (uint16_t)~I2CMCON_IENMTX;
+          mmr->I2CFSTA = I2CFSTA_MFLUSH;
+        }
+        else {
+          mmr->I2CMRXCNT = 0U;
+        }
+
+        info->status = 0U;
+        info->xfer   = 0U;
+
+        /* Enable I2C interrupts */
+        NVIC_ClearPendingIRQ(irq->master_num);
+        NVIC_EnableIRQ(irq->master_num);
+      }
+      break;
 
     default:
       return (ARM_DRIVER_ERROR_UNSUPPORTED);
@@ -415,7 +528,9 @@ int32_t I2C_MasterTransmit(uint32_t         addr,
   info->xfer = xfer_pending ? XFER_PENDING : 0U;
 
   /* Enable master */
-  mmr->I2CMCON = (uint16_t)(I2CMCON_MASEN | I2CMCON_IENALOST);
+  mmr->I2CMCON = (uint16_t)(I2CMCON_MASEN);
+  /* Flush the TX FIFO */
+  mmr->I2CFSTA = I2CFSTA_MFLUSH;
   /* Fill the TX FIFO */
   mmr->I2CMTX = xx->data[xx->idx++];
   if (xx->idx == xx->num) {
@@ -427,7 +542,7 @@ int32_t I2C_MasterTransmit(uint32_t         addr,
   /* Set slave address, transfer direction and generate start */
   mmr->I2CADR0 = (uint16_t)((addr << 1) & I2CADR0_ADR0_Msk);
   /* Enable transmit interrupt */
-  mmr->I2CMCON |= (uint16_t)(I2CMCON_IENCMP | I2CMCON_IENMTX);
+  mmr->I2CMCON |= (uint16_t)(I2CMCON_IENCMP | I2CMCON_IENMTX | I2CMCON_IENALOST);
 
   return (ARM_DRIVER_OK);
 }
@@ -480,13 +595,13 @@ int32_t I2C_MasterReceive(uint32_t         addr,
   info->xfer = xfer_pending ? XFER_PENDING : 0U;
 
   /* Enable master */
-  mmr->I2CMCON = (uint16_t)(I2CMCON_MASEN | I2CMCON_IENALOST);
+  mmr->I2CMCON = (uint16_t)(I2CMCON_MASEN);
   /* Set number of bytes to transfer */
   mmr->I2CMRXCNT = (uint16_t)((num - 1U) & I2CMRXCNT_COUNT_Msk);
   /* Set slave address, transfer direction and generate start */
   mmr->I2CADR0 = (uint16_t)(((addr << 1) | 1UL) & I2CADR0_ADR0_Msk);
   /* Enable receive interrupt */
-  mmr->I2CMCON |= (uint16_t)(I2CMCON_IENCMP | I2CMCON_IENMRX);
+  mmr->I2CMCON |= (uint16_t)(I2CMCON_IENCMP | I2CMCON_IENMRX | I2CMCON_IENALOST);
 
   return (ARM_DRIVER_OK);
 }
@@ -634,7 +749,6 @@ void I2C_Master_IRQHandler(I2C_Resources_t *i2c)
       if ((info->xfer & XFER_PENDING) != 0U) {
         info->xfer |= XFER_MASTER_TX;
         info->status &= ~I2C_STATUS_BUSY;
-        ctrl &= ~I2CMCON_IENCMP;
         event = ARM_I2C_EVENT_TRANSFER_DONE;
       }
       mmr->I2CMCON = (uint16_t)ctrl;
@@ -663,19 +777,27 @@ void I2C_Master_IRQHandler(I2C_Resources_t *i2c)
   }
 
   if ((state & I2CMSTA_ALOST) != 0U) {
-    info->status = (info->status & ~I2C_STATUS_BUSY) | I2C_STATUS_ARBITRATION_LOST;
+    /* Disable master */
+    mmr->I2CMCON = 0U;
+    info->status = (info->status & ~(I2C_STATUS_BUSY | I2C_STATUS_MASTER)) |
+                   I2C_STATUS_ARBITRATION_LOST;
+    info->xfer = 0U;
     event = ARM_I2C_EVENT_ARBITRATION_LOST |
             ARM_I2C_EVENT_TRANSFER_DONE    |
             ARM_I2C_EVENT_TRANSFER_INCOMPLETE;
   }
 
-  if ((state & (I2CMSTA_MSTOP | I2CMSTA_MBUSY)) == I2CMSTA_MSTOP) {
+  if ((state & I2CMSTA_TCOMP) != 0U) {
     info->xfer = 0U;
     if ((info->status & I2C_STATUS_BUSY) != 0U) {
       info->status &= ~I2C_STATUS_BUSY;
       event = ARM_I2C_EVENT_TRANSFER_DONE;
 
-      if ((state & (I2CMSTA_NACKADDR | I2CMSTA_NACKDATA)) != 0U) {
+      if ((state & I2CMSTA_MBUSY) != 0U || (state & I2CMSTA_MSTOP) == 0U) {
+        info->status |= I2C_STATUS_BUS_ERROR;
+        event |= ARM_I2C_EVENT_BUS_ERROR | ARM_I2C_EVENT_TRANSFER_INCOMPLETE;
+      }
+      else if ((state & (I2CMSTA_NACKADDR | I2CMSTA_NACKDATA)) != 0U) {
         mmr->I2CFSTA = I2CFSTA_MFLUSH;
         event |= ARM_I2C_EVENT_TRANSFER_INCOMPLETE;
         if ((state & I2CMSTA_NACKADDR) != 0U) {
@@ -685,10 +807,10 @@ void I2C_Master_IRQHandler(I2C_Resources_t *i2c)
           info->cnt--;
         }
       }
-
-      /* Disable master */
-      mmr->I2CMCON = 0U;
     }
+
+    /* Disable master */
+    mmr->I2CMCON = 0U;
   }
 
   /* Send events */
