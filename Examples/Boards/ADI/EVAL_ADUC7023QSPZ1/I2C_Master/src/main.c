@@ -17,6 +17,9 @@
  * limitations under the License.
  */
 
+/*******************************************************************************
+ *  includes
+ ******************************************************************************/
 
 #include <stddef.h>
 #include <Kernel/kernel.h>
@@ -212,7 +215,8 @@ static void GPIO_Init(void)
   gpio->PinConfig(LED_PIN, &pin_cfg);
 }
 
-__NO_RETURN static void main_proc(void *param)
+__NO_RETURN
+static void main_proc(void *param)
 {
   (void) param;
   bool pooling;
@@ -251,7 +255,7 @@ static void timer_func(void *argument)
 {
   (void) argument;
 
-  gpio->PinToggle(GPIO_PIN_7);
+  gpio->PinToggle(LED_PIN);
 }
 
 int main(void)
