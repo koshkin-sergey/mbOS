@@ -128,6 +128,30 @@ SECTIONS
     *(.rodata*)
 
     KEEP(*(.eh_frame*))
+
+    /* copy.table */
+    . = ALIGN(4);
+    __copy_table_start__ = .;
+    LONG (LOADADDR(.data))
+    LONG (ADDR(.data))
+    LONG (SIZEOF(.data) / 4)
+    /* Add each additional data section here */
+/*
+    LONG (LOADADDR(.data2))
+    LONG (ADDR(.data2))
+    LONG (SIZEOF(.data2) / 4)
+*/
+    __copy_table_end__ = .;
+
+    /* zero.table */
+    . = ALIGN(4);
+    __zero_table_start__ = .;
+    /* Add each additional bss section here */
+/*
+    LONG (__bss2_start__)
+    LONG ((__bss2_end__ - __bss2_start__) / 4)
+*/
+    __zero_table_end__ = .;
   } > FLASH
 
   /*
@@ -154,23 +178,6 @@ SECTIONS
   } > FLASH
   __exidx_end = .;
 
-  .copy.table :
-  {
-    . = ALIGN(4);
-    __copy_table_start__ = .;
-    LONG (__etext)
-    LONG (__data_start__)
-    LONG ((__data_end__ - __data_start__) / 4)
-    __copy_table_end__ = .;
-  } > FLASH
-
-  .zero.table :
-  {
-    . = ALIGN(4);
-    __zero_table_start__ = .;
-    __zero_table_end__ = .;
-  } > FLASH
-  
   /**
    * Location counter can end up 2byte aligned with narrow Thumb code but
    * __etext is assumed by startup code to be the LMA of a section in RAM

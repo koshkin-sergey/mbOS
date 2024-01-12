@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2023-2024 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -101,7 +101,6 @@ int32_t WaitTransferEvent(void)
                            I2C_TIMEOUT);
   if ((flags & osFlagsError) != 0U) {
     if (flags == osFlagsErrorTimeout) {
-      i2c->Control(ARM_I2C_ABORT_TRANSFER, 0U);
       i2c->Control(ARM_I2C_BUS_CLEAR, 0U);
     }
     return (-1);
