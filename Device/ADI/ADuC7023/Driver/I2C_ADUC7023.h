@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2021-2024 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -155,7 +155,7 @@ typedef const struct _I2C_IO {
 typedef struct _I2C_XFER_INFO {
   uint8_t              *data;               // Data pointer
   uint32_t              num;                // Number of data to transfer
-  uint32_t              cnt;                // Data transfer counter
+  uint32_t              idx;                // Data index
 } I2C_XFER_INFO;
 
 /* I2C Information (Run-Time) */
@@ -164,6 +164,7 @@ typedef struct _I2C_INFO {
   uint32_t              status;             // Status flags
   I2C_XFER_INFO         rx;                 // RX transfer information
   I2C_XFER_INFO         tx;                 // TX transfer information
+   int32_t              cnt;                // Data transfer counter
   uint16_t              flags;              // Current I2C state flags
   uint16_t              xfer;               // Transfer control (current)
 } I2C_INFO;
@@ -187,5 +188,3 @@ typedef struct {
 } const I2C_RESOURCES;
 
 #endif /* I2C_ADUC7023_H_ */
-
-/* ----------------------------- End of file ---------------------------------*/
