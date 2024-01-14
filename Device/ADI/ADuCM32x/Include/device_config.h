@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2022-2024 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -231,6 +231,124 @@ extern uint32_t osKernelGetSysTimerCount(void);
 
 //   <o> Interrupt Priority <0=>Realtime <1=>Above High <2=>High <3=>Above Normal <4=>Normal <5=>Below Normal <6=>Above Low <7=>Low
 #define DEV_I2C1_INT_PRIO              4
+
+// </e>
+
+
+// <e> SPI0 (Serial Peripheral Interface 0) [Driver_SPI0]
+// <i> Configuration settings for Driver_SPI0 in component ::CMSIS Driver:SPI
+#define DEV_SPI0                       1
+
+//   <o> SCLK Pin <0=>P0.0
+#define   DEV_SPI0_SCLK_PORT_ID        0
+#if      (DEV_SPI0_SCLK_PORT_ID == 0)
+  #define DEV_SPI0_SCLK_PORT           &Driver_GPIO0
+  #define DEV_SPI0_SCLK_PIN            GPIO_PIN_0
+  #define DEV_SPI0_SCLK_FUNC           GPIO_PIN_FUNC_1
+#else
+  #error "Invalid SPI0 SCLK Pin Configuration!"
+#endif
+
+//   <o> MISO Pin <0=>Not Used <1=>P0.1
+#define   DEV_SPI0_MISO_PORT_ID        0
+#if      (DEV_SPI0_MISO_PORT_ID == 0)
+  #define DEV_SPI0_MISO                0
+#elif    (DEV_SPI0_MISO_PORT_ID == 1)
+  #define DEV_SPI0_MISO                1
+  #define DEV_SPI0_MISO_PORT           &Driver_GPIO0
+  #define DEV_SPI0_MISO_PIN            GPIO_PIN_1
+  #define DEV_SPI0_MISO_FUNC           GPIO_PIN_FUNC_1
+#else
+  #error "Invalid SPI0 MISO Pin Configuration!"
+#endif
+
+//   <o> MOSI Pin <0=>Not Used <1=>P0.2
+#define   DEV_SPI0_MOSI_PORT_ID        0
+#if      (DEV_SPI0_MOSI_PORT_ID == 0)
+  #define DEV_SPI0_MOSI                0
+#elif    (DEV_SPI0_MOSI_PORT_ID == 1)
+  #define DEV_SPI0_MOSI                1
+  #define DEV_SPI0_MOSI_PORT           &Driver_GPIO0
+  #define DEV_SPI0_MOSI_PIN            GPIO_PIN_2
+  #define DEV_SPI0_MOSI_FUNC           GPIO_PIN_FUNC_1
+#else
+  #error "Invalid SPI0 MOSI Pin Configuration!"
+#endif
+
+//   <o> CS Pin <0=>Not Used <1=>P0.3
+#define   DEV_SPI0_CS_PORT_ID          0
+#if      (DEV_SPI0_CS_PORT_ID == 0)
+  #define DEV_SPI0_CS                  0
+#elif    (DEV_SPI0_CS_PORT_ID == 1)
+  #define DEV_SPI0_CS                  1
+  #define DEV_SPI0_CS_PORT             &Driver_GPIO0
+  #define DEV_SPI0_CS_PIN              GPIO_PIN_3
+  #define DEV_SPI0_CS_FUNC             GPIO_PIN_FUNC_1
+#else
+  #error "Invalid SPI0 CS Pin Configuration!"
+#endif
+
+//   <o> Interrupt Priority <0=>Realtime <1=>Above High <2=>High <3=>Above Normal <4=>Normal <5=>Below Normal <6=>Above Low <7=>Low
+#define DEV_SPI0_INT_PRIO              4
+
+// </e>
+
+
+// <e> SPI1 (Serial Peripheral Interface 1) [Driver_SPI1]
+// <i> Configuration settings for Driver_SPI1 in component ::CMSIS Driver:SPI
+#define DEV_SPI1                       1
+
+//   <o> SCLK Pin <0=>P1.4
+#define   DEV_SPI1_SCLK_PORT_ID        0
+#if      (DEV_SPI1_SCLK_PORT_ID == 0)
+  #define DEV_SPI1_SCLK_PORT           &Driver_GPIO1
+  #define DEV_SPI1_SCLK_PIN            GPIO_PIN_4
+  #define DEV_SPI1_SCLK_FUNC           GPIO_PIN_FUNC_2
+#else
+  #error "Invalid SPI1 SCLK Pin Configuration!"
+#endif
+
+//   <o> MISO Pin <0=>Not Used <1=>P1.5
+#define   DEV_SPI1_MISO_PORT_ID        0
+#if      (DEV_SPI1_MISO_PORT_ID == 0)
+  #define DEV_SPI1_MISO                0
+#elif    (DEV_SPI1_MISO_PORT_ID == 1)
+  #define DEV_SPI1_MISO                1
+  #define DEV_SPI1_MISO_PORT           &Driver_GPIO1
+  #define DEV_SPI1_MISO_PIN            GPIO_PIN_5
+  #define DEV_SPI1_MISO_FUNC           GPIO_PIN_FUNC_2
+#else
+  #error "Invalid SPI1 MISO Pin Configuration!"
+#endif
+
+//   <o> MOSI Pin <0=>Not Used <1=>P1.6
+#define   DEV_SPI1_MOSI_PORT_ID        0
+#if      (DEV_SPI1_MOSI_PORT_ID == 0)
+  #define DEV_SPI1_MOSI                0
+#elif    (DEV_SPI1_MOSI_PORT_ID == 1)
+  #define DEV_SPI1_MOSI                1
+  #define DEV_SPI1_MOSI_PORT           &Driver_GPIO1
+  #define DEV_SPI1_MOSI_PIN            GPIO_PIN_6
+  #define DEV_SPI1_MOSI_FUNC           GPIO_PIN_FUNC_2
+#else
+  #error "Invalid SPI1 MOSI Pin Configuration!"
+#endif
+
+//   <o> CS Pin <0=>Not Used <1=>P1.7
+#define   DEV_SPI1_CS_PORT_ID          0
+#if      (DEV_SPI1_CS_PORT_ID == 0)
+  #define DEV_SPI1_CS                  0
+#elif    (DEV_SPI1_CS_PORT_ID == 1)
+  #define DEV_SPI1_CS                  1
+  #define DEV_SPI1_CS_PORT             &Driver_GPIO1
+  #define DEV_SPI1_CS_PIN              GPIO_PIN_7
+  #define DEV_SPI1_CS_FUNC             GPIO_PIN_FUNC_2
+#else
+  #error "Invalid SPI1 CS Pin Configuration!"
+#endif
+
+//   <o> Interrupt Priority <0=>Realtime <1=>Above High <2=>High <3=>Above Normal <4=>Normal <5=>Below Normal <6=>Above Low <7=>Low
+#define DEV_SPI1_INT_PRIO              4
 
 // </e>
 
