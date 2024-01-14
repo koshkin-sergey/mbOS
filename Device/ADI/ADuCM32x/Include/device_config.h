@@ -31,8 +31,9 @@ extern uint32_t osKernelGetSysTimerCount(void);
  *  defines and macros
  ******************************************************************************/
 
-#define GetSysTimerFreq()               osKernelGetSysTimerFreq()
-#define GetSysTimerCount()              osKernelGetSysTimerCount()
+#define GetSysTimerFreq()                 osKernelGetSysTimerFreq()
+#define GetSysTimerCount()                osKernelGetSysTimerCount()
+#define MicroSecToSysTimerCount(microsec) (uint32_t)(((uint64_t)microsec * GetSysTimerFreq()) / 1000000)
 
 
 //-------- <<< Use Configuration Wizard in Context Menu >>> --------------------

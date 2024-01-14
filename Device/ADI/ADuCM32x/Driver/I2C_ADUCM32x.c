@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2017-2024 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -153,31 +153,13 @@ static I2C_Resources_t I2C1_Resources = {
 static
 void delay(uint32_t us)
 {
-  const uint32_t timeout = GetSysTimerFreq() / 1000000U * us;
+  const uint32_t timeout = MicroSecToSysTimerCount(us);
   const uint32_t tick = GetSysTimerCount();
 
   while ((GetSysTimerCount() - tick) < timeout) {
     __NOP();
   };
 }
-
-#if 0
-static
-uint32_t GetFifoCntSlaveTx(MMR_I2C_t *mmr)
-{
-  uint32_t cnt = _FLD2VAL(I2CFSTA_STXFSTA, mmr->I2CFSTA);
-
-  return (cnt);
-}
-
-static
-uint32_t GetFifoCntMasterTx(MMR_I2C_t *mmr)
-{
-  uint32_t cnt = _FLD2VAL(I2CFSTA_MTXFSTA, mmr->I2CFSTA);
-
-  return (cnt);
-}
-#endif
 
 /**
  * @brief   Get driver capabilities.
@@ -529,15 +511,9 @@ int32_t I2C_MasterTransmit(uint32_t         addr,
 
   /* Enable master */
   mmr->I2CMCON = (uint16_t)(I2CMCON_MASEN);
-  /* Flush the TX FIFO */
-  mmr->I2CFSTA = I2CFSTA_MFLUSH;
-  /* Fill the TX FIFO */
-  mmr->I2CMTX = xx->data[xx->idx++];
-  if (xx->idx == xx->num) {
-    mmr->I2CMTX = DUMMY_BYTE;
-  }
-  else {
-    mmr->I2CMTX = xx->data[xx->idx++];
+  /* Fill the Master TX FIFO */
+  while ((mmr->I2CFSTA & I2CMSTA_MTXFSTA_Msk) != I2CMSTA_MTXFSTA_TWOBYTES) {
+    mmr->I2CMTX = xx->idx < xx->num ? xx->data[xx->idx++] : DUMMY_BYTE;
   }
   /* Set slave address, transfer direction and generate start */
   mmr->I2CADR0 = (uint16_t)((addr << 1) & I2CADR0_ADR0_Msk);
@@ -642,12 +618,7 @@ int32_t I2C_SlaveTransmit(const uint8_t *data, uint32_t num, I2C_Resources_t *i2
 
   /* Fill the Slave TX FIFO */
   mmr->I2CSTX = xx->data[xx->idx++];
-  if (xx->idx == xx->num) {
-    mmr->I2CSTX = DUMMY_BYTE;
-  }
-  else {
-    mmr->I2CSTX = xx->data[xx->idx++];
-  }
+  mmr->I2CSTX = xx->idx < xx->num ? xx->data[xx->idx++] : DUMMY_BYTE;
 
   /* Enable TX interrupt */
   mmr->I2CSCON |= I2CSCON_IENSTX;
@@ -736,13 +707,8 @@ void I2C_Master_IRQHandler(I2C_Resources_t *i2c)
 
   if ((ctrl & I2CMCON_IENMTX) != 0U && (state & I2CMSTA_MTXREQ) != 0U) {
     xx = &info->tx;
-    if (xx->idx < xx->num) {
-      mmr->I2CMTX = xx->data[xx->idx++];
-    }
-    else {
-      mmr->I2CMTX = DUMMY_BYTE;
-    }
-    info->cnt++;
+    mmr->I2CMTX = xx->idx < xx->num ? xx->data[xx->idx++] : DUMMY_BYTE;
+    ++info->cnt;
     if (info->cnt == (int32_t)xx->num) {
       mmr->I2CFSTA = I2CFSTA_MFLUSH;
       ctrl &= ~I2CMCON_IENMTX;
@@ -756,11 +722,11 @@ void I2C_Master_IRQHandler(I2C_Resources_t *i2c)
   }
 
   if ((ctrl & I2CMCON_IENMRX) != 0U && (state & I2CMSTA_MRXREQ) != 0U) {
-    xx = &info->rx;
     data = (uint8_t)mmr->I2CMRX;
-    info->cnt++;
+    xx = &info->rx;
     if (xx->idx < xx->num) {
       xx->data[xx->idx++] = data;
+    ++info->cnt;
 #if 0
       if (rx->cnt == rx->num) {
         ctrl &= ~I2CMCON_IENMRX;
@@ -795,11 +761,10 @@ void I2C_Master_IRQHandler(I2C_Resources_t *i2c)
 
       if ((state & I2CMSTA_MBUSY) != 0U || (state & I2CMSTA_MSTOP) == 0U) {
         info->status |= I2C_STATUS_BUS_ERROR;
-        event |= ARM_I2C_EVENT_BUS_ERROR | ARM_I2C_EVENT_TRANSFER_INCOMPLETE;
+        event |= ARM_I2C_EVENT_BUS_ERROR;
       }
       else if ((state & (I2CMSTA_NACKADDR | I2CMSTA_NACKDATA)) != 0U) {
         mmr->I2CFSTA = I2CFSTA_MFLUSH;
-        event |= ARM_I2C_EVENT_TRANSFER_INCOMPLETE;
         if ((state & I2CMSTA_NACKADDR) != 0U) {
           event |= ARM_I2C_EVENT_ADDRESS_NACK;
         }
@@ -807,6 +772,11 @@ void I2C_Master_IRQHandler(I2C_Resources_t *i2c)
           info->cnt--;
         }
       }
+    }
+
+    xx = info->status & I2C_STATUS_RECEIVER ? &info->rx : &info->tx;
+    if (info->cnt != (int32_t)xx->num) {
+      event |= ARM_I2C_EVENT_TRANSFER_INCOMPLETE;
     }
 
     /* Disable master */
@@ -860,13 +830,8 @@ void I2C_Slave_IRQHandler(I2C_Resources_t *i2c)
     }
 
     if (xx->num != 0U) {
-      if (xx->idx < xx->num) {
-        mmr->I2CSTX = xx->data[xx->idx++];
-      }
-      else {
-        mmr->I2CSTX = DUMMY_BYTE;
-      }
-      info->cnt++;
+      mmr->I2CSTX = xx->idx < xx->num ? xx->data[xx->idx++] : DUMMY_BYTE;
+      ++info->cnt;
       if (info->cnt == (int32_t)xx->num) {
         mmr->I2CSCON &= (uint16_t)~I2CSCON_IENSTX;
         info->status &= ~I2C_STATUS_BUSY;
@@ -907,7 +872,7 @@ void I2C_Slave_IRQHandler(I2C_Resources_t *i2c)
         if (xx->idx < xx->num) {
           xx->data[xx->idx++] = data;
         }
-        info->cnt++;
+        ++info->cnt;
         if (info->cnt == (int32_t)xx->num) {
           info->status &= ~I2C_STATUS_BUSY;
           info->xfer &= (uint16_t)~XFER_SLAVE_RX;
@@ -932,13 +897,7 @@ void I2C_Slave_IRQHandler(I2C_Resources_t *i2c)
       info->xfer &= (uint16_t)~XFER_SLAVE;
       event = ARM_I2C_EVENT_TRANSFER_DONE;
 
-      if ((info->status & I2C_STATUS_RECEIVER) == 0U) {
-        xx = &info->tx;
-      }
-      else {
-        xx = &info->rx;
-      }
-
+      xx = info->status & I2C_STATUS_RECEIVER ? &info->rx : &info->tx;
       if (info->cnt < (int32_t)xx->num) {
         event |= ARM_I2C_EVENT_TRANSFER_INCOMPLETE;
       }
