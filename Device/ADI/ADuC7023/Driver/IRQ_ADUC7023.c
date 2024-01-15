@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2021-2024 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -19,8 +19,8 @@
 
 #include <stddef.h>
 #include <string.h>
-#include "Core/Arm/irq_ctrl.h"
-#include "asm/aduc7023.h"
+#include <Core/Arm/irq_ctrl.h>
+#include <asm/aduc7023.h>
 
 #define RAM_INTVEC_SIZE   16U
 #define RAM_INTVEC_ATTR   __attribute__((used, section(".vectors_ram")))

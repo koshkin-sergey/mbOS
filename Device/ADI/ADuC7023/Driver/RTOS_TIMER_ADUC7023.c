@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2021-2024 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 
-#include "Kernel/tick.h"
-#include "Core/Arm/irq_ctrl.h"
-#include "asm/aduc7023.h"
+#include <Kernel/tick.h>
+#include <Core/Arm/irq_ctrl.h>
+#include <asm/aduc7023.h>
 
 #define RTIM_IRQ_PRIORITY           (uint32_t)IRQ_PriorityLow
 
