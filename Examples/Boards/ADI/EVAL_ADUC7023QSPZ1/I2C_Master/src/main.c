@@ -32,7 +32,7 @@
  ******************************************************************************/
 
 #define TIMEOUT                       (500UL)
-#define THREAD_STACK_SIZE             (256U)
+#define THREAD_STACK_SIZE             (384U)
 
 #define LED_PIN                       (GPIO_PIN_7)
 
@@ -95,8 +95,11 @@ int32_t WaitTransferEvent(void)
   uint32_t flags;
 
   flags = osEventFlagsWait(evf_i2c,
-                           ARM_I2C_EVENT_TRANSFER_DONE |
-                           ARM_I2C_EVENT_TRANSFER_INCOMPLETE,
+                           ARM_I2C_EVENT_TRANSFER_DONE       |
+                           ARM_I2C_EVENT_TRANSFER_INCOMPLETE |
+                           ARM_I2C_EVENT_ADDRESS_NACK        |
+                           ARM_I2C_EVENT_ARBITRATION_LOST    |
+                           ARM_I2C_EVENT_BUS_ERROR,
                            osFlagsWaitAny,
                            I2C_TIMEOUT);
   if ((flags & osFlagsError) != 0U) {
@@ -107,7 +110,7 @@ int32_t WaitTransferEvent(void)
   }
 
   /* Check if all data transferred */
-  if ((flags & ARM_I2C_EVENT_TRANSFER_INCOMPLETE) != 0U) {
+  if ((flags & ~ARM_I2C_EVENT_TRANSFER_DONE) != 0U) {
     return (-1);
   }
 
@@ -118,31 +121,26 @@ static
 int32_t TestTransferEvent(uint8_t *wr_buf, uint8_t wr_size,
                           uint8_t *rd_buf, uint8_t rd_size)
 {
-  int32_t rc;
+  int32_t rc = 0;
+  bool pend = (rd_buf != NULL && rd_size != 0U) ? true : false;
 
-  rc = i2c->MasterTransmit(SLAVE_ADDR, wr_buf, wr_size, true);
-  if (rc != ARM_DRIVER_OK) {
-    return (-1);
+  if (wr_buf != NULL && wr_size != 0U) {
+    rc = i2c->MasterTransmit(SLAVE_ADDR, wr_buf, wr_size, pend);
+    if (rc == ARM_DRIVER_OK) {
+      /* Wait until transfer completed */
+      rc = WaitTransferEvent();
+    }
   }
 
-  /* Wait until transfer completed */
-  rc = WaitTransferEvent();
-  if (rc != 0) {
-    return (-1);
+  if (rc == 0 && pend == true) {
+    rc = i2c->MasterReceive(SLAVE_ADDR, rd_buf, rd_size, false);
+    if (rc == ARM_DRIVER_OK) {
+      /* Wait until transfer completed */
+      rc = WaitTransferEvent();
+    }
   }
 
-  rc = i2c->MasterReceive(SLAVE_ADDR, rd_buf, rd_size, false);
-  if (rc != ARM_DRIVER_OK) {
-    return (-1);
-  }
-
-  /* Wait until transfer completed */
-  rc = WaitTransferEvent();
-  if (rc != 0) {
-    return (-1);
-  }
-
-  return (0U);
+  return (rc);
 }
 
 static
@@ -161,7 +159,6 @@ int32_t WaitTransferPool(void)
   } while (time_before(osKernelGetTickCount(), timeout));
 
   if (state.busy != 0U) {
-    i2c->Control(ARM_I2C_ABORT_TRANSFER, 0U);
     i2c->Control(ARM_I2C_BUS_CLEAR, 0U);
     return (-1);
   }
