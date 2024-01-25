@@ -68,7 +68,7 @@ int32_t osTickSetup(uint32_t freq, IRQHandler_t handler)
  */
 void osTickEnable(void)
 {
-  RTOS_TIMER->CON |= RTOS_TIMER_CON_EN;
+  RTOS_TIMER->CON |= (uint16_t)RTOS_TIMER_CON_EN;
 }
 
 /**
@@ -76,7 +76,7 @@ void osTickEnable(void)
  */
 void osTickDisable(void)
 {
-  RTOS_TIMER->CON &= ~RTOS_TIMER_CON_EN;
+  RTOS_TIMER->CON &= (uint16_t)~RTOS_TIMER_CON_EN;
 }
 
 /**

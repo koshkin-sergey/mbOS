@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2021-2024 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -25,7 +25,7 @@
 #endif /* __cplusplus */
 
 #include <stdint.h>
-#include "Core/Arm/core_arm.h"
+#include <Core/Arm/core_arm.h>
 #include "system_aduc7023.h"
 
 /*------------------------------------------------------------------------------
@@ -206,8 +206,8 @@ typedef struct FIQ_s {
 #define FIQ_VEC_BASE              FIQ_VEC_BASE_Msk
 
 #define IRQ_PRIORITY_BIT_Msk      (7U)
-#define IRQ_PRIORITY_IDX(irqn)    (irqn >> 3U)
-#define IRQ_PRIORITY_OFS(irqn)    ((irqn & IRQ_PRIORITY_BIT_Msk) << 2U)
+#define IRQ_PRIORITY_IDX(irqn)    ((uint32_t)irqn >> 3U)
+#define IRQ_PRIORITY_OFS(irqn)    (((uint32_t)irqn & IRQ_PRIORITY_BIT_Msk) << 2U)
 
 #define IRQ_CLR_DEF_VALUE         (0xFFFFFFFFUL)
 #define FIQ_CLR_DEF_VALUE         (0xFFFFFFFFUL)
@@ -440,6 +440,7 @@ typedef struct RTOS_TIMER_s {
   __IOM uint16_t CON;     /*!< Timer control register                         */
   RESERVED(2, uint16_t);
   __OM  uint8_t  CLRI;    /*!< Timer interrupt clear register                 */
+  RESERVED(3, uint8_t);
 } RTOS_TIMER_t;
 
 #define RTOS_TIMER_LD_Pos         (0U)
@@ -835,26 +836,43 @@ typedef struct DACB {
  * @brief I2C
  */
 typedef struct I2C_s {
-  __IOM uint32_t MCON;
-  __IM  uint32_t MSTA;
-  __IM  uint32_t MRX;
-  __OM  uint32_t MTX;
-  __IOM uint32_t MCNT0;
-  __IM  uint32_t MCNT1;
-  __IOM uint32_t ADR0;
-  __IOM uint32_t ADR1;
-  RESERVED(0, uint32_t);
-  __IOM uint32_t DIV;
-  __IOM uint32_t SCON;
-  __IOM uint32_t SSTA;
-  __IM  uint32_t SRX;
-  __OM  uint32_t STX;
-  __IOM uint32_t ALT;
-  __IOM uint32_t ID0;
-  __IOM uint32_t ID1;
-  __IOM uint32_t ID2;
-  __IOM uint32_t ID3;
-  __IOM uint32_t FSTA;
+  __IOM uint16_t MCON;
+  RESERVED(0, uint16_t);
+  __IM  uint16_t MSTA;
+  RESERVED(1, uint16_t);
+  __IM  uint8_t  MRX;
+  RESERVED(2[3], uint8_t );
+  __OM  uint8_t  MTX;
+  RESERVED(3[3], uint8_t );
+  __IOM uint16_t MCNT0;
+  RESERVED(4, uint16_t);
+  __IM  uint8_t  MCNT1;
+  RESERVED(5[3], uint8_t );
+  __IOM uint8_t  ADR0;
+  RESERVED(6[3], uint8_t );
+  __IOM uint8_t  ADR1;
+  RESERVED(7[7], uint8_t );
+  __IOM uint16_t DIV;
+  RESERVED(8, uint16_t);
+  __IOM uint16_t SCON;
+  RESERVED(9, uint16_t);
+  __IOM uint16_t SSTA;
+  RESERVED(10, uint16_t);
+  __IM  uint8_t SRX;
+  RESERVED(11[3], uint8_t );
+  __OM  uint8_t STX;
+  RESERVED(12[3], uint8_t );
+  __IOM uint8_t ALT;
+  RESERVED(13[3], uint8_t );
+  __IOM uint8_t ID0;
+  RESERVED(14[3], uint8_t );
+  __IOM uint8_t ID1;
+  RESERVED(15[3], uint8_t );
+  __IOM uint8_t ID2;
+  RESERVED(16[3], uint8_t );
+  __IOM uint8_t ID3;
+  RESERVED(17[3], uint8_t );
+  __IOM uint16_t FSTA;
 } I2C_t;
 
 /*******************  Bit definition for I2CMCON register  ********************/
@@ -871,8 +889,8 @@ typedef struct I2C_s {
 #define I2CMCON_ILEN                        I2CMCON_ILEN_Msk
 
 #define I2CMCON_STRETCH_Pos       (3U)
-#define I2CMCON_STRETCH_Msk       (0x1U << I2CMCON_STRETCH_Pos)
-#define I2CMCON_STRETCH                    I2CMCON_STRETCH_Msk
+#define I2CMCON_STRETCH_Msk       (0x1UL << I2CMCON_STRETCH_Pos)
+#define I2CMCON_STRETCH                     I2CMCON_STRETCH_Msk
 
 #define I2CMCON_MRENI_Pos         (4U)
 #define I2CMCON_MRENI_Msk         (0x1UL << I2CMCON_MRENI_Pos)

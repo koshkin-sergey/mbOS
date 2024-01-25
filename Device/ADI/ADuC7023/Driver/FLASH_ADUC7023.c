@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2021-2024 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -241,7 +241,7 @@ static void FLASH_IRQHandler(void)
 {
   uint32_t event = 0UL;
   FLASH_Info_t *info = &flash_info;
-  register uint8_t sta = FLASH->STA;
+  register uint8_t sta = (uint8_t)FLASH->STA;
 
   if ((sta & FLASH_STA_FAIL) != 0U) {
     info->mode = FLASH_MODE_NONE;
