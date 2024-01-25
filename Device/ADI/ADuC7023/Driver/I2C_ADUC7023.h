@@ -126,13 +126,11 @@ ARM_DRIVER_I2C Driver_I2C##x = {  \
 
 /* Transfer status flags definitions */
 #define XFER_PENDING                  (uint16_t)(1U << 0) // Transfer pending
-#define XFER_MASTER_TX                (uint16_t)(1U << 1) // Master stalled on transmit
-#define XFER_MASTER_RX                (uint16_t)(1U << 2) // Master stalled on receive
+#define XFER_MASTER_NADDR             (uint16_t)(1U << 1) // Master
+#define XFER_MASTER_NDATA             (uint16_t)(1U << 2) // Master
 #define XFER_SLAVE_TX                 (uint16_t)(1U << 3) // Slave addressed on transmit
 #define XFER_SLAVE_RX                 (uint16_t)(1U << 4) // Slave addressed on receive
 #define XFER_SLAVE_ADDR               (uint16_t)(1U << 5) // Slave addressed
-#define XFER_MASTER                   (XFER_MASTER_TX | XFER_MASTER_RX)
-#define XFER_SLAVE                    (XFER_SLAVE_TX | XFER_SLAVE_RX)
 
 /*******************************************************************************
  *  typedefs and structures (scope: module-local)
@@ -142,7 +140,7 @@ ARM_DRIVER_I2C Driver_I2C##x = {  \
 typedef const struct _I2C_PIN {
   DRIVER_GPIO          *gpio;               // Pointer to GPIO driver
   GPIO_PIN_t            pin;                // IO pin
-  GPIO_PIN_CFG_t        cfg;
+  GPIO_PIN_CFG_t        cfg;                // AF pin configuration
 } I2C_PIN;
 
 /* I2C Input/Output Configuration */
@@ -155,7 +153,7 @@ typedef const struct _I2C_IO {
 typedef struct _I2C_XFER_INFO {
   uint8_t              *data;               // Data pointer
   uint32_t              num;                // Number of data to transfer
-  uint32_t              idx;                // Data index
+  uint32_t              cnt;                // Data transfer counter
 } I2C_XFER_INFO;
 
 /* I2C Information (Run-Time) */
@@ -164,7 +162,6 @@ typedef struct _I2C_INFO {
   uint32_t              status;             // Status flags
   I2C_XFER_INFO         rx;                 // RX transfer information
   I2C_XFER_INFO         tx;                 // TX transfer information
-   int32_t              cnt;                // Data transfer counter
   uint16_t              flags;              // Current I2C state flags
   uint16_t              xfer;               // Transfer control (current)
 } I2C_INFO;
