@@ -101,6 +101,8 @@ void I2C_Callback(uint32_t event)
   if ((event & ARM_I2C_EVENT_SLAVE_RECEIVE) != 0U) {
     uint32_t size;
 
+    i2c->Control(ARM_I2C_ABORT_TRANSFER, 0U);
+
     if (xfer_mode == XferModeNone) {
       size = sizeof(rd_buf[0]);
       xfer_mode = XferModeAddr;
