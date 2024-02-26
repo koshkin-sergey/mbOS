@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2017-2024 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -122,13 +122,11 @@ ARM_DRIVER_I2C Driver_I2C##x = {  \
 
 /* Transfer status flags definitions */
 #define XFER_PENDING                  (uint16_t)(1U << 0) // Transfer pending
-#define XFER_MASTER_TX                (uint16_t)(1U << 1) // Master stalled on transmit
-#define XFER_MASTER_RX                (uint16_t)(1U << 2) // Master stalled on receive
+#define XFER_MASTER_NADDR             (uint16_t)(1U << 1) // Master nack address
+#define XFER_MASTER_NDATA             (uint16_t)(1U << 2) // Master nack data
 #define XFER_SLAVE_TX                 (uint16_t)(1U << 3) // Slave addressed on transmit
 #define XFER_SLAVE_RX                 (uint16_t)(1U << 4) // Slave addressed on receive
 #define XFER_SLAVE_ADDR               (uint16_t)(1U << 5) // Slave addressed
-#define XFER_MASTER                   (XFER_MASTER_TX | XFER_MASTER_RX)
-#define XFER_SLAVE                    (XFER_SLAVE_TX | XFER_SLAVE_RX)
 
 /*******************************************************************************
  *  typedefs and structures
@@ -158,7 +156,7 @@ typedef const struct I2C_Irq {
 typedef struct I2C_XferInfo {
   uint8_t              *data;               // Data pointer
   uint32_t              num;                // Number of data to transfer
-  uint32_t              idx;                // Data index
+  uint32_t              cnt;                // Data transfer counter
 } I2C_XferInfo_t;
 
 /* I2C Information (Run-Time) */
@@ -167,7 +165,6 @@ typedef struct I2C_Info {
   uint32_t              status;             // Status flags
   I2C_XferInfo_t        rx;                 // RX transfer information
   I2C_XferInfo_t        tx;                 // TX transfer information
-   int32_t              cnt;                // Data transfer counter
   uint16_t              flags;              // Current I2C state flags
   uint16_t              xfer;               // Transfer control (current)
 } I2C_Info_t;
