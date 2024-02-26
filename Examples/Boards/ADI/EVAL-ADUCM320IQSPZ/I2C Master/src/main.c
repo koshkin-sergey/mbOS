@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2023-2024 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -95,8 +95,11 @@ int32_t WaitTransferEvent(void)
   uint32_t flags;
 
   flags = osEventFlagsWait(evf_i2c,
-                           ARM_I2C_EVENT_TRANSFER_DONE |
-                           ARM_I2C_EVENT_TRANSFER_INCOMPLETE,
+                           ARM_I2C_EVENT_TRANSFER_DONE       |
+                           ARM_I2C_EVENT_TRANSFER_INCOMPLETE |
+                           ARM_I2C_EVENT_ADDRESS_NACK        |
+                           ARM_I2C_EVENT_ARBITRATION_LOST    |
+                           ARM_I2C_EVENT_BUS_ERROR,
                            osFlagsWaitAny,
                            I2C_TIMEOUT);
   if ((flags & osFlagsError) != 0U) {
@@ -107,7 +110,7 @@ int32_t WaitTransferEvent(void)
   }
 
   /* Check if all data transferred */
-  if ((flags & ARM_I2C_EVENT_TRANSFER_INCOMPLETE) != 0U) {
+  if ((flags & ~ARM_I2C_EVENT_TRANSFER_DONE) != 0U) {
     return (-1);
   }
 
@@ -118,31 +121,26 @@ static
 int32_t TestTransferEvent(uint8_t *wr_buf, uint8_t wr_size,
                           uint8_t *rd_buf, uint8_t rd_size)
 {
-  int32_t rc;
+  int32_t rc = 0;
+  bool pend = (rd_buf != NULL && rd_size != 0U) ? true : false;
 
-  rc = i2c->MasterTransmit(SLAVE_ADDR, wr_buf, wr_size, true);
-  if (rc != ARM_DRIVER_OK) {
-    return (-1);
+  if (wr_buf != NULL && wr_size != 0U) {
+    rc = i2c->MasterTransmit(SLAVE_ADDR, wr_buf, wr_size, pend);
+    if (rc == ARM_DRIVER_OK) {
+      /* Wait until transfer completed */
+      rc = WaitTransferEvent();
+    }
   }
 
-  /* Wait until transfer completed */
-  rc = WaitTransferEvent();
-  if (rc != 0) {
-    return (-1);
+  if (rc == 0 && pend == true) {
+    rc = i2c->MasterReceive(SLAVE_ADDR, rd_buf, rd_size, false);
+    if (rc == ARM_DRIVER_OK) {
+      /* Wait until transfer completed */
+      rc = WaitTransferEvent();
+    }
   }
 
-  rc = i2c->MasterReceive(SLAVE_ADDR, rd_buf, rd_size, false);
-  if (rc != ARM_DRIVER_OK) {
-    return (-1);
-  }
-
-  /* Wait until transfer completed */
-  rc = WaitTransferEvent();
-  if (rc != 0) {
-    return (-1);
-  }
-
-  return (0U);
+  return (rc);
 }
 
 static
@@ -150,6 +148,7 @@ int32_t WaitTransferPool(void)
 {
   uint32_t timeout;
   ARM_I2C_STATUS state;
+  int32_t rc = 0;
 
   timeout = osKernelGetTickCount() + I2C_TIMEOUT;
 
@@ -161,12 +160,15 @@ int32_t WaitTransferPool(void)
   } while (time_before(osKernelGetTickCount(), timeout));
 
   if (state.busy != 0U) {
-    i2c->Control(ARM_I2C_ABORT_TRANSFER, 0U);
     i2c->Control(ARM_I2C_BUS_CLEAR, 0U);
-    return (-1);
+    rc = -1;
   }
 
-  return (0);
+  if (state.arbitration_lost != 0U || state.bus_error != 0U) {
+    rc = -1;
+  }
+
+  return (rc);
 }
 
 static
@@ -174,32 +176,35 @@ int32_t TestTransferPool(uint8_t *wr_buf, uint8_t wr_size,
                          uint8_t *rd_buf, uint8_t rd_size)
 {
   int32_t rc;
+  bool pend = (rd_buf != NULL && rd_size != 0U) ? true : false;
 
-  rc = i2c->MasterTransmit(SLAVE_ADDR, wr_buf, wr_size, true);
-  if (rc != ARM_DRIVER_OK) {
-    return (-1);
+  if (wr_buf != NULL && wr_size != 0U) {
+    rc = i2c->MasterTransmit(SLAVE_ADDR, wr_buf, wr_size, pend);
+    if (rc == ARM_DRIVER_OK) {
+      /* Wait until transfer completed */
+      rc = WaitTransferPool();
+    }
   }
 
-  /* Wait until transfer completed */
-  rc = WaitTransferPool();
   /* Check if all data transferred */
-  if (rc != 0 || i2c->GetDataCount() != wr_size) {
-    return (-1);
+  if (i2c->GetDataCount() != wr_size) {
+    rc = -1;
   }
 
-  rc = i2c->MasterReceive(SLAVE_ADDR, rd_buf, rd_size, false);
-  if (rc != ARM_DRIVER_OK) {
-    return (-1);
+  if (rc == 0 && pend == true) {
+    rc = i2c->MasterReceive(SLAVE_ADDR, rd_buf, rd_size, false);
+    if (rc == ARM_DRIVER_OK) {
+      /* Wait until transfer completed */
+      rc = WaitTransferPool();
+    }
   }
 
-  /* Wait until transfer completed */
-  rc = WaitTransferPool();
   /* Check if all data transferred */
-  if (rc != 0 || i2c->GetDataCount() != rd_size) {
-    return (-1);
+  if (i2c->GetDataCount() != rd_size) {
+    rc = -1;
   }
 
-  return (0U);
+  return (rc);
 }
 
 static void GPIO_Init(void)
@@ -233,7 +238,7 @@ static void main_proc(void *param)
   }
   /* Configure I2C Driver */
   i2c->PowerControl(ARM_POWER_FULL);
-  i2c->Control(ARM_I2C_BUS_SPEED, ARM_I2C_BUS_SPEED_FAST);
+  i2c->Control(ARM_I2C_BUS_SPEED, ARM_I2C_BUS_SPEED_STANDARD);
 
   uint8_t wr_buf[] = {0U};
   uint8_t rd_buf[16];
@@ -245,7 +250,7 @@ static void main_proc(void *param)
     else {
       TestTransferPool(&wr_buf[0], sizeof(wr_buf), &rd_buf[0], sizeof(rd_buf));
     }
-    osDelay(10U);
+    osDelay(5U);
   }
 }
 
