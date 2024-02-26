@@ -1,6 +1,5 @@
 *.o
 *.d
-*.launch
 *.axf
 *.bin
 *.elf

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2023-2024 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -100,6 +100,8 @@ void I2C_Callback(uint32_t event)
 
   if ((event & ARM_I2C_EVENT_SLAVE_RECEIVE) != 0U) {
     uint32_t size;
+
+    i2c->Control(ARM_I2C_ABORT_TRANSFER, 0U);
 
     if (xfer_mode == XferModeNone) {
       size = sizeof(rd_buf[0]);
