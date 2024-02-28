@@ -24,8 +24,9 @@
 #include <stddef.h>
 #include <Kernel/kernel.h>
 #include <asm/system_aduc7023.h>
+#include <Core/Arm/cmsis_compiler.h>
 #include <Driver/GPIO_ADUC7023.h>
-#include "Driver/Driver_I2C.h"
+#include <Driver/Driver_I2C.h>
 
 /*******************************************************************************
  *  defines and macros (scope: module-local)
@@ -79,6 +80,8 @@ static DRIVER_GPIO *gpio = &DRIVER_GPIO0;
 extern ARM_DRIVER_I2C Driver_I2C1;
 static ARM_DRIVER_I2C *i2c = &Driver_I2C1;
 
+static bool pooling;
+
 /*******************************************************************************
  *  function implementations (scope: module-local)
  ******************************************************************************/
@@ -90,36 +93,65 @@ void I2C_Callback(uint32_t event)
 }
 
 static
-int32_t WaitTransferEvent(void)
+int32_t WaitTransfer(uint32_t data_cnt)
 {
-  uint32_t flags;
+  if (pooling == false) {
+    uint32_t flags;
 
-  flags = osEventFlagsWait(evf_i2c,
-                           ARM_I2C_EVENT_TRANSFER_DONE       |
-                           ARM_I2C_EVENT_TRANSFER_INCOMPLETE |
-                           ARM_I2C_EVENT_ADDRESS_NACK        |
-                           ARM_I2C_EVENT_ARBITRATION_LOST    |
-                           ARM_I2C_EVENT_BUS_ERROR,
-                           osFlagsWaitAny,
-                           I2C_TIMEOUT);
-  if ((flags & osFlagsError) != 0U) {
-    if (flags == osFlagsErrorTimeout) {
-      i2c->Control(ARM_I2C_BUS_CLEAR, 0U);
+    flags = osEventFlagsWait(evf_i2c,
+                             ARM_I2C_EVENT_TRANSFER_DONE       |
+                             ARM_I2C_EVENT_TRANSFER_INCOMPLETE |
+                             ARM_I2C_EVENT_ADDRESS_NACK        |
+                             ARM_I2C_EVENT_ARBITRATION_LOST    |
+                             ARM_I2C_EVENT_BUS_ERROR,
+                             osFlagsWaitAny,
+                             I2C_TIMEOUT);
+    if ((flags & osFlagsError) != 0U) {
+      if (flags == osFlagsErrorTimeout) {
+        i2c->Control(ARM_I2C_BUS_CLEAR, 0U);
+      }
+      return (-1);
     }
-    return (-1);
-  }
 
-  /* Check if all data transferred */
-  if ((flags & ~ARM_I2C_EVENT_TRANSFER_DONE) != 0U) {
-    return (-1);
+    /* Check if all data transferred */
+    if ((flags & ~ARM_I2C_EVENT_TRANSFER_DONE) != 0U) {
+      return (-1);
+    }
+  }
+  else {
+    uint32_t timeout;
+    ARM_I2C_STATUS state;
+
+    timeout = osKernelGetTickCount() + I2C_TIMEOUT;
+
+    do {
+      state = i2c->GetStatus();
+      if (state.busy == 0U) {
+        break;
+      }
+    } while (time_before(osKernelGetTickCount(), timeout));
+
+    if (state.busy != 0U) {
+      i2c->Control(ARM_I2C_BUS_CLEAR, 0U);
+      return (-1);
+    }
+
+    if (state.arbitration_lost != 0U || state.bus_error != 0U) {
+      return (-1);
+    }
+
+    /* Check if all data transferred */
+    if (i2c->GetDataCount() != (int32_t)data_cnt) {
+      return (-1);
+    }
   }
 
   return (0);
 }
 
 static
-int32_t TestTransferEvent(uint8_t *wr_buf, uint8_t wr_size,
-                          uint8_t *rd_buf, uint8_t rd_size)
+int32_t TestTransfer(uint8_t *wr_buf, uint8_t wr_size,
+                     uint8_t *rd_buf, uint8_t rd_size)
 {
   int32_t rc = 0;
   bool pend = (rd_buf != NULL && rd_size != 0U) ? true : false;
@@ -128,7 +160,7 @@ int32_t TestTransferEvent(uint8_t *wr_buf, uint8_t wr_size,
     rc = i2c->MasterTransmit(SLAVE_ADDR, wr_buf, wr_size, pend);
     if (rc == ARM_DRIVER_OK) {
       /* Wait until transfer completed */
-      rc = WaitTransferEvent();
+      rc = WaitTransfer(wr_size);
     }
   }
 
@@ -136,67 +168,11 @@ int32_t TestTransferEvent(uint8_t *wr_buf, uint8_t wr_size,
     rc = i2c->MasterReceive(SLAVE_ADDR, rd_buf, rd_size, false);
     if (rc == ARM_DRIVER_OK) {
       /* Wait until transfer completed */
-      rc = WaitTransferEvent();
+      rc = WaitTransfer(rd_size);
     }
   }
 
   return (rc);
-}
-
-static
-int32_t WaitTransferPool(void)
-{
-  uint32_t timeout;
-  ARM_I2C_STATUS state;
-
-  timeout = osKernelGetTickCount() + I2C_TIMEOUT;
-
-  do {
-    state = i2c->GetStatus();
-    if (state.busy == 0U) {
-      break;
-    }
-  } while (time_before(osKernelGetTickCount(), timeout));
-
-  if (state.busy != 0U) {
-    i2c->Control(ARM_I2C_BUS_CLEAR, 0U);
-    return (-1);
-  }
-
-  return (0);
-}
-
-static
-int32_t TestTransferPool(uint8_t *wr_buf, uint8_t wr_size,
-                         uint8_t *rd_buf, uint8_t rd_size)
-{
-  int32_t rc;
-
-  rc = i2c->MasterTransmit(SLAVE_ADDR, wr_buf, wr_size, true);
-  if (rc != ARM_DRIVER_OK) {
-    return (-1);
-  }
-
-  /* Wait until transfer completed */
-  rc = WaitTransferPool();
-  /* Check if all data transferred */
-  if (rc != 0 || i2c->GetDataCount() != wr_size) {
-    return (-1);
-  }
-
-  rc = i2c->MasterReceive(SLAVE_ADDR, rd_buf, rd_size, false);
-  if (rc != ARM_DRIVER_OK) {
-    return (-1);
-  }
-
-  /* Wait until transfer completed */
-  rc = WaitTransferPool();
-  /* Check if all data transferred */
-  if (rc != 0 || i2c->GetDataCount() != rd_size) {
-    return (-1);
-  }
-
-  return (0U);
 }
 
 static void GPIO_Init(void)
@@ -211,38 +187,36 @@ static void GPIO_Init(void)
   gpio->PinConfig(LED_PIN, &pin_cfg);
 }
 
+static void I2C_Init(void)
+{
+  ARM_I2C_SignalEvent_t cb_event;
+
+  cb_event = pooling == false ? I2C_Callback : NULL;
+
+  /* Initialize I2C Driver */
+  i2c->Initialize(cb_event);
+  /* Configure I2C Driver */
+  i2c->PowerControl(ARM_POWER_FULL);
+  i2c->Control(ARM_I2C_BUS_SPEED, ARM_I2C_BUS_SPEED_STANDARD);
+}
+
 __NO_RETURN
 static void main_proc(void *param)
 {
   (void) param;
-  bool pooling;
+
+  pooling = false;
 
   GPIO_Init();
+  I2C_Init();
+
   osTimerStart(timer_id, TIMEOUT);
-
-  pooling = true;
-
-  /* Initialize I2C Driver */
-  if (pooling == false) {
-    i2c->Initialize(I2C_Callback);
-  }
-  else {
-    i2c->Initialize(NULL);
-  }
-  /* Configure I2C Driver */
-  i2c->PowerControl(ARM_POWER_FULL);
-  i2c->Control(ARM_I2C_BUS_SPEED, ARM_I2C_BUS_SPEED_STANDARD);
 
   uint8_t wr_buf[] = {0U};
   uint8_t rd_buf[16];
 
   for (;;) {
-    if (pooling == false) {
-      TestTransferEvent(&wr_buf[0], sizeof(wr_buf), &rd_buf[0], sizeof(rd_buf));
-    }
-    else {
-      TestTransferPool(&wr_buf[0], sizeof(wr_buf), &rd_buf[0], sizeof(rd_buf));
-    }
+    TestTransfer(&wr_buf[0], sizeof(wr_buf), &rd_buf[0], sizeof(rd_buf));
     osDelay(5U);
   }
 }
