@@ -24,7 +24,6 @@
 #include <stddef.h>
 #include <Kernel/kernel.h>
 #include <asm/system_aduc7023.h>
-#include <Core/Arm/cmsis_compiler.h>
 #include <Driver/GPIO_ADUC7023.h>
 #include <Driver/Driver_I2C.h>
 
