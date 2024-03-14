@@ -30,7 +30,22 @@
 			<locationURI>PARENT-2-PROJECT_LOC/src</locationURI>
 		</link>
 		<link>
+			<name>src/Device</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
 			<name>src/Include</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>src/Kernel</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>src/Device/GD32VF1xx</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
@@ -41,6 +56,121 @@
 		</link>
 		<link>
 			<name>src/Include/Kernel</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>src/Kernel/Config</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>src/Kernel/GCC</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>src/Kernel/arch.h</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Kernel/Source/arch.h</locationURI>
+		</link>
+		<link>
+			<name>src/Kernel/arch_arm.h</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Kernel/Source/arch_arm.h</locationURI>
+		</link>
+		<link>
+			<name>src/Kernel/arch_cm.h</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Kernel/Source/arch_cm.h</locationURI>
+		</link>
+		<link>
+			<name>src/Kernel/arch_kmx32.h</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Kernel/Source/arch_kmx32.h</locationURI>
+		</link>
+		<link>
+			<name>src/Kernel/arch_riscv.h</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Kernel/Source/arch_riscv.h</locationURI>
+		</link>
+		<link>
+			<name>src/Kernel/dataqueue.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Kernel/Source/dataqueue.c</locationURI>
+		</link>
+		<link>
+			<name>src/Kernel/delay.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Kernel/Source/delay.c</locationURI>
+		</link>
+		<link>
+			<name>src/Kernel/event.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Kernel/Source/event.c</locationURI>
+		</link>
+		<link>
+			<name>src/Kernel/kernel.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Kernel/Source/kernel.c</locationURI>
+		</link>
+		<link>
+			<name>src/Kernel/kernel_lib.h</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Kernel/Source/kernel_lib.h</locationURI>
+		</link>
+		<link>
+			<name>src/Kernel/mempool.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Kernel/Source/mempool.c</locationURI>
+		</link>
+		<link>
+			<name>src/Kernel/msgqueue.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Kernel/Source/msgqueue.c</locationURI>
+		</link>
+		<link>
+			<name>src/Kernel/mutex.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Kernel/Source/mutex.c</locationURI>
+		</link>
+		<link>
+			<name>src/Kernel/scheduler.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Kernel/Source/scheduler.c</locationURI>
+		</link>
+		<link>
+			<name>src/Kernel/semaphore.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Kernel/Source/semaphore.c</locationURI>
+		</link>
+		<link>
+			<name>src/Kernel/system.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Kernel/Source/system.c</locationURI>
+		</link>
+		<link>
+			<name>src/Kernel/systick.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Kernel/Source/systick.c</locationURI>
+		</link>
+		<link>
+			<name>src/Kernel/thread.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Kernel/Source/thread.c</locationURI>
+		</link>
+		<link>
+			<name>src/Kernel/timer.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Kernel/Source/timer.c</locationURI>
+		</link>
+		<link>
+			<name>src/Device/GD32VF1xx/Include</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>src/Device/GD32VF1xx/Startup</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
@@ -60,6 +190,61 @@
 			<locationURI>PARENT-7-PROJECT_LOC/Include/Kernel/tick.h</locationURI>
 		</link>
 		<link>
+			<name>src/Kernel/Config/kernel_config.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Kernel/Config/kernel_config.c</locationURI>
+		</link>
+		<link>
+			<name>src/Kernel/Config/kernel_config.h</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Kernel/Config/kernel_config.h</locationURI>
+		</link>
+		<link>
+			<name>src/Kernel/Config/kernel_lib.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Kernel/Config/kernel_lib.c</locationURI>
+		</link>
+		<link>
+			<name>src/Kernel/GCC/irq_arm.S</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Kernel/Source/GCC/irq_arm.S</locationURI>
+		</link>
+		<link>
+			<name>src/Kernel/GCC/irq_cm0.S</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Kernel/Source/GCC/irq_cm0.S</locationURI>
+		</link>
+		<link>
+			<name>src/Kernel/GCC/irq_cm3.S</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Kernel/Source/GCC/irq_cm3.S</locationURI>
+		</link>
+		<link>
+			<name>src/Kernel/GCC/irq_cm4f.S</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Kernel/Source/GCC/irq_cm4f.S</locationURI>
+		</link>
+		<link>
+			<name>src/Kernel/GCC/irq_kmx32.S</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Kernel/Source/GCC/irq_kmx32.S</locationURI>
+		</link>
+		<link>
+			<name>src/Device/GD32VF1xx/Include/asm</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>src/Device/GD32VF1xx/Startup/startup_gd32vf1xx.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Device/GigaDevice/GD32VF1xx/Startup/startup_gd32vf1xx.c</locationURI>
+		</link>
+		<link>
+			<name>src/Device/GD32VF1xx/Startup/system_gd32vf1xx.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Device/GigaDevice/GD32VF1xx/Startup/system_gd32vf1xx.c</locationURI>
+		</link>
+		<link>
 			<name>src/Include/Core/Riscv/compiler.h</name>
 			<type>1</type>
 			<locationURI>PARENT-7-PROJECT_LOC/Include/Core/Riscv/compiler.h</locationURI>
@@ -73,6 +258,16 @@
 			<name>src/Include/Core/Riscv/iccriscv.h</name>
 			<type>1</type>
 			<locationURI>PARENT-7-PROJECT_LOC/Include/Core/Riscv/iccriscv.h</locationURI>
+		</link>
+		<link>
+			<name>src/Device/GD32VF1xx/Include/asm/gd32vf103xx.h</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Device/GigaDevice/GD32VF1xx/Include/asm/gd32vf103xx.h</locationURI>
+		</link>
+		<link>
+			<name>src/Device/GD32VF1xx/Include/asm/system_gd32vf1xx.h</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Device/GigaDevice/GD32VF1xx/Include/asm/system_gd32vf1xx.h</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

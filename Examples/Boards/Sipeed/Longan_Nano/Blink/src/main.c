@@ -19,6 +19,7 @@
 
 
 #include <stddef.h>
+#include <asm/system_gd32vf1xx.h>
 #include <Kernel/kernel.h>
 
 /*******************************************************************************
@@ -28,7 +29,7 @@
 #define TIMEOUT                       (500UL)
 #define THREAD_STACK_SIZE             (256U)
 
-#define LED_PIN                       (GPIO_PIN_4)
+//#define LED_PIN                       (GPIO_PIN_4)
 
 /*******************************************************************************
  *  global variable definitions (scope: module-local)
@@ -56,8 +57,8 @@ static const osTimerAttr_t timer_attr = {
     .cb_size   = sizeof(timer_cb)
 };
 
-extern Driver_GPIO_t Driver_GPIO2;
-static Driver_GPIO_t *gpio = &Driver_GPIO2;
+//extern Driver_GPIO_t Driver_GPIO2;
+//static Driver_GPIO_t *gpio = &Driver_GPIO2;
 
 /*******************************************************************************
  *  function implementations (scope: module-local)
@@ -65,13 +66,13 @@ static Driver_GPIO_t *gpio = &Driver_GPIO2;
 
 static void GPIO_Init(void)
 {
-  const GPIO_PIN_CFG_t led_cfg = {
-    .func = GPIO_PIN_FUNC_0,
-    .mode = GPIO_MODE_OUT_PP,
-    .pull = GPIO_PULL_DISABLE
-  };
-
-  gpio->PinConfig(LED_PIN, &led_cfg);
+//  const GPIO_PIN_CFG_t led_cfg = {
+//    .func = GPIO_PIN_FUNC_0,
+//    .mode = GPIO_MODE_OUT_PP,
+//    .pull = GPIO_PULL_DISABLE
+//  };
+//
+//  gpio->PinConfig(LED_PIN, &led_cfg);
 }
 
 static void init_proc(void *param)
@@ -87,7 +88,7 @@ static void timer_func(void *argument)
 {
   (void) argument;
 
-  gpio->PinToggle(LED_PIN);
+//  gpio->PinToggle(LED_PIN);
 }
 
 int main(void)
