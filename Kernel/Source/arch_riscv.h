@@ -27,6 +27,8 @@
 #include <stdbool.h>
 #include "Core/Riscv/compiler.h"
 
+extern uint8_t IRQ_PendSV;
+
 extern uint32_t GetModeCPU(void);
 extern uint32_t DisableIRQ(void);
 extern     void RestoreIRQ(uint32_t);
@@ -56,17 +58,6 @@ extern     void RestoreIRQ(uint32_t);
 #define BEGIN_CRITICAL_SECTION        uint32_t mode = DisableIRQ();
 #define END_CRITICAL_SECTION          RestoreIRQ(mode);
 
-#if defined(__CC_ARM)
-  #define SVC_INDIRECT_REG            r12
-#elif defined(__ICCARM__)
-  #define SVC_FUNC(f)                 __asm (                                  \
-                                        "mov r12,%0\n"                         \
-                                        :: "r"(f): "r12"                       \
-                                      )
-#else
-  #define SVC_INDIRECT_REG            "t0"
-#endif
-
 /*******************************************************************************
  *  exported functions
  ******************************************************************************/
@@ -95,8 +86,6 @@ bool IsIrqMode(void)
 
   return ((mode != CPSR_MODE_USER) && (mode != CPSR_MODE_SYSTEM));
 }
-
-extern uint8_t IRQ_PendSV;
 
 /**
  * @fn          void PendServCallReq(void)
@@ -150,199 +139,85 @@ uint32_t StackInit(StackAttr_t *attr, bool privileged)
   return ((uint32_t)stk);
 }
 
-#if   defined ( __CC_ARM )
-  #pragma push
-  #pragma arm
-#endif
-
 __STATIC_FORCEINLINE
 uint32_t svc_0(uint32_t func)
 {
-#if defined(__CC_ARM)
+  register uint32_t __r0 __ASM("a0");
+  register uint32_t __rf __ASM("a7") = func;
 
-  register uint32_t __r0 __ASM("r0");
-
-  __ASM {
-    SVC 0, {SVC_INDIRECT_REG=func}, {__r0=r0}
-  }
+  __ASM volatile (
+      "ecall \n\t"
+      :"=r"(__r0)
+      :"r"(__rf)
+  );
 
   return (__r0);
-
-#elif defined(__ICCARM__)
-
-  _Pragma("swi_number = 0") __swi uint32_t __svc_0(void);
-
-  SVC_FUNC(func);
-
-  return __svc_0();
-
-#else   // !(defined(__CC_ARM) || defined(__ICCARM__))
-
-  register uint32_t __rf __ASM(SVC_INDIRECT_REG) = func;
-  register uint32_t __a0 __ASM("a0");
-
-//  __ASM volatile ("svc 0\n"
-//                 :"=r"(__a0)
-//                 :"r"(__rf)
-//  );
-
-  return (__a0);
-
-#endif
 }
 
 __STATIC_FORCEINLINE
 uint32_t svc_1(uint32_t param1, uint32_t func)
 {
-#if defined(__CC_ARM)
+  register uint32_t __r0 __ASM("a0") = param1;
+  register uint32_t __rf __ASM("a7") = func;
 
-  register uint32_t __r0 __ASM("r0");
-
-  __ASM {
-    SVC 0, {SVC_INDIRECT_REG=func, r0=param1}, {__r0=r0}
-  }
+  __ASM volatile (
+      "ecall \n\t"
+      :"=r"(__r0)
+      :"r"(__rf),"r"(__r0)
+  );
 
   return (__r0);
-
-#elif defined(__ICCARM__)
-
-  _Pragma("swi_number = 0") __swi uint32_t __svc_1(uint32_t);
-
-  SVC_FUNC(func);
-
-  return __svc_1(param1);
-
-#else   // !(defined(__CC_ARM) || defined(__ICCARM__))
-
-  register uint32_t __rf __ASM(SVC_INDIRECT_REG) = func;
-  register uint32_t __a0 __ASM("a0") = param1;
-
-//  __ASM volatile ("svc 0\n"
-//                 :"=r"(__a0)
-//                 :"r"(__rf),"r"(__a0)
-//  );
-
-  return (__a0);
-
-#endif
 }
 
 __STATIC_FORCEINLINE
 uint32_t svc_2(uint32_t param1, uint32_t param2, uint32_t func)
 {
-#if defined(__CC_ARM)
+  register uint32_t __r0 __ASM("a0") = param1;
+  register uint32_t __r1 __ASM("a1") = param2;
+  register uint32_t __rf __ASM("a7") = func;
 
-  register uint32_t __r0 __ASM("r0");
-
-  __ASM {
-    SVC 0, {SVC_INDIRECT_REG=func, r0=param1, r1=param2}, {__r0=r0}
-  }
+  __ASM volatile (
+      "ecall \n\t"
+      :"=r"(__r0)
+      :"r"(__rf),"r"(__r0),"r"(__r1)
+  );
 
   return (__r0);
-
-#elif defined(__ICCARM__)
-
-  _Pragma("swi_number = 0") __swi uint32_t __svc_2(uint32_t, uint32_t);
-
-  SVC_FUNC(func);
-
-  return __svc_2(param1, param2);
-
-#else   // !(defined(__CC_ARM) || defined(__ICCARM__))
-
-  register uint32_t __rf __ASM(SVC_INDIRECT_REG) = func;
-  register uint32_t __a0 __ASM("a0") = param1;
-  register uint32_t __a1 __ASM("a1") = param2;
-
-//  __ASM volatile ("svc 0\n"
-//                 :"=r"(__a0)
-//                 :"r"(__rf),"r"(__a0),"r"(__a1)
-//  );
-
-  return (__a0);
-
-#endif
 }
 
 __STATIC_FORCEINLINE
 uint32_t svc_3(uint32_t param1, uint32_t param2, uint32_t param3, uint32_t func)
 {
-#if defined(__CC_ARM)
+  register uint32_t __r0 __ASM("a0") = param1;
+  register uint32_t __r1 __ASM("a1") = param2;
+  register uint32_t __r2 __ASM("a2") = param3;
+  register uint32_t __rf __ASM("a7") = func;
 
-  register uint32_t __r0 __ASM("r0");
-
-  __ASM {
-    SVC 0, {SVC_INDIRECT_REG=func, r0=param1, r1=param2, r2=param3}, {__r0=r0}
-  }
+  __ASM volatile (
+      "ecall \n\t"
+      :"=r"(__r0)
+      :"r"(__rf),"r"(__r0),"r"(__r1),"r"(__r2)
+  );
 
   return (__r0);
-
-#elif defined(__ICCARM__)
-
-  _Pragma("swi_number = 0") __swi uint32_t __svc_3(uint32_t, uint32_t, uint32_t);
-
-  SVC_FUNC(func);
-
-  return __svc_3(param1, param2, param3);
-
-#else   // !(defined(__CC_ARM) || defined(__ICCARM__))
-
-  register uint32_t __rf __ASM(SVC_INDIRECT_REG) = func;
-  register uint32_t __a0 __ASM("a0") = param1;
-  register uint32_t __a1 __ASM("a1") = param2;
-  register uint32_t __a2 __ASM("a2") = param3;
-
-//  __ASM volatile ("svc 0\n"
-//                 :"=r"(__a0)
-//                 :"r"(__rf),"r"(__a0),"r"(__a1),"r"(__a2)
-//  );
-
-  return (__a0);
-
-#endif
 }
 
 __STATIC_FORCEINLINE
 uint32_t svc_4(uint32_t param1, uint32_t param2, uint32_t param3, uint32_t param4, uint32_t func)
 {
-#if defined(__CC_ARM)
+  register uint32_t __r0 __ASM("a0") = param1;
+  register uint32_t __r1 __ASM("a1") = param2;
+  register uint32_t __r2 __ASM("a2") = param3;
+  register uint32_t __r3 __ASM("a3") = param4;
+  register uint32_t __rf __ASM("a7") = func;
 
-  register uint32_t __r0 __ASM("r0");
-
-  __ASM {
-    SVC 0, {SVC_INDIRECT_REG=func, r0=param1, r1=param2, r2=param3, r3=param4}, {__r0=r0}
-  }
+  __ASM volatile (
+      "ecall \n\t"
+      :"=r"(__r0)
+      :"r"(__rf),"r"(__r0),"r"(__r1),"r"(__r2),"r"(__r3)
+  );
 
   return (__r0);
-
-#elif defined(__ICCARM__)
-
-  _Pragma("swi_number = 0") __swi uint32_t __svc_4(uint32_t, uint32_t, uint32_t, uint32_t);
-
-  SVC_FUNC(func);
-
-  return __svc_4(param1, param2, param3, param4);
-
-#else   // !(defined(__CC_ARM) || defined(__ICCARM__))
-
-  register uint32_t __rf __ASM(SVC_INDIRECT_REG) = func;
-  register uint32_t __a0 __ASM("a0") = param1;
-  register uint32_t __a1 __ASM("a1") = param2;
-  register uint32_t __a2 __ASM("a2") = param3;
-  register uint32_t __a3 __ASM("a3") = param4;
-
-//  __ASM volatile ("svc 0\n"
-//                 :"=r"(__a0)
-//                 :"r"(__rf),"r"(__a0),"r"(__a1),"r"(__a2),"r"(__a3)
-//  );
-
-  return (__a0);
-
-#endif
 }
-
-#if   defined ( __CC_ARM )
-  #pragma pop
-#endif
 
 #endif /* ARCH_RISCV_H_ */
