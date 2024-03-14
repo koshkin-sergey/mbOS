@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2017-2024 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -22,6 +22,7 @@
  *  includes
  ******************************************************************************/
 
+#include <stdbool.h>
 #include "arch.h"
 #include "Kernel/kernel.h"
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2022 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2017-2024 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -88,6 +88,10 @@ typedef struct StackAttr_s {
 
 #include "arch_kmx32.h"
 
+#elif (defined(__riscv) && (__riscv != 0))
+
+#include "arch_riscv.h"
+
 #else
   #error Unknown target.
 #endif
@@ -103,5 +107,3 @@ typedef struct StackAttr_s {
 #define SVC_4(param1, param2, param3, param4, func)   (uint32_t)svc_4((uint32_t)(param1), (uint32_t)(param2), (uint32_t)(param3), (uint32_t)(param4), (uint32_t)(func))
 
 #endif  // _ARCH_H_
-
-/*------------------------------ End of file ---------------------------------*/
