@@ -230,6 +230,11 @@
 			<locationURI>PARENT-7-PROJECT_LOC/Kernel/Source/GCC/irq_kmx32.S</locationURI>
 		</link>
 		<link>
+			<name>src/Kernel/GCC/irq_riscv.S</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Kernel/Source/GCC/irq_riscv.S</locationURI>
+		</link>
+		<link>
 			<name>src/Device/GD32VF1xx/Include/asm</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
