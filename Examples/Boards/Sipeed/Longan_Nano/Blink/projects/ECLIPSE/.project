@@ -165,6 +165,11 @@
 			<locationURI>PARENT-7-PROJECT_LOC/Kernel/Source/timer.c</locationURI>
 		</link>
 		<link>
+			<name>src/Device/GD32VF1xx/Driver</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
 			<name>src/Device/GD32VF1xx/Include</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
@@ -233,6 +238,11 @@
 			<name>src/Kernel/GCC/irq_riscv.S</name>
 			<type>1</type>
 			<locationURI>PARENT-7-PROJECT_LOC/Kernel/Source/GCC/irq_riscv.S</locationURI>
+		</link>
+		<link>
+			<name>src/Device/GD32VF1xx/Driver/RTOS_TIMER_GD32VF1xx.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Device/GigaDevice/GD32VF1xx/Driver/RTOS_TIMER_GD32VF1xx.c</locationURI>
 		</link>
 		<link>
 			<name>src/Device/GD32VF1xx/Include/asm</name>
