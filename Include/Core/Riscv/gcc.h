@@ -111,6 +111,12 @@
 #define __NOP()                             __ASM volatile ("nop")
 
 /**
+ * @brief   Wait For Interrupt
+ * @details Wait For Interrupt is a hint instruction that suspends execution until one of a number of events occurs.
+ */
+#define __WFI()                             __ASM volatile ("wfi":::"memory")
+
+/**
  * @brief   Reverse byte order (32 bit)
  * @details Reverses the byte order in unsigned integer value. For example, 0x12345678 becomes 0x78563412.
  * @param [in]    value  Value to reverse
