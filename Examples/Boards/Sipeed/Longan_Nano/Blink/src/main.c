@@ -21,6 +21,7 @@
 #include <stddef.h>
 #include <asm/system_gd32vf1xx.h>
 #include <Kernel/kernel.h>
+#include <Core/Riscv/compiler.h>
 
 /*******************************************************************************
  *  defines and macros (scope: module-local)
