@@ -228,5 +228,35 @@ uint8_t __CLZ(uint32_t value)
 
 /* #########################  Core Function Access  ######################### */
 
+#define read_csr(reg) (                                                        \
+{                                                                              \
+  uint32_t __tmp;                                                              \
+  __ASM volatile ("csrr %0, " #reg : "=r"(__tmp));                             \
+  __tmp;                                                                       \
+})
+
+#define write_csr(reg, val)                                                    \
+  __ASM volatile ("csrw " #reg ", %0" :: "Kr"(val))
+
+#define swap_csr(reg, val) (                                                   \
+{                                                                              \
+  uint32_t __tmp;                                                              \
+  __ASM volatile ("csrrw %0, " #reg ", %1" : "=r"(__tmp) : "Kr"(val));         \
+  __tmp;                                                                       \
+})
+
+#define set_csr(reg, bit) (                                                    \
+{                                                                              \
+  uint32_t __tmp;                                                              \
+  __ASM volatile ("csrrs %0, " #reg ", %1" : "=r"(__tmp) : "Kr"(bit));         \
+  __tmp;                                                                       \
+})
+
+#define clear_csr(reg, bit) (                                                  \
+{                                                                              \
+  uint32_t __tmp;                                                              \
+  __ASM volatile ("csrrc %0, " #reg ", %1" : "=r"(__tmp) : "Kr"(bit));         \
+  __tmp;                                                                       \
+})
 
 #endif /* __GCC_H */
