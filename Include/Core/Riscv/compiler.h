@@ -1,11 +1,5 @@
-/**************************************************************************//**
- * @file     compiler.h
- * @brief    RISC-V compiler specific macros, functions, instructions
- * @version  V1.0.0
- * @date     12. June 2023
- ******************************************************************************/
 /*
- * Copyright (C) 2023 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2023-2024 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -30,14 +24,14 @@
  * GNU Compiler
  */
 #if   defined ( __GNUC__ )
-  #include "gcc.h"
+  #include "gcc_riscv.h"
 
 
 /*
  * IAR Compiler
  */
 #elif defined ( __ICCRISCV__ )
-  #include "iccriscv.h"
+  #include "icc_riscv.h"
 
 
 #else

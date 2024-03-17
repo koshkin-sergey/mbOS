@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2023-2024 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -224,5 +224,9 @@ uint8_t __CLZ(uint32_t value)
   }
   return (__builtin_clz(value));
 }
+
+
+/* #########################  Core Function Access  ######################### */
+
 
 #endif /* __GCC_H */

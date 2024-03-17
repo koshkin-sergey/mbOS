@@ -265,14 +265,14 @@
 			<locationURI>PARENT-7-PROJECT_LOC/Include/Core/Riscv/compiler.h</locationURI>
 		</link>
 		<link>
-			<name>src/Include/Core/Riscv/gcc.h</name>
+			<name>src/Include/Core/Riscv/gcc_riscv.h</name>
 			<type>1</type>
-			<locationURI>PARENT-7-PROJECT_LOC/Include/Core/Riscv/gcc.h</locationURI>
+			<locationURI>PARENT-7-PROJECT_LOC/Include/Core/Riscv/gcc_riscv.h</locationURI>
 		</link>
 		<link>
-			<name>src/Include/Core/Riscv/iccriscv.h</name>
+			<name>src/Include/Core/Riscv/icc_riscv.h</name>
 			<type>1</type>
-			<locationURI>PARENT-7-PROJECT_LOC/Include/Core/Riscv/iccriscv.h</locationURI>
+			<locationURI>PARENT-7-PROJECT_LOC/Include/Core/Riscv/icc_riscv.h</locationURI>
 		</link>
 		<link>
 			<name>src/Device/GD32VF1xx/Include/asm/gd32vf103xx.h</name>
