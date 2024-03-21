@@ -1,31 +1,28 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
-<!-- File naming: <gigadevice>_<GD32F10x_CL>.svd -->
+<!-- File naming: <gigadevice>_<GD32VF103>.svd -->
 <device schemaVersion="1.1" xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
 
   <name>GD32VF103</name>
   <version>1.0</version>
   <description>GD32VF103 RISC-V Microcontroller based device</description>
+
   <cpu>
-  <name>CM3</name>
-  <revision>r2p1</revision>
-  <endian>little</endian>
-  <mpuPresent>0</mpuPresent>
-  <fpuPresent>0</fpuPresent>
-  <nvicPrioBits>4</nvicPrioBits>
-  <vendorSystickConfig>0</vendorSystickConfig>
-</cpu> 
+    <name>GD32VF103</name>
+    <revision>r1p0</revision>
+    <endian>little</endian>
+    <mpuPresent>1</mpuPresent>
+    <fpuPresent>0</fpuPresent>
+    <vendorSystickConfig>0</vendorSystickConfig>
+  </cpu>
+
   <addressUnitBits>8</addressUnitBits>
   <width>32</width>
-  <!--Bus Interface Properties-->
-  <!--the maximum data bit width accessible within a single transfer-->
-  <!--Cortex-M3 is byte addressable-->
-  <!--Register Default Properties-->
-  <size>0x20</size>
+  <size>32</size>
   <resetValue>0x0</resetValue>
   <resetMask>0xFFFFFFFF</resetMask>
-   <peripherals>
 
- <peripheral>
+  <peripherals>
+    <peripheral>
       <name>ADC0</name>
       <description>Analog to digital converter</description>
       <groupName>ADC</groupName>
@@ -98,7 +95,7 @@
             </field>
             <field>
               <name>IWDEN</name>
-              <description>Inserted channel analog watchdog 
+              <description>Inserted channel analog watchdog
 	     enable</description>
               <bitOffset>22</bitOffset>
               <bitWidth>1</bitWidth>
@@ -111,14 +108,14 @@
             </field>
             <field>
               <name>DISNUM</name>
-              <description>Number of conversions in 
+              <description>Number of conversions in
 	     discontinuous mode</description>
               <bitOffset>13</bitOffset>
               <bitWidth>3</bitWidth>
             </field>
             <field>
               <name>DISIC</name>
-              <description>Discontinuous mode on 
+              <description>Discontinuous mode on
 	     inserted channels</description>
               <bitOffset>12</bitOffset>
               <bitWidth>1</bitWidth>
@@ -132,7 +129,7 @@
             </field>
             <field>
               <name>ICA</name>
-              <description>Inserted channel group convert 
+              <description>Inserted channel group convert
 	     automatically</description>
               <bitOffset>10</bitOffset>
               <bitWidth>1</bitWidth>
@@ -925,28 +922,28 @@
           <fields>
             <field>
               <name>RWDEN</name>
-              <description>Regular channel analog watchdog 
+              <description>Regular channel analog watchdog
 	     enable</description>
               <bitOffset>23</bitOffset>
               <bitWidth>1</bitWidth>
             </field>
             <field>
               <name>IWDEN</name>
-              <description>Inserted channel analog watchdog 
+              <description>Inserted channel analog watchdog
 	     enable</description>
               <bitOffset>22</bitOffset>
               <bitWidth>1</bitWidth>
             </field>
             <field>
               <name>DISNUM</name>
-              <description>Number of conversions in 
+              <description>Number of conversions in
 	     discontinuous mode</description>
               <bitOffset>13</bitOffset>
               <bitWidth>3</bitWidth>
             </field>
             <field>
               <name>DISIC</name>
-              <description>Discontinuous mode on 
+              <description>Discontinuous mode on
 	     inserted channels</description>
               <bitOffset>12</bitOffset>
               <bitWidth>1</bitWidth>
@@ -960,7 +957,7 @@
             </field>
             <field>
               <name>ICA</name>
-              <description>Inserted channel group convert 
+              <description>Inserted channel group convert
 	     automatically</description>
               <bitOffset>10</bitOffset>
               <bitWidth>1</bitWidth>
@@ -1699,7 +1696,7 @@
               <description>Serial wire JTAG configuration</description>
               <bitOffset>24</bitOffset>
               <bitWidth>3</bitWidth>
-            </field>  
+            </field>
             <field>
               <name>CAN1_REMAP</name>
               <description>CAN1 I/O remapping</description>
@@ -2905,7 +2902,7 @@
             </field>
             <field>
               <name>SLPIF</name>
-              <description>Status change interrupt flag of sleep 
+              <description>Status change interrupt flag of sleep
 	     working mode entering</description>
               <bitOffset>4</bitOffset>
               <bitWidth>1</bitWidth>
@@ -2913,7 +2910,7 @@
             </field>
             <field>
               <name>WUIF</name>
-              <description>Status change interrupt flag of wakeup 
+              <description>Status change interrupt flag of wakeup
 	     from sleep working mode</description>
               <bitOffset>3</bitOffset>
               <bitWidth>1</bitWidth>
@@ -2952,7 +2949,7 @@
           <fields>
             <field>
               <name>TMLS2</name>
-              <description>Transmit mailbox 2 last sending 
+              <description>Transmit mailbox 2 last sending
 	     in transmit FIFO</description>
               <bitOffset>31</bitOffset>
               <bitWidth>1</bitWidth>
@@ -2960,7 +2957,7 @@
             </field>
             <field>
               <name>TMLS1</name>
-              <description>Transmit mailbox 1 last sending 
+              <description>Transmit mailbox 1 last sending
 	     in transmit FIFO</description>
               <bitOffset>30</bitOffset>
               <bitWidth>1</bitWidth>
@@ -2968,7 +2965,7 @@
             </field>
             <field>
               <name>TMLS0</name>
-              <description>Transmit mailbox 0 last sending 
+              <description>Transmit mailbox 0 last sending
 	     in transmit FIFO</description>
               <bitOffset>29</bitOffset>
               <bitWidth>1</bitWidth>
@@ -2997,7 +2994,7 @@
             </field>
             <field>
               <name>NUM</name>
-              <description>number of the transmit FIFO mailbox in 
+              <description>number of the transmit FIFO mailbox in
 	     which the frame will be transmitted if at least one mailbox is empty</description>
               <bitOffset>24</bitOffset>
               <bitWidth>2</bitWidth>
@@ -3291,7 +3288,7 @@
           <fields>
             <field>
               <name>RECNT</name>
-              <description>Receive Error Count defined 
+              <description>Receive Error Count defined
 	     by the CAN standard</description>
               <bitOffset>24</bitOffset>
               <bitWidth>8</bitWidth>
@@ -3299,7 +3296,7 @@
             </field>
             <field>
               <name>TECNT</name>
-              <description>Transmit Error Count defined 
+              <description>Transmit Error Count defined
 	     by the CAN standard</description>
               <bitOffset>16</bitOffset>
               <bitWidth>8</bitWidth>
@@ -16708,13 +16705,13 @@
               <description>TIMER 23 hold bit</description>
               <bitOffset>13</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>            
+            </field>
              <field>
               <name>CAN0_HOLD</name>
               <description>CAN0 hold bit</description>
               <bitOffset>14</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>            
+            </field>
 	    <field>
               <name>I2C0_HOLD</name>
               <description>I2C0 hold bit</description>
@@ -16726,7 +16723,7 @@
               <description>I2C1 hold bit</description>
               <bitOffset>16</bitOffset>
               <bitWidth>1</bitWidth>
-            </field> 
+            </field>
 	   <field>
               <name>TIMER4_HOLD</name>
               <description>TIMER4_HOLD</description>
@@ -16738,19 +16735,19 @@
               <description>TIMER 5 hold bit</description>
               <bitOffset>19</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>   
+            </field>
             <field>
               <name>TIMER6_HOLD</name>
               <description>TIMER 6 hold bit</description>
               <bitOffset>20</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>                
+            </field>
             <field>
               <name>CAN1_HOLD</name>
               <description>CAN1 hold bit</description>
               <bitOffset>21</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>          
+            </field>
           </fields>
         </register>
       </registers>
@@ -16981,49 +16978,49 @@
           <size>0x20</size>
           <access>write-only</access>
           <resetValue>0x00000000</resetValue>
-          <fields>            
+          <fields>
             <field>
               <name>GIFC0</name>
               <description>Clear global interrupt flag of channel 0</description>
               <bitOffset>0</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>           
+            </field>
             <field>
               <name>FTFIFC0</name>
               <description>Clear bit for full transfer finish flag of channel 0</description>
               <bitOffset>1</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>           
+            </field>
             <field>
               <name>HTFIFC0</name>
               <description>Clear bit for half transfer finish flag of channel 0</description>
               <bitOffset>2</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>           
+            </field>
             <field>
               <name>ERRIFC0</name>
               <description>Clear bit for error flag of channel 0</description>
               <bitOffset>3</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>           
+            </field>
             <field>
               <name>GIFC1</name>
               <description>Clear global interrupt flag of channel 1</description>
               <bitOffset>4</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>           
+            </field>
             <field>
               <name>FTFIFC1</name>
               <description>Clear bit for full transfer finish flag of channel 1</description>
               <bitOffset>5</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>           
+            </field>
             <field>
               <name>HTFIFC1</name>
               <description>Clear bit for half transfer finish flag of channel 1</description>
               <bitOffset>6</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>           
+            </field>
             <field>
               <name>ERRIFC1</name>
               <description>Clear bit for error flag of channel 1</description>
@@ -17034,19 +17031,19 @@
               <description>Clear global interrupt flag of channel 2</description>
               <bitOffset>8</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>           
+            </field>
             <field>
               <name>FTFIFC2</name>
               <description>Clear bit for full transfer finish flag of channel 2</description>
               <bitOffset>9</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>           
+            </field>
             <field>
               <name>HTFIFC2</name>
               <description>Clear bit for half transfer finish flag of channel 2</description>
               <bitOffset>10</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>           
+            </field>
             <field>
               <name>ERRIFC2</name>
               <description>Clear bit for error flag of channel 2</description>
@@ -17057,19 +17054,19 @@
               <description>Clear global interrupt flag of channel 3</description>
               <bitOffset>12</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>           
+            </field>
             <field>
               <name>FTFIFC3</name>
               <description>Clear bit for full transfer finish flag of channel 3</description>
               <bitOffset>13</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>           
+            </field>
             <field>
               <name>HTFIFC3</name>
               <description>Clear bit for half transfer finish flag of channel 3</description>
               <bitOffset>14</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>           
+            </field>
             <field>
               <name>ERRIFC3</name>
               <description>Clear bit for error flag of channel 3</description>
@@ -17080,19 +17077,19 @@
               <description>Clear global interrupt flag of channel 4</description>
               <bitOffset>16</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>           
+            </field>
             <field>
               <name>FTFIFC4</name>
               <description>Clear bit for full transfer finish flag of channel 4</description>
               <bitOffset>17</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>           
+            </field>
             <field>
               <name>HTFIFC4</name>
               <description>Clear bit for half transfer finish flag of channel 4</description>
               <bitOffset>18</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>           
+            </field>
             <field>
               <name>ERRIFC4</name>
               <description>Clear bit for error flag of channel 4</description>
@@ -17103,19 +17100,19 @@
               <description>Clear global interrupt flag of channel 5</description>
               <bitOffset>20</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>           
+            </field>
             <field>
               <name>FTFIFC5</name>
               <description>Clear bit for full transfer finish flag of channel 5</description>
               <bitOffset>21</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>           
+            </field>
             <field>
               <name>HTFIFC5</name>
               <description>Clear bit for half transfer finish flag of channel 5</description>
               <bitOffset>22</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>           
+            </field>
             <field>
               <name>ERRIFC5</name>
               <description>Clear bit for error flag of channel 5</description>
@@ -17126,25 +17123,25 @@
               <description>Clear global interrupt flag of channel 6</description>
               <bitOffset>24</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>           
+            </field>
             <field>
               <name>FTFIFC6</name>
               <description>Clear bit for full transfer finish flag of channel 6</description>
               <bitOffset>25</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>           
+            </field>
             <field>
               <name>HTFIFC6</name>
               <description>Clear bit for half transfer finish flag of channel 6</description>
               <bitOffset>26</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>           
+            </field>
             <field>
               <name>ERRIFC6</name>
               <description>Clear bit for error flag of channel 6</description>
               <bitOffset>27</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>               
+            </field>
           </fields>
         </register>
         <register>
@@ -18084,7 +18081,7 @@
                <bitWidth>32</bitWidth>
              </field>
            </fields>
-         </register> 
+         </register>
       </registers>
     </peripheral>
     <peripheral >
@@ -18247,7 +18244,7 @@
               <description>Error flag of channel 4</description>
               <bitOffset>19</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>    
+            </field>
           </fields>
         </register>
         <register>
@@ -18258,49 +18255,49 @@
           <size>0x20</size>
           <access>write-only</access>
           <resetValue>0x00000000</resetValue>
-          <fields>            
+          <fields>
             <field>
               <name>GIFC0</name>
               <description>Clear global interrupt flag of channel 0</description>
               <bitOffset>0</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>           
+            </field>
             <field>
               <name>FTFIFC0</name>
               <description>Clear bit for full transfer finish flag of channel 0</description>
               <bitOffset>1</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>           
+            </field>
             <field>
               <name>HTFIFC0</name>
               <description>Clear bit for half transfer finish flag of channel 0</description>
               <bitOffset>2</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>           
+            </field>
             <field>
               <name>ERRIFC0</name>
               <description>Clear bit for error flag of channel 0</description>
               <bitOffset>3</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>           
+            </field>
             <field>
               <name>GIFC1</name>
               <description>Clear global interrupt flag of channel 1</description>
               <bitOffset>4</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>           
+            </field>
             <field>
               <name>FTFIFC1</name>
               <description>Clear bit for full transfer finish flag of channel 1</description>
               <bitOffset>5</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>           
+            </field>
             <field>
               <name>HTFIFC1</name>
               <description>Clear bit for half transfer finish flag of channel 1</description>
               <bitOffset>6</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>           
+            </field>
             <field>
               <name>ERRIFC1</name>
               <description>Clear bit for error flag of channel 1</description>
@@ -18311,19 +18308,19 @@
               <description>Clear global interrupt flag of channel 2</description>
               <bitOffset>8</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>           
+            </field>
             <field>
               <name>FTFIFC2</name>
               <description>Clear bit for full transfer finish flag of channel 2</description>
               <bitOffset>9</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>           
+            </field>
             <field>
               <name>HTFIFC2</name>
               <description>Clear bit for half transfer finish flag of channel 2</description>
               <bitOffset>10</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>           
+            </field>
             <field>
               <name>ERRIFC2</name>
               <description>Clear bit for error flag of channel 2</description>
@@ -18334,19 +18331,19 @@
               <description>Clear global interrupt flag of channel 3</description>
               <bitOffset>12</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>           
+            </field>
             <field>
               <name>FTFIFC3</name>
               <description>Clear bit for full transfer finish flag of channel 3</description>
               <bitOffset>13</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>           
+            </field>
             <field>
               <name>HTFIFC3</name>
               <description>Clear bit for half transfer finish flag of channel 3</description>
               <bitOffset>14</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>           
+            </field>
             <field>
               <name>ERRIFC3</name>
               <description>Clear bit for error flag of channel 3</description>
@@ -18357,25 +18354,25 @@
               <description>Clear global interrupt flag of channel 4</description>
               <bitOffset>16</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>           
+            </field>
             <field>
               <name>FTFIFC4</name>
               <description>Clear bit for full transfer finish flag of channel 4</description>
               <bitOffset>17</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>           
+            </field>
             <field>
               <name>HTFIFC4</name>
               <description>Clear bit for half transfer finish flag of channel 4</description>
               <bitOffset>18</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>           
+            </field>
             <field>
               <name>ERRIFC4</name>
               <description>Clear bit for error flag of channel 4</description>
               <bitOffset>19</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>             
+            </field>
           </fields>
         </register>
         <register>
@@ -19087,7 +19084,7 @@
               <description>Write enable</description>
               <bitOffset>12</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>  
+            </field>
             <field>
               <name>NRWTPOL</name>
               <description>NWAIT signal polarity</description>
@@ -19134,7 +19131,7 @@
           <size>0x20</size>
           <access>read-write</access>
           <resetValue>0x0FFFFFFF</resetValue>
-          <fields>   
+          <fields>
             <field>
               <name>BUSLAT</name>
               <description>Bus latency</description>
@@ -19169,7 +19166,7 @@
           <size>0x20</size>
           <access>read-write</access>
           <resetValue>0x000030DA</resetValue>
-          <fields>         
+          <fields>
             <field>
               <name>ASYNCWAIT</name>
               <description>Asynchronous wait</description>
@@ -19240,31 +19237,31 @@
         <usage>registers</usage>
       </addressBlock>
       <interrupt>
-        <name>EXTI_Line0</name> 
+        <name>EXTI_Line0</name>
         <value>25</value>
       </interrupt>
       <interrupt>
-        <name>EXTI_Line1</name> 
+        <name>EXTI_Line1</name>
         <value>26</value>
       </interrupt>
       <interrupt>
-        <name>EXTI_Line2</name> 
+        <name>EXTI_Line2</name>
         <value>27</value>
       </interrupt>
       <interrupt>
-        <name>EXTI_Line3</name> 
+        <name>EXTI_Line3</name>
         <value>28</value>
       </interrupt>
       <interrupt>
-        <name>EXTI_Line4</name> 
+        <name>EXTI_Line4</name>
         <value>29</value>
       </interrupt>
       <interrupt>
-        <name>EXTI_line9_5</name> 
+        <name>EXTI_line9_5</name>
         <value>42</value>
       </interrupt>
       <interrupt>
-        <name>EXTI_line15_10</name> 
+        <name>EXTI_line15_10</name>
         <value>59</value>
       </interrupt>
       <registers>
@@ -20110,7 +20107,7 @@
               <description>wait state counter register</description>
               <bitOffset>0</bitOffset>
               <bitWidth>3</bitWidth>
-            </field>            
+            </field>
           </fields>
         </register>
         <register>
@@ -20324,7 +20321,7 @@
               <bitWidth>32</bitWidth>
             </field>
           </fields>
-        </register>    
+        </register>
         <register>
           <name>PID</name>
           <displayName>PID</displayName>
@@ -20428,7 +20425,7 @@
               <bitWidth>1</bitWidth>
             </field>
           </fields>
-        </register>       
+        </register>
       </registers>
     </peripheral>
     <peripheral>
@@ -21356,11 +21353,11 @@
         <usage>registers</usage>
       </addressBlock>
       <interrupt>
-        <name>I2C0_EV</name>       
+        <name>I2C0_EV</name>
         <value>50</value>
       </interrupt>
       <interrupt>
-        <name>I2C0_ER</name>  
+        <name>I2C0_ER</name>
         <value>51</value>
       </interrupt>
       <registers>
@@ -24887,7 +24884,7 @@
               <bitWidth>2</bitWidth>
             </field>
          </fields>
-        </register>       
+        </register>
       <register>
           <name>CLICINTATTR_2</name>
           <displayName>CLICINTIE_2</displayName>
@@ -24979,7 +24976,7 @@
               <bitWidth>2</bitWidth>
             </field>
          </fields>
-        </register>       
+        </register>
       <register>
           <name>CLICINTATTR_6</name>
           <displayName>CLICINTIE_6</displayName>
@@ -25071,7 +25068,7 @@
               <bitWidth>2</bitWidth>
             </field>
          </fields>
-        </register>       
+        </register>
       <register>
           <name>CLICINTATTR_10</name>
           <displayName>CLICINTIE_10</displayName>
@@ -25163,7 +25160,7 @@
               <bitWidth>2</bitWidth>
             </field>
          </fields>
-        </register>       
+        </register>
       <register>
           <name>CLICINTATTR_14</name>
           <displayName>CLICINTIE_14</displayName>
@@ -25255,7 +25252,7 @@
               <bitWidth>2</bitWidth>
             </field>
          </fields>
-        </register>       
+        </register>
       <register>
           <name>CLICINTATTR_18</name>
           <displayName>CLICINTIE_18</displayName>
@@ -25347,7 +25344,7 @@
               <bitWidth>2</bitWidth>
             </field>
          </fields>
-        </register>       
+        </register>
       <register>
           <name>CLICINTATTR_22</name>
           <displayName>CLICINTIE_22</displayName>
@@ -25439,7 +25436,7 @@
               <bitWidth>2</bitWidth>
             </field>
          </fields>
-        </register>       
+        </register>
       <register>
           <name>CLICINTATTR_26</name>
           <displayName>CLICINTIE_26</displayName>
@@ -25531,7 +25528,7 @@
               <bitWidth>2</bitWidth>
             </field>
          </fields>
-        </register>       
+        </register>
       <register>
           <name>CLICINTATTR_30</name>
           <displayName>CLICINTIE_30</displayName>
@@ -25623,7 +25620,7 @@
               <bitWidth>2</bitWidth>
             </field>
          </fields>
-        </register>       
+        </register>
       <register>
           <name>CLICINTATTR_34</name>
           <displayName>CLICINTIE_34</displayName>
@@ -25715,7 +25712,7 @@
               <bitWidth>2</bitWidth>
             </field>
          </fields>
-        </register>       
+        </register>
       <register>
           <name>CLICINTATTR_38</name>
           <displayName>CLICINTIE_38</displayName>
@@ -25807,7 +25804,7 @@
               <bitWidth>2</bitWidth>
             </field>
          </fields>
-        </register>       
+        </register>
       <register>
           <name>CLICINTATTR_42</name>
           <displayName>CLICINTIE_42</displayName>
@@ -25899,7 +25896,7 @@
               <bitWidth>2</bitWidth>
             </field>
          </fields>
-        </register>       
+        </register>
       <register>
           <name>CLICINTATTR_46</name>
           <displayName>CLICINTIE_46</displayName>
@@ -25991,7 +25988,7 @@
               <bitWidth>2</bitWidth>
             </field>
          </fields>
-        </register>       
+        </register>
       <register>
           <name>CLICINTATTR_50</name>
           <displayName>CLICINTIE_50</displayName>
@@ -26083,7 +26080,7 @@
               <bitWidth>2</bitWidth>
             </field>
          </fields>
-        </register>       
+        </register>
       <register>
           <name>CLICINTATTR_54</name>
           <displayName>CLICINTIE_54</displayName>
@@ -26175,7 +26172,7 @@
               <bitWidth>2</bitWidth>
             </field>
          </fields>
-        </register>       
+        </register>
       <register>
           <name>CLICINTATTR_58</name>
           <displayName>CLICINTIE_58</displayName>
@@ -26267,7 +26264,7 @@
               <bitWidth>2</bitWidth>
             </field>
          </fields>
-        </register>       
+        </register>
       <register>
           <name>CLICINTATTR_62</name>
           <displayName>CLICINTIE_62</displayName>
@@ -26359,7 +26356,7 @@
               <bitWidth>2</bitWidth>
             </field>
          </fields>
-        </register>       
+        </register>
       <register>
           <name>CLICINTATTR_66</name>
           <displayName>CLICINTIE_66</displayName>
@@ -26451,7 +26448,7 @@
               <bitWidth>2</bitWidth>
             </field>
          </fields>
-        </register>       
+        </register>
       <register>
           <name>CLICINTATTR_70</name>
           <displayName>CLICINTIE_70</displayName>
@@ -26543,7 +26540,7 @@
               <bitWidth>2</bitWidth>
             </field>
          </fields>
-        </register>       
+        </register>
       <register>
           <name>CLICINTATTR_74</name>
           <displayName>CLICINTIE_74</displayName>
@@ -26635,7 +26632,7 @@
               <bitWidth>2</bitWidth>
             </field>
          </fields>
-        </register>       
+        </register>
       <register>
           <name>CLICINTATTR_78</name>
           <displayName>CLICINTIE_78</displayName>
@@ -26727,7 +26724,7 @@
               <bitWidth>2</bitWidth>
             </field>
          </fields>
-        </register>       
+        </register>
       <register>
           <name>CLICINTATTR_82</name>
           <displayName>CLICINTIE_82</displayName>
@@ -26819,7 +26816,7 @@
               <bitWidth>2</bitWidth>
             </field>
          </fields>
-        </register>       
+        </register>
       <register>
           <name>CLICINTATTR_86</name>
           <displayName>CLICINTIE_86</displayName>
@@ -26860,7 +26857,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
       <register>
           <name>CLICINTCTL_1</name>
           <displayName>CLICINTCTL_1</displayName>
@@ -26877,7 +26874,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_2</name>
           <displayName>CLICINTCTL_2</displayName>
@@ -26894,7 +26891,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_3</name>
           <displayName>CLICINTCTL_3</displayName>
@@ -26911,7 +26908,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_4</name>
           <displayName>CLICINTCTL_4</displayName>
@@ -26928,7 +26925,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
       <register>
           <name>CLICINTCTL_5</name>
           <displayName>CLICINTCTL_5</displayName>
@@ -26945,7 +26942,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_6</name>
           <displayName>CLICINTCTL_6</displayName>
@@ -26962,7 +26959,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_7</name>
           <displayName>CLICINTCTL_7</displayName>
@@ -26979,7 +26976,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_8</name>
           <displayName>CLICINTCTL_8</displayName>
@@ -26996,7 +26993,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
       <register>
           <name>CLICINTCTL_9</name>
           <displayName>CLICINTCTL_9</displayName>
@@ -27013,7 +27010,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_10</name>
           <displayName>CLICINTCTL_10</displayName>
@@ -27030,7 +27027,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_11</name>
           <displayName>CLICINTCTL_11</displayName>
@@ -27047,7 +27044,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_12</name>
           <displayName>CLICINTCTL_12</displayName>
@@ -27064,7 +27061,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
       <register>
           <name>CLICINTCTL_13</name>
           <displayName>CLICINTCTL_13</displayName>
@@ -27081,7 +27078,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_14</name>
           <displayName>CLICINTCTL_14</displayName>
@@ -27098,7 +27095,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_15</name>
           <displayName>CLICINTCTL_15</displayName>
@@ -27115,7 +27112,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_16</name>
           <displayName>CLICINTCTL_16</displayName>
@@ -27132,7 +27129,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
       <register>
           <name>CLICINTCTL_17</name>
           <displayName>CLICINTCTL_17</displayName>
@@ -27149,7 +27146,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_18</name>
           <displayName>CLICINTCTL_18</displayName>
@@ -27166,7 +27163,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_19</name>
           <displayName>CLICINTCTL_19</displayName>
@@ -27183,7 +27180,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_20</name>
           <displayName>CLICINTCTL_20</displayName>
@@ -27200,7 +27197,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
       <register>
           <name>CLICINTCTL_21</name>
           <displayName>CLICINTCTL_21</displayName>
@@ -27217,7 +27214,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_22</name>
           <displayName>CLICINTCTL_22</displayName>
@@ -27234,7 +27231,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_23</name>
           <displayName>CLICINTCTL_23</displayName>
@@ -27251,7 +27248,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_24</name>
           <displayName>CLICINTCTL_24</displayName>
@@ -27268,7 +27265,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
       <register>
           <name>CLICINTCTL_25</name>
           <displayName>CLICINTCTL_25</displayName>
@@ -27285,7 +27282,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_26</name>
           <displayName>CLICINTCTL_26</displayName>
@@ -27302,7 +27299,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_27</name>
           <displayName>CLICINTCTL_27</displayName>
@@ -27319,7 +27316,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_28</name>
           <displayName>CLICINTCTL_28</displayName>
@@ -27336,7 +27333,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
       <register>
           <name>CLICINTCTL_29</name>
           <displayName>CLICINTCTL_29</displayName>
@@ -27353,7 +27350,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_30</name>
           <displayName>CLICINTCTL_30</displayName>
@@ -27370,7 +27367,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_31</name>
           <displayName>CLICINTCTL_31</displayName>
@@ -27387,7 +27384,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_32</name>
           <displayName>CLICINTCTL_32</displayName>
@@ -27404,7 +27401,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
       <register>
           <name>CLICINTCTL_33</name>
           <displayName>CLICINTCTL_33</displayName>
@@ -27421,7 +27418,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_34</name>
           <displayName>CLICINTCTL_34</displayName>
@@ -27438,7 +27435,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_35</name>
           <displayName>CLICINTCTL_35</displayName>
@@ -27455,7 +27452,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_36</name>
           <displayName>CLICINTCTL_36</displayName>
@@ -27472,7 +27469,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
       <register>
           <name>CLICINTCTL_37</name>
           <displayName>CLICINTCTL_37</displayName>
@@ -27489,7 +27486,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_38</name>
           <displayName>CLICINTCTL_38</displayName>
@@ -27506,7 +27503,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_39</name>
           <displayName>CLICINTCTL_39</displayName>
@@ -27523,7 +27520,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_40</name>
           <displayName>CLICINTCTL_40</displayName>
@@ -27540,7 +27537,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
       <register>
           <name>CLICINTCTL_41</name>
           <displayName>CLICINTCTL_41</displayName>
@@ -27557,7 +27554,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_42</name>
           <displayName>CLICINTCTL_42</displayName>
@@ -27574,7 +27571,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_43</name>
           <displayName>CLICINTCTL_43</displayName>
@@ -27591,7 +27588,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_44</name>
           <displayName>CLICINTCTL_44</displayName>
@@ -27608,7 +27605,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
       <register>
           <name>CLICINTCTL_45</name>
           <displayName>CLICINTCTL_45</displayName>
@@ -27625,7 +27622,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_46</name>
           <displayName>CLICINTCTL_46</displayName>
@@ -27642,7 +27639,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_47</name>
           <displayName>CLICINTCTL_47</displayName>
@@ -27659,7 +27656,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_48</name>
           <displayName>CLICINTCTL_48</displayName>
@@ -27676,7 +27673,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
       <register>
           <name>CLICINTCTL_49</name>
           <displayName>CLICINTCTL_49</displayName>
@@ -27693,7 +27690,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_50</name>
           <displayName>CLICINTCTL_50</displayName>
@@ -27710,7 +27707,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_51</name>
           <displayName>CLICINTCTL_51</displayName>
@@ -27727,7 +27724,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_52</name>
           <displayName>CLICINTCTL_52</displayName>
@@ -27744,7 +27741,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
       <register>
           <name>CLICINTCTL_53</name>
           <displayName>CLICINTCTL_53</displayName>
@@ -27761,7 +27758,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_54</name>
           <displayName>CLICINTCTL_54</displayName>
@@ -27778,7 +27775,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_55</name>
           <displayName>CLICINTCTL_55</displayName>
@@ -27795,7 +27792,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_56</name>
           <displayName>CLICINTCTL_56</displayName>
@@ -27812,7 +27809,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
       <register>
           <name>CLICINTCTL_57</name>
           <displayName>CLICINTCTL_57</displayName>
@@ -27829,7 +27826,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_58</name>
           <displayName>CLICINTCTL_58</displayName>
@@ -27846,7 +27843,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_59</name>
           <displayName>CLICINTCTL_59</displayName>
@@ -27863,7 +27860,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_60</name>
           <displayName>CLICINTCTL_60</displayName>
@@ -27880,7 +27877,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
       <register>
           <name>CLICINTCTL_61</name>
           <displayName>CLICINTCTL_61</displayName>
@@ -27897,7 +27894,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_62</name>
           <displayName>CLICINTCTL_62</displayName>
@@ -27914,7 +27911,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_63</name>
           <displayName>CLICINTCTL_63</displayName>
@@ -27931,7 +27928,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_64</name>
           <displayName>CLICINTCTL_64</displayName>
@@ -27948,7 +27945,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
       <register>
           <name>CLICINTCTL_65</name>
           <displayName>CLICINTCTL_65</displayName>
@@ -27965,7 +27962,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_66</name>
           <displayName>CLICINTCTL_66</displayName>
@@ -27982,7 +27979,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_67</name>
           <displayName>CLICINTCTL_67</displayName>
@@ -27999,7 +27996,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_68</name>
           <displayName>CLICINTCTL_68</displayName>
@@ -28016,7 +28013,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
       <register>
           <name>CLICINTCTL_69</name>
           <displayName>CLICINTCTL_69</displayName>
@@ -28033,7 +28030,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_70</name>
           <displayName>CLICINTCTL_70</displayName>
@@ -28050,7 +28047,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_71</name>
           <displayName>CLICINTCTL_71</displayName>
@@ -28067,7 +28064,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_72</name>
           <displayName>CLICINTCTL_72</displayName>
@@ -28084,7 +28081,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
       <register>
           <name>CLICINTCTL_73</name>
           <displayName>CLICINTCTL_73</displayName>
@@ -28101,7 +28098,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_74</name>
           <displayName>CLICINTCTL_74</displayName>
@@ -28118,7 +28115,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_75</name>
           <displayName>CLICINTCTL_75</displayName>
@@ -28135,7 +28132,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_76</name>
           <displayName>CLICINTCTL_76</displayName>
@@ -28152,7 +28149,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
       <register>
           <name>CLICINTCTL_77</name>
           <displayName>CLICINTCTL_77</displayName>
@@ -28169,7 +28166,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_78</name>
           <displayName>CLICINTCTL_78</displayName>
@@ -28186,7 +28183,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_79</name>
           <displayName>CLICINTCTL_79</displayName>
@@ -28203,7 +28200,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_80</name>
           <displayName>CLICINTCTL_80</displayName>
@@ -28220,7 +28217,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
       <register>
           <name>CLICINTCTL_81</name>
           <displayName>CLICINTCTL_81</displayName>
@@ -28237,7 +28234,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_82</name>
           <displayName>CLICINTCTL_82</displayName>
@@ -28254,7 +28251,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_83</name>
           <displayName>CLICINTCTL_83</displayName>
@@ -28271,7 +28268,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_84</name>
           <displayName>CLICINTCTL_84</displayName>
@@ -28288,7 +28285,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
       <register>
           <name>CLICINTCTL_85</name>
           <displayName>CLICINTCTL_85</displayName>
@@ -28305,7 +28302,7 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register>   
+        </register>
      <register>
           <name>CLICINTCTL_86</name>
           <displayName>CLICINTCTL_86</displayName>
@@ -28322,9 +28319,9 @@
               <bitWidth>8</bitWidth>
             </field>
          </fields>
-        </register> 
-       </registers>  
-      </peripheral> 
+        </register>
+       </registers>
+      </peripheral>
 
     <peripheral>
       <name>PMU</name>
@@ -28897,7 +28894,7 @@
               <description>SPI0 reset</description>
               <bitOffset>12</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>         
+            </field>
             <field>
               <name>USART0RST</name>
               <description>USART0 Reset</description>
@@ -28951,7 +28948,7 @@
               <description>TIMER6 timer reset</description>
               <bitOffset>5</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>     
+            </field>
             <field>
               <name>WWDGTRST</name>
               <description>Window watchdog timer reset</description>
@@ -29089,7 +29086,7 @@
               <description>USBFS clock enable</description>
               <bitOffset>12</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>          
+            </field>
           </fields>
         </register>
        <register>
@@ -29137,7 +29134,7 @@
               <description>GPIO port E clock enable </description>
               <bitOffset>6</bitOffset>
               <bitWidth>1</bitWidth>
-            </field>          
+            </field>
             <field>
               <name>ADC0EN</name>
               <description>ADC0 clock enable</description>
@@ -29216,7 +29213,7 @@
               <description>TIMER6 timer clock enable</description>
               <bitOffset>5</bitOffset>
               <bitWidth>1</bitWidth>
-            </field> 
+            </field>
             <field>
               <name>WWDGTEN</name>
               <description>Window watchdog timer clock enable</description>
@@ -29303,7 +29300,7 @@
             </field>
           </fields>
         </register>
- 
+
         <register>
           <name>BDCTL</name>
           <displayName>BDCTL</displayName>
@@ -29333,7 +29330,7 @@
               <bitOffset>2</bitOffset>
               <bitWidth>1</bitWidth>
               <access>read-write</access>
-            </field>            
+            </field>
             <field>
               <name>RTCSRC</name>
               <description>RTC clock entry selection</description>
@@ -29430,7 +29427,7 @@
               <access>read-only</access>
             </field>
           </fields>
-        </register> 
+        </register>
 
         <register>
           <name>AHBRST</name>
@@ -29449,7 +29446,7 @@
             </field>
           </fields>
         </register>
-   
+
         <register>
           <name>CFG1</name>
           <displayName>CFG1</displayName>
@@ -29519,10 +29516,10 @@
               <access>read-write</access>
             </field>
           </fields>
-        </register>  
+        </register>
       </registers>
     </peripheral>
-   
+
  <peripheral>
       <name>RTC</name>
       <description>Real-time clock</description>
@@ -29754,7 +29751,7 @@
               <bitWidth>16</bitWidth>
             </field>
           </fields>
-        </register>    
+        </register>
       </registers>
     </peripheral>
 
@@ -29769,7 +29766,7 @@
         <usage>registers</usage>
       </addressBlock>
       <interrupt>
-        <name>SPI0</name>  
+        <name>SPI0</name>
         <value>54</value>
       </interrupt>
       <registers>
@@ -29784,7 +29781,7 @@
           <fields>
             <field>
               <name>BDEN</name>
-              <description>Bidirectional 
+              <description>Bidirectional
               enable</description>
               <bitOffset>15</bitOffset>
               <bitWidth>1</bitWidth>
@@ -30168,7 +30165,7 @@
       <name>SPI1</name>
       <baseAddress>0x40003800</baseAddress>
       <interrupt>
-        <name>SPI1</name> 
+        <name>SPI1</name>
         <value>55</value>
       </interrupt>
     </peripheral>
@@ -30176,7 +30173,7 @@
       <name>SPI2</name>
       <baseAddress>0x40003C00</baseAddress>
       <interrupt>
-        <name>SPI2</name> 
+        <name>SPI2</name>
         <value>70</value>
       </interrupt>
     </peripheral>
@@ -30191,7 +30188,7 @@
         <usage>registers</usage>
       </addressBlock>
       <interrupt>
-        <name>TIMER0_BRK</name>  
+        <name>TIMER0_BRK</name>
         <value>43</value>
       </interrupt>
       <interrupt>
@@ -32257,7 +32254,7 @@
         <value>74</value>
       </interrupt>
     </peripheral>
-  
+
     <peripheral>
       <name>USART0</name>
       <description>Universal synchronous asynchronous receiver
@@ -32270,7 +32267,7 @@
         <usage>registers</usage>
       </addressBlock>
       <interrupt>
-        <name>USART0</name>       
+        <name>USART0</name>
         <value>56</value>
       </interrupt>
       <registers>
@@ -32662,7 +32659,7 @@
       <name>USART1</name>
       <baseAddress>0x40004400</baseAddress>
       <interrupt>
-        <name>USART1</name>    
+        <name>USART1</name>
         <value>57</value>
       </interrupt>
     </peripheral>
@@ -32670,7 +32667,7 @@
       <name>USART2</name>
       <baseAddress>0x40004800</baseAddress>
       <interrupt>
-        <name>USART2</name>    
+        <name>USART2</name>
         <value>58</value>
       </interrupt>
     </peripheral>
@@ -32686,7 +32683,7 @@
         <usage>registers</usage>
       </addressBlock>
       <interrupt>
-        <name>UART3</name>       
+        <name>UART3</name>
         <value>71</value>
       </interrupt>
       <registers>
@@ -33011,7 +33008,7 @@
       <name>UART4</name>
       <baseAddress>0x40005000</baseAddress>
       <interrupt>
-        <name>UART4</name>    
+        <name>UART4</name>
         <value>72</value>
       </interrupt>
     </peripheral>
@@ -33038,7 +33035,7 @@
         <register>
           <name>GOTGCS</name>
           <displayName>GOTGCS</displayName>
-          <description>Global OTG control and status register 
+          <description>Global OTG control and status register
           (USBFS_GOTGCS)</description>
           <addressOffset>0x0</addressOffset>
           <size>0x20</size>
@@ -37490,7 +37487,7 @@
         <register>
           <name>DOEP0INTF</name>
           <displayName>DOEP0INTF</displayName>
-          <description>device out endpoint-0 interrupt flag 
+          <description>device out endpoint-0 interrupt flag
           register</description>
           <addressOffset>0x308</addressOffset>
           <size>0x20</size>
@@ -37532,7 +37529,7 @@
         <register>
           <name>DOEP1INTF</name>
           <displayName>DOEP1INTF</displayName>
-          <description>device out endpoint-1 interrupt flag 
+          <description>device out endpoint-1 interrupt flag
           register</description>
           <addressOffset>0x328</addressOffset>
           <size>0x20</size>
@@ -37574,7 +37571,7 @@
         <register>
           <name>DOEP2INTF</name>
           <displayName>DOEP2INTF</displayName>
-          <description>device out endpoint-2 interrupt flag 
+          <description>device out endpoint-2 interrupt flag
           register</description>
           <addressOffset>0x348</addressOffset>
           <size>0x20</size>
@@ -37616,7 +37613,7 @@
         <register>
           <name>DOEP3INTF</name>
           <displayName>DOEP3INTF</displayName>
-          <description>device out endpoint-3 interrupt flag 
+          <description>device out endpoint-3 interrupt flag
           register</description>
           <addressOffset>0x368</addressOffset>
           <size>0x20</size>
@@ -38016,7 +38013,7 @@
         <usage>registers</usage>
       </addressBlock>
       <interrupt>
-        <name>WWDGT</name>  
+        <name>WWDGT</name>
         <value>0</value>
       </interrupt>
       <registers>
@@ -38091,6 +38088,6 @@
           </fields>
         </register>
       </registers>
-    </peripheral> 
+    </peripheral>
   </peripherals>
 </device>
