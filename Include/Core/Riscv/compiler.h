@@ -26,17 +26,66 @@
 #if   defined ( __GNUC__ )
   #include "gcc_riscv.h"
 
-
 /*
  * IAR Compiler
  */
 #elif defined ( __ICCRISCV__ )
   #include "icc_riscv.h"
 
-
 #else
   #error Unknown compiler.
 #endif
 
+/* IO definitions (access restrictions to peripheral registers) */
+/**
+ * @brief      Defines 'read only' permissions
+ */
+#ifdef __cplusplus
+  #define   __I                       volatile
+#else
+  #define   __I                       volatile const
+#endif
+/**
+ * @brief       Defines 'write only' permissions
+ */
+#define     __O                       volatile
+/**
+ * @brief       Defines 'read / write' permissions
+ */
+#define     __IO                      volatile
+
+/* following defines should be used for structure members */
+/**
+ * @brief       Defines 'read only' structure member permissions
+ */
+#define     __IM                      volatile const
+/**
+ * @brief       Defines 'write only' structure member permissions
+ */
+#define     __OM                      volatile
+/**
+ * @brief       Defines 'read / write' structure member permissions
+ */
+#define     __IOM                     volatile
+/**
+ * @brief       Placeholder struct members used for "reserved" areas
+ */
+#define     RESERVED(N, T)            T RESERVED##N
+
+/**
+  \brief     Mask and shift a bit field value for use in a register bit range.
+  \param [in] field  Name of the register bit field.
+  \param [in] value  Value of the bit field. This parameter is interpreted as an uint32_t type.
+  \return           Masked and shifted value.
+*/
+#define _VAL2FLD(field, value)    (((uint32_t)(value) << field ## _Pos) & field ## _Msk)
+
+/**
+  \brief     Mask and shift a register value to extract a bit filed value.
+  \param [in] field  Name of the register bit field.
+  \param [in] value  Value of register. This parameter is interpreted as an uint32_t type.
+  \return           Masked and shifted bit field value.
+*/
+#define _FLD2VAL(field, value)    (((uint32_t)(value) & field ## _Msk) >> field ## _Pos)
 
 #endif /* __COMPILER_H */
