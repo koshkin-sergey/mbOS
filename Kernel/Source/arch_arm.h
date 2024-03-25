@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021-2022 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2021-2024 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -27,7 +27,9 @@
 #include <stdbool.h>
 #include "Core/Arm/cmsis_compiler.h"
 
-extern uint32_t GetModeCPU(void);
+extern uint32_t IRQ_NestLevel;
+extern uint8_t IRQ_PendSV;
+
 extern uint32_t DisableIRQ(void);
 extern     void RestoreIRQ(uint32_t);
 
@@ -50,6 +52,7 @@ extern     void RestoreIRQ(uint32_t);
 #define CPSR_MODE_SYSTEM              0x1FU
 
 #define IsIrqMasked()                 false
+#define IsPrivileged()                false
 #define SystemIsrInit()
 #define setPrivilegedMode(flag)
 
@@ -72,18 +75,6 @@ extern     void RestoreIRQ(uint32_t);
  ******************************************************************************/
 
 /**
- * @fn          bool IsPrivileged(void)
- * @brief       Check if running Privileged
- *
- * @return      true=privileged, false=unprivileged
- */
-__STATIC_INLINE
-bool IsPrivileged(void)
-{
-  return (GetModeCPU() != CPSR_MODE_USER);
-}
-
-/**
  * @fn          bool IsIrqMode(void)
  * @brief       Check if in IRQ Mode
  * @return      true=IRQ, false=thread
@@ -91,12 +82,8 @@ bool IsPrivileged(void)
 __STATIC_INLINE
 bool IsIrqMode(void)
 {
-  uint32_t mode = GetModeCPU();
-
-  return ((mode != CPSR_MODE_USER) && (mode != CPSR_MODE_SYSTEM));
+  return (IRQ_NestLevel > 0U);
 }
-
-extern uint8_t IRQ_PendSV;
 
 /**
  * @fn          void PendServCallReq(void)
