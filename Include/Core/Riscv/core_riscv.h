@@ -23,18 +23,18 @@
  * @details     The following macros are used for CSR Register Defintions.
  */
 
-/* ================= Standard RISC-V CSR Registers ========================== */
+/* ----------------- Standard RISC-V CSR Registers -------------------------- */
 
-#define CSR_USTATUS                   0x0
-#define CSR_FFLAGS                    0x1
-#define CSR_FRM                       0x2
-#define CSR_FCSR                      0x3
-#define CSR_VSTART                    0x8
-#define CSR_VXSAT                     0x9
-#define CSR_VXRM                      0xa
-#define CSR_VCSR                      0xf
-#define CSR_SEED                      0x15
-#define CSR_JVT                       0x17
+#define CSR_USTATUS                   0x000
+#define CSR_FFLAGS                    0x001
+#define CSR_FRM                       0x002
+#define CSR_FCSR                      0x003
+#define CSR_VSTART                    0x008
+#define CSR_VXSAT                     0x009
+#define CSR_VXRM                      0x00a
+#define CSR_VCSR                      0x00f
+#define CSR_SEED                      0x015
+#define CSR_JVT                       0x017
 #define CSR_CYCLE                     0xc00
 #define CSR_TIME                      0xc01
 #define CSR_INSTRET                   0xc02
@@ -120,11 +120,11 @@
 #define CSR_HCONTEXT                  0x6a8
 #define CSR_HGEIP                     0xe12
 #define CSR_SCOUNTOVF                 0xda0
-#define CSR_UTVT                      0x7
-#define CSR_UNXTI                     0x45
-#define CSR_UINTSTATUS                0x46
-#define CSR_USCRATCHCSW               0x48
-#define CSR_USCRATCHCSWL              0x49
+#define CSR_UTVT                      0x007
+#define CSR_UNXTI                     0x045
+#define CSR_UINTSTATUS                0x046
+#define CSR_USCRATCHCSW               0x048
+#define CSR_USCRATCHCSWL              0x049
 #define CSR_STVT                      0x107
 #define CSR_SNXTI                     0x145
 #define CSR_SINTSTATUS                0x146
@@ -422,7 +422,7 @@
 #define CSR_MHPMCOUNTER30H            0xb9e
 #define CSR_MHPMCOUNTER31H            0xb9f
 
-/* === TEE CSR Registers === */
+/* -------------------------- TEE CSR Registers ----------------------------- */
 #define CSR_SPMPCFG0                  0x1A0
 #define CSR_SPMPCFG1                  0x1A1
 #define CSR_SPMPCFG2                  0x1A2
@@ -468,7 +468,7 @@
 #define CSR_SPMUSWITCH0               0x170
 #define CSR_SPMUSWITCH1               0x171
 
-/* === CLIC CSR Registers === */
+/* ------------------------- CLIC CSR Registers ----------------------------- */
 #define CSR_MTVT                      0x307
 #define CSR_MNXTI                     0x345
 #define CSR_MINTSTATUS                0x346
@@ -476,5 +476,32 @@
 #define CSR_MSCRATCHCSWL              0x349
 #define CSR_MCLICBASE                 0x350
 
+#define MSTATUS_UIE         0x00000001
+#define MSTATUS_SIE         0x00000002
+#define MSTATUS_HIE         0x00000004
+#define MSTATUS_MIE         0x00000008
+#define MSTATUS_UPIE        0x00000010
+#define MSTATUS_SPIE        0x00000020
+#define MSTATUS_UBE         0x00000040
+#define MSTATUS_MPIE        0x00000080
+#define MSTATUS_SPP         0x00000100
+#define MSTATUS_VS          0x00000600
+#define MSTATUS_MPP         0x00001800
+#define MSTATUS_FS          0x00006000
+#define MSTATUS_XS          0x00018000
+#define MSTATUS_MPRV        0x00020000
+#define MSTATUS_SUM         0x00040000
+#define MSTATUS_MXR         0x00080000
+#define MSTATUS_TVM         0x00100000
+#define MSTATUS_TW          0x00200000
+#define MSTATUS_TSR         0x00400000
+#define MSTATUS32_SD        0x80000000
+#define MSTATUS_UXL         0x0000000300000000
+#define MSTATUS_SXL         0x0000000C00000000
+#define MSTATUS_SBE         0x0000001000000000
+#define MSTATUS_MBE         0x0000002000000000
+#define MSTATUS_GVA         0x0000004000000000
+#define MSTATUS_MPV         0x0000008000000000
+#define MSTATUS64_SD        0x8000000000000000
 
 #endif /* __CORE_RISCV_H */
