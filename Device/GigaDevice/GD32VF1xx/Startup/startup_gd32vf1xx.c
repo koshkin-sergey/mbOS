@@ -16,3 +16,47 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+/*******************************************************************************
+ *  includes
+ ******************************************************************************/
+
+#include <Core/Riscv/compiler.h>
+#include <asm/system_gd32vf1xx.h>
+
+/*----------------------------------------------------------------------------
+  Internal References
+ *----------------------------------------------------------------------------*/
+
+void _enter(void) __attribute__ ((naked, section(".text.init")));
+void _reset(void) __NO_RETURN;
+void _exit(int code);
+
+void _enter(void)
+{
+  __ASM volatile  (
+      ".option push                 \n"
+      ".option norelax              \n"
+      "la   gp, __global_pointer$   \n"
+      ".option pop                  \n"
+      "la   sp, _sp                 \n"
+      "j    _reset                  \n"
+  );
+}
+
+void _reset(void)
+{
+  SystemInit();
+  __PROGRAM_START();
+}
+
+/**
+ * @brief       On Release, call the hardware reset procedure.
+ *              On Debug we just enter an infinite loop,
+ *              to be used as landmark when halting the debugger.
+ * @param[in]   code
+ */
+void _exit(int code __attribute__((unused)))
+{
+  for (;;);
+}
