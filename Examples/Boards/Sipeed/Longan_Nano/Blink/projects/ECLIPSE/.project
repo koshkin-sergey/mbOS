@@ -250,6 +250,16 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
+			<name>src/Device/GD32VF1xx/Include/device_config.h</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Device/GigaDevice/GD32VF1xx/Include/device_config.h</locationURI>
+		</link>
+		<link>
+			<name>src/Device/GD32VF1xx/Startup/gcc</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
 			<name>src/Device/GD32VF1xx/Startup/startup_gd32vf1xx.c</name>
 			<type>1</type>
 			<locationURI>PARENT-7-PROJECT_LOC/Device/GigaDevice/GD32VF1xx/Startup/startup_gd32vf1xx.c</locationURI>
@@ -263,6 +273,11 @@
 			<name>src/Include/Core/Riscv/compiler.h</name>
 			<type>1</type>
 			<locationURI>PARENT-7-PROJECT_LOC/Include/Core/Riscv/compiler.h</locationURI>
+		</link>
+		<link>
+			<name>src/Include/Core/Riscv/core_riscv.h</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Include/Core/Riscv/core_riscv.h</locationURI>
 		</link>
 		<link>
 			<name>src/Include/Core/Riscv/gcc_riscv.h</name>
@@ -283,6 +298,11 @@
 			<name>src/Device/GD32VF1xx/Include/asm/system_gd32vf1xx.h</name>
 			<type>1</type>
 			<locationURI>PARENT-7-PROJECT_LOC/Device/GigaDevice/GD32VF1xx/Include/asm/system_gd32vf1xx.h</locationURI>
+		</link>
+		<link>
+			<name>src/Device/GD32VF1xx/Startup/gcc/gcc_gd32vf103x8_flashxip.ld</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Device/GigaDevice/GD32VF1xx/Startup/gcc/gcc_gd32vf103x8_flashxip.ld</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>
