@@ -25,13 +25,11 @@
  ******************************************************************************/
 
 #include <stdbool.h>
-#include "Core/Riscv/compiler.h"
+#include <Core/Riscv/compiler.h>
+#include <Core/Riscv/core_riscv.h>
 
+extern uint8_t IRQ_NestLevel;
 extern uint8_t IRQ_PendSV;
-
-extern uint32_t GetModeCPU(void);
-extern uint32_t DisableIRQ(void);
-extern     void RestoreIRQ(uint32_t);
 
 /*******************************************************************************
  *  defines and macros
@@ -40,39 +38,17 @@ extern     void RestoreIRQ(uint32_t);
 #define INIT_EXC_RETURN               0xFFFFFFFDUL
 #define OS_TICK_HANDLER               osTick_Handler
 
-/* CPSR bit definitions */
-#define CPSR_I_Pos                    7U
-#define CPSR_I_Msk                    (1UL << CPSR_I_Pos)
-
-#define CPSR_T_Pos                    5U
-#define CPSR_T_Msk                    (1UL << CPSR_T_Pos)
-
-/* CPSR mode bitmasks */
-#define CPSR_MODE_USER                0x10U
-#define CPSR_MODE_SYSTEM              0x1FU
-
 #define IsIrqMasked()                 false
+#define IsPrivileged()                false
 #define SystemIsrInit()
 #define setPrivilegedMode(flag)
 
-#define BEGIN_CRITICAL_SECTION        uint32_t mode = DisableIRQ();
-#define END_CRITICAL_SECTION          RestoreIRQ(mode);
+#define BEGIN_CRITICAL_SECTION        uint32_t mode = CSR_READ_CLEAR(CSR_MSTATUS, MSTATUS_MIE);
+#define END_CRITICAL_SECTION          CSR_WRITE(CSR_MSTATUS, mode);
 
 /*******************************************************************************
  *  exported functions
  ******************************************************************************/
-
-/**
- * @fn          bool IsPrivileged(void)
- * @brief       Check if running Privileged
- *
- * @return      true=privileged, false=unprivileged
- */
-__STATIC_INLINE
-bool IsPrivileged(void)
-{
-  return (GetModeCPU() != CPSR_MODE_USER);
-}
 
 /**
  * @fn          bool IsIrqMode(void)
@@ -82,9 +58,7 @@ bool IsPrivileged(void)
 __STATIC_INLINE
 bool IsIrqMode(void)
 {
-  uint32_t mode = GetModeCPU();
-
-  return ((mode != CPSR_MODE_USER) && (mode != CPSR_MODE_SYSTEM));
+  return (IRQ_NestLevel > 0U);
 }
 
 /**
@@ -101,20 +75,20 @@ __STATIC_INLINE
 uint32_t StackInit(StackAttr_t *attr, bool privileged)
 {
   uint32_t psr;
-  bool     thumb = (attr->func_addr & 1U) != 0U;
+//  bool     thumb = (attr->func_addr & 1U) != 0U;
 
   if (privileged) {
-    if (thumb) {
-      psr = CPSR_MODE_SYSTEM | CPSR_T_Msk;
-    } else {
-      psr = CPSR_MODE_SYSTEM;
-    }
-  } else {
-    if (thumb) {
-      psr = CPSR_MODE_USER   | CPSR_T_Msk;
-    } else {
-      psr = CPSR_MODE_USER;
-    }
+//    if (thumb) {
+//      psr = CPSR_MODE_SYSTEM | CPSR_T_Msk;
+//    } else {
+//      psr = CPSR_MODE_SYSTEM;
+//    }
+//  } else {
+//    if (thumb) {
+//      psr = CPSR_MODE_USER   | CPSR_T_Msk;
+//    } else {
+//      psr = CPSR_MODE_USER;
+//    }
   }
 
   uint32_t *stk = (uint32_t *)(attr->stk_mem + attr->stk_size);
@@ -143,7 +117,7 @@ __STATIC_FORCEINLINE
 uint32_t svc_0(uint32_t func)
 {
   register uint32_t __r0 __ASM("a0");
-  register uint32_t __rf __ASM("a7") = func;
+  register uint32_t __rf __ASM("a5") = func;
 
   __ASM volatile (
       "ecall \n\t"
@@ -158,7 +132,7 @@ __STATIC_FORCEINLINE
 uint32_t svc_1(uint32_t param1, uint32_t func)
 {
   register uint32_t __r0 __ASM("a0") = param1;
-  register uint32_t __rf __ASM("a7") = func;
+  register uint32_t __rf __ASM("a5") = func;
 
   __ASM volatile (
       "ecall \n\t"
@@ -174,7 +148,7 @@ uint32_t svc_2(uint32_t param1, uint32_t param2, uint32_t func)
 {
   register uint32_t __r0 __ASM("a0") = param1;
   register uint32_t __r1 __ASM("a1") = param2;
-  register uint32_t __rf __ASM("a7") = func;
+  register uint32_t __rf __ASM("a5") = func;
 
   __ASM volatile (
       "ecall \n\t"
@@ -191,7 +165,7 @@ uint32_t svc_3(uint32_t param1, uint32_t param2, uint32_t param3, uint32_t func)
   register uint32_t __r0 __ASM("a0") = param1;
   register uint32_t __r1 __ASM("a1") = param2;
   register uint32_t __r2 __ASM("a2") = param3;
-  register uint32_t __rf __ASM("a7") = func;
+  register uint32_t __rf __ASM("a5") = func;
 
   __ASM volatile (
       "ecall \n\t"
@@ -209,7 +183,7 @@ uint32_t svc_4(uint32_t param1, uint32_t param2, uint32_t param3, uint32_t param
   register uint32_t __r1 __ASM("a1") = param2;
   register uint32_t __r2 __ASM("a2") = param3;
   register uint32_t __r3 __ASM("a3") = param4;
-  register uint32_t __rf __ASM("a7") = func;
+  register uint32_t __rf __ASM("a5") = func;
 
   __ASM volatile (
       "ecall \n\t"

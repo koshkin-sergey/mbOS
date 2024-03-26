@@ -26,38 +26,13 @@ irqLib:
                 .byte    0
 
                 .section ".data"
-                .global  IRQ_PendSV
+                .global  IRQ_NestLevel
 IRQ_NestLevel:
                 .word    0                          // IRQ nesting level counter
+
+                .global  IRQ_PendSV
 IRQ_PendSV:
                 .byte    0                          // Pending SVC flag
-
-
-/*-----------------------------------------------------------------------------
- * Helper functions
- *----------------------------------------------------------------------------*/
-
-                .section ".text"
-
-                .type    GetModeCPU, %function
-                .global  GetModeCPU
-GetModeCPU:
-
-                .size    GetModeCPU, .-GetModeCPU
-
-
-                .type    DisableIRQ, %function
-                .global  DisableIRQ
-DisableIRQ:
-
-                .size    DisableIRQ, .-DisableIRQ
-
-
-                .type    RestoreIRQ, %function
-                .global  RestoreIRQ
-RestoreIRQ:
-
-                .size    RestoreIRQ, .-RestoreIRQ
 
 
                 .end
