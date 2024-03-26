@@ -17,12 +17,37 @@
  * limitations under the License.
  */
 
-#ifndef GD32VF103_H
-#define GD32VF103_H
+#ifndef GD32VF103XX_H
+#define GD32VF103XX_H
 
 #ifdef __cplusplus
  extern "C" {
 #endif 
+
+/* ---------------------- Exception Code Definition ------------------------- */
+
+typedef enum EXCn {
+/* -------------------  Core Specific Exception Code  ----------------------- */
+  InsUnalign_EXCn       =  0,  /*!<  Instruction address misaligned           */
+  InsAccFault_EXCn      =  1,  /*!<  Instruction access fault                 */
+  IlleIns_EXCn          =  2,  /*!<  Illegal instruction                      */
+  Break_EXCn            =  3,  /*!<  Beakpoint                                */
+  LdAddrUnalign_EXCn    =  4,  /*!<  Load address misaligned                  */
+  LdFault_EXCn          =  5,  /*!<  Load access fault                        */
+  StAddrUnalign_EXCn    =  6,  /*!<  Store or AMO address misaligned          */
+  StAccessFault_EXCn    =  7,  /*!<  Store or AMO access fault                */
+  UmodeEcall_EXCn       =  8,  /*!<  Environment call from User mode          */
+  SmodeEcall_EXCn       =  9,  /*!<  Environment call from S-mode             */
+  MmodeEcall_EXCn       = 11,  /*!<  Environment call from Machine mode       */
+  InsPageFault_EXCn     = 12,  /*!<  Instruction page fault                   */
+  LdPageFault_EXCn      = 13,  /*!<  Load page fault                          */
+  StPageFault_EXCn      = 15,  /*!<  Store or AMO page fault                  */
+
+  EXCn_MAX_NUM,
+
+  EXCn_Reserved         = 0x7FFFFFFF
+} EXCn_t;
+
 
 /* ----------------------  Interrupt Number Definition  --------------------- */
 
@@ -97,8 +122,30 @@ typedef enum IRQn {
   CAN1_EWMC_IRQn        = 85,  /*!< CAN1 EWMC interrupt                       */
   USBFS_IRQn            = 86,  /*!< USBFS global interrupt                    */
 
+  IRQn_MAX_NUM,
+
   IRQn_Reserved         = 0x7FFFFFFF
-} IRQn_Type;
+} IRQn_t;
+
+
+/* ---------------  Processor and Core Peripheral Section  ------------------ */
+
+#define __CORE_REV                0x0100        /*!< Core Revision r1p0       */
+
+#define __ECLIC_PRESENT           1             /*!< Set to 1 if ECLIC is present */
+#define __ECLIC_BASEADDR          0xD2000000UL  /*!< Set to ECLIC baseaddr    */
+#define __ECLIC_INTCTLBITS        4             /*!< Set to 1 - 8, the number of hardware bits are actually implemented in the clicintctl registers. */
+#define __ECLIC_INTNUM            IRQn_MAX_NUM  /*!< Set to 1 - 1005, the external interrupt number of ECLIC Unit */
+#define __SYSTIMER_PRESENT        1             /*!< Set to 1 if System Timer is present */
+#define __SYSTIMER_BASEADDR       0xD1000000UL  /*!< Set to SysTimer baseaddr */
+
+/*!< Set to 0, 1, or 2, 0 not present, 1 single floating point unit present, 2 double floating point unit present */
+#define __FPU_PRESENT             0
+#define __DSP_PRESENT             0             /*!< Set to 1 if DSP is present */
+#define __PMP_PRESENT             1             /*!< Set to 1 if PMP is present */
+#define __PMP_ENTRY_NUM           8             /*!< Set to 8 or 16, the number of PMP entries */
+#define __ICACHE_PRESENT          0             /*!< Set to 1 if I-Cache is present */
+#define __DCACHE_PRESENT          0             /*!< Set to 1 if D-Cache is present */
 
 /* includes */
 #include <Core/Riscv/core_riscv.h>
@@ -168,4 +215,4 @@ typedef enum IRQn {
 }
 #endif
 
-#endif 
+#endif  /* GD32VF103XX_H */
