@@ -31,6 +31,7 @@
 void _enter(void) __attribute__ ((naked, section(".text.init")));
 void _reset(void) __NO_RETURN;
 void _exit(int code);
+void early_exc_handler(void)  __attribute__((__noreturn__, aligned(16)));
 
 void _enter(void)
 {
@@ -40,6 +41,8 @@ void _enter(void)
       "la   gp, __global_pointer$   \n"
       ".option pop                  \n"
       "la   sp, _sp                 \n"
+      "la   t0, early_exc_handler   \n"
+      "csrw mtvec, t0               \n"
       "j    _reset                  \n"
   );
 }
@@ -57,6 +60,11 @@ void _reset(void)
  * @param[in]   code
  */
 void _exit(int code __attribute__((unused)))
+{
+  for (;;);
+}
+
+void early_exc_handler(void)
 {
   for (;;);
 }
