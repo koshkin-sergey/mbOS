@@ -148,6 +148,7 @@ typedef enum IRQn {
 #define __DCACHE_PRESENT          0             /*!< Set to 1 if D-Cache is present */
 
 /* includes */
+#include <Core/Riscv/compiler.h>
 #include <Core/Riscv/core_riscv.h>
 #include "system_gd32vf1xx.h"
 

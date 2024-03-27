@@ -1,6 +1,8 @@
 /*
  * Copyright (C) 2024 Sergey Koshkin <koshkin.sergey@gmail.com>
- * All rights reserved
+ * All rights reserved.
+ *
+ * SPDX-License-Identifier: Apache-2.0
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
  * not use this file except in compliance with the License.
@@ -19,31 +21,26 @@
  *  includes
  ******************************************************************************/
 
-#include <asm/system_gd32vf1xx.h>
+#include <asm/gd32vf103xx.h>
 #include <Core/Riscv/irq_riscv.h>
 
 /*******************************************************************************
- *  global variable definitions (scope: module-exported)
+ *  external references
  ******************************************************************************/
 
-uint32_t SystemCoreClock;           /*!< System Clock Frequency (Core Clock)  */
+extern void EXC_Handler(void);
 
 /*******************************************************************************
  *  function implementations (scope: module-exported)
  ******************************************************************************/
 
 /**
- * @brief       Update SystemCoreClock variable.
+ * @brief       Initialize interrupt controller.
+ * @return      0 on success, -1 on error.
  */
-void SystemCoreClockUpdate(void)
+int32_t IRQ_Initialize(void)
 {
-  SystemCoreClock = 8000000U;
-}
+  CSR_WRITE(CSR_MTVEC, EXC_Handler);
 
-/**
- * @brief       Initialize the System.
- */
-void SystemInit(void)
-{
-  IRQ_Initialize();
+  return (0);
 }

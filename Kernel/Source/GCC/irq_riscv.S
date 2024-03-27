@@ -35,4 +35,15 @@ IRQ_PendSV:
                 .byte    0                          // Pending SVC flag
 
 
+                .section ".text.os.handlers"
+                .align   2
+
+
+                .type    EXC_Handler, %function
+                .global  EXC_Handler
+EXC_Handler:
+
+                mret
+                .size    EXC_Handler, .-EXC_Handler
+
                 .end
