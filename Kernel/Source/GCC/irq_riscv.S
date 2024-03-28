@@ -39,11 +39,11 @@ IRQ_PendSV:
                 .align   2
 
 
-                .type    EXC_Handler, %function
-                .global  EXC_Handler
-EXC_Handler:
+                .type    ECM_Handler, %function
+                .global  ECM_Handler
+ECM_Handler:
 
-                mret
-                .size    EXC_Handler, .-EXC_Handler
+                j   ECM_Handler
+                .size    ECM_Handler, .-ECM_Handler
 
                 .end
