@@ -476,36 +476,104 @@
 #define CSR_MSCRATCHCSWL              0x349
 #define CSR_MCLICBASE                 0x350
 
-#define MSTATUS_UIE                   0x00000001
-#define MSTATUS_SIE                   0x00000002
-#define MSTATUS_HIE                   0x00000004
-#define MSTATUS_MIE                   0x00000008
-#define MSTATUS_UPIE                  0x00000010
-#define MSTATUS_SPIE                  0x00000020
-#define MSTATUS_UBE                   0x00000040
-#define MSTATUS_MPIE                  0x00000080
-#define MSTATUS_SPP                   0x00000100
-#define MSTATUS_VS                    0x00000600
-#define MSTATUS_MPP                   0x00001800
-#define MSTATUS_FS                    0x00006000
-#define MSTATUS_XS                    0x00018000
-#define MSTATUS_MPRV                  0x00020000
-#define MSTATUS_SUM                   0x00040000
-#define MSTATUS_MXR                   0x00080000
-#define MSTATUS_TVM                   0x00100000
-#define MSTATUS_TW                    0x00200000
-#define MSTATUS_TSR                   0x00400000
-#define MSTATUS32_SD                  0x80000000
-#define MSTATUS_UXL                   0x0000000300000000
-#define MSTATUS_SXL                   0x0000000C00000000
-#define MSTATUS_SBE                   0x0000001000000000
-#define MSTATUS_MBE                   0x0000002000000000
-#define MSTATUS_GVA                   0x0000004000000000
-#define MSTATUS_MPV                   0x0000008000000000
-#define MSTATUS64_SD                  0x8000000000000000
+/*******************  Bit definition for MSTATUS register  ********************/
+#define MSTATUS_UIE_Pos               (0U)
+#define MSTATUS_UIE_Msk               (0x1UL << MSTATUS_UIE_Pos)
+#define MSTATUS_UIE                             MSTATUS_UIE_Msk
 
+#define MSTATUS_SIE_Pos               (1U)
+#define MSTATUS_SIE_Msk               (0x1UL << MSTATUS_SIE_Pos)
+#define MSTATUS_SIE                             MSTATUS_SIE_Msk
+
+#define MSTATUS_HIE_Pos               (2U)
+#define MSTATUS_HIE_Msk               (0x1UL << MSTATUS_HIE_Pos)
+#define MSTATUS_HIE                             MSTATUS_HIE_Msk
+
+#define MSTATUS_MIE_Pos               (3U)
+#define MSTATUS_MIE_Msk               (0x1UL << MSTATUS_MIE_Pos)
+#define MSTATUS_MIE                             MSTATUS_MIE_Msk
+
+#define MSTATUS_UPIE_Pos              (4U)
+#define MSTATUS_UPIE_Msk              (0x1UL << MSTATUS_UPIE_Pos)
+#define MSTATUS_UPIE                            MSTATUS_UPIE_Msk
+
+#define MSTATUS_SPIE_Pos              (5U)
+#define MSTATUS_SPIE_Msk              (0x1UL << MSTATUS_SPIE_Pos)
+#define MSTATUS_SPIE                            MSTATUS_SPIE_Msk
+
+#define MSTATUS_UBE_Pos               (6U)
+#define MSTATUS_UBE_Msk               (0x1UL << MSTATUS_UBE_Pos)
+#define MSTATUS_UBE                             MSTATUS_UBE_Msk
+
+#define MSTATUS_MPIE_Pos              (7U)
+#define MSTATUS_MPIE_Msk              (0x1UL << MSTATUS_MPIE_Pos)
+#define MSTATUS_MPIE                            MSTATUS_MPIE_Msk
+
+#define MSTATUS_SPP_Pos               (8U)
+#define MSTATUS_SPP_Msk               (0x1UL << MSTATUS_SPP_Pos)
+#define MSTATUS_SPP                             MSTATUS_SPP_Msk)
+
+#define MSTATUS_VS_Pos                (9U)
+#define MSTATUS_VS_Msk                (0x3UL << MSTATUS_VS_Pos)
+#define MSTATUS_VS_OFF                (0x0UL << MSTATUS_VS_Pos)
+#define MSTATUS_VS_INITIAL            (0x1UL << MSTATUS_VS_Pos)
+#define MSTATUS_VS_CLEAN              (0x2UL << MSTATUS_VS_Pos)
+#define MSTATUS_VS_DIRTY              (0x3UL << MSTATUS_VS_Pos)
+
+#define MSTATUS_MPP_Pos               (11U)
+#define MSTATUS_MPP_Msk               (0x3UL << MSTATUS_MPP_Pos)
+#define MSTATUS_MPP_U                 (0x0UL << MSTATUS_MPP_Pos)
+#define MSTATUS_MPP_S                 (0x1UL << MSTATUS_MPP_Pos)
+#define MSTATUS_MPP_H                 (0x2UL << MSTATUS_MPP_Pos)
+#define MSTATUS_MPP_M                 (0x3UL << MSTATUS_MPP_Pos)
+
+#define MSTATUS_FS_Pos                (13U)
+#define MSTATUS_FS_Msk                (0x3UL << MSTATUS_FS_Pos)
+#define MSTATUS_FS_OFF                (0x0UL << MSTATUS_FS_Pos)
+#define MSTATUS_FS_INITIAL            (0x1UL << MSTATUS_FS_Pos)
+#define MSTATUS_FS_CLEAN              (0x2UL << MSTATUS_FS_Pos)
+#define MSTATUS_FS_DIRTY              (0x3UL << MSTATUS_FS_Pos)
+
+#define MSTATUS_XS_Pos                (15U)
+#define MSTATUS_XS_Msk                (0x3UL << MSTATUS_XS_Pos)
+#define MSTATUS_XS_OFF                (0x0UL << MSTATUS_XS_Pos)
+#define MSTATUS_XS_INITIAL            (0x1UL << MSTATUS_XS_Pos)
+#define MSTATUS_XS_CLEAN              (0x2UL << MSTATUS_XS_Pos)
+#define MSTATUS_XS_DIRTY              (0x3UL << MSTATUS_XS_Pos)
+
+#define MSTATUS_MPRV_Pos              (17U)
+#define MSTATUS_MPRV_Msk              (0x1UL << MSTATUS_MPRV_Pos)
+#define MSTATUS_MPRV                            MSTATUS_MPRV_Msk
+
+#define MSTATUS_SUM_Pos               (18U)
+#define MSTATUS_SUM_Msk               (0x1UL << MSTATUS_SUM_Pos)
+#define MSTATUS_SUM                             MSTATUS_SUM_Msk
+
+#define MSTATUS_MXR_Pos               (19U)
+#define MSTATUS_MXR_Msk               (0x1UL << MSTATUS_MXR_Pos)
+#define MSTATUS_MXR                             MSTATUS_MXR_Msk
+
+#define MSTATUS_TVM_Pos               (20U)
+#define MSTATUS_TVM_Msk               (0x1UL << MSTATUS_TVM_Pos)
+#define MSTATUS_TVM                             MSTATUS_TVM_Msk
+
+#define MSTATUS_TW_Pos                (21U)
+#define MSTATUS_TW_Msk                (0x1UL << MSTATUS_TW_Pos)
+#define MSTATUS_TW                              MSTATUS_TW_Msk
+
+#define MSTATUS_TSR_Pos               (22U)
+#define MSTATUS_TSR_Msk               (0x1UL << MSTATUS_TSR_Pos)
+#define MSTATUS_TSR                             MSTATUS_TSR_Msk
+
+#define MSTATUS_SD_Pos                (31U)
+#define MSTATUS_SD_Msk                (0x1UL << MSTATUS_SD_Pos)
+#define MSTATUS_SD                              MSTATUS_SD_Msk
+
+
+/*******************  Bit definition for MCAUSE register  *********************/
 #define MCAUSE_CODE_Pos               (0U)
 #define MCAUSE_CODE_Msk               (0x7FFFFFFFUL << MCAUSE_CODE_Pos)
+
 #define MCAUSE_INT_Pos                (31U)
 #define MCAUSE_INT_Msk                (0x1UL << MCAUSE_INT_Pos)
 
