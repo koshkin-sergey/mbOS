@@ -28,6 +28,11 @@
 void Default_Handler(void);
 
 /**
+ * @brief Exception Entry
+ */
+void exc_entry(void)   __attribute__ ((weak, alias("Default_Handler")));
+
+/**
  * @brief Exception Handlers
  */
 void IAM_Handler(void) __attribute__ ((weak, alias("Default_Handler")));
@@ -71,24 +76,6 @@ static const IRQHandler_t exc_vector[EXCn_MAX_NUM] = {
  *  function implementations (scope: module-local)
  ******************************************************************************/
 
-/**
- * @brief
- */
-static void exc_entry(void)
-{
-  uint32_t mcause_val = CSR_READ(CSR_MCAUSE);
-
-  if ((mcause_val & MCAUSE_INT_Msk) == 0U) {
-    IRQHandler_t handler = exc_vector[mcause_val & MCAUSE_CODE_Msk];
-    if (handler != NULL) {
-      handler();
-    }
-  }
-  else {
-
-  }
-}
-
 /*******************************************************************************
  *  function implementations (scope: module-exported)
  ******************************************************************************/
@@ -100,8 +87,25 @@ static void exc_entry(void)
 int32_t IRQ_Initialize(void)
 {
   CSR_WRITE(CSR_MTVEC, exc_entry);
+  CSR_WRITE(CSR_MSTATUS, MSTATUS_MIE);
 
   return (0);
+}
+
+/**
+ * @brief       Get the registered interrupt handler.
+ * @param[in]   irqn   interrupt or exception ID number
+ * @return      registered interrupt handler function address.
+ */
+IRQHandler_t IRQ_GetHandler(IRQn_ID_t irqn)
+{
+  IRQHandler_t handler = NULL;
+
+  if ((irqn & MCAUSE_INT_Msk) == 0U) {
+    handler = exc_vector[irqn & MCAUSE_CODE_Msk];
+  }
+
+  return (handler);
 }
 
 /**
