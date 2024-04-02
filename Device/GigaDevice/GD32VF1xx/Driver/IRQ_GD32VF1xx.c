@@ -86,6 +86,7 @@ static const IRQHandler_t exc_vector[EXCn_MAX_NUM] = {
  */
 int32_t IRQ_Initialize(void)
 {
+  CSR_WRITE(CSR_MSCRATCH, 0);
   CSR_WRITE(CSR_MTVEC, exc_entry);
   CSR_WRITE(CSR_MSTATUS, MSTATUS_MIE);
 

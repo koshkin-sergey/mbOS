@@ -28,7 +28,7 @@
 #include <Core/Riscv/compiler.h>
 #include <Core/Riscv/core_riscv.h>
 
-extern uint8_t IRQ_NestLevel;
+extern uint32_t IRQ_NestLevel;
 extern uint8_t IRQ_PendSV;
 
 /*******************************************************************************
@@ -38,6 +38,7 @@ extern uint8_t IRQ_PendSV;
 #define INIT_EXC_RETURN               0xFFFFFFFDUL
 #define OS_TICK_HANDLER               osTick_Handler
 
+#define IsIrqMasked()                 false
 #define IsPrivileged()                false
 #define SystemIsrInit()
 #define setPrivilegedMode(flag)
@@ -51,10 +52,6 @@ extern uint8_t IRQ_PendSV;
                                        MSTATUS_VS_INITIAL)
 
 /*******************************************************************************
- *  typedefs and structures
- ******************************************************************************/
-
-/*******************************************************************************
  *  exported functions
  ******************************************************************************/
 
@@ -66,18 +63,7 @@ extern uint8_t IRQ_PendSV;
 __STATIC_FORCEINLINE
 bool IsIrqMode(void)
 {
-  return (CSR_READ(CSR_MIP) != 0U);
-}
-
-/**
- * @fn          bool IsIrqMasked(void)
- * @brief       Check if in IRQ Mode
- * @return      true=IRQ, false=thread
- */
-__STATIC_FORCEINLINE
-bool IsIrqMasked(void)
-{
-  return ((CSR_READ(CSR_MSTATUS) & MSTATUS_MIE_Msk) == 0U);
+  return (IRQ_NestLevel > 0U);
 }
 
 /**

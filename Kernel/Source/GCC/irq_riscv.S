@@ -116,11 +116,24 @@ exc_entry:
 
                 SAVE_CONTEXT
 
+                lw    t0, IRQ_NestLevel
+                addi  t0, t0, +1                  // Increment IRQ nesting level
+                sw    t0, IRQ_NestLevel, t1
+
+                csrrw sp, mscratch, sp
+                bnez  sp, 1f
+                csrr  sp, mscratch
+1:
                 csrr    a0, mcause
                 jal     IRQ_GetHandler
                 beqz    a0, 1f
                 jalr    a0
 1:
+                csrrw sp, mscratch, sp
+
+                lw    t0, IRQ_NestLevel
+                addi  t0, t0, -1                  // Decrement IRQ nesting level
+                sw    t0, IRQ_NestLevel, t1
 
                 RESTORE_CONTEXT
                 mret
@@ -129,21 +142,18 @@ exc_entry:
                 .type    ECM_Handler, %function
                 .global  ECM_Handler
 ECM_Handler:
+                csrr  tp, mscratch
 
-                lw    t0, 10 * 4(sp)
+                lw    t0, 10 * 4(tp)
                 addi  t0, t0, 4
-                sw    t0, 10 * 4(sp)
+                sw    t0, 10 * 4(tp)
 
-//                la    t0, osInfo + I_K_STATE_OFS // Load kernel state
-//                lw    t0, 0(t0)
-//                beqz  t0, 1f
-//                csrrw s0, mscratch, s0
-//1:
-                lw    a0,  0 * 4(sp)
-                lw    a1,  1 * 4(sp)
-                lw    a2,  2 * 4(sp)
-                lw    a3,  3 * 4(sp)
-                lw    a5,  5 * 4(sp)
+ECM_FuncCall:
+                lw    a0,  0 * 4(tp)
+                lw    a1,  1 * 4(tp)
+                lw    a2,  2 * 4(tp)
+                lw    a3,  3 * 4(tp)
+                lw    a5,  5 * 4(tp)
 
                 addi  sp, sp, -4
                 sw    ra, 0(sp)
@@ -151,8 +161,8 @@ ECM_Handler:
                 lw    ra, 0(sp)
                 addi  sp, sp, +4
 
-                sw    a0,  0 * 4(sp)              // Store function return values
-ECM_Context:
+                sw    a0,  0 * 4(tp)              // Store function return values
+ECM_ContextCheck:
                 la    a0, osInfo                  // Load address of osInfo
                 lw    a1, 0(a0)                   // Load osInfo.thread.run.curr to a1
                 lw    a2, 4(a0)                   // Load osInfo.thread.run.next to a2
@@ -160,43 +170,44 @@ ECM_Context:
                 beqz  a1, ECM_ContextSwitch       // Branch if running thread is deleted
 ECM_ContextSave:
 #ifndef __riscv_32e
-                addi  sp, sp, -10 * 4
-                sw    s2,  0 * 4(sp)
-                sw    s3,  1 * 4(sp)
-                sw    s4,  2 * 4(sp)
-                sw    s5,  3 * 4(sp)
-                sw    s6,  4 * 4(sp)
-                sw    s7,  5 * 4(sp)
-                sw    s8,  6 * 4(sp)
-                sw    s9,  7 * 4(sp)
-                sw    s10, 8 * 4(sp)
-                sw    s11, 9 * 4(sp)
+                addi  tp, tp, -10 * 4
+                sw    s2,  0 * 4(tp)
+                sw    s3,  1 * 4(tp)
+                sw    s4,  2 * 4(tp)
+                sw    s5,  3 * 4(tp)
+                sw    s6,  4 * 4(tp)
+                sw    s7,  5 * 4(tp)
+                sw    s8,  6 * 4(tp)
+                sw    s9,  7 * 4(tp)
+                sw    s10, 8 * 4(tp)
+                sw    s11, 9 * 4(tp)
 #endif /* __riscv_32e */
-                addi  sp, sp, -2 * 4
-                sw    s0, 0 * 4(sp)
-                sw    s1, 1 * 4(sp)
-                sw    sp, 0(a1)
+                addi  tp, tp, -2 * 4
+                sw    s0, 0 * 4(tp)
+                sw    s1, 1 * 4(tp)
+                sw    tp, 0(a1)
 ECM_ContextSwitch:
                 sw    a2, 0(a0)
 ECM_ContextRestore:
-                lw    sp, 0(a2)
-                lw    s0, 0 * 4(sp)
-                lw    s1, 1 * 4(sp)
-                addi  sp, sp, 2 * 4
+                lw    tp, 0(a2)
+                lw    s0, 0 * 4(tp)
+                lw    s1, 1 * 4(tp)
+                addi  tp, tp, 2 * 4
 #ifndef __riscv_32e
-                lw    s2,  0 * 4(sp)
-                lw    s3,  1 * 4(sp)
-                lw    s4,  2 * 4(sp)
-                lw    s5,  3 * 4(sp)
-                lw    s6,  4 * 4(sp)
-                lw    s7,  5 * 4(sp)
-                lw    s8,  6 * 4(sp)
-                lw    s9,  7 * 4(sp)
-                lw    s10, 8 * 4(sp)
-                lw    s11, 9 * 4(sp)
-                addi  sp, sp, 10 * 4
+                lw    s2,  0 * 4(tp)
+                lw    s3,  1 * 4(tp)
+                lw    s4,  2 * 4(tp)
+                lw    s5,  3 * 4(tp)
+                lw    s6,  4 * 4(tp)
+                lw    s7,  5 * 4(tp)
+                lw    s8,  6 * 4(tp)
+                lw    s9,  7 * 4(tp)
+                lw    s10, 8 * 4(tp)
+                lw    s11, 9 * 4(tp)
+                addi  tp, tp, 10 * 4
 #endif /* __riscv_32e */
 ECM_Exit:
+                csrw  mscratch, tp
                 ret
 
                 .size    ECM_Handler, .-ECM_Handler
