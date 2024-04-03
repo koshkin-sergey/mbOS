@@ -94,6 +94,20 @@ int32_t IRQ_Initialize(void)
 }
 
 /**
+ * @brief       Register interrupt handler.
+ * @param[in]   irqn      interrupt ID number
+ * @param[in]   handler   interrupt handler function address
+ * @return      0 on success, -1 on error.
+ */
+int32_t IRQ_SetHandler(IRQn_ID_t irqn, IRQHandler_t handler)
+{
+  (void) irqn;
+  (void) handler;
+
+  return (0);
+}
+
+/**
  * @brief       Get the registered interrupt handler.
  * @param[in]   irqn   interrupt or exception ID number
  * @return      registered interrupt handler function address.
