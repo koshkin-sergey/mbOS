@@ -60,6 +60,8 @@
 #define SysTimer_BASE               __SYSTIMER_BASEADDR                         /*!< SysTick Base Address */
 #define SysTimer                    ((SysTimer_t *) SysTimer_BASE)              /*!< SysTick configuration struct */
 
+#define SYSTIMER_IRQ_PRIORITY       0U
+
 /*******************************************************************************
  *  typedefs and structures (scope: module-local)
  ******************************************************************************/
@@ -159,8 +161,16 @@ int32_t osTickSetup(uint32_t freq, IRQHandler_t handler)
   SetLoadValue(0U);
   SetCompareValue(ticks);
 
+  /* Disable corresponding IRQ */
+  IRQ_Disable(CLIC_INT_TMR);
+  /* Set Timer interrupt priority */
+  IRQ_SetPriority(CLIC_INT_TMR, SYSTIMER_IRQ_PRIORITY);
   /* Register tick interrupt handler function */
   IRQ_SetHandler(CLIC_INT_TMR, handler);
+  /* Set IRQ mode interrupt */
+  IRQ_SetMode(CLIC_INT_TMR, IRQ_MODE_TYPE_IRQ);
+  /* Enable corresponding interrupt */
+  IRQ_Enable(CLIC_INT_TMR);
 
   return (0);
 }
@@ -187,7 +197,7 @@ void osTickDisable(void)
  */
 void osTickEnableIRQ(void)
 {
-
+  IRQ_Enable(CLIC_INT_TMR);
 }
 
 /**
@@ -196,7 +206,7 @@ void osTickEnableIRQ(void)
  */
 void osTickDisableIRQ(void)
 {
-
+  IRQ_Disable(CLIC_INT_TMR);
 }
 
 /**
@@ -234,7 +244,7 @@ uint32_t osTickGetClock(void)
  */
 uint32_t osTickGetInterval(void)
 {
-  return (0U);
+  return (ticks);
 }
 
 /**
@@ -243,7 +253,7 @@ uint32_t osTickGetInterval(void)
  */
 uint32_t osTickGetCount(void)
 {
-  return (0U);
+  return (SysTimer->MTIMERL);
 }
 
 /**
@@ -252,7 +262,7 @@ uint32_t osTickGetCount(void)
  */
 uint32_t osTickGetOverflow(void)
 {
-  return (0U);
+  return (IRQ_GetPending(CLIC_INT_TMR));
 }
 
 #endif /* defined(__SYSTIMER_PRESENT) && (__SYSTIMER_PRESENT == 1) */

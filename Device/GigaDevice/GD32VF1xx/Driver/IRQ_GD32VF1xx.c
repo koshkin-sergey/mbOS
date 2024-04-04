@@ -124,6 +124,165 @@ IRQHandler_t IRQ_GetHandler(IRQn_ID_t irqn)
 }
 
 /**
+ * @brief       Enable interrupt.
+ * @param[in]   irqn    interrupt ID number
+ * @return      0 on success, -1 on error.
+ */
+int32_t IRQ_Enable(IRQn_ID_t irqn)
+{
+  (void) irqn;
+
+  return (0);
+}
+
+/**
+ * @brief       Disable interrupt.
+ * @param[in]   irqn    interrupt ID number
+ * @return      0 on success, -1 on error.
+ */
+int32_t IRQ_Disable(IRQn_ID_t irqn)
+{
+  (void) irqn;
+
+  return (0);
+}
+
+/**
+ * @brief       Get interrupt enable state.
+ * @param[in]   irqn    interrupt ID number
+ * @return      0 - interrupt is disabled, 1 - interrupt is enabled.
+ */
+uint32_t IRQ_GetEnableState(IRQn_ID_t irqn)
+{
+  (void) irqn;
+
+  return (0U);
+}
+
+/**
+ * @brief       Configure interrupt request mode.
+ * @param[in]   irqn    interrupt ID number
+ * @param[in]   mode    mode configuration
+ * @return      0 on success, -1 on error.
+ */
+int32_t IRQ_SetMode(IRQn_ID_t irqn, uint32_t mode)
+{
+  (void) irqn;
+  (void) mode;
+
+  return (0);
+}
+
+/**
+ * @brief       Get interrupt mode configuration.
+ * @param[in]   irqn    interrupt ID number
+ * @return      current interrupt mode configuration with optional
+ *              IRQ_MODE_ERROR bit set.
+ */
+uint32_t IRQ_GetMode(IRQn_ID_t irqn)
+{
+  (void) irqn;
+
+  return (0U);
+}
+
+/**
+ * @brief       Set interrupt pending flag.
+ * @param[in]   irqn    interrupt ID number
+ * @return      0 on success, -1 on error.
+ */
+int32_t IRQ_SetPending(IRQn_ID_t irqn)
+{
+  (void) irqn;
+
+  return (0);
+}
+
+/**
+ * @brief       Get interrupt pending flag.
+ * @param[in]   irqn    interrupt ID number
+ * @return      0 - interrupt is not pending, 1 - interrupt is pending.
+ */
+uint32_t IRQ_GetPending(IRQn_ID_t irqn)
+{
+  (void) irqn;
+
+  return (0U);
+}
+
+/**
+ * @brief       Set interrupt priority value.
+ * @param[in]   irqn      interrupt ID number
+ * @param[in]   priority  interrupt priority value
+ * @return      0 on success, -1 on error.
+ */
+int32_t IRQ_SetPriority(IRQn_ID_t irqn, uint32_t priority)
+{
+  (void) irqn;
+  (void) priority;
+
+  return (-1);
+}
+
+/**
+ * @brief       Get interrupt priority.
+ * @param[in]   irqn      interrupt ID number
+ * @return      current interrupt priority value with optional
+ *              IRQ_PRIORITY_ERROR bit set.
+ */
+uint32_t IRQ_GetPriority(IRQn_ID_t irqn)
+{
+  (void) irqn;
+
+  return (0U);
+}
+
+/**
+ * @brief       Set priority masking threshold.
+ * @param[in]   priority  priority masking threshold value
+ * @return      0 on success, -1 on error.
+ */
+int32_t IRQ_SetPriorityMask(uint32_t priority)
+{
+  (void) priority;
+
+  return (-1);
+}
+
+/**
+ * @brief       Get priority masking threshold
+ * @return      current priority masking threshold value with optional
+ *              IRQ_PRIORITY_ERROR bit set.
+ */
+uint32_t IRQ_GetPriorityMask(void)
+{
+  return (IRQ_PRIORITY_ERROR);
+}
+
+/**
+ * @brief       Set priority grouping field split point
+ * @param[in]   bits    number of MSB bits included in the group priority field
+ *                      comparison
+ * @return      0 on success, -1 on error.
+ */
+int32_t IRQ_SetPriorityGroupBits(uint32_t bits)
+{
+  (void) bits;
+
+  return (-1);
+}
+
+/**
+ * @brief       Get priority grouping field split point
+ * @return      current number of MSB bits included in the group priority field
+ *              comparison with optional IRQ_PRIORITY_ERROR bit set.
+ */
+uint32_t IRQ_GetPriorityGroupBits(void)
+{
+  return (IRQ_PRIORITY_ERROR);
+}
+
+/**
  * @brief       Default Handler for Exceptions / Interrupts.
  */
 void Default_Handler(void)
