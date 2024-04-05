@@ -25,12 +25,127 @@
 #include <asm/gd32vf103xx.h>
 #include <Core/Riscv/irq_riscv.h>
 
-void Default_Handler(void);
+/*******************************************************************************
+ *  defines and macros (scope: module-local)
+ ******************************************************************************/
+
+#ifndef __riscv_32e
+/**
+ * @brief       Macro for context save
+ * @details     This macro save ABI defined caller saved registers in the stack.
+ * @remarks     This Macro could use to save context when you enter to exception
+ *              or interrupt
+ */
+#define SAVE_CONTEXT()                                                         \
+  __ASM volatile (                                                             \
+    "addi    sp, sp, -72            \n\t"                                      \
+    "sw      a0,  0 * 4(sp)         \n\t"                                      \
+    "sw      a1,  1 * 4(sp)         \n\t"                                      \
+    "sw      a2,  2 * 4(sp)         \n\t"                                      \
+    "sw      a3,  3 * 4(sp)         \n\t"                                      \
+    "sw      a4,  4 * 4(sp)         \n\t"                                      \
+    "sw      a5,  5 * 4(sp)         \n\t"                                      \
+    "sw      t0,  6 * 4(sp)         \n\t"                                      \
+    "sw      t1,  7 * 4(sp)         \n\t"                                      \
+    "sw      t2,  8 * 4(sp)         \n\t"                                      \
+    "sw      ra,  9 * 4(sp)         \n\t"                                      \
+    "csrr    t0, mepc               \n\t"                                      \
+    "sw      t0, 10 * 4(sp)         \n\t"                                      \
+    "csrr    t0, mstatus            \n\t"                                      \
+    "sw      t0, 11 * 4(sp)         \n\t"                                      \
+    "sw      a6, 12 * 4(sp)         \n\t"                                      \
+    "sw      a7, 13 * 4(sp)         \n\t"                                      \
+    "sw      t3, 14 * 4(sp)         \n\t"                                      \
+    "sw      t4, 15 * 4(sp)         \n\t"                                      \
+    "sw      t5, 16 * 4(sp)         \n\t"                                      \
+    "sw      t6, 17 * 4(sp)         \n\t"                                      \
+  )
 
 /**
- * @brief Exception Entry
+ * @brief       Macro for restore caller registers
+ * @details     This macro restore ABI defined caller saved registers from stack.
+ * @remarks     You could use this macro to restore context before you want return
+ *              from interrupt or exeception
  */
-void exc_entry(void)   __attribute__ ((weak, alias("Default_Handler")));
+#define RESTORE_CONTEXT()                                                      \
+  __ASM volatile (                                                             \
+    "lw      t0, 11 * 4(sp)         \n\t"                                      \
+    "csrw    mstatus, t0            \n\t"                                      \
+    "lw      t0, 10 * 4(sp)         \n\t"                                      \
+    "csrw    mepc, t0               \n\t"                                      \
+    "lw      a0,  0 * 4(sp)         \n\t"                                      \
+    "lw      a1,  1 * 4(sp)         \n\t"                                      \
+    "lw      a2,  2 * 4(sp)         \n\t"                                      \
+    "lw      a3,  3 * 4(sp)         \n\t"                                      \
+    "lw      a4,  4 * 4(sp)         \n\t"                                      \
+    "lw      a5,  5 * 4(sp)         \n\t"                                      \
+    "lw      t0,  6 * 4(sp)         \n\t"                                      \
+    "lw      t1,  7 * 4(sp)         \n\t"                                      \
+    "lw      t2,  8 * 4(sp)         \n\t"                                      \
+    "lw      ra,  9 * 4(sp)         \n\t"                                      \
+    "lw      a6, 12 * 4(sp)         \n\t"                                      \
+    "lw      a7, 13 * 4(sp)         \n\t"                                      \
+    "lw      t3, 14 * 4(sp)         \n\t"                                      \
+    "lw      t4, 15 * 4(sp)         \n\t"                                      \
+    "lw      t5, 16 * 4(sp)         \n\t"                                      \
+    "lw      t6, 17 * 4(sp)         \n\t"                                      \
+    "addi    sp, sp, 72             \n\t"                                      \
+    "mret                           \n\t"                                      \
+  )
+#else
+/**
+ * @brief       Macro for context save
+ * @details     This macro save ABI defined caller saved registers in the stack.
+ * @remarks     This Macro could use to save context when you enter to exception
+ *              or interrupt
+ */
+#define SAVE_CONTEXT()                                                         \
+  __ASM volatile (                                                             \
+    "addi    sp, sp, -48            \n\t"                                      \
+    "sw      a0,  0 * 4(sp)         \n\t"                                      \
+    "sw      a1,  1 * 4(sp)         \n\t"                                      \
+    "sw      a2,  2 * 4(sp)         \n\t"                                      \
+    "sw      a3,  3 * 4(sp)         \n\t"                                      \
+    "sw      a4,  4 * 4(sp)         \n\t"                                      \
+    "sw      a5,  5 * 4(sp)         \n\t"                                      \
+    "sw      t0,  6 * 4(sp)         \n\t"                                      \
+    "sw      t1,  7 * 4(sp)         \n\t"                                      \
+    "sw      t2,  8 * 4(sp)         \n\t"                                      \
+    "sw      ra,  9 * 4(sp)         \n\t"                                      \
+    "csrr    t0, mepc               \n\t"                                      \
+    "sw      t0, 10 * 4(sp)         \n\t"                                      \
+    "csrr    t0, mstatus            \n\t"                                      \
+    "sw      t0, 11 * 4(sp)         \n\t"                                      \
+  )
+
+/**
+ * @brief       Macro for restore caller registers
+ * @details     This macro restore ABI defined caller saved registers from stack.
+ * @remarks     You could use this macro to restore context before you want return
+ *              from interrupt or exeception
+ */
+#define RESTORE_CONTEXT()                                                      \
+  __ASM volatile (                                                             \
+    "lw      t0, 11 * 4(sp)         \n\t"                                      \
+    "csrw    mstatus, t0            \n\t"                                      \
+    "lw      t0, 10 * 4(sp)         \n\t"                                      \
+    "csrw    mepc, t0               \n\t"                                      \
+    "lw      a0,  0 * 4(sp)         \n\t"                                      \
+    "lw      a1,  1 * 4(sp)         \n\t"                                      \
+    "lw      a2,  2 * 4(sp)         \n\t"                                      \
+    "lw      a3,  3 * 4(sp)         \n\t"                                      \
+    "lw      a4,  4 * 4(sp)         \n\t"                                      \
+    "lw      a5,  5 * 4(sp)         \n\t"                                      \
+    "lw      t0,  6 * 4(sp)         \n\t"                                      \
+    "lw      t1,  7 * 4(sp)         \n\t"                                      \
+    "lw      t2,  8 * 4(sp)         \n\t"                                      \
+    "lw      ra,  9 * 4(sp)         \n\t"                                      \
+    "addi    sp, sp, 48             \n\t"                                      \
+    "mret                           \n\t"                                      \
+  )
+#endif
+
+void Default_Handler(void);
 
 /**
  * @brief Exception Handlers
@@ -45,7 +160,7 @@ void SAM_Handler(void) __attribute__ ((weak, alias("Default_Handler")));
 void SAF_Handler(void) __attribute__ ((weak, alias("Default_Handler")));
 void ECU_Handler(void) __attribute__ ((weak, alias("Default_Handler")));
 void ECS_Handler(void) __attribute__ ((weak, alias("Default_Handler")));
-void ECM_Handler(void) __attribute__ ((weak, alias("Default_Handler")));
+void SVC_Handler(void) __attribute__ ((weak, alias("Default_Handler")));
 void IPF_Handler(void) __attribute__ ((weak, alias("Default_Handler")));
 void LPF_Handler(void) __attribute__ ((weak, alias("Default_Handler")));
 void SPF_Handler(void) __attribute__ ((weak, alias("Default_Handler")));
@@ -65,7 +180,7 @@ static const IRQHandler_t exc_vector[EXCn_MAX_NUM] = {
   ECU_Handler,    // Environment call from U-mode
   ECS_Handler,    // Environment call from S-mode
   NULL,           // Reserved
-  ECM_Handler,    // Environment call from M-mode
+  SVC_Handler,    // Environment call from M-mode
   IPF_Handler,    // Instruction page fault
   LPF_Handler,    // Load page fault
   NULL,           // Reserved
@@ -75,6 +190,39 @@ static const IRQHandler_t exc_vector[EXCn_MAX_NUM] = {
 /*******************************************************************************
  *  function implementations (scope: module-local)
  ******************************************************************************/
+
+void exc_entry(void) __attribute__ ((naked));
+
+/**
+ * @brief       Exception Entry
+ */
+void exc_entry(void)
+{
+  SAVE_CONTEXT();
+
+  __ASM volatile (
+    "  lw    t0, IRQ_NestLevel      \n\t"
+    "  addi  t0, t0, +1             \n\t"     // Increment IRQ nesting level
+    "  sw    t0, IRQ_NestLevel, t1  \n\t"
+    "                               \n\t"
+    "  csrrw sp, mscratch, sp       \n\t"
+    "  bnez  sp, 1f                 \n\t"
+    "  csrr  sp, mscratch           \n\t"
+    "1:                             \n\t"
+    "  csrr    a0, mcause           \n\t"
+    "  jal     IRQ_GetHandler       \n\t"
+    "  beqz    a0, 1f               \n\t"
+    "  jalr    a0                   \n\t"
+    "1:                             \n\t"
+    "  csrrw sp, mscratch, sp       \n\t"
+    "                               \n\t"
+    "  lw    t0, IRQ_NestLevel      \n\t"
+    "  addi  t0, t0, -1             \n\t"     // Decrement IRQ nesting level
+    "  sw    t0, IRQ_NestLevel, t1  \n\t"
+  );
+
+  RESTORE_CONTEXT();
+}
 
 /*******************************************************************************
  *  function implementations (scope: module-exported)
