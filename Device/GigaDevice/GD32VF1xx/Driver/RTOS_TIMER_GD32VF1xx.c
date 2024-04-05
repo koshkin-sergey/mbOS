@@ -17,70 +17,15 @@
  * limitations under the License.
  */
 
+/*******************************************************************************
+ *  includes
+ ******************************************************************************/
+
 #include <Kernel/tick.h>
 #include <Core/Riscv/irq_riscv.h>
-#include <asm/gd32vf103xx.h>
+#include <asm/gd32vf103xx_systimer.h>
 
 #if defined(__SYSTIMER_PRESENT) && (__SYSTIMER_PRESENT == 1)
-
-/*******************************************************************************
- *  defines and macros (scope: module-local)
- ******************************************************************************/
-
-/* Timer Control / Status Register Definitions */
-#define MTIMECTL_TIMESTOP_Pos       0U
-#define MTIMECTL_TIMESTOP_Msk       (0x1UL << MTIMECTL_TIMESTOP_Pos)
-#define MTIMECTL_TIMESTOP                     MTIMECTL_TIMESTOP_Msk
-
-#define MTIMECTL_CMPCLREN_Pos       1U
-#define MTIMECTL_CMPCLREN_Msk       (0x1UL << MTIMECTL_CMPCLREN_Pos)
-#define MTIMECTL_CMPCLREN                     MTIMECTL_CMPCLREN_Msk
-
-#define MTIMECTL_CLKSRC_Pos         2U
-#define MTIMECTL_CLKSRC_Msk         (0x1UL << MTIMECTL_CLKSRC_Pos)
-#define MTIMECTL_CLKSRC                       MTIMECTL_CLKSRC_Msk
-
-#define MSIP_MSIP_Pos               0U
-#define MSIP_MSIP_Msk               (0x1UL << MSIP_MSIP_Pos)
-#define MSIP_MSIP                             MSIP_MSIP_Msk
-
-#define MTIMER_Msk                  (0xFFFFFFFFFFFFFFFFULL)
-#define MTIMERCMP_Msk               (0xFFFFFFFFFFFFFFFFULL)
-#define MTIMECTL_Msk                (0xFFFFFFFFUL)
-#define MSIP_Msk                    (0xFFFFFFFFUL)
-#define MSFTRST_Msk                 (0xFFFFFFFFUL)
-
-#define MSFRST_KEY                  (0x80000A5FUL)
-
-#ifndef __SYSTIMER_BASEADDR
-/* Base address of SYSTIMER(__SYSTIMER_BASEADDR) should be defined in <Device.h> */
-#error "__SYSTIMER_BASEADDR is not defined, please check!"
-#endif
-/* System Timer Memory mapping of Device  */
-#define SysTimer_BASE               __SYSTIMER_BASEADDR                         /*!< SysTick Base Address */
-#define SysTimer                    ((SysTimer_t *) SysTimer_BASE)              /*!< SysTick configuration struct */
-
-#define SYSTIMER_IRQ_PRIORITY       0U
-
-/*******************************************************************************
- *  typedefs and structures (scope: module-local)
- ******************************************************************************/
-
-/**
- * @brief       Structure type to access the System Timer (SysTimer).
- * @details     Structure definition to access the system timer(SysTimer).
- */
-typedef struct SysTimer_s {
-  __IOM uint32_t MTIMERL;           /*!< (R/W) System Timer current value low */
-  __IOM uint32_t MTIMERH;           /*!< (R/W) System Timer current value high */
-  __IOM uint32_t MTIMERCMPL;        /*!< (R/W) System Timer compare Value low */
-  __IOM uint32_t MTIMERCMPH;        /*!< (R/W) System Timer compare Value high */
-  __IOM uint32_t RESERVED0[0x3F8];  /*!< - 0xFEC Reserved */
-  __IOM uint32_t MSFTRST;           /*!< (R/W)  System Timer Software Core Reset Register */
-  __IOM uint32_t RESERVED1;         /*!< Reserved */
-  __IOM uint32_t MTIMECTL;          /*!< (R/W)  System Timer Control Register, previously MSTOP register */
-  __IOM uint32_t MSIP;              /*!< (R/W)  System Timer SW interrupt Register */
-} SysTimer_t;
 
 /*******************************************************************************
  *  global variable definitions (scope: module-local)
@@ -100,9 +45,9 @@ static uint32_t ticks;
 static
 void SetLoadValue(uint64_t value)
 {
-  SysTimer->MTIMERL = 0U;
-  SysTimer->MTIMERH = value >> 32;
-  SysTimer->MTIMERL = value;
+  SysTimer->MTIMEL = 0U;
+  SysTimer->MTIMEH = value >> 32;
+  SysTimer->MTIMEL = value;
 }
 
 /**
@@ -117,11 +62,11 @@ uint64_t GetLoadValue(void)
   uint32_t hi;
   uint32_t lo;
 
-  hi = SysTimer->MTIMERH;
-  lo = SysTimer->MTIMERL;
-  value = SysTimer->MTIMERH;
+  hi = SysTimer->MTIMEH;
+  lo = SysTimer->MTIMEL;
+  value = SysTimer->MTIMEH;
   if (hi != value) {
-    lo = SysTimer->MTIMERL;
+    lo = SysTimer->MTIMEL;
   }
 
   return ((value << 32) | lo);
@@ -135,9 +80,9 @@ uint64_t GetLoadValue(void)
 static
 void SetCompareValue(uint64_t value)
 {
-  SysTimer->MTIMERCMPL = -1U;
-  SysTimer->MTIMERCMPH = value >> 32;
-  SysTimer->MTIMERCMPL = value;
+  SysTimer->MTIMECMPL = -1U;
+  SysTimer->MTIMECMPH = value >> 32;
+  SysTimer->MTIMECMPL = value;
 }
 
 /*******************************************************************************
@@ -253,7 +198,7 @@ uint32_t osTickGetInterval(void)
  */
 uint32_t osTickGetCount(void)
 {
-  return (SysTimer->MTIMERL);
+  return (SysTimer->MTIMEL);
 }
 
 /**
