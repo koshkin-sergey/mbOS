@@ -212,6 +212,34 @@ typedef enum IRQn {
 #define EXT_RAM         (AHB_BASE + 0x1FFE8000U)    /*!< External RAM address */
 #define EXMC_BASE       (AHB_BASE + 0x5FFE8000U)    /*!< EXMC reg address     */
 
+/* Nuclei custom CSR Registers */
+#define CSR_MILM_CTL            0x7C0
+#define CSR_MDLM_CTL            0x7C1
+#define CSR_MECC_CODE           0x7C2
+#define CSR_MNVEC               0x7C3
+#define CSR_MSUBM               0x7C4
+#define CSR_MDCAUSE             0x7C9
+#define CSR_MCACHE_CTL          0x7CA
+#define CSR_MMISC_CTL           0x7D0
+#define CSR_MSAVESTATUS         0x7D6
+#define CSR_MSAVEEPC1           0x7D7
+#define CSR_MSAVECAUSE1         0x7D8
+#define CSR_MSAVEEPC2           0x7D9
+#define CSR_MSAVECAUSE2         0x7DA
+#define CSR_MSAVEDCAUSE1        0x7DB
+#define CSR_MSAVEDCAUSE2        0x7DC
+#define CSR_MTLB_CTL            0x7DD
+#define CSR_MECC_LOCK           0x7DE
+#define CSR_MFP16MODE           0x7E2
+#define CSR_LSTEPFORC           0x7E9
+#define CSR_PUSHMSUBM           0x7EB
+#define CSR_MTVT2               0x7EC
+#define CSR_JALMNXTI            0x7ED
+#define CSR_PUSHMCAUSE          0x7EE
+#define CSR_PUSHMEPC            0x7EF
+#define CSR_MPPICFG_INFO        0x7F0
+#define CSR_MFIOCFG_INFO        0x7F1
+
 #ifdef __cplusplus
 }
 #endif

@@ -31,7 +31,7 @@ extern "C" {
 #include <asm/gd32vf103xx.h>
 
 /*******************************************************************************
- *  defines and macros (scope: module-local)
+ *  defines and macros
  ******************************************************************************/
 
 /* Machine Timer Control / Status Register Definitions */
@@ -64,7 +64,7 @@ extern "C" {
 #define SYSTIMER_IRQ_PRIORITY       0U
 
 /*******************************************************************************
- *  typedefs and structures (scope: module-local)
+ *  typedefs and structures
  ******************************************************************************/
 
 /**
@@ -72,15 +72,15 @@ extern "C" {
  * @details     Structure definition to access the system timer(SysTimer).
  */
 typedef struct SysTimer_s {
-  __IOM uint32_t MTIMEL;            /*!< (R/W) System Timer current value low */
-  __IOM uint32_t MTIMEH;            /*!< (R/W) System Timer current value high */
-  __IOM uint32_t MTIMECMPL;         /*!< (R/W) System Timer compare Value low */
-  __IOM uint32_t MTIMECMPH;         /*!< (R/W) System Timer compare Value high */
-  __IOM uint32_t RESERVED0[0x3F8];  /*!< - 0xFEC Reserved */
-  __IOM uint32_t MSFTRST;           /*!< (R/W)  System Timer Software Core Reset Register */
-  __IOM uint32_t RESERVED1;         /*!< Reserved */
-  __IOM uint32_t MTIMECTL;          /*!< (R/W)  System Timer Control Register, previously MSTOP register */
-  __IOM uint32_t MSIP;              /*!< (R/W)  System Timer SW interrupt Register */
+  __IOM uint32_t mtime_lo;          /*!< (R/W) System Timer current value low */
+  __IOM uint32_t mtime_hi;          /*!< (R/W) System Timer current value high */
+  __IOM uint32_t mtimecmp_lo;       /*!< (R/W) System Timer compare Value low */
+  __IOM uint32_t mtimecmp_hi;       /*!< (R/W) System Timer compare Value high */
+  __IOM uint32_t reserved0[0x3F8];  /*!< - 0xFEC Reserved */
+  __IOM uint32_t msftrst;           /*!< (R/W)  System Timer Software Core Reset Register */
+  __IOM uint32_t reserved1;         /*!< Reserved */
+  __IOM uint32_t mtimectl;          /*!< (R/W)  System Timer Control Register, previously MSTOP register */
+  __IOM uint32_t msip;              /*!< (R/W)  System Timer SW interrupt Register */
 } SysTimer_t;
 
 #ifdef __cplusplus
