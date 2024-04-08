@@ -37,6 +37,16 @@ void _enter(void)
 {
   __ASM volatile  (
       "csrc mstatus, 0x8            \n"
+      "la      a0, _enter           \n"
+      "li      a1, 1                \n"
+      "slli    a1, a1, 29           \n"
+      "bleu    a1, a0, _start0800   \n"
+      "srli    a1, a1, 2            \n"
+      "bleu    a1, a0, _start0800   \n"
+      "la      a0, _start0800       \n"
+      "add     a0, a0, a1           \n"
+      "jr      a0                   \n"
+      "_start0800:                  \n"
       ".option push                 \n"
       ".option norelax              \n"
       "la   gp, __global_pointer$   \n"
