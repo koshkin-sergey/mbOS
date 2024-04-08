@@ -20,6 +20,7 @@
 
 #include <stddef.h>
 #include <asm/system_gd32vf1xx.h>
+#include <asm/gd32vf103xx_gpio.h>
 #include <Kernel/kernel.h>
 #include <Core/Riscv/compiler.h>
 
@@ -67,29 +68,32 @@ static const osTimerAttr_t timer_attr = {
 
 static void GPIO_Init(void)
 {
-//  const GPIO_PIN_CFG_t led_cfg = {
-//    .func = GPIO_PIN_FUNC_0,
-//    .mode = GPIO_MODE_OUT_PP,
-//    .pull = GPIO_PULL_DISABLE
-//  };
-//
-//  gpio->PinConfig(LED_PIN, &led_cfg);
+  *((volatile uint32_t *)(RCU_BASE + 0x18UL)) |= 1UL << 2;
+  GPIOA->CTL0 &= ~0xF0UL;
+  GPIOA->CTL0 |= 0x10UL;
 }
 
 static void init_proc(void *param)
 {
   (void) param;
+  volatile uint32_t time;
 
   GPIO_Init();
 
   osTimerStart(timer_id, TIMEOUT);
+
+  for (;;) {
+    time = osKernelGetSysTimerCount();
+    GPIOA->OCTL ^= (1UL << 1);
+    osDelay(TIMEOUT);
+  }
 }
 
 static void timer_func(void *argument)
 {
   (void) argument;
 
-//  gpio->PinToggle(LED_PIN);
+//  GPIOA->OCTL ^= (1UL << 0);
 }
 
 int main(void)

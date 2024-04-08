@@ -305,6 +305,21 @@
 			<locationURI>PARENT-7-PROJECT_LOC/Device/GigaDevice/GD32VF1xx/Include/asm/gd32vf103xx.h</locationURI>
 		</link>
 		<link>
+			<name>src/Device/GD32VF1xx/Include/asm/gd32vf103xx_eclic.h</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Device/GigaDevice/GD32VF1xx/Include/asm/gd32vf103xx_eclic.h</locationURI>
+		</link>
+		<link>
+			<name>src/Device/GD32VF1xx/Include/asm/gd32vf103xx_gpio.h</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Device/GigaDevice/GD32VF1xx/Include/asm/gd32vf103xx_gpio.h</locationURI>
+		</link>
+		<link>
+			<name>src/Device/GD32VF1xx/Include/asm/gd32vf103xx_systimer.h</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Device/GigaDevice/GD32VF1xx/Include/asm/gd32vf103xx_systimer.h</locationURI>
+		</link>
+		<link>
 			<name>src/Device/GD32VF1xx/Include/asm/system_gd32vf1xx.h</name>
 			<type>1</type>
 			<locationURI>PARENT-7-PROJECT_LOC/Device/GigaDevice/GD32VF1xx/Include/asm/system_gd32vf1xx.h</locationURI>
