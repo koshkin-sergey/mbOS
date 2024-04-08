@@ -76,14 +76,12 @@ static void GPIO_Init(void)
 static void init_proc(void *param)
 {
   (void) param;
-  volatile uint32_t time;
 
   GPIO_Init();
 
   osTimerStart(timer_id, TIMEOUT);
 
   for (;;) {
-    time = osKernelGetSysTimerCount();
     GPIOA->OCTL ^= (1UL << 1);
     osDelay(TIMEOUT);
   }

@@ -240,14 +240,14 @@
 			<locationURI>PARENT-7-PROJECT_LOC/Kernel/Source/GCC/irq_riscv.S</locationURI>
 		</link>
 		<link>
-			<name>src/Device/GD32VF1xx/Driver/IRQ_GD32VF1xx.c</name>
+			<name>src/Device/GD32VF1xx/Driver/OS_IRQ_GD32VF1xx.c</name>
 			<type>1</type>
-			<locationURI>PARENT-7-PROJECT_LOC/Device/GigaDevice/GD32VF1xx/Driver/IRQ_GD32VF1xx.c</locationURI>
+			<locationURI>PARENT-7-PROJECT_LOC/Device/GigaDevice/GD32VF1xx/Driver/OS_IRQ_GD32VF1xx.c</locationURI>
 		</link>
 		<link>
-			<name>src/Device/GD32VF1xx/Driver/RTOS_TIMER_GD32VF1xx.c</name>
+			<name>src/Device/GD32VF1xx/Driver/OS_TIMER_GD32VF1xx.c</name>
 			<type>1</type>
-			<locationURI>PARENT-7-PROJECT_LOC/Device/GigaDevice/GD32VF1xx/Driver/RTOS_TIMER_GD32VF1xx.c</locationURI>
+			<locationURI>PARENT-7-PROJECT_LOC/Device/GigaDevice/GD32VF1xx/Driver/OS_TIMER_GD32VF1xx.c</locationURI>
 		</link>
 		<link>
 			<name>src/Device/GD32VF1xx/Include/asm</name>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="ilg.gnumcueclipse.debug.gdbjtag.jlink.launchConfigurationType">
     <booleanAttribute key="ilg.gnumcueclipse.debug.gdbjtag.jlink.doConnectToRunning" value="false"/>
-    <booleanAttribute key="ilg.gnumcueclipse.debug.gdbjtag.jlink.doContinue" value="false"/>
+    <booleanAttribute key="ilg.gnumcueclipse.debug.gdbjtag.jlink.doContinue" value="true"/>
     <booleanAttribute key="ilg.gnumcueclipse.debug.gdbjtag.jlink.doDebugInRam" value="false"/>
     <booleanAttribute key="ilg.gnumcueclipse.debug.gdbjtag.jlink.doFirstReset" value="true"/>
     <booleanAttribute key="ilg.gnumcueclipse.debug.gdbjtag.jlink.doGdbServerAllocateConsole" value="true"/>
@@ -10,7 +10,7 @@
     <booleanAttribute key="ilg.gnumcueclipse.debug.gdbjtag.jlink.doGdbServerLocalOnly" value="true"/>
     <booleanAttribute key="ilg.gnumcueclipse.debug.gdbjtag.jlink.doGdbServerSilent" value="false"/>
     <booleanAttribute key="ilg.gnumcueclipse.debug.gdbjtag.jlink.doGdbServerVerifyDownload" value="true"/>
-    <booleanAttribute key="ilg.gnumcueclipse.debug.gdbjtag.jlink.doSecondReset" value="true"/>
+    <booleanAttribute key="ilg.gnumcueclipse.debug.gdbjtag.jlink.doSecondReset" value="false"/>
     <booleanAttribute key="ilg.gnumcueclipse.debug.gdbjtag.jlink.doStartGdbServer" value="true"/>
     <booleanAttribute key="ilg.gnumcueclipse.debug.gdbjtag.jlink.enableFlashBreakpoints" value="false"/>
     <booleanAttribute key="ilg.gnumcueclipse.debug.gdbjtag.jlink.enableSemihosting" value="false"/>
@@ -33,9 +33,9 @@
     <stringAttribute key="ilg.gnumcueclipse.debug.gdbjtag.jlink.gdbServerOther" value="-singlerun -strict -timeout 0 -nogui"/>
     <intAttribute key="ilg.gnumcueclipse.debug.gdbjtag.jlink.gdbServerSwoPortNumber" value="2332"/>
     <intAttribute key="ilg.gnumcueclipse.debug.gdbjtag.jlink.gdbServerTelnetPortNumber" value="2333"/>
-    <stringAttribute key="ilg.gnumcueclipse.debug.gdbjtag.jlink.interfaceSpeed" value="auto"/>
+    <stringAttribute key="ilg.gnumcueclipse.debug.gdbjtag.jlink.interfaceSpeed" value="4000"/>
     <stringAttribute key="ilg.gnumcueclipse.debug.gdbjtag.jlink.otherInitCommands" value=""/>
-    <stringAttribute key="ilg.gnumcueclipse.debug.gdbjtag.jlink.otherRunCommands" value=""/>
+    <stringAttribute key="ilg.gnumcueclipse.debug.gdbjtag.jlink.otherRunCommands" value="set $pc=0x8000000"/>
     <stringAttribute key="ilg.gnumcueclipse.debug.gdbjtag.jlink.secondResetType" value="0"/>
     <intAttribute key="ilg.gnumcueclipse.debug.gdbjtag.jlink.swoEnableTargetCpuFreq" value="0"/>
     <stringAttribute key="ilg.gnumcueclipse.debug.gdbjtag.jlink.swoEnableTargetPortMask" value="0x1"/>
@@ -49,9 +49,9 @@
     <booleanAttribute key="org.eclipse.cdt.debug.gdbjtag.core.loadSymbols" value="true"/>
     <stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.pcRegister" value="8000000"/>
     <intAttribute key="org.eclipse.cdt.debug.gdbjtag.core.portNumber" value="2331"/>
-    <booleanAttribute key="org.eclipse.cdt.debug.gdbjtag.core.setPcRegister" value="true"/>
+    <booleanAttribute key="org.eclipse.cdt.debug.gdbjtag.core.setPcRegister" value="false"/>
     <booleanAttribute key="org.eclipse.cdt.debug.gdbjtag.core.setResume" value="false"/>
-    <booleanAttribute key="org.eclipse.cdt.debug.gdbjtag.core.setStopAt" value="false"/>
+    <booleanAttribute key="org.eclipse.cdt.debug.gdbjtag.core.setStopAt" value="true"/>
     <stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.stopAt" value="main"/>
     <stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.symbolsFileName" value=""/>
     <stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.symbolsOffset" value=""/>
