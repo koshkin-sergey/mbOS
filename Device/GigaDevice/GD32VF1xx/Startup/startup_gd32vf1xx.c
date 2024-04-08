@@ -36,6 +36,7 @@ void early_exc_handler(void)  __attribute__((__noreturn__, aligned(16)));
 void _enter(void)
 {
   __ASM volatile  (
+      "csrc mstatus, 0x8            \n"
       ".option push                 \n"
       ".option norelax              \n"
       "la   gp, __global_pointer$   \n"
