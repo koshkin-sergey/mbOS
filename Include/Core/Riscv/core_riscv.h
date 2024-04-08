@@ -572,7 +572,7 @@
 
 /*******************  Bit definition for MCAUSE register  *********************/
 #define MCAUSE_CODE_Pos               (0U)
-#define MCAUSE_CODE_Msk               (0xFFFFUL << MCAUSE_CODE_Pos)
+#define MCAUSE_CODE_Msk               (0xFFFUL << MCAUSE_CODE_Pos)
 
 #define MCAUSE_INT_Pos                (31U)
 #define MCAUSE_INT_Msk                (0x1UL << MCAUSE_INT_Pos)
