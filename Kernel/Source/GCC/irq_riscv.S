@@ -68,6 +68,7 @@ SVC_ContextCheck:
                 beq   a1, a2, SVC_Exit            // Exit when threads are the same
                 beqz  a1, SVC_ContextSwitch       // Branch if running thread is deleted
 SVC_ContextSave:
+                csrr  tp, mscratch
 #ifndef __riscv_32e
                 addi  tp, tp, -10 * 4
                 sw    s2,  0 * 4(tp)
@@ -110,5 +111,19 @@ SVC_Exit:
                 ret
 
                 .size    SVC_Handler, .-SVC_Handler
+
+
+                .type    SysTick_Handler, %function
+                .global  SysTick_Handler
+SysTick_Handler:
+
+                addi  sp, sp, -8
+                sw    ra, 4(sp)
+                call  osTick_Handler
+                lw    ra, 4(sp)
+                addi  sp, sp, +8
+                j     SVC_ContextCheck
+
+                .size    SysTick_Handler, .-SysTick_Handler
 
                 .end

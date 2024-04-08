@@ -36,7 +36,7 @@ extern uint8_t IRQ_PendSV;
  ******************************************************************************/
 
 #define INIT_EXC_RETURN               0xFFFFFFFDUL
-#define OS_TICK_HANDLER               osTick_Handler
+#define OS_TICK_HANDLER               SysTick_Handler
 
 #define IsIrqMasked()                 false
 #define IsPrivileged()                false
