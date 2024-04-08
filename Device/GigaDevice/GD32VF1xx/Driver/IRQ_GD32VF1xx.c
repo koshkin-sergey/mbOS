@@ -22,7 +22,7 @@
  ******************************************************************************/
 
 #include <stddef.h>
-#include <asm/gd32vf103xx.h>
+#include <asm/gd32vf103xx_eclic.h>
 #include <Core/Riscv/irq_riscv.h>
 
 /*******************************************************************************
@@ -165,6 +165,9 @@ void IPF_Handler(void) __attribute__ ((weak, alias("Default_Handler")));
 void LPF_Handler(void) __attribute__ ((weak, alias("Default_Handler")));
 void SPF_Handler(void) __attribute__ ((weak, alias("Default_Handler")));
 
+void PendSV_Handler(void)  __attribute__ ((weak, alias("Default_Handler")));
+void SysTick_Handler(void) __attribute__ ((weak, alias("Default_Handler")));
+
 /**
  * @brief Exception Vector Table
  */
@@ -187,11 +190,104 @@ static const IRQHandler_t exc_vector[EXCn_MAX_NUM] = {
   SPF_Handler     // Store/AMO page fault
 };
 
+/**
+ * @brief Interrupt Vector Table
+ */
+static const IRQHandler_t irq_vector[IRQn_MAX_NUM] __attribute__ ((aligned(512))) = {
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  PendSV_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  SysTick_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler,
+  Default_Handler
+};
+
 /*******************************************************************************
  *  function implementations (scope: module-local)
  ******************************************************************************/
 
-void exc_entry(void) __attribute__ ((naked));
+void exc_entry(void) __attribute__ ((naked, aligned(64)));
 
 /**
  * @brief       Exception Entry
@@ -204,18 +300,44 @@ void exc_entry(void)
     "  lw    t0, IRQ_NestLevel      \n\t"
     "  addi  t0, t0, +1             \n\t"     // Increment IRQ nesting level
     "  sw    t0, IRQ_NestLevel, t1  \n\t"
-    "                               \n\t"
     "  csrrw sp, mscratch, sp       \n\t"
     "  bnez  sp, 1f                 \n\t"
     "  csrr  sp, mscratch           \n\t"
     "1:                             \n\t"
-    "  csrr    a0, mcause           \n\t"
-    "  jal     IRQ_GetHandler       \n\t"
-    "  beqz    a0, 1f               \n\t"
-    "  jalr    a0                   \n\t"
+    "  csrr  a0, mcause             \n\t"
+    "  jal   IRQ_GetHandler         \n\t"
+    "  beqz  a0, 1f                 \n\t"
+    "  jalr  a0                     \n\t"
     "1:                             \n\t"
     "  csrrw sp, mscratch, sp       \n\t"
-    "                               \n\t"
+    "  lw    t0, IRQ_NestLevel      \n\t"
+    "  addi  t0, t0, -1             \n\t"     // Decrement IRQ nesting level
+    "  sw    t0, IRQ_NestLevel, t1  \n\t"
+  );
+
+  RESTORE_CONTEXT();
+}
+
+void irq_entry(void) __attribute__ ((naked, aligned(4)));
+
+/**
+ * @brief       Interrupt Entry
+ */
+void irq_entry(void)
+{
+  SAVE_CONTEXT();
+
+  __ASM volatile (
+    "  lw    t0, IRQ_NestLevel      \n\t"
+    "  addi  t0, t0, +1             \n\t"     // Increment IRQ nesting level
+    "  sw    t0, IRQ_NestLevel, t1  \n\t"
+    "  csrrw sp, mscratch, sp       \n\t"
+    "  bnez  sp, 1f                 \n\t"
+    "  csrr  sp, mscratch           \n\t"
+    "1:                             \n\t"
+    "  csrrw ra, 0x7ED, ra          \n\t"
+    "  csrc  mstatus, 0x8           \n\t"
+    "  csrrw sp, mscratch, sp       \n\t"
     "  lw    t0, IRQ_NestLevel      \n\t"
     "  addi  t0, t0, -1             \n\t"     // Decrement IRQ nesting level
     "  sw    t0, IRQ_NestLevel, t1  \n\t"
@@ -234,9 +356,19 @@ void exc_entry(void)
  */
 int32_t IRQ_Initialize(void)
 {
+  uint32_t addr;
+
   CSR_WRITE(CSR_MSCRATCH, 0);
-  CSR_WRITE(CSR_MTVEC, exc_entry);
-  CSR_WRITE(CSR_MSTATUS, MSTATUS_MIE);
+  CSR_SET(CSR_MMISC_CTL, 1UL << 9);
+
+  addr = ((uint32_t)exc_entry & ~0x3FUL) | 0x3UL;
+  CSR_WRITE(CSR_MTVEC, addr);
+
+  addr = (uint32_t)&irq_vector[0];
+  CSR_WRITE(CSR_MTVT, addr);
+
+  addr = ((uint32_t)irq_entry & ~0x3UL) | 0x1UL;
+  CSR_WRITE(CSR_MTVT2, addr);
 
   return (0);
 }
@@ -278,7 +410,7 @@ IRQHandler_t IRQ_GetHandler(IRQn_ID_t irqn)
  */
 int32_t IRQ_Enable(IRQn_ID_t irqn)
 {
-  (void) irqn;
+  ECLIC->ctrl[irqn].intie |= CLIC_INTIE_IE_Msk;
 
   return (0);
 }
@@ -290,7 +422,7 @@ int32_t IRQ_Enable(IRQn_ID_t irqn)
  */
 int32_t IRQ_Disable(IRQn_ID_t irqn)
 {
-  (void) irqn;
+  ECLIC->ctrl[irqn].intie &= ~CLIC_INTIE_IE_Msk;
 
   return (0);
 }
