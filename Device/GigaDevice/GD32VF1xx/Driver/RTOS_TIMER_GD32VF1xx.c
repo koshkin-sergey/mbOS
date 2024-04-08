@@ -45,9 +45,9 @@ static uint32_t ticks;
 static
 void SetLoadValue(uint64_t value)
 {
-  SysTimer->MTIMEL = 0U;
-  SysTimer->MTIMEH = value >> 32;
-  SysTimer->MTIMEL = value;
+  SysTimer->mtime_lo = 0U;
+  SysTimer->mtime_hi = value >> 32;
+  SysTimer->mtime_lo = value;
 }
 
 /**
@@ -62,11 +62,11 @@ uint64_t GetLoadValue(void)
   uint32_t hi;
   uint32_t lo;
 
-  hi = SysTimer->MTIMEH;
-  lo = SysTimer->MTIMEL;
-  value = SysTimer->MTIMEH;
+  hi = SysTimer->mtime_hi;
+  lo = SysTimer->mtime_lo;
+  value = SysTimer->mtime_hi;
   if (hi != value) {
-    lo = SysTimer->MTIMEL;
+    lo = SysTimer->mtime_lo;
   }
 
   return ((value << 32) | lo);
@@ -80,9 +80,9 @@ uint64_t GetLoadValue(void)
 static
 void SetCompareValue(uint64_t value)
 {
-  SysTimer->MTIMECMPL = -1U;
-  SysTimer->MTIMECMPH = value >> 32;
-  SysTimer->MTIMECMPL = value;
+  SysTimer->mtimecmp_lo = -1U;
+  SysTimer->mtimecmp_hi = value >> 32;
+  SysTimer->mtimecmp_lo = value;
 }
 
 /*******************************************************************************
@@ -125,7 +125,7 @@ int32_t osTickSetup(uint32_t freq, IRQHandler_t handler)
  */
 void osTickEnable(void)
 {
-  SysTimer->MTIMECTL &= ~MTIMECTL_TIMESTOP;
+  SysTimer->mtimectl &= ~MTIMECTL_TIMESTOP;
 }
 
 /**
@@ -133,7 +133,7 @@ void osTickEnable(void)
  */
 void osTickDisable(void)
 {
-  SysTimer->MTIMECTL |= MTIMECTL_TIMESTOP;
+  SysTimer->mtimectl |= MTIMECTL_TIMESTOP;
 }
 
 /**
@@ -194,11 +194,13 @@ uint32_t osTickGetInterval(void)
 
 /**
  * @brief       Get OS Tick timer counter value
+ * @details     Return the current value of the OS Tick counter: 0 ... (reload value -1).
+ *              The reload value is returned by the function osTickGetInterval.
  * @return      OS Tick timer counter value
  */
 uint32_t osTickGetCount(void)
 {
-  return (SysTimer->MTIMEL);
+  return (SysTimer->mtime_lo % ticks);
 }
 
 /**
