@@ -54,6 +54,8 @@ typedef int32_t IRQn_ID_t;
 #define IRQ_PRIORITY_Msk            (0x0000FFFFUL)                    ///< Interrupt priority value bit-mask
 #define IRQ_PRIORITY_ERROR          (0x80000000UL)                    ///< Bit indicating priority value error
 
+extern uint32_t IRQ_NestLevel;
+
 /**
  * @brief       Initialize interrupt controller.
  * @return      0 on success, -1 on error.
@@ -154,5 +156,17 @@ int32_t IRQ_SetPriorityGroupBits (uint32_t bits);
 /// \return current number of MSB bits included in the group priority field comparison with
 ///         optional IRQ_PRIORITY_ERROR bit set.
 uint32_t IRQ_GetPriorityGroupBits (void);
+
+/**
+ * @brief       Generate the software interrupt by writing 1 to the msip register
+ * @return      0 on success, -1 on error.
+ */
+int32_t IRQ_SetSWI(void);
+
+/**
+ * @brief       Clear the software interrupt by writing 0 to the msip register
+ * @return      0 on success, -1 on error.
+ */
+int32_t IRQ_ClearSWI(void);
 
 #endif  /* IRQ_RISCV_H_ */

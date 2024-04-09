@@ -69,8 +69,9 @@ static const osTimerAttr_t timer_attr = {
 static void GPIO_Init(void)
 {
   *((volatile uint32_t *)(RCU_BASE + 0x18UL)) |= 1UL << 2;
-  GPIOA->CTL0 &= ~0xF0UL;
-  GPIOA->CTL0 |= 0x10UL;
+  GPIOA->CTL0 &= ~0xFF0UL;
+  GPIOA->CTL0 |=  0x110UL;
+  GPIOA->OCTL &= ~(3UL << 1);
 }
 
 static void init_proc(void *param)
@@ -82,7 +83,7 @@ static void init_proc(void *param)
   osTimerStart(timer_id, TIMEOUT);
 
   for (;;) {
-    GPIOA->OCTL ^= (1UL << 1);
+    GPIOA->OCTL ^= (1UL << 2);    // Blue LED
     osDelay(TIMEOUT);
   }
 }
@@ -91,7 +92,7 @@ static void timer_func(void *argument)
 {
   (void) argument;
 
-//  GPIOA->OCTL ^= (1UL << 0);
+  GPIOA->OCTL ^= (1UL << 1);      // Green LED
 }
 
 int main(void)

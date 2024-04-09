@@ -17,22 +17,10 @@
  * Project: mbOS real-time kernel
  */
 
-.equ    K_STATE_RUNNING, 2           // osKernelState_t::osKernelRunning
-.equ    I_K_STATE_OFS,   16          // osInfo.kernel.state offset
-
                 .section ".rodata"
                 .global  irqLib                     // Non weak library reference
 irqLib:
                 .byte    0
-
-                .section ".data"
-                .global  IRQ_NestLevel
-IRQ_NestLevel:
-                .word    0                          // IRQ nesting level counter
-
-                .global  IRQ_PendSV
-IRQ_PendSV:
-                .byte    0                          // Pending SVC flag
 
 
                 .section ".text.os.handlers"
@@ -125,5 +113,20 @@ SysTick_Handler:
                 j     SVC_ContextCheck
 
                 .size    SysTick_Handler, .-SysTick_Handler
+
+
+                .type    PendSV_Handler, %function
+                .global  PendSV_Handler
+PendSV_Handler:
+
+                addi  sp, sp, -8
+                sw    ra, 4(sp)
+                call  osPendSV_Handler
+                call  IRQ_ClearSWI
+                lw    ra, 4(sp)
+                addi  sp, sp, +8
+                j     SVC_ContextCheck
+
+                .size    PendSV_Handler, .-PendSV_Handler
 
                 .end

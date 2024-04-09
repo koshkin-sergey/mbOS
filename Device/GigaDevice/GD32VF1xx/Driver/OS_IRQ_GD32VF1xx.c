@@ -23,6 +23,7 @@
 
 #include <stddef.h>
 #include <asm/gd32vf103xx_eclic.h>
+#include <asm/gd32vf103xx_systimer.h>
 #include <Core/Riscv/irq_riscv.h>
 
 /*******************************************************************************
@@ -284,6 +285,12 @@ static const IRQHandler_t irq_vector[IRQn_MAX_NUM] __attribute__ ((aligned(512))
 };
 
 /*******************************************************************************
+ *  global variable definitions (scope: module-exported)
+ ******************************************************************************/
+
+uint32_t IRQ_NestLevel;
+
+/*******************************************************************************
  *  function implementations (scope: module-local)
  ******************************************************************************/
 
@@ -369,6 +376,10 @@ int32_t IRQ_Initialize(void)
 
   addr = ((uint32_t)irq_entry & ~0x3UL) | 0x1UL;
   CSR_WRITE(CSR_MTVT2, addr);
+
+  SysTimer->msip &= ~MSIP_MSIP;
+  ECLIC->ctrl[CLIC_INT_SFT].intip &= ~CLIC_INTIP_IP_Msk;
+  ECLIC->ctrl[CLIC_INT_SFT].intie |= CLIC_INTIE_IE_Msk;
 
   return (0);
 }
@@ -560,6 +571,28 @@ int32_t IRQ_SetPriorityGroupBits(uint32_t bits)
 uint32_t IRQ_GetPriorityGroupBits(void)
 {
   return (IRQ_PRIORITY_ERROR);
+}
+
+/**
+ * @brief       Generate the software interrupt by writing 1 to the msip register
+ * @return      0 on success, -1 on error.
+ */
+int32_t IRQ_SetSWI(void)
+{
+  SysTimer->msip = 1U;
+
+  return (0);
+}
+
+/**
+ * @brief       Clear the software interrupt by writing 0 to the msip register
+ * @return      0 on success, -1 on error.
+ */
+int32_t IRQ_ClearSWI(void)
+{
+  SysTimer->msip = 0U;
+
+  return (0);
 }
 
 /**

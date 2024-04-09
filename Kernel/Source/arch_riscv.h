@@ -27,9 +27,7 @@
 #include <stdbool.h>
 #include <Core/Riscv/compiler.h>
 #include <Core/Riscv/core_riscv.h>
-
-extern uint32_t IRQ_NestLevel;
-extern uint8_t IRQ_PendSV;
+#include <Core/Riscv/irq_riscv.h>
 
 /*******************************************************************************
  *  defines and macros
@@ -42,6 +40,7 @@ extern uint8_t IRQ_PendSV;
 #define IsPrivileged()                false
 #define SystemIsrInit()
 #define setPrivilegedMode(flag)
+#define PendServCallReq()             IRQ_SetSWI()
 
 #define BEGIN_CRITICAL_SECTION        uint32_t mode = CSR_READ_CLEAR(CSR_MSTATUS, MSTATUS_MIE);
 #define END_CRITICAL_SECTION          CSR_WRITE(CSR_MSTATUS, mode);
@@ -64,16 +63,6 @@ __STATIC_FORCEINLINE
 bool IsIrqMode(void)
 {
   return (IRQ_NestLevel > 0U);
-}
-
-/**
- * @fn          void PendServCallReq(void)
- * @brief       Set Pending SV (Service Call) Flag.
- */
-__STATIC_FORCEINLINE
-void PendServCallReq(void)
-{
-  IRQ_PendSV = 1U;
 }
 
 __STATIC_INLINE
