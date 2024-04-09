@@ -29,10 +29,10 @@
   Internal References
  *----------------------------------------------------------------------------*/
 
-void irq_vectors(void) __attribute__ ((naked, section(".text.vtable")));
-void _enter(void)  __attribute__ ((section(".text.init")));
+void irq_vectors(void)        __attribute__((naked,    section(".text.vtable")));
+void _enter(void)             __attribute__((noreturn, section(".text.init")));
 void _exit(int code);
-void early_exc_handler(void)  __attribute__((__noreturn__, aligned(16)));
+void early_exc_handler(void)  __attribute__((noreturn, aligned(16)));
 void Default_Handler(void);
 
 /**

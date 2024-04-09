@@ -176,8 +176,13 @@ void exc_entry(void)
     "  csrr  sp, mscratch           \n\t"
     "1:                             \n\t"
     "  csrr  a0, mcause             \n\t"
-    "  jal   IRQ_GetHandler         \n\t"
-    "  beqz  a0, 1f                 \n\t"
+    "  blt   a0, zero, 1f           \n\t"
+    "  li    a5, 0xFFF              \n\t"
+    "  and   a0, a0, a5             \n\t"
+    "  la    a5, exc_vectors        \n\t"
+    "  slli  a0, a0, 2              \n\t"
+    "  add   a5, a5, a0             \n\t"
+    "  lw    a0, 0(a5)              \n\t"
     "  jalr  a0                     \n\t"
     "1:                             \n\t"
     "  csrrw sp, mscratch, sp       \n\t"
@@ -270,13 +275,9 @@ int32_t IRQ_SetHandler(IRQn_ID_t irqn, IRQHandler_t handler)
  */
 IRQHandler_t IRQ_GetHandler(IRQn_ID_t irqn)
 {
-  IRQHandler_t handler = NULL;
+  (void) irqn;
 
-  if ((irqn & MCAUSE_INT_Msk) == 0U) {
-    handler = exc_vectors[irqn & MCAUSE_CODE_Msk];
-  }
-
-  return (handler);
+  return (NULL);
 }
 
 /**
