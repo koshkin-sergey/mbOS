@@ -97,6 +97,8 @@ void SetCompareValue(uint64_t value)
  */
 int32_t osTickSetup(uint32_t freq, IRQHandler_t handler)
 {
+  (void) handler;
+
   if (freq == 0U) {
     return (-1);
   }
@@ -110,8 +112,6 @@ int32_t osTickSetup(uint32_t freq, IRQHandler_t handler)
   IRQ_Disable(CLIC_INT_TMR);
   /* Set Timer interrupt priority */
   IRQ_SetPriority(CLIC_INT_TMR, SYSTIMER_IRQ_PRIORITY);
-  /* Register tick interrupt handler function */
-  IRQ_SetHandler(CLIC_INT_TMR, handler);
   /* Set IRQ mode interrupt */
   IRQ_SetMode(CLIC_INT_TMR, IRQ_MODE_TYPE_IRQ);
   /* Enable corresponding interrupt */

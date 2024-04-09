@@ -204,18 +204,19 @@ void irq_entry(void)
 
   __ASM volatile (
     "  lw    t0, IRQ_NestLevel      \n\t"
+    "  bnez  t0, 1f                 \n\t"
+    "  csrrw sp, mscratch, sp       \n\t"
+    "1:                             \n\t"
     "  addi  t0, t0, +1             \n\t"     // Increment IRQ nesting level
     "  sw    t0, IRQ_NestLevel, t1  \n\t"
-    "  csrrw sp, mscratch, sp       \n\t"
-    "  bnez  sp, 1f                 \n\t"
-    "  csrr  sp, mscratch           \n\t"
-    "1:                             \n\t"
     "  csrrw ra, 0x7ED, ra          \n\t"
     "  csrc  mstatus, 0x8           \n\t"
-    "  csrrw sp, mscratch, sp       \n\t"
     "  lw    t0, IRQ_NestLevel      \n\t"
     "  addi  t0, t0, -1             \n\t"     // Decrement IRQ nesting level
     "  sw    t0, IRQ_NestLevel, t1  \n\t"
+    "  bnez  t0, 1f                 \n\t"
+    "  csrrw sp, mscratch, sp       \n\t"
+    "1:                             \n\t"
   );
 
   RESTORE_CONTEXT();
@@ -246,9 +247,8 @@ int32_t IRQ_Initialize(void)
   addr = ((uint32_t)irq_entry & ~0x3UL) | 0x1UL;
   CSR_WRITE(CSR_MTVT2, addr);
 
-  SysTimer->msip &= ~MSIP_MSIP;
-  ECLIC->ctrl[CLIC_INT_SFT].intip &= ~CLIC_INTIP_IP_Msk;
-  ECLIC->ctrl[CLIC_INT_SFT].intie |= CLIC_INTIE_IE_Msk;
+  SysTimer->msip = 0U;
+  ECLIC->ctrl[CLIC_INT_SFT].intie = CLIC_INTIE_IE_Msk;
 
   return (0);
 }
@@ -286,7 +286,7 @@ IRQHandler_t IRQ_GetHandler(IRQn_ID_t irqn)
  */
 int32_t IRQ_Enable(IRQn_ID_t irqn)
 {
-  ECLIC->ctrl[irqn].intie |= CLIC_INTIE_IE_Msk;
+  ECLIC->ctrl[irqn].intie = 1U;
 
   return (0);
 }
@@ -298,7 +298,7 @@ int32_t IRQ_Enable(IRQn_ID_t irqn)
  */
 int32_t IRQ_Disable(IRQn_ID_t irqn)
 {
-  ECLIC->ctrl[irqn].intie &= ~CLIC_INTIE_IE_Msk;
+  ECLIC->ctrl[irqn].intie = 0U;
 
   return (0);
 }
