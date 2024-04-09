@@ -61,7 +61,9 @@ SECTIONS
 
   .text :
   {
-    KEEP (*(.text.init))
+    /* vector table locate at ROM */
+    KEEP(*(.text.vtable))
+    KEEP(*(SORT_NONE(.text.init)))
     *(.text.unlikely .text.unlikely.*)
     *(.text.startup .text.startup.*)
     *(.text .text.*)

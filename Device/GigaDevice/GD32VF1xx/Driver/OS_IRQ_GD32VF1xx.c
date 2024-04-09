@@ -26,6 +26,8 @@
 #include <asm/gd32vf103xx_systimer.h>
 #include <Core/Riscv/irq_riscv.h>
 
+extern const IRQHandler_t exc_vectors[];
+
 /*******************************************************************************
  *  defines and macros (scope: module-local)
  ******************************************************************************/
@@ -146,144 +148,6 @@
   )
 #endif
 
-void Default_Handler(void);
-
-/**
- * @brief Exception Handlers
- */
-void IAM_Handler(void) __attribute__ ((weak, alias("Default_Handler")));
-void IAF_Handler(void) __attribute__ ((weak, alias("Default_Handler")));
-void ILI_Handler(void) __attribute__ ((weak, alias("Default_Handler")));
-void BKP_Handler(void) __attribute__ ((weak, alias("Default_Handler")));
-void LAM_Handler(void) __attribute__ ((weak, alias("Default_Handler")));
-void LAF_Handler(void) __attribute__ ((weak, alias("Default_Handler")));
-void SAM_Handler(void) __attribute__ ((weak, alias("Default_Handler")));
-void SAF_Handler(void) __attribute__ ((weak, alias("Default_Handler")));
-void ECU_Handler(void) __attribute__ ((weak, alias("Default_Handler")));
-void ECS_Handler(void) __attribute__ ((weak, alias("Default_Handler")));
-void SVC_Handler(void) __attribute__ ((weak, alias("Default_Handler")));
-void IPF_Handler(void) __attribute__ ((weak, alias("Default_Handler")));
-void LPF_Handler(void) __attribute__ ((weak, alias("Default_Handler")));
-void SPF_Handler(void) __attribute__ ((weak, alias("Default_Handler")));
-
-void PendSV_Handler(void)  __attribute__ ((weak, alias("Default_Handler")));
-void SysTick_Handler(void) __attribute__ ((weak, alias("Default_Handler")));
-
-/**
- * @brief Exception Vector Table
- */
-static const IRQHandler_t exc_vector[EXCn_MAX_NUM] = {
-  IAM_Handler,    // Instruction address misaligned
-  IAF_Handler,    // Instruction access fault
-  ILI_Handler,    // Illegal instruction
-  BKP_Handler,    // Breakpoint
-  LAM_Handler,    // Load address misaligned
-  LAF_Handler,    // Load access fault
-  SAM_Handler,    // Store/AMO address misaligned
-  SAF_Handler,    // Store/AMO access fault
-  ECU_Handler,    // Environment call from U-mode
-  ECS_Handler,    // Environment call from S-mode
-  NULL,           // Reserved
-  SVC_Handler,    // Environment call from M-mode
-  IPF_Handler,    // Instruction page fault
-  LPF_Handler,    // Load page fault
-  NULL,           // Reserved
-  SPF_Handler     // Store/AMO page fault
-};
-
-/**
- * @brief Interrupt Vector Table
- */
-static const IRQHandler_t irq_vector[IRQn_MAX_NUM] __attribute__ ((aligned(512))) = {
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  PendSV_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  SysTick_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler,
-  Default_Handler
-};
-
 /*******************************************************************************
  *  global variable definitions (scope: module-exported)
  ******************************************************************************/
@@ -364,6 +228,7 @@ void irq_entry(void)
 int32_t IRQ_Initialize(void)
 {
   uint32_t addr;
+  extern void irq_vectors(void);
 
   CSR_WRITE(CSR_MSCRATCH, 0);
   CSR_SET(CSR_MMISC_CTL, 1UL << 9);
@@ -371,7 +236,7 @@ int32_t IRQ_Initialize(void)
   addr = ((uint32_t)exc_entry & ~0x3FUL) | 0x3UL;
   CSR_WRITE(CSR_MTVEC, addr);
 
-  addr = (uint32_t)&irq_vector[0];
+  addr = (uint32_t)irq_vectors;
   CSR_WRITE(CSR_MTVT, addr);
 
   addr = ((uint32_t)irq_entry & ~0x3UL) | 0x1UL;
@@ -408,7 +273,7 @@ IRQHandler_t IRQ_GetHandler(IRQn_ID_t irqn)
   IRQHandler_t handler = NULL;
 
   if ((irqn & MCAUSE_INT_Msk) == 0U) {
-    handler = exc_vector[irqn & MCAUSE_CODE_Msk];
+    handler = exc_vectors[irqn & MCAUSE_CODE_Msk];
   }
 
   return (handler);
@@ -593,12 +458,4 @@ int32_t IRQ_ClearSWI(void)
   SysTimer->msip = 0U;
 
   return (0);
-}
-
-/**
- * @brief       Default Handler for Exceptions / Interrupts.
- */
-void Default_Handler(void)
-{
-  for (;;);
 }
