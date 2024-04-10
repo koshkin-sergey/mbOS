@@ -270,7 +270,7 @@ int32_t IRQ_SetHandler(IRQn_ID_t irqn, IRQHandler_t handler)
   (void) irqn;
   (void) handler;
 
-  return (0);
+  return (-1);
 }
 
 /**
@@ -280,9 +280,14 @@ int32_t IRQ_SetHandler(IRQn_ID_t irqn, IRQHandler_t handler)
  */
 IRQHandler_t IRQ_GetHandler(IRQn_ID_t irqn)
 {
-  (void) irqn;
+  IRQHandler_t handler = NULL;
 
-  return (NULL);
+  if (irqn > 0 && irqn < IRQn_MAX_NUM) {
+    IRQHandler_t *irq_vtable = (IRQHandler_t *)CSR_READ(CSR_MTVT);
+    handler = irq_vtable[irqn];
+  }
+
+  return (handler);
 }
 
 /**
@@ -292,9 +297,14 @@ IRQHandler_t IRQ_GetHandler(IRQn_ID_t irqn)
  */
 int32_t IRQ_Enable(IRQn_ID_t irqn)
 {
-  ECLIC->ctrl[irqn].intie = 1U;
+  int32_t status = -1;
 
-  return (0);
+  if (irqn > 0 && irqn < IRQn_MAX_NUM) {
+    ECLIC->ctrl[irqn].intie = 1U;
+    status = 0;
+  }
+
+  return (status);
 }
 
 /**
@@ -304,9 +314,14 @@ int32_t IRQ_Enable(IRQn_ID_t irqn)
  */
 int32_t IRQ_Disable(IRQn_ID_t irqn)
 {
-  ECLIC->ctrl[irqn].intie = 0U;
+  int32_t status = -1;
 
-  return (0);
+  if (irqn > 0 && irqn < IRQn_MAX_NUM) {
+    ECLIC->ctrl[irqn].intie = 0U;
+    status = 0;
+  }
+
+  return (status);
 }
 
 /**
@@ -316,9 +331,13 @@ int32_t IRQ_Disable(IRQn_ID_t irqn)
  */
 uint32_t IRQ_GetEnableState(IRQn_ID_t irqn)
 {
-  (void) irqn;
+  uint32_t status = 0U;
 
-  return (0U);
+  if (irqn > 0 && irqn < IRQn_MAX_NUM) {
+    status = ECLIC->ctrl[irqn].intie;
+  }
+
+  return (status);
 }
 
 /**
@@ -369,9 +388,14 @@ int32_t IRQ_EndOfInterrupt(IRQn_ID_t irqn)
  */
 int32_t IRQ_SetPending(IRQn_ID_t irqn)
 {
-  (void) irqn;
+  int32_t status = -1;
 
-  return (0);
+  if (irqn > 0 && irqn < IRQn_MAX_NUM) {
+    ECLIC->ctrl[irqn].intip = 1U;
+    status = 0;
+  }
+
+  return (status);
 }
 
 /**
@@ -381,9 +405,13 @@ int32_t IRQ_SetPending(IRQn_ID_t irqn)
  */
 uint32_t IRQ_GetPending(IRQn_ID_t irqn)
 {
-  (void) irqn;
+  uint32_t status = 0U;
 
-  return (0U);
+  if (irqn > 0 && irqn < IRQn_MAX_NUM) {
+    status = ECLIC->ctrl[irqn].intip;
+  }
+
+  return (status);
 }
 
 /**
@@ -393,9 +421,14 @@ uint32_t IRQ_GetPending(IRQn_ID_t irqn)
  */
 int32_t IRQ_ClearPending(IRQn_ID_t irqn)
 {
-  ECLIC->ctrl[irqn].intip = 0U;
+  int32_t status = -1;
 
-  return (0);
+  if (irqn > 0 && irqn < IRQn_MAX_NUM) {
+    ECLIC->ctrl[irqn].intip = 0U;
+    status = 0;
+  }
+
+  return (status);
 }
 
 /**
@@ -406,9 +439,14 @@ int32_t IRQ_ClearPending(IRQn_ID_t irqn)
  */
 int32_t IRQ_SetPriority(IRQn_ID_t irqn, uint32_t priority)
 {
-  ECLIC->ctrl[irqn].intctrl = (uint8_t)priority;
+  int32_t status = -1;
 
-  return (0);
+  if (irqn > 0 && irqn < IRQn_MAX_NUM) {
+    ECLIC->ctrl[irqn].intctrl = (uint8_t)priority;
+    status = 0;
+  }
+
+  return (status);
 }
 
 /**
@@ -419,7 +457,13 @@ int32_t IRQ_SetPriority(IRQn_ID_t irqn, uint32_t priority)
  */
 uint32_t IRQ_GetPriority(IRQn_ID_t irqn)
 {
-  return (ECLIC->ctrl[irqn].intctrl);
+  uint32_t priority = IRQ_PRIORITY_ERROR;
+
+  if (irqn > 0 && irqn < IRQn_MAX_NUM) {
+    priority = ECLIC->ctrl[irqn].intctrl;
+  }
+
+  return (priority);
 }
 
 /**
