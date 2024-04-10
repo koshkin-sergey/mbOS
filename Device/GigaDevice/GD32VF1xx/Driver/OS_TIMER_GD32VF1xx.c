@@ -45,9 +45,9 @@ static uint32_t ticks;
 static
 void SetLoadValue(uint64_t value)
 {
-  SysTimer->mtime_lo = 0U;
-  SysTimer->mtime_hi = value >> 32;
-  SysTimer->mtime_lo = value;
+  SysTimer->mtime_lo = 0UL;
+  SysTimer->mtime_hi = (uint32_t)(value >> 32);
+  SysTimer->mtime_lo = (uint32_t)value;
 }
 
 /**
@@ -81,8 +81,8 @@ static
 void SetCompareValue(uint64_t value)
 {
   SysTimer->mtimecmp_lo = -1U;
-  SysTimer->mtimecmp_hi = value >> 32;
-  SysTimer->mtimecmp_lo = value;
+  SysTimer->mtimecmp_hi = (uint32_t)(value >> 32);
+  SysTimer->mtimecmp_lo = (uint32_t)value;
 }
 
 /*******************************************************************************
@@ -105,11 +105,14 @@ int32_t osTickSetup(uint32_t freq, IRQHandler_t handler)
 
   ticks = SystemCoreClock / (freq * 4U);
 
+  SysTimer->mtimectl |= MTIMECTL_TIMESTOP;
   SetLoadValue(0U);
   SetCompareValue(ticks);
 
   /* Disable corresponding IRQ */
   IRQ_Disable(CLIC_INT_TMR);
+  IRQ_ClearPending(CLIC_INT_TMR);
+
   /* Set Timer interrupt priority */
   IRQ_SetPriority(CLIC_INT_TMR, SYSTIMER_IRQ_PRIORITY);
   /* Set IRQ mode interrupt */

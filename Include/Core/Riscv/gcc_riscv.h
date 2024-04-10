@@ -47,7 +47,7 @@
 
 /** \brief Inform the compiler that a function does not return. */
 #ifndef   __NO_RETURN
-  #define __NO_RETURN                            __attribute__((__noreturn__))
+  #define __NO_RETURN                            __attribute__((noreturn))
 #endif
 
 /** \brief Inform that a variable shall be retained in executable image. */

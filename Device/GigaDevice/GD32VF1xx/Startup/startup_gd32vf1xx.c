@@ -26,12 +26,19 @@
 #include <asm/system_gd32vf1xx.h>
 
 /*----------------------------------------------------------------------------
+  External References
+ *----------------------------------------------------------------------------*/
+
+extern __NO_RETURN void __PROGRAM_START(void);
+extern             void _exit(int code);
+
+/*----------------------------------------------------------------------------
   Internal References
  *----------------------------------------------------------------------------*/
 
 void irq_vectors(void)        __attribute__((naked,    section(".text.vtable")));
-void _enter(void)             __attribute__((noreturn, section(".text.init")));
-void _exit(int code);
+void _enter(void)             __attribute__((naked,    section(".text.init")));
+void _reset(void)             __attribute__((noreturn, section(".text.init")));
 void Default_Handler(void);
 
 /**
@@ -253,8 +260,12 @@ void _enter(void)
     "la   gp, __global_pointer$       \n\t"
     ".option pop                      \n\t"
     "la   sp, _sp                     \n\t"
+    "j    _reset                      \n\t"
   );
+}
 
+void _reset(void)
+{
   SystemInit();
   __PROGRAM_START();
 }

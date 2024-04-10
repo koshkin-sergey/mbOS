@@ -103,10 +103,6 @@ uint32_t IRQ_GetMode (IRQn_ID_t irqn);
 /// \return interrupt ID number.
 IRQn_ID_t IRQ_GetActiveIRQ (void);
 
-/// Get ID number of current fast interrupt request (FIQ).
-/// \return interrupt ID number.
-IRQn_ID_t IRQ_GetActiveEXC (void);
-
 /// Signal end of interrupt processing.
 /// \param[in]     irqn          interrupt ID number
 /// \return 0 on success, -1 on error.

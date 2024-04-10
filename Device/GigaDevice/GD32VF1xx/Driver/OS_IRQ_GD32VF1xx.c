@@ -247,6 +247,12 @@ int32_t IRQ_Initialize(void)
   addr = ((uint32_t)irq_entry & ~0x3UL) | 0x1UL;
   CSR_WRITE(CSR_MTVT2, addr);
 
+  uint32_t irq_cnt = ECLIC->info & CLIC_CLICINFO_NUM_Msk;
+  for (uint32_t i = 0U; i < irq_cnt; ++i) {
+    ECLIC->ctrl[i].intie = 0U;
+    ECLIC->ctrl[i].intip = 0U;
+  }
+
   SysTimer->msip = 0U;
   ECLIC->ctrl[CLIC_INT_SFT].intie = CLIC_INTIE_IE_Msk;
 
@@ -343,6 +349,20 @@ uint32_t IRQ_GetMode(IRQn_ID_t irqn)
 }
 
 /**
+ * @brief       Signal end of interrupt processing.
+ * @param[in]   irqn   interrupt ID number
+ * @return      0 on success, -1 on error.
+ */
+int32_t IRQ_EndOfInterrupt(IRQn_ID_t irqn)
+{
+  (void) irqn;
+
+  return (-1);
+}
+
+
+
+/**
  * @brief       Set interrupt pending flag.
  * @param[in]   irqn    interrupt ID number
  * @return      0 on success, -1 on error.
@@ -356,7 +376,7 @@ int32_t IRQ_SetPending(IRQn_ID_t irqn)
 
 /**
  * @brief       Get interrupt pending flag.
- * @param[in]   irqn    interrupt ID number
+ * @param[in]   irqn   interrupt ID number
  * @return      0 - interrupt is not pending, 1 - interrupt is pending.
  */
 uint32_t IRQ_GetPending(IRQn_ID_t irqn)
@@ -367,6 +387,18 @@ uint32_t IRQ_GetPending(IRQn_ID_t irqn)
 }
 
 /**
+ * @brief       Clear interrupt pending flag.
+ * @param[in]   irqn   interrupt ID number
+ * @return      0 on success, -1 on error.
+ */
+int32_t IRQ_ClearPending(IRQn_ID_t irqn)
+{
+  ECLIC->ctrl[irqn].intip = 0U;
+
+  return (0);
+}
+
+/**
  * @brief       Set interrupt priority value.
  * @param[in]   irqn      interrupt ID number
  * @param[in]   priority  interrupt priority value
@@ -374,10 +406,9 @@ uint32_t IRQ_GetPending(IRQn_ID_t irqn)
  */
 int32_t IRQ_SetPriority(IRQn_ID_t irqn, uint32_t priority)
 {
-  (void) irqn;
-  (void) priority;
+  ECLIC->ctrl[irqn].intctrl = (uint8_t)priority;
 
-  return (-1);
+  return (0);
 }
 
 /**
@@ -388,9 +419,7 @@ int32_t IRQ_SetPriority(IRQn_ID_t irqn, uint32_t priority)
  */
 uint32_t IRQ_GetPriority(IRQn_ID_t irqn)
 {
-  (void) irqn;
-
-  return (0U);
+  return (ECLIC->ctrl[irqn].intctrl);
 }
 
 /**

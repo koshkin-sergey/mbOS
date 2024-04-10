@@ -48,7 +48,7 @@
 #define INITIAL_MSTATUS               (MSTATUS_MPP_M      | \
                                        MSTATUS_MPIE       | \
                                        MSTATUS_FS_INITIAL | \
-                                       MSTATUS_VS_INITIAL)
+                                       MSTATUS_XS_INITIAL)
 
 /*******************************************************************************
  *  exported functions
