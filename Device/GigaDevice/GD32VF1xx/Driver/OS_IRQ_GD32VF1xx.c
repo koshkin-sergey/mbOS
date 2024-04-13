@@ -169,7 +169,7 @@ void exc_entry(void)
 
   __ASM volatile (
     "  lw    t0, IRQ_NestLevel      \n\t"
-    "  addi  t0, t0, +1             \n\t"     // Increment IRQ nesting level
+    "  addi  t0, t0, +1             \n\t"   // Increment IRQ nesting level
     "  sw    t0, IRQ_NestLevel, t1  \n\t"
     "  csrrw sp, mscratch, sp       \n\t"
     "  bnez  sp, 1f                 \n\t"
@@ -182,11 +182,13 @@ void exc_entry(void)
     "  la    a5, exc_vectors        \n\t"
     "  add   a5, a5, a0             \n\t"
     "  lw    a0, 0(a5)              \n\t"
+    "  csrs  mstatus, 0x8           \n\t"   // Re-enable interrupts
     "  jalr  a0                     \n\t"
+    "  csrc  mstatus, 0x8           \n\t"   // Disable interrupts
     "1:                             \n\t"
     "  csrrw sp, mscratch, sp       \n\t"
     "  lw    t0, IRQ_NestLevel      \n\t"
-    "  addi  t0, t0, -1             \n\t"     // Decrement IRQ nesting level
+    "  addi  t0, t0, -1             \n\t"   // Decrement IRQ nesting level
     "  sw    t0, IRQ_NestLevel, t1  \n\t"
   );
 
@@ -207,12 +209,12 @@ void irq_entry(void)
     "  bnez  t0, 1f                 \n\t"
     "  csrrw sp, mscratch, sp       \n\t"
     "1:                             \n\t"
-    "  addi  t0, t0, +1             \n\t"     // Increment IRQ nesting level
+    "  addi  t0, t0, +1             \n\t"   // Increment IRQ nesting level
     "  sw    t0, IRQ_NestLevel, t1  \n\t"
     "  csrrw ra, 0x7ED, ra          \n\t"
-    "  csrc  mstatus, 0x8           \n\t"
+    "  csrc  mstatus, 0x8           \n\t"   // Disable interrupts
     "  lw    t0, IRQ_NestLevel      \n\t"
-    "  addi  t0, t0, -1             \n\t"     // Decrement IRQ nesting level
+    "  addi  t0, t0, -1             \n\t"   // Decrement IRQ nesting level
     "  sw    t0, IRQ_NestLevel, t1  \n\t"
     "  bnez  t0, 1f                 \n\t"
     "  csrrw sp, mscratch, sp       \n\t"
