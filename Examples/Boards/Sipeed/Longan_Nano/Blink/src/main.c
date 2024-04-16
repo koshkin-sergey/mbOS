@@ -20,9 +20,8 @@
 
 #include <stddef.h>
 #include <asm/system_gd32vf1xx.h>
-#include <asm/gd32vf103xx_gpio.h>
+#include <Driver/GPIO_GD32VF1xx.h>
 #include <Kernel/kernel.h>
-#include <Core/Riscv/compiler.h>
 
 /*******************************************************************************
  *  defines and macros (scope: module-local)
@@ -31,7 +30,8 @@
 #define TIMEOUT                       (500UL)
 #define THREAD_STACK_SIZE             (256U)
 
-//#define LED_PIN                       (GPIO_PIN_4)
+#define LED_GREEN_PIN                 (GPIO_PIN_1)
+#define LED_BLUE_PIN                  (GPIO_PIN_2)
 
 /*******************************************************************************
  *  global variable definitions (scope: module-local)
@@ -59,8 +59,7 @@ static const osTimerAttr_t timer_attr = {
     .cb_size   = sizeof(timer_cb)
 };
 
-//extern Driver_GPIO_t Driver_GPIO2;
-//static Driver_GPIO_t *gpio = &Driver_GPIO2;
+static Driver_GPIO_t *gpio = &Driver_GPIOA;
 
 /*******************************************************************************
  *  function implementations (scope: module-local)
@@ -68,10 +67,11 @@ static const osTimerAttr_t timer_attr = {
 
 static void GPIO_Init(void)
 {
-  *((volatile uint32_t *)(RCU_BASE + 0x18UL)) |= 1UL << 2;
-  GPIOA->CTL0 &= ~0xFF0UL;
-  GPIOA->CTL0 |=  0x110UL;
-  GPIOA->OCTL &= ~(3UL << 1);
+  gpio->Initialize();
+  gpio->PinConfig(LED_GREEN_PIN, 0U);
+  gpio->PinConfig(LED_BLUE_PIN,  0U);
+  gpio->PinWrite(LED_GREEN_PIN, GPIO_PIN_OUT_LOW);
+  gpio->PinWrite(LED_BLUE_PIN,  GPIO_PIN_OUT_LOW);
 }
 
 static void init_proc(void *param)
@@ -83,7 +83,7 @@ static void init_proc(void *param)
   osTimerStart(timer_id, TIMEOUT);
 
   for (;;) {
-    GPIOA->OCTL ^= (1UL << 2);    // Blue LED
+    gpio->PinToggle(LED_BLUE_PIN);
     osDelay(TIMEOUT);
   }
 }
@@ -92,7 +92,7 @@ static void timer_func(void *argument)
 {
   (void) argument;
 
-  GPIOA->OCTL ^= (1UL << 1);      // Green LED
+  gpio->PinToggle(LED_GREEN_PIN);
 }
 
 int main(void)
