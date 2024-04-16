@@ -27,6 +27,14 @@
 #include <stdint.h>
 
 /*******************************************************************************
+ *  defines and macros
+ ******************************************************************************/
+
+/* GPIO return codes */
+#define GPIO_DRIVER_OK                0 ///< Operation succeeded
+#define GPIO_DRIVER_ERROR            -1 ///< Unspecified error
+
+/*******************************************************************************
  *  typedefs and structures
  ******************************************************************************/
 
@@ -93,41 +101,39 @@ typedef enum GPIO_PortClk {
 } GPIO_PortClk_t;
 
 /**
- * @fn          void PortClock(GPIO_PortClk_t state)
- * @brief       Port Clock Control
- * @param[in]   state   GPIO_PORT_CLK_DISABLE - to disable
- *                      GPIO_PORT_CLK_ENABLE  - to enable
+ * @fn          int32_t GPIO_Initialize(void)
+ * @brief       Initialize GPIO Interface.
+ * @return      execution_status
 
- * @fn          GPIO_PortClk_t GetPortClockState(void)
- * @brief       Get GPIO port clock state
- * @return      GPIO_PORT_CLK_DISABLE - disabled
- *              GPIO_PORT_CLK_ENABLE  - enabled
+ * @fn          int32_t GPIO_Uninitialize(void)
+ * @brief       De-initialize GPIO Interface.
+ * @return      execution_status
 
- * @fn          void PinConfig(GPIO_Pin_t pin, const GPIO_PinCfg_t *cfg)
+ * @fn          int32_t GPIO_PinConfig(GPIO_Pin_t pin, uint32_t cfg)
  * @brief       Configure Pin corresponding to specified parameters
- * @param[in]   pin   Port pin number (0..15)
- * @param[in]   cfg   Pointer to a GPIO_PinCfg_t structure that contains the
- *                    configuration information for the specified pin.
+ * @param[in]   pin   Port pin number
+ * @param[in]   cfg   contains the configuration information for the
+ *                    specified pin.
 
- * @fn          uint16_t PortRead(void)
+ * @fn          uint32_t GPIO_PortRead(void)
  * @brief       Read port pins
  * @return      port pin inputs
 
- * @fn          void PortWrite(uint16_t value)
+ * @fn          void GPIO_PortWrite(uint32_t value)
  * @brief       Write port pins
  * @param[in]   value  Pin values
 
- * @fn          uint32_t PinRead(GPIO_Pin_t pin)
+ * @fn          uint32_t GPIO_PinRead(GPIO_Pin_t pin)
  * @brief       Read port pin
  * @param[in]   pin   Port pin number
  * @return      pin value (0 or 1)
 
- * @fn          void PinWrite(GPIO_Pin_t pin, GPIO_PinOut_t value)
+ * @fn          void GPIO_PinWrite(GPIO_Pin_t pin, GPIO_PinOut_t value)
  * @brief       Write port pin
  * @param[in]   pin   Port pin number
  * @param[in]   value Port pin value (0 or 1)
 
- * @fn          void PinToggle(GPIO_Pin_t pin)
+ * @fn          void GPIO_PinToggle(GPIO_Pin_t pin)
  * @brief       Toggle the output of the port pin
  * @param[in]   pin   Port pin number
  */
@@ -136,14 +142,14 @@ typedef enum GPIO_PortClk {
  * @brief Access structure of the GPIO Driver.
  */
 typedef struct Driver_GPIO {
-  void            (*PortClock)        (GPIO_PortClk_t state);
-  GPIO_PortClk_t  (*GetPortClockState)(void);
-  void            (*PinConfig)        (GPIO_Pin_t pin, const GPIO_PinCfg_t *cfg);
-  uint16_t        (*PortRead)         (void);
-  void            (*PortWrite)        (uint16_t value);
-  uint32_t        (*PinRead)          (GPIO_Pin_t pin);
-  void            (*PinWrite)         (GPIO_Pin_t pin, GPIO_PinOut_t value);
-  void            (*PinToggle)        (GPIO_Pin_t pin);
+  int32_t   (*Initialize)   (void);
+  int32_t   (*Uninitialize) (void);
+  int32_t   (*PinConfig)    (GPIO_Pin_t pin, uint32_t cfg);
+  uint32_t  (*PortRead)     (void);
+  void      (*PortWrite)    (uint32_t value);
+  uint32_t  (*PinRead)      (GPIO_Pin_t pin);
+  void      (*PinWrite)     (GPIO_Pin_t pin, GPIO_PinOut_t value);
+  void      (*PinToggle)    (GPIO_Pin_t pin);
 } const Driver_GPIO_t;
 
 /*******************************************************************************
