@@ -68,10 +68,8 @@ static Driver_GPIO_t *gpio = &Driver_GPIOA;
 static void GPIO_Init(void)
 {
   gpio->Initialize();
-  gpio->PinConfig(LED_GREEN_PIN, 0U);
-  gpio->PinConfig(LED_BLUE_PIN,  0U);
-  gpio->PinWrite(LED_GREEN_PIN, GPIO_PIN_OUT_LOW);
-  gpio->PinWrite(LED_BLUE_PIN,  GPIO_PIN_OUT_LOW);
+  gpio->PinConfig(LED_GREEN_PIN, PIN_MODE_OUTPUT);
+  gpio->PinConfig(LED_BLUE_PIN,  PIN_MODE_OUTPUT);
 }
 
 static void init_proc(void *param)
