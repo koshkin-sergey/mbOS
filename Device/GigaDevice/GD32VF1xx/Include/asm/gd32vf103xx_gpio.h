@@ -42,6 +42,19 @@ extern "C" {
 #define AFIO    ((AFIO_t *) AFIO_BASE)        /*!< AFIO  configuration struct */
 
 /**
+ * @brief Bit definition for CTL register
+ */
+#define CTL_MD_Pos                    (0U)
+#define CTL_MD_Msk                    (0x3UL << CTL_MD_Pos)
+#define CTL_MD_0                      (0x1UL << CTL_MD_Pos)
+#define CTL_MD_1                      (0x2UL << CTL_MD_Pos)
+
+#define CTL_CTL_Pos                   (2U)
+#define CTL_CTL_Msk                   (0x3UL << CTL_CTL_Pos)
+#define CTL_CTL_0                     (0x1UL << CTL_CTL_Pos)
+#define CTL_CTL_1                     (0x2UL << CTL_CTL_Pos)
+
+/**
  * @brief Bit definition for ISTAT register
  */
 #define ISTAT_ISTAT_Pos               (0U)

@@ -31,74 +31,62 @@
  ******************************************************************************/
 
 /* GPIO return codes */
-#define GPIO_DRIVER_OK                0 ///< Operation succeeded
-#define GPIO_DRIVER_ERROR            -1 ///< Unspecified error
+#define GPIO_DRIVER_OK                0                                         ///< Operation succeeded
+#define GPIO_DRIVER_ERROR            -1                                         ///< Unspecified error
+
+/* GPIO Pin Config Codes */
+#define PIN_MODE_Pos                  0
+#define PIN_MODE_Msk                  (3UL << PIN_MODE_Pos)
+#define PIN_MODE_INPUT                (0UL << PIN_MODE_Pos)                     ///< General-purpose Input (default)
+#define PIN_MODE_OUTPUT               (1UL << PIN_MODE_Pos)                     ///< General-purpose Output
+#define PIN_MODE_ALT_FUNC             (2UL << PIN_MODE_Pos)                     ///< Alternate function
+#define PIN_MODE_ANALOG               (3UL << PIN_MODE_Pos)                     ///< Analog Input/Output
+
+#define PIN_OUTPUT_Pos                4
+#define PIN_OUTPUT_Msk                (1UL << PIN_OUTPUT_Pos)
+#define PIN_OUTPUT_PUSH_PULL          (0UL << PIN_OUTPUT_Pos)                   ///< Output push-pull (default)
+#define PIN_OUTPUT_OPEN_DRAIN         (1UL << PIN_OUTPUT_Pos)                   ///< Output open-drain
+
+#define PIN_OUTPUT_SPEED_Pos          8
+#define PIN_OUTPUT_SPEED_Msk          (3UL << PIN_OUTPUT_SPEED_Pos)
+#define PIN_OUTPUT_SPEED_LOW          (0UL << PIN_OUTPUT_SPEED_Pos)             ///< Max speed 2 MHz (default)
+#define PIN_OUTPUT_SPEED_MEDIUM       (1UL << PIN_OUTPUT_SPEED_Pos)             ///< Max speed 10 MHz
+#define PIN_OUTPUT_SPEED_HIGH         (2UL << PIN_OUTPUT_SPEED_Pos)             ///< Max speed 50 MHz
+
+#define PIN_PULL_Pos                  12
+#define PIN_PULL_Msk                  (3UL << PIN_PULL_Pos)
+#define PIN_PULL_DISABLE              (0UL << PIN_PULL_Pos)                     ///< Pin no pull-up, pull-down (default)
+#define PIN_PULL_UP                   (1UL << PIN_PULL_Pos)                     ///< Pin pull-up
+#define PIN_PULL_DOWN                 (2UL << PIN_PULL_Pos)                     ///< Pin pull-down
+
+#define PIN_OUTPUT_VALUE_Pos          16
+#define PIN_OUTPUT_VALUE_Msk          (1UL << PIN_OUTPUT_VALUE_Pos)
+#define PIN_OUTPUT_VALUE_LOW          (0UL << PIN_OUTPUT_VALUE_Pos)             ///< Pin output low (default)
+#define PIN_OUTPUT_VALUE_HIGH         (1UL << PIN_OUTPUT_VALUE_Pos)             ///< Pin output high
 
 /*******************************************************************************
  *  typedefs and structures
  ******************************************************************************/
 
 typedef enum GPIO_Pin {
-  GPIO_PIN_0              = 0,
-  GPIO_PIN_1              = 1,
-  GPIO_PIN_2              = 2,
-  GPIO_PIN_3              = 3,
-  GPIO_PIN_4              = 4,
-  GPIO_PIN_5              = 5,
-  GPIO_PIN_6              = 6,
-  GPIO_PIN_7              = 7,
-  GPIO_PIN_8              = 8,
-  GPIO_PIN_9              = 9,
-  GPIO_PIN_10             = 10,
-  GPIO_PIN_11             = 11,
-  GPIO_PIN_12             = 12,
-  GPIO_PIN_13             = 13,
-  GPIO_PIN_14             = 14,
-  GPIO_PIN_15             = 15,
-  GPIO_PinReserved        = 0x7FFFFFFF
+  GPIO_PIN_0              = 0,                                                  ///< GPIO_PIN_0
+  GPIO_PIN_1              = 1,                                                  ///< GPIO_PIN_1
+  GPIO_PIN_2              = 2,                                                  ///< GPIO_PIN_2
+  GPIO_PIN_3              = 3,                                                  ///< GPIO_PIN_3
+  GPIO_PIN_4              = 4,                                                  ///< GPIO_PIN_4
+  GPIO_PIN_5              = 5,                                                  ///< GPIO_PIN_5
+  GPIO_PIN_6              = 6,                                                  ///< GPIO_PIN_6
+  GPIO_PIN_7              = 7,                                                  ///< GPIO_PIN_7
+  GPIO_PIN_8              = 8,                                                  ///< GPIO_PIN_8
+  GPIO_PIN_9              = 9,                                                  ///< GPIO_PIN_9
+  GPIO_PIN_10             = 10,                                                 ///< GPIO_PIN_10
+  GPIO_PIN_11             = 11,                                                 ///< GPIO_PIN_11
+  GPIO_PIN_12             = 12,                                                 ///< GPIO_PIN_12
+  GPIO_PIN_13             = 13,                                                 ///< GPIO_PIN_13
+  GPIO_PIN_14             = 14,                                                 ///< GPIO_PIN_14
+  GPIO_PIN_15             = 15,                                                 ///< GPIO_PIN_15
+  GPIO_PinReserved        = 0x7FFFFFFF                                          ///< GPIO_PinReserved
 } GPIO_Pin_t;
-
-typedef enum GPIO_PinFunc {
-  GPIO_PIN_FUNC_0         = 0,
-  GPIO_PIN_FUNC_1         = 1,
-  GPIO_PIN_FUNC_2         = 2,
-  GPIO_PIN_FUNC_3         = 3,
-  GPIO_PIN_FUNC_Reserved  = 0x7FFFFFFF
-} GPIO_PinFunc_t;
-
-typedef enum GPIO_PinOut {
-  GPIO_PIN_OUT_LOW        = 0,
-  GPIO_PIN_OUT_HIGH       = 1,
-  GPIO_PIN_OUT_Reserved   = 0x7FFFFFFF
-} GPIO_PinOut_t;
-
-typedef enum GPIO_PinPull {
-  GPIO_PULL_DISABLE       = 0,
-  GPIO_PULL_ENABLE        = 1,
-  GPIO_PULL_Reserved      = 0x7FFFFFFF
-} GPIO_PinPull_t;
-
-/**
- * Pin Mode
- */
-typedef enum GPIO_PinMode {
-  GPIO_MODE_ANALOG        = 0x00,  //!< Analog Input
-  GPIO_MODE_INPUT         = 0x01,  //!< General-purpose Input
-  GPIO_MODE_OUT_PP        = 0x02,  //!< General-purpose Output push-pull
-  GPIO_MODE_OUT_OD        = 0x06,  //!< General-purpose Output open-drain
-  GPIO_MODE_Reserved      = 0x7FFFFFFF
-} GPIO_PinMode_t;
-
-typedef struct GPIO_PinCfg {
-  GPIO_PinFunc_t  func;
-  GPIO_PinMode_t  mode;
-  GPIO_PinPull_t  pull;
-} GPIO_PinCfg_t;
-
-typedef enum GPIO_PortClk {
-  GPIO_PORT_CLK_DISABLE,
-  GPIO_PORT_CLK_ENABLE,
-} GPIO_PortClk_t;
 
 /**
  * @fn          int32_t GPIO_Initialize(void)
@@ -128,7 +116,7 @@ typedef enum GPIO_PortClk {
  * @param[in]   pin   Port pin number
  * @return      pin value (0 or 1)
 
- * @fn          void GPIO_PinWrite(GPIO_Pin_t pin, GPIO_PinOut_t value)
+ * @fn          void GPIO_PinWrite(GPIO_Pin_t pin, uint32_t value)
  * @brief       Write port pin
  * @param[in]   pin   Port pin number
  * @param[in]   value Port pin value (0 or 1)
@@ -148,7 +136,7 @@ typedef struct Driver_GPIO {
   uint32_t  (*PortRead)     (void);
   void      (*PortWrite)    (uint32_t value);
   uint32_t  (*PinRead)      (GPIO_Pin_t pin);
-  void      (*PinWrite)     (GPIO_Pin_t pin, GPIO_PinOut_t value);
+  void      (*PinWrite)     (GPIO_Pin_t pin, uint32_t value);
   void      (*PinToggle)    (GPIO_Pin_t pin);
 } const Driver_GPIO_t;
 

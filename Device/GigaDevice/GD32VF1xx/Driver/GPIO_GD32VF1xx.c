@@ -36,7 +36,7 @@ static int32_t  GPIO##x##_PinConfig(GPIO_Pin_t pin, uint32_t cfg)               
 static uint32_t GPIO##x##_PortRead(void)                                        {return (GPIO_PortRead     (&GPIO##x##_Resources));            } \
 static void     GPIO##x##_PortWrite(uint32_t value)                             {        GPIO_PortWrite    (value, &GPIO##x##_Resources);      } \
 static uint32_t GPIO##x##_PinRead(GPIO_Pin_t pin)                               {return (GPIO_PinRead      (pin, &GPIO##x##_Resources));       } \
-static void     GPIO##x##_PinWrite(GPIO_Pin_t pin, GPIO_PinOut_t value)         {        GPIO_PinWrite     (pin, value, &GPIO##x##_Resources); } \
+static void     GPIO##x##_PinWrite(GPIO_Pin_t pin, uint32_t value)              {        GPIO_PinWrite     (pin, value, &GPIO##x##_Resources); } \
 static void     GPIO##x##_PinToggle(GPIO_Pin_t pin)                             {        GPIO_PinToggle    (pin, &GPIO##x##_Resources);        } \
                                                                                \
 Driver_GPIO_t Driver_GPIO##x = {                                               \
@@ -117,16 +117,69 @@ int32_t GPIO_Uninitialize(GPIO_Resources_t *rs)
 static
 int32_t GPIO_PinConfig(GPIO_Pin_t pin, uint32_t cfg, GPIO_Resources_t *rs)
 {
-  __O uint32_t *reg;
-  uint32_t val;
+  __IO uint32_t *pCTL;
+  uint32_t CTL;
+  uint32_t OCTL;
   uint32_t offset;
+  uint32_t pin_cfg = 0U;
   GPIO_t *mmr = rs->mmr;
 
   offset = (pin & 0x7) * 4;
-  reg = pin < 8 ? &mmr->CTL0 : &mmr->CTL1;
-  val = *reg & ~(0xFUL << offset);
+  pCTL = pin < 8 ? &mmr->CTL0 : &mmr->CTL1;
+  pin = (1UL << pin);
+  CTL = *pCTL & ~((CTL_MD_Msk | CTL_CTL_Msk) << offset);
+  OCTL = mmr->OCTL;
 
-  *reg = val | (0x1UL << offset);
+  if ((cfg & PIN_MODE_Msk) == PIN_MODE_ANALOG) {
+    /* nothing to do */
+  }
+  else if ((cfg & PIN_MODE_Msk) == PIN_MODE_INPUT) {
+    if ((cfg & PIN_PULL_Msk) == PIN_PULL_DISABLE) {
+      pin_cfg |= CTL_CTL_0;
+    }
+    else {
+      pin_cfg |= CTL_CTL_1;
+      if ((cfg & PIN_PULL_Msk) == PIN_PULL_UP) {
+        OCTL |= pin;
+      }
+      else {
+        OCTL &= ~pin;
+      }
+    }
+  }
+  else {
+    if ((cfg & PIN_OUTPUT_Msk) == PIN_OUTPUT_OPEN_DRAIN) {
+      pin_cfg |= CTL_CTL_0;
+    }
+
+    if ((cfg & PIN_MODE_Msk) == PIN_MODE_ALT_FUNC) {
+      pin_cfg |= CTL_CTL_1;
+    }
+
+    switch (cfg & PIN_OUTPUT_SPEED_Msk) {
+      case PIN_OUTPUT_SPEED_LOW:
+        pin_cfg |= CTL_MD_1;
+        break;
+
+      case PIN_OUTPUT_SPEED_MEDIUM:
+        pin_cfg |= CTL_MD_0;
+        break;
+
+      case PIN_OUTPUT_SPEED_HIGH:
+        pin_cfg |= (CTL_MD_1 | CTL_MD_0);
+        break;
+    }
+
+    if ((cfg & PIN_OUTPUT_VALUE_Msk) == PIN_OUTPUT_VALUE_LOW) {
+      OCTL &= ~pin;
+    }
+    else {
+      OCTL |= pin;
+    }
+  }
+
+  *pCTL = CTL | (pin_cfg << offset);
+  mmr->OCTL = OCTL;
 
   return (GPIO_DRIVER_OK);
 }
@@ -150,7 +203,7 @@ uint32_t GPIO_PinRead(GPIO_Pin_t pin, GPIO_Resources_t *rs)
 }
 
 static
-void GPIO_PinWrite(GPIO_Pin_t pin, GPIO_PinOut_t value, GPIO_Resources_t *rs)
+void GPIO_PinWrite(GPIO_Pin_t pin, uint32_t value, GPIO_Resources_t *rs)
 {
   __O uint32_t *reg;
   GPIO_t *mmr = rs->mmr;
