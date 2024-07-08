@@ -35,7 +35,7 @@ extern "C"
  *  defines and macros (scope: module-local)
  ******************************************************************************/
 
-#define DAC_API_VERSION   ARM_DRIVER_VERSION_MAJOR_MINOR(1,0)  /* API version */
+#define DAC_API_VERSION   DRIVER_VERSION_MAJOR_MINOR(1,0)  /* API version */
 
 /* DAC Event */
 #define DAC_EVENT_CONVERT_COMPLETE    (1UL << 0)  ///< Data Convert completed
@@ -74,10 +74,10 @@ extern "C"
 #define DAC_ABORT_CONVERT             (4UL << DAC_CONTROL_Pos)
 
 /*----- DAC specific error codes ---------------------------------------------*/
-#define DAC_ERROR_MODE                (ARM_DRIVER_ERROR_SPECIFIC - 1)     ///< Specified Mode not supported
-#define DAC_ERROR_DATA_FORMAT         (ARM_DRIVER_ERROR_SPECIFIC - 2)     ///< Specified Data Format not supported
-#define DAC_ERROR_OUTPUT_CHANNEL      (ARM_DRIVER_ERROR_SPECIFIC - 3)     ///< Specified Output Channel not supported
-#define DAC_ERROR_OUTPUT_BUFFER       (ARM_DRIVER_ERROR_SPECIFIC - 4)     ///< Specified Output Buffer not supported
+#define DAC_ERROR_MODE                (DRIVER_ERROR_SPECIFIC - 1)     ///< Specified Mode not supported
+#define DAC_ERROR_DATA_FORMAT         (DRIVER_ERROR_SPECIFIC - 2)     ///< Specified Data Format not supported
+#define DAC_ERROR_OUTPUT_CHANNEL      (DRIVER_ERROR_SPECIFIC - 3)     ///< Specified Output Channel not supported
+#define DAC_ERROR_OUTPUT_BUFFER       (DRIVER_ERROR_SPECIFIC - 4)     ///< Specified Output Buffer not supported
 
 /*******************************************************************************
  *  typedefs and structures (scope: module-local)
@@ -110,11 +110,11 @@ typedef volatile struct _DAC_STATUS {
  * @brief Access structure of the DAC Driver.
  */
 typedef struct _DRIVER_DAC {
-  ARM_DRIVER_VERSION   (*GetVersion)      (void);                             ///< Pointer to \ref ARM_SPI_GetVersion : Get driver version.
+  DRIVER_VERSION   (*GetVersion)      (void);                             ///< Pointer to \ref SPI_GetVersion : Get driver version.
   DAC_CAPABILITIES     (*GetCapabilities) (void);                             ///< Pointer to \ref DAC_GetCapabilities : Get driver capabilities.
   int32_t              (*Initialize)      (DAC_SignalEvent_t cb_event);       ///< Pointer to \ref DAC_Initialize : Initialize DAC Interface.
   int32_t              (*Uninitialize)    (void);                             ///< Pointer to \ref DAC_Uninitialize : De-initialize DAC Interface.
-  int32_t              (*PowerControl)    (ARM_POWER_STATE state);            ///< Pointer to \ref DAC_PowerControl : Control DAC Interface Power.
+  int32_t              (*PowerControl)    (POWER_STATE state);            ///< Pointer to \ref DAC_PowerControl : Control DAC Interface Power.
   int32_t              (*Convert)         (const void *data, uint32_t num);   ///< Pointer to \ref DAC_Convert : Start transfer data to DAC Interface.
   uint32_t             (*GetCount)        (void);                             ///< Pointer to \ref DAC_GetCount : Get transferred data count.
   int32_t              (*Control)         (uint32_t control, uint32_t arg);   ///< Pointer to \ref DAC_Control : Control DAC Interface.

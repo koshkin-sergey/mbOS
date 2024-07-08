@@ -153,9 +153,9 @@
 #define MCI_DATA_READ ((uint8_t)0x40)   /* Read transfer             */
 #define MCI_READ_WAIT ((uint8_t)0x80)   /* Read wait operation start */
 
-#define MCI_RESPONSE_EXPECTED_Msk (ARM_MCI_RESPONSE_SHORT      | \
-                                   ARM_MCI_RESPONSE_SHORT_BUSY | \
-                                   ARM_MCI_RESPONSE_LONG)
+#define MCI_RESPONSE_EXPECTED_Msk (MCI_RESPONSE_SHORT      | \
+                                   MCI_RESPONSE_SHORT_BUSY | \
+                                   MCI_RESPONSE_LONG)
 
 /* MCI Transfer Information Definition */
 typedef struct _MCI_XFER {
@@ -165,8 +165,8 @@ typedef struct _MCI_XFER {
 
 /* MCI Driver State Definition */
 typedef struct _MCI_INFO {
-  ARM_MCI_SignalEvent_t cb_event;       /* Driver event callback function     */
-  ARM_MCI_STATUS        status;         /* Driver status                      */
+  MCI_SignalEvent_t cb_event;       /* Driver event callback function     */
+  MCI_STATUS        status;         /* Driver status                      */
   uint32_t             *response;       /* Pointer to response buffer         */
   MCI_XFER              xfer;           /* Data transfer description          */
   uint8_t volatile      flags;          /* Driver state flags                 */

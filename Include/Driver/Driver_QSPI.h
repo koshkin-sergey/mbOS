@@ -37,7 +37,7 @@ extern "C"
 
 #include "Driver/Driver_Common.h"
 
-#define QSPI_API_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(1,0)  /* API version */
+#define QSPI_API_VERSION      DRIVER_VERSION_MAJOR_MINOR(1,0)  /* API version */
 
 
 /****** QSPI Control Codes *****/
@@ -88,7 +88,7 @@ extern "C"
 #define QSPI_ABORT_TRANSFER             (0x12UL << QSPI_CONTROL_Pos)            ///< Abort current data transfer
 
 /****** QSPI specific error codes *****/
-#define QSPI_ERROR_MODE                 (ARM_DRIVER_ERROR_SPECIFIC - 1)         ///< Specified Mode not supported
+#define QSPI_ERROR_MODE                 (DRIVER_ERROR_SPECIFIC - 1)             ///< Specified Mode not supported
 
 
 /**
@@ -108,9 +108,9 @@ typedef volatile struct _QSPI_STATUS {
 
 // Function documentation
 /**
-  \fn          ARM_DRIVER_VERSION QSPI_GetVersion (void)
+  \fn          DRIVER_VERSION QSPI_GetVersion (void)
   \brief       Get driver version.
-  \return      \ref ARM_DRIVER_VERSION
+  \return      \ref DRIVER_VERSION
 
   \fn          QSPI_CAPABILITIES QSPI_GetCapabilities (void)
   \brief       Get driver capabilities.
@@ -125,7 +125,7 @@ typedef volatile struct _QSPI_STATUS {
   \brief       De-initialize QSPI Interface.
   \return      \ref execution_status
 
-  \fn          int32_t QSPI_PowerControl (ARM_POWER_STATE state)
+  \fn          int32_t QSPI_PowerControl (POWER_STATE state)
   \brief       Control QSPI Interface Power.
   \param[in]   state  Power state
   \return      \ref execution_status
@@ -181,16 +181,16 @@ typedef struct _QSPI_CAPABILITIES {
 \brief Access structure of the QSPI Driver.
 */
 typedef struct _DRIVER_QSPI {
-  ARM_DRIVER_VERSION   (*GetVersion)      (void);                             ///< Pointer to QSPI_GetVersion : Get driver version.
-  QSPI_CAPABILITIES    (*GetCapabilities) (void);                             ///< Pointer to QSPI_GetCapabilities : Get driver capabilities.
-  int32_t              (*Initialize)      (QSPI_SignalEvent_t cb_event);      ///< Pointer to QSPI_Initialize : Initialize QSPI Interface.
-  int32_t              (*Uninitialize)    (void);                             ///< Pointer to QSPI_Uninitialize : De-initialize QSPI Interface.
-  int32_t              (*PowerControl)    (ARM_POWER_STATE state);            ///< Pointer to QSPI_PowerControl : Control QSPI Interface Power.
-  int32_t              (*Send)            (const void *data, uint32_t num);   ///< Pointer to QSPI_Send : Start sending data to QSPI Interface.
-  int32_t              (*Receive)         (      void *data, uint32_t num);   ///< Pointer to QSPI_Receive : Start receiving data from QSPI Interface.
-  uint32_t             (*GetDataCount)    (void);                             ///< Pointer to QSPI_GetDataCount : Get transferred data count.
-  int32_t              (*Control)         (uint32_t control, uint32_t arg);   ///< Pointer to QSPI_Control : Control QSPI Interface.
-  QSPI_STATUS          (*GetStatus)       (void);                             ///< Pointer to QSPI_GetStatus : Get QSPI status.
+  DRIVER_VERSION    (*GetVersion)      (void);                                  ///< Pointer to QSPI_GetVersion : Get driver version.
+  QSPI_CAPABILITIES (*GetCapabilities) (void);                                  ///< Pointer to QSPI_GetCapabilities : Get driver capabilities.
+  int32_t           (*Initialize)      (QSPI_SignalEvent_t cb_event);           ///< Pointer to QSPI_Initialize : Initialize QSPI Interface.
+  int32_t           (*Uninitialize)    (void);                                  ///< Pointer to QSPI_Uninitialize : De-initialize QSPI Interface.
+  int32_t           (*PowerControl)    (POWER_STATE state);                     ///< Pointer to QSPI_PowerControl : Control QSPI Interface Power.
+  int32_t           (*Send)            (const void *data, uint32_t num);        ///< Pointer to QSPI_Send : Start sending data to QSPI Interface.
+  int32_t           (*Receive)         (      void *data, uint32_t num);        ///< Pointer to QSPI_Receive : Start receiving data from QSPI Interface.
+  uint32_t          (*GetDataCount)    (void);                                  ///< Pointer to QSPI_GetDataCount : Get transferred data count.
+  int32_t           (*Control)         (uint32_t control, uint32_t arg);        ///< Pointer to QSPI_Control : Control QSPI Interface.
+  QSPI_STATUS       (*GetStatus)       (void);                                  ///< Pointer to QSPI_GetStatus : Get QSPI status.
 } const DRIVER_QSPI;
 
 #ifdef  __cplusplus

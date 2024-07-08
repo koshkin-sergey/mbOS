@@ -57,10 +57,10 @@ extern "C" {
  ******************************************************************************/
 
 typedef enum I2C_BusSpeed {
-  I2C_BUS_SPEED_STANDARD  = ARM_I2C_BUS_SPEED_STANDARD,
-  I2C_BUS_SPEED_FAST      = ARM_I2C_BUS_SPEED_FAST,
-  I2C_BUS_SPEED_FAST_PLUS = ARM_I2C_BUS_SPEED_FAST_PLUS,
-  I2C_BUS_SPEED_HIGH      = ARM_I2C_BUS_SPEED_HIGH,
+  I2C_BUS_SPEED_STANDARD  = I2C_BUS_SPEED_STANDARD,
+  I2C_BUS_SPEED_FAST      = I2C_BUS_SPEED_FAST,
+  I2C_BUS_SPEED_FAST_PLUS = I2C_BUS_SPEED_FAST_PLUS,
+  I2C_BUS_SPEED_HIGH      = I2C_BUS_SPEED_HIGH,
 } I2C_BusSpeed_t;
 
 typedef struct i2c_com {

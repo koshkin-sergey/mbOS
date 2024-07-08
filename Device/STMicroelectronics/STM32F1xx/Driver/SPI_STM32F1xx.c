@@ -33,7 +33,7 @@
  *  defines and macros (scope: module-local)
  ******************************************************************************/
 
-#define ARM_SPI_DRV_VERSION   ARM_DRIVER_VERSION_MAJOR_MINOR(1,0)
+#define SPI_DRV_VERSION   DRIVER_VERSION_MAJOR_MINOR(1,0)
 
 /*******************************************************************************
  *  typedefs and structures (scope: module-local)
@@ -48,18 +48,18 @@
  ******************************************************************************/
 
 // Driver Version
-static const ARM_DRIVER_VERSION DriverVersion = {
-    ARM_SPI_API_VERSION,
-    ARM_SPI_DRV_VERSION
+static const DRIVER_VERSION DriverVersion = {
+    SPI_API_VERSION,
+    SPI_DRV_VERSION
 };
 
 // Driver Capabilities
 static const
-ARM_SPI_CAPABILITIES DriverCapabilities = {
+SPI_CAPABILITIES DriverCapabilities = {
     0,  /* Simplex Mode (Master and Slave) */
     0,  /* TI Synchronous Serial Interface */
     0,  /* Microwire Interface */
-    1   /* Signal Mode Fault event: \ref ARM_SPI_EVENT_MODE_FAULT */
+    1   /* Signal Mode Fault event: \ref SPI_EVENT_MODE_FAULT */
 };
 
 static const GPIO_PIN_CFG_t SPI_pin_cfg_af = {
@@ -349,41 +349,41 @@ int32_t CalcPrescalerValue(const SPI_RESOURCES *spi, uint32_t freq)
 }
 
 /**
- * @fn          ARM_DRIVER_VERSION SPIx_GetVersion(void)
+ * @fn          DRIVER_VERSION SPIx_GetVersion(void)
  * @brief       Get SPI driver version.
- * @return      \ref ARM_DRV_VERSION
+ * @return      \ref DRV_VERSION
  */
 static
-ARM_DRIVER_VERSION SPIx_GetVersion(void)
+DRIVER_VERSION SPIx_GetVersion(void)
 {
   return DriverVersion;
 }
 
 /**
- * @fn          ARM_SPI_CAPABILITIES SPIx_GetCapabilities(void)
+ * @fn          SPI_CAPABILITIES SPIx_GetCapabilities(void)
  * @brief       Get driver capabilities.
- * @return      \ref ARM_SPI_CAPABILITIES
+ * @return      \ref SPI_CAPABILITIES
  */
 static
-ARM_SPI_CAPABILITIES SPIx_GetCapabilities(void)
+SPI_CAPABILITIES SPIx_GetCapabilities(void)
 {
   return DriverCapabilities;
 }
 
 /**
- * @fn          int32_t SPI_Initialize(ARM_SPI_SignalEvent_t cb_event, const SPI_RESOURCES *spi)
+ * @fn          int32_t SPI_Initialize(SPI_SignalEvent_t cb_event, const SPI_RESOURCES *spi)
  * @brief       Initialize SPI Interface.
- * @param[in]   cb_event  Pointer to \ref ARM_SPI_SignalEvent
+ * @param[in]   cb_event  Pointer to \ref SPI_SignalEvent
  * @param[in]   spi       Pointer to SPI resources
  * @return      \ref execution_status
  */
 static
-int32_t SPI_Initialize(ARM_SPI_SignalEvent_t cb_event, const SPI_RESOURCES *spi)
+int32_t SPI_Initialize(SPI_SignalEvent_t cb_event, const SPI_RESOURCES *spi)
 {
   SPI_INFO *info = spi->info;
 
   if (info->state & SPI_INITIALIZED)
-    return ARM_DRIVER_OK;
+    return DRIVER_OK;
 
   /* Initialize SPI Run-Time Resources */
   info->cb_event          = cb_event;
@@ -414,7 +414,7 @@ int32_t SPI_Initialize(ARM_SPI_SignalEvent_t cb_event, const SPI_RESOURCES *spi)
 
   info->state = SPI_INITIALIZED;
 
-  return (ARM_DRIVER_OK);
+  return (DRIVER_OK);
 }
 
 /**
@@ -449,23 +449,23 @@ int32_t SPI_Uninitialize(const SPI_RESOURCES *spi)
   /* Clear SPI state */
   spi->info->state = 0U;
 
-  return (ARM_DRIVER_OK);
+  return (DRIVER_OK);
 }
 
 /**
- * @fn          int32_t SPI_PowerControl(ARM_POWER_STATE state, const SPI_RESOURCES *spi)
+ * @fn          int32_t SPI_PowerControl(POWER_STATE state, const SPI_RESOURCES *spi)
  * @brief       Control SPI Interface Power.
  * @param[in]   state  Power state
  * @param[in]   spi    Pointer to SPI resources
  * @return      \ref execution_status
  */
 static
-int32_t SPI_PowerControl(ARM_POWER_STATE state, const SPI_RESOURCES *spi)
+int32_t SPI_PowerControl(POWER_STATE state, const SPI_RESOURCES *spi)
 {
   SPI_INFO *info = spi->info;
 
   switch (state) {
-    case ARM_POWER_OFF:
+    case POWER_OFF:
       /* SPI peripheral reset */
       RCC_ResetPeriph(spi->periph);
       /* Disable SPI IRQ */
@@ -483,12 +483,12 @@ int32_t SPI_PowerControl(ARM_POWER_STATE state, const SPI_RESOURCES *spi)
       info->state &= ~SPI_POWERED;
       break;
 
-    case ARM_POWER_FULL:
+    case POWER_FULL:
       if ((info->state & SPI_INITIALIZED) == 0U)
-        return (ARM_DRIVER_ERROR);
+        return (DRIVER_ERROR);
 
       if ((info->state & SPI_POWERED) != 0U)
-        return (ARM_DRIVER_OK);
+        return (DRIVER_OK);
 
       /* Clear status flags */
       info->status.busy       = 0U;
@@ -513,10 +513,10 @@ int32_t SPI_PowerControl(ARM_POWER_STATE state, const SPI_RESOURCES *spi)
       break;
 
     default:
-      return (ARM_DRIVER_ERROR_UNSUPPORTED);
+      return (DRIVER_ERROR_UNSUPPORTED);
   }
 
-  return (ARM_DRIVER_OK);
+  return (DRIVER_OK);
 }
 
 /**
@@ -540,13 +540,13 @@ int32_t SPI_Send(const void *data, uint32_t num, const SPI_RESOURCES *spi)
 #endif
 
   if ((data == NULL) || (num == 0U))
-    return (ARM_DRIVER_ERROR_PARAMETER);
+    return (DRIVER_ERROR_PARAMETER);
 
   if ((info->state & SPI_CONFIGURED) == 0U)
-    return (ARM_DRIVER_ERROR);
+    return (DRIVER_ERROR);
 
   if (info->status.busy)
-    return (ARM_DRIVER_ERROR_BUSY);
+    return (DRIVER_ERROR_BUSY);
 
   cr1 = reg->CR1;
   cr2 = reg->CR2;
@@ -624,7 +624,7 @@ int32_t SPI_Send(const void *data, uint32_t num, const SPI_RESOURCES *spi)
 
   reg->CR2 = cr2;
 
-  return (ARM_DRIVER_OK);
+  return (DRIVER_OK);
 }
 
 /**
@@ -648,13 +648,13 @@ int32_t SPI_Receive(void *data, uint32_t num, const SPI_RESOURCES *spi)
 #endif
 
   if ((data == NULL) || (num == 0U))
-    return (ARM_DRIVER_ERROR_PARAMETER);
+    return (DRIVER_ERROR_PARAMETER);
 
   if ((info->state & SPI_CONFIGURED) == 0U)
-    return (ARM_DRIVER_ERROR);
+    return (DRIVER_ERROR);
 
   if (info->status.busy)
-    return (ARM_DRIVER_ERROR_BUSY);
+    return (DRIVER_ERROR_BUSY);
 
 #ifdef __SPI_DMA
   cr1 = reg->CR1;
@@ -729,7 +729,7 @@ int32_t SPI_Receive(void *data, uint32_t num, const SPI_RESOURCES *spi)
 
   reg->CR2 = cr2;
 
-  return (ARM_DRIVER_OK);
+  return (DRIVER_OK);
 }
 
 /**
@@ -754,13 +754,13 @@ int32_t SPI_Transfer(const void *data_out, void *data_in, uint32_t num, const SP
 #endif
 
   if ((data_out == NULL) || (data_in == NULL) || (num == 0U))
-    return (ARM_DRIVER_ERROR_PARAMETER);
+    return (DRIVER_ERROR_PARAMETER);
 
   if ((info->state & SPI_CONFIGURED) == 0U)
-    return (ARM_DRIVER_ERROR);
+    return (DRIVER_ERROR);
 
   if (info->status.busy)
-    return (ARM_DRIVER_ERROR_BUSY);
+    return (DRIVER_ERROR_BUSY);
 
   cr1 = reg->CR1;
   cr2 = reg->CR2;
@@ -836,7 +836,7 @@ int32_t SPI_Transfer(const void *data_out, void *data_in, uint32_t num, const SP
 
   reg->CR2 = cr2;
 
-  return (ARM_DRIVER_OK);
+  return (DRIVER_OK);
 }
 
 /**
@@ -873,9 +873,9 @@ static int32_t SPI_Control(uint32_t control, uint32_t arg, const SPI_RESOURCES *
   cr2 = 0U;
 
   if ((info->state & SPI_POWERED) == 0U)
-    return (ARM_DRIVER_ERROR);
+    return (DRIVER_ERROR);
 
-  if ((control & ARM_SPI_CONTROL_Msk) == ARM_SPI_ABORT_TRANSFER) {
+  if ((control & SPI_CONTROL_Msk) == SPI_ABORT_TRANSFER) {
     cr2 = reg->CR2;
     /* Send abort */
     if (spi->tx_dma != NULL) {
@@ -912,137 +912,137 @@ static int32_t SPI_Control(uint32_t control, uint32_t arg, const SPI_RESOURCES *
     memset(spi->xfer, 0, sizeof(SPI_TRANSFER_INFO));
     info->status.busy = 0U;
 
-    return (ARM_DRIVER_OK);
+    return (DRIVER_OK);
   }
 
   /* Check for busy flag */
   if (info->status.busy)
-    return (ARM_DRIVER_ERROR_BUSY);
+    return (DRIVER_ERROR_BUSY);
 
-  switch (control & ARM_SPI_CONTROL_Msk) {
-    case ARM_SPI_MODE_INACTIVE:
-      mode |= ARM_SPI_MODE_INACTIVE;
+  switch (control & SPI_CONTROL_Msk) {
+    case SPI_MODE_INACTIVE:
+      mode |= SPI_MODE_INACTIVE;
       break;
 
-    case ARM_SPI_MODE_MASTER:
-      mode |= ARM_SPI_MODE_MASTER;
+    case SPI_MODE_MASTER:
+      mode |= SPI_MODE_MASTER;
       /* Master enabled */
       cr1 |= SPI_CR1_MSTR;
       break;
 
-    case ARM_SPI_MODE_SLAVE:
-      mode |= ARM_SPI_MODE_SLAVE;
+    case SPI_MODE_SLAVE:
+      mode |= SPI_MODE_SLAVE;
       break;
 
-    case ARM_SPI_MODE_MASTER_SIMPLEX:
-    case ARM_SPI_MODE_SLAVE_SIMPLEX:
-      return (ARM_SPI_ERROR_MODE);
+    case SPI_MODE_MASTER_SIMPLEX:
+    case SPI_MODE_SLAVE_SIMPLEX:
+      return (SPI_ERROR_MODE);
 
-    case ARM_SPI_SET_BUS_SPEED:
+    case SPI_SET_BUS_SPEED:
       /* Set SPI Bus Speed */
       br = CalcPrescalerValue(spi, arg);
       if (br < 0)
-        return (ARM_DRIVER_ERROR);
+        return (DRIVER_ERROR);
 
       /* Disable SPI, update prescaler and enable SPI */
       reg->CR1 &= ~SPI_CR1_SPE;
       reg->CR1 = (reg->CR1 & ~SPI_CR1_BR_Msk) | (br << SPI_CR1_BR_Pos);
       reg->CR1 |= SPI_CR1_SPE;
-      return (ARM_DRIVER_OK);
+      return (DRIVER_OK);
 
-    case ARM_SPI_GET_BUS_SPEED:
+    case SPI_GET_BUS_SPEED:
       /* Return current bus speed */
       return (int32_t)(RCC_GetPeriphFreq(spi->periph) >> (((reg->CR1 & SPI_CR1_BR_Msk) >> SPI_CR1_BR_Pos) + 1U));
 
-    case ARM_SPI_SET_DEFAULT_TX_VALUE:
+    case SPI_SET_DEFAULT_TX_VALUE:
       spi->xfer->def_val = (uint16_t)(arg & 0xFFFFU);
-      return (ARM_DRIVER_OK);
+      return (DRIVER_OK);
 
-    case ARM_SPI_CONTROL_SS:
-      val = (info->mode & ARM_SPI_CONTROL_Msk);
+    case SPI_CONTROL_SS:
+      val = (info->mode & SPI_CONTROL_Msk);
       /* Master modes */
-      if (val == ARM_SPI_MODE_MASTER) {
-        val = info->mode & ARM_SPI_SS_MASTER_MODE_Msk;
+      if (val == SPI_MODE_MASTER) {
+        val = info->mode & SPI_SS_MASTER_MODE_Msk;
         /* Check if NSS pin is available and
            software slave select master is selected */
-        if ((spi->io.nss != NULL) && (val == ARM_SPI_SS_MASTER_SW)) {
+        if ((spi->io.nss != NULL) && (val == SPI_SS_MASTER_SW)) {
           SPI_PIN *io = spi->io.nss;
           /* Set/Clear NSS pin */
-          if (arg == ARM_SPI_SS_INACTIVE)
+          if (arg == SPI_SS_INACTIVE)
             GPIO_PinWrite(io->port, io->pin, GPIO_PIN_OUT_HIGH);
           else
             GPIO_PinWrite(io->port, io->pin, GPIO_PIN_OUT_LOW);
         }
         else {
-          return (ARM_DRIVER_ERROR);
+          return (DRIVER_ERROR);
         }
 
-        return (ARM_DRIVER_OK);
+        return (DRIVER_OK);
       }
       /* Slave modes */
-      else if (val == ARM_SPI_MODE_SLAVE) {
-        val = info->mode & ARM_SPI_SS_SLAVE_MODE_Msk;
+      else if (val == SPI_MODE_SLAVE) {
+        val = info->mode & SPI_SS_SLAVE_MODE_Msk;
         /* Check if slave select slave mode is selected */
-        if (val == ARM_SPI_SS_SLAVE_SW) {
-          if (arg == ARM_SPI_SS_ACTIVE) {
+        if (val == SPI_SS_SLAVE_SW) {
+          if (arg == SPI_SS_ACTIVE) {
             reg->CR1 |= SPI_CR1_SSI;
           }
           else {
             reg->CR1 &= ~SPI_CR1_SSI;
           }
-          return (ARM_DRIVER_OK);
+          return (DRIVER_OK);
         }
         else {
-          return (ARM_DRIVER_ERROR);
+          return (DRIVER_ERROR);
         }
       }
       else {
-        return (ARM_DRIVER_ERROR);
+        return (DRIVER_ERROR);
       }
 
     default:
-      return (ARM_DRIVER_ERROR_UNSUPPORTED);
+      return (DRIVER_ERROR_UNSUPPORTED);
   }
 
   /* Frame format: */
-  switch (control & ARM_SPI_FRAME_FORMAT_Msk) {
-    case ARM_SPI_CPOL0_CPHA0:
+  switch (control & SPI_FRAME_FORMAT_Msk) {
+    case SPI_CPOL0_CPHA0:
       break;
-    case ARM_SPI_CPOL0_CPHA1:
+    case SPI_CPOL0_CPHA1:
       cr1 |= SPI_CR1_CPHA;
       break;
-    case ARM_SPI_CPOL1_CPHA0:
+    case SPI_CPOL1_CPHA0:
       cr1 |= SPI_CR1_CPOL;
       break;
-    case ARM_SPI_CPOL1_CPHA1:
+    case SPI_CPOL1_CPHA1:
       cr1 |= SPI_CR1_CPHA | SPI_CR1_CPOL;
       break;
-    case ARM_SPI_TI_SSI:
-    case ARM_SPI_MICROWIRE:
+    case SPI_TI_SSI:
+    case SPI_MICROWIRE:
     default:
-      return (ARM_SPI_ERROR_FRAME_FORMAT);
+      return (SPI_ERROR_FRAME_FORMAT);
   }
 
   /* Data Bits */
-  switch (control & ARM_SPI_DATA_BITS_Msk) {
-    case ARM_SPI_DATA_BITS(8U):
+  switch (control & SPI_DATA_BITS_Msk) {
+    case SPI_DATA_BITS(8U):
       break;
-    case ARM_SPI_DATA_BITS(16U):
+    case SPI_DATA_BITS(16U):
       cr1 |= SPI_CR1_DFF;
       break;
     default:
-      return (ARM_SPI_ERROR_DATA_BITS);
+      return (SPI_ERROR_DATA_BITS);
   }
 
   /* Bit order */
-  if ((control & ARM_SPI_BIT_ORDER_Msk) == ARM_SPI_LSB_MSB) {
+  if ((control & SPI_BIT_ORDER_Msk) == SPI_LSB_MSB) {
     cr1 |= SPI_CR1_LSBFIRST;
   }
 
   /* Slave select master modes */
-  if (mode == ARM_SPI_MODE_MASTER) {
-    switch (control & ARM_SPI_SS_MASTER_MODE_Msk) {
-      case ARM_SPI_SS_MASTER_UNUSED:
+  if (mode == SPI_MODE_MASTER) {
+    switch (control & SPI_SS_MASTER_MODE_Msk) {
+      case SPI_SS_MASTER_UNUSED:
         if (spi->io.nss != NULL) {
           /* Unconfigure NSS pin */
           PinConfig(spi->io.nss, &SPI_pin_cfg_analog);
@@ -1050,89 +1050,89 @@ static int32_t SPI_Control(uint32_t control, uint32_t arg, const SPI_RESOURCES *
         /* Software slave management */
         /* Internal NSS always active, IO value is ignored */
         cr1 |= SPI_CR1_SSM | SPI_CR1_SSI;
-        mode |= ARM_SPI_SS_MASTER_UNUSED;
+        mode |= SPI_SS_MASTER_UNUSED;
         break;
 
-      case ARM_SPI_SS_MASTER_HW_INPUT:
+      case SPI_SS_MASTER_HW_INPUT:
         if (spi->io.nss != NULL) {
           /* Configure NSS pin */
           PinConfig(spi->io.nss, &SPI_pin_cfg_af);
         }
         else {
           /* NSS pin is not available */
-          return (ARM_SPI_ERROR_SS_MODE);
+          return (SPI_ERROR_SS_MODE);
         }
-        mode |= ARM_SPI_SS_MASTER_HW_INPUT;
+        mode |= SPI_SS_MASTER_HW_INPUT;
         break;
 
-      case ARM_SPI_SS_MASTER_SW:
+      case SPI_SS_MASTER_SW:
         if (spi->io.nss != NULL) {
           /* Configure NSS pin as GPIO output */
           PinConfig(spi->io.nss, &SPI_pin_cfg_out_pp);
           /* Software slave management */
           cr1 |= SPI_CR1_SSM | SPI_CR1_SSI;
-          mode |= ARM_SPI_SS_MASTER_SW;
+          mode |= SPI_SS_MASTER_SW;
         }
         else {
           /* NSS pin is not available */
-          return (ARM_SPI_ERROR_SS_MODE);
+          return (SPI_ERROR_SS_MODE);
         }
         break;
 
-      case ARM_SPI_SS_MASTER_HW_OUTPUT:
+      case SPI_SS_MASTER_HW_OUTPUT:
         if (spi->io.nss != NULL) {
           /* Configure NSS pin - SPI NSS alternative function */
           PinConfig(spi->io.nss, &SPI_pin_cfg_af);
           /* Slave select output enable */
           cr2 |= SPI_CR2_SSOE;
-          mode |= ARM_SPI_SS_MASTER_HW_OUTPUT;
+          mode |= SPI_SS_MASTER_HW_OUTPUT;
         }
         else {
           /* NSS pin is not available */
-          return (ARM_SPI_ERROR_SS_MODE);
+          return (SPI_ERROR_SS_MODE);
         }
         break;
 
       default:
-        return (ARM_SPI_ERROR_SS_MODE);
+        return (SPI_ERROR_SS_MODE);
     }
   }
 
   /* Slave select slave modes */
-  if (mode == ARM_SPI_MODE_SLAVE) {
-    switch (control & ARM_SPI_SS_SLAVE_MODE_Msk) {
-      case ARM_SPI_SS_SLAVE_HW:
+  if (mode == SPI_MODE_SLAVE) {
+    switch (control & SPI_SS_SLAVE_MODE_Msk) {
+      case SPI_SS_SLAVE_HW:
         if (spi->io.nss != NULL) {
           /* Configure NSS pin - SPI NSS alternative function */
           PinConfig(spi->io.nss, &SPI_pin_cfg_af);
-          mode |= ARM_SPI_SS_SLAVE_HW;
+          mode |= SPI_SS_SLAVE_HW;
         }
         else {
           /* NSS pin is not available */
-          return (ARM_SPI_ERROR_SS_MODE);
+          return (SPI_ERROR_SS_MODE);
         }
         break;
 
-      case ARM_SPI_SS_SLAVE_SW:
+      case SPI_SS_SLAVE_SW:
         if (spi->io.nss != NULL) {
           /* Unconfigure NSS pin */
           PinConfig(spi->io.nss, &SPI_pin_cfg_analog);
         }
         /* Enable software slave management */
         cr1 |= SPI_CR1_SSM;
-        mode |= ARM_SPI_SS_SLAVE_SW;
+        mode |= SPI_SS_SLAVE_SW;
         break;
 
       default:
-        return (ARM_SPI_ERROR_SS_MODE);
+        return (SPI_ERROR_SS_MODE);
     }
   }
 
   /* Set SPI Bus Speed */
-  if ((mode & ARM_SPI_CONTROL_Msk) == ARM_SPI_MODE_MASTER) {
+  if ((mode & SPI_CONTROL_Msk) == SPI_MODE_MASTER) {
     br = CalcPrescalerValue(spi, arg);
     if (br < 0)
-      return ARM_DRIVER_ERROR;
+      return DRIVER_ERROR;
     // Save prescaler value
     cr1 |= (br << SPI_CR1_BR_Pos);
   }
@@ -1144,7 +1144,7 @@ static int32_t SPI_Control(uint32_t control, uint32_t arg, const SPI_RESOURCES *
   reg->CR2 = cr2 | SPI_CR2_ERRIE;
   reg->CR1 = cr1;
 
-  if ((mode & ARM_SPI_CONTROL_Msk) == ARM_SPI_MODE_INACTIVE) {
+  if ((mode & SPI_CONTROL_Msk) == SPI_MODE_INACTIVE) {
     info->state &= ~SPI_CONFIGURED;
   }
   else {
@@ -1154,19 +1154,19 @@ static int32_t SPI_Control(uint32_t control, uint32_t arg, const SPI_RESOURCES *
   /* Enable SPI */
   reg->CR1 |= SPI_CR1_SPE;
 
-  return (ARM_DRIVER_OK);
+  return (DRIVER_OK);
 }
 
 /**
- * @fn          ARM_SPI_STATUS SPI_GetStatus (const SPI_RESOURCES *spi)
+ * @fn          SPI_STATUS SPI_GetStatus (const SPI_RESOURCES *spi)
  * @brief       Get SPI status.
  * @param[in]   spi  Pointer to SPI resources
- * @return      SPI status \ref ARM_SPI_STATUS
+ * @return      SPI status \ref SPI_STATUS
  */
 static
-ARM_SPI_STATUS SPI_GetStatus(const SPI_RESOURCES *spi)
+SPI_STATUS SPI_GetStatus(const SPI_RESOURCES *spi)
 {
-  ARM_SPI_STATUS status;
+  SPI_STATUS status;
 
   status.busy       = spi->info->status.busy;
   status.data_lost  = spi->info->status.data_lost;
@@ -1214,7 +1214,7 @@ void SPI_IRQHandler(const SPI_RESOURCES *spi)
       sr = reg->SR;
 
       info->status.data_lost = 1U;
-      event |= ARM_SPI_EVENT_DATA_LOST;
+      event |= SPI_EVENT_DATA_LOST;
     }
 
     if ((sr & SPI_SR_MODF) != 0U) {
@@ -1223,7 +1223,7 @@ void SPI_IRQHandler(const SPI_RESOURCES *spi)
 
       // Write CR1 register to clear MODF flag
       reg->CR1 = cr1;
-      event |= ARM_SPI_EVENT_MODE_FAULT;
+      event |= SPI_EVENT_MODE_FAULT;
     }
   }
 
@@ -1248,12 +1248,12 @@ void SPI_IRQHandler(const SPI_RESOURCES *spi)
         /* Clear busy flag */
         info->status.busy = 0U;
         /* Transfer completed */
-        event |= ARM_SPI_EVENT_TRANSFER_COMPLETE;
+        event |= SPI_EVENT_TRANSFER_COMPLETE;
       }
     }
     else {
       // Unexpected transfer, data lost
-      event |= ARM_SPI_EVENT_DATA_LOST;
+      event |= SPI_EVENT_DATA_LOST;
     }
   }
 
@@ -1280,7 +1280,7 @@ void SPI_IRQHandler(const SPI_RESOURCES *spi)
     }
     else {
       /* Unexpected transfer, data lost */
-      event |= ARM_SPI_EVENT_DATA_LOST;
+      event |= SPI_EVENT_DATA_LOST;
     }
   }
 
@@ -1320,22 +1320,22 @@ void SPI_RX_DMA_Complete(uint32_t events, const SPI_RESOURCES *spi) {
 
   spi->info->status.busy = 0U;
   if (spi->info->cb_event != NULL) {
-    spi->info->cb_event(ARM_SPI_EVENT_TRANSFER_COMPLETE);
+    spi->info->cb_event(SPI_EVENT_TRANSFER_COMPLETE);
   }
 }
 #endif
 
 /* SPI1 */
 #if defined(USE_SPI1)
-static int32_t        SPI1_Initialize          (ARM_SPI_SignalEvent_t pSignalEvent)                { return SPI_Initialize (pSignalEvent, &SPI1_Resources); }
+static int32_t        SPI1_Initialize          (SPI_SignalEvent_t pSignalEvent)                { return SPI_Initialize (pSignalEvent, &SPI1_Resources); }
 static int32_t        SPI1_Uninitialize        (void)                                              { return SPI_Uninitialize (&SPI1_Resources); }
-static int32_t        SPI1_PowerControl        (ARM_POWER_STATE state)                             { return SPI_PowerControl (state, &SPI1_Resources); }
+static int32_t        SPI1_PowerControl        (POWER_STATE state)                             { return SPI_PowerControl (state, &SPI1_Resources); }
 static int32_t        SPI1_Send                (const void *data, uint32_t num)                    { return SPI_Send (data, num, &SPI1_Resources); }
 static int32_t        SPI1_Receive             (void *data, uint32_t num)                          { return SPI_Receive (data, num, &SPI1_Resources); }
 static int32_t        SPI1_Transfer            (const void *data_out, void *data_in, uint32_t num) { return SPI_Transfer (data_out, data_in, num, &SPI1_Resources); }
 static uint32_t       SPI1_GetDataCount        (void)                                              { return SPI_GetDataCount (&SPI1_Resources); }
 static int32_t        SPI1_Control             (uint32_t control, uint32_t arg)                    { return SPI_Control (control, arg, &SPI1_Resources); }
-static ARM_SPI_STATUS SPI1_GetStatus           (void)                                              { return SPI_GetStatus (&SPI1_Resources); }
+static SPI_STATUS SPI1_GetStatus           (void)                                              { return SPI_GetStatus (&SPI1_Resources); }
        void           SPI1_IRQHandler          (void)                                              {        SPI_IRQHandler (&SPI1_Resources); }
 
 #if defined(SPI1_TX_DMA_Instance)
@@ -1345,7 +1345,7 @@ static ARM_SPI_STATUS SPI1_GetStatus           (void)                           
       void            SPI1_RX_DMA_Handler      (uint32_t events)                                   {        SPI_RX_DMA_Complete (events, &SPI1_Resources); }
 #endif
 
-ARM_DRIVER_SPI Driver_SPI1 = {
+DRIVER_SPI Driver_SPI1 = {
   SPIx_GetVersion,
   SPIx_GetCapabilities,
   SPI1_Initialize,
@@ -1362,15 +1362,15 @@ ARM_DRIVER_SPI Driver_SPI1 = {
 
 /* SPI2 */
 #if defined(USE_SPI2)
-static int32_t        SPI2_Initialize          (ARM_SPI_SignalEvent_t pSignalEvent)                { return SPI_Initialize (pSignalEvent, &SPI2_Resources); }
+static int32_t        SPI2_Initialize          (SPI_SignalEvent_t pSignalEvent)                { return SPI_Initialize (pSignalEvent, &SPI2_Resources); }
 static int32_t        SPI2_Uninitialize        (void)                                              { return SPI_Uninitialize (&SPI2_Resources); }
-static int32_t        SPI2_PowerControl        (ARM_POWER_STATE state)                             { return SPI_PowerControl (state, &SPI2_Resources); }
+static int32_t        SPI2_PowerControl        (POWER_STATE state)                             { return SPI_PowerControl (state, &SPI2_Resources); }
 static int32_t        SPI2_Send                (const void *data, uint32_t num)                    { return SPI_Send (data, num, &SPI2_Resources); }
 static int32_t        SPI2_Receive             (void *data, uint32_t num)                          { return SPI_Receive (data, num, &SPI2_Resources); }
 static int32_t        SPI2_Transfer            (const void *data_out, void *data_in, uint32_t num) { return SPI_Transfer (data_out, data_in, num, &SPI2_Resources); }
 static uint32_t       SPI2_GetDataCount        (void)                                              { return SPI_GetDataCount (&SPI2_Resources); }
 static int32_t        SPI2_Control             (uint32_t control, uint32_t arg)                    { return SPI_Control (control, arg, &SPI2_Resources); }
-static ARM_SPI_STATUS SPI2_GetStatus           (void)                                              { return SPI_GetStatus (&SPI2_Resources); }
+static SPI_STATUS SPI2_GetStatus           (void)                                              { return SPI_GetStatus (&SPI2_Resources); }
        void           SPI2_IRQHandler          (void)                                              {        SPI_IRQHandler (&SPI2_Resources); }
 
 #if defined(SPI2_TX_DMA_Instance)
@@ -1380,7 +1380,7 @@ static ARM_SPI_STATUS SPI2_GetStatus           (void)                           
        void           SPI2_RX_DMA_Handler      (uint32_t events)                                   {        SPI_RX_DMA_Complete (events, &SPI2_Resources); }
 #endif
 
-ARM_DRIVER_SPI Driver_SPI2 = {
+DRIVER_SPI Driver_SPI2 = {
   SPIx_GetVersion,
   SPIx_GetCapabilities,
   SPI2_Initialize,
@@ -1397,15 +1397,15 @@ ARM_DRIVER_SPI Driver_SPI2 = {
 
 /* SPI3 */
 #if defined(USE_SPI3)
-static int32_t        SPI3_Initialize          (ARM_SPI_SignalEvent_t pSignalEvent)                { return SPI_Initialize (pSignalEvent, &SPI3_Resources); }
+static int32_t        SPI3_Initialize          (SPI_SignalEvent_t pSignalEvent)                { return SPI_Initialize (pSignalEvent, &SPI3_Resources); }
 static int32_t        SPI3_Uninitialize        (void)                                              { return SPI_Uninitialize (&SPI3_Resources); }
-static int32_t        SPI3_PowerControl        (ARM_POWER_STATE state)                             { return SPI_PowerControl (state, &SPI3_Resources); }
+static int32_t        SPI3_PowerControl        (POWER_STATE state)                             { return SPI_PowerControl (state, &SPI3_Resources); }
 static int32_t        SPI3_Send                (const void *data, uint32_t num)                    { return SPI_Send (data, num, &SPI3_Resources); }
 static int32_t        SPI3_Receive             (void *data, uint32_t num)                          { return SPI_Receive (data, num, &SPI3_Resources); }
 static int32_t        SPI3_Transfer            (const void *data_out, void *data_in, uint32_t num) { return SPI_Transfer (data_out, data_in, num, &SPI3_Resources); }
 static uint32_t       SPI3_GetDataCount        (void)                                              { return SPI_GetDataCount (&SPI3_Resources); }
 static int32_t        SPI3_Control             (uint32_t control, uint32_t arg)                    { return SPI_Control (control, arg, &SPI3_Resources); }
-static ARM_SPI_STATUS SPI3_GetStatus           (void)                                              { return SPI_GetStatus (&SPI3_Resources); }
+static SPI_STATUS SPI3_GetStatus           (void)                                              { return SPI_GetStatus (&SPI3_Resources); }
        void           SPI3_IRQHandler          (void)                                              {        SPI_IRQHandler (&SPI3_Resources); }
 
 #if defined(SPI3_TX_DMA_Instance)
@@ -1415,7 +1415,7 @@ static ARM_SPI_STATUS SPI3_GetStatus           (void)                           
       void            SPI3_RX_DMA_Handler      (uint32_t events)                                   {        SPI_RX_DMA_Complete (events, &SPI3_Resources); }
 #endif
 
-ARM_DRIVER_SPI Driver_SPI3 = {
+DRIVER_SPI Driver_SPI3 = {
   SPIx_GetVersion,
   SPIx_GetCapabilities,
   SPI3_Initialize,

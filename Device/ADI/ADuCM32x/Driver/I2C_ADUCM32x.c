@@ -40,20 +40,20 @@
 
 #define CLOCK_STRETCH_TIME        (5)
 
-#define ARM_I2C_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(1,1) /* driver version */
+#define I2C_DRV_VERSION DRIVER_VERSION_MAJOR_MINOR(1,1) /* driver version */
 
 /*******************************************************************************
  *  global variable definitions (scope: module-local)
  ******************************************************************************/
 
 /* Driver Version */
-static const ARM_DRIVER_VERSION DriverVersion = {
-  ARM_I2C_API_VERSION,
-  ARM_I2C_DRV_VERSION
+static const DRIVER_VERSION DriverVersion = {
+  I2C_API_VERSION,
+  I2C_DRV_VERSION
 };
 
 /* Driver Capabilities */
-static const ARM_I2C_CAPABILITIES DriverCapabilities = {
+static const I2C_CAPABILITIES DriverCapabilities = {
   0            /* supports 10-bit addressing */
 };
 
@@ -161,38 +161,38 @@ void delay(uint32_t us)
 
 /**
  * @brief   Get driver capabilities.
- * @return  \ref ARM_I2C_CAPABILITIES
+ * @return  \ref I2C_CAPABILITIES
  */
 static
-ARM_DRIVER_VERSION I2C_GetVersion(void)
+DRIVER_VERSION I2C_GetVersion(void)
 {
   return (DriverVersion);
 }
 
 /**
  * @brief   Get driver capabilities.
- * @return  \ref ARM_I2C_CAPABILITIES
+ * @return  \ref I2C_CAPABILITIES
  */
 static
-ARM_I2C_CAPABILITIES I2C_GetCapabilities(void)
+I2C_CAPABILITIES I2C_GetCapabilities(void)
 {
   return (DriverCapabilities);
 }
 
 /**
  * @brief       Initialize I2C Interface.
- * @param[in]   cb_event  Pointer to \ref ARM_I2C_SignalEvent
+ * @param[in]   cb_event  Pointer to \ref I2C_SignalEvent
  * @param[in]   i2c   Pointer to I2C resources
  * @return      \ref execution_status
  */
 static
-int32_t I2C_Initialize(ARM_I2C_SignalEvent_t cb_event, I2C_Resources_t *i2c)
+int32_t I2C_Initialize(I2C_SignalEvent_t cb_event, I2C_Resources_t *i2c)
 {
   I2C_Info_t *info;
   I2C_IO_t   *io;
 
   if (i2c->info->flags & I2C_FLAG_INIT) {
-    return (ARM_DRIVER_OK);
+    return (DRIVER_OK);
   }
 
   io   = &i2c->io;
@@ -210,7 +210,7 @@ int32_t I2C_Initialize(ARM_I2C_SignalEvent_t cb_event, I2C_Resources_t *i2c)
   info->cb_event = cb_event;
   info->flags    = I2C_FLAG_INIT;
 
-  return (ARM_DRIVER_OK);
+  return (DRIVER_OK);
 }
 
 /**
@@ -231,7 +231,7 @@ int32_t I2C_Uninitialize(I2C_Resources_t *i2c)
 
   i2c->info->flags = 0U;
 
-  return (ARM_DRIVER_OK);
+  return (DRIVER_OK);
 }
 
 /**
@@ -241,7 +241,7 @@ int32_t I2C_Uninitialize(I2C_Resources_t *i2c)
  * @return      \ref execution_status
  */
 static
-int32_t I2C_PowerControl(ARM_POWER_STATE state, I2C_Resources_t *i2c)
+int32_t I2C_PowerControl(POWER_STATE state, I2C_Resources_t *i2c)
 {
   MMR_I2C_t  *mmr  = i2c->mmr;
   I2C_Info_t *info = i2c->info;
@@ -249,7 +249,7 @@ int32_t I2C_PowerControl(ARM_POWER_STATE state, I2C_Resources_t *i2c)
   Driver_CLK_t *clk = &Driver_CLK;
 
   switch (state) {
-    case ARM_POWER_OFF:
+    case POWER_OFF:
       /* Reset I2C peripheral */
       mmr->I2CMCON  = 0U;
       mmr->I2CSCON  = 0U;
@@ -266,13 +266,13 @@ int32_t I2C_PowerControl(ARM_POWER_STATE state, I2C_Resources_t *i2c)
       info->flags &= (uint16_t)~I2C_FLAG_POWER;
       break;
 
-    case ARM_POWER_FULL:
+    case POWER_FULL:
       if ((info->flags & I2C_FLAG_INIT) == 0U) {
-        return (ARM_DRIVER_ERROR);
+        return (DRIVER_ERROR);
       }
 
       if ((info->flags & I2C_FLAG_POWER) != 0U) {
-        return (ARM_DRIVER_OK);
+        return (DRIVER_OK);
       }
 
       /* Enable I2C peripheral clock */
@@ -293,11 +293,11 @@ int32_t I2C_PowerControl(ARM_POWER_STATE state, I2C_Resources_t *i2c)
       info->flags |= I2C_FLAG_POWER;
       break;
 
-    case ARM_POWER_LOW:
-      return (ARM_DRIVER_ERROR_UNSUPPORTED);
+    case POWER_LOW:
+      return (DRIVER_ERROR_UNSUPPORTED);
   }
 
-  return (ARM_DRIVER_OK);
+  return (DRIVER_OK);
 }
 
 /**
@@ -315,11 +315,11 @@ int32_t I2C_Control(uint32_t control, uint32_t arg, I2C_Resources_t *i2c)
 
   if ((info->flags & I2C_FLAG_POWER) == 0U) {
     /* Driver not powered */
-    return (ARM_DRIVER_ERROR);
+    return (DRIVER_ERROR);
   }
 
   switch (control) {
-    case ARM_I2C_OWN_ADDRESS: {
+    case I2C_OWN_ADDRESS: {
       uint16_t reg_val;
 
       /* Set Own Slave Address */
@@ -334,7 +334,7 @@ int32_t I2C_Control(uint32_t control, uint32_t arg, I2C_Resources_t *i2c)
                   I2CSCON_EARLYTXR |
                   I2CSCON_SLVEN;
 
-        if (arg & ARM_I2C_ADDRESS_GC) {
+        if (arg & I2C_ADDRESS_GC) {
           /* General call enable */
           reg_val |= I2CSCON_GCEN;
         }
@@ -346,7 +346,7 @@ int32_t I2C_Control(uint32_t control, uint32_t arg, I2C_Resources_t *i2c)
     }
       break;
 
-    case ARM_I2C_BUS_SPEED: {
+    case I2C_BUS_SPEED: {
       Driver_CLK_t *clk = &Driver_CLK;
       uint64_t clk_val;
       uint16_t low;
@@ -356,20 +356,20 @@ int32_t I2C_Control(uint32_t control, uint32_t arg, I2C_Resources_t *i2c)
       clk_val = clk->GetFrequency(CLK_FREQ_PCLK);
 
       switch (arg) {
-        case ARM_I2C_BUS_SPEED_STANDARD:
+        case I2C_BUS_SPEED_STANDARD:
           /* Standard Speed (100kHz) */
           low  = (uint16_t)(SCL_LOW_TIME_100K * clk_val / 1000000000U - 1U);
           high = (uint16_t)(SCL_HIGH_TIME_100K  * clk_val / 1000000000U - 2U);
           break;
 
-        case ARM_I2C_BUS_SPEED_FAST:
+        case I2C_BUS_SPEED_FAST:
           /* Fast Speed (400kHz) */
           low  = (uint16_t)(SCL_LOW_TIME_400K * clk_val / 1000000000U - 1U);
           high = (uint16_t)(SCL_HIGH_TIME_400K  * clk_val / 1000000000U - 2U);
           break;
 
         default:
-          return (ARM_DRIVER_ERROR_UNSUPPORTED);
+          return (DRIVER_ERROR_UNSUPPORTED);
       }
 
       mmr->I2CDIV = (uint16_t)(_VAL2FLD(I2CDIV_HIGH, high) |
@@ -381,7 +381,7 @@ int32_t I2C_Control(uint32_t control, uint32_t arg, I2C_Resources_t *i2c)
     }
       break;
 
-    case ARM_I2C_BUS_CLEAR:
+    case I2C_BUS_CLEAR:
       /* Disable I2C interrupts */
       NVIC_DisableIRQ(i2c->irq.master_num);
 
@@ -431,7 +431,7 @@ int32_t I2C_Control(uint32_t control, uint32_t arg, I2C_Resources_t *i2c)
       NVIC_EnableIRQ(i2c->irq.master_num);
       break;
 
-    case ARM_I2C_ABORT_TRANSFER:
+    case I2C_ABORT_TRANSFER:
     {
       IRQn_Type irq_num;
 
@@ -469,10 +469,10 @@ int32_t I2C_Control(uint32_t control, uint32_t arg, I2C_Resources_t *i2c)
       break;
 
     default:
-      return (ARM_DRIVER_ERROR_UNSUPPORTED);
+      return (DRIVER_ERROR_UNSUPPORTED);
   }
 
-  return (ARM_DRIVER_OK);
+  return (DRIVER_OK);
 }
 
 /**
@@ -497,21 +497,21 @@ int32_t I2C_MasterTransmit(uint32_t         addr,
   I2C_XferInfo_t *xx = &info->tx;
 
   if ((data == NULL) || (num == 0U)) {
-    return (ARM_DRIVER_ERROR_PARAMETER);
+    return (DRIVER_ERROR_PARAMETER);
   }
 
-  if ((addr & ~(ARM_I2C_ADDRESS_10BIT | ARM_I2C_ADDRESS_GC)) > 0x3FFU) {
-    return (ARM_DRIVER_ERROR_PARAMETER);
+  if ((addr & ~(I2C_ADDRESS_10BIT | I2C_ADDRESS_GC)) > 0x3FFU) {
+    return (DRIVER_ERROR_PARAMETER);
   }
 
   if ((info->flags & I2C_FLAG_SETUP) == 0U) {
     /* Driver not yet configured */
-    return (ARM_DRIVER_ERROR);
+    return (DRIVER_ERROR);
   }
 
   if ((info->status & I2C_STATUS_BUSY) != 0U) {
     /* Transfer operation in progress */
-    return (ARM_DRIVER_ERROR_BUSY);
+    return (DRIVER_ERROR_BUSY);
   }
 
   /* Disable I2C interrupts */
@@ -536,7 +536,7 @@ int32_t I2C_MasterTransmit(uint32_t         addr,
   /* Enable I2C interrupts */
   NVIC_EnableIRQ(i2c->irq.master_num);
 
-  return (ARM_DRIVER_OK);
+  return (DRIVER_OK);
 }
 
 /**
@@ -561,21 +561,21 @@ int32_t I2C_MasterReceive(uint32_t         addr,
   I2C_XferInfo_t *xx = &info->rx;
 
   if ((data == NULL) || (num == 0U)) {
-    return (ARM_DRIVER_ERROR_PARAMETER);
+    return (DRIVER_ERROR_PARAMETER);
   }
 
-  if ((addr & ~(ARM_I2C_ADDRESS_10BIT | ARM_I2C_ADDRESS_GC)) > 0x3FFU) {
-    return (ARM_DRIVER_ERROR_PARAMETER);
+  if ((addr & ~(I2C_ADDRESS_10BIT | I2C_ADDRESS_GC)) > 0x3FFU) {
+    return (DRIVER_ERROR_PARAMETER);
   }
 
   if ((info->flags & I2C_FLAG_SETUP) == 0U) {
     /* Driver not yet configured */
-    return (ARM_DRIVER_ERROR);
+    return (DRIVER_ERROR);
   }
 
   if ((info->status & I2C_STATUS_BUSY) != 0U) {
     /* Transfer operation in progress */
-    return (ARM_DRIVER_ERROR_BUSY);
+    return (DRIVER_ERROR_BUSY);
   }
 
   /* Disable I2C interrupts */
@@ -598,7 +598,7 @@ int32_t I2C_MasterReceive(uint32_t         addr,
   /* Enable I2C interrupts */
   NVIC_EnableIRQ(i2c->irq.master_num);
 
-  return (ARM_DRIVER_OK);
+  return (DRIVER_OK);
 }
 
 /**
@@ -616,12 +616,12 @@ int32_t I2C_SlaveTransmit(const uint8_t *data, uint32_t num, I2C_Resources_t *i2
   I2C_XferInfo_t *xx = &info->tx;
 
   if ((data == NULL) || (num == 0U)) {
-    return (ARM_DRIVER_ERROR_PARAMETER);
+    return (DRIVER_ERROR_PARAMETER);
   }
 
   if ((info->status & I2C_STATUS_BUSY) != 0U) {
     /* Transfer operation in progress */
-    return (ARM_DRIVER_ERROR_BUSY);
+    return (DRIVER_ERROR_BUSY);
   }
 
   /* Disable I2C interrupts */
@@ -645,7 +645,7 @@ int32_t I2C_SlaveTransmit(const uint8_t *data, uint32_t num, I2C_Resources_t *i2
   /* Enable I2C interrupts */
   NVIC_EnableIRQ(i2c->irq.slave_num);
 
-  return (ARM_DRIVER_OK);
+  return (DRIVER_OK);
 }
 
 /**
@@ -662,12 +662,12 @@ int32_t I2C_SlaveReceive(uint8_t *data, uint32_t num, I2C_Resources_t *i2c)
   I2C_XferInfo_t *xx = &info->rx;
 
   if ((data == NULL) || (num == 0U)) {
-    return (ARM_DRIVER_ERROR_PARAMETER);
+    return (DRIVER_ERROR_PARAMETER);
   }
 
   if ((info->status & I2C_STATUS_BUSY) != 0U) {
     /* Transfer operation in progress */
-    return (ARM_DRIVER_ERROR_BUSY);
+    return (DRIVER_ERROR_BUSY);
   }
 
   /* Disable I2C interrupts */
@@ -683,7 +683,7 @@ int32_t I2C_SlaveReceive(uint8_t *data, uint32_t num, I2C_Resources_t *i2c)
   /* Enable I2C interrupts */
   NVIC_EnableIRQ(i2c->irq.slave_num);
 
-  return (ARM_DRIVER_OK);
+  return (DRIVER_OK);
 }
 
 /**
@@ -710,15 +710,15 @@ int32_t I2C_GetDataCount(I2C_Resources_t *i2c)
 }
 
 /**
- * @fn          ARM_I2C_STATUS I2Cx_GetStatus(I2C_RESOURCES *i2c)
+ * @fn          I2C_STATUS I2Cx_GetStatus(I2C_RESOURCES *i2c)
  * @brief       Get I2C status.
  * @param[in]   i2c   Pointer to I2C resources
- * @return      I2C status \ref ARM_I2C_STATUS
+ * @return      I2C status \ref I2C_STATUS
  */
 static
-ARM_I2C_STATUS I2C_GetStatus(I2C_Resources_t *i2c)
+I2C_STATUS I2C_GetStatus(I2C_Resources_t *i2c)
 {
-  ARM_I2C_STATUS *status = (ARM_I2C_STATUS *)&i2c->info->status;
+  I2C_STATUS *status = (I2C_STATUS *)&i2c->info->status;
 
   return (*status);
 }
@@ -747,9 +747,9 @@ void I2C_Master_IRQHandler(I2C_Resources_t *i2c)
     /* Disable master */
     cntrl = 0U;
     info->status = (info->status & ~I2C_STATUS_BUSY) | I2C_STATUS_BUS_ERROR;
-    event = ARM_I2C_EVENT_BUS_ERROR      |
-            ARM_I2C_EVENT_TRANSFER_DONE  |
-            ARM_I2C_EVENT_TRANSFER_INCOMPLETE;
+    event = I2C_EVENT_BUS_ERROR      |
+            I2C_EVENT_TRANSFER_DONE  |
+            I2C_EVENT_TRANSFER_INCOMPLETE;
     goto error;
   }
 
@@ -759,9 +759,9 @@ void I2C_Master_IRQHandler(I2C_Resources_t *i2c)
     cntrl = 0U;
     info->status = (info->status & ~(I2C_STATUS_BUSY | I2C_STATUS_MASTER)) |
                    I2C_STATUS_ARBITRATION_LOST;
-    event = ARM_I2C_EVENT_ARBITRATION_LOST |
-            ARM_I2C_EVENT_TRANSFER_DONE    |
-            ARM_I2C_EVENT_TRANSFER_INCOMPLETE;
+    event = I2C_EVENT_ARBITRATION_LOST |
+            I2C_EVENT_TRANSFER_DONE    |
+            I2C_EVENT_TRANSFER_INCOMPLETE;
     goto error;
   }
 
@@ -785,7 +785,7 @@ void I2C_Master_IRQHandler(I2C_Resources_t *i2c)
           return;
         }
         info->status &= ~I2C_STATUS_BUSY;
-        event |= ARM_I2C_EVENT_TRANSFER_DONE;
+        event |= I2C_EVENT_TRANSFER_DONE;
       }
       cntrl &= ~I2CMCON_IENMTX;
     }
@@ -800,7 +800,7 @@ void I2C_Master_IRQHandler(I2C_Resources_t *i2c)
         if (xx->cnt == xx->num) {
           if ((info->xfer & XFER_PENDING) != 0U) {
             info->status &= ~I2C_STATUS_BUSY;
-            event |= ARM_I2C_EVENT_TRANSFER_DONE;
+            event |= I2C_EVENT_TRANSFER_DONE;
           }
           cntrl &= ~I2CMCON_IENMRX;
         }
@@ -814,13 +814,13 @@ void I2C_Master_IRQHandler(I2C_Resources_t *i2c)
 
     if ((info->status & I2C_STATUS_BUSY) != 0U) {
       info->status &= ~I2C_STATUS_BUSY;
-      event |= ARM_I2C_EVENT_TRANSFER_DONE;
+      event |= I2C_EVENT_TRANSFER_DONE;
 
       xx = info->status & I2C_STATUS_RECEIVER ? &info->rx : &info->tx;
 
       if ((info->xfer & (XFER_MASTER_NADDR | XFER_MASTER_NDATA)) != 0U) {
         if ((info->xfer & XFER_MASTER_NADDR) != 0U) {
-          event |= ARM_I2C_EVENT_ADDRESS_NACK;
+          event |= I2C_EVENT_ADDRESS_NACK;
           xx->cnt = 0U;
         }
         else {
@@ -830,7 +830,7 @@ void I2C_Master_IRQHandler(I2C_Resources_t *i2c)
       }
 
       if (xx->cnt < xx->num) {
-        event |= ARM_I2C_EVENT_TRANSFER_INCOMPLETE;
+        event |= I2C_EVENT_TRANSFER_INCOMPLETE;
       }
     }
   }
@@ -874,7 +874,7 @@ void I2C_Slave_IRQHandler(I2C_Resources_t *i2c)
         mmr->I2CSCON &= (uint16_t)~I2CSCON_IENSTX;
         if (info->cb_event != NULL) {
           info->status &= ~I2C_STATUS_BUSY;
-          info->cb_event(ARM_I2C_EVENT_SLAVE_TRANSMIT);
+          info->cb_event(I2C_EVENT_SLAVE_TRANSMIT);
         }
       }
 
@@ -893,9 +893,9 @@ void I2C_Slave_IRQHandler(I2C_Resources_t *i2c)
         xx->num = 0U;
         /* Transfer completed */
         if (info->cb_event != NULL) {
-          event = ARM_I2C_EVENT_TRANSFER_DONE;
+          event = I2C_EVENT_TRANSFER_DONE;
           if ((info->status & I2C_STATUS_GENERAL_CALL) != 0U) {
-            event |= ARM_I2C_EVENT_GENERAL_CALL;
+            event |= I2C_EVENT_GENERAL_CALL;
           }
           info->cb_event(event);
         }
@@ -913,7 +913,7 @@ void I2C_Slave_IRQHandler(I2C_Resources_t *i2c)
         if (xx->num == 0U) {
           if (info->cb_event != NULL) {
             info->status &= ~I2C_STATUS_BUSY;
-            info->cb_event(ARM_I2C_EVENT_SLAVE_RECEIVE);
+            info->cb_event(I2C_EVENT_SLAVE_RECEIVE);
           }
         }
 
@@ -929,9 +929,9 @@ void I2C_Slave_IRQHandler(I2C_Resources_t *i2c)
           xx->num = 0U;
           /* Transfer completed */
           if (info->cb_event != NULL) {
-            event = ARM_I2C_EVENT_TRANSFER_DONE;
+            event = I2C_EVENT_TRANSFER_DONE;
             if ((info->status & I2C_STATUS_GENERAL_CALL) != 0U) {
-              event |= ARM_I2C_EVENT_GENERAL_CALL;
+              event |= I2C_EVENT_GENERAL_CALL;
             }
             info->cb_event(event);
           }
@@ -945,18 +945,18 @@ void I2C_Slave_IRQHandler(I2C_Resources_t *i2c)
     if ((info->status & I2C_STATUS_BUSY) != 0U) {
       info->status &= ~I2C_STATUS_BUSY;
       info->xfer &= (uint16_t)~(XFER_SLAVE_TX | XFER_SLAVE_RX);
-      event = ARM_I2C_EVENT_TRANSFER_DONE;
+      event = I2C_EVENT_TRANSFER_DONE;
 
       xx = info->status & I2C_STATUS_RECEIVER ? &info->rx : &info->tx;
       if (xx->cnt < xx->num) {
-        event |= ARM_I2C_EVENT_TRANSFER_INCOMPLETE;
+        event |= I2C_EVENT_TRANSFER_INCOMPLETE;
       }
 
       xx->num = 0U;
 
       if (info->cb_event != NULL) {
         if ((info->status & I2C_STATUS_GENERAL_CALL) != 0U) {
-          event |= ARM_I2C_EVENT_GENERAL_CALL;
+          event |= I2C_EVENT_GENERAL_CALL;
         }
         info->cb_event(event);
       }

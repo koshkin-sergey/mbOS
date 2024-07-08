@@ -21,16 +21,16 @@
 
 #include "asm/GPIO_STM32F1xx.h"
 
-#define ARM_USBD_DRV_VERSION          ARM_DRIVER_VERSION_MAJOR_MINOR(1,0)
+#define USBD_DRV_VERSION          DRIVER_VERSION_MAJOR_MINOR(1,0)
 
 // Driver Version
-static const ARM_DRIVER_VERSION usbd_driver_version = {
-  ARM_USBD_API_VERSION,
-  ARM_USBD_DRV_VERSION
+static const DRIVER_VERSION usbd_driver_version = {
+  USBD_API_VERSION,
+  USBD_DRV_VERSION
 };
 
 // Driver Capabilities
-static const ARM_USBD_CAPABILITIES usbd_driver_capabilities = {
+static const USBD_CAPABILITIES usbd_driver_capabilities = {
   0U,   // VBUS Detection
   0U,   // Event VBUS On
   0U    // Event VBUS Off
@@ -84,43 +84,43 @@ void ConPinConfig(const GPIO_PIN_CFG_t *pin_cfg)
  ******************************************************************************/
 
 /**
- * @fn          ARM_DRIVER_VERSION USBD_GetVersion(void)
+ * @fn          DRIVER_VERSION USBD_GetVersion(void)
  * @brief       Get driver version.
- * @return      \ref ARM_DRIVER_VERSION
+ * @return      \ref DRIVER_VERSION
  */
 static
-ARM_DRIVER_VERSION USBD_GetVersion(void)
+DRIVER_VERSION USBD_GetVersion(void)
 {
   return (usbd_driver_version);
 }
 
 /**
- * @fn          ARM_USBD_CAPABILITIES USBD_GetCapabilities(void)
+ * @fn          USBD_CAPABILITIES USBD_GetCapabilities(void)
  * @brief       Get driver capabilities.
- * @return      \ref ARM_USBD_CAPABILITIES
+ * @return      \ref USBD_CAPABILITIES
  */
 static
-ARM_USBD_CAPABILITIES USBD_GetCapabilities(void)
+USBD_CAPABILITIES USBD_GetCapabilities(void)
 {
   return (usbd_driver_capabilities);
 }
 
 /**
- * @fn          int32_t USBD_Initialize(ARM_USBD_SignalDeviceEvent_t   cb_device_event,
-                                        ARM_USBD_SignalEndpointEvent_t cb_endpoint_event)
+ * @fn          int32_t USBD_Initialize(USBD_SignalDeviceEvent_t   cb_device_event,
+                                        USBD_SignalEndpointEvent_t cb_endpoint_event)
  * @brief       Initialize USB Device Interface.
- * @param[in]   cb_device_event    Pointer to \ref ARM_USBD_SignalDeviceEvent
- * @param[in]   cb_endpoint_event  Pointer to \ref ARM_USBD_SignalEndpointEvent
+ * @param[in]   cb_device_event    Pointer to \ref USBD_SignalDeviceEvent
+ * @param[in]   cb_endpoint_event  Pointer to \ref USBD_SignalEndpointEvent
  * @return      \ref execution_status
  */
 static
-int32_t USBD_Initialize(ARM_USBD_SignalDeviceEvent_t   cb_device_event,
-                        ARM_USBD_SignalEndpointEvent_t cb_endpoint_event)
+int32_t USBD_Initialize(USBD_SignalDeviceEvent_t   cb_device_event,
+                        USBD_SignalEndpointEvent_t cb_endpoint_event)
 {
   USBD_INFO *info = USBD_Resources.info;
 
   if (info->state & USBD_INITIALIZED) {
-    return (ARM_DRIVER_OK);
+    return (DRIVER_OK);
   }
 
   /* Initialize Run-Time Resources */
@@ -134,7 +134,7 @@ int32_t USBD_Initialize(ARM_USBD_SignalDeviceEvent_t   cb_device_event,
 
   info->state = USBD_INITIALIZED;
 
-  return (ARM_DRIVER_OK);
+  return (DRIVER_OK);
 }
 
 /**
@@ -148,7 +148,7 @@ int32_t USBD_Uninitialize(void)
   USBD_INFO *info = USBD_Resources.info;
 
   if (info->state == 0U) {
-    return (ARM_DRIVER_OK);
+    return (DRIVER_OK);
   }
 
   /* Deinitialize Run-Time Resources */
@@ -163,17 +163,17 @@ int32_t USBD_Uninitialize(void)
   /* Clear state */
   info->state = 0U;
 
-  return (ARM_DRIVER_OK);
+  return (DRIVER_OK);
 }
 
 /**
- * @fn          int32_t USBD_PowerControl(ARM_POWER_STATE state)
+ * @fn          int32_t USBD_PowerControl(POWER_STATE state)
  * @brief       Control USB Device Interface Power.
  * @param[in]   state  Power state
  * @return      \ref execution_status
  */
 static
-int32_t USBD_PowerControl(ARM_POWER_STATE state)
+int32_t USBD_PowerControl(POWER_STATE state)
 {
 
 }
@@ -201,12 +201,12 @@ int32_t USBD_DeviceDisconnect(void)
 }
 
 /**
- * @fn          ARM_USBD_STATE USBD_DeviceGetState(void)
+ * @fn          USBD_STATE USBD_DeviceGetState(void)
  * @brief       Get current USB Device State.
- * @return      Device State \ref ARM_USBD_STATE
+ * @return      Device State \ref USBD_STATE
  */
 static
-ARM_USBD_STATE USBD_DeviceGetState(void)
+USBD_STATE USBD_DeviceGetState(void)
 {
 
 }
@@ -252,7 +252,7 @@ int32_t USBD_ReadSetupPacket(uint8_t *setup)
  * @param[in]   ep_addr  Endpoint Address
  *               - ep_addr.0..7: Address
  *               - ep_addr.7:    Direction
- * @param[in]   ep_type  Endpoint Type (ARM_USB_ENDPOINT_xxx)
+ * @param[in]   ep_type  Endpoint Type (USB_ENDPOINT_xxx)
  * @param[in]   ep_max_packet_size Endpoint Maximum Packet Size
  * @return      \ref execution_status
  */
@@ -348,7 +348,7 @@ uint16_t USBD_GetFrameNumber(void)
 
 }
 
-ARM_DRIVER_USBD Driver_USBD0 = {
+DRIVER_USBD Driver_USBD0 = {
   USBD_GetVersion,
   USBD_GetCapabilities,
   USBD_Initialize,

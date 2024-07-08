@@ -23,17 +23,17 @@
 
 /* History:
  *  Version 2.4
- *    Removed volatile from ARM_MCI_STATUS
+ *    Removed volatile from MCI_STATUS
  *  Version 2.3
- *    ARM_MCI_STATUS made volatile
+ *    MCI_STATUS made volatile
  *  Version 2.2
- *    Added timeout and error flags to ARM_MCI_STATUS
+ *    Added timeout and error flags to MCI_STATUS
  *    Added support for controlling optional RST_n pin (eMMC)
- *    Removed explicit Clock Control (ARM_MCI_CONTROL_CLOCK)
- *    Removed event ARM_MCI_EVENT_BOOT_ACK_TIMEOUT
+ *    Removed explicit Clock Control (MCI_CONTROL_CLOCK)
+ *    Removed event MCI_EVENT_BOOT_ACK_TIMEOUT
  *  Version 2.1
  *    Decoupled SPI mode from MCI driver
- *    Replaced function ARM_MCI_CardSwitchRead with ARM_MCI_ReadCD and ARM_MCI_ReadWP
+ *    Replaced function MCI_CardSwitchRead with MCI_ReadCD and MCI_ReadWP
  *  Version 2.0
  *    Added support for:
  *      SD UHS-I (Ultra High Speed)
@@ -45,18 +45,18 @@
  *      Stream Data transfer (MMC)
  *      VCCQ Power Supply Control (eMMC)
  *      Command Completion Signal (CCS) for CE-ATA
- *    Added ARM_MCI_Control function
- *    Added ARM_MCI_GetStatus function
- *    Removed ARM_MCI_BusMode, ARM_MCI_BusDataWidth, ARM_MCI_BusSingaling functions
- *      (replaced by ARM_MCI_Control)
- *    Changed ARM_MCI_CardPower function (voltage parameter)
- *    Changed ARM_MCI_SendCommnad function (flags parameter)
- *    Changed ARM_MCI_SetupTransfer function (mode parameter)
- *    Removed ARM_MCI_ReadTransfer and ARM_MCI_WriteTransfer functions
- *    Changed prefix ARM_DRV -> ARM_DRIVER
+ *    Added MCI_Control function
+ *    Added MCI_GetStatus function
+ *    Removed MCI_BusMode, MCI_BusDataWidth, MCI_BusSingaling functions
+ *      (replaced by MCI_Control)
+ *    Changed MCI_CardPower function (voltage parameter)
+ *    Changed MCI_SendCommnad function (flags parameter)
+ *    Changed MCI_SetupTransfer function (mode parameter)
+ *    Removed MCI_ReadTransfer and MCI_WriteTransfer functions
+ *    Changed prefix DRV -> DRIVER
  *    Changed return values of some functions to int32_t
  *  Version 1.10
- *    Namespace prefix ARM_ added
+ *    Namespace prefix  added
  *  Version 1.00
  *    Initial release
  */
@@ -71,110 +71,110 @@ extern "C"
 
 #include "Driver_Common.h"
 
-#define ARM_MCI_API_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(2,4)  /* API version */
+#define MCI_API_VERSION      DRIVER_VERSION_MAJOR_MINOR(2,4)  /* API version */
 
 
-#define _ARM_Driver_MCI_(n)      Driver_MCI##n
-#define  ARM_Driver_MCI_(n) _ARM_Driver_MCI_(n)
+#define _Driver_MCI_(n)      Driver_MCI##n
+#define  Driver_MCI_(n)     _Driver_MCI_(n)
 
 
 /****** MCI Send Command Flags *****/
-#define ARM_MCI_RESPONSE_Pos             0
-#define ARM_MCI_RESPONSE_Msk            (3UL << ARM_MCI_RESPONSE_Pos)
-#define ARM_MCI_RESPONSE_NONE           (0UL << ARM_MCI_RESPONSE_Pos)   ///< No response expected (default)
-#define ARM_MCI_RESPONSE_SHORT          (1UL << ARM_MCI_RESPONSE_Pos)   ///< Short response (48-bit)
-#define ARM_MCI_RESPONSE_SHORT_BUSY     (2UL << ARM_MCI_RESPONSE_Pos)   ///< Short response with busy signal (48-bit)
-#define ARM_MCI_RESPONSE_LONG           (3UL << ARM_MCI_RESPONSE_Pos)   ///< Long response (136-bit)
+#define MCI_RESPONSE_Pos             0
+#define MCI_RESPONSE_Msk            (3UL << MCI_RESPONSE_Pos)
+#define MCI_RESPONSE_NONE           (0UL << MCI_RESPONSE_Pos)   ///< No response expected (default)
+#define MCI_RESPONSE_SHORT          (1UL << MCI_RESPONSE_Pos)   ///< Short response (48-bit)
+#define MCI_RESPONSE_SHORT_BUSY     (2UL << MCI_RESPONSE_Pos)   ///< Short response with busy signal (48-bit)
+#define MCI_RESPONSE_LONG           (3UL << MCI_RESPONSE_Pos)   ///< Long response (136-bit)
 
-#define ARM_MCI_RESPONSE_INDEX          (1UL << 2)  ///< Check command index in response
-#define ARM_MCI_RESPONSE_CRC            (1UL << 3)  ///< Check CRC in response
+#define MCI_RESPONSE_INDEX          (1UL << 2)  ///< Check command index in response
+#define MCI_RESPONSE_CRC            (1UL << 3)  ///< Check CRC in response
 
-#define ARM_MCI_WAIT_BUSY               (1UL << 4)  ///< Wait until busy before sending the command
+#define MCI_WAIT_BUSY               (1UL << 4)  ///< Wait until busy before sending the command
 
-#define ARM_MCI_TRANSFER_DATA           (1UL << 5)  ///< Activate Data transfer
+#define MCI_TRANSFER_DATA           (1UL << 5)  ///< Activate Data transfer
 
-#define ARM_MCI_CARD_INITIALIZE         (1UL << 6)  ///< Execute Memory Card initialization sequence
+#define MCI_CARD_INITIALIZE         (1UL << 6)  ///< Execute Memory Card initialization sequence
 
-#define ARM_MCI_INTERRUPT_COMMAND       (1UL << 7)  ///< Send Interrupt command (CMD40 - MMC only)
-#define ARM_MCI_INTERRUPT_RESPONSE      (1UL << 8)  ///< Send Interrupt response (CMD40 - MMC only)
+#define MCI_INTERRUPT_COMMAND       (1UL << 7)  ///< Send Interrupt command (CMD40 - MMC only)
+#define MCI_INTERRUPT_RESPONSE      (1UL << 8)  ///< Send Interrupt response (CMD40 - MMC only)
 
-#define ARM_MCI_BOOT_OPERATION          (1UL << 9)  ///< Execute Boot operation (MMC only)
-#define ARM_MCI_BOOT_ALTERNATIVE        (1UL << 10) ///< Execute Alternative Boot operation (MMC only)
-#define ARM_MCI_BOOT_ACK                (1UL << 11) ///< Expect Boot Acknowledge (MMC only)
+#define MCI_BOOT_OPERATION          (1UL << 9)  ///< Execute Boot operation (MMC only)
+#define MCI_BOOT_ALTERNATIVE        (1UL << 10) ///< Execute Alternative Boot operation (MMC only)
+#define MCI_BOOT_ACK                (1UL << 11) ///< Expect Boot Acknowledge (MMC only)
 
-#define ARM_MCI_CCSD                    (1UL << 12) ///< Send Command Completion Signal Disable (CCSD) for CE-ATA device
-#define ARM_MCI_CCS                     (1UL << 13) ///< Expect Command Completion Signal (CCS) for CE-ATA device
+#define MCI_CCSD                    (1UL << 12) ///< Send Command Completion Signal Disable (CCSD) for CE-ATA device
+#define MCI_CCS                     (1UL << 13) ///< Expect Command Completion Signal (CCS) for CE-ATA device
 
 
 /****** MCI Setup Transfer Mode *****/
-#define ARM_MCI_TRANSFER_READ           (0UL << 0)  ///< Data Read Transfer (from MCI)
-#define ARM_MCI_TRANSFER_WRITE          (1UL << 0)  ///< Data Write Transfer (to MCI)
-#define ARM_MCI_TRANSFER_BLOCK          (0UL << 1)  ///< Block Data transfer (default)
-#define ARM_MCI_TRANSFER_STREAM         (1UL << 1)  ///< Stream Data transfer (MMC only)
+#define MCI_TRANSFER_READ           (0UL << 0)  ///< Data Read Transfer (from MCI)
+#define MCI_TRANSFER_WRITE          (1UL << 0)  ///< Data Write Transfer (to MCI)
+#define MCI_TRANSFER_BLOCK          (0UL << 1)  ///< Block Data transfer (default)
+#define MCI_TRANSFER_STREAM         (1UL << 1)  ///< Stream Data transfer (MMC only)
 
 
 /****** MCI Control Codes *****/
-#define ARM_MCI_BUS_SPEED               (0x01UL)    ///< Set Bus Speed; arg = requested speed in bits/s; returns configured speed in bits/s
-#define ARM_MCI_BUS_SPEED_MODE          (0x02UL)    ///< Set Bus Speed Mode as specified with arg
-#define ARM_MCI_BUS_CMD_MODE            (0x03UL)    ///< Set CMD Line Mode as specified with arg
-#define ARM_MCI_BUS_DATA_WIDTH          (0x04UL)    ///< Set Bus Data Width as specified with arg
-#define ARM_MCI_DRIVER_STRENGTH         (0x05UL)    ///< Set SD UHS-I Driver Strength as specified with arg 
-#define ARM_MCI_CONTROL_RESET           (0x06UL)    ///< Control optional RST_n Pin (eMMC); arg: 0=inactive, 1=active 
-#define ARM_MCI_CONTROL_CLOCK_IDLE      (0x07UL)    ///< Control Clock generation on CLK Pin when idle; arg: 0=disabled, 1=enabled
-#define ARM_MCI_UHS_TUNING_OPERATION    (0x08UL)    ///< Sampling clock Tuning operation (SD UHS-I); arg: 0=reset, 1=execute
-#define ARM_MCI_UHS_TUNING_RESULT       (0x09UL)    ///< Sampling clock Tuning result (SD UHS-I); returns: 0=done, 1=in progress, -1=error
-#define ARM_MCI_DATA_TIMEOUT            (0x0AUL)    ///< Set Data timeout; arg = timeout in bus cycles
-#define ARM_MCI_CSS_TIMEOUT             (0x0BUL)    ///< Set Command Completion Signal (CCS) timeout; arg = timeout in bus cycles
-#define ARM_MCI_MONITOR_SDIO_INTERRUPT  (0x0CUL)    ///< Monitor SD I/O interrupt: arg: 0=disabled, 1=enabled
-#define ARM_MCI_CONTROL_READ_WAIT       (0x0DUL)    ///< Control Read/Wait for SD I/O; arg: 0=disabled, 1=enabled
-#define ARM_MCI_SUSPEND_TRANSFER        (0x0EUL)    ///< Suspend Data transfer (SD I/O); returns number of remaining bytes to transfer
-#define ARM_MCI_RESUME_TRANSFER         (0x0FUL)    ///< Resume Data transfer (SD I/O)
+#define MCI_BUS_SPEED               (0x01UL)    ///< Set Bus Speed; arg = requested speed in bits/s; returns configured speed in bits/s
+#define MCI_BUS_SPEED_MODE          (0x02UL)    ///< Set Bus Speed Mode as specified with arg
+#define MCI_BUS_CMD_MODE            (0x03UL)    ///< Set CMD Line Mode as specified with arg
+#define MCI_BUS_DATA_WIDTH          (0x04UL)    ///< Set Bus Data Width as specified with arg
+#define MCI_DRIVER_STRENGTH         (0x05UL)    ///< Set SD UHS-I Driver Strength as specified with arg 
+#define MCI_CONTROL_RESET           (0x06UL)    ///< Control optional RST_n Pin (eMMC); arg: 0=inactive, 1=active 
+#define MCI_CONTROL_CLOCK_IDLE      (0x07UL)    ///< Control Clock generation on CLK Pin when idle; arg: 0=disabled, 1=enabled
+#define MCI_UHS_TUNING_OPERATION    (0x08UL)    ///< Sampling clock Tuning operation (SD UHS-I); arg: 0=reset, 1=execute
+#define MCI_UHS_TUNING_RESULT       (0x09UL)    ///< Sampling clock Tuning result (SD UHS-I); returns: 0=done, 1=in progress, -1=error
+#define MCI_DATA_TIMEOUT            (0x0AUL)    ///< Set Data timeout; arg = timeout in bus cycles
+#define MCI_CSS_TIMEOUT             (0x0BUL)    ///< Set Command Completion Signal (CCS) timeout; arg = timeout in bus cycles
+#define MCI_MONITOR_SDIO_INTERRUPT  (0x0CUL)    ///< Monitor SD I/O interrupt: arg: 0=disabled, 1=enabled
+#define MCI_CONTROL_READ_WAIT       (0x0DUL)    ///< Control Read/Wait for SD I/O; arg: 0=disabled, 1=enabled
+#define MCI_SUSPEND_TRANSFER        (0x0EUL)    ///< Suspend Data transfer (SD I/O); returns number of remaining bytes to transfer
+#define MCI_RESUME_TRANSFER         (0x0FUL)    ///< Resume Data transfer (SD I/O)
 
 /*----- MCI Bus Speed Mode -----*/
-#define ARM_MCI_BUS_DEFAULT_SPEED       (0x00UL)    ///< SD/MMC: Default Speed mode up to 25/26MHz
-#define ARM_MCI_BUS_HIGH_SPEED          (0x01UL)    ///< SD/MMC: High    Speed mode up to 50/52MHz
-#define ARM_MCI_BUS_UHS_SDR12           (0x02UL)    ///< SD: SDR12  (Single Data Rate) up to  25MHz,  12.5MB/s: UHS-I (Ultra High Speed) 1.8V signaling
-#define ARM_MCI_BUS_UHS_SDR25           (0x03UL)    ///< SD: SDR25  (Single Data Rate) up to  50MHz,  25  MB/s: UHS-I (Ultra High Speed) 1.8V signaling
-#define ARM_MCI_BUS_UHS_SDR50           (0x04UL)    ///< SD: SDR50  (Single Data Rate) up to 100MHz,  50  MB/s: UHS-I (Ultra High Speed) 1.8V signaling
-#define ARM_MCI_BUS_UHS_SDR104          (0x05UL)    ///< SD: SDR104 (Single Data Rate) up to 208MHz, 104  MB/s: UHS-I (Ultra High Speed) 1.8V signaling
-#define ARM_MCI_BUS_UHS_DDR50           (0x06UL)    ///< SD: DDR50  (Dual Data Rate)   up to  50MHz,  50  MB/s: UHS-I (Ultra High Speed) 1.8V signaling
+#define MCI_BUS_DEFAULT_SPEED       (0x00UL)    ///< SD/MMC: Default Speed mode up to 25/26MHz
+#define MCI_BUS_HIGH_SPEED          (0x01UL)    ///< SD/MMC: High    Speed mode up to 50/52MHz
+#define MCI_BUS_UHS_SDR12           (0x02UL)    ///< SD: SDR12  (Single Data Rate) up to  25MHz,  12.5MB/s: UHS-I (Ultra High Speed) 1.8V signaling
+#define MCI_BUS_UHS_SDR25           (0x03UL)    ///< SD: SDR25  (Single Data Rate) up to  50MHz,  25  MB/s: UHS-I (Ultra High Speed) 1.8V signaling
+#define MCI_BUS_UHS_SDR50           (0x04UL)    ///< SD: SDR50  (Single Data Rate) up to 100MHz,  50  MB/s: UHS-I (Ultra High Speed) 1.8V signaling
+#define MCI_BUS_UHS_SDR104          (0x05UL)    ///< SD: SDR104 (Single Data Rate) up to 208MHz, 104  MB/s: UHS-I (Ultra High Speed) 1.8V signaling
+#define MCI_BUS_UHS_DDR50           (0x06UL)    ///< SD: DDR50  (Dual Data Rate)   up to  50MHz,  50  MB/s: UHS-I (Ultra High Speed) 1.8V signaling
 
 /*----- MCI CMD Line Mode -----*/
-#define ARM_MCI_BUS_CMD_PUSH_PULL       (0x00UL)    ///< Push-Pull CMD line (default)
-#define ARM_MCI_BUS_CMD_OPEN_DRAIN      (0x01UL)    ///< Open Drain CMD line (MMC only)
+#define MCI_BUS_CMD_PUSH_PULL       (0x00UL)    ///< Push-Pull CMD line (default)
+#define MCI_BUS_CMD_OPEN_DRAIN      (0x01UL)    ///< Open Drain CMD line (MMC only)
 
 /*----- MCI Bus Data Width -----*/
-#define ARM_MCI_BUS_DATA_WIDTH_1        (0x00UL)    ///< Bus data width: 1 bit (default)
-#define ARM_MCI_BUS_DATA_WIDTH_4        (0x01UL)    ///< Bus data width: 4 bits
-#define ARM_MCI_BUS_DATA_WIDTH_8        (0x02UL)    ///< Bus data width: 8 bits
-#define ARM_MCI_BUS_DATA_WIDTH_4_DDR    (0x03UL)    ///< Bus data width: 4 bits, DDR (Dual Data Rate) - MMC only
-#define ARM_MCI_BUS_DATA_WIDTH_8_DDR    (0x04UL)    ///< Bus data width: 8 bits, DDR (Dual Data Rate) - MMC only
+#define MCI_BUS_DATA_WIDTH_1        (0x00UL)    ///< Bus data width: 1 bit (default)
+#define MCI_BUS_DATA_WIDTH_4        (0x01UL)    ///< Bus data width: 4 bits
+#define MCI_BUS_DATA_WIDTH_8        (0x02UL)    ///< Bus data width: 8 bits
+#define MCI_BUS_DATA_WIDTH_4_DDR    (0x03UL)    ///< Bus data width: 4 bits, DDR (Dual Data Rate) - MMC only
+#define MCI_BUS_DATA_WIDTH_8_DDR    (0x04UL)    ///< Bus data width: 8 bits, DDR (Dual Data Rate) - MMC only
 
 /*----- MCI Driver Strength -----*/
-#define ARM_MCI_DRIVER_TYPE_A           (0x01UL)    ///< SD UHS-I Driver Type A
-#define ARM_MCI_DRIVER_TYPE_B           (0x00UL)    ///< SD UHS-I Driver Type B (default)
-#define ARM_MCI_DRIVER_TYPE_C           (0x02UL)    ///< SD UHS-I Driver Type C
-#define ARM_MCI_DRIVER_TYPE_D           (0x03UL)    ///< SD UHS-I Driver Type D
+#define MCI_DRIVER_TYPE_A           (0x01UL)    ///< SD UHS-I Driver Type A
+#define MCI_DRIVER_TYPE_B           (0x00UL)    ///< SD UHS-I Driver Type B (default)
+#define MCI_DRIVER_TYPE_C           (0x02UL)    ///< SD UHS-I Driver Type C
+#define MCI_DRIVER_TYPE_D           (0x03UL)    ///< SD UHS-I Driver Type D
 
 
 /****** MCI Card Power *****/
-#define ARM_MCI_POWER_VDD_Pos            0
-#define ARM_MCI_POWER_VDD_Msk           (0x0FUL << ARM_MCI_POWER_VDD_Pos)
-#define ARM_MCI_POWER_VDD_OFF           (0x01UL << ARM_MCI_POWER_VDD_Pos)   ///< VDD (VCC) turned off
-#define ARM_MCI_POWER_VDD_3V3           (0x02UL << ARM_MCI_POWER_VDD_Pos)   ///< VDD (VCC) = 3.3V
-#define ARM_MCI_POWER_VDD_1V8           (0x03UL << ARM_MCI_POWER_VDD_Pos)   ///< VDD (VCC) = 1.8V
-#define ARM_MCI_POWER_VCCQ_Pos           4
-#define ARM_MCI_POWER_VCCQ_Msk          (0x0FUL << ARM_MCI_POWER_VCCQ_Pos)
-#define ARM_MCI_POWER_VCCQ_OFF          (0x01UL << ARM_MCI_POWER_VCCQ_Pos)  ///< eMMC VCCQ turned off
-#define ARM_MCI_POWER_VCCQ_3V3          (0x02UL << ARM_MCI_POWER_VCCQ_Pos)  ///< eMMC VCCQ = 3.3V
-#define ARM_MCI_POWER_VCCQ_1V8          (0x03UL << ARM_MCI_POWER_VCCQ_Pos)  ///< eMMC VCCQ = 1.8V
-#define ARM_MCI_POWER_VCCQ_1V2          (0x04UL << ARM_MCI_POWER_VCCQ_Pos)  ///< eMMC VCCQ = 1.2V
+#define MCI_POWER_VDD_Pos            0
+#define MCI_POWER_VDD_Msk           (0x0FUL << MCI_POWER_VDD_Pos)
+#define MCI_POWER_VDD_OFF           (0x01UL << MCI_POWER_VDD_Pos)   ///< VDD (VCC) turned off
+#define MCI_POWER_VDD_3V3           (0x02UL << MCI_POWER_VDD_Pos)   ///< VDD (VCC) = 3.3V
+#define MCI_POWER_VDD_1V8           (0x03UL << MCI_POWER_VDD_Pos)   ///< VDD (VCC) = 1.8V
+#define MCI_POWER_VCCQ_Pos           4
+#define MCI_POWER_VCCQ_Msk          (0x0FUL << MCI_POWER_VCCQ_Pos)
+#define MCI_POWER_VCCQ_OFF          (0x01UL << MCI_POWER_VCCQ_Pos)  ///< eMMC VCCQ turned off
+#define MCI_POWER_VCCQ_3V3          (0x02UL << MCI_POWER_VCCQ_Pos)  ///< eMMC VCCQ = 3.3V
+#define MCI_POWER_VCCQ_1V8          (0x03UL << MCI_POWER_VCCQ_Pos)  ///< eMMC VCCQ = 1.8V
+#define MCI_POWER_VCCQ_1V2          (0x04UL << MCI_POWER_VCCQ_Pos)  ///< eMMC VCCQ = 1.2V
 
 
 /**
 \brief MCI Status
 */
-typedef struct _ARM_MCI_STATUS {
+typedef struct _MCI_STATUS {
   uint32_t command_active   : 1;        ///< Command active flag
   uint32_t command_timeout  : 1;        ///< Command timeout flag (cleared on start of next command)
   uint32_t command_error    : 1;        ///< Command error flag (cleared on start of next command)
@@ -184,69 +184,69 @@ typedef struct _ARM_MCI_STATUS {
   uint32_t sdio_interrupt   : 1;        ///< SD I/O Interrupt flag (cleared on start of monitoring)
   uint32_t ccs              : 1;        ///< CCS flag (cleared on start of next command)
   uint32_t reserved         : 24;
-} ARM_MCI_STATUS;
+} MCI_STATUS;
 
 
 /****** MCI Card Event *****/
-#define ARM_MCI_EVENT_CARD_INSERTED     (1UL << 0)  ///< Memory Card inserted
-#define ARM_MCI_EVENT_CARD_REMOVED      (1UL << 1)  ///< Memory Card removed
-#define ARM_MCI_EVENT_COMMAND_COMPLETE  (1UL << 2)  ///< Command completed
-#define ARM_MCI_EVENT_COMMAND_TIMEOUT   (1UL << 3)  ///< Command timeout
-#define ARM_MCI_EVENT_COMMAND_ERROR     (1UL << 4)  ///< Command response error (CRC error or invalid response)
-#define ARM_MCI_EVENT_TRANSFER_COMPLETE (1UL << 5)  ///< Data transfer completed
-#define ARM_MCI_EVENT_TRANSFER_TIMEOUT  (1UL << 6)  ///< Data transfer timeout
-#define ARM_MCI_EVENT_TRANSFER_ERROR    (1UL << 7)  ///< Data transfer CRC failed
-#define ARM_MCI_EVENT_SDIO_INTERRUPT    (1UL << 8)  ///< SD I/O Interrupt
-#define ARM_MCI_EVENT_CCS               (1UL << 9)  ///< Command Completion Signal (CCS)
-#define ARM_MCI_EVENT_CCS_TIMEOUT       (1UL << 10) ///< Command Completion Signal (CCS) Timeout
+#define MCI_EVENT_CARD_INSERTED     (1UL << 0)  ///< Memory Card inserted
+#define MCI_EVENT_CARD_REMOVED      (1UL << 1)  ///< Memory Card removed
+#define MCI_EVENT_COMMAND_COMPLETE  (1UL << 2)  ///< Command completed
+#define MCI_EVENT_COMMAND_TIMEOUT   (1UL << 3)  ///< Command timeout
+#define MCI_EVENT_COMMAND_ERROR     (1UL << 4)  ///< Command response error (CRC error or invalid response)
+#define MCI_EVENT_TRANSFER_COMPLETE (1UL << 5)  ///< Data transfer completed
+#define MCI_EVENT_TRANSFER_TIMEOUT  (1UL << 6)  ///< Data transfer timeout
+#define MCI_EVENT_TRANSFER_ERROR    (1UL << 7)  ///< Data transfer CRC failed
+#define MCI_EVENT_SDIO_INTERRUPT    (1UL << 8)  ///< SD I/O Interrupt
+#define MCI_EVENT_CCS               (1UL << 9)  ///< Command Completion Signal (CCS)
+#define MCI_EVENT_CCS_TIMEOUT       (1UL << 10) ///< Command Completion Signal (CCS) Timeout
 
 
 // Function documentation
 /**
-  \fn            ARM_DRIVER_VERSION ARM_MCI_GetVersion (void)
+  \fn            DRIVER_VERSION MCI_GetVersion (void)
   \brief         Get driver version.
-  \return        \ref ARM_DRIVER_VERSION
+  \return        \ref DRIVER_VERSION
 */
 /**
-  \fn            ARM_MCI_CAPABILITIES ARM_MCI_GetCapabilities (void)
+  \fn            MCI_CAPABILITIES MCI_GetCapabilities (void)
   \brief         Get driver capabilities.
-  \return        \ref ARM_MCI_CAPABILITIES
+  \return        \ref MCI_CAPABILITIES
 */
 /**
-  \fn            int32_t ARM_MCI_Initialize (ARM_MCI_SignalEvent_t cb_event)
+  \fn            int32_t MCI_Initialize (MCI_SignalEvent_t cb_event)
   \brief         Initialize the Memory Card Interface
-  \param[in]     cb_event  Pointer to \ref ARM_MCI_SignalEvent
+  \param[in]     cb_event  Pointer to \ref MCI_SignalEvent
   \return        \ref execution_status
 */
 /**
-  \fn            int32_t ARM_MCI_Uninitialize (void)
+  \fn            int32_t MCI_Uninitialize (void)
   \brief         De-initialize Memory Card Interface.
   \return        \ref execution_status
 */
 /**
-  \fn            int32_t ARM_MCI_PowerControl (ARM_POWER_STATE state)
+  \fn            int32_t MCI_PowerControl (POWER_STATE state)
   \brief         Control Memory Card Interface Power.
-  \param[in]     state   Power state \ref ARM_POWER_STATE
+  \param[in]     state   Power state \ref POWER_STATE
   \return        \ref execution_status
 */
 /**
-  \fn            int32_t ARM_MCI_CardPower (uint32_t voltage)
+  \fn            int32_t MCI_CardPower (uint32_t voltage)
   \brief         Set Memory Card Power supply voltage.
   \param[in]     voltage  Memory Card Power supply voltage
   \return        \ref execution_status
 */
 /**
-  \fn            int32_t ARM_MCI_ReadCD (void)
+  \fn            int32_t MCI_ReadCD (void)
   \brief         Read Card Detect (CD) state.
   \return        1:card detected, 0:card not detected, or error
 */
 /**
-  \fn            int32_t ARM_MCI_ReadWP (void)
+  \fn            int32_t MCI_ReadWP (void)
   \brief         Read Write Protect (WP) state.
   \return        1:write protected, 0:not write protected, or error
 */
 /**
-  \fn            int32_t ARM_MCI_SendCommand (uint32_t  cmd,
+  \fn            int32_t MCI_SendCommand (uint32_t  cmd,
                                               uint32_t  arg,
                                               uint32_t  flags,
                                               uint32_t *response)
@@ -258,7 +258,7 @@ typedef struct _ARM_MCI_STATUS {
   \return        \ref execution_status
 */
 /**
-  \fn            int32_t ARM_MCI_SetupTransfer (uint8_t *data,
+  \fn            int32_t MCI_SetupTransfer (uint8_t *data,
                                                 uint32_t block_count,
                                                 uint32_t block_size,
                                                 uint32_t mode)
@@ -270,37 +270,37 @@ typedef struct _ARM_MCI_STATUS {
   \return        \ref execution_status
 */
 /**
-  \fn            int32_t ARM_MCI_AbortTransfer (void)
+  \fn            int32_t MCI_AbortTransfer (void)
   \brief         Abort current read/write data transfer.
   \return        \ref execution_status
 */
 /**
-  \fn            int32_t ARM_MCI_Control (uint32_t control, uint32_t arg)
+  \fn            int32_t MCI_Control (uint32_t control, uint32_t arg)
   \brief         Control MCI Interface.
   \param[in]     control  Operation
   \param[in]     arg      Argument of operation (optional)
   \return        \ref execution_status
 */
 /**
-  \fn            ARM_MCI_STATUS ARM_MCI_GetStatus (void)
+  \fn            MCI_STATUS MCI_GetStatus (void)
   \brief         Get MCI status.
-  \return        MCI status \ref ARM_MCI_STATUS
+  \return        MCI status \ref MCI_STATUS
 */
 
 /**
-  \fn            void ARM_MCI_SignalEvent (uint32_t event)
+  \fn            void MCI_SignalEvent (uint32_t event)
   \brief         Callback function that signals a MCI Card Event.
   \param[in]     event \ref mci_event_gr
   \return        none
 */
 
-typedef void (*ARM_MCI_SignalEvent_t) (uint32_t event);  ///< Pointer to \ref ARM_MCI_SignalEvent : Signal MCI Card Event.
+typedef void (*MCI_SignalEvent_t) (uint32_t event);  ///< Pointer to \ref MCI_SignalEvent : Signal MCI Card Event.
 
 
 /**
 \brief  MCI Driver Capabilities.
 */
-typedef struct _ARM_MCI_CAPABILITIES {
+typedef struct _MCI_CAPABILITIES {
   uint32_t cd_state          : 1;       ///< Card Detect State available
   uint32_t cd_event          : 1;       ///< Signal Card Detect change event
   uint32_t wp_state          : 1;       ///< Write Protect State available
@@ -331,33 +331,33 @@ typedef struct _ARM_MCI_CAPABILITIES {
   uint32_t ccs               : 1;       ///< Supports Command Completion Signal (CCS) for CE-ATA
   uint32_t ccs_timeout       : 1;       ///< Supports Command Completion Signal (CCS) timeout for CE-ATA
   uint32_t reserved          : 3;       ///< Reserved (must be zero)
-} ARM_MCI_CAPABILITIES;
+} MCI_CAPABILITIES;
 
 
 /**
 \brief  Access structure of the MCI Driver.
 */
-typedef struct _ARM_DRIVER_MCI {
-  ARM_DRIVER_VERSION   (*GetVersion)     (void);                           ///< Pointer to \ref ARM_MCI_GetVersion : Get driver version.
-  ARM_MCI_CAPABILITIES (*GetCapabilities)(void);                           ///< Pointer to \ref ARM_MCI_GetCapabilities : Get driver capabilities.
-  int32_t              (*Initialize)     (ARM_MCI_SignalEvent_t cb_event); ///< Pointer to \ref ARM_MCI_Initialize : Initialize MCI Interface.
-  int32_t              (*Uninitialize)   (void);                           ///< Pointer to \ref ARM_MCI_Uninitialize : De-initialize MCI Interface.
-  int32_t              (*PowerControl)   (ARM_POWER_STATE state);          ///< Pointer to \ref ARM_MCI_PowerControl : Control MCI Interface Power.
-  int32_t              (*CardPower)      (uint32_t voltage);               ///< Pointer to \ref ARM_MCI_CardPower : Set card power supply voltage.
-  int32_t              (*ReadCD)         (void);                           ///< Pointer to \ref ARM_MCI_ReadCD : Read Card Detect (CD) state.
-  int32_t              (*ReadWP)         (void);                           ///< Pointer to \ref ARM_MCI_ReadWP : Read Write Protect (WP) state.
-  int32_t              (*SendCommand)    (uint32_t cmd, 
-                                          uint32_t arg, 
-                                          uint32_t flags,
-                                          uint32_t *response);             ///< Pointer to \ref ARM_MCI_SendCommand : Send Command to card and get the response.
-  int32_t              (*SetupTransfer)  (uint8_t *data,
-                                          uint32_t block_count,
-                                          uint32_t block_size,
-                                          uint32_t mode);                  ///< Pointer to \ref ARM_MCI_SetupTransfer : Setup data transfer operation.
-  int32_t              (*AbortTransfer)  (void);                           ///< Pointer to \ref ARM_MCI_AbortTransfer : Abort current data transfer.
-  int32_t              (*Control)        (uint32_t control, uint32_t arg); ///< Pointer to \ref ARM_MCI_Control : Control MCI Interface.
-  ARM_MCI_STATUS       (*GetStatus)      (void);                           ///< Pointer to \ref ARM_MCI_GetStatus : Get MCI status.
-} const ARM_DRIVER_MCI;
+typedef struct _DRIVER_MCI {
+  DRIVER_VERSION   (*GetVersion)     (void);                           ///< Pointer to \ref MCI_GetVersion : Get driver version.
+  MCI_CAPABILITIES (*GetCapabilities)(void);                           ///< Pointer to \ref MCI_GetCapabilities : Get driver capabilities.
+  int32_t          (*Initialize)     (MCI_SignalEvent_t cb_event);     ///< Pointer to \ref MCI_Initialize : Initialize MCI Interface.
+  int32_t          (*Uninitialize)   (void);                           ///< Pointer to \ref MCI_Uninitialize : De-initialize MCI Interface.
+  int32_t          (*PowerControl)   (POWER_STATE state);              ///< Pointer to \ref MCI_PowerControl : Control MCI Interface Power.
+  int32_t          (*CardPower)      (uint32_t voltage);               ///< Pointer to \ref MCI_CardPower : Set card power supply voltage.
+  int32_t          (*ReadCD)         (void);                           ///< Pointer to \ref MCI_ReadCD : Read Card Detect (CD) state.
+  int32_t          (*ReadWP)         (void);                           ///< Pointer to \ref MCI_ReadWP : Read Write Protect (WP) state.
+  int32_t          (*SendCommand)    (uint32_t cmd,
+                                      uint32_t arg,
+                                      uint32_t flags,
+                                      uint32_t *response);             ///< Pointer to \ref MCI_SendCommand : Send Command to card and get the response.
+  int32_t          (*SetupTransfer)  (uint8_t *data,
+                                      uint32_t block_count,
+                                      uint32_t block_size,
+                                      uint32_t mode);                  ///< Pointer to \ref MCI_SetupTransfer : Setup data transfer operation.
+  int32_t          (*AbortTransfer)  (void);                           ///< Pointer to \ref MCI_AbortTransfer : Abort current data transfer.
+  int32_t          (*Control)        (uint32_t control, uint32_t arg); ///< Pointer to \ref MCI_Control : Control MCI Interface.
+  MCI_STATUS       (*GetStatus)      (void);                           ///< Pointer to \ref MCI_GetStatus : Get MCI status.
+} const DRIVER_MCI;
 
 #ifdef  __cplusplus
 }

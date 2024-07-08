@@ -193,7 +193,7 @@ typedef struct _I2S_STATUS {
 
 /* SAI Information (Run-Time) */
 typedef struct _I2S_INFO {
-  ARM_SAI_SignalEvent_t cb_event;           // Event Callback
+  SAI_SignalEvent_t cb_event;           // Event Callback
   I2S_STATUS            status;             // Status flags
   I2S_TRANSFER_INFO     tx;                 // Transmit information
   I2S_TRANSFER_INFO     rx;                 // Receive information

@@ -62,8 +62,8 @@ typedef struct FlashXfer {
  * @brief Flash driver runtime information
  */
 typedef struct FlashInstance {
-  ARM_Flash_SignalEvent_t   cb_event;
-  ARM_FLASH_STATUS          status;
+  Flash_SignalEvent_t   cb_event;
+  FLASH_STATUS          status;
   FlashXfer_t               xfer;
   uint32_t volatile         flags;
 } FlashInstance_t;

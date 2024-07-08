@@ -50,8 +50,8 @@
 
 /* USBD Information (Run-time) */
 typedef struct USBD_INFO_s {
-  ARM_USBD_SignalDeviceEvent_t    cb_device_event;    // Device Event Callback
-  ARM_USBD_SignalEndpointEvent_t  cb_endpoint_event;  // Endpoint Event Callback
+  USBD_SignalDeviceEvent_t    cb_device_event;    // Device Event Callback
+  USBD_SignalEndpointEvent_t  cb_endpoint_event;  // Endpoint Event Callback
   uint8_t                         state;              // Current state
 } USBD_INFO;
 

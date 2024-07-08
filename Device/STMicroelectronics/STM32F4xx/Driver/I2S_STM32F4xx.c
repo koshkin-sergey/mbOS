@@ -33,7 +33,7 @@
  *  defines and macros (scope: module-local)
  ******************************************************************************/
 
-#define ARM_SAI_DRV_VERSION    ARM_DRIVER_VERSION_MAJOR_MINOR(1, 0) /* driver version */
+#define SAI_DRV_VERSION    DRIVER_VERSION_MAJOR_MINOR(1, 0) /* driver version */
 
 #define I2S_MODE_MASTER_TX            (2U << SPI_I2SCFGR_I2SCFG_Pos)
 #define I2S_MODE_MASTER_RX            (3U << SPI_I2SCFGR_I2SCFG_Pos)
@@ -69,13 +69,13 @@ static void I2S3_RX_DMA_Complete(uint32_t event);
  ******************************************************************************/
 
 /* Driver Version */
-static const ARM_DRIVER_VERSION DriverVersion = {
-  ARM_SAI_API_VERSION,
-  ARM_SAI_DRV_VERSION
+static const DRIVER_VERSION DriverVersion = {
+  SAI_API_VERSION,
+  SAI_DRV_VERSION
 };
 
 /* Driver Capabilities */
-static const ARM_SAI_CAPABILITIES DriverCapabilities = {
+static const SAI_CAPABILITIES DriverCapabilities = {
   1, /* supports asynchronous Transmit/Receive */
   0, /* supports synchronous Transmit/Receive */
   0, /* supports user defined Protocol */
@@ -86,7 +86,7 @@ static const ARM_SAI_CAPABILITIES DriverCapabilities = {
   0, /* supports Mono mode */
   0, /* supports Companding */
   1, /* supports MCLK (Master Clock) pin */
-  0  /* supports Frame error event: \ref ARM_SAI_EVENT_FRAME_ERROR */
+  0  /* supports Frame error event: \ref SAI_EVENT_FRAME_ERROR */
 };
 
 static const GPIO_PIN_CFG_t I2S_pin_cfg_af = {
@@ -255,39 +255,39 @@ static I2S_RESOURCES I2S3_Resources = {
  ******************************************************************************/
 
 /**
- * @fn          ARM_DRIVER_VERSION SAIx_GetVersion(void)
+ * @fn          DRIVER_VERSION SAIx_GetVersion(void)
  * @brief       Get driver version.
- * @return      \ref ARM_DRIVER_VERSION
+ * @return      \ref DRIVER_VERSION
  */
 static
-ARM_DRIVER_VERSION I2Sx_GetVersion(void)
+DRIVER_VERSION I2Sx_GetVersion(void)
 {
   return DriverVersion;
 }
 
 /**
- * @fn          ARM_SAI_CAPABILITIES SAIx_GetCapabilities(void)
+ * @fn          SAI_CAPABILITIES SAIx_GetCapabilities(void)
  * @brief       Get driver capabilities.
- * @return      \ref ARM_SAI_CAPABILITIES
+ * @return      \ref SAI_CAPABILITIES
  */
 static
-ARM_SAI_CAPABILITIES I2Sx_GetCapabilities(void)
+SAI_CAPABILITIES I2Sx_GetCapabilities(void)
 {
   return DriverCapabilities;
 }
 
 /**
- * @fn          int32_t SAI_Initialize(ARM_SAI_SignalEvent_t cb_event, I2S_RESOURCES *i2s)
+ * @fn          int32_t SAI_Initialize(SAI_SignalEvent_t cb_event, I2S_RESOURCES *i2s)
  * @brief       Initialize SAI Interface.
- * @param[in]   cb_event  Pointer to \ref ARM_SAI_SignalEvent
+ * @param[in]   cb_event  Pointer to \ref SAI_SignalEvent
  * @param[in]   i2s       Pointer to SAI resources
  * @return      \ref execution_status
  */
 static
-int32_t I2S_Initialize(ARM_SAI_SignalEvent_t cb_event, I2S_RESOURCES *i2s)
+int32_t I2S_Initialize(SAI_SignalEvent_t cb_event, I2S_RESOURCES *i2s)
 {
   if (i2s->info->flags & I2S_FLAG_INITIALIZED)
-    return ARM_DRIVER_OK;
+    return DRIVER_OK;
 
   I2S_IO *io = &i2s->io;
   I2S_INFO *info = i2s->info;
@@ -319,7 +319,7 @@ int32_t I2S_Initialize(ARM_SAI_SignalEvent_t cb_event, I2S_RESOURCES *i2s)
   info->cb_event = cb_event;
   info->flags    = I2S_FLAG_INITIALIZED;
 
-  return ARM_DRIVER_OK;
+  return DRIVER_OK;
 }
 
 /**
@@ -346,24 +346,24 @@ int32_t I2S_Uninitialize(I2S_RESOURCES *i2s)
 
   i2s->info->flags = 0U;
 
-  return ARM_DRIVER_OK;
+  return DRIVER_OK;
 }
 
 /**
- * @fn          int32_t SAI_PowerControl(ARM_POWER_STATE state, I2S_RESOURCES *i2s)
+ * @fn          int32_t SAI_PowerControl(POWER_STATE state, I2S_RESOURCES *i2s)
  * @brief       Control SAI Interface Power.
  * @param[in]   state   Power state
  * @param[in]   i2s     Pointer to SAI resources
  * @return      \ref execution_status
  */
 static
-int32_t I2S_PowerControl(ARM_POWER_STATE state, I2S_RESOURCES *i2s)
+int32_t I2S_PowerControl(POWER_STATE state, I2S_RESOURCES *i2s)
 {
   I2S_INFO *info = i2s->info;
   SPI_TypeDef *reg = i2s->tx_reg;
 
   switch (state) {
-    case ARM_POWER_OFF:
+    case POWER_OFF:
       /* Enable I2S clock */
       RCC_EnablePeriph(i2s->rcc);
 
@@ -396,12 +396,12 @@ int32_t I2S_PowerControl(ARM_POWER_STATE state, I2S_RESOURCES *i2s)
       info->flags &= ~I2S_FLAG_POWERED;
       break;
 
-    case ARM_POWER_FULL:
+    case POWER_FULL:
       if ((info->flags & I2S_FLAG_INITIALIZED) == 0U)
-        return ARM_DRIVER_ERROR;
+        return DRIVER_ERROR;
 
       if ((info->flags & I2S_FLAG_POWERED) != 0U)
-        return ARM_DRIVER_OK;
+        return DRIVER_OK;
 
       /* Enable the peripheral clock */
       RCC_EnablePeriph(i2s->rcc);
@@ -463,10 +463,10 @@ int32_t I2S_PowerControl(ARM_POWER_STATE state, I2S_RESOURCES *i2s)
       break;
 
     default:
-      return ARM_DRIVER_ERROR_UNSUPPORTED;
+      return DRIVER_ERROR_UNSUPPORTED;
   }
 
-  return ARM_DRIVER_OK;
+  return DRIVER_OK;
 }
 
 /**
@@ -484,16 +484,16 @@ int32_t I2S_Send(const void *data, uint32_t num, I2S_RESOURCES *i2s)
   SPI_TypeDef *reg = i2s->tx_reg;
 
   if ((data == NULL) || (num == 0U)) {
-    return ARM_DRIVER_ERROR_PARAMETER;
+    return DRIVER_ERROR_PARAMETER;
   }
 
   if ((info->flags & I2S_FLAG_CONFIGURED) == 0U || (info->flags & I2S_FLAG_TX_ENABLE) == 0U) {
     /* I2S is not configured (mode not selected) */
-    return ARM_DRIVER_ERROR;
+    return DRIVER_ERROR;
   }
 
   if (info->status.tx_busy) {
-    return ARM_DRIVER_ERROR_BUSY;
+    return DRIVER_ERROR_BUSY;
   }
 
   info->status.tx_busy      = 1U;
@@ -521,7 +521,7 @@ int32_t I2S_Send(const void *data, uint32_t num, I2S_RESOURCES *i2s)
     reg->CR2 |= SPI_CR2_TXEIE;
   }
 
-  return ARM_DRIVER_OK;
+  return DRIVER_OK;
 }
 
 /**
@@ -539,16 +539,16 @@ int32_t I2S_Receive(void *data, uint32_t num, I2S_RESOURCES *i2s)
   SPI_TypeDef *reg = i2s->rx_reg;
 
   if ((data == NULL) || (num == 0U)) {
-    return ARM_DRIVER_ERROR_PARAMETER;
+    return DRIVER_ERROR_PARAMETER;
   }
 
   if ((info->flags & I2S_FLAG_CONFIGURED) == 0U || (info->flags & I2S_FLAG_RX_ENABLE) == 0U) {
     /* I2S is not configured (mode not selected) */
-    return ARM_DRIVER_ERROR;
+    return DRIVER_ERROR;
   }
 
   if (info->status.rx_busy) {
-    return ARM_DRIVER_ERROR_BUSY;
+    return DRIVER_ERROR_BUSY;
   }
 
   info->status.rx_busy      = 1U;
@@ -576,7 +576,7 @@ int32_t I2S_Receive(void *data, uint32_t num, I2S_RESOURCES *i2s)
     reg->CR2 |= SPI_CR2_RXNEIE;
   }
 
-  return ARM_DRIVER_OK;
+  return DRIVER_OK;
 }
 
 /**
@@ -621,11 +621,11 @@ int32_t I2S_Control(uint32_t control, uint32_t arg1, uint32_t arg2, I2S_RESOURCE
 
   if ((i2s->info->flags & I2S_FLAG_POWERED) == 0U) {
     /* SAI not powered */
-    return ARM_DRIVER_ERROR;
+    return DRIVER_ERROR;
   }
 
-  switch (control & ARM_SAI_CONTROL_Msk) {
-    case ARM_SAI_CONTROL_TX:
+  switch (control & SAI_CONTROL_Msk) {
+    case SAI_CONTROL_TX:
       if ((arg1 & 1U) == 0U) {
         /* Disable TX buffer empty interrupt */
         i2s->tx_reg->CR2 &= ~SPI_CR2_TXEIE;
@@ -662,9 +662,9 @@ int32_t I2S_Control(uint32_t control, uint32_t arg1, uint32_t arg2, I2S_RESOURCE
         /* Enable TX buffer empty interrupt */
         i2s->tx_reg->CR2 |= SPI_CR2_TXEIE;
       }
-      return ARM_DRIVER_OK;
+      return DRIVER_OK;
 
-    case ARM_SAI_CONTROL_RX:
+    case SAI_CONTROL_RX:
       if ((arg1 & 1U) == 0U) {
         /* Disable Receive Interrupt */
         i2s->rx_reg->CR2 &= ~SPI_CR2_RXNEIE;
@@ -684,25 +684,25 @@ int32_t I2S_Control(uint32_t control, uint32_t arg1, uint32_t arg2, I2S_RESOURCE
         /* Enable Receive Interrupt */
         i2s->rx_reg->CR2 |= SPI_CR2_RXNEIE;
       }
-      return ARM_DRIVER_OK;
+      return DRIVER_OK;
 
-    case ARM_SAI_CONFIGURE_TX:
-      mode = ARM_SAI_CONFIGURE_TX;
+    case SAI_CONFIGURE_TX:
+      mode = SAI_CONFIGURE_TX;
       i2scfgr |= I2S_MODE_SLAVE_TX;
       break;
 
-    case ARM_SAI_CONFIGURE_RX:
-      mode = ARM_SAI_CONFIGURE_RX;
+    case SAI_CONFIGURE_RX:
+      mode = SAI_CONFIGURE_RX;
       i2scfgr |= I2S_MODE_SLAVE_RX;
       break;
 
-    case ARM_SAI_MASK_SLOTS_TX:
-      return ARM_DRIVER_ERROR;
+    case SAI_MASK_SLOTS_TX:
+      return DRIVER_ERROR;
 
-    case ARM_SAI_MASK_SLOTS_RX:
-      return ARM_DRIVER_ERROR;
+    case SAI_MASK_SLOTS_RX:
+      return DRIVER_ERROR;
 
-    case ARM_SAI_ABORT_SEND:
+    case SAI_ABORT_SEND:
       /* Disable TX interrupt */
       i2s->tx_reg->CR2 &= ~SPI_CR2_TXEIE;
 
@@ -727,9 +727,9 @@ int32_t I2S_Control(uint32_t control, uint32_t arg1, uint32_t arg2, I2S_RESOURCE
         /* Enable TX interrupt, to detect TX overflow */
         i2s->tx_reg->CR2 |= SPI_CR2_TXEIE;
       }
-      return ARM_DRIVER_OK;
+      return DRIVER_OK;
 
-    case ARM_SAI_ABORT_RECEIVE:
+    case SAI_ABORT_RECEIVE:
       /* Disable RX interrupt */
       i2s->tx_reg->CR2 &= ~SPI_CR2_RXNEIE;
 
@@ -754,18 +754,18 @@ int32_t I2S_Control(uint32_t control, uint32_t arg1, uint32_t arg2, I2S_RESOURCE
         /* Enable RX interrupt, to detect RX overflow */
         i2s->tx_reg->CR2 |= SPI_CR2_RXNEIE;
       }
-      return ARM_DRIVER_OK;
+      return DRIVER_OK;
 
     default:
-      return ARM_DRIVER_ERROR_UNSUPPORTED;
+      return DRIVER_ERROR_UNSUPPORTED;
   }
 
-  data_len = ((control & ARM_SAI_DATA_SIZE_Msk) >> ARM_SAI_DATA_SIZE_Pos) + 1;
+  data_len = ((control & SAI_DATA_SIZE_Msk) >> SAI_DATA_SIZE_Pos) + 1;
 
-  if ((control & ARM_SAI_MODE_Msk) == ARM_SAI_MODE_MASTER) {
+  if ((control & SAI_MODE_Msk) == SAI_MODE_MASTER) {
 
-    if (mode == ARM_SAI_CONFIGURE_RX)
-      return ARM_DRIVER_ERROR_UNSUPPORTED;
+    if (mode == SAI_CONFIGURE_RX)
+      return DRIVER_ERROR_UNSUPPORTED;
 
     i2scfgr |= I2S_MODE_MASTER_TX;
 
@@ -781,7 +781,7 @@ int32_t I2S_Control(uint32_t control, uint32_t arg1, uint32_t arg2, I2S_RESOURCE
     }
 
     if (freq_idx == -1)
-      return ARM_SAI_ERROR_AUDIO_FREQ;
+      return SAI_ERROR_AUDIO_FREQ;
 
     i2sclk = RCC_I2SPLL_Config(i2s_pll_param[freq_idx].plln, i2s_pll_param[freq_idx].pllr);
 
@@ -789,18 +789,18 @@ int32_t I2S_Control(uint32_t control, uint32_t arg1, uint32_t arg2, I2S_RESOURCE
     if (data_len != 16U)
       length = 2U;
 
-    switch (control & ARM_SAI_MCLK_PIN_Msk) {
-      case ARM_SAI_MCLK_PIN_INACTIVE:
+    switch (control & SAI_MCLK_PIN_Msk) {
+      case SAI_MCLK_PIN_INACTIVE:
         tmp = (i2sclk / (32U * length) * 10U / arg2 + 5U);
         break;
 
-      case ARM_SAI_MCLK_PIN_OUTPUT:
+      case SAI_MCLK_PIN_OUTPUT:
         i2spr = SPI_I2SPR_MCKOE;
         tmp = (i2sclk / 256U * 10U / arg2 + 5U);
         break;
 
       default:
-        return ARM_SAI_ERROR_MCLK_PIN;
+        return SAI_ERROR_MCLK_PIN;
     }
 
     tmp /= 10U;
@@ -808,34 +808,34 @@ int32_t I2S_Control(uint32_t control, uint32_t arg1, uint32_t arg2, I2S_RESOURCE
     pres_div = (tmp - pres_odd) / 2U;
 
     if ((pres_div < 2U) || (pres_div > 255U))
-      return ARM_SAI_ERROR_AUDIO_FREQ;
+      return SAI_ERROR_AUDIO_FREQ;
 
     i2spr |= ((pres_div << SPI_I2SPR_I2SDIV_Pos) | (pres_odd << SPI_I2SPR_ODD_Pos));
   }
 
   /* Configure I2S Protocol */
-  switch (control & ARM_SAI_PROTOCOL_Msk) {
-    case ARM_SAI_PROTOCOL_I2S:
+  switch (control & SAI_PROTOCOL_Msk) {
+    case SAI_PROTOCOL_I2S:
       break;
 
-    case ARM_SAI_PROTOCOL_MSB_JUSTIFIED:
+    case SAI_PROTOCOL_MSB_JUSTIFIED:
       i2scfgr |= (1U << SPI_I2SCFGR_I2SSTD_Pos);
       break;
 
-    case ARM_SAI_PROTOCOL_LSB_JUSTIFIED:
+    case SAI_PROTOCOL_LSB_JUSTIFIED:
       i2scfgr |= (2U << SPI_I2SCFGR_I2SSTD_Pos);
       break;
 
-    case ARM_SAI_PROTOCOL_PCM_SHORT:
+    case SAI_PROTOCOL_PCM_SHORT:
       i2scfgr |= (3U << SPI_I2SCFGR_I2SSTD_Pos);
       break;
 
-    case ARM_SAI_PROTOCOL_PCM_LONG:
+    case SAI_PROTOCOL_PCM_LONG:
       i2scfgr |= ((3U << SPI_I2SCFGR_I2SSTD_Pos) | SPI_I2SCFGR_PCMSYNC);
       break;
 
     default:
-      return ARM_SAI_ERROR_PROTOCOL;
+      return SAI_ERROR_PROTOCOL;
   }
 
   /* Configure Data length */
@@ -852,10 +852,10 @@ int32_t I2S_Control(uint32_t control, uint32_t arg1, uint32_t arg2, I2S_RESOURCE
       break;
 
     default:
-      return ARM_SAI_ERROR_DATA_SIZE;
+      return SAI_ERROR_DATA_SIZE;
   }
 
-  if (mode == ARM_SAI_CONFIGURE_TX) {
+  if (mode == SAI_CONFIGURE_TX) {
     i2s->info->tx.data_bits = data_len;
     /* Configure I2S configuration register */
     i2s->tx_reg->I2SCFGR = i2scfgr;
@@ -869,19 +869,19 @@ int32_t I2S_Control(uint32_t control, uint32_t arg1, uint32_t arg2, I2S_RESOURCE
 
   i2s->info->flags |= I2S_FLAG_CONFIGURED;
 
-  return ARM_DRIVER_OK;
+  return DRIVER_OK;
 }
 
 /**
- * @fn          ARM_SAI_STATUS SAI_GetStatus(I2S_RESOURCES *i2s)
+ * @fn          SAI_STATUS SAI_GetStatus(I2S_RESOURCES *i2s)
  * @brief       Get SAI status.
  * @param[in]   i2s  Pointer to SAI resources
- * @return      SAI status \ref ARM_SAI_STATUS
+ * @return      SAI status \ref SAI_STATUS
  */
 static
-ARM_SAI_STATUS I2S_GetStatus(I2S_RESOURCES *i2s)
+SAI_STATUS I2S_GetStatus(I2S_RESOURCES *i2s)
 {
-  ARM_SAI_STATUS status;
+  SAI_STATUS status;
 
   status.frame_error  = i2s->info->status.frame_error;
   status.rx_busy      = i2s->info->status.rx_busy;
@@ -910,7 +910,7 @@ void I2S_IRQHandler(I2S_RESOURCES *i2s)
     if (rx->num == 0U) {
       /* Set RX overflow event and flag */
       info->status.rx_overflow = 1U;
-      event |= ARM_SAI_EVENT_RX_OVERFLOW;
+      event |= SAI_EVENT_RX_OVERFLOW;
 
       /* Disable RX Interrupt */
       reg->CR2 &= ~SPI_CR2_RXNEIE;
@@ -922,7 +922,7 @@ void I2S_IRQHandler(I2S_RESOURCES *i2s)
         /* Clear busy flag */
         info->status.rx_busy = 0U;
         rx->num = 0U;
-        event |= ARM_SAI_EVENT_RECEIVE_COMPLETE;
+        event |= SAI_EVENT_RECEIVE_COMPLETE;
       }
     }
   }
@@ -935,7 +935,7 @@ void I2S_IRQHandler(I2S_RESOURCES *i2s)
     if (tx->num == 0U) {
       /* Set TX underflow event and flag */
       info->status.tx_underflow = 1U;
-      event |= ARM_SAI_EVENT_TX_UNDERFLOW;
+      event |= SAI_EVENT_TX_UNDERFLOW;
 
       /* Disable TX Buffer Empty Interrupt */
       reg->CR2 &= ~SPI_CR2_TXEIE;
@@ -947,7 +947,7 @@ void I2S_IRQHandler(I2S_RESOURCES *i2s)
         /* Clear busy flag */
         info->status.tx_busy = 0U;
         tx->num = 0U;
-        event |= ARM_SAI_EVENT_SEND_COMPLETE;
+        event |= SAI_EVENT_SEND_COMPLETE;
       }
     }
   }
@@ -971,7 +971,7 @@ void I2S_TX_DMA_Complete(uint32_t event, I2S_RESOURCES *i2s)
     info->tx.num = 0U;
 
     if ((info->cb_event != NULL) && (event & DMA_EVENT_TRANSFER_COMPLETE))
-      info->cb_event(ARM_SAI_EVENT_SEND_COMPLETE);
+      info->cb_event(SAI_EVENT_SEND_COMPLETE);
   }
 }
 #endif  // I2S_TX_DMA
@@ -990,7 +990,7 @@ void I2S_RX_DMA_Complete(uint32_t event, I2S_RESOURCES *i2s)
     info->rx.num = 0U;
 
     if ((info->cb_event != NULL) && (event & DMA_EVENT_TRANSFER_COMPLETE))
-      info->cb_event(ARM_SAI_EVENT_RECEIVE_COMPLETE);
+      info->cb_event(SAI_EVENT_RECEIVE_COMPLETE);
   }
 }
 #endif  // I2S_RX_DMA
@@ -999,7 +999,7 @@ void I2S_RX_DMA_Complete(uint32_t event, I2S_RESOURCES *i2s)
 /* I2S2 Driver wrapper functions */
 
 static
-int32_t I2S2_Initialize(ARM_SAI_SignalEvent_t cb_event)
+int32_t I2S2_Initialize(SAI_SignalEvent_t cb_event)
 {
   return I2S_Initialize(cb_event, &I2S2_Resources);
 }
@@ -1011,7 +1011,7 @@ int32_t I2S2_Uninitialize(void)
 }
 
 static
-int32_t I2S2_PowerControl(ARM_POWER_STATE state)
+int32_t I2S2_PowerControl(POWER_STATE state)
 {
   return I2S_PowerControl(state, &I2S2_Resources);
 }
@@ -1047,7 +1047,7 @@ int32_t I2S2_Control(uint32_t control, uint32_t arg1, uint32_t arg2)
 }
 
 static
-ARM_SAI_STATUS I2S2_GetStatus(void)
+SAI_STATUS I2S2_GetStatus(void)
 {
   return I2S_GetStatus(&I2S2_Resources);
 }
@@ -1087,7 +1087,7 @@ void I2S2_RX_DMA_Complete(uint32_t event)
 /* I2S3 Driver wrapper functions */
 
 static
-int32_t I2S3_Initialize(ARM_SAI_SignalEvent_t cb_event)
+int32_t I2S3_Initialize(SAI_SignalEvent_t cb_event)
 {
   return I2S_Initialize(cb_event, &I2S3_Resources);
 }
@@ -1099,7 +1099,7 @@ int32_t I2S3_Uninitialize(void)
 }
 
 static
-int32_t I2S3_PowerControl(ARM_POWER_STATE state)
+int32_t I2S3_PowerControl(POWER_STATE state)
 {
   return I2S_PowerControl(state, &I2S3_Resources);
 }
@@ -1135,7 +1135,7 @@ int32_t I2S3_Control(uint32_t control, uint32_t arg1, uint32_t arg2)
 }
 
 static
-ARM_SAI_STATUS I2S3_GetStatus(void)
+SAI_STATUS I2S3_GetStatus(void)
 {
   return I2S_GetStatus(&I2S3_Resources);
 }
@@ -1178,7 +1178,7 @@ void I2S3_RX_DMA_Complete(uint32_t event)
 
 #if defined(USE_I2S2)
 
-ARM_DRIVER_SAI Driver_SAI2 = {
+DRIVER_SAI Driver_SAI2 = {
   I2Sx_GetVersion,
   I2Sx_GetCapabilities,
   I2S2_Initialize,
@@ -1196,7 +1196,7 @@ ARM_DRIVER_SAI Driver_SAI2 = {
 
 #if defined(USE_I2S3)
 
-ARM_DRIVER_SAI Driver_SAI3 = {
+DRIVER_SAI Driver_SAI3 = {
   I2Sx_GetVersion,
   I2Sx_GetCapabilities,
   I2S3_Initialize,

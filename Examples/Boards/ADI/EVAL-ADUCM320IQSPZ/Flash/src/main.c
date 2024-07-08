@@ -49,9 +49,9 @@ static const osThreadAttr_t init_attr = {
     .priority   = osPriorityNormal,
 };
 
-extern ARM_DRIVER_FLASH ARM_Driver_Flash_(0);
+extern DRIVER_FLASH Driver_Flash_(0);
 
-static ARM_DRIVER_FLASH *flash = &ARM_Driver_Flash_(0);
+static DRIVER_FLASH *flash = &Driver_Flash_(0);
 static Driver_GPIO_t    *gpio  = &Driver_GPIO2;
 static Driver_EXTI_t    *exti  = &Driver_EXTI0;
 
@@ -86,7 +86,7 @@ static void EXTI_Callback(uint32_t event)
 
 static void FLASH_Callback(uint32_t event)
 {
-  if (event & ARM_FLASH_EVENT_READY) {
+  if (event & FLASH_EVENT_READY) {
     gpio->PinWrite(LED_PIN, GPIO_PIN_OUT_HIGH);
   }
 }
@@ -98,7 +98,7 @@ static void init_proc(void *param)
   GPIO_Init();
 
   flash->Initialize(FLASH_Callback);
-  flash->PowerControl(ARM_POWER_FULL);
+  flash->PowerControl(POWER_FULL);
 
   exti->Initialize(EXTI_Callback);
   exti->Control(EXTI_MODE_ACTIVE | EXTI_TRG_FALLING_EDGE);

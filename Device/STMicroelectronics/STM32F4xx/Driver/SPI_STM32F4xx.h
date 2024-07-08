@@ -56,18 +56,18 @@
 #endif
 
 #define SPIx_EXPORT_DRIVER(x)                                                                                                                                               \
-static int32_t        SPI##x##_Initialize      (ARM_SPI_SignalEvent_t pSignalEvent)                { return SPI_Initialize (pSignalEvent, &SPI##x##_Resources); }           \
+static int32_t        SPI##x##_Initialize      (SPI_SignalEvent_t pSignalEvent)                { return SPI_Initialize (pSignalEvent, &SPI##x##_Resources); }           \
 static int32_t        SPI##x##_Uninitialize    (void)                                              { return SPI_Uninitialize (&SPI##x##_Resources); }                       \
-static int32_t        SPI##x##_PowerControl    (ARM_POWER_STATE state)                             { return SPI_PowerControl (state, &SPI##x##_Resources); }                \
+static int32_t        SPI##x##_PowerControl    (POWER_STATE state)                             { return SPI_PowerControl (state, &SPI##x##_Resources); }                \
 static int32_t        SPI##x##_Send            (const void *data, uint32_t num)                    { return SPI_Send (data, num, &SPI##x##_Resources); }                    \
 static int32_t        SPI##x##_Receive         (void *data, uint32_t num)                          { return SPI_Receive (data, num, &SPI##x##_Resources); }                 \
 static int32_t        SPI##x##_Transfer        (const void *data_out, void *data_in, uint32_t num) { return SPI_Transfer (data_out, data_in, num, &SPI##x##_Resources); }   \
 static uint32_t       SPI##x##_GetDataCount    (void)                                              { return SPI_GetDataCount (&SPI##x##_Resources); }                       \
 static int32_t        SPI##x##_Control         (uint32_t control, uint32_t arg)                    { return SPI_Control (control, arg, &SPI##x##_Resources); }              \
-static ARM_SPI_STATUS SPI##x##_GetStatus       (void)                                              { return SPI_GetStatus (&SPI##x##_Resources); }                          \
+static SPI_STATUS SPI##x##_GetStatus       (void)                                              { return SPI_GetStatus (&SPI##x##_Resources); }                          \
        void           SPI##x##_IRQHandler      (void)                                              { SPI_IRQHandler(&SPI##x##_Resources); }                                 \
                                                                                                                                                                             \
-ARM_DRIVER_SPI Driver_SPI##x = {        \
+DRIVER_SPI Driver_SPI##x = {        \
   SPIx_GetVersion,                      \
   SPIx_GetCapabilities,                 \
   SPI##x##_Initialize,                  \
@@ -745,7 +745,7 @@ typedef struct _SPI_STATUS {
 
 /* SPI Information (Run-Time) */
 typedef struct _SPI_INFO {
-  ARM_SPI_SignalEvent_t cb_event;           // Event Callback
+  SPI_SignalEvent_t cb_event;           // Event Callback
   SPI_STATUS            status;             // Status flags
   uint8_t               state;              // Current SPI state
   uint32_t              mode;               // Current SPI mode

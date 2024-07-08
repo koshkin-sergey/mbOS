@@ -437,7 +437,7 @@ typedef struct _USART_STATUS {
 
 // USART Information (Run-time)
 typedef struct _USART_INFO {
-  ARM_USART_SignalEvent_t cb_event;            // Event Callback
+  USART_SignalEvent_t cb_event;            // Event Callback
   USART_STATUS            status;              // Status flags
   uint8_t                 flags;               // Current USART flags
   uint32_t                mode;                // Current USART mode
@@ -446,7 +446,7 @@ typedef struct _USART_INFO {
 
 // USART Resources definition
 typedef const struct {
-  ARM_USART_CAPABILITIES  capabilities;        // Capabilities
+  USART_CAPABILITIES  capabilities;        // Capabilities
   USART_TypeDef          *reg;                 // USART peripheral pointer
   RCC_Periph_t            periph;              // Peripheral
   USART_IO                io;                  // USART Input/Output pins

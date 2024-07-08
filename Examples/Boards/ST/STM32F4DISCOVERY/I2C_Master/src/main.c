@@ -76,8 +76,8 @@ static const osEventFlagsAttr_t evf_i2c_attr = {
     .cb_size   = sizeof(evf_i2c_cb)
 };
 
-extern ARM_DRIVER_I2C Driver_I2C1;
-static ARM_DRIVER_I2C *i2c = &Driver_I2C1;
+extern DRIVER_I2C Driver_I2C1;
+static DRIVER_I2C *i2c = &Driver_I2C1;
 
 /*******************************************************************************
  *  function implementations (scope: module-local)
@@ -98,24 +98,24 @@ int32_t TestTransferEvent(uint8_t *wr_buf, uint8_t wr_size,
   i2c->MasterTransmit(SLAVE_ADDR, wr_buf, wr_size, true);
   /* Wait until transfer completed */
   flags = osEventFlagsWait(evf_i2c,
-                           ARM_I2C_EVENT_TRANSFER_DONE |
-                           ARM_I2C_EVENT_TRANSFER_INCOMPLETE,
+                           I2C_EVENT_TRANSFER_DONE |
+                           I2C_EVENT_TRANSFER_INCOMPLETE,
                            osFlagsWaitAny,
                            I2C_TIMEOUT);
   /* Check if all data transferred */
-  if ((flags & (ARM_I2C_EVENT_TRANSFER_INCOMPLETE | osFlagsError)) != 0U) {
+  if ((flags & (I2C_EVENT_TRANSFER_INCOMPLETE | osFlagsError)) != 0U) {
     return (-1);
   }
 
   i2c->MasterReceive(SLAVE_ADDR, rd_buf, rd_size, false);
   /* Wait until transfer completed */
   flags = osEventFlagsWait(evf_i2c,
-                           ARM_I2C_EVENT_TRANSFER_DONE |
-                           ARM_I2C_EVENT_TRANSFER_INCOMPLETE,
+                           I2C_EVENT_TRANSFER_DONE |
+                           I2C_EVENT_TRANSFER_INCOMPLETE,
                            osFlagsWaitAny,
                            I2C_TIMEOUT);
   /* Check if all data transferred */
-  if ((flags & (ARM_I2C_EVENT_TRANSFER_INCOMPLETE | osFlagsError)) != 0U) {
+  if ((flags & (I2C_EVENT_TRANSFER_INCOMPLETE | osFlagsError)) != 0U) {
     return (-1);
   }
 
@@ -163,8 +163,8 @@ static void main_proc(void *param)
     i2c->Initialize(NULL);
   }
   /* Configure I2C Driver */
-  i2c->PowerControl(ARM_POWER_FULL);
-  i2c->Control(ARM_I2C_BUS_SPEED, ARM_I2C_BUS_SPEED_STANDARD);
+  i2c->PowerControl(POWER_FULL);
+  i2c->Control(I2C_BUS_SPEED, I2C_BUS_SPEED_STANDARD);
 
   uint8_t wr_buf[] = {0U};
   uint8_t rd_buf[16];

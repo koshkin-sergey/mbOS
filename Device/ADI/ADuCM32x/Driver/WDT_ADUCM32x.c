@@ -61,7 +61,7 @@ static int32_t WDT_Setup(uint32_t interval, WDT_SignalEvent_t cb_event)
   int32_t ret = WDT_DRIVER_ERROR;
 
   if (interval == 0U || interval > 8000000U) {
-    return (ARM_DRIVER_ERROR_PARAMETER);
+    return (DRIVER_ERROR_PARAMETER);
   }
 
   if ((MMR_WDT->T3STA & T3STA_LOCK_Msk) == 0U) {

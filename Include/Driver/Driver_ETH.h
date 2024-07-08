@@ -23,14 +23,14 @@
 
 /* History:
  *  Version 2.2
- *    Removed volatile from ARM_ETH_LINK_INFO
+ *    Removed volatile from ETH_LINK_INFO
  *  Version 2.1
- *    ARM_ETH_LINK_INFO made volatile
+ *    ETH_LINK_INFO made volatile
  *  Version 2.0
- *    Removed ARM_ETH_STATUS enumerator
- *    Removed ARM_ETH_MODE enumerator
+ *    Removed ETH_STATUS enumerator
+ *    Removed ETH_MODE enumerator
  *  Version 1.10
- *    Namespace prefix ARM_ added
+ *    Namespace prefix  added
  *  Version 1.00
  *    Initial release
  */
@@ -43,45 +43,45 @@
 /**
 \brief Ethernet Media Interface type
 */
-#define ARM_ETH_INTERFACE_MII           (0U)    ///< Media Independent Interface (MII)
-#define ARM_ETH_INTERFACE_RMII          (1U)    ///< Reduced Media Independent Interface (RMII)
-#define ARM_ETH_INTERFACE_SMII          (2U)    ///< Serial Media Independent Interface (SMII)
+#define ETH_INTERFACE_MII           (0U)    ///< Media Independent Interface (MII)
+#define ETH_INTERFACE_RMII          (1U)    ///< Reduced Media Independent Interface (RMII)
+#define ETH_INTERFACE_SMII          (2U)    ///< Serial Media Independent Interface (SMII)
 
 /**
 \brief Ethernet link speed
 */
-#define ARM_ETH_SPEED_10M               (0U)    ///< 10 Mbps link speed
-#define ARM_ETH_SPEED_100M              (1U)    ///< 100 Mbps link speed
-#define ARM_ETH_SPEED_1G                (2U)    ///< 1 Gpbs link speed
+#define ETH_SPEED_10M               (0U)    ///< 10 Mbps link speed
+#define ETH_SPEED_100M              (1U)    ///< 100 Mbps link speed
+#define ETH_SPEED_1G                (2U)    ///< 1 Gpbs link speed
 
 /**
 \brief Ethernet duplex mode
 */
-#define ARM_ETH_DUPLEX_HALF             (0U)    ///< Half duplex link
-#define ARM_ETH_DUPLEX_FULL             (1U)    ///< Full duplex link
+#define ETH_DUPLEX_HALF             (0U)    ///< Half duplex link
+#define ETH_DUPLEX_FULL             (1U)    ///< Full duplex link
 
 /**
 \brief Ethernet link state
 */
-typedef enum _ARM_ETH_LINK_STATE {
-  ARM_ETH_LINK_DOWN,                    ///< Link is down
-  ARM_ETH_LINK_UP                       ///< Link is up
-} ARM_ETH_LINK_STATE;
+typedef enum _ETH_LINK_STATE {
+  ETH_LINK_DOWN,                        ///< Link is down
+  ETH_LINK_UP                           ///< Link is up
+} ETH_LINK_STATE;
 
 /**
 \brief Ethernet link information
 */
-typedef struct _ARM_ETH_LINK_INFO {
+typedef struct _ETH_LINK_INFO {
   uint32_t speed    : 2;                ///< Link speed: 0= 10 MBit, 1= 100 MBit, 2= 1 GBit
   uint32_t duplex   : 1;                ///< Duplex mode: 0= Half, 1= Full
   uint32_t reserved : 29;
-} ARM_ETH_LINK_INFO;
+} ETH_LINK_INFO;
 
 /**
 \brief Ethernet MAC Address
 */
-typedef struct _ARM_ETH_MAC_ADDR {
+typedef struct _ETH_MAC_ADDR {
   uint8_t b[6];                         ///< MAC Address (6 bytes), MSB first
-} ARM_ETH_MAC_ADDR;
+} ETH_MAC_ADDR;
 
 #endif /* DRIVER_ETH_H_ */

@@ -76,8 +76,8 @@ static const osEventFlagsAttr_t evf_i2c_attr = {
 
 static Driver_GPIO_t *gpio = &Driver_GPIO2;
 
-extern ARM_DRIVER_I2C Driver_I2C0;
-static ARM_DRIVER_I2C *i2c = &Driver_I2C0;
+extern DRIVER_I2C Driver_I2C0;
+static DRIVER_I2C *i2c = &Driver_I2C0;
 
 static bool pooling;
 
@@ -98,28 +98,28 @@ int32_t WaitTransfer(uint32_t data_cnt)
     uint32_t flags;
 
     flags = osEventFlagsWait(evf_i2c,
-                             ARM_I2C_EVENT_TRANSFER_DONE       |
-                             ARM_I2C_EVENT_TRANSFER_INCOMPLETE |
-                             ARM_I2C_EVENT_ADDRESS_NACK        |
-                             ARM_I2C_EVENT_ARBITRATION_LOST    |
-                             ARM_I2C_EVENT_BUS_ERROR,
+                             I2C_EVENT_TRANSFER_DONE       |
+                             I2C_EVENT_TRANSFER_INCOMPLETE |
+                             I2C_EVENT_ADDRESS_NACK        |
+                             I2C_EVENT_ARBITRATION_LOST    |
+                             I2C_EVENT_BUS_ERROR,
                              osFlagsWaitAny,
                              I2C_TIMEOUT);
     if ((flags & osFlagsError) != 0U) {
       if (flags == osFlagsErrorTimeout) {
-        i2c->Control(ARM_I2C_BUS_CLEAR, 0U);
+        i2c->Control(I2C_BUS_CLEAR, 0U);
       }
       return (-1);
     }
 
     /* Check if all data transferred */
-    if ((flags & ~ARM_I2C_EVENT_TRANSFER_DONE) != 0U) {
+    if ((flags & ~I2C_EVENT_TRANSFER_DONE) != 0U) {
       return (-1);
     }
   }
   else {
     uint32_t timeout;
-    ARM_I2C_STATUS state;
+    I2C_STATUS state;
 
     timeout = osKernelGetTickCount() + I2C_TIMEOUT;
 
@@ -131,7 +131,7 @@ int32_t WaitTransfer(uint32_t data_cnt)
     } while (time_before(osKernelGetTickCount(), timeout));
 
     if (state.busy != 0U) {
-      i2c->Control(ARM_I2C_BUS_CLEAR, 0U);
+      i2c->Control(I2C_BUS_CLEAR, 0U);
       return (-1);
     }
 
@@ -157,7 +157,7 @@ int32_t TestTransfer(uint8_t *wr_buf, uint8_t wr_size,
 
   if (wr_buf != NULL && wr_size != 0U) {
     rc = i2c->MasterTransmit(SLAVE_ADDR, wr_buf, wr_size, pend);
-    if (rc == ARM_DRIVER_OK) {
+    if (rc == DRIVER_OK) {
       /* Wait until transfer completed */
       rc = WaitTransfer(wr_size);
     }
@@ -165,7 +165,7 @@ int32_t TestTransfer(uint8_t *wr_buf, uint8_t wr_size,
 
   if (rc == 0 && pend == true) {
     rc = i2c->MasterReceive(SLAVE_ADDR, rd_buf, rd_size, false);
-    if (rc == ARM_DRIVER_OK) {
+    if (rc == DRIVER_OK) {
       /* Wait until transfer completed */
       rc = WaitTransfer(rd_size);
     }
@@ -187,15 +187,15 @@ static void GPIO_Init(void)
 
 static void I2C_Init(void)
 {
-  ARM_I2C_SignalEvent_t cb_event;
+  I2C_SignalEvent_t cb_event;
 
   cb_event = pooling == false ? I2C_Callback : NULL;
 
   /* Initialize I2C Driver */
   i2c->Initialize(cb_event);
   /* Configure I2C Driver */
-  i2c->PowerControl(ARM_POWER_FULL);
-  i2c->Control(ARM_I2C_BUS_SPEED, ARM_I2C_BUS_SPEED_STANDARD);
+  i2c->PowerControl(POWER_FULL);
+  i2c->Control(I2C_BUS_SPEED, I2C_BUS_SPEED_STANDARD);
 }
 
 __NO_RETURN

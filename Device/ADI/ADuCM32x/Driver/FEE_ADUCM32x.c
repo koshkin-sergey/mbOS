@@ -31,7 +31,7 @@
  *  defines and macros (scope: module-local)
  ******************************************************************************/
 
-#define ARM_FLASH_DRV_VERSION    ARM_DRIVER_VERSION_MAJOR_MINOR(1, 0) /* driver version */
+#define FLASH_DRV_VERSION    DRIVER_VERSION_MAJOR_MINOR(1, 0) /* driver version */
 
 #define FLASH_SECTOR_INFO           NULL
 #define FLASH_SECTOR_COUNT          128U
@@ -45,7 +45,7 @@
  ******************************************************************************/
 
 /* Flash Information */
-static ARM_FLASH_INFO FlashInfo = {
+static FLASH_INFO FlashInfo = {
   FLASH_SECTOR_INFO,
   FLASH_SECTOR_COUNT,
   FLASH_SECTOR_SIZE,
@@ -56,13 +56,13 @@ static ARM_FLASH_INFO FlashInfo = {
 };
 
 /* Driver Version */
-static const ARM_DRIVER_VERSION DriverVersion = {
-  ARM_FLASH_API_VERSION,
-  ARM_FLASH_DRV_VERSION
+static const DRIVER_VERSION DriverVersion = {
+  FLASH_API_VERSION,
+  FLASH_DRV_VERSION
 };
 
 /* Driver Capabilities */
-static const ARM_FLASH_CAPABILITIES DriverCapabilities = {
+static const FLASH_CAPABILITIES DriverCapabilities = {
   1U, /* event_ready */
   2U, /* data_width = 0:8-bit, 1:16-bit, 2:32-bit */
   0U, /* erase_chip */
@@ -88,33 +88,33 @@ static void ProgramTwoWord(FlashXfer_t *xfer)
 
 /**
  * @brief       Get driver version.
- * @return      \ref ARM_DRIVER_VERSION
+ * @return      \ref DRIVER_VERSION
  */
-static ARM_DRIVER_VERSION Flash_GetVersion(void)
+static DRIVER_VERSION Flash_GetVersion(void)
 {
   return (DriverVersion);
 }
 
 /**
  * @brief       Get driver capabilities.
- * @return      \ref ARM_FLASH_CAPABILITIES
+ * @return      \ref FLASH_CAPABILITIES
  */
-static ARM_FLASH_CAPABILITIES Flash_GetCapabilities(void)
+static FLASH_CAPABILITIES Flash_GetCapabilities(void)
 {
   return (DriverCapabilities);
 }
 
 /**
  * @brief       Initialize the Flash Interface.
- * @param[in]   cb_event  Pointer to \ref ARM_Flash_SignalEvent
+ * @param[in]   cb_event  Pointer to \ref Flash_SignalEvent
  * @return      \ref execution_status
  */
-static int32_t Flash_Initialize(ARM_Flash_SignalEvent_t cb_event)
+static int32_t Flash_Initialize(Flash_SignalEvent_t cb_event)
 {
   FlashInstance_t *ins = &FlashInstance;
 
   if (ins->flags == FEE_FLAG_INIT) {
-    return (ARM_DRIVER_OK);
+    return (DRIVER_OK);
   }
 
   memset(ins, 0, sizeof(FlashInstance_t));
@@ -122,7 +122,7 @@ static int32_t Flash_Initialize(ARM_Flash_SignalEvent_t cb_event)
   ins->cb_event = cb_event;
   ins->flags    = FEE_FLAG_INIT;
 
-  return (ARM_DRIVER_OK);
+  return (DRIVER_OK);
 }
 
 /**
@@ -135,7 +135,7 @@ static int32_t Flash_Uninitialize(void)
 
   memset(ins, 0, sizeof(FlashInstance_t));
 
-  return (ARM_DRIVER_OK);
+  return (DRIVER_OK);
 }
 
 /**
@@ -143,13 +143,13 @@ static int32_t Flash_Uninitialize(void)
  * @param[in]   state  Power state
  * @return      \ref execution_status
  */
-static int32_t Flash_PowerControl(ARM_POWER_STATE state)
+static int32_t Flash_PowerControl(POWER_STATE state)
 {
   MMR_FEE_t *mmr = MMR_FEE;
   FlashInstance_t *ins = &FlashInstance;
 
   switch (state) {
-    case ARM_POWER_OFF:
+    case POWER_OFF:
       /* Disable interrupts */
       NVIC_DisableIRQ(FLASH_IRQn);
 
@@ -160,13 +160,13 @@ static int32_t Flash_PowerControl(ARM_POWER_STATE state)
       ins->flags &= ~FEE_FLAG_POWER;
       break;
 
-    case ARM_POWER_FULL:
+    case POWER_FULL:
       if ((ins->flags & FEE_FLAG_INIT) == 0U) {
-        return (ARM_DRIVER_ERROR);
+        return (DRIVER_ERROR);
       }
 
       if ((ins->flags & FEE_FLAG_POWER) != 0U) {
-        return (ARM_DRIVER_OK);
+        return (DRIVER_OK);
       }
 
       mmr->FEECON0 = FEECON0_IENERR | FEECON0_IWRALCOMP | FEECON0_IENCMD;
@@ -179,11 +179,11 @@ static int32_t Flash_PowerControl(ARM_POWER_STATE state)
       ins->flags |= FEE_FLAG_POWER;
       break;
 
-    case ARM_POWER_LOW:
-      return (ARM_DRIVER_ERROR_UNSUPPORTED);
+    case POWER_LOW:
+      return (DRIVER_ERROR_UNSUPPORTED);
   }
 
-  return (ARM_DRIVER_OK);
+  return (DRIVER_OK);
 }
 
 /**
@@ -204,11 +204,11 @@ static int32_t Flash_ReadData(uint32_t addr, void *data, uint32_t cnt)
       (          addr & 0x3U) != 0U   ||
       ((uint32_t)data & 0x3U) != 0U)
   {
-    return (ARM_DRIVER_ERROR_PARAMETER);
+    return (DRIVER_ERROR_PARAMETER);
   }
 
   if ((MMR_FEE->FEESTA & FEESTA_CMDBUSY) != 0U) {
-    return (ARM_DRIVER_ERROR_BUSY);
+    return (DRIVER_ERROR_BUSY);
   }
 
   from = (uint32_t *)addr;
@@ -238,15 +238,15 @@ static int32_t Flash_ProgramData(uint32_t addr, const void *data, uint32_t cnt)
       (          addr & 0x7U) != 0U   ||
       ((uint32_t)data & 0x3U) != 0U)
   {
-    return (ARM_DRIVER_ERROR_PARAMETER);
+    return (DRIVER_ERROR_PARAMETER);
   }
 
   if ((ins->flags & FEE_FLAG_POWER) == 0U) {
-    return (ARM_DRIVER_ERROR);
+    return (DRIVER_ERROR);
   }
 
   if ((mmr->FEESTA & FEESTA_CMDBUSY) != 0U) {
-    return (ARM_DRIVER_ERROR_BUSY);
+    return (DRIVER_ERROR_BUSY);
   }
 
   ins->status.busy  = 1U;
@@ -258,7 +258,7 @@ static int32_t Flash_ProgramData(uint32_t addr, const void *data, uint32_t cnt)
 
   ProgramTwoWord(&ins->xfer);
 
-  return (ARM_DRIVER_OK);
+  return (DRIVER_OK);
 }
 
 /**
@@ -272,15 +272,15 @@ static int32_t Flash_EraseSector(uint32_t addr)
   FlashInstance_t *ins = &FlashInstance;
 
   if ((addr & 0x3U) != 0U) {
-    return (ARM_DRIVER_ERROR_PARAMETER);
+    return (DRIVER_ERROR_PARAMETER);
   }
 
   if ((ins->flags & FEE_FLAG_POWER) == 0U) {
-    return (ARM_DRIVER_ERROR);
+    return (DRIVER_ERROR);
   }
 
   if ((mmr->FEESTA & FEESTA_CMDBUSY) != 0U) {
-    return (ARM_DRIVER_ERROR_BUSY);
+    return (DRIVER_ERROR_BUSY);
   }
 
   ins->status.busy  = 1U;
@@ -290,7 +290,7 @@ static int32_t Flash_EraseSector(uint32_t addr)
   mmr->FEEADR0 = addr;
   mmr->FEECMD  = FEECMD_CMD_PAGEERASE;
 
-  return (ARM_DRIVER_OK);
+  return (DRIVER_OK);
 }
 
 /**
@@ -300,23 +300,23 @@ static int32_t Flash_EraseSector(uint32_t addr)
  */
 static int32_t Flash_EraseChip(void)
 {
-  return (ARM_DRIVER_ERROR_UNSUPPORTED);
+  return (DRIVER_ERROR_UNSUPPORTED);
 }
 
 /**
  * @brief       Get Flash status.
- * @return      Flash status \ref ARM_FLASH_STATUS
+ * @return      Flash status \ref FLASH_STATUS
  */
-static ARM_FLASH_STATUS Flash_GetStatus(void)
+static FLASH_STATUS Flash_GetStatus(void)
 {
   return (FlashInstance.status);
 }
 
 /**
  * @brief       Get Flash information.
- * @return      Pointer to Flash information \ref ARM_FLASH_INFO
+ * @return      Pointer to Flash information \ref FLASH_INFO
  */
-static ARM_FLASH_INFO* Flash_GetInfo(void)
+static FLASH_INFO* Flash_GetInfo(void)
 {
   return (&FlashInfo);
 }
@@ -339,12 +339,12 @@ void FLASH_IRQHandler(void)
   if ((status & FEESTA_CMDRES_Msk) != 0U) {
     ins->status.busy = 0U;
     ins->status.error = 1U;
-    event = ARM_FLASH_EVENT_READY | ARM_FLASH_EVENT_ERROR;
+    event = FLASH_EVENT_READY | FLASH_EVENT_ERROR;
   }
   else {
     if ((status & FEESTA_CMDDONE) != 0U) {
       ins->status.busy = 0U;
-      event = ARM_FLASH_EVENT_READY;
+      event = FLASH_EVENT_READY;
     }
 
     if ((status & FEESTA_WRALMOSTDONE) != 0U) {
@@ -354,7 +354,7 @@ void FLASH_IRQHandler(void)
       }
       else {
         ins->status.busy = 0U;
-        event = ARM_FLASH_EVENT_READY;
+        event = FLASH_EVENT_READY;
       }
     }
   }
@@ -369,8 +369,8 @@ void FLASH_IRQHandler(void)
  ******************************************************************************/
 
 extern \
-ARM_DRIVER_FLASH Driver_Flash0;
-ARM_DRIVER_FLASH Driver_Flash0 = {
+DRIVER_FLASH Driver_Flash0;
+DRIVER_FLASH Driver_Flash0 = {
   Flash_GetVersion,
   Flash_GetCapabilities,
   Flash_Initialize,

@@ -33,7 +33,7 @@
 /****** WDT error codes *****/
 #define WDT_DRIVER_OK                  0      ///< Operation succeeded
 #define WDT_DRIVER_ERROR              -1      ///< Unspecified error
-#define ARM_DRIVER_ERROR_PARAMETER    -2      ///< Parameter error
+#define DRIVER_ERROR_PARAMETER    -2      ///< Parameter error
 
 /*******************************************************************************
  *  typedefs and structures

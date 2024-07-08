@@ -95,15 +95,15 @@
 
 // CAN Driver ******************************************************************
 
-#define ARM_CAN_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(1,6)         // CAN driver version
+#define CAN_DRV_VERSION DRIVER_VERSION_MAJOR_MINOR(1,6)         // CAN driver version
 
 // Driver Version
-static const ARM_DRIVER_VERSION can_driver_version = { ARM_CAN_API_VERSION, ARM_CAN_DRV_VERSION };
+static const DRIVER_VERSION can_driver_version = { CAN_API_VERSION, CAN_DRV_VERSION };
 
 // Driver Capabilities
-static const ARM_CAN_CAPABILITIES can_driver_capabilities = {
+static const CAN_CAPABILITIES can_driver_capabilities = {
   CAN_TOT_OBJ_NUM,      // Number of CAN Objects available
-  1U,                   // Supports reentrant calls to ARM_CAN_MessageSend, ARM_CAN_MessageRead, ARM_CAN_ObjectConfigure and abort message sending used by ARM_CAN_Control.
+  1U,                   // Supports reentrant calls to CAN_MessageSend, CAN_MessageRead, CAN_ObjectConfigure and abort message sending used by CAN_Control.
   0U,                   // Does not support CAN with flexible data-rate mode (CAN_FD)
   0U,                   // Does not support restricted operation mode
   1U,                   // Supports bus monitoring mode
@@ -112,7 +112,7 @@ static const ARM_CAN_CAPABILITIES can_driver_capabilities = {
 };
 
 // Object Capabilities
-static const ARM_CAN_OBJ_CAPABILITIES can_object_capabilities_rx = {
+static const CAN_OBJ_CAPABILITIES can_object_capabilities_rx = {
   0U,                   // Object does not support transmission
   1U,                   // Object supports reception
   0U,                   // Object does not support RTR reception and automatic Data transmission
@@ -123,7 +123,7 @@ static const ARM_CAN_OBJ_CAPABILITIES can_object_capabilities_rx = {
   1U,                   // Object supports mask identifier filtering
   3U                    // Object can buffer 3 messages
 };
-static const ARM_CAN_OBJ_CAPABILITIES can_object_capabilities_tx = {
+static const CAN_OBJ_CAPABILITIES can_object_capabilities_tx = {
   1U,                   // Object supports transmission
   0U,                   // Object does not support reception
   0U,                   // Object does not support RTR reception and automatic Data transmission
@@ -153,8 +153,8 @@ static CAN_TypeDef * const ptr_CANx[2] = { (CAN_TypeDef *)CAN1, (CAN_TypeDef *)C
 static uint8_t                     can_driver_powered    [CAN_CTRL_NUM];
 static uint8_t                     can_driver_initialized[CAN_CTRL_NUM];
 static uint8_t                     can_obj_cfg           [CAN_CTRL_NUM][CAN_TOT_OBJ_NUM];
-static ARM_CAN_SignalUnitEvent_t   CAN_SignalUnitEvent   [CAN_CTRL_NUM];
-static ARM_CAN_SignalObjectEvent_t CAN_SignalObjectEvent [CAN_CTRL_NUM];
+static CAN_SignalUnitEvent_t   CAN_SignalUnitEvent   [CAN_CTRL_NUM];
+static CAN_SignalObjectEvent_t CAN_SignalObjectEvent [CAN_CTRL_NUM];
 
 
 // Helper Functions
@@ -176,26 +176,26 @@ static int32_t CANx_AddFilter (uint32_t obj_idx, CAN_FILTER_TYPE filter_type, ui
   uint8_t      bank, bank_end;
   int32_t      status;
 
-  if (x >= CAN_CTRL_NUM)         { return ARM_DRIVER_ERROR;           }
-  if (obj_idx >= CAN_RX_OBJ_NUM) { return ARM_DRIVER_ERROR_PARAMETER; }
+  if (x >= CAN_CTRL_NUM)         { return DRIVER_ERROR;           }
+  if (obj_idx >= CAN_RX_OBJ_NUM) { return DRIVER_ERROR_PARAMETER; }
   if (x == 1U)                   { bank = CAN1_FILTER_BANK_NUM; bank_end = CAN1_FILTER_BANK_NUM + CAN2_FILTER_BANK_NUM; }
   else                           { bank = 0U;                   bank_end = CAN1_FILTER_BANK_NUM;                        }
-  if (bank >= bank_end)          { return ARM_DRIVER_ERROR;           }
+  if (bank >= bank_end)          { return DRIVER_ERROR;           }
 
-  status = ARM_DRIVER_OK;
+  status = DRIVER_OK;
   CAN1->FMR |= CAN_FMR_FINIT;                                           // Enter filter initialization mode
 
   fa1r = CAN1->FA1R;
   msk  = (uint32_t)1U << bank;
 
-  if ((id & ARM_CAN_ID_IDE_Msk) != 0U) {                                // Extended Identifier
+  if ((id & CAN_ID_IDE_Msk) != 0U) {                                // Extended Identifier
     frx = (id << 3) | CAN_FRx_32BIT_IDE;                                // id + IDE
     switch (filter_type) {
       case CAN_FILTER_TYPE_EXACT_ID:
         fry = (id << 3) | CAN_FRx_32BIT_IDE | CAN_FRx_32BIT_RTR;        // id + IDE + RTR
         while (bank <= bank_end) {                                      // Find empty place for id
           if (bank == bank_end) {                                       // If no free found exit
-            status = ARM_DRIVER_ERROR;
+            status = DRIVER_ERROR;
             break;
           }
           if ((fa1r & msk) == 0U) {                                     // If filter is not active
@@ -218,7 +218,7 @@ static int32_t CANx_AddFilter (uint32_t obj_idx, CAN_FILTER_TYPE filter_type, ui
         fry = (mask << 3) | CAN_FRx_32BIT_IDE;                          // mask + IDE
         while (bank <= bank_end) {                                      // Find empty place for id
           if (bank == bank_end) {                                       // If no free found exit
-            status = ARM_DRIVER_ERROR;
+            status = DRIVER_ERROR;
             break;
           }
           if ((fa1r & msk) == 0U) {                                     // If filter is not active
@@ -238,7 +238,7 @@ static int32_t CANx_AddFilter (uint32_t obj_idx, CAN_FILTER_TYPE filter_type, ui
         }
         break;
       default:
-        status = ARM_DRIVER_ERROR_PARAMETER;
+        status = DRIVER_ERROR_PARAMETER;
         break;
     }
   } else {                                                              // Standard Identifier
@@ -248,7 +248,7 @@ static int32_t CANx_AddFilter (uint32_t obj_idx, CAN_FILTER_TYPE filter_type, ui
               ((id & 0xFFFFU) << 21) | CAN_FRx_16BIT_H_RTR;             // High 16 bits = id + RTR
         while (bank <= bank_end) {                                      // Find empty place for id
           if (bank == bank_end) {                                       // If no free found exit
-            status = ARM_DRIVER_ERROR;
+            status = DRIVER_ERROR;
             break;
           }
           if ((fa1r & msk) == 0U) {                                     // If filter is not active
@@ -282,12 +282,12 @@ static int32_t CANx_AddFilter (uint32_t obj_idx, CAN_FILTER_TYPE filter_type, ui
       case CAN_FILTER_TYPE_MASKABLE_ID:
         frx = ((id   & 0xFFFFU) <<  5) |                                // Low 16 bits = id
               ((mask & 0xFFFFU) << 21) ;                                // High 16 bits = mask
-        if ((mask & ARM_CAN_ID_IDE_Msk) != 0U) {                        // If IDE masking enabled
+        if ((mask & CAN_ID_IDE_Msk) != 0U) {                        // If IDE masking enabled
           frx |= CAN_FRx_16BIT_H_RTR;                                   // High 16 bits = mask + IDE
         }
         while (bank <= bank_end) {                                      // Find empty place for id
           if (bank == bank_end) {                                       // If no free found exit
-            status = ARM_DRIVER_ERROR;
+            status = DRIVER_ERROR;
             break;
           }
           if ((fa1r & msk) == 0U) {                                     // If filter is not active
@@ -318,12 +318,12 @@ static int32_t CANx_AddFilter (uint32_t obj_idx, CAN_FILTER_TYPE filter_type, ui
         }
         break;
       default:
-        status = ARM_DRIVER_ERROR_PARAMETER;
+        status = DRIVER_ERROR_PARAMETER;
         break;
     }
   }
 
-  if (status == ARM_DRIVER_OK) {
+  if (status == DRIVER_OK) {
     CAN1->FA1R |= msk;                                                  // Put filter in active mode
   }
   CAN1->FMR  &= ~CAN_FMR_FINIT;                                         // Exit filter initialization mode
@@ -348,26 +348,26 @@ static int32_t CANx_RemoveFilter (uint32_t obj_idx, CAN_FILTER_TYPE filter_type,
   int32_t      status;
   uint8_t      bank, bank_end;
 
-  if (x >= CAN_CTRL_NUM)         { return ARM_DRIVER_ERROR;           }
-  if (obj_idx >= CAN_RX_OBJ_NUM) { return ARM_DRIVER_ERROR_PARAMETER; }
+  if (x >= CAN_CTRL_NUM)         { return DRIVER_ERROR;           }
+  if (obj_idx >= CAN_RX_OBJ_NUM) { return DRIVER_ERROR_PARAMETER; }
   if (x == 1U)                   { bank = CAN1_FILTER_BANK_NUM; bank_end = CAN1_FILTER_BANK_NUM + CAN2_FILTER_BANK_NUM; }
   else                           { bank = 0U;                   bank_end = CAN1_FILTER_BANK_NUM;                        }
-  if (bank >= bank_end)          { return ARM_DRIVER_ERROR;           }
+  if (bank >= bank_end)          { return DRIVER_ERROR;           }
 
-  status = ARM_DRIVER_OK;
+  status = DRIVER_OK;
   CAN1->FMR |= CAN_FMR_FINIT;                                           // Enter filter initialization mode
 
   fa1r = CAN1->FA1R;
   msk  = (uint32_t)1U << bank;
 
-  if ((id & ARM_CAN_ID_IDE_Msk) != 0U) {                                // Extended Identifier
+  if ((id & CAN_ID_IDE_Msk) != 0U) {                                // Extended Identifier
     frx = (id << 3) | CAN_FRx_32BIT_IDE;                                // id + IDE
     switch (filter_type) {
       case CAN_FILTER_TYPE_EXACT_ID:
         fry = (id << 3) | CAN_FRx_32BIT_IDE | CAN_FRx_32BIT_RTR;        // id + IDE + RTR
         while (bank <= bank_end) {                                      // Find empty place for id
           if (bank == bank_end) {                                       // If no free found exit
-            status = ARM_DRIVER_ERROR;
+            status = DRIVER_ERROR;
             break;
           }
           if (((fa1r & msk) != 0U) &&                                   // If filter is active
@@ -388,7 +388,7 @@ static int32_t CANx_RemoveFilter (uint32_t obj_idx, CAN_FILTER_TYPE filter_type,
         fry = (mask << 3) | CAN_FRx_32BIT_IDE;                          // mask + IDE
         while (bank <= bank_end) {                                      // Find empty place for id
           if (bank == bank_end) {                                       // If no free found exit
-            status = ARM_DRIVER_ERROR;
+            status = DRIVER_ERROR;
             break;
           }
           if (((fa1r & msk) != 0U) &&                                   // If filter is active
@@ -407,7 +407,7 @@ static int32_t CANx_RemoveFilter (uint32_t obj_idx, CAN_FILTER_TYPE filter_type,
         }
         break;
       default:
-        status = ARM_DRIVER_ERROR_PARAMETER;
+        status = DRIVER_ERROR_PARAMETER;
         break;
     }
   } else {                                                              // Standard Identifier
@@ -417,7 +417,7 @@ static int32_t CANx_RemoveFilter (uint32_t obj_idx, CAN_FILTER_TYPE filter_type,
               ((id & 0xFFFFU) << 21) | CAN_FRx_16BIT_H_RTR;             // High 16 bits = id + RTR
         while (bank <= bank_end) {                                      // Find empty place for id
           if (bank == bank_end) {                                       // If no free found exit
-            status = ARM_DRIVER_ERROR;
+            status = DRIVER_ERROR;
             break;
           }
           if (((fa1r & msk) != 0U)&&                                    // If filter is active
@@ -441,12 +441,12 @@ static int32_t CANx_RemoveFilter (uint32_t obj_idx, CAN_FILTER_TYPE filter_type,
       case CAN_FILTER_TYPE_MASKABLE_ID:
         frx = ((id   & 0xFFFFU) <<  5) |                                // Low 16 bits = id
               ((mask & 0xFFFFU) << 21) ;                                // High 16 bits = mask
-        if ((mask & ARM_CAN_ID_IDE_Msk) != 0U) {                        // If IDE masking enabled
+        if ((mask & CAN_ID_IDE_Msk) != 0U) {                        // If IDE masking enabled
           frx |= CAN_FRx_16BIT_H_IDE;                                   // High 16 bits = mask + IDE
         }
         while (bank <= bank_end) {                                      // Find empty place for id
           if (bank == bank_end) {                                       // If no free found exit
-            status = ARM_DRIVER_ERROR;
+            status = DRIVER_ERROR;
             break;
           }
           if (((fa1r & msk) != 0U) &&                                   // If filter is active
@@ -467,12 +467,12 @@ static int32_t CANx_RemoveFilter (uint32_t obj_idx, CAN_FILTER_TYPE filter_type,
         }
         break;
       default:
-        status = ARM_DRIVER_ERROR_PARAMETER;
+        status = DRIVER_ERROR_PARAMETER;
         break;
     }
   }
 
-  if ((status == ARM_DRIVER_OK)                         && 
+  if ((status == DRIVER_OK)                         && 
      ((CAN1->sFilterRegister[bank].FR1 != 0xFFFFFFFFU)  || 
       (CAN1->sFilterRegister[bank].FR2 != 0xFFFFFFFFU))) {
     CAN1->FA1R |= msk;                                                  // Put filter in active mode
@@ -485,35 +485,35 @@ static int32_t CANx_RemoveFilter (uint32_t obj_idx, CAN_FILTER_TYPE filter_type,
 // CAN Driver Functions
 
 /**
-  \fn          ARM_DRIVER_VERSION CAN_GetVersion (void)
+  \fn          DRIVER_VERSION CAN_GetVersion (void)
   \brief       Get driver version.
-  \return      ARM_DRIVER_VERSION
+  \return      DRIVER_VERSION
 */
-static ARM_DRIVER_VERSION CAN_GetVersion (void) { return can_driver_version; }
+static DRIVER_VERSION CAN_GetVersion (void) { return can_driver_version; }
 
 /**
-  \fn          ARM_CAN_CAPABILITIES CAN_GetCapabilities (void)
+  \fn          CAN_CAPABILITIES CAN_GetCapabilities (void)
   \brief       Get driver capabilities.
-  \return      ARM_CAN_CAPABILITIES
+  \return      CAN_CAPABILITIES
 */
-static ARM_CAN_CAPABILITIES CAN_GetCapabilities (void) { return can_driver_capabilities; }
+static CAN_CAPABILITIES CAN_GetCapabilities (void) { return can_driver_capabilities; }
 
 /**
-  \fn          int32_t CANx_Initialize (ARM_CAN_SignalUnitEvent_t   cb_unit_event,
-                                        ARM_CAN_SignalObjectEvent_t cb_object_event,
+  \fn          int32_t CANx_Initialize (CAN_SignalUnitEvent_t   cb_unit_event,
+                                        CAN_SignalObjectEvent_t cb_object_event,
                                         uint8_t                     x)
   \brief       Initialize CAN interface and register signal (callback) functions.
-  \param[in]   cb_unit_event   Pointer to ARM_CAN_SignalUnitEvent callback function
-  \param[in]   cb_object_event Pointer to ARM_CAN_SignalObjectEvent callback function
+  \param[in]   cb_unit_event   Pointer to CAN_SignalUnitEvent callback function
+  \param[in]   cb_object_event Pointer to CAN_SignalObjectEvent callback function
   \param[in]   x               Controller number (0..1)
   \return      execution status
 */
-static int32_t CANx_Initialize (ARM_CAN_SignalUnitEvent_t   cb_unit_event,
-                                ARM_CAN_SignalObjectEvent_t cb_object_event,
+static int32_t CANx_Initialize (CAN_SignalUnitEvent_t   cb_unit_event,
+                                CAN_SignalObjectEvent_t cb_object_event,
                                 uint8_t                     x) {
 
-  if (x >= CAN_CTRL_NUM)               { return ARM_DRIVER_ERROR; }
-  if (can_driver_initialized[x] != 0U) { return ARM_DRIVER_OK;    }
+  if (x >= CAN_CTRL_NUM)               { return DRIVER_ERROR; }
+  if (can_driver_initialized[x] != 0U) { return DRIVER_OK;    }
 
   CAN_SignalUnitEvent  [x] = cb_unit_event;
   CAN_SignalObjectEvent[x] = cb_object_event;
@@ -549,13 +549,13 @@ static int32_t CANx_Initialize (ARM_CAN_SignalUnitEvent_t   cb_unit_event,
 
   can_driver_initialized[x] = 1U;
 
-  return ARM_DRIVER_OK;
+  return DRIVER_OK;
 }
 #if (MX_CAN1 == 1U)
-static int32_t CAN1_Initialize (ARM_CAN_SignalUnitEvent_t cb_unit_event, ARM_CAN_SignalObjectEvent_t cb_object_event) { return CANx_Initialize (cb_unit_event, cb_object_event, 0U); }
+static int32_t CAN1_Initialize (CAN_SignalUnitEvent_t cb_unit_event, CAN_SignalObjectEvent_t cb_object_event) { return CANx_Initialize (cb_unit_event, cb_object_event, 0U); }
 #endif
 #if (MX_CAN2 == 1U)
-static int32_t CAN2_Initialize (ARM_CAN_SignalUnitEvent_t cb_unit_event, ARM_CAN_SignalObjectEvent_t cb_object_event) { return CANx_Initialize (cb_unit_event, cb_object_event, 1U); }
+static int32_t CAN2_Initialize (CAN_SignalUnitEvent_t cb_unit_event, CAN_SignalObjectEvent_t cb_object_event) { return CANx_Initialize (cb_unit_event, cb_object_event, 1U); }
 #endif
 
 /**
@@ -566,7 +566,7 @@ static int32_t CAN2_Initialize (ARM_CAN_SignalUnitEvent_t cb_unit_event, ARM_CAN
 */
 static int32_t CANx_Uninitialize (uint8_t x) {
 
-  if (x >= CAN_CTRL_NUM) { return ARM_DRIVER_ERROR; }
+  if (x >= CAN_CTRL_NUM) { return DRIVER_ERROR; }
 
 #if (MX_CAN1 == 1U)
   if (x == 0U) {
@@ -595,7 +595,7 @@ static int32_t CANx_Uninitialize (uint8_t x) {
 
   can_driver_initialized[x] = 0U;
 
-  return ARM_DRIVER_OK;
+  return DRIVER_OK;
 }
 #if (MX_CAN1 == 1U)
 static int32_t CAN1_Uninitialize (void) { return CANx_Uninitialize (0U); }
@@ -605,29 +605,29 @@ static int32_t CAN2_Uninitialize (void) { return CANx_Uninitialize (1U); }
 #endif
 
 /**
-  \fn          int32_t CANx_PowerControl (ARM_POWER_STATE state, uint8_t x)
+  \fn          int32_t CANx_PowerControl (POWER_STATE state, uint8_t x)
   \brief       Control CAN interface power.
   \param[in]   state  Power state
-                 - ARM_POWER_OFF :  power off: no operation possible
-                 - ARM_POWER_LOW :  low power mode: retain state, detect and signal wake-up events
-                 - ARM_POWER_FULL : power on: full operation at maximum performance
+                 - POWER_OFF :  power off: no operation possible
+                 - POWER_LOW :  low power mode: retain state, detect and signal wake-up events
+                 - POWER_FULL : power on: full operation at maximum performance
   \param[in]   x      Controller number (0..1)
   \return      execution status
 */
-static int32_t CANx_PowerControl (ARM_POWER_STATE state, uint8_t x) {
+static int32_t CANx_PowerControl (POWER_STATE state, uint8_t x) {
   CAN_TypeDef *ptr_CAN;
   uint32_t     msk;
   uint8_t      bank, bank_end;
 
-  if (x >= CAN_CTRL_NUM) { return ARM_DRIVER_ERROR; }
+  if (x >= CAN_CTRL_NUM) { return DRIVER_ERROR; }
   if (x == 1U)           { bank = CAN1_FILTER_BANK_NUM; bank_end = CAN1_FILTER_BANK_NUM + CAN2_FILTER_BANK_NUM; }
   else                   { bank = 0U;                   bank_end = CAN1_FILTER_BANK_NUM;                        }
-  if (bank >= bank_end)  { return ARM_DRIVER_ERROR; }
+  if (bank >= bank_end)  { return DRIVER_ERROR; }
 
   ptr_CAN = ptr_CANx[x];
 
   switch (state) {
-    case ARM_POWER_OFF:
+    case POWER_OFF:
       can_driver_powered[x] = 0U;
 #if (MX_CAN1 == 1U)
       if (x == 0U) {
@@ -688,9 +688,9 @@ static int32_t CANx_PowerControl (ARM_POWER_STATE state, uint8_t x) {
 #endif
       break;
 
-    case ARM_POWER_FULL:
-      if (can_driver_initialized[x] == 0U) { return ARM_DRIVER_ERROR; }
-      if (can_driver_powered[x]     != 0U) { return ARM_DRIVER_OK;    }
+    case POWER_FULL:
+      if (can_driver_initialized[x] == 0U) { return DRIVER_ERROR; }
+      if (can_driver_powered[x]     != 0U) { return DRIVER_OK;    }
 
 #if (MX_CAN1 == 1U)
       if (x == 0U) {
@@ -782,16 +782,16 @@ static int32_t CANx_PowerControl (ARM_POWER_STATE state, uint8_t x) {
       break;
 
     default:
-      return ARM_DRIVER_ERROR_UNSUPPORTED;
+      return DRIVER_ERROR_UNSUPPORTED;
   }
 
-  return ARM_DRIVER_OK;
+  return DRIVER_OK;
 }
 #if (MX_CAN1 == 1U)
-static int32_t CAN1_PowerControl (ARM_POWER_STATE state) { return CANx_PowerControl (state, 0U); }
+static int32_t CAN1_PowerControl (POWER_STATE state) { return CANx_PowerControl (state, 0U); }
 #endif
 #if (MX_CAN2 == 1U)
-static int32_t CAN2_PowerControl (ARM_POWER_STATE state) { return CANx_PowerControl (state, 1U); }
+static int32_t CAN2_PowerControl (POWER_STATE state) { return CANx_PowerControl (state, 1U); }
 #endif
 
 /**
@@ -804,42 +804,42 @@ uint32_t CAN_GetClock (void) {
 }
 
 /**
-  \fn          int32_t CANx_SetBitrate (ARM_CAN_BITRATE_SELECT select, uint32_t bitrate, uint32_t bit_segments, uint8_t x)
+  \fn          int32_t CANx_SetBitrate (CAN_BITRATE_SELECT select, uint32_t bitrate, uint32_t bit_segments, uint8_t x)
   \brief       Set bitrate for CAN interface.
   \param[in]   select       Bitrate selection
-                 - ARM_CAN_BITRATE_NOMINAL : nominal (flexible data-rate arbitration) bitrate
-                 - ARM_CAN_BITRATE_FD_DATA : flexible data-rate data bitrate
+                 - CAN_BITRATE_NOMINAL : nominal (flexible data-rate arbitration) bitrate
+                 - CAN_BITRATE_FD_DATA : flexible data-rate data bitrate
   \param[in]   bitrate      Bitrate
   \param[in]   bit_segments Bit segments settings
   \param[in]   x            Controller number (0..1)
   \return      execution status
 */
-static int32_t CANx_SetBitrate (ARM_CAN_BITRATE_SELECT select, uint32_t bitrate, uint32_t bit_segments, uint8_t x) {
+static int32_t CANx_SetBitrate (CAN_BITRATE_SELECT select, uint32_t bitrate, uint32_t bit_segments, uint8_t x) {
   CAN_TypeDef *ptr_CAN;
   uint32_t     mcr, sjw, prop_seg, phase_seg1, phase_seg2, pclk, brp, tq_num;
 
-  if (x >= CAN_CTRL_NUM)                 { return ARM_DRIVER_ERROR;               }
-  if (select != ARM_CAN_BITRATE_NOMINAL) { return ARM_CAN_INVALID_BITRATE_SELECT; }
-  if (can_driver_powered[x] == 0U)       { return ARM_DRIVER_ERROR;               }
+  if (x >= CAN_CTRL_NUM)                 { return DRIVER_ERROR;               }
+  if (select != CAN_BITRATE_NOMINAL) { return CAN_INVALID_BITRATE_SELECT; }
+  if (can_driver_powered[x] == 0U)       { return DRIVER_ERROR;               }
 
-  prop_seg   = (bit_segments & ARM_CAN_BIT_PROP_SEG_Msk  ) >> ARM_CAN_BIT_PROP_SEG_Pos;
-  phase_seg1 = (bit_segments & ARM_CAN_BIT_PHASE_SEG1_Msk) >> ARM_CAN_BIT_PHASE_SEG1_Pos;
-  phase_seg2 = (bit_segments & ARM_CAN_BIT_PHASE_SEG2_Msk) >> ARM_CAN_BIT_PHASE_SEG2_Pos;
-  sjw        = (bit_segments & ARM_CAN_BIT_SJW_Msk       ) >> ARM_CAN_BIT_SJW_Pos;
+  prop_seg   = (bit_segments & CAN_BIT_PROP_SEG_Msk  ) >> CAN_BIT_PROP_SEG_Pos;
+  phase_seg1 = (bit_segments & CAN_BIT_PHASE_SEG1_Msk) >> CAN_BIT_PHASE_SEG1_Pos;
+  phase_seg2 = (bit_segments & CAN_BIT_PHASE_SEG2_Msk) >> CAN_BIT_PHASE_SEG2_Pos;
+  sjw        = (bit_segments & CAN_BIT_SJW_Msk       ) >> CAN_BIT_SJW_Pos;
 
-  if (((prop_seg + phase_seg1) < 1U) || ((prop_seg + phase_seg1) > 16U)) { return ARM_CAN_INVALID_BIT_PROP_SEG;   }
-  if (( phase_seg2             < 1U) || ( phase_seg2             >  8U)) { return ARM_CAN_INVALID_BIT_PHASE_SEG2; }
-  if (( sjw                    < 1U) || ( sjw                    >  4U)) { return ARM_CAN_INVALID_BIT_SJW;        }
+  if (((prop_seg + phase_seg1) < 1U) || ((prop_seg + phase_seg1) > 16U)) { return CAN_INVALID_BIT_PROP_SEG;   }
+  if (( phase_seg2             < 1U) || ( phase_seg2             >  8U)) { return CAN_INVALID_BIT_PHASE_SEG2; }
+  if (( sjw                    < 1U) || ( sjw                    >  4U)) { return CAN_INVALID_BIT_SJW;        }
 
   ptr_CAN = ptr_CANx[x];
 
   tq_num = 1U + prop_seg + phase_seg1 + phase_seg2;
-  pclk   = CAN_GetClock ();           if (pclk == 0U)  { return ARM_DRIVER_ERROR;        }
-  brp    = pclk / (tq_num * bitrate); if (brp > 1024U) { return ARM_CAN_INVALID_BITRATE; }
+  pclk   = CAN_GetClock ();           if (pclk == 0U)  { return DRIVER_ERROR;        }
+  brp    = pclk / (tq_num * bitrate); if (brp > 1024U) { return CAN_INVALID_BITRATE; }
   if (pclk > (brp * tq_num * bitrate)) {
-    if (((pclk - (brp * tq_num * bitrate)) * 1024U) > CAN_CLOCK_TOLERANCE) { return ARM_CAN_INVALID_BITRATE; }
+    if (((pclk - (brp * tq_num * bitrate)) * 1024U) > CAN_CLOCK_TOLERANCE) { return CAN_INVALID_BITRATE; }
   } else if (pclk < (brp * tq_num * bitrate)) {
-    if ((((brp * tq_num * bitrate) - pclk) * 1024U) > CAN_CLOCK_TOLERANCE) { return ARM_CAN_INVALID_BITRATE; }
+    if ((((brp * tq_num * bitrate) - pclk) * 1024U) > CAN_CLOCK_TOLERANCE) { return CAN_INVALID_BITRATE; }
   }
 
   mcr = ptr_CAN->MCR;
@@ -849,107 +849,107 @@ static int32_t CANx_SetBitrate (ARM_CAN_BITRATE_SELECT select, uint32_t bitrate,
   ptr_CAN->BTR = ((brp - 1U) & CAN_BTR_BRP) | ((sjw - 1U) << 24) | ((phase_seg2 - 1U) << 20) | ((prop_seg + phase_seg1 - 1U) << 16);
   ptr_CAN->MCR =  mcr;                          // Return to previous mode
 
-  return ARM_DRIVER_OK;
+  return DRIVER_OK;
 }
 #if (MX_CAN1 == 1U)
-static int32_t CAN1_SetBitrate (ARM_CAN_BITRATE_SELECT select, uint32_t bitrate, uint32_t bit_segments) { return CANx_SetBitrate (select, bitrate, bit_segments, 0U); }
+static int32_t CAN1_SetBitrate (CAN_BITRATE_SELECT select, uint32_t bitrate, uint32_t bit_segments) { return CANx_SetBitrate (select, bitrate, bit_segments, 0U); }
 #endif
 #if (MX_CAN2 == 1U)
-static int32_t CAN2_SetBitrate (ARM_CAN_BITRATE_SELECT select, uint32_t bitrate, uint32_t bit_segments) { return CANx_SetBitrate (select, bitrate, bit_segments, 1U); }
+static int32_t CAN2_SetBitrate (CAN_BITRATE_SELECT select, uint32_t bitrate, uint32_t bit_segments) { return CANx_SetBitrate (select, bitrate, bit_segments, 1U); }
 #endif
 
 /**
-  \fn          int32_t CANx_SetMode (ARM_CAN_MODE mode, uint8_t x)
+  \fn          int32_t CANx_SetMode (CAN_MODE mode, uint8_t x)
   \brief       Set operating mode for CAN interface.
   \param[in]   mode   Operating mode
-                 - ARM_CAN_MODE_INITIALIZATION :    initialization mode
-                 - ARM_CAN_MODE_NORMAL :            normal operation mode
-                 - ARM_CAN_MODE_RESTRICTED :        restricted operation mode
-                 - ARM_CAN_MODE_MONITOR :           bus monitoring mode
-                 - ARM_CAN_MODE_LOOPBACK_INTERNAL : loopback internal mode
-                 - ARM_CAN_MODE_LOOPBACK_EXTERNAL : loopback external mode
+                 - CAN_MODE_INITIALIZATION :    initialization mode
+                 - CAN_MODE_NORMAL :            normal operation mode
+                 - CAN_MODE_RESTRICTED :        restricted operation mode
+                 - CAN_MODE_MONITOR :           bus monitoring mode
+                 - CAN_MODE_LOOPBACK_INTERNAL : loopback internal mode
+                 - CAN_MODE_LOOPBACK_EXTERNAL : loopback external mode
   \param[in]   x      Controller number (0..1)
   \return      execution status
 */
-static int32_t CANx_SetMode (ARM_CAN_MODE mode, uint8_t x) {
+static int32_t CANx_SetMode (CAN_MODE mode, uint8_t x) {
   CAN_TypeDef *ptr_CAN;
   uint32_t     event;
 
-  if (x >= CAN_CTRL_NUM) { return ARM_DRIVER_ERROR; }
+  if (x >= CAN_CTRL_NUM) { return DRIVER_ERROR; }
 
   ptr_CAN = ptr_CANx[x];
 
   event = 0U;
   switch (mode) {
-    case ARM_CAN_MODE_INITIALIZATION:
+    case CAN_MODE_INITIALIZATION:
       CAN1->FMR    |=  CAN_FMR_FINIT;           // Filter initialization mode
       ptr_CAN->MCR  =  CAN_MCR_INRQ;            // Enter initialization mode
       while ((ptr_CAN->MSR&CAN_MSR_INAK)==0U);  // Wait to enter initialization mode
-      event = ARM_CAN_EVENT_UNIT_BUS_OFF;
+      event = CAN_EVENT_UNIT_BUS_OFF;
       break;
-    case ARM_CAN_MODE_NORMAL:
+    case CAN_MODE_NORMAL:
       ptr_CAN->BTR &=~(CAN_BTR_LBKM | CAN_BTR_SILM);
       ptr_CAN->MCR  =  CAN_MCR_ABOM |           // Activate automatic bus-off
                        CAN_MCR_AWUM ;           // Enable automatic wakeup mode
       while ((ptr_CAN->MSR&CAN_MSR_INAK)!=0U);  // Wait to exit initialization mode
       CAN1->FMR    &= ~CAN_FMR_FINIT;           // Filter active mode
-      event = ARM_CAN_EVENT_UNIT_ACTIVE;
+      event = CAN_EVENT_UNIT_ACTIVE;
       break;
-    case ARM_CAN_MODE_RESTRICTED:
-      return ARM_DRIVER_ERROR_UNSUPPORTED;
-    case ARM_CAN_MODE_MONITOR:
+    case CAN_MODE_RESTRICTED:
+      return DRIVER_ERROR_UNSUPPORTED;
+    case CAN_MODE_MONITOR:
       ptr_CAN->MCR |=  CAN_MCR_INRQ;            // Enter initialization mode
       while ((ptr_CAN->MSR&CAN_MSR_INAK)==0U);  // Wait to enter initialization mode
       ptr_CAN->BTR &= ~CAN_BTR_LBKM;            // Deactivate loopback
       ptr_CAN->BTR |=  CAN_BTR_SILM;            // Activate silent
       ptr_CAN->MCR &= ~CAN_MCR_INRQ;            // Deactivate initialization mode
       while ((ptr_CAN->MSR&CAN_MSR_INAK)!=0U);  // Wait to exit initialization mode
-      event = ARM_CAN_EVENT_UNIT_PASSIVE;
+      event = CAN_EVENT_UNIT_PASSIVE;
       break;
-    case ARM_CAN_MODE_LOOPBACK_INTERNAL:
+    case CAN_MODE_LOOPBACK_INTERNAL:
       ptr_CAN->MCR |=  CAN_MCR_INRQ;            // Enter initialization mode
       while ((ptr_CAN->MSR&CAN_MSR_INAK)==0U);  // Wait to enter initialization mode
       ptr_CAN->BTR |=  CAN_BTR_LBKM;            // Activate loopback
       ptr_CAN->BTR |=  CAN_BTR_SILM;            // Activate silent
       ptr_CAN->MCR &= ~CAN_MCR_INRQ;            // Deactivate initialization mode
       while ((ptr_CAN->MSR&CAN_MSR_INAK)!=0U);  // Wait to exit initialization mode
-      event = ARM_CAN_EVENT_UNIT_PASSIVE;
+      event = CAN_EVENT_UNIT_PASSIVE;
       break;
-    case ARM_CAN_MODE_LOOPBACK_EXTERNAL:
+    case CAN_MODE_LOOPBACK_EXTERNAL:
       ptr_CAN->MCR |=  CAN_MCR_INRQ;            // Enter initialization mode
       while ((ptr_CAN->MSR&CAN_MSR_INAK)==0U);  // Wait to enter initialization mode
       ptr_CAN->BTR &= ~CAN_BTR_SILM;            // Deactivate silent
       ptr_CAN->BTR |=  CAN_BTR_LBKM;            // Activate loopback
       ptr_CAN->MCR &= ~CAN_MCR_INRQ;            // Deactivate initialization mode
       while ((ptr_CAN->MSR&CAN_MSR_INAK)!=0U);  // Wait to exit initialization mode
-      event = ARM_CAN_EVENT_UNIT_ACTIVE;
+      event = CAN_EVENT_UNIT_ACTIVE;
       break;
     default:
-      return ARM_DRIVER_ERROR_PARAMETER;
+      return DRIVER_ERROR_PARAMETER;
   }
   if ((CAN_SignalUnitEvent[x] != NULL) && (event != 0U)) { CAN_SignalUnitEvent[x](event); }
 
-  return ARM_DRIVER_OK;
+  return DRIVER_OK;
 }
 #if (MX_CAN1 == 1U)
-static int32_t CAN1_SetMode (ARM_CAN_MODE mode) { return CANx_SetMode (mode, 0U); }
+static int32_t CAN1_SetMode (CAN_MODE mode) { return CANx_SetMode (mode, 0U); }
 #endif
 #if (MX_CAN2 == 1U)
-static int32_t CAN2_SetMode (ARM_CAN_MODE mode) { return CANx_SetMode (mode, 1U); }
+static int32_t CAN2_SetMode (CAN_MODE mode) { return CANx_SetMode (mode, 1U); }
 #endif
 
 /**
-  \fn          ARM_CAN_OBJ_CAPABILITIES CANx_ObjectGetCapabilities (uint32_t obj_idx, uint8_t x)
+  \fn          CAN_OBJ_CAPABILITIES CANx_ObjectGetCapabilities (uint32_t obj_idx, uint8_t x)
   \brief       Retrieve capabilities of an object.
   \param[in]   obj_idx  Object index
   \param[in]   x        Controller number (0..1)
-  \return      ARM_CAN_OBJ_CAPABILITIES
+  \return      CAN_OBJ_CAPABILITIES
 */
-ARM_CAN_OBJ_CAPABILITIES CANx_ObjectGetCapabilities (uint32_t obj_idx, uint8_t x) {
-  ARM_CAN_OBJ_CAPABILITIES obj_cap_null;
+CAN_OBJ_CAPABILITIES CANx_ObjectGetCapabilities (uint32_t obj_idx, uint8_t x) {
+  CAN_OBJ_CAPABILITIES obj_cap_null;
 
   if ((x >= CAN_CTRL_NUM) || (obj_idx >= CAN_TOT_OBJ_NUM)) {
-    memset (&obj_cap_null, 0U, sizeof(ARM_CAN_OBJ_CAPABILITIES));
+    memset (&obj_cap_null, 0U, sizeof(CAN_OBJ_CAPABILITIES));
     return obj_cap_null;
   }
 
@@ -960,54 +960,54 @@ ARM_CAN_OBJ_CAPABILITIES CANx_ObjectGetCapabilities (uint32_t obj_idx, uint8_t x
   }
 }
 #if (MX_CAN1 == 1U)
-ARM_CAN_OBJ_CAPABILITIES CAN1_ObjectGetCapabilities (uint32_t obj_idx) { return CANx_ObjectGetCapabilities (obj_idx, 0U); }
+CAN_OBJ_CAPABILITIES CAN1_ObjectGetCapabilities (uint32_t obj_idx) { return CANx_ObjectGetCapabilities (obj_idx, 0U); }
 #endif
 #if (MX_CAN2 == 1U)
-ARM_CAN_OBJ_CAPABILITIES CAN2_ObjectGetCapabilities (uint32_t obj_idx) { return CANx_ObjectGetCapabilities (obj_idx, 1U); }
+CAN_OBJ_CAPABILITIES CAN2_ObjectGetCapabilities (uint32_t obj_idx) { return CANx_ObjectGetCapabilities (obj_idx, 1U); }
 #endif
 
 /**
-  \fn          int32_t CANx_ObjectSetFilter (uint32_t obj_idx, ARM_CAN_FILTER_OPERATION operation, uint32_t id, uint32_t arg, uint8_t x)
+  \fn          int32_t CANx_ObjectSetFilter (uint32_t obj_idx, CAN_FILTER_OPERATION operation, uint32_t id, uint32_t arg, uint8_t x)
   \brief       Add or remove filter for message reception.
   \param[in]   obj_idx      Object index of object that filter should be or is assigned to
   \param[in]   operation    Operation on filter
-                 - ARM_CAN_FILTER_ID_EXACT_ADD :       add    exact id filter
-                 - ARM_CAN_FILTER_ID_EXACT_REMOVE :    remove exact id filter
-                 - ARM_CAN_FILTER_ID_RANGE_ADD :       add    range id filter
-                 - ARM_CAN_FILTER_ID_RANGE_REMOVE :    remove range id filter
-                 - ARM_CAN_FILTER_ID_MASKABLE_ADD :    add    maskable id filter
-                 - ARM_CAN_FILTER_ID_MASKABLE_REMOVE : remove maskable id filter
+                 - CAN_FILTER_ID_EXACT_ADD :       add    exact id filter
+                 - CAN_FILTER_ID_EXACT_REMOVE :    remove exact id filter
+                 - CAN_FILTER_ID_RANGE_ADD :       add    range id filter
+                 - CAN_FILTER_ID_RANGE_REMOVE :    remove range id filter
+                 - CAN_FILTER_ID_MASKABLE_ADD :    add    maskable id filter
+                 - CAN_FILTER_ID_MASKABLE_REMOVE : remove maskable id filter
   \param[in]   id           ID or start of ID range (depending on filter type)
   \param[in]   arg          Mask or end of ID range (depending on filter type)
   \param[in]   x            Controller number (0..1)
   \return      execution status
 */
-static int32_t CANx_ObjectSetFilter (uint32_t obj_idx, ARM_CAN_FILTER_OPERATION operation, uint32_t id, uint32_t arg, uint8_t x) {
+static int32_t CANx_ObjectSetFilter (uint32_t obj_idx, CAN_FILTER_OPERATION operation, uint32_t id, uint32_t arg, uint8_t x) {
   int32_t status;
 
-  if (x >= CAN_CTRL_NUM)           { return ARM_DRIVER_ERROR;           }
-  if (obj_idx >= CAN_RX_OBJ_NUM)   { return ARM_DRIVER_ERROR_PARAMETER; }
-  if (can_driver_powered[x] == 0U) { return ARM_DRIVER_ERROR;           }
+  if (x >= CAN_CTRL_NUM)           { return DRIVER_ERROR;           }
+  if (obj_idx >= CAN_RX_OBJ_NUM)   { return DRIVER_ERROR_PARAMETER; }
+  if (can_driver_powered[x] == 0U) { return DRIVER_ERROR;           }
 
   CAN1->FMR |=  CAN_FMR_FINIT;          // Filter initialization mode
 
   switch (operation) {
-    case ARM_CAN_FILTER_ID_EXACT_ADD:
+    case CAN_FILTER_ID_EXACT_ADD:
       status = CANx_AddFilter   (obj_idx, CAN_FILTER_TYPE_EXACT_ID,    id,  0U, x);
       break;
-    case ARM_CAN_FILTER_ID_MASKABLE_ADD:
+    case CAN_FILTER_ID_MASKABLE_ADD:
       status = CANx_AddFilter   (obj_idx, CAN_FILTER_TYPE_MASKABLE_ID, id, arg, x);
       break;
-    case ARM_CAN_FILTER_ID_EXACT_REMOVE:
+    case CAN_FILTER_ID_EXACT_REMOVE:
       status = CANx_RemoveFilter(obj_idx, CAN_FILTER_TYPE_EXACT_ID,    id,  0U, x);
       break;
-    case ARM_CAN_FILTER_ID_MASKABLE_REMOVE:
+    case CAN_FILTER_ID_MASKABLE_REMOVE:
       status = CANx_RemoveFilter(obj_idx, CAN_FILTER_TYPE_MASKABLE_ID, id, arg, x);
       break;
-    case ARM_CAN_FILTER_ID_RANGE_ADD:
-    case ARM_CAN_FILTER_ID_RANGE_REMOVE:
+    case CAN_FILTER_ID_RANGE_ADD:
+    case CAN_FILTER_ID_RANGE_REMOVE:
     default:
-      status = ARM_DRIVER_ERROR_UNSUPPORTED;
+      status = DRIVER_ERROR_UNSUPPORTED;
       break;
   }
   CAN1->FMR &= ~CAN_FMR_FINIT;          // Filter active mode
@@ -1015,62 +1015,62 @@ static int32_t CANx_ObjectSetFilter (uint32_t obj_idx, ARM_CAN_FILTER_OPERATION 
   return status;
 }
 #if (MX_CAN1 == 1U)
-static int32_t CAN1_ObjectSetFilter (uint32_t obj_idx, ARM_CAN_FILTER_OPERATION operation, uint32_t id, uint32_t arg) { return CANx_ObjectSetFilter (obj_idx, operation, id, arg, 0U); }
+static int32_t CAN1_ObjectSetFilter (uint32_t obj_idx, CAN_FILTER_OPERATION operation, uint32_t id, uint32_t arg) { return CANx_ObjectSetFilter (obj_idx, operation, id, arg, 0U); }
 #endif
 #if (MX_CAN2 == 1U)
-static int32_t CAN2_ObjectSetFilter (uint32_t obj_idx, ARM_CAN_FILTER_OPERATION operation, uint32_t id, uint32_t arg) { return CANx_ObjectSetFilter (obj_idx, operation, id, arg, 1U); }
+static int32_t CAN2_ObjectSetFilter (uint32_t obj_idx, CAN_FILTER_OPERATION operation, uint32_t id, uint32_t arg) { return CANx_ObjectSetFilter (obj_idx, operation, id, arg, 1U); }
 #endif
 
 /**
-  \fn          int32_t CANx_ObjectConfigure (uint32_t obj_idx, ARM_CAN_OBJ_CONFIG obj_cfg, uint8_t x)
+  \fn          int32_t CANx_ObjectConfigure (uint32_t obj_idx, CAN_OBJ_CONFIG obj_cfg, uint8_t x)
   \brief       Configure object.
   \param[in]   obj_idx  Object index
   \param[in]   obj_cfg  Object configuration state
-                 - ARM_CAN_OBJ_INACTIVE :       deactivate object
-                 - ARM_CAN_OBJ_RX :             configure object for reception
-                 - ARM_CAN_OBJ_TX :             configure object for transmission
-                 - ARM_CAN_OBJ_RX_RTR_TX_DATA : configure object that on RTR reception automatically transmits Data Frame
-                 - ARM_CAN_OBJ_TX_RTR_RX_DATA : configure object that transmits RTR and automatically receives Data Frame
+                 - CAN_OBJ_INACTIVE :       deactivate object
+                 - CAN_OBJ_RX :             configure object for reception
+                 - CAN_OBJ_TX :             configure object for transmission
+                 - CAN_OBJ_RX_RTR_TX_DATA : configure object that on RTR reception automatically transmits Data Frame
+                 - CAN_OBJ_TX_RTR_RX_DATA : configure object that transmits RTR and automatically receives Data Frame
   \param[in]   x        Controller number (0..1)
   \return      execution status
 */
-static int32_t CANx_ObjectConfigure (uint32_t obj_idx, ARM_CAN_OBJ_CONFIG obj_cfg, uint8_t x) {
+static int32_t CANx_ObjectConfigure (uint32_t obj_idx, CAN_OBJ_CONFIG obj_cfg, uint8_t x) {
 
-  if (x >= CAN_CTRL_NUM)           { return ARM_DRIVER_ERROR;           }
-  if (obj_idx >= CAN_TOT_OBJ_NUM)  { return ARM_DRIVER_ERROR_PARAMETER; }
-  if (can_driver_powered[x] == 0U) { return ARM_DRIVER_ERROR;           }
+  if (x >= CAN_CTRL_NUM)           { return DRIVER_ERROR;           }
+  if (obj_idx >= CAN_TOT_OBJ_NUM)  { return DRIVER_ERROR_PARAMETER; }
+  if (can_driver_powered[x] == 0U) { return DRIVER_ERROR;           }
 
   switch (obj_cfg) {
-    case ARM_CAN_OBJ_INACTIVE:
-      can_obj_cfg[x][obj_idx] = ARM_CAN_OBJ_INACTIVE;
+    case CAN_OBJ_INACTIVE:
+      can_obj_cfg[x][obj_idx] = CAN_OBJ_INACTIVE;
       break;
-    case ARM_CAN_OBJ_RX_RTR_TX_DATA:
-    case ARM_CAN_OBJ_TX_RTR_RX_DATA:
-      can_obj_cfg[x][obj_idx] = ARM_CAN_OBJ_INACTIVE;
-      return ARM_DRIVER_ERROR_UNSUPPORTED;
-    case ARM_CAN_OBJ_TX:
-      if (obj_idx < CAN_RX_OBJ_NUM)  { return ARM_DRIVER_ERROR_PARAMETER; }
-      can_obj_cfg[x][obj_idx] = ARM_CAN_OBJ_TX;
+    case CAN_OBJ_RX_RTR_TX_DATA:
+    case CAN_OBJ_TX_RTR_RX_DATA:
+      can_obj_cfg[x][obj_idx] = CAN_OBJ_INACTIVE;
+      return DRIVER_ERROR_UNSUPPORTED;
+    case CAN_OBJ_TX:
+      if (obj_idx < CAN_RX_OBJ_NUM)  { return DRIVER_ERROR_PARAMETER; }
+      can_obj_cfg[x][obj_idx] = CAN_OBJ_TX;
       break;
-    case ARM_CAN_OBJ_RX:
-      if (obj_idx >= CAN_RX_OBJ_NUM) { return ARM_DRIVER_ERROR_PARAMETER; }
-      can_obj_cfg[x][obj_idx] = ARM_CAN_OBJ_RX;
+    case CAN_OBJ_RX:
+      if (obj_idx >= CAN_RX_OBJ_NUM) { return DRIVER_ERROR_PARAMETER; }
+      can_obj_cfg[x][obj_idx] = CAN_OBJ_RX;
       break;
     default:
-      return ARM_DRIVER_ERROR;
+      return DRIVER_ERROR;
   }
 
-  return ARM_DRIVER_OK;
+  return DRIVER_OK;
 }
 #if (MX_CAN1 == 1U)
-static int32_t CAN1_ObjectConfigure (uint32_t obj_idx, ARM_CAN_OBJ_CONFIG obj_cfg) { return CANx_ObjectConfigure (obj_idx, obj_cfg, 0U); }
+static int32_t CAN1_ObjectConfigure (uint32_t obj_idx, CAN_OBJ_CONFIG obj_cfg) { return CANx_ObjectConfigure (obj_idx, obj_cfg, 0U); }
 #endif
 #if (MX_CAN2 == 1U)
-static int32_t CAN2_ObjectConfigure (uint32_t obj_idx, ARM_CAN_OBJ_CONFIG obj_cfg) { return CANx_ObjectConfigure (obj_idx, obj_cfg, 1U); }
+static int32_t CAN2_ObjectConfigure (uint32_t obj_idx, CAN_OBJ_CONFIG obj_cfg) { return CANx_ObjectConfigure (obj_idx, obj_cfg, 1U); }
 #endif
 
 /**
-  \fn          int32_t CANx_MessageSend (uint32_t obj_idx, ARM_CAN_MSG_INFO *msg_info, const uint8_t *data, uint8_t size, uint8_t x)
+  \fn          int32_t CANx_MessageSend (uint32_t obj_idx, CAN_MSG_INFO *msg_info, const uint8_t *data, uint8_t size, uint8_t x)
   \brief       Send message on CAN bus.
   \param[in]   obj_idx  Object index
   \param[in]   msg_info Pointer to CAN message information
@@ -1080,22 +1080,22 @@ static int32_t CAN2_ObjectConfigure (uint32_t obj_idx, ARM_CAN_OBJ_CONFIG obj_cf
   \return      value >= 0  number of data bytes accepted to send
   \return      value < 0   execution status
 */
-static int32_t CANx_MessageSend (uint32_t obj_idx, ARM_CAN_MSG_INFO *msg_info, const uint8_t *data, uint8_t size, uint8_t x) {
+static int32_t CANx_MessageSend (uint32_t obj_idx, CAN_MSG_INFO *msg_info, const uint8_t *data, uint8_t size, uint8_t x) {
   CAN_TypeDef *ptr_CAN;
   uint32_t     tir;
 
-  if (x >= CAN_CTRL_NUM)                                          { return ARM_DRIVER_ERROR;           }
-  if ((obj_idx < CAN_RX_OBJ_NUM) || (obj_idx >= CAN_TOT_OBJ_NUM)) { return ARM_DRIVER_ERROR_PARAMETER; }
-  if (can_driver_powered[x] == 0U)                                { return ARM_DRIVER_ERROR;           }
-  if (can_obj_cfg[x][obj_idx] != ARM_CAN_OBJ_TX)                  { return ARM_DRIVER_ERROR;           }
+  if (x >= CAN_CTRL_NUM)                                          { return DRIVER_ERROR;           }
+  if ((obj_idx < CAN_RX_OBJ_NUM) || (obj_idx >= CAN_TOT_OBJ_NUM)) { return DRIVER_ERROR_PARAMETER; }
+  if (can_driver_powered[x] == 0U)                                { return DRIVER_ERROR;           }
+  if (can_obj_cfg[x][obj_idx] != CAN_OBJ_TX)                  { return DRIVER_ERROR;           }
 
   obj_idx -= CAN_RX_OBJ_NUM;                            // obj_idx origin to 0
 
   ptr_CAN  = ptr_CANx[x];
 
-  if ((ptr_CAN->sTxMailBox[obj_idx].TIR & CAN_TI0R_TXRQ) != 0U) { return ARM_DRIVER_ERROR_BUSY; }
+  if ((ptr_CAN->sTxMailBox[obj_idx].TIR & CAN_TI0R_TXRQ) != 0U) { return DRIVER_ERROR_BUSY; }
 
-  if ((msg_info->id & ARM_CAN_ID_IDE_Msk) != 0U) {      // Extended Identifier
+  if ((msg_info->id & CAN_ID_IDE_Msk) != 0U) {      // Extended Identifier
     tir = (msg_info->id <<  3) | CAN_TI0R_IDE;
   } else {                                              // Standard Identifier
     tir = (msg_info->id << 21);
@@ -1122,14 +1122,14 @@ static int32_t CANx_MessageSend (uint32_t obj_idx, ARM_CAN_MSG_INFO *msg_info, c
   return ((int32_t)size);
 }
 #if (MX_CAN1 == 1U)
-static int32_t CAN1_MessageSend (uint32_t obj_idx, ARM_CAN_MSG_INFO *msg_info, const uint8_t *data, uint8_t size) { return CANx_MessageSend (obj_idx, msg_info, data, size, 0U); }
+static int32_t CAN1_MessageSend (uint32_t obj_idx, CAN_MSG_INFO *msg_info, const uint8_t *data, uint8_t size) { return CANx_MessageSend (obj_idx, msg_info, data, size, 0U); }
 #endif
 #if (MX_CAN2 == 1U)
-static int32_t CAN2_MessageSend (uint32_t obj_idx, ARM_CAN_MSG_INFO *msg_info, const uint8_t *data, uint8_t size) { return CANx_MessageSend (obj_idx, msg_info, data, size, 1U); }
+static int32_t CAN2_MessageSend (uint32_t obj_idx, CAN_MSG_INFO *msg_info, const uint8_t *data, uint8_t size) { return CANx_MessageSend (obj_idx, msg_info, data, size, 1U); }
 #endif
 
 /**
-  \fn          int32_t CANx_MessageRead (uint32_t obj_idx, ARM_CAN_MSG_INFO *msg_info, uint8_t *data, uint8_t size, uint8_t x)
+  \fn          int32_t CANx_MessageRead (uint32_t obj_idx, CAN_MSG_INFO *msg_info, uint8_t *data, uint8_t size, uint8_t x)
   \brief       Read message received on CAN bus.
   \param[in]   obj_idx  Object index
   \param[out]  msg_info Pointer to read CAN message information
@@ -1139,21 +1139,21 @@ static int32_t CAN2_MessageSend (uint32_t obj_idx, ARM_CAN_MSG_INFO *msg_info, c
   \return      value >= 0  number of data bytes read
   \return      value < 0   execution status
 */
-static int32_t CANx_MessageRead (uint32_t obj_idx, ARM_CAN_MSG_INFO *msg_info, uint8_t *data, uint8_t size, uint8_t x) {
+static int32_t CANx_MessageRead (uint32_t obj_idx, CAN_MSG_INFO *msg_info, uint8_t *data, uint8_t size, uint8_t x) {
   CAN_TypeDef *ptr_CAN;
   uint32_t     data_rx[2][2];
 
-  if (x >= CAN_CTRL_NUM)                         { return ARM_DRIVER_ERROR;           }
-  if (obj_idx >= CAN_RX_OBJ_NUM)                 { return ARM_DRIVER_ERROR_PARAMETER; }
-  if (can_driver_powered[x] == 0U)               { return ARM_DRIVER_ERROR;           }
-  if (can_obj_cfg[x][obj_idx] != ARM_CAN_OBJ_RX) { return ARM_DRIVER_ERROR;           }
+  if (x >= CAN_CTRL_NUM)                         { return DRIVER_ERROR;           }
+  if (obj_idx >= CAN_RX_OBJ_NUM)                 { return DRIVER_ERROR_PARAMETER; }
+  if (can_driver_powered[x] == 0U)               { return DRIVER_ERROR;           }
+  if (can_obj_cfg[x][obj_idx] != CAN_OBJ_RX) { return DRIVER_ERROR;           }
 
   ptr_CAN = ptr_CANx[x];
 
   if (size > 8U) { size = 8U; }
 
   if ((ptr_CAN->sFIFOMailBox[obj_idx].RIR & CAN_RI0R_IDE) != 0U) {      // Extended Identifier
-    msg_info->id = (0x1FFFFFFFUL & (ptr_CAN->sFIFOMailBox[obj_idx].RIR >>  3)) | ARM_CAN_ID_IDE_Msk;
+    msg_info->id = (0x1FFFFFFFUL & (ptr_CAN->sFIFOMailBox[obj_idx].RIR >>  3)) | CAN_ID_IDE_Msk;
   } else {                                              // Standard Identifier
     msg_info->id = (    0x07FFUL & (ptr_CAN->sFIFOMailBox[obj_idx].RIR >> 21));
   }
@@ -1183,20 +1183,20 @@ static int32_t CANx_MessageRead (uint32_t obj_idx, ARM_CAN_MSG_INFO *msg_info, u
   return ((int32_t)size);
 }
 #if (MX_CAN1 == 1U)
-static int32_t CAN1_MessageRead (uint32_t obj_idx, ARM_CAN_MSG_INFO *msg_info, uint8_t *data, uint8_t size) { return CANx_MessageRead (obj_idx, msg_info, data, size, 0U); }
+static int32_t CAN1_MessageRead (uint32_t obj_idx, CAN_MSG_INFO *msg_info, uint8_t *data, uint8_t size) { return CANx_MessageRead (obj_idx, msg_info, data, size, 0U); }
 #endif
 #if (MX_CAN2 == 1U)
-static int32_t CAN2_MessageRead (uint32_t obj_idx, ARM_CAN_MSG_INFO *msg_info, uint8_t *data, uint8_t size) { return CANx_MessageRead (obj_idx, msg_info, data, size, 1U); }
+static int32_t CAN2_MessageRead (uint32_t obj_idx, CAN_MSG_INFO *msg_info, uint8_t *data, uint8_t size) { return CANx_MessageRead (obj_idx, msg_info, data, size, 1U); }
 #endif
 
 /**
   \fn          int32_t CANx_Control (uint32_t control, uint32_t arg, uint8_t x)
   \brief       Control CAN interface.
   \param[in]   control  Operation
-                 - ARM_CAN_SET_FD_MODE :            set FD operation mode
-                 - ARM_CAN_ABORT_MESSAGE_SEND :     abort sending of CAN message
-                 - ARM_CAN_CONTROL_RETRANSMISSION : enable/disable automatic retransmission
-                 - ARM_CAN_SET_TRANSCEIVER_DELAY :  set transceiver delay
+                 - CAN_SET_FD_MODE :            set FD operation mode
+                 - CAN_ABORT_MESSAGE_SEND :     abort sending of CAN message
+                 - CAN_CONTROL_RETRANSMISSION : enable/disable automatic retransmission
+                 - CAN_SET_TRANSCEIVER_DELAY :  set transceiver delay
   \param[in]   arg      Argument of operation
   \param[in]   x        Controller number (0..1)
   \return      execution status
@@ -1204,14 +1204,14 @@ static int32_t CAN2_MessageRead (uint32_t obj_idx, ARM_CAN_MSG_INFO *msg_info, u
 static int32_t CANx_Control (uint32_t control, uint32_t arg, uint8_t x) {
   CAN_TypeDef *ptr_CAN;
 
-  if (x >= CAN_CTRL_NUM)           { return ARM_DRIVER_ERROR; }
-  if (can_driver_powered[x] == 0U) { return ARM_DRIVER_ERROR; }
+  if (x >= CAN_CTRL_NUM)           { return DRIVER_ERROR; }
+  if (can_driver_powered[x] == 0U) { return DRIVER_ERROR; }
 
   ptr_CAN = ptr_CANx[x];
 
-  switch (control & ARM_CAN_CONTROL_Msk) {
-    case ARM_CAN_ABORT_MESSAGE_SEND:
-      if ((arg < CAN_RX_OBJ_NUM) || (arg >= CAN_TOT_OBJ_NUM)) { return ARM_DRIVER_ERROR_PARAMETER; }
+  switch (control & CAN_CONTROL_Msk) {
+    case CAN_ABORT_MESSAGE_SEND:
+      if ((arg < CAN_RX_OBJ_NUM) || (arg >= CAN_TOT_OBJ_NUM)) { return DRIVER_ERROR_PARAMETER; }
       arg -= CAN_RX_OBJ_NUM;
       switch (arg) {
         case 0:
@@ -1224,10 +1224,10 @@ static int32_t CANx_Control (uint32_t control, uint32_t arg, uint8_t x) {
           ptr_CAN->TSR = CAN_TSR_ABRQ2;
           break;
         default:
-          return ARM_DRIVER_ERROR_PARAMETER;
+          return DRIVER_ERROR_PARAMETER;
       }
       break;
-    case ARM_CAN_CONTROL_RETRANSMISSION:
+    case CAN_CONTROL_RETRANSMISSION:
       switch (arg) {
         case 0:
           ptr_CAN->MCR |=  CAN_MCR_NART;
@@ -1236,16 +1236,16 @@ static int32_t CANx_Control (uint32_t control, uint32_t arg, uint8_t x) {
           ptr_CAN->MCR &= ~CAN_MCR_NART;
           break;
         default:
-          return ARM_DRIVER_ERROR_PARAMETER;
+          return DRIVER_ERROR_PARAMETER;
       }
       break;
-    case ARM_CAN_SET_FD_MODE:
-    case ARM_CAN_SET_TRANSCEIVER_DELAY:
+    case CAN_SET_FD_MODE:
+    case CAN_SET_TRANSCEIVER_DELAY:
     default:
-      return ARM_DRIVER_ERROR_UNSUPPORTED;
+      return DRIVER_ERROR_UNSUPPORTED;
   }
 
-  return ARM_DRIVER_OK;
+  return DRIVER_OK;
 }
 #if (MX_CAN1 == 1U)
 static int32_t CAN1_Control (uint32_t control, uint32_t arg) { return CANx_Control (control, arg, 0U); }
@@ -1255,49 +1255,49 @@ static int32_t CAN2_Control (uint32_t control, uint32_t arg) { return CANx_Contr
 #endif
 
 /**
-  \fn          ARM_CAN_STATUS CANx_GetStatus (uint8_t x)
+  \fn          CAN_STATUS CANx_GetStatus (uint8_t x)
   \brief       Get CAN status.
   \param[in]   x      Controller number (0..1)
-  \return      CAN status ARM_CAN_STATUS
+  \return      CAN status CAN_STATUS
 */
-static ARM_CAN_STATUS CANx_GetStatus (uint8_t x) {
+static CAN_STATUS CANx_GetStatus (uint8_t x) {
   CAN_TypeDef    *ptr_CAN;
-  ARM_CAN_STATUS  can_status;
+  CAN_STATUS  can_status;
   uint32_t        esr;
 
   ptr_CAN      = ptr_CANx[x];
   esr          = ptr_CAN->ESR;
   ptr_CAN->ESR = CAN_ESR_LEC;           // Software set last error code to unused value
 
-  if       ((ptr_CAN->MSR & CAN_MSR_INAK) != 0U)  { can_status.unit_state = ARM_CAN_UNIT_STATE_INACTIVE; }
+  if       ((ptr_CAN->MSR & CAN_MSR_INAK) != 0U)  { can_status.unit_state = CAN_UNIT_STATE_INACTIVE; }
   else if (((ptr_CAN->BTR & CAN_BTR_LBKM) != 0U) ||
-           ((ptr_CAN->BTR & CAN_BTR_SILM) != 0U)) { can_status.unit_state = ARM_CAN_UNIT_STATE_PASSIVE;  }
-  else if ((esr & CAN_ESR_BOFF) != 0U)            { can_status.unit_state = ARM_CAN_UNIT_STATE_INACTIVE; }
-  else if ((esr & CAN_ESR_EPVF) != 0U)            { can_status.unit_state = ARM_CAN_UNIT_STATE_PASSIVE;  }
-  else                                            { can_status.unit_state = ARM_CAN_UNIT_STATE_ACTIVE;   }
+           ((ptr_CAN->BTR & CAN_BTR_SILM) != 0U)) { can_status.unit_state = CAN_UNIT_STATE_PASSIVE;  }
+  else if ((esr & CAN_ESR_BOFF) != 0U)            { can_status.unit_state = CAN_UNIT_STATE_INACTIVE; }
+  else if ((esr & CAN_ESR_EPVF) != 0U)            { can_status.unit_state = CAN_UNIT_STATE_PASSIVE;  }
+  else                                            { can_status.unit_state = CAN_UNIT_STATE_ACTIVE;   }
 
   switch ((esr & CAN_ESR_LEC) >> 4) {
     case 0:
-      can_status.last_error_code = ARM_CAN_LEC_NO_ERROR;
+      can_status.last_error_code = CAN_LEC_NO_ERROR;
       break;
     case 1:
-      can_status.last_error_code = ARM_CAN_LEC_STUFF_ERROR;
+      can_status.last_error_code = CAN_LEC_STUFF_ERROR;
       break;
     case 2:
-      can_status.last_error_code = ARM_CAN_LEC_FORM_ERROR;
+      can_status.last_error_code = CAN_LEC_FORM_ERROR;
       break;
     case 3:
-      can_status.last_error_code = ARM_CAN_LEC_ACK_ERROR;
+      can_status.last_error_code = CAN_LEC_ACK_ERROR;
       break;
     case 4:
     case 5:
-      can_status.last_error_code = ARM_CAN_LEC_BIT_ERROR;
+      can_status.last_error_code = CAN_LEC_BIT_ERROR;
       break;
     case 6:
-      can_status.last_error_code = ARM_CAN_LEC_CRC_ERROR;
+      can_status.last_error_code = CAN_LEC_CRC_ERROR;
       break;
     case 7:
-      can_status.last_error_code = ARM_CAN_LEC_NO_ERROR;
+      can_status.last_error_code = CAN_LEC_NO_ERROR;
       break;
   }
 
@@ -1307,10 +1307,10 @@ static ARM_CAN_STATUS CANx_GetStatus (uint8_t x) {
   return can_status;
 }
 #if (MX_CAN1 == 1U)
-static ARM_CAN_STATUS CAN1_GetStatus (void) { return CANx_GetStatus (0); }
+static CAN_STATUS CAN1_GetStatus (void) { return CANx_GetStatus (0); }
 #endif
 #if (MX_CAN2 == 1U)
-static ARM_CAN_STATUS CAN2_GetStatus (void) { return CANx_GetStatus (1); }
+static CAN_STATUS CAN2_GetStatus (void) { return CANx_GetStatus (1); }
 #endif
 
 
@@ -1327,20 +1327,20 @@ void USB_HP_CAN1_TX_IRQHandler (void) {
   uint32_t esr, ier;
 
   if ((CAN1->TSR & CAN_TSR_TXOK0) != 0U) {
-    if (can_obj_cfg[0][CAN_RX_OBJ_NUM] == ARM_CAN_OBJ_TX) {
-      if (CAN_SignalObjectEvent[0] != NULL) { CAN_SignalObjectEvent[0](CAN_RX_OBJ_NUM, ARM_CAN_EVENT_SEND_COMPLETE); }
+    if (can_obj_cfg[0][CAN_RX_OBJ_NUM] == CAN_OBJ_TX) {
+      if (CAN_SignalObjectEvent[0] != NULL) { CAN_SignalObjectEvent[0](CAN_RX_OBJ_NUM, CAN_EVENT_SEND_COMPLETE); }
     }
     CAN1->TSR = CAN_TSR_RQCP0;          // Request completed on transmit mailbox 0
   }
   if ((CAN1->TSR & CAN_TSR_TXOK1) != 0U) {
-    if (can_obj_cfg[0][CAN_RX_OBJ_NUM+1U] == ARM_CAN_OBJ_TX) {
-      if (CAN_SignalObjectEvent[0] != NULL) { CAN_SignalObjectEvent[0](CAN_RX_OBJ_NUM+1U, ARM_CAN_EVENT_SEND_COMPLETE); }
+    if (can_obj_cfg[0][CAN_RX_OBJ_NUM+1U] == CAN_OBJ_TX) {
+      if (CAN_SignalObjectEvent[0] != NULL) { CAN_SignalObjectEvent[0](CAN_RX_OBJ_NUM+1U, CAN_EVENT_SEND_COMPLETE); }
     }
     CAN1->TSR = CAN_TSR_RQCP1;          // Request completed on transmit mailbox 1
   }
   if ((CAN1->TSR & CAN_TSR_TXOK2) != 0U) {
-    if (can_obj_cfg[0][CAN_RX_OBJ_NUM+2U] == ARM_CAN_OBJ_TX) {
-      if (CAN_SignalObjectEvent[0] != NULL) { CAN_SignalObjectEvent[0](CAN_RX_OBJ_NUM+2U, ARM_CAN_EVENT_SEND_COMPLETE); }
+    if (can_obj_cfg[0][CAN_RX_OBJ_NUM+2U] == CAN_OBJ_TX) {
+      if (CAN_SignalObjectEvent[0] != NULL) { CAN_SignalObjectEvent[0](CAN_RX_OBJ_NUM+2U, CAN_EVENT_SEND_COMPLETE); }
     }
     CAN1->TSR = CAN_TSR_RQCP2;          // Request completed on transmit mailbox 2
   }
@@ -1350,11 +1350,11 @@ void USB_HP_CAN1_TX_IRQHandler (void) {
   ier = CAN1->IER;
   if (((esr & CAN_ESR_BOFF) == 0U) && ((ier & CAN_IER_BOFIE) == 0U)) { 
     CAN1->IER |= CAN_IER_BOFIE;
-    if (CAN_SignalUnitEvent[0] != NULL) { CAN_SignalUnitEvent[0](ARM_CAN_EVENT_UNIT_PASSIVE); }
+    if (CAN_SignalUnitEvent[0] != NULL) { CAN_SignalUnitEvent[0](CAN_EVENT_UNIT_PASSIVE); }
   }
   if (((esr & CAN_ESR_EPVF) == 0U) && ((ier & CAN_IER_EPVIE) == 0U)) {
     CAN1->IER |= CAN_IER_EPVIE;
-    if (CAN_SignalUnitEvent[0] != NULL) { CAN_SignalUnitEvent[0](ARM_CAN_EVENT_UNIT_ACTIVE); }
+    if (CAN_SignalUnitEvent[0] != NULL) { CAN_SignalUnitEvent[0](CAN_EVENT_UNIT_ACTIVE); }
   }
   if (((esr & CAN_ESR_EWGF) == 0U) && ((ier & CAN_IER_EWGIE) == 0U) && (((esr & CAN_ESR_TEC) >> 16) == 95U) && (((esr & CAN_ESR_REC) >> 24) < 95U)) {
     CAN1->IER |= CAN_IER_EWGIE;
@@ -1372,12 +1372,12 @@ void USB_LP_CAN1_RX0_IRQHandler (void) {
 #endif
   uint32_t esr, ier;
 
-  if (can_obj_cfg[0][0] == ARM_CAN_OBJ_RX) {
+  if (can_obj_cfg[0][0] == CAN_OBJ_RX) {
     if ((CAN1->RF0R & CAN_RF0R_FOVR0) != 0U) {
       CAN1->RF0R = CAN_RF0R_FOVR0;      // Clear overrun flag
-      if (CAN_SignalObjectEvent[0] != NULL) { CAN_SignalObjectEvent[0](0U, ARM_CAN_EVENT_RECEIVE | ARM_CAN_EVENT_RECEIVE_OVERRUN); }
+      if (CAN_SignalObjectEvent[0] != NULL) { CAN_SignalObjectEvent[0](0U, CAN_EVENT_RECEIVE | CAN_EVENT_RECEIVE_OVERRUN); }
     } else if ((CAN1->RF0R & CAN_RF0R_FMP0) != 0U) {
-      if (CAN_SignalObjectEvent[0] != NULL) { CAN_SignalObjectEvent[0](0U, ARM_CAN_EVENT_RECEIVE); }
+      if (CAN_SignalObjectEvent[0] != NULL) { CAN_SignalObjectEvent[0](0U, CAN_EVENT_RECEIVE); }
     }
   } else {
     CAN1->RF0R = CAN_RF0R_RFOM0;        // Release FIFO 0 output mailbox if object not enabled for reception
@@ -1388,11 +1388,11 @@ void USB_LP_CAN1_RX0_IRQHandler (void) {
   ier = CAN1->IER;
   if (((esr & CAN_ESR_BOFF) == 0U) && ((ier & CAN_IER_BOFIE) == 0U)) { 
     CAN1->IER |= CAN_IER_BOFIE;
-    if (CAN_SignalUnitEvent[0] != NULL) { CAN_SignalUnitEvent[0](ARM_CAN_EVENT_UNIT_PASSIVE); }
+    if (CAN_SignalUnitEvent[0] != NULL) { CAN_SignalUnitEvent[0](CAN_EVENT_UNIT_PASSIVE); }
   }
   if (((esr & CAN_ESR_EPVF) == 0U) && ((ier & CAN_IER_EPVIE) == 0U)) {
     CAN1->IER |= CAN_IER_EPVIE;
-    if (CAN_SignalUnitEvent[0] != NULL) { CAN_SignalUnitEvent[0](ARM_CAN_EVENT_UNIT_ACTIVE); }
+    if (CAN_SignalUnitEvent[0] != NULL) { CAN_SignalUnitEvent[0](CAN_EVENT_UNIT_ACTIVE); }
   }
   if (((esr & CAN_ESR_EWGF) == 0U) && ((ier & CAN_IER_EWGIE) == 0U) && (((esr & CAN_ESR_TEC) >> 16) < 95U) && (((esr & CAN_ESR_REC) >> 24) == 95U)) {
     CAN1->IER |= CAN_IER_EWGIE;
@@ -1406,12 +1406,12 @@ void USB_LP_CAN1_RX0_IRQHandler (void) {
 void CAN1_RX1_IRQHandler (void) {
   uint32_t esr, ier;
 
-  if (can_obj_cfg[0][1] == ARM_CAN_OBJ_RX) {
+  if (can_obj_cfg[0][1] == CAN_OBJ_RX) {
     if ((CAN1->RF1R & CAN_RF1R_FOVR1) != 0U) {
       CAN1->RF1R = CAN_RF1R_FOVR1;      // Clear overrun flag
-      if (CAN_SignalObjectEvent[0] != NULL) { CAN_SignalObjectEvent[0](1U, ARM_CAN_EVENT_RECEIVE | ARM_CAN_EVENT_RECEIVE_OVERRUN); }
+      if (CAN_SignalObjectEvent[0] != NULL) { CAN_SignalObjectEvent[0](1U, CAN_EVENT_RECEIVE | CAN_EVENT_RECEIVE_OVERRUN); }
     } else if ((CAN1->RF1R & CAN_RF1R_FMP1) != 0U) {
-      if (CAN_SignalObjectEvent[0] != NULL) { CAN_SignalObjectEvent[0](1U, ARM_CAN_EVENT_RECEIVE); }
+      if (CAN_SignalObjectEvent[0] != NULL) { CAN_SignalObjectEvent[0](1U, CAN_EVENT_RECEIVE); }
     }
   } else {
     CAN1->RF1R = CAN_RF1R_RFOM1;        // Release FIFO 1 output mailbox if object not enabled for reception
@@ -1422,11 +1422,11 @@ void CAN1_RX1_IRQHandler (void) {
   ier = CAN1->IER;
   if (((esr & CAN_ESR_BOFF) == 0U) && ((ier & CAN_IER_BOFIE) == 0U)) { 
     CAN1->IER |= CAN_IER_BOFIE;
-    if (CAN_SignalUnitEvent[0] != NULL) { CAN_SignalUnitEvent[0](ARM_CAN_EVENT_UNIT_PASSIVE); }
+    if (CAN_SignalUnitEvent[0] != NULL) { CAN_SignalUnitEvent[0](CAN_EVENT_UNIT_PASSIVE); }
   }
   if (((esr & CAN_ESR_EPVF) == 0U) && ((ier & CAN_IER_EPVIE) == 0U)) {
     CAN1->IER |= CAN_IER_EPVIE;
-    if (CAN_SignalUnitEvent[0] != NULL) { CAN_SignalUnitEvent[0](ARM_CAN_EVENT_UNIT_ACTIVE); }
+    if (CAN_SignalUnitEvent[0] != NULL) { CAN_SignalUnitEvent[0](CAN_EVENT_UNIT_ACTIVE); }
   }
   if (((esr & CAN_ESR_EWGF) == 0U) && ((ier & CAN_IER_EWGIE) == 0U) && (((esr & CAN_ESR_TEC) >> 16) < 95U) && (((esr & CAN_ESR_REC) >> 24) == 95U)) {
     CAN1->IER |= CAN_IER_EWGIE;
@@ -1444,9 +1444,9 @@ void CAN1_SCE_IRQHandler (void) {
     esr = CAN1->ESR;
     ier = CAN1->IER;
     CAN1->MSR = CAN_MSR_ERRI;             // Clear error interrupt
-    if      (((esr & CAN_ESR_BOFF) != 0U) && ((ier & CAN_IER_BOFIE) != 0U)) { CAN1->IER &= ~CAN_IER_BOFIE; CAN_SignalUnitEvent[0](ARM_CAN_EVENT_UNIT_BUS_OFF); }
-    else if (((esr & CAN_ESR_EPVF) != 0U) && ((ier & CAN_IER_EPVIE) != 0U)) { CAN1->IER &= ~CAN_IER_EPVIE; CAN_SignalUnitEvent[0](ARM_CAN_EVENT_UNIT_PASSIVE); }
-    else if (((esr & CAN_ESR_EWGF) != 0U) && ((ier & CAN_IER_EWGIE) != 0U)) { CAN1->IER &= ~CAN_IER_EWGIE; CAN_SignalUnitEvent[0](ARM_CAN_EVENT_UNIT_WARNING); }
+    if      (((esr & CAN_ESR_BOFF) != 0U) && ((ier & CAN_IER_BOFIE) != 0U)) { CAN1->IER &= ~CAN_IER_BOFIE; CAN_SignalUnitEvent[0](CAN_EVENT_UNIT_BUS_OFF); }
+    else if (((esr & CAN_ESR_EPVF) != 0U) && ((ier & CAN_IER_EPVIE) != 0U)) { CAN1->IER &= ~CAN_IER_EPVIE; CAN_SignalUnitEvent[0](CAN_EVENT_UNIT_PASSIVE); }
+    else if (((esr & CAN_ESR_EWGF) != 0U) && ((ier & CAN_IER_EWGIE) != 0U)) { CAN1->IER &= ~CAN_IER_EWGIE; CAN_SignalUnitEvent[0](CAN_EVENT_UNIT_WARNING); }
   }
 }
 #endif
@@ -1460,20 +1460,20 @@ void CAN2_TX_IRQHandler (void) {
   uint32_t esr, ier;
 
   if ((CAN2->TSR & CAN_TSR_TXOK0) != 0U) {
-    if (can_obj_cfg[1][CAN_RX_OBJ_NUM] == ARM_CAN_OBJ_TX) {
-      if (CAN_SignalObjectEvent[1] != NULL) { CAN_SignalObjectEvent[1](CAN_RX_OBJ_NUM, ARM_CAN_EVENT_SEND_COMPLETE); }
+    if (can_obj_cfg[1][CAN_RX_OBJ_NUM] == CAN_OBJ_TX) {
+      if (CAN_SignalObjectEvent[1] != NULL) { CAN_SignalObjectEvent[1](CAN_RX_OBJ_NUM, CAN_EVENT_SEND_COMPLETE); }
     }
     CAN2->TSR = CAN_TSR_RQCP0;          // Request completed on transmit mailbox 0
   }
   if ((CAN2->TSR & CAN_TSR_TXOK1) != 0U) {
-    if (can_obj_cfg[1][CAN_RX_OBJ_NUM+1U] == ARM_CAN_OBJ_TX) {
-      if (CAN_SignalObjectEvent[1] != NULL) { CAN_SignalObjectEvent[1](CAN_RX_OBJ_NUM+1U, ARM_CAN_EVENT_SEND_COMPLETE); }
+    if (can_obj_cfg[1][CAN_RX_OBJ_NUM+1U] == CAN_OBJ_TX) {
+      if (CAN_SignalObjectEvent[1] != NULL) { CAN_SignalObjectEvent[1](CAN_RX_OBJ_NUM+1U, CAN_EVENT_SEND_COMPLETE); }
     }
     CAN2->TSR = CAN_TSR_RQCP1;          // Request completed on transmit mailbox 1
   }
   if ((CAN2->TSR & CAN_TSR_TXOK2) != 0U) {
-    if (can_obj_cfg[1][CAN_RX_OBJ_NUM+2U] == ARM_CAN_OBJ_TX) {
-      if (CAN_SignalObjectEvent[1] != NULL) { CAN_SignalObjectEvent[1](CAN_RX_OBJ_NUM+2U, ARM_CAN_EVENT_SEND_COMPLETE); }
+    if (can_obj_cfg[1][CAN_RX_OBJ_NUM+2U] == CAN_OBJ_TX) {
+      if (CAN_SignalObjectEvent[1] != NULL) { CAN_SignalObjectEvent[1](CAN_RX_OBJ_NUM+2U, CAN_EVENT_SEND_COMPLETE); }
     }
     CAN2->TSR = CAN_TSR_RQCP2;          // Request completed on transmit mailbox 2
   }
@@ -1483,11 +1483,11 @@ void CAN2_TX_IRQHandler (void) {
   ier = CAN2->IER;
   if (((esr & CAN_ESR_BOFF) == 0U) && ((ier & CAN_IER_BOFIE) == 0U)) { 
     CAN2->IER |= CAN_IER_BOFIE;
-    if (CAN_SignalUnitEvent[1] != NULL) { CAN_SignalUnitEvent[1](ARM_CAN_EVENT_UNIT_PASSIVE); }
+    if (CAN_SignalUnitEvent[1] != NULL) { CAN_SignalUnitEvent[1](CAN_EVENT_UNIT_PASSIVE); }
   }
   if (((esr & CAN_ESR_EPVF) == 0U) && ((ier & CAN_IER_EPVIE) == 0U)) {
     CAN2->IER |= CAN_IER_EPVIE;
-    if (CAN_SignalUnitEvent[1] != NULL) { CAN_SignalUnitEvent[1](ARM_CAN_EVENT_UNIT_ACTIVE); }
+    if (CAN_SignalUnitEvent[1] != NULL) { CAN_SignalUnitEvent[1](CAN_EVENT_UNIT_ACTIVE); }
   }
   if (((esr & CAN_ESR_EWGF) == 0U) && ((ier & CAN_IER_EWGIE) == 0U) && (((esr & CAN_ESR_TEC) >> 16) == 95U) && (((esr & CAN_ESR_REC) >> 24) < 95U)) {
     CAN2->IER |= CAN_IER_EWGIE;
@@ -1501,12 +1501,12 @@ void CAN2_TX_IRQHandler (void) {
 void CAN2_RX0_IRQHandler (void) {
   uint32_t esr, ier;
 
-  if (can_obj_cfg[1][0] == ARM_CAN_OBJ_RX) {
+  if (can_obj_cfg[1][0] == CAN_OBJ_RX) {
     if ((CAN2->RF0R & CAN_RF0R_FOVR0) != 0U) {
       CAN2->RF0R = CAN_RF0R_FOVR0;      // Clear overrun flag
-      if (CAN_SignalObjectEvent[1] != NULL) { CAN_SignalObjectEvent[1](0U, ARM_CAN_EVENT_RECEIVE | ARM_CAN_EVENT_RECEIVE_OVERRUN); }
+      if (CAN_SignalObjectEvent[1] != NULL) { CAN_SignalObjectEvent[1](0U, CAN_EVENT_RECEIVE | CAN_EVENT_RECEIVE_OVERRUN); }
     } else if ((CAN2->RF0R & CAN_RF0R_FMP0) != 0U) {
-      if (CAN_SignalObjectEvent[1] != NULL) { CAN_SignalObjectEvent[1](0U, ARM_CAN_EVENT_RECEIVE); }
+      if (CAN_SignalObjectEvent[1] != NULL) { CAN_SignalObjectEvent[1](0U, CAN_EVENT_RECEIVE); }
     }
   } else {
     CAN2->RF0R = CAN_RF0R_RFOM0;        // Release FIFO 0 output mailbox if object not enabled for reception
@@ -1517,11 +1517,11 @@ void CAN2_RX0_IRQHandler (void) {
   ier = CAN2->IER;
   if (((esr & CAN_ESR_BOFF) == 0U) && ((ier & CAN_IER_BOFIE) == 0U)) { 
     CAN2->IER |= CAN_IER_BOFIE;
-    if (CAN_SignalUnitEvent[1] != NULL) { CAN_SignalUnitEvent[1](ARM_CAN_EVENT_UNIT_PASSIVE); }
+    if (CAN_SignalUnitEvent[1] != NULL) { CAN_SignalUnitEvent[1](CAN_EVENT_UNIT_PASSIVE); }
   }
   if (((esr & CAN_ESR_EPVF) == 0U) && ((ier & CAN_IER_EPVIE) == 0U)) {
     CAN2->IER |= CAN_IER_EPVIE;
-    if (CAN_SignalUnitEvent[1] != NULL) { CAN_SignalUnitEvent[1](ARM_CAN_EVENT_UNIT_ACTIVE); }
+    if (CAN_SignalUnitEvent[1] != NULL) { CAN_SignalUnitEvent[1](CAN_EVENT_UNIT_ACTIVE); }
   }
   if (((esr & CAN_ESR_EWGF) == 0U) && ((ier & CAN_IER_EWGIE) == 0U) && (((esr & CAN_ESR_TEC) >> 16) < 95U) && (((esr & CAN_ESR_REC) >> 24) == 95U)) {
     CAN2->IER |= CAN_IER_EWGIE;
@@ -1535,12 +1535,12 @@ void CAN2_RX0_IRQHandler (void) {
 void CAN2_RX1_IRQHandler (void) {
   uint32_t esr, ier;
 
-  if (can_obj_cfg[1][1] == ARM_CAN_OBJ_RX) {
+  if (can_obj_cfg[1][1] == CAN_OBJ_RX) {
     if ((CAN2->RF1R & CAN_RF1R_FOVR1) != 0U) {
       CAN2->RF1R = CAN_RF1R_FOVR1;      // Clear overrun flag
-      if (CAN_SignalObjectEvent[1] != NULL) { CAN_SignalObjectEvent[1](1U, ARM_CAN_EVENT_RECEIVE | ARM_CAN_EVENT_RECEIVE_OVERRUN); }
+      if (CAN_SignalObjectEvent[1] != NULL) { CAN_SignalObjectEvent[1](1U, CAN_EVENT_RECEIVE | CAN_EVENT_RECEIVE_OVERRUN); }
     } else if ((CAN2->RF1R & CAN_RF1R_FMP1) != 0U) {
-      if (CAN_SignalObjectEvent[1] != NULL) { CAN_SignalObjectEvent[1](1U, ARM_CAN_EVENT_RECEIVE); }
+      if (CAN_SignalObjectEvent[1] != NULL) { CAN_SignalObjectEvent[1](1U, CAN_EVENT_RECEIVE); }
     }
   } else {
     CAN2->RF1R = CAN_RF1R_RFOM1;        // Release FIFO 1 output mailbox if object not enabled for reception
@@ -1551,11 +1551,11 @@ void CAN2_RX1_IRQHandler (void) {
   ier = CAN2->IER;
   if (((esr & CAN_ESR_BOFF) == 0U) && ((ier & CAN_IER_BOFIE) == 0U)) { 
     CAN2->IER |= CAN_IER_BOFIE;
-    if (CAN_SignalUnitEvent[1] != NULL) { CAN_SignalUnitEvent[1](ARM_CAN_EVENT_UNIT_PASSIVE); }
+    if (CAN_SignalUnitEvent[1] != NULL) { CAN_SignalUnitEvent[1](CAN_EVENT_UNIT_PASSIVE); }
   }
   if (((esr & CAN_ESR_EPVF) == 0U) && ((ier & CAN_IER_EPVIE) == 0U)) {
     CAN2->IER |= CAN_IER_EPVIE;
-    if (CAN_SignalUnitEvent[1] != NULL) { CAN_SignalUnitEvent[1](ARM_CAN_EVENT_UNIT_ACTIVE); }
+    if (CAN_SignalUnitEvent[1] != NULL) { CAN_SignalUnitEvent[1](CAN_EVENT_UNIT_ACTIVE); }
   }
   if (((esr & CAN_ESR_EWGF) == 0U) && ((ier & CAN_IER_EWGIE) == 0U) && (((esr & CAN_ESR_TEC) >> 16) < 95U) && (((esr & CAN_ESR_REC) >> 24) == 95U)) {
     CAN2->IER |= CAN_IER_EWGIE;
@@ -1573,16 +1573,16 @@ void CAN2_SCE_IRQHandler (void) {
     esr = CAN2->ESR;
     ier = CAN2->IER;
     CAN2->MSR = CAN_MSR_ERRI;             // Clear error interrupt
-    if      (((esr & CAN_ESR_BOFF) != 0U) && ((ier & CAN_IER_BOFIE) != 0U)) { CAN2->IER &= ~CAN_IER_BOFIE; CAN_SignalUnitEvent[1](ARM_CAN_EVENT_UNIT_BUS_OFF); }
-    else if (((esr & CAN_ESR_EPVF) != 0U) && ((ier & CAN_IER_EPVIE) != 0U)) { CAN2->IER &= ~CAN_IER_EPVIE; CAN_SignalUnitEvent[1](ARM_CAN_EVENT_UNIT_PASSIVE); }
-    else if (((esr & CAN_ESR_EWGF) != 0U) && ((ier & CAN_IER_EWGIE) != 0U)) { CAN2->IER &= ~CAN_IER_EWGIE; CAN_SignalUnitEvent[1](ARM_CAN_EVENT_UNIT_WARNING); }
+    if      (((esr & CAN_ESR_BOFF) != 0U) && ((ier & CAN_IER_BOFIE) != 0U)) { CAN2->IER &= ~CAN_IER_BOFIE; CAN_SignalUnitEvent[1](CAN_EVENT_UNIT_BUS_OFF); }
+    else if (((esr & CAN_ESR_EPVF) != 0U) && ((ier & CAN_IER_EPVIE) != 0U)) { CAN2->IER &= ~CAN_IER_EPVIE; CAN_SignalUnitEvent[1](CAN_EVENT_UNIT_PASSIVE); }
+    else if (((esr & CAN_ESR_EWGF) != 0U) && ((ier & CAN_IER_EWGIE) != 0U)) { CAN2->IER &= ~CAN_IER_EWGIE; CAN_SignalUnitEvent[1](CAN_EVENT_UNIT_WARNING); }
   }
 }
 #endif
 
 
 #if (MX_CAN1 == 1U)
-ARM_DRIVER_CAN Driver_CAN1 = {
+DRIVER_CAN Driver_CAN1 = {
   CAN_GetVersion,
   CAN_GetCapabilities,
   CAN1_Initialize,
@@ -1602,7 +1602,7 @@ ARM_DRIVER_CAN Driver_CAN1 = {
 #endif
 
 #if (MX_CAN2 == 1U)
-ARM_DRIVER_CAN Driver_CAN2 = {
+DRIVER_CAN Driver_CAN2 = {
   CAN_GetVersion,
   CAN_GetCapabilities,
   CAN2_Initialize,

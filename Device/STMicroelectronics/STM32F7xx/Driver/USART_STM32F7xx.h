@@ -502,22 +502,22 @@
 #endif
 
 #define USARTx_EXPORT_DRIVER(x)                                                                                                                                                            \
-static ARM_USART_CAPABILITIES  USART##x##_GetCapabilities (void)                                                { return USART_GetCapabilities (&USART##x##_Resources);                  } \
-static int32_t                 USART##x##_Initialize      (ARM_USART_SignalEvent_t cb_event)                    { return USART_Initialize (cb_event, &USART##x##_Resources);             } \
+static USART_CAPABILITIES  USART##x##_GetCapabilities (void)                                                { return USART_GetCapabilities (&USART##x##_Resources);                  } \
+static int32_t                 USART##x##_Initialize      (USART_SignalEvent_t cb_event)                    { return USART_Initialize (cb_event, &USART##x##_Resources);             } \
 static int32_t                 USART##x##_Uninitialize    (void)                                                { return USART_Uninitialize (&USART##x##_Resources);                     } \
-static int32_t                 USART##x##_PowerControl    (ARM_POWER_STATE state)                               { return USART_PowerControl (state, &USART##x##_Resources);              } \
+static int32_t                 USART##x##_PowerControl    (POWER_STATE state)                               { return USART_PowerControl (state, &USART##x##_Resources);              } \
 static int32_t                 USART##x##_Send            (const void *data, uint32_t num)                      { return USART_Send (data, num, &USART##x##_Resources);                  } \
 static int32_t                 USART##x##_Receive         (void *data, uint32_t num)                            { return USART_Receive (data, num, &USART##x##_Resources);               } \
 static int32_t                 USART##x##_Transfer        (const void *data_out, void *data_in, uint32_t num)   { return USART_Transfer (data_out, data_in, num, &USART##x##_Resources); } \
 static uint32_t                USART##x##_GetTxCount      (void)                                                { return USART_GetTxCount (&USART##x##_Resources);                       } \
 static uint32_t                USART##x##_GetRxCount      (void)                                                { return USART_GetRxCount (&USART##x##_Resources);                       } \
 static int32_t                 USART##x##_Control         (uint32_t control, uint32_t arg)                      { return USART_Control (control, arg, &USART##x##_Resources);            } \
-static ARM_USART_STATUS        USART##x##_GetStatus       (void)                                                { return USART_GetStatus (&USART##x##_Resources);                        } \
-static int32_t                 USART##x##_SetModemControl (ARM_USART_MODEM_CONTROL control)                     { return USART_SetModemControl (control, &USART##x##_Resources);         } \
-static ARM_USART_MODEM_STATUS  USART##x##_GetModemStatus  (void)                                                { return USART_GetModemStatus (&USART##x##_Resources);                   } \
+static USART_STATUS        USART##x##_GetStatus       (void)                                                { return USART_GetStatus (&USART##x##_Resources);                        } \
+static int32_t                 USART##x##_SetModemControl (USART_MODEM_CONTROL control)                     { return USART_SetModemControl (control, &USART##x##_Resources);         } \
+static USART_MODEM_STATUS  USART##x##_GetModemStatus  (void)                                                { return USART_GetModemStatus (&USART##x##_Resources);                   } \
        void                    USART##x##_IRQHandler      (void)                                                {        USART_IRQHandler (&USART##x##_Resources);                       } \
                                                                                                                                                                                            \
-ARM_DRIVER_USART Driver_USART##x = {                                                                                                                                                       \
+DRIVER_USART Driver_USART##x = {                                                                                                                                                       \
     USARTx_GetVersion,                                                                                                                                                                     \
     USART##x##_GetCapabilities,                                                                                                                                                            \
     USART##x##_Initialize,                                                                                                                                                                 \
@@ -535,22 +535,22 @@ ARM_DRIVER_USART Driver_USART##x = {                                            
 };
 
 #define UARTx_EXPORT_DRIVER(x)                                                                                                                                                             \
-static ARM_USART_CAPABILITIES  USART##x##_GetCapabilities (void)                                                { return USART_GetCapabilities (&UART##x##_Resources);                   } \
-static int32_t                 USART##x##_Initialize      (ARM_USART_SignalEvent_t cb_event)                    { return USART_Initialize (cb_event, &UART##x##_Resources);              } \
+static USART_CAPABILITIES  USART##x##_GetCapabilities (void)                                                { return USART_GetCapabilities (&UART##x##_Resources);                   } \
+static int32_t                 USART##x##_Initialize      (USART_SignalEvent_t cb_event)                    { return USART_Initialize (cb_event, &UART##x##_Resources);              } \
 static int32_t                 USART##x##_Uninitialize    (void)                                                { return USART_Uninitialize (&UART##x##_Resources);                      } \
-static int32_t                 USART##x##_PowerControl    (ARM_POWER_STATE state)                               { return USART_PowerControl (state, &UART##x##_Resources);               } \
+static int32_t                 USART##x##_PowerControl    (POWER_STATE state)                               { return USART_PowerControl (state, &UART##x##_Resources);               } \
 static int32_t                 USART##x##_Send            (const void *data, uint32_t num)                      { return USART_Send (data, num, &UART##x##_Resources);                   } \
 static int32_t                 USART##x##_Receive         (void *data, uint32_t num)                            { return USART_Receive (data, num, &UART##x##_Resources);                } \
 static int32_t                 USART##x##_Transfer        (const void *data_out, void *data_in, uint32_t num)   { return USART_Transfer (data_out, data_in, num, &UART##x##_Resources);  } \
 static uint32_t                USART##x##_GetTxCount      (void)                                                { return USART_GetTxCount (&UART##x##_Resources);                        } \
 static uint32_t                USART##x##_GetRxCount      (void)                                                { return USART_GetRxCount (&UART##x##_Resources);                        } \
 static int32_t                 USART##x##_Control         (uint32_t control, uint32_t arg)                      { return USART_Control (control, arg, &UART##x##_Resources);             } \
-static ARM_USART_STATUS        USART##x##_GetStatus       (void)                                                { return USART_GetStatus (&UART##x##_Resources);                         } \
-static int32_t                 USART##x##_SetModemControl (ARM_USART_MODEM_CONTROL control)                     { return USART_SetModemControl (control, &UART##x##_Resources);          } \
-static ARM_USART_MODEM_STATUS  USART##x##_GetModemStatus  (void)                                                { return USART_GetModemStatus (&UART##x##_Resources);                    } \
+static USART_STATUS        USART##x##_GetStatus       (void)                                                { return USART_GetStatus (&UART##x##_Resources);                         } \
+static int32_t                 USART##x##_SetModemControl (USART_MODEM_CONTROL control)                     { return USART_SetModemControl (control, &UART##x##_Resources);          } \
+static USART_MODEM_STATUS  USART##x##_GetModemStatus  (void)                                                { return USART_GetModemStatus (&UART##x##_Resources);                    } \
        void                    UART##x##_IRQHandler       (void)                                                {        USART_IRQHandler (&UART##x##_Resources);                        } \
                                                                                                                                                                                            \
-ARM_DRIVER_USART Driver_USART##x = {                                                                                                                                                       \
+DRIVER_USART Driver_USART##x = {                                                                                                                                                       \
     USARTx_GetVersion,                                                                                                                                                                     \
     USART##x##_GetCapabilities,                                                                                                                                                            \
     USART##x##_Initialize,                                                                                                                                                                 \
@@ -632,7 +632,7 @@ typedef struct _USART_STATUS {
 
 // USART Information (Run-time)
 typedef struct _USART_INFO {
-  ARM_USART_SignalEvent_t     cb_event; // Event Callback
+  USART_SignalEvent_t     cb_event; // Event Callback
   USART_STATUS                  status; // Status flags
   uint8_t                        flags; // Current USART flags
   uint32_t                        mode; // Current USART mode
@@ -641,7 +641,7 @@ typedef struct _USART_INFO {
 
 // USART Resources definition
 typedef const struct {
-  ARM_USART_CAPABILITIES  capabilities; // Capabilities
+  USART_CAPABILITIES  capabilities; // Capabilities
   USART_TypeDef                   *reg; // USART peripheral pointer
   RCC_Periph_t                  periph; // Peripheral
   USART_IO                          io; // USART Input/Output pins

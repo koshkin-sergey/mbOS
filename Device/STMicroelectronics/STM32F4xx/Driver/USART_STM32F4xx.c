@@ -32,7 +32,7 @@
  *  defines and macros (scope: module-local)
  ******************************************************************************/
 
-#define ARM_USART_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(1,0)
+#define USART_DRV_VERSION DRIVER_VERSION_MAJOR_MINOR(1,0)
 
 /*******************************************************************************
  *  typedefs and structures (scope: module-local)
@@ -43,9 +43,9 @@
  ******************************************************************************/
 
 // Driver Version
-static const ARM_DRIVER_VERSION usart_driver_version = {
-  ARM_USART_API_VERSION,
-  ARM_USART_DRV_VERSION
+static const DRIVER_VERSION usart_driver_version = {
+  USART_API_VERSION,
+  USART_DRV_VERSION
 };
 
 static const GPIO_PIN_CFG_t USART_pin_cfg_af = {
@@ -131,8 +131,8 @@ static const USART_RESOURCES USART1_Resources = {
 #else
     0,  // CTS Flow Control available
 #endif
-    1,  // Transmit completed event: \ref ARM_USART_EVENT_TX_COMPLETE
-    1,  // Signal receive character timeout event: \ref ARM_USART_EVENT_RX_TIMEOUT
+    1,  // Transmit completed event: \ref USART_EVENT_TX_COMPLETE
+    1,  // Signal receive character timeout event: \ref USART_EVENT_RX_TIMEOUT
 #ifdef USE_USART1_RTS_Pin
     1,  // RTS Line: 0=not available, 1=available
 #else
@@ -148,13 +148,13 @@ static const USART_RESOURCES USART1_Resources = {
     0,  // DCD Line: 0=not available, 1=available
     0,  // RI Line: 0=not available, 1=available
 #ifdef USE_USART1_CTS_Pin
-    1,  // Signal CTS change event: \ref ARM_USART_EVENT_CTS
+    1,  // Signal CTS change event: \ref USART_EVENT_CTS
 #else
-    0,  // Signal CTS change event: \ref ARM_USART_EVENT_CTS
+    0,  // Signal CTS change event: \ref USART_EVENT_CTS
 #endif
-    0,  // Signal DSR change event: \ref ARM_USART_EVENT_DSR
-    0,  // Signal DCD change event: \ref ARM_USART_EVENT_DCD
-    0,  // Signal RI change event: \ref ARM_USART_EVENT_RI
+    0,  // Signal DSR change event: \ref USART_EVENT_DSR
+    0,  // Signal DCD change event: \ref USART_EVENT_DCD
+    0,  // Signal RI change event: \ref USART_EVENT_RI
   },
 
   USART1,
@@ -266,8 +266,8 @@ static const USART_RESOURCES USART2_Resources = {
 #else
     0,  // CTS Flow Control available
 #endif
-    1,  // Transmit completed event: \ref ARM_USART_EVENT_TX_COMPLETE
-    1,  // Signal receive character timeout event: \ref ARM_USART_EVENT_RX_TIMEOUT
+    1,  // Transmit completed event: \ref USART_EVENT_TX_COMPLETE
+    1,  // Signal receive character timeout event: \ref USART_EVENT_RX_TIMEOUT
 #ifdef USE_USART2_RTS_Pin
     1,  // RTS Line: 0=not available, 1=available
 #else
@@ -283,13 +283,13 @@ static const USART_RESOURCES USART2_Resources = {
     0,  // DCD Line: 0=not available, 1=available
     0,  // RI Line: 0=not available, 1=available
 #ifdef USE_USART2_CTS_Pin
-    1,  // Signal CTS change event: \ref ARM_USART_EVENT_CTS
+    1,  // Signal CTS change event: \ref USART_EVENT_CTS
 #else
-    0,  // Signal CTS change event: \ref ARM_USART_EVENT_CTS
+    0,  // Signal CTS change event: \ref USART_EVENT_CTS
 #endif
-    0,  // Signal DSR change event: \ref ARM_USART_EVENT_DSR
-    0,  // Signal DCD change event: \ref ARM_USART_EVENT_DCD
-    0,  // Signal RI change event: \ref ARM_USART_EVENT_RI
+    0,  // Signal DSR change event: \ref USART_EVENT_DSR
+    0,  // Signal DCD change event: \ref USART_EVENT_DCD
+    0,  // Signal RI change event: \ref USART_EVENT_RI
   },
 
   USART2,
@@ -401,8 +401,8 @@ static const USART_RESOURCES USART3_Resources = {
 #else
     0,  // CTS Flow Control available
 #endif
-    1,  // Transmit completed event: \ref ARM_USART_EVENT_TX_COMPLETE
-    1,  // Signal receive character timeout event: \ref ARM_USART_EVENT_RX_TIMEOUT
+    1,  // Transmit completed event: \ref USART_EVENT_TX_COMPLETE
+    1,  // Signal receive character timeout event: \ref USART_EVENT_RX_TIMEOUT
 #ifdef USE_USART3_RTS_Pin
     1,  // RTS Line: 0=not available, 1=available
 #else
@@ -418,13 +418,13 @@ static const USART_RESOURCES USART3_Resources = {
     0,  // DCD Line: 0=not available, 1=available
     0,  // RI Line: 0=not available, 1=available
 #ifdef USE_USART3_CTS_Pin
-    1,  // Signal CTS change event: \ref ARM_USART_EVENT_CTS
+    1,  // Signal CTS change event: \ref USART_EVENT_CTS
 #else
-    0,  // Signal CTS change event: \ref ARM_USART_EVENT_CTS
+    0,  // Signal CTS change event: \ref USART_EVENT_CTS
 #endif
-    0,  // Signal DSR change event: \ref ARM_USART_EVENT_DSR
-    0,  // Signal DCD change event: \ref ARM_USART_EVENT_DCD
-    0,  // Signal RI change event: \ref ARM_USART_EVENT_RI
+    0,  // Signal DSR change event: \ref USART_EVENT_DSR
+    0,  // Signal DCD change event: \ref USART_EVENT_DCD
+    0,  // Signal RI change event: \ref USART_EVENT_RI
   },
 
   USART3,
@@ -500,18 +500,18 @@ static const USART_RESOURCES USART4_Resources = {
     0,  // Smart Card Clock generator
     0,  // RTS Flow Control available
     0,  // CTS Flow Control available
-    1,  // Transmit completed event: \ref ARM_USART_EVENT_TX_COMPLETE
-    1,  // Signal receive character timeout event: \ref ARM_USART_EVENT_RX_TIMEOUT
+    1,  // Transmit completed event: \ref USART_EVENT_TX_COMPLETE
+    1,  // Signal receive character timeout event: \ref USART_EVENT_RX_TIMEOUT
     0,  // RTS Line: 0=not available, 1=available
     0,  // CTS Line: 0=not available, 1=available
     0,  // DTR Line: 0=not available, 1=available
     0,  // DSR Line: 0=not available, 1=available
     0,  // DCD Line: 0=not available, 1=available
     0,  // RI Line: 0=not available, 1=available
-    0,  // Signal CTS change event: \ref ARM_USART_EVENT_CTS
-    0,  // Signal DSR change event: \ref ARM_USART_EVENT_DSR
-    0,  // Signal DCD change event: \ref ARM_USART_EVENT_DCD
-    0,  // Signal RI change event: \ref ARM_USART_EVENT_RI
+    0,  // Signal CTS change event: \ref USART_EVENT_CTS
+    0,  // Signal DSR change event: \ref USART_EVENT_DSR
+    0,  // Signal DCD change event: \ref USART_EVENT_DCD
+    0,  // Signal RI change event: \ref USART_EVENT_RI
   },
 
   UART4,
@@ -575,18 +575,18 @@ static const USART_RESOURCES USART5_Resources = {
     0,  // Smart Card Clock generator
     0,  // RTS Flow Control available
     0,  // CTS Flow Control available
-    1,  // Transmit completed event: \ref ARM_USART_EVENT_TX_COMPLETE
-    1,  // Signal receive character timeout event: \ref ARM_USART_EVENT_RX_TIMEOUT
+    1,  // Transmit completed event: \ref USART_EVENT_TX_COMPLETE
+    1,  // Signal receive character timeout event: \ref USART_EVENT_RX_TIMEOUT
     0,  // RTS Line: 0=not available, 1=available
     0,  // CTS Line: 0=not available, 1=available
     0,  // DTR Line: 0=not available, 1=available
     0,  // DSR Line: 0=not available, 1=available
     0,  // DCD Line: 0=not available, 1=available
     0,  // RI Line: 0=not available, 1=available
-    0,  // Signal CTS change event: \ref ARM_USART_EVENT_CTS
-    0,  // Signal DSR change event: \ref ARM_USART_EVENT_DSR
-    0,  // Signal DCD change event: \ref ARM_USART_EVENT_DCD
-    0,  // Signal RI change event: \ref ARM_USART_EVENT_RI
+    0,  // Signal CTS change event: \ref USART_EVENT_CTS
+    0,  // Signal DSR change event: \ref USART_EVENT_DSR
+    0,  // Signal DCD change event: \ref USART_EVENT_DCD
+    0,  // Signal RI change event: \ref USART_EVENT_RI
   },
 
   UART5,
@@ -686,8 +686,8 @@ static const USART_RESOURCES USART6_Resources = {
 #else
     0,  // CTS Flow Control available
 #endif
-    1,  // Transmit completed event: \ref ARM_USART_EVENT_TX_COMPLETE
-    1,  // Signal receive character timeout event: \ref ARM_USART_EVENT_RX_TIMEOUT
+    1,  // Transmit completed event: \ref USART_EVENT_TX_COMPLETE
+    1,  // Signal receive character timeout event: \ref USART_EVENT_RX_TIMEOUT
 #ifdef USE_USART6_RTS_Pin
     1,  // RTS Line: 0=not available, 1=available
 #else
@@ -703,13 +703,13 @@ static const USART_RESOURCES USART6_Resources = {
     0,  // DCD Line: 0=not available, 1=available
     0,  // RI Line: 0=not available, 1=available
 #ifdef USE_USART6_CTS_Pin
-    1,  // Signal CTS change event: \ref ARM_USART_EVENT_CTS
+    1,  // Signal CTS change event: \ref USART_EVENT_CTS
 #else
-    0,  // Signal CTS change event: \ref ARM_USART_EVENT_CTS
+    0,  // Signal CTS change event: \ref USART_EVENT_CTS
 #endif
-    0,  // Signal DSR change event: \ref ARM_USART_EVENT_DSR
-    0,  // Signal DCD change event: \ref ARM_USART_EVENT_DCD
-    0,  // Signal RI change event: \ref ARM_USART_EVENT_RI
+    0,  // Signal DSR change event: \ref USART_EVENT_DSR
+    0,  // Signal DCD change event: \ref USART_EVENT_DCD
+    0,  // Signal RI change event: \ref USART_EVENT_RI
   },
 
   USART6,
@@ -785,18 +785,18 @@ static const USART_RESOURCES USART7_Resources = {
     0,  // Smart Card Clock generator
     0,  // RTS Flow Control available
     0,  // CTS Flow Control available
-    1,  // Transmit completed event: \ref ARM_USART_EVENT_TX_COMPLETE
-    1,  // Signal receive character timeout event: \ref ARM_USART_EVENT_RX_TIMEOUT
+    1,  // Transmit completed event: \ref USART_EVENT_TX_COMPLETE
+    1,  // Signal receive character timeout event: \ref USART_EVENT_RX_TIMEOUT
     0,  // RTS Line: 0=not available, 1=available
     0,  // CTS Line: 0=not available, 1=available
     0,  // DTR Line: 0=not available, 1=available
     0,  // DSR Line: 0=not available, 1=available
     0,  // DCD Line: 0=not available, 1=available
     0,  // RI Line: 0=not available, 1=available
-    0,  // Signal CTS change event: \ref ARM_USART_EVENT_CTS
-    0,  // Signal DSR change event: \ref ARM_USART_EVENT_DSR
-    0,  // Signal DCD change event: \ref ARM_USART_EVENT_DCD
-    0,  // Signal RI change event: \ref ARM_USART_EVENT_RI
+    0,  // Signal CTS change event: \ref USART_EVENT_CTS
+    0,  // Signal DSR change event: \ref USART_EVENT_DSR
+    0,  // Signal DCD change event: \ref USART_EVENT_DCD
+    0,  // Signal RI change event: \ref USART_EVENT_RI
   },
 
   UART7,
@@ -860,18 +860,18 @@ static const USART_RESOURCES USART8_Resources = {
     0,  // Smart Card Clock generator
     0,  // RTS Flow Control available
     0,  // CTS Flow Control available
-    1,  // Transmit completed event: \ref ARM_USART_EVENT_TX_COMPLETE
-    1,  // Signal receive character timeout event: \ref ARM_USART_EVENT_RX_TIMEOUT
+    1,  // Transmit completed event: \ref USART_EVENT_TX_COMPLETE
+    1,  // Signal receive character timeout event: \ref USART_EVENT_RX_TIMEOUT
     0,  // RTS Line: 0=not available, 1=available
     0,  // CTS Line: 0=not available, 1=available
     0,  // DTR Line: 0=not available, 1=available
     0,  // DSR Line: 0=not available, 1=available
     0,  // DCD Line: 0=not available, 1=available
     0,  // RI Line: 0=not available, 1=available
-    0,  // Signal CTS change event: \ref ARM_USART_EVENT_CTS
-    0,  // Signal DSR change event: \ref ARM_USART_EVENT_DSR
-    0,  // Signal DCD change event: \ref ARM_USART_EVENT_DCD
-    0,  // Signal RI change event: \ref ARM_USART_EVENT_RI
+    0,  // Signal CTS change event: \ref USART_EVENT_CTS
+    0,  // Signal DSR change event: \ref USART_EVENT_DSR
+    0,  // Signal DCD change event: \ref USART_EVENT_DCD
+    0,  // Signal RI change event: \ref USART_EVENT_RI
   },
 
   UART8,
@@ -935,18 +935,18 @@ static const USART_RESOURCES USART9_Resources = {
     0,  // Smart Card Clock generator
     0,  // RTS Flow Control available
     0,  // CTS Flow Control available
-    1,  // Transmit completed event: \ref ARM_USART_EVENT_TX_COMPLETE
-    1,  // Signal receive character timeout event: \ref ARM_USART_EVENT_RX_TIMEOUT
+    1,  // Transmit completed event: \ref USART_EVENT_TX_COMPLETE
+    1,  // Signal receive character timeout event: \ref USART_EVENT_RX_TIMEOUT
     0,  // RTS Line: 0=not available, 1=available
     0,  // CTS Line: 0=not available, 1=available
     0,  // DTR Line: 0=not available, 1=available
     0,  // DSR Line: 0=not available, 1=available
     0,  // DCD Line: 0=not available, 1=available
     0,  // RI Line: 0=not available, 1=available
-    0,  // Signal CTS change event: \ref ARM_USART_EVENT_CTS
-    0,  // Signal DSR change event: \ref ARM_USART_EVENT_DSR
-    0,  // Signal DCD change event: \ref ARM_USART_EVENT_DCD
-    0,  // Signal RI change event: \ref ARM_USART_EVENT_RI
+    0,  // Signal CTS change event: \ref USART_EVENT_CTS
+    0,  // Signal DSR change event: \ref USART_EVENT_DSR
+    0,  // Signal DCD change event: \ref USART_EVENT_DCD
+    0,  // Signal RI change event: \ref USART_EVENT_RI
   },
 
   UART9,
@@ -1010,18 +1010,18 @@ static const USART_RESOURCES USART10_Resources = {
     0,  // Smart Card Clock generator
     0,  // RTS Flow Control available
     0,  // CTS Flow Control available
-    1,  // Transmit completed event: \ref ARM_USART_EVENT_TX_COMPLETE
-    1,  // Signal receive character timeout event: \ref ARM_USART_EVENT_RX_TIMEOUT
+    1,  // Transmit completed event: \ref USART_EVENT_TX_COMPLETE
+    1,  // Signal receive character timeout event: \ref USART_EVENT_RX_TIMEOUT
     0,  // RTS Line: 0=not available, 1=available
     0,  // CTS Line: 0=not available, 1=available
     0,  // DTR Line: 0=not available, 1=available
     0,  // DSR Line: 0=not available, 1=available
     0,  // DCD Line: 0=not available, 1=available
     0,  // RI Line: 0=not available, 1=available
-    0,  // Signal CTS change event: \ref ARM_USART_EVENT_CTS
-    0,  // Signal DSR change event: \ref ARM_USART_EVENT_DSR
-    0,  // Signal DCD change event: \ref ARM_USART_EVENT_DCD
-    0,  // Signal RI change event: \ref ARM_USART_EVENT_RI
+    0,  // Signal CTS change event: \ref USART_EVENT_CTS
+    0,  // Signal DSR change event: \ref USART_EVENT_DSR
+    0,  // Signal DCD change event: \ref USART_EVENT_DCD
+    0,  // Signal RI change event: \ref USART_EVENT_RI
   },
 
   UART10,
@@ -1062,41 +1062,41 @@ int32_t USART_Receive(void *data, uint32_t num, USART_RESOURCES *usart);
  ******************************************************************************/
 
 /**
-  \fn          ARM_DRIVER_VERSION USARTx_GetVersion (void)
+  \fn          DRIVER_VERSION USARTx_GetVersion (void)
   \brief       Get driver version.
-  \return      \ref ARM_DRIVER_VERSION
+  \return      \ref DRIVER_VERSION
 */
 static
-ARM_DRIVER_VERSION USARTx_GetVersion(void)
+DRIVER_VERSION USARTx_GetVersion(void)
 {
   return usart_driver_version;
 }
 
 /**
-  \fn          ARM_USART_CAPABILITIES USART_GetCapabilities(USART_RESOURCES *usart)
+  \fn          USART_CAPABILITIES USART_GetCapabilities(USART_RESOURCES *usart)
   \brief       Get driver capabilities
   \param[in]   usart     Pointer to USART resources
-  \return      \ref ARM_USART_CAPABILITIES
+  \return      \ref USART_CAPABILITIES
 */
 static
-ARM_USART_CAPABILITIES USART_GetCapabilities(USART_RESOURCES *usart)
+USART_CAPABILITIES USART_GetCapabilities(USART_RESOURCES *usart)
 {
   return usart->capabilities;
 }
 
 /**
-  \fn          int32_t USART_Initialize(ARM_USART_SignalEvent_t cb_event, USART_RESOURCES *usart)
+  \fn          int32_t USART_Initialize(USART_SignalEvent_t cb_event, USART_RESOURCES *usart)
   \brief       Initialize USART Interface.
-  \param[in]   cb_event  Pointer to \ref ARM_USART_SignalEvent
+  \param[in]   cb_event  Pointer to \ref USART_SignalEvent
   \param[in]   usart     Pointer to USART resources
   \return      \ref execution_status
 */
 static
-int32_t USART_Initialize(ARM_USART_SignalEvent_t cb_event, USART_RESOURCES *usart)
+int32_t USART_Initialize(USART_SignalEvent_t cb_event, USART_RESOURCES *usart)
 {
   if (usart->info->flags & USART_FLAG_INITIALIZED) {
     // Driver is already initialized
-    return ARM_DRIVER_OK;
+    return DRIVER_OK;
   }
 
   USART_INFO *info = usart->info;
@@ -1141,7 +1141,7 @@ int32_t USART_Initialize(ARM_USART_SignalEvent_t cb_event, USART_RESOURCES *usar
 
   usart->info->flags = USART_FLAG_INITIALIZED;
 
-  return ARM_DRIVER_OK;
+  return DRIVER_OK;
 }
 
 /**
@@ -1174,24 +1174,24 @@ int32_t USART_Uninitialize(USART_RESOURCES *usart)
   // Reset USART status flags
   usart->info->flags = 0U;
 
-  return ARM_DRIVER_OK;
+  return DRIVER_OK;
 }
 
 /**
-  \fn          int32_t USART_PowerControl(ARM_POWER_STATE state, USART_RESOURCES *usart)
+  \fn          int32_t USART_PowerControl(POWER_STATE state, USART_RESOURCES *usart)
   \brief       Control USART Interface Power.
   \param[in]   state  Power state
   \param[in]   usart  Pointer to USART resources
   \return      \ref execution_status
 */
 static
-int32_t USART_PowerControl(ARM_POWER_STATE state, USART_RESOURCES *usart)
+int32_t USART_PowerControl(POWER_STATE state, USART_RESOURCES *usart)
 {
   USART_INFO *info = usart->info;
   USART_TRANSFER_INFO *xfer = usart->xfer;
 
   switch (state) {
-    case ARM_POWER_OFF:
+    case POWER_OFF:
       // USART peripheral reset
       RCC_ResetPeriph(usart->rcc);
 
@@ -1214,16 +1214,16 @@ int32_t USART_PowerControl(ARM_POWER_STATE state, USART_RESOURCES *usart)
       info->flags &= ~USART_FLAG_POWERED;
       break;
 
-    case ARM_POWER_LOW:
-      return ARM_DRIVER_ERROR_UNSUPPORTED;
+    case POWER_LOW:
+      return DRIVER_ERROR_UNSUPPORTED;
 
-    case ARM_POWER_FULL:
+    case POWER_FULL:
       if ((info->flags & USART_FLAG_INITIALIZED) == 0U) {
-        return ARM_DRIVER_ERROR;
+        return DRIVER_ERROR;
       }
 
       if ((info->flags & USART_FLAG_POWERED) != 0U) {
-        return ARM_DRIVER_OK;
+        return DRIVER_OK;
       }
 
       // Clear Status flags
@@ -1256,10 +1256,10 @@ int32_t USART_PowerControl(ARM_POWER_STATE state, USART_RESOURCES *usart)
       RCC_ResetPeriph(usart->rcc);
 
     break;
-    default: return ARM_DRIVER_ERROR_UNSUPPORTED;
+    default: return DRIVER_ERROR_UNSUPPORTED;
   }
 
-  return ARM_DRIVER_OK;
+  return DRIVER_OK;
 }
 
 /**
@@ -1278,17 +1278,17 @@ int32_t USART_Send(const void *data, uint32_t num, USART_RESOURCES *usart)
 
   if ((data == NULL) || (num == 0U)) {
     // Invalid parameters
-    return ARM_DRIVER_ERROR_PARAMETER;
+    return DRIVER_ERROR_PARAMETER;
   }
 
   if ((info->flags & USART_FLAG_CONFIGURED) == 0U) {
     // USART is not configured (mode not selected)
-    return ARM_DRIVER_ERROR;
+    return DRIVER_ERROR;
   }
 
   if (xfer->send_active != 0U) {
     // Send is not completed yet
-    return ARM_DRIVER_ERROR_BUSY;
+    return DRIVER_ERROR_BUSY;
   }
 
   // Set Send active flag
@@ -1300,19 +1300,19 @@ int32_t USART_Send(const void *data, uint32_t num, USART_RESOURCES *usart)
   xfer->tx_cnt = 0U;
 
   // Synchronous mode
-  if (info->mode == ARM_USART_MODE_SYNCHRONOUS_MASTER) {
+  if (info->mode == USART_MODE_SYNCHRONOUS_MASTER) {
     if (xfer->sync_mode == 0U) {
       xfer->sync_mode = USART_SYNC_MODE_TX;
       // Start dummy reads
-      if (USART_Receive(&xfer->dump_val, num, usart) == ARM_DRIVER_ERROR_BUSY)
-        return ARM_DRIVER_ERROR_BUSY;
+      if (USART_Receive(&xfer->dump_val, num, usart) == DRIVER_ERROR_BUSY)
+        return DRIVER_ERROR_BUSY;
     }
   }
 
   // TXE interrupt enable
   usart->reg->CR1 |= USART_CR1_TXEIE;
 
-  return ARM_DRIVER_OK;
+  return DRIVER_OK;
 }
 
 /**
@@ -1331,17 +1331,17 @@ int32_t USART_Receive(void *data, uint32_t num, USART_RESOURCES *usart)
 
   if ((data == NULL) || (num == 0U)) {
     // Invalid parameters
-    return ARM_DRIVER_ERROR_PARAMETER;
+    return DRIVER_ERROR_PARAMETER;
   }
 
   if ((info->flags & USART_FLAG_CONFIGURED) == 0U) {
     // USART is not configured (mode not selected)
-    return ARM_DRIVER_ERROR;
+    return DRIVER_ERROR;
   }
 
   // Check if receiver is busy
   if (info->status.rx_busy == 1U) {
-    return ARM_DRIVER_ERROR_BUSY;
+    return DRIVER_ERROR_BUSY;
   }
 
   // Disable RXNE Interrupt
@@ -1367,16 +1367,16 @@ int32_t USART_Receive(void *data, uint32_t num, USART_RESOURCES *usart)
   usart->reg->CR1 |= (USART_CR1_IDLEIE | USART_CR1_RXNEIE);
 
   // Synchronous mode
-  if (info->mode == ARM_USART_MODE_SYNCHRONOUS_MASTER) {
+  if (info->mode == USART_MODE_SYNCHRONOUS_MASTER) {
     if (xfer->sync_mode == 0U) {
       xfer->sync_mode = USART_SYNC_MODE_RX;
       // Send dummy data
-      if (USART_Send(&xfer->def_val, num, usart) == ARM_DRIVER_ERROR_BUSY)
-        return ARM_DRIVER_ERROR_BUSY;
+      if (USART_Send(&xfer->def_val, num, usart) == DRIVER_ERROR_BUSY)
+        return DRIVER_ERROR_BUSY;
     }
   }
 
-  return ARM_DRIVER_OK;
+  return DRIVER_OK;
 }
 
 /**
@@ -1395,32 +1395,32 @@ int32_t USART_Transfer(const void *data_out, void *data_in, uint32_t num, USART_
 
   if ((data_out == NULL) || (data_in == NULL) || (num == 0U)) {
     // Invalid parameters
-    return ARM_DRIVER_ERROR_PARAMETER;
+    return DRIVER_ERROR_PARAMETER;
   }
 
   if ((usart->info->flags & USART_FLAG_CONFIGURED) == 0U) {
     // USART is not configured
-    return ARM_DRIVER_ERROR;
+    return DRIVER_ERROR;
   }
 
-  if (usart->info->mode == ARM_USART_MODE_SYNCHRONOUS_MASTER) {
+  if (usart->info->mode == USART_MODE_SYNCHRONOUS_MASTER) {
     // Set xfer mode
     usart->xfer->sync_mode = USART_SYNC_MODE_TX_RX;
     // Receive
     status = USART_Receive(data_in, num, usart);
-    if (status != ARM_DRIVER_OK)
+    if (status != DRIVER_OK)
       return status;
     // Send
     status = USART_Send(data_out, num, usart);
-    if (status != ARM_DRIVER_OK)
+    if (status != DRIVER_OK)
       return status;
   }
   else {
     // Only in synchronous mode
-    return ARM_DRIVER_ERROR;
+    return DRIVER_ERROR;
   }
 
-  return ARM_DRIVER_OK;
+  return DRIVER_OK;
 }
 
 /**
@@ -1465,19 +1465,19 @@ int32_t USART_Control(uint32_t control, uint32_t arg, USART_RESOURCES *usart)
 
   if ((info->flags & USART_FLAG_POWERED) == 0U) {
     // USART not powered
-    return ARM_DRIVER_ERROR;
+    return DRIVER_ERROR;
   }
 
   cr1  = 0U;
   cr2  = 0U;
   cr3  = 0U;
 
-  switch (control & ARM_USART_CONTROL_Msk) {
+  switch (control & USART_CONTROL_Msk) {
     // Control break
-    case ARM_USART_CONTROL_BREAK:
+    case USART_CONTROL_BREAK:
       if (arg) {
         if (xfer->send_active != 0U)
-          return ARM_DRIVER_ERROR_BUSY;
+          return DRIVER_ERROR_BUSY;
 
         // Set Send active and Break flag
         xfer->send_active = 1U;
@@ -1494,43 +1494,43 @@ int32_t USART_Control(uint32_t control, uint32_t arg, USART_RESOURCES *usart)
           xfer->send_active = 0U;
         }
       }
-      return ARM_DRIVER_OK;
+      return DRIVER_OK;
 
     // Abort Send
-    case ARM_USART_ABORT_SEND:
+    case USART_ABORT_SEND:
       // Disable TX and TC interrupt
       usart->reg->CR1 &= ~(USART_CR1_TXEIE | USART_CR1_TCIE);
       // Clear break flag
       xfer->break_flag = 0U;
       // Clear Send active flag
       xfer->send_active = 0U;
-      return ARM_DRIVER_OK;
+      return DRIVER_OK;
 
     // Abort receive
-    case ARM_USART_ABORT_RECEIVE:
+    case USART_ABORT_RECEIVE:
       // Disable RX interrupt
       usart->reg->CR1 &= ~USART_CR1_RXNEIE;
       // Clear RX busy status
       info->status.rx_busy = 0U;
-      return ARM_DRIVER_OK;
+      return DRIVER_OK;
 
     // Abort transfer
-    case ARM_USART_ABORT_TRANSFER:
+    case USART_ABORT_TRANSFER:
       // Disable TX, TC and RX interrupt
       usart->reg->CR1 &= ~(USART_CR1_TXEIE | USART_CR1_TCIE | USART_CR1_RXNEIE);
       // Clear busy statuses
       info->status.rx_busy = 0U;
       xfer->send_active    = 0U;
-      return ARM_DRIVER_OK;
+      return DRIVER_OK;
 
     // Control TX
-    case ARM_USART_CONTROL_TX:
+    case USART_CONTROL_TX:
       // Check if TX pin available
       if (usart->io.tx == NULL)
-        return ARM_DRIVER_ERROR;
+        return DRIVER_ERROR;
 
       if (arg) {
-        if (info->mode != ARM_USART_MODE_SMART_CARD) {
+        if (info->mode != USART_MODE_SMART_CARD) {
           // USART TX pin function selected
           GPIO_AFConfig(usart->io.tx->port, usart->io.tx->pin, usart->io.tx->func);
           GPIO_PinConfig(usart->io.tx->port, usart->io.tx->pin, &USART_pin_cfg_af);
@@ -1545,22 +1545,22 @@ int32_t USART_Control(uint32_t control, uint32_t arg, USART_RESOURCES *usart)
 
         info->flags &= ~USART_FLAG_TX_ENABLED;
 
-        if (info->mode != ARM_USART_MODE_SMART_CARD) {
+        if (info->mode != USART_MODE_SMART_CARD) {
           // GPIO pin function selected
           GPIO_PinConfig(usart->io.tx->port, usart->io.tx->pin, &USART_pin_cfg_input);
         }
       }
-      return ARM_DRIVER_OK;
+      return DRIVER_OK;
 
     // Control RX
-    case ARM_USART_CONTROL_RX:
+    case USART_CONTROL_RX:
       // Check if RX line available
       if (usart->io.rx == NULL)
-        return ARM_DRIVER_ERROR;
+        return DRIVER_ERROR;
 
       if (arg) {
-        if ((info->mode != ARM_USART_MODE_SMART_CARD) &&
-            (info->mode != ARM_USART_MODE_SINGLE_WIRE )) {
+        if ((info->mode != USART_MODE_SMART_CARD) &&
+            (info->mode != USART_MODE_SINGLE_WIRE )) {
           // USART RX pin function selected
           GPIO_AFConfig(usart->io.rx->port, usart->io.rx->pin, usart->io.rx->func);
           GPIO_PinConfig(usart->io.rx->port, usart->io.rx->pin, &USART_pin_cfg_af);
@@ -1587,13 +1587,13 @@ int32_t USART_Control(uint32_t control, uint32_t arg, USART_RESOURCES *usart)
 
         info->flags &= ~USART_FLAG_RX_ENABLED;
 
-        if ((info->mode != ARM_USART_MODE_SMART_CARD) &&
-            (info->mode != ARM_USART_MODE_SINGLE_WIRE )) {
+        if ((info->mode != USART_MODE_SMART_CARD) &&
+            (info->mode != USART_MODE_SINGLE_WIRE )) {
           // GPIO pin function selected
           GPIO_PinConfig(usart->io.rx->port, usart->io.rx->pin, &USART_pin_cfg_input);
         }
       }
-      return ARM_DRIVER_OK;
+      return DRIVER_OK;
 
     default:
       break;
@@ -1601,17 +1601,17 @@ int32_t USART_Control(uint32_t control, uint32_t arg, USART_RESOURCES *usart)
 
   // Check if busy
   if ((info->status.rx_busy != 0U) || (xfer->send_active != 0U))
-    return ARM_DRIVER_ERROR_BUSY;
+    return DRIVER_ERROR_BUSY;
 
   if (((usart->reg->CR1 & USART_CR1_TE) != 0U) && ((usart->reg->SR & USART_SR_TC) == 0U))
-    return ARM_DRIVER_ERROR_BUSY;
+    return DRIVER_ERROR_BUSY;
 
-  switch (control & ARM_USART_CONTROL_Msk) {
-    case ARM_USART_MODE_ASYNCHRONOUS:
-      mode = ARM_USART_MODE_ASYNCHRONOUS;
+  switch (control & USART_CONTROL_Msk) {
+    case USART_MODE_ASYNCHRONOUS:
+      mode = USART_MODE_ASYNCHRONOUS;
       break;
 
-    case ARM_USART_MODE_SYNCHRONOUS_MASTER:
+    case USART_MODE_SYNCHRONOUS_MASTER:
       if (usart->capabilities.synchronous_master) {
         // Enable Clock pin
         cr2 |= USART_CR2_CLKEN;
@@ -1619,46 +1619,46 @@ int32_t USART_Control(uint32_t control, uint32_t arg, USART_RESOURCES *usart)
         cr2 |= USART_CR2_LBCL;
       }
       else {
-        return ARM_USART_ERROR_MODE;
+        return USART_ERROR_MODE;
       }
 
-      mode = ARM_USART_MODE_SYNCHRONOUS_MASTER;
+      mode = USART_MODE_SYNCHRONOUS_MASTER;
       break;
 
-    case ARM_USART_MODE_SYNCHRONOUS_SLAVE:
-      return ARM_USART_ERROR_MODE;
+    case USART_MODE_SYNCHRONOUS_SLAVE:
+      return USART_ERROR_MODE;
 
-    case ARM_USART_MODE_SINGLE_WIRE:
+    case USART_MODE_SINGLE_WIRE:
       // Enable Half duplex
       cr3 |= USART_CR3_HDSEL;
-      mode = ARM_USART_MODE_SINGLE_WIRE;
+      mode = USART_MODE_SINGLE_WIRE;
       break;
 
-    case ARM_USART_MODE_IRDA:
+    case USART_MODE_IRDA:
       // Enable IrDA mode
       cr3 |= USART_CR3_IREN;
-      mode = ARM_USART_MODE_IRDA;
+      mode = USART_MODE_IRDA;
       break;
 
-    case ARM_USART_MODE_SMART_CARD:
+    case USART_MODE_SMART_CARD:
       if (usart->capabilities.smart_card) {
         // Enable Smart card mode
         cr3 |= USART_CR3_SCEN;
       }
       else
-        return ARM_USART_ERROR_MODE;
+        return USART_ERROR_MODE;
 
-      mode = ARM_USART_MODE_SMART_CARD;
+      mode = USART_MODE_SMART_CARD;
       break;
 
     // Default TX value
-    case ARM_USART_SET_DEFAULT_TX_VALUE:
+    case USART_SET_DEFAULT_TX_VALUE:
       xfer->def_val = (uint16_t)arg;
-      return ARM_DRIVER_OK;
+      return DRIVER_OK;
 
     // IrDA pulse
-    case ARM_USART_SET_IRDA_PULSE:
-      if (info->mode != ARM_USART_MODE_IRDA) {
+    case USART_SET_IRDA_PULSE:
+      if (info->mode != USART_MODE_IRDA) {
         if (arg != 0U) {
           // IrDa low-power
           usart->reg->CR3 |= USART_CR3_IRLP;
@@ -1675,32 +1675,32 @@ int32_t USART_Control(uint32_t control, uint32_t arg, USART_RESOURCES *usart)
           }
 
           if (i == 256U)
-            return ARM_DRIVER_ERROR;
+            return DRIVER_ERROR;
 
           usart->reg->GTPR = (usart->reg->GTPR & ~USART_GTPR_PSC) | i;
         }
       }
       else
-        return ARM_DRIVER_ERROR;
+        return DRIVER_ERROR;
 
-      return ARM_DRIVER_OK;
+      return DRIVER_OK;
 
     // SmartCard guard time
-    case ARM_USART_SET_SMART_CARD_GUARD_TIME:
-      if (info->mode == ARM_USART_MODE_SMART_CARD) {
+    case USART_SET_SMART_CARD_GUARD_TIME:
+      if (info->mode == USART_MODE_SMART_CARD) {
         if (arg > 255U)
-          return ARM_DRIVER_ERROR;
+          return DRIVER_ERROR;
 
         usart->reg->GTPR = (usart->reg->GTPR & ~USART_GTPR_GT) | arg;
       }
       else
-        return ARM_DRIVER_ERROR;
+        return DRIVER_ERROR;
 
-      return ARM_DRIVER_OK;
+      return DRIVER_OK;
 
     // SmartCard clock
-    case ARM_USART_SET_SMART_CARD_CLOCK:
-      if (info->mode == ARM_USART_MODE_SMART_CARD) {
+    case USART_SET_SMART_CARD_CLOCK:
+      if (info->mode == USART_MODE_SMART_CARD) {
         // Get clock
         val = RCC_GetPeriphFreq(usart->rcc);
 
@@ -1716,42 +1716,42 @@ int32_t USART_Control(uint32_t control, uint32_t arg, USART_RESOURCES *usart)
         }
 
         if (i == 64U)
-          return ARM_DRIVER_ERROR;
+          return DRIVER_ERROR;
 
         usart->reg->GTPR = (usart->reg->GTPR & ~USART_GTPR_PSC) | i;
       }
       else {
-        return ARM_DRIVER_ERROR;
+        return DRIVER_ERROR;
       }
-      return ARM_DRIVER_OK;
+      return DRIVER_OK;
 
     // SmartCard NACK
-    case ARM_USART_CONTROL_SMART_CARD_NACK:
-      if (info->mode == ARM_USART_MODE_SMART_CARD) {
+    case USART_CONTROL_SMART_CARD_NACK:
+      if (info->mode == USART_MODE_SMART_CARD) {
         // SmartCard NACK Enable
         if (arg != 0U) { usart->reg->CR3 |= USART_CR3_NACK; }
       }
       else {
-        return ARM_DRIVER_ERROR;
+        return DRIVER_ERROR;
       }
-      return ARM_DRIVER_OK;
+      return DRIVER_OK;
 
     // Unsupported command
     default:
-      return ARM_DRIVER_ERROR_UNSUPPORTED;
+      return DRIVER_ERROR_UNSUPPORTED;
   }
 
   // USART Data bits
-  switch (control & ARM_USART_DATA_BITS_Msk) {
-    case ARM_USART_DATA_BITS_7:
-      if ((control & ARM_USART_PARITY_Msk) == ARM_USART_PARITY_NONE)
-        return ARM_USART_ERROR_DATA_BITS;
+  switch (control & USART_DATA_BITS_Msk) {
+    case USART_DATA_BITS_7:
+      if ((control & USART_PARITY_Msk) == USART_PARITY_NONE)
+        return USART_ERROR_DATA_BITS;
 
       // 7 data bits, 8. data bit is parity bit
       break;
 
-    case ARM_USART_DATA_BITS_8:
-      if ((control & ARM_USART_PARITY_Msk) == ARM_USART_PARITY_NONE) {
+    case USART_DATA_BITS_8:
+      if ((control & USART_PARITY_Msk) == USART_PARITY_NONE) {
         // 8-data bits, no parity
       }
       else {
@@ -1762,9 +1762,9 @@ int32_t USART_Control(uint32_t control, uint32_t arg, USART_RESOURCES *usart)
       }
       break;
 
-    case ARM_USART_DATA_BITS_9:
-      if ((control & ARM_USART_PARITY_Msk) != ARM_USART_PARITY_NONE)
-        return ARM_USART_ERROR_DATA_BITS;
+    case USART_DATA_BITS_9:
+      if ((control & USART_PARITY_Msk) != USART_PARITY_NONE)
+        return USART_ERROR_DATA_BITS;
 
       // 11-bit break detection
       cr2 |= USART_CR2_LBDL;
@@ -1773,102 +1773,102 @@ int32_t USART_Control(uint32_t control, uint32_t arg, USART_RESOURCES *usart)
       break;
 
     default:
-      return ARM_USART_ERROR_DATA_BITS;
+      return USART_ERROR_DATA_BITS;
   }
 
   // USART Parity
-  switch (control & ARM_USART_PARITY_Msk) {
-    case ARM_USART_PARITY_NONE:
+  switch (control & USART_PARITY_Msk) {
+    case USART_PARITY_NONE:
       break;
-    case ARM_USART_PARITY_EVEN:
+    case USART_PARITY_EVEN:
       cr1 |=  USART_CR1_PCE;
       break;
-    case ARM_USART_PARITY_ODD:
+    case USART_PARITY_ODD:
       cr1 |= (USART_CR1_PCE | USART_CR1_PS);
       break;
     default:
-      return ARM_USART_ERROR_PARITY;
+      return USART_ERROR_PARITY;
   }
 
   // USART Stop bits
-  switch (control & ARM_USART_STOP_BITS_Msk) {
-    case ARM_USART_STOP_BITS_1:
+  switch (control & USART_STOP_BITS_Msk) {
+    case USART_STOP_BITS_1:
       break;
-    case ARM_USART_STOP_BITS_2:
+    case USART_STOP_BITS_2:
       cr2 |= USART_CR2_STOP_1;
       break;
-    case ARM_USART_STOP_BITS_1_5:
+    case USART_STOP_BITS_1_5:
       cr2 |= USART_CR2_STOP_0 | USART_CR2_STOP_1;
       break;
-    case ARM_USART_STOP_BITS_0_5:
+    case USART_STOP_BITS_0_5:
       cr2 |= USART_CR2_STOP_0;
       break;
     default:
-      return ARM_USART_ERROR_STOP_BITS;
+      return USART_ERROR_STOP_BITS;
   }
 
   // USART Flow control
-  switch (control & ARM_USART_FLOW_CONTROL_Msk) {
-    case ARM_USART_FLOW_CONTROL_NONE:
-      flow_control = ARM_USART_FLOW_CONTROL_NONE;
+  switch (control & USART_FLOW_CONTROL_Msk) {
+    case USART_FLOW_CONTROL_NONE:
+      flow_control = USART_FLOW_CONTROL_NONE;
       break;
-    case ARM_USART_FLOW_CONTROL_RTS:
+    case USART_FLOW_CONTROL_RTS:
       if (usart->capabilities.flow_control_rts) {
-        flow_control = ARM_USART_FLOW_CONTROL_RTS;
+        flow_control = USART_FLOW_CONTROL_RTS;
         // RTS Enable
         cr3 |= USART_CR3_RTSE;
       }
       else {
-        return ARM_USART_ERROR_FLOW_CONTROL;
+        return USART_ERROR_FLOW_CONTROL;
       }
       break;
-    case ARM_USART_FLOW_CONTROL_CTS:
+    case USART_FLOW_CONTROL_CTS:
       if (usart->capabilities.flow_control_cts) {
-        flow_control = ARM_USART_FLOW_CONTROL_CTS;
+        flow_control = USART_FLOW_CONTROL_CTS;
         // CTS Enable, CTS interrupt enable
         cr3 |= USART_CR3_CTSE | USART_CR3_CTSIE;
       }
       else {
-        return ARM_USART_ERROR_FLOW_CONTROL;
+        return USART_ERROR_FLOW_CONTROL;
       }
       break;
-    case ARM_USART_FLOW_CONTROL_RTS_CTS:
+    case USART_FLOW_CONTROL_RTS_CTS:
       if ((usart->capabilities.flow_control_rts != 0U) &&
           (usart->capabilities.flow_control_cts != 0U)) {
-        flow_control = ARM_USART_FLOW_CONTROL_RTS_CTS;
+        flow_control = USART_FLOW_CONTROL_RTS_CTS;
         // RTS and CTS Enable, CTS interrupt enable
         cr3 |= (USART_CR3_RTSE | USART_CR3_CTSE | USART_CR3_CTSIE);
       }
       else {
-        return ARM_USART_ERROR_FLOW_CONTROL;
+        return USART_ERROR_FLOW_CONTROL;
       }
       break;
     default:
-      return ARM_USART_ERROR_FLOW_CONTROL;
+      return USART_ERROR_FLOW_CONTROL;
   }
 
   // Clock setting for synchronous mode
-  if (mode == ARM_USART_MODE_SYNCHRONOUS_MASTER) {
+  if (mode == USART_MODE_SYNCHRONOUS_MASTER) {
     // Polarity
-    switch (control & ARM_USART_CPOL_Msk) {
-      case ARM_USART_CPOL0:
+    switch (control & USART_CPOL_Msk) {
+      case USART_CPOL0:
         break;
-      case ARM_USART_CPOL1:
+      case USART_CPOL1:
         cr2 |= USART_CR2_CPOL;
         break;
       default:
-        return ARM_USART_ERROR_CPOL;
+        return USART_ERROR_CPOL;
     }
 
     // Phase
-    switch (control & ARM_USART_CPHA_Msk) {
-      case ARM_USART_CPHA0:
+    switch (control & USART_CPHA_Msk) {
+      case USART_CPHA0:
         break;
-      case ARM_USART_CPHA1:
+      case USART_CPHA1:
         cr2 |= USART_CR2_CPHA;
         break;
       default:
-        return ARM_USART_ERROR_CPHA;
+        return USART_ERROR_CPHA;
     }
   }
 
@@ -1878,7 +1878,7 @@ int32_t USART_Control(uint32_t control, uint32_t arg, USART_RESOURCES *usart)
   br = ((freq << 4U) / (val & 0xFFFFU)) >> 4U;
   // If inside +/- 2% tolerance, baud rate configured correctly
   if (!(((br * 100U) < (arg * 102U)) && ((br * 100U) > (arg * 98U)))) {
-    return ARM_USART_ERROR_BAUDRATE;
+    return USART_ERROR_BAUDRATE;
   }
 
   // USART Disable
@@ -1895,7 +1895,7 @@ int32_t USART_Control(uint32_t control, uint32_t arg, USART_RESOURCES *usart)
 
   // Configure TX pin regarding mode and transmitter state
   switch (info->mode) {
-    case ARM_USART_MODE_SMART_CARD:
+    case USART_MODE_SMART_CARD:
       // USART TX pin function selected
       GPIO_AFConfig(usart->io.tx->port, usart->io.tx->pin, usart->io.tx->func);
       GPIO_PinConfig(usart->io.tx->port, usart->io.tx->pin, &USART_pin_cfg_af);
@@ -1915,8 +1915,8 @@ int32_t USART_Control(uint32_t control, uint32_t arg, USART_RESOURCES *usart)
 
   // Configure RX pin regarding mode and receiver state
   switch (info->mode) {
-    case ARM_USART_MODE_SINGLE_WIRE:
-    case ARM_USART_MODE_SMART_CARD:
+    case USART_MODE_SINGLE_WIRE:
+    case USART_MODE_SMART_CARD:
       // GPIO pin function selected
       GPIO_PinConfig(usart->io.rx->port, usart->io.rx->pin, &USART_pin_cfg_input);
       break;
@@ -1936,8 +1936,8 @@ int32_t USART_Control(uint32_t control, uint32_t arg, USART_RESOURCES *usart)
   // Configure CLK pin regarding mode
   if (usart->io.ck) {
     switch (info->mode) {
-      case ARM_USART_MODE_SMART_CARD:
-      case ARM_USART_MODE_SYNCHRONOUS_MASTER:
+      case USART_MODE_SMART_CARD:
+      case USART_MODE_SYNCHRONOUS_MASTER:
         // USART CK pin function selected
         GPIO_AFConfig(usart->io.ck->port, usart->io.ck->pin, usart->io.ck->func);
         GPIO_PinConfig(usart->io.ck->port, usart->io.ck->pin, &USART_pin_cfg_af);
@@ -1951,8 +1951,8 @@ int32_t USART_Control(uint32_t control, uint32_t arg, USART_RESOURCES *usart)
 
   // Configure RTS pin regarding Flow control configuration
   if (usart->io.rts) {
-    if ((flow_control == ARM_USART_FLOW_CONTROL_RTS) ||
-        (flow_control == ARM_USART_FLOW_CONTROL_RTS_CTS)) {
+    if ((flow_control == USART_FLOW_CONTROL_RTS) ||
+        (flow_control == USART_FLOW_CONTROL_RTS_CTS)) {
       // USART RTS Alternate function
       GPIO_AFConfig(usart->io.rts->port, usart->io.rts->pin, usart->io.rts->func);
       GPIO_PinConfig(usart->io.rts->port, usart->io.rts->pin, &USART_pin_cfg_af);
@@ -1965,8 +1965,8 @@ int32_t USART_Control(uint32_t control, uint32_t arg, USART_RESOURCES *usart)
 
   // Configure CTS pin regarding Flow control configuration
   if (usart->io.cts) {
-    if ((flow_control == ARM_USART_FLOW_CONTROL_CTS) ||
-        (flow_control == ARM_USART_FLOW_CONTROL_RTS_CTS)) {
+    if ((flow_control == USART_FLOW_CONTROL_CTS) ||
+        (flow_control == USART_FLOW_CONTROL_RTS_CTS)) {
       // USART CTS Alternate function
       GPIO_AFConfig(usart->io.cts->port, usart->io.cts->pin, usart->io.cts->func);
       GPIO_PinConfig(usart->io.cts->port, usart->io.cts->pin, &USART_pin_cfg_af);
@@ -1988,19 +1988,19 @@ int32_t USART_Control(uint32_t control, uint32_t arg, USART_RESOURCES *usart)
   // Set configured flag
   info->flags |= USART_FLAG_CONFIGURED;
 
-  return ARM_DRIVER_OK;
+  return DRIVER_OK;
 }
 
 /**
-  \fn          ARM_USART_STATUS USART_GetStatus(USART_RESOURCES *usart)
+  \fn          USART_STATUS USART_GetStatus(USART_RESOURCES *usart)
   \brief       Get USART status.
   \param[in]   usart     Pointer to USART resources
-  \return      USART status \ref ARM_USART_STATUS
+  \return      USART status \ref USART_STATUS
 */
 static
-ARM_USART_STATUS USART_GetStatus(USART_RESOURCES *usart)
+USART_STATUS USART_GetStatus(USART_RESOURCES *usart)
 {
-  ARM_USART_STATUS status;
+  USART_STATUS status;
 
   if (usart->xfer->send_active != 0U)
     status.tx_busy        = 1U;
@@ -2018,58 +2018,58 @@ ARM_USART_STATUS USART_GetStatus(USART_RESOURCES *usart)
 }
 
 /**
-  \fn          int32_t USART_SetModemControl(ARM_USART_MODEM_CONTROL control, USART_RESOURCES *usart)
+  \fn          int32_t USART_SetModemControl(USART_MODEM_CONTROL control, USART_RESOURCES *usart)
   \brief       Set USART Modem Control line state.
-  \param[in]   control   \ref ARM_USART_MODEM_CONTROL
+  \param[in]   control   \ref USART_MODEM_CONTROL
   \param[in]   usart     Pointer to USART resources
   \return      \ref execution_status
 */
 static
-int32_t USART_SetModemControl(ARM_USART_MODEM_CONTROL control, USART_RESOURCES *usart)
+int32_t USART_SetModemControl(USART_MODEM_CONTROL control, USART_RESOURCES *usart)
 {
   switch (control) {
-    case ARM_USART_RTS_CLEAR:
-      if ((usart->info->flow_control == ARM_USART_FLOW_CONTROL_NONE) ||
-          (usart->info->flow_control == ARM_USART_FLOW_CONTROL_CTS)) {
+    case USART_RTS_CLEAR:
+      if ((usart->info->flow_control == USART_FLOW_CONTROL_NONE) ||
+          (usart->info->flow_control == USART_FLOW_CONTROL_CTS)) {
         GPIO_PinWrite(usart->io.rts->port, usart->io.rts->pin, GPIO_PIN_OUT_HIGH);
       }
       else {
         // Hardware RTS
-        return ARM_DRIVER_ERROR;
+        return DRIVER_ERROR;
       }
       break;
 
-    case ARM_USART_RTS_SET:
-      if ((usart->info->flow_control == ARM_USART_FLOW_CONTROL_NONE) ||
-          (usart->info->flow_control == ARM_USART_FLOW_CONTROL_CTS)) {
+    case USART_RTS_SET:
+      if ((usart->info->flow_control == USART_FLOW_CONTROL_NONE) ||
+          (usart->info->flow_control == USART_FLOW_CONTROL_CTS)) {
         GPIO_PinWrite(usart->io.rts->port, usart->io.rts->pin, GPIO_PIN_OUT_LOW);
       }
       else {
         // Hardware RTS
-        return ARM_DRIVER_ERROR;
+        return DRIVER_ERROR;
       }
       break;
 
     default:
-      return ARM_DRIVER_ERROR;
+      return DRIVER_ERROR;
   }
 
-  return ARM_DRIVER_OK;
+  return DRIVER_OK;
 }
 
 /**
-  \fn          ARM_USART_MODEM_STATUS USART_GetModemStatus(USART_RESOURCES *usart)
+  \fn          USART_MODEM_STATUS USART_GetModemStatus(USART_RESOURCES *usart)
   \brief       Get USART Modem Status lines state.
   \param[in]   usart     Pointer to USART resources
-  \return      modem status \ref ARM_USART_MODEM_STATUS
+  \return      modem status \ref USART_MODEM_STATUS
 */
 static
-ARM_USART_MODEM_STATUS USART_GetModemStatus(USART_RESOURCES *usart)
+USART_MODEM_STATUS USART_GetModemStatus(USART_RESOURCES *usart)
 {
-  ARM_USART_MODEM_STATUS modem_status;
+  USART_MODEM_STATUS modem_status;
 
-  if ((usart->info->flow_control == ARM_USART_FLOW_CONTROL_NONE) ||
-      (usart->info->flow_control == ARM_USART_FLOW_CONTROL_RTS)) {
+  if ((usart->info->flow_control == USART_FLOW_CONTROL_NONE) ||
+      (usart->info->flow_control == USART_FLOW_CONTROL_RTS)) {
     if (GPIO_PinRead(usart->io.cts->port, usart->io.cts->pin) == 0U)
       modem_status.cts = 1U;
     else
@@ -2114,10 +2114,10 @@ void USART_IRQHandler(USART_RESOURCES *usart)
       // Dump RX data
       usart->reg->DR;
       usart->info->status.rx_overflow = 1;
-      event |= ARM_USART_EVENT_RX_OVERFLOW;
+      event |= USART_EVENT_RX_OVERFLOW;
     }
     else {
-      if ((usart->info->mode == ARM_USART_MODE_SYNCHRONOUS_MASTER)
+      if ((usart->info->mode == USART_MODE_SYNCHRONOUS_MASTER)
           && (usart->xfer->sync_mode == USART_SYNC_MODE_TX)) {
         // Dummy read in synchronous transmit only mode
         usart->reg->DR;
@@ -2143,25 +2143,25 @@ void USART_IRQHandler(USART_RESOURCES *usart)
 
         // Clear RX busy flag and set receive transfer complete event
         usart->info->status.rx_busy = 0U;
-        if (usart->info->mode == ARM_USART_MODE_SYNCHRONOUS_MASTER) {
+        if (usart->info->mode == USART_MODE_SYNCHRONOUS_MASTER) {
           val = usart->xfer->sync_mode;
           usart->xfer->sync_mode = 0U;
           switch (val) {
             case USART_SYNC_MODE_TX:
-              event |= ARM_USART_EVENT_SEND_COMPLETE;
+              event |= USART_EVENT_SEND_COMPLETE;
               break;
             case USART_SYNC_MODE_RX:
-              event |= ARM_USART_EVENT_RECEIVE_COMPLETE;
+              event |= USART_EVENT_RECEIVE_COMPLETE;
               break;
             case USART_SYNC_MODE_TX_RX:
-              event |= ARM_USART_EVENT_TRANSFER_COMPLETE;
+              event |= USART_EVENT_TRANSFER_COMPLETE;
               break;
             default:
               break;
           }
         }
         else {
-          event |= ARM_USART_EVENT_RECEIVE_COMPLETE;
+          event |= USART_EVENT_RECEIVE_COMPLETE;
         }
       }
     }
@@ -2171,7 +2171,7 @@ void USART_IRQHandler(USART_RESOURCES *usart)
   if (sr & USART_SR_IDLE & usart->reg->CR1) {
     // Dummy read to clear IDLE interrupt
     usart->reg->DR;
-    event |= ARM_USART_EVENT_RX_TIMEOUT;
+    event |= USART_EVENT_RX_TIMEOUT;
   }
 
   // Transmit data register empty
@@ -2183,7 +2183,7 @@ void USART_IRQHandler(USART_RESOURCES *usart)
     }
     else {
       if (usart->xfer->tx_num != usart->xfer->tx_cnt) {
-        if ((usart->info->mode == ARM_USART_MODE_SYNCHRONOUS_MASTER)
+        if ((usart->info->mode == USART_MODE_SYNCHRONOUS_MASTER)
             && (usart->xfer->sync_mode == USART_SYNC_MODE_RX)) {
           // Dummy write in synchronous receive only mode
           data = usart->xfer->def_val;
@@ -2215,14 +2215,14 @@ void USART_IRQHandler(USART_RESOURCES *usart)
         usart->xfer->send_active = 0U;
 
         // Set send complete event
-        if (usart->info->mode == ARM_USART_MODE_SYNCHRONOUS_MASTER) {
+        if (usart->info->mode == USART_MODE_SYNCHRONOUS_MASTER) {
           if ((usart->xfer->sync_mode == USART_SYNC_MODE_TX)
               && ((usart->info->flags & USART_FLAG_RX_ENABLED) == 0U)) {
-            event |= ARM_USART_EVENT_SEND_COMPLETE;
+            event |= USART_EVENT_SEND_COMPLETE;
           }
         }
         else {
-          event |= ARM_USART_EVENT_SEND_COMPLETE;
+          event |= USART_EVENT_SEND_COMPLETE;
         }
       }
     }
@@ -2232,7 +2232,7 @@ void USART_IRQHandler(USART_RESOURCES *usart)
   if (sr & USART_SR_TC & usart->reg->CR1) {
     // Disable transmission complete interrupt
     usart->reg->CR1 &= ~USART_CR1_TCIE;
-    event |= ARM_USART_EVENT_TX_COMPLETE;
+    event |= USART_EVENT_TX_COMPLETE;
   }
 
   // RX Overrun
@@ -2241,7 +2241,7 @@ void USART_IRQHandler(USART_RESOURCES *usart)
     // Dummy data read to clear the ORE flag
     usart->reg->DR;
     usart->info->status.rx_overflow = 1U;
-    event |= ARM_USART_EVENT_RX_OVERFLOW;
+    event |= USART_EVENT_RX_OVERFLOW;
   }
 
   // Framing error
@@ -2249,7 +2249,7 @@ void USART_IRQHandler(USART_RESOURCES *usart)
     // Dummy data read to clear the FE flag
     usart->reg->DR;
     usart->info->status.rx_framing_error = 1U;
-    event |= ARM_USART_EVENT_RX_FRAMING_ERROR;
+    event |= USART_EVENT_RX_FRAMING_ERROR;
   }
 
   // Parity error
@@ -2257,7 +2257,7 @@ void USART_IRQHandler(USART_RESOURCES *usart)
     // Dummy data read to clear the PE flag
     usart->reg->DR;
     usart->info->status.rx_parity_error = 1U;
-    event |= ARM_USART_EVENT_RX_PARITY_ERROR;
+    event |= USART_EVENT_RX_PARITY_ERROR;
   }
 
   // Break Detection
@@ -2266,7 +2266,7 @@ void USART_IRQHandler(USART_RESOURCES *usart)
     usart->reg->SR &= ~USART_SR_LBD;
 
     usart->info->status.rx_break = 1U;
-    event |= ARM_USART_EVENT_RX_BREAK;
+    event |= USART_EVENT_RX_BREAK;
   }
 
   // CTS changed
@@ -2274,7 +2274,7 @@ void USART_IRQHandler(USART_RESOURCES *usart)
     // Clear CTS flag
     usart->reg->SR &= ~USART_SR_CTS;
 
-    event |= ARM_USART_EVENT_CTS;
+    event |= USART_EVENT_CTS;
   }
 
   // Send Event
@@ -2287,13 +2287,13 @@ void USART_IRQHandler(USART_RESOURCES *usart)
 // USART1 Driver Wrapper functions
 
 static
-ARM_USART_CAPABILITIES USART1_GetCapabilities(void)
+USART_CAPABILITIES USART1_GetCapabilities(void)
 {
   return USART_GetCapabilities(&USART1_Resources);
 }
 
 static
-int32_t USART1_Initialize(ARM_USART_SignalEvent_t cb_event)
+int32_t USART1_Initialize(USART_SignalEvent_t cb_event)
 {
   return USART_Initialize(cb_event, &USART1_Resources);
 }
@@ -2305,7 +2305,7 @@ int32_t USART1_Uninitialize(void)
 }
 
 static
-int32_t USART1_PowerControl(ARM_POWER_STATE state)
+int32_t USART1_PowerControl(POWER_STATE state)
 {
   return USART_PowerControl(state, &USART1_Resources);
 }
@@ -2347,19 +2347,19 @@ int32_t USART1_Control(uint32_t control, uint32_t arg)
 }
 
 static
-ARM_USART_STATUS USART1_GetStatus(void)
+USART_STATUS USART1_GetStatus(void)
 {
   return USART_GetStatus (&USART1_Resources);
 }
 
 static
-int32_t USART1_SetModemControl(ARM_USART_MODEM_CONTROL control)
+int32_t USART1_SetModemControl(USART_MODEM_CONTROL control)
 {
   return USART_SetModemControl(control, &USART1_Resources);
 }
 
 static
-ARM_USART_MODEM_STATUS USART1_GetModemStatus(void)
+USART_MODEM_STATUS USART1_GetModemStatus(void)
 {
   return USART_GetModemStatus(&USART1_Resources);
 }
@@ -2370,7 +2370,7 @@ void USART1_IRQHandler(void)
 }
 
 // USART1 Driver Control Block
-ARM_DRIVER_USART Driver_USART1 = {
+DRIVER_USART Driver_USART1 = {
     USARTx_GetVersion,
     USART1_GetCapabilities,
     USART1_Initialize,
@@ -2392,13 +2392,13 @@ ARM_DRIVER_USART Driver_USART1 = {
 // USART2 Driver Wrapper functions
 
 static
-ARM_USART_CAPABILITIES USART2_GetCapabilities(void)
+USART_CAPABILITIES USART2_GetCapabilities(void)
 {
   return USART_GetCapabilities(&USART2_Resources);
 }
 
 static
-int32_t USART2_Initialize(ARM_USART_SignalEvent_t cb_event)
+int32_t USART2_Initialize(USART_SignalEvent_t cb_event)
 {
   return USART_Initialize(cb_event, &USART2_Resources);
 }
@@ -2410,7 +2410,7 @@ int32_t USART2_Uninitialize(void)
 }
 
 static
-int32_t USART2_PowerControl(ARM_POWER_STATE state)
+int32_t USART2_PowerControl(POWER_STATE state)
 {
   return USART_PowerControl(state, &USART2_Resources);
 }
@@ -2452,19 +2452,19 @@ int32_t USART2_Control(uint32_t control, uint32_t arg)
 }
 
 static
-ARM_USART_STATUS USART2_GetStatus(void)
+USART_STATUS USART2_GetStatus(void)
 {
   return USART_GetStatus(&USART2_Resources);
 }
 
 static
-int32_t USART2_SetModemControl(ARM_USART_MODEM_CONTROL control)
+int32_t USART2_SetModemControl(USART_MODEM_CONTROL control)
 {
   return USART_SetModemControl(control, &USART2_Resources);
 }
 
 static
-ARM_USART_MODEM_STATUS USART2_GetModemStatus(void)
+USART_MODEM_STATUS USART2_GetModemStatus(void)
 {
   return USART_GetModemStatus(&USART2_Resources);
 }
@@ -2475,7 +2475,7 @@ void USART2_IRQHandler(void)
 }
 
 // USART2 Driver Control Block
-ARM_DRIVER_USART Driver_USART2 = {
+DRIVER_USART Driver_USART2 = {
     USARTx_GetVersion,
     USART2_GetCapabilities,
     USART2_Initialize,
@@ -2497,13 +2497,13 @@ ARM_DRIVER_USART Driver_USART2 = {
 // USART3 Driver Wrapper functions
 
 static
-ARM_USART_CAPABILITIES USART3_GetCapabilities(void)
+USART_CAPABILITIES USART3_GetCapabilities(void)
 {
   return USART_GetCapabilities(&USART3_Resources);
 }
 
 static
-int32_t USART3_Initialize(ARM_USART_SignalEvent_t cb_event)
+int32_t USART3_Initialize(USART_SignalEvent_t cb_event)
 {
   return USART_Initialize(cb_event, &USART3_Resources);
 }
@@ -2515,7 +2515,7 @@ int32_t USART3_Uninitialize(void)
 }
 
 static
-int32_t USART3_PowerControl(ARM_POWER_STATE state)
+int32_t USART3_PowerControl(POWER_STATE state)
 {
   return USART_PowerControl(state, &USART3_Resources);
 }
@@ -2557,19 +2557,19 @@ int32_t USART3_Control(uint32_t control, uint32_t arg)
 }
 
 static
-ARM_USART_STATUS USART3_GetStatus(void)
+USART_STATUS USART3_GetStatus(void)
 {
   return USART_GetStatus(&USART3_Resources);
 }
 
 static
-int32_t USART3_SetModemControl(ARM_USART_MODEM_CONTROL control)
+int32_t USART3_SetModemControl(USART_MODEM_CONTROL control)
 {
   return USART_SetModemControl(control, &USART3_Resources);
 }
 
 static
-ARM_USART_MODEM_STATUS USART3_GetModemStatus(void)
+USART_MODEM_STATUS USART3_GetModemStatus(void)
 {
   return USART_GetModemStatus(&USART3_Resources);
 }
@@ -2580,7 +2580,7 @@ void USART3_IRQHandler(void)
 }
 
 // USART3 Driver Control Block
-ARM_DRIVER_USART Driver_USART3 = {
+DRIVER_USART Driver_USART3 = {
     USARTx_GetVersion,
     USART3_GetCapabilities,
     USART3_Initialize,
@@ -2601,13 +2601,13 @@ ARM_DRIVER_USART Driver_USART3 = {
 #ifdef USE_UART4
 // USART4 Driver Wrapper functions
 static
-ARM_USART_CAPABILITIES USART4_GetCapabilities(void)
+USART_CAPABILITIES USART4_GetCapabilities(void)
 {
   return USART_GetCapabilities(&USART4_Resources);
 }
 
 static
-int32_t USART4_Initialize(ARM_USART_SignalEvent_t cb_event)
+int32_t USART4_Initialize(USART_SignalEvent_t cb_event)
 {
   return USART_Initialize(cb_event, &USART4_Resources);
 }
@@ -2619,7 +2619,7 @@ int32_t USART4_Uninitialize(void)
 }
 
 static
-int32_t USART4_PowerControl(ARM_POWER_STATE state)
+int32_t USART4_PowerControl(POWER_STATE state)
 {
   return USART_PowerControl(state, &USART4_Resources);
 }
@@ -2661,19 +2661,19 @@ int32_t USART4_Control(uint32_t control, uint32_t arg)
 }
 
 static
-ARM_USART_STATUS USART4_GetStatus(void)
+USART_STATUS USART4_GetStatus(void)
 {
   return USART_GetStatus(&USART4_Resources);
 }
 
 static
-int32_t USART4_SetModemControl(ARM_USART_MODEM_CONTROL control)
+int32_t USART4_SetModemControl(USART_MODEM_CONTROL control)
 {
   return USART_SetModemControl(control, &USART4_Resources);
 }
 
 static
-ARM_USART_MODEM_STATUS USART4_GetModemStatus(void)
+USART_MODEM_STATUS USART4_GetModemStatus(void)
 {
   return USART_GetModemStatus(&USART4_Resources);
 }
@@ -2684,7 +2684,7 @@ void UART4_IRQHandler(void)
 }
 
 // USART4 Driver Control Block
-ARM_DRIVER_USART Driver_USART4 = {
+DRIVER_USART Driver_USART4 = {
     USARTx_GetVersion,
     USART4_GetCapabilities,
     USART4_Initialize,
@@ -2706,13 +2706,13 @@ ARM_DRIVER_USART Driver_USART4 = {
 // USART5 Driver Wrapper functions
 
 static
-ARM_USART_CAPABILITIES USART5_GetCapabilities(void)
+USART_CAPABILITIES USART5_GetCapabilities(void)
 {
   return USART_GetCapabilities(&USART5_Resources);
 }
 
 static
-int32_t USART5_Initialize(ARM_USART_SignalEvent_t cb_event)
+int32_t USART5_Initialize(USART_SignalEvent_t cb_event)
 {
   return USART_Initialize(cb_event, &USART5_Resources);
 }
@@ -2724,7 +2724,7 @@ int32_t USART5_Uninitialize(void)
 }
 
 static
-int32_t USART5_PowerControl(ARM_POWER_STATE state)
+int32_t USART5_PowerControl(POWER_STATE state)
 {
   return USART_PowerControl(state, &USART5_Resources);
 }
@@ -2766,19 +2766,19 @@ int32_t USART5_Control(uint32_t control, uint32_t arg)
 }
 
 static
-ARM_USART_STATUS USART5_GetStatus(void)
+USART_STATUS USART5_GetStatus(void)
 {
   return USART_GetStatus(&USART5_Resources);
 }
 
 static
-int32_t USART5_SetModemControl(ARM_USART_MODEM_CONTROL control)
+int32_t USART5_SetModemControl(USART_MODEM_CONTROL control)
 {
   return USART_SetModemControl(control, &USART5_Resources);
 }
 
 static
-ARM_USART_MODEM_STATUS USART5_GetModemStatus(void)
+USART_MODEM_STATUS USART5_GetModemStatus(void)
 {
   return USART_GetModemStatus(&USART5_Resources);
 }
@@ -2789,7 +2789,7 @@ void UART5_IRQHandler(void)
 }
 
 // USART5 Driver Control Block
-ARM_DRIVER_USART Driver_USART5 = {
+DRIVER_USART Driver_USART5 = {
     USARTx_GetVersion,
     USART5_GetCapabilities,
     USART5_Initialize,
@@ -2811,13 +2811,13 @@ ARM_DRIVER_USART Driver_USART5 = {
 // USART6 Driver Wrapper functions
 
 static
-ARM_USART_CAPABILITIES USART6_GetCapabilities(void)
+USART_CAPABILITIES USART6_GetCapabilities(void)
 {
   return USART_GetCapabilities(&USART6_Resources);
 }
 
 static
-int32_t USART6_Initialize(ARM_USART_SignalEvent_t cb_event)
+int32_t USART6_Initialize(USART_SignalEvent_t cb_event)
 {
   return USART_Initialize(cb_event, &USART6_Resources);
 }
@@ -2829,7 +2829,7 @@ int32_t USART6_Uninitialize(void)
 }
 
 static
-int32_t USART6_PowerControl(ARM_POWER_STATE state)
+int32_t USART6_PowerControl(POWER_STATE state)
 {
   return USART_PowerControl(state, &USART6_Resources);
 }
@@ -2871,19 +2871,19 @@ int32_t USART6_Control(uint32_t control, uint32_t arg)
 }
 
 static
-ARM_USART_STATUS USART6_GetStatus(void)
+USART_STATUS USART6_GetStatus(void)
 {
   return USART_GetStatus(&USART6_Resources);
 }
 
 static
-int32_t USART6_SetModemControl(ARM_USART_MODEM_CONTROL control)
+int32_t USART6_SetModemControl(USART_MODEM_CONTROL control)
 {
   return USART_SetModemControl(control, &USART6_Resources);
 }
 
 static
-ARM_USART_MODEM_STATUS USART6_GetModemStatus(void)
+USART_MODEM_STATUS USART6_GetModemStatus(void)
 {
   return USART_GetModemStatus(&USART6_Resources);
 }
@@ -2894,7 +2894,7 @@ void USART6_IRQHandler(void)
 }
 
 // USART6 Driver Control Block
-ARM_DRIVER_USART Driver_USART6 = {
+DRIVER_USART Driver_USART6 = {
     USARTx_GetVersion,
     USART6_GetCapabilities,
     USART6_Initialize,
@@ -2916,13 +2916,13 @@ ARM_DRIVER_USART Driver_USART6 = {
 // USART7 Driver Wrapper functions
 
 static
-ARM_USART_CAPABILITIES USART7_GetCapabilities(void)
+USART_CAPABILITIES USART7_GetCapabilities(void)
 {
   return USART_GetCapabilities(&USART7_Resources);
 }
 
 static
-int32_t USART7_Initialize(ARM_USART_SignalEvent_t cb_event)
+int32_t USART7_Initialize(USART_SignalEvent_t cb_event)
 {
   return USART_Initialize(cb_event, &USART7_Resources);
 }
@@ -2934,7 +2934,7 @@ int32_t USART7_Uninitialize(void)
 }
 
 static
-int32_t USART7_PowerControl(ARM_POWER_STATE state)
+int32_t USART7_PowerControl(POWER_STATE state)
 {
   return USART_PowerControl(state, &USART7_Resources);
 }
@@ -2976,19 +2976,19 @@ int32_t USART7_Control(uint32_t control, uint32_t arg)
 }
 
 static
-ARM_USART_STATUS USART7_GetStatus(void)
+USART_STATUS USART7_GetStatus(void)
 {
   return USART_GetStatus(&USART7_Resources);
 }
 
 static
-int32_t USART7_SetModemControl(ARM_USART_MODEM_CONTROL control)
+int32_t USART7_SetModemControl(USART_MODEM_CONTROL control)
 {
   return USART_SetModemControl(control, &USART7_Resources);
 }
 
 static
-ARM_USART_MODEM_STATUS USART7_GetModemStatus(void)
+USART_MODEM_STATUS USART7_GetModemStatus(void)
 {
   return USART_GetModemStatus(&USART7_Resources);
 }
@@ -2999,7 +2999,7 @@ void UART7_IRQHandler(void)
 }
 
 // USART7 Driver Control Block
-ARM_DRIVER_USART Driver_USART7 = {
+DRIVER_USART Driver_USART7 = {
     USARTx_GetVersion,
     USART7_GetCapabilities,
     USART7_Initialize,
@@ -3021,13 +3021,13 @@ ARM_DRIVER_USART Driver_USART7 = {
 // USART8 Driver Wrapper functions
 
 static
-ARM_USART_CAPABILITIES USART8_GetCapabilities(void)
+USART_CAPABILITIES USART8_GetCapabilities(void)
 {
   return USART_GetCapabilities(&USART8_Resources);
 }
 
 static
-int32_t USART8_Initialize(ARM_USART_SignalEvent_t cb_event)
+int32_t USART8_Initialize(USART_SignalEvent_t cb_event)
 {
   return USART_Initialize(cb_event, &USART8_Resources);
 }
@@ -3039,7 +3039,7 @@ int32_t USART8_Uninitialize(void)
 }
 
 static
-int32_t USART8_PowerControl(ARM_POWER_STATE state)
+int32_t USART8_PowerControl(POWER_STATE state)
 {
   return USART_PowerControl(state, &USART8_Resources);
 }
@@ -3081,19 +3081,19 @@ int32_t USART8_Control(uint32_t control, uint32_t arg)
 }
 
 static
-ARM_USART_STATUS USART8_GetStatus(void)
+USART_STATUS USART8_GetStatus(void)
 {
   return USART_GetStatus(&USART8_Resources);
 }
 
 static
-int32_t USART8_SetModemControl(ARM_USART_MODEM_CONTROL control)
+int32_t USART8_SetModemControl(USART_MODEM_CONTROL control)
 {
   return USART_SetModemControl(control, &USART8_Resources);
 }
 
 static
-ARM_USART_MODEM_STATUS USART8_GetModemStatus(void)
+USART_MODEM_STATUS USART8_GetModemStatus(void)
 {
   return USART_GetModemStatus(&USART8_Resources);
 }
@@ -3104,7 +3104,7 @@ void UART8_IRQHandler(void)
 }
 
 // USART8 Driver Control Block
-ARM_DRIVER_USART Driver_USART8 = {
+DRIVER_USART Driver_USART8 = {
     USARTx_GetVersion,
     USART8_GetCapabilities,
     USART8_Initialize,
@@ -3126,13 +3126,13 @@ ARM_DRIVER_USART Driver_USART8 = {
 // USART9 Driver Wrapper functions
 
 static
-ARM_USART_CAPABILITIES USART9_GetCapabilities(void)
+USART_CAPABILITIES USART9_GetCapabilities(void)
 {
   return USART_GetCapabilities(&USART9_Resources);
 }
 
 static
-int32_t USART9_Initialize(ARM_USART_SignalEvent_t cb_event)
+int32_t USART9_Initialize(USART_SignalEvent_t cb_event)
 {
   return USART_Initialize(cb_event, &USART9_Resources);
 }
@@ -3144,7 +3144,7 @@ int32_t USART9_Uninitialize(void)
 }
 
 static
-int32_t USART9_PowerControl(ARM_POWER_STATE state)
+int32_t USART9_PowerControl(POWER_STATE state)
 {
   return USART_PowerControl(state, &USART9_Resources);
 }
@@ -3186,19 +3186,19 @@ int32_t USART9_Control(uint32_t control, uint32_t arg)
 }
 
 static
-ARM_USART_STATUS USART9_GetStatus(void)
+USART_STATUS USART9_GetStatus(void)
 {
   return USART_GetStatus(&USART9_Resources);
 }
 
 static
-int32_t USART9_SetModemControl(ARM_USART_MODEM_CONTROL control)
+int32_t USART9_SetModemControl(USART_MODEM_CONTROL control)
 {
   return USART_SetModemControl(control, &USART9_Resources);
 }
 
 static
-ARM_USART_MODEM_STATUS USART9_GetModemStatus(void)
+USART_MODEM_STATUS USART9_GetModemStatus(void)
 {
   return USART_GetModemStatus(&USART9_Resources);
 }
@@ -3209,7 +3209,7 @@ void UART9_IRQHandler(void)
 }
 
 // USART9 Driver Control Block
-ARM_DRIVER_USART Driver_USART9 = {
+DRIVER_USART Driver_USART9 = {
     USARTx_GetVersion,
     USART9_GetCapabilities,
     USART9_Initialize,
@@ -3231,13 +3231,13 @@ ARM_DRIVER_USART Driver_USART9 = {
 // USART10 Driver Wrapper functions
 
 static
-ARM_USART_CAPABILITIES USART10_GetCapabilities(void)
+USART_CAPABILITIES USART10_GetCapabilities(void)
 {
   return USART_GetCapabilities(&USART10_Resources);
 }
 
 static
-int32_t USART10_Initialize(ARM_USART_SignalEvent_t cb_event)
+int32_t USART10_Initialize(USART_SignalEvent_t cb_event)
 {
   return USART_Initialize(cb_event, &USART10_Resources);
 }
@@ -3249,7 +3249,7 @@ int32_t USART10_Uninitialize(void)
 }
 
 static
-int32_t USART10_PowerControl(ARM_POWER_STATE state)
+int32_t USART10_PowerControl(POWER_STATE state)
 {
   return USART_PowerControl(state, &USART10_Resources);
 }
@@ -3291,19 +3291,19 @@ int32_t USART10_Control(uint32_t control, uint32_t arg)
 }
 
 static
-ARM_USART_STATUS USART10_GetStatus(void)
+USART_STATUS USART10_GetStatus(void)
 {
   return USART_GetStatus(&USART10_Resources);
 }
 
 static
-int32_t USART10_SetModemControl(ARM_USART_MODEM_CONTROL control)
+int32_t USART10_SetModemControl(USART_MODEM_CONTROL control)
 {
   return USART_SetModemControl(control, &USART10_Resources);
 }
 
 static
-ARM_USART_MODEM_STATUS USART10_GetModemStatus(void)
+USART_MODEM_STATUS USART10_GetModemStatus(void)
 {
   return USART_GetModemStatus(&USART10_Resources);
 }
@@ -3314,7 +3314,7 @@ void UART10_IRQHandler(void)
 }
 
 // USART10 Driver Control Block
-ARM_DRIVER_USART Driver_USART10 = {
+DRIVER_USART Driver_USART10 = {
     USARTx_GetVersion,
     USART10_GetCapabilities,
     USART10_Initialize,

@@ -106,8 +106,8 @@ typedef struct _I2C_TRANSFER_INFO {
 
 /* I2C Information (Run-Time) */
 typedef struct _I2C_INFO {
-  ARM_I2C_SignalEvent_t cb_event;           // Event Callback
-  ARM_I2C_STATUS        status;             // Status flags
+  I2C_SignalEvent_t cb_event;           // Event Callback
+  I2C_STATUS        status;             // Status flags
   uint8_t               flags;              // Current I2C state flags
   I2C_TRANSFER_INFO     xfer;               // Transfer information
 } I2C_INFO;

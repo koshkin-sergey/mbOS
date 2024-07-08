@@ -39,14 +39,14 @@
  *  Version 1.2
  *    ST StdPeriph Drivers used for GPIO and DMA
  *  Version 1.1
- *    Based on API V1.10 (namespace prefix ARM_ added)
+ *    Based on API V1.10 (namespace prefix  added)
  *  Version 1.0
  *    Initial release
  */
 
 #include "MCI_STM32F10x.h"
 
-#define ARM_MCI_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(2,0)  /* driver version */
+#define MCI_DRV_VERSION DRIVER_VERSION_MAJOR_MINOR(2,0)  /* driver version */
 
 /* Enable High Speed bus mode */
 #if defined(MemoryCard_Bus_Mode_HS_Enable)
@@ -72,13 +72,13 @@ void SDIO_IRQHandler (void);
 
 
 /* Driver Version */
-static const ARM_DRIVER_VERSION DriverVersion = {
-  ARM_MCI_API_VERSION,
-  ARM_MCI_DRV_VERSION
+static const DRIVER_VERSION DriverVersion = {
+  MCI_API_VERSION,
+  MCI_DRV_VERSION
 };
 
 /* Driver Capabilities */
-static const ARM_MCI_CAPABILITIES DriverCapabilities = {
+static const MCI_CAPABILITIES DriverCapabilities = {
   MCI_CD_PIN,                                     /* cd_state          */
   0U,                                             /* cd_event          */
   MCI_WP_PIN,                                     /* wp_state          */
@@ -112,34 +112,34 @@ static const ARM_MCI_CAPABILITIES DriverCapabilities = {
 
 
 /**
-  \fn          ARM_DRV_VERSION GetVersion (void)
+  \fn          DRV_VERSION GetVersion (void)
   \brief       Get driver version.
-  \return      \ref ARM_DRV_VERSION
+  \return      \ref DRV_VERSION
 */
-static ARM_DRIVER_VERSION GetVersion (void) {
+static DRIVER_VERSION GetVersion (void) {
   return DriverVersion;
 }
 
 
 /**
-  \fn          ARM_MCI_CAPABILITIES MCI_GetCapabilities (void)
+  \fn          MCI_CAPABILITIES MCI_GetCapabilities (void)
   \brief       Get driver capabilities.
-  \return      \ref ARM_MCI_CAPABILITIES
+  \return      \ref MCI_CAPABILITIES
 */
-static ARM_MCI_CAPABILITIES GetCapabilities (void) {
+static MCI_CAPABILITIES GetCapabilities (void) {
   return DriverCapabilities;
 }
 
 
 /**
-  \fn            int32_t Initialize (ARM_MCI_SignalEvent_t cb_event)
+  \fn            int32_t Initialize (MCI_SignalEvent_t cb_event)
   \brief         Initialize the Memory Card Interface
-  \param[in]     cb_event  Pointer to \ref ARM_MCI_SignalEvent
+  \param[in]     cb_event  Pointer to \ref MCI_SignalEvent
   \return        \ref execution_status
 */
-static int32_t Initialize (ARM_MCI_SignalEvent_t cb_event) {
+static int32_t Initialize (MCI_SignalEvent_t cb_event) {
 
-  if (MCI.flags & MCI_INIT) { return ARM_DRIVER_OK; }
+  if (MCI.flags & MCI_INIT) { return DRIVER_OK; }
 
   SystemCoreClockUpdate();
 
@@ -203,7 +203,7 @@ static int32_t Initialize (ARM_MCI_SignalEvent_t cb_event) {
   MCI.cb_event = cb_event;
   MCI.flags    = MCI_INIT;
 
-  return ARM_DRIVER_OK;
+  return DRIVER_OK;
 }
 
 
@@ -247,23 +247,23 @@ static int32_t Uninitialize (void) {
                                                                     GPIO_MODE_INPUT);
   #endif
 
-  return ARM_DRIVER_OK;
+  return DRIVER_OK;
 }
 
 
 /**
-  \fn            int32_t PowerControl (ARM_POWER_STATE state)
+  \fn            int32_t PowerControl (POWER_STATE state)
   \brief         Control Memory Card Interface Power.
-  \param[in]     state   Power state \ref ARM_POWER_STATE
+  \param[in]     state   Power state \ref POWER_STATE
   \return        \ref execution_status
 */
-static int32_t PowerControl (ARM_POWER_STATE state) {
+static int32_t PowerControl (POWER_STATE state) {
   int32_t status;
 
-  status = ARM_DRIVER_OK;
+  status = DRIVER_OK;
 
   switch (state) {
-    case ARM_POWER_OFF:
+    case POWER_OFF:
       /* Disable SDIO interrupts in NVIC */
       NVIC_DisableIRQ (SDIO_IRQn);
 
@@ -286,12 +286,12 @@ static int32_t PowerControl (ARM_POWER_STATE state) {
       MCI.flags &= ~MCI_POWER;
       break;
 
-    case ARM_POWER_FULL:
+    case POWER_FULL:
       if ((MCI.flags & MCI_INIT)  == 0U) {
-        return ARM_DRIVER_ERROR;
+        return DRIVER_ERROR;
       }
       if ((MCI.flags & MCI_POWER) != 0U) {
-        return ARM_DRIVER_OK;
+        return DRIVER_OK;
       }
       /* Enable SDIO peripheral clock */
       RCC->AHBENR |= RCC_AHBENR_SDIOEN;
@@ -329,9 +329,9 @@ static int32_t PowerControl (ARM_POWER_STATE state) {
       MCI.flags |= MCI_POWER;
       break;
 
-    case ARM_POWER_LOW:
+    case POWER_LOW:
     default:
-      return ARM_DRIVER_ERROR_UNSUPPORTED;
+      return DRIVER_ERROR_UNSUPPORTED;
   }
   return status;
 }
@@ -345,8 +345,8 @@ static int32_t PowerControl (ARM_POWER_STATE state) {
 */
 static int32_t CardPower (uint32_t voltage) {
 
-  if ((MCI.flags & MCI_POWER) == 0U) { return ARM_DRIVER_ERROR; }
-  return ARM_DRIVER_ERROR_UNSUPPORTED;
+  if ((MCI.flags & MCI_POWER) == 0U) { return DRIVER_ERROR; }
+  return DRIVER_ERROR_UNSUPPORTED;
 }
 
 
@@ -357,7 +357,7 @@ static int32_t CardPower (uint32_t voltage) {
 */
 static int32_t ReadCD (void) {
 
-  if ((MCI.flags & MCI_POWER) == 0U) { return ARM_DRIVER_ERROR; }
+  if ((MCI.flags & MCI_POWER) == 0U) { return DRIVER_ERROR; }
 
   /* Read CD (Card Detect) Pin */
   #if defined (MemoryCard_CD_Pin)
@@ -377,7 +377,7 @@ static int32_t ReadCD (void) {
 */
 static int32_t ReadWP (void) {
 
-  if ((MCI.flags & MCI_POWER) == 0U) { return ARM_DRIVER_ERROR; }
+  if ((MCI.flags & MCI_POWER) == 0U) { return DRIVER_ERROR; }
 
   /* Read WP (Write Protect) Pin */
   #if defined (MemoryCard_WP_Pin)
@@ -406,13 +406,13 @@ static int32_t SendCommand (uint32_t cmd, uint32_t arg, uint32_t flags, uint32_t
   uint32_t i, clkcr;
 
   if (((flags & MCI_RESPONSE_EXPECTED_Msk) != 0U) && (response == NULL)) {
-    return ARM_DRIVER_ERROR_PARAMETER;
+    return DRIVER_ERROR_PARAMETER;
   }
   if ((MCI.flags & MCI_SETUP) == 0U) {
-    return ARM_DRIVER_ERROR;
+    return DRIVER_ERROR;
   }
   if (MCI.status.command_active) {
-    return ARM_DRIVER_ERROR_BUSY;
+    return DRIVER_ERROR_BUSY;
   }
   MCI.status.command_active   = 1U;
   MCI.status.command_timeout  = 0U;
@@ -421,7 +421,7 @@ static int32_t SendCommand (uint32_t cmd, uint32_t arg, uint32_t flags, uint32_t
   MCI.status.transfer_error   = 0U;
   MCI.status.ccs              = 0U;
 
-  if (flags & ARM_MCI_CARD_INITIALIZE) {
+  if (flags & MCI_CARD_INITIALIZE) {
     clkcr = SDIO->CLKCR;
 
     if (((clkcr & SDIO_CLKCR_CLKEN) == 0) || ((clkcr & SDIO_CLKCR_PWRSAV) != 0)) {
@@ -441,30 +441,30 @@ static int32_t SendCommand (uint32_t cmd, uint32_t arg, uint32_t flags, uint32_t
   MCI.response = response;
   MCI.flags   &= ~(MCI_RESP_CRC | MCI_RESP_LONG);
 
-  switch (flags & ARM_MCI_RESPONSE_Msk) {
-    case ARM_MCI_RESPONSE_NONE:
+  switch (flags & MCI_RESPONSE_Msk) {
+    case MCI_RESPONSE_NONE:
       /* No response expected (wait CMDSENT) */
       break;
 
-    case ARM_MCI_RESPONSE_SHORT:
-    case ARM_MCI_RESPONSE_SHORT_BUSY:
+    case MCI_RESPONSE_SHORT:
+    case MCI_RESPONSE_SHORT_BUSY:
       /* Short response expected (wait CMDREND or CCRCFAIL) */
       cmd |= SDIO_CMD_WAITRESP_0;
       break;
 
-    case ARM_MCI_RESPONSE_LONG:
+    case MCI_RESPONSE_LONG:
       MCI.flags |= MCI_RESP_LONG;
       /* Long response expected (wait CMDREND or CCRCFAIL) */
       cmd |= SDIO_CMD_WAITRESP_1 | SDIO_CMD_WAITRESP_0;
       break;
 
     default:
-      return ARM_DRIVER_ERROR;
+      return DRIVER_ERROR;
   }
-  if (flags & ARM_MCI_RESPONSE_CRC) {
+  if (flags & MCI_RESPONSE_CRC) {
     MCI.flags |= MCI_RESP_CRC;
   }
-  if (flags & ARM_MCI_TRANSFER_DATA) {
+  if (flags & MCI_TRANSFER_DATA) {
     MCI.flags |= MCI_DATA_XFER;
   }
 
@@ -475,7 +475,7 @@ static int32_t SendCommand (uint32_t cmd, uint32_t arg, uint32_t flags, uint32_t
   SDIO->ARG = arg;
   SDIO->CMD = cmd;
 
-  return ARM_DRIVER_OK;
+  return DRIVER_OK;
 }
 
 
@@ -494,13 +494,13 @@ static int32_t SendCommand (uint32_t cmd, uint32_t arg, uint32_t flags, uint32_t
 static int32_t SetupTransfer (uint8_t *data, uint32_t block_count, uint32_t block_size, uint32_t mode) {
   uint32_t sz, cnt, cfg, dctrl;
 
-  if ((data == NULL) || (block_count == 0U) || (block_size == 0U)) { return ARM_DRIVER_ERROR_PARAMETER; }
+  if ((data == NULL) || (block_count == 0U) || (block_size == 0U)) { return DRIVER_ERROR_PARAMETER; }
 
   if ((MCI.flags & MCI_SETUP) == 0U) {
-    return ARM_DRIVER_ERROR;
+    return DRIVER_ERROR;
   }
   if (MCI.status.transfer_active) {
-    return ARM_DRIVER_ERROR_BUSY;
+    return DRIVER_ERROR_BUSY;
   }
 
   MCI.xfer.buf = data;
@@ -516,7 +516,7 @@ static int32_t SetupTransfer (uint8_t *data, uint32_t block_count, uint32_t bloc
 
   dctrl = 0U;
 
-  if ((mode & ARM_MCI_TRANSFER_WRITE) == 0) {
+  if ((mode & MCI_TRANSFER_WRITE) == 0) {
     /* Direction: From card to controller */
     MCI.flags |= MCI_DATA_READ;
     dctrl |= SDIO_DCTRL_DTDIR;
@@ -525,7 +525,7 @@ static int32_t SetupTransfer (uint8_t *data, uint32_t block_count, uint32_t bloc
     MCI.flags &= ~MCI_DATA_READ;
   }
 
-  if (mode & ARM_MCI_TRANSFER_STREAM) {
+  if (mode & MCI_TRANSFER_STREAM) {
     /* Stream or SDIO multibyte data transfer enable */
     dctrl |= SDIO_DCTRL_DTMODE;
   }
@@ -536,7 +536,7 @@ static int32_t SetupTransfer (uint8_t *data, uint32_t block_count, uint32_t bloc
   }
   else {
     if (block_size > 16384U) {
-      return ARM_DRIVER_ERROR_UNSUPPORTED;
+      return DRIVER_ERROR_UNSUPPORTED;
     }
     for (sz = 0U; sz < 14U; sz++) {
       if (block_size & (1UL << sz)) {
@@ -554,7 +554,7 @@ static int32_t SetupTransfer (uint8_t *data, uint32_t block_count, uint32_t bloc
         DMA_TRANSFER_ERROR_INTERRUPT            |
         DMA_TRANSFER_COMPLETE_INTERRUPT         ;
 
-  if (mode & ARM_MCI_TRANSFER_WRITE) {
+  if (mode & MCI_TRANSFER_WRITE) {
     cfg |= DMA_READ_MEMORY;
   }
   
@@ -564,7 +564,7 @@ static int32_t SetupTransfer (uint8_t *data, uint32_t block_count, uint32_t bloc
   MCI.dlen   = cnt;
   MCI.dctrl  = dctrl | (sz << 4) | SDIO_DCTRL_DMAEN;
 
-  return (ARM_DRIVER_OK);
+  return (DRIVER_OK);
 }
 
 
@@ -577,9 +577,9 @@ static int32_t AbortTransfer (void) {
   int32_t  status;
   uint32_t mask;
 
-  if ((MCI.flags & MCI_SETUP) == 0U) { return ARM_DRIVER_ERROR; }
+  if ((MCI.flags & MCI_SETUP) == 0U) { return DRIVER_ERROR; }
 
-  status = ARM_DRIVER_OK;
+  status = DRIVER_OK;
 
   /* Disable SDIO interrupts */
   mask = SDIO->MASK;
@@ -620,10 +620,10 @@ static int32_t AbortTransfer (void) {
 static int32_t Control (uint32_t control, uint32_t arg) {
   uint32_t val, clkdiv, bps;
 
-  if ((MCI.flags & MCI_POWER) == 0U) { return ARM_DRIVER_ERROR; }
+  if ((MCI.flags & MCI_POWER) == 0U) { return DRIVER_ERROR; }
 
   switch (control) {
-    case ARM_MCI_BUS_SPEED:
+    case MCI_BUS_SPEED:
       /* Determine clock divider and set bus speed */
       bps = arg;
 
@@ -657,54 +657,54 @@ static int32_t Control (uint32_t control, uint32_t arg) {
       MCI.flags |= MCI_SETUP;
       return ((int32_t)bps);
 
-    case ARM_MCI_BUS_SPEED_MODE:
+    case MCI_BUS_SPEED_MODE:
       switch (arg) {
-        case ARM_MCI_BUS_DEFAULT_SPEED:
+        case MCI_BUS_DEFAULT_SPEED:
           /* Speed mode up to 25MHz */
           SDIO->CLKCR &= ~SDIO_CLKCR_NEGEDGE;
           break;
-        case ARM_MCI_BUS_HIGH_SPEED:
+        case MCI_BUS_HIGH_SPEED:
           /* Speed mode up to 50MHz */
           /* Errata: configuration with the NEGEDGE bit set should not be used. */
           break;
-        default: return ARM_DRIVER_ERROR_UNSUPPORTED;
+        default: return DRIVER_ERROR_UNSUPPORTED;
       }
       break;
 
-    case ARM_MCI_BUS_CMD_MODE:
+    case MCI_BUS_CMD_MODE:
       switch (arg) {
-        case ARM_MCI_BUS_CMD_OPEN_DRAIN:
+        case MCI_BUS_CMD_OPEN_DRAIN:
           /* Configure command line in open-drain mode */
           GPIO_PinConfigure(RTE_SDIO_CMD_PORT, RTE_SDIO_CMD_PIN, GPIO_AF_OPENDRAIN,
                                                                  GPIO_MODE_OUT50MHZ);
           break;
-        case ARM_MCI_BUS_CMD_PUSH_PULL:
+        case MCI_BUS_CMD_PUSH_PULL:
           /* Configure command line in push-pull mode */
           GPIO_PinConfigure(RTE_SDIO_CMD_PORT, RTE_SDIO_CMD_PIN, GPIO_AF_PUSHPULL,
                                                                  GPIO_MODE_OUT50MHZ);
           break;
         default:
-          return ARM_DRIVER_ERROR_UNSUPPORTED;
+          return DRIVER_ERROR_UNSUPPORTED;
       }
       break;
 
-    case ARM_MCI_BUS_DATA_WIDTH:
+    case MCI_BUS_DATA_WIDTH:
       switch (arg) {
-        case ARM_MCI_BUS_DATA_WIDTH_1:
+        case MCI_BUS_DATA_WIDTH_1:
           SDIO->CLKCR &= ~SDIO_CLKCR_WIDBUS;
           break;
-        case ARM_MCI_BUS_DATA_WIDTH_4:
+        case MCI_BUS_DATA_WIDTH_4:
           SDIO->CLKCR = (SDIO->CLKCR & ~SDIO_CLKCR_WIDBUS) | SDIO_CLKCR_WIDBUS_0;
           break;
-        case ARM_MCI_BUS_DATA_WIDTH_8:
+        case MCI_BUS_DATA_WIDTH_8:
           SDIO->CLKCR = (SDIO->CLKCR & ~SDIO_CLKCR_WIDBUS) | SDIO_CLKCR_WIDBUS_1;
           break;
         default:
-          return ARM_DRIVER_ERROR_UNSUPPORTED;
+          return DRIVER_ERROR_UNSUPPORTED;
       }
       break;
 
-    case ARM_MCI_CONTROL_CLOCK_IDLE:
+    case MCI_CONTROL_CLOCK_IDLE:
       if (arg) {
         /* Clock generation enabled when idle */
         SDIO->CLKCR &= ~SDIO_CLKCR_PWRSAV;
@@ -715,16 +715,16 @@ static int32_t Control (uint32_t control, uint32_t arg) {
       }
       break;
 
-    case ARM_MCI_DATA_TIMEOUT:
+    case MCI_DATA_TIMEOUT:
       SDIO->DTIMER = arg;
       break;
 
-    case ARM_MCI_MONITOR_SDIO_INTERRUPT:
+    case MCI_MONITOR_SDIO_INTERRUPT:
       MCI.status.sdio_interrupt = 0U;
       SDIO->MASK |= SDIO_MASK_SDIOITIE;
       break;
 
-    case ARM_MCI_CONTROL_READ_WAIT:
+    case MCI_CONTROL_READ_WAIT:
       if (arg) {
         /* Assert read wait */
         MCI.flags |= MCI_READ_WAIT;
@@ -736,19 +736,19 @@ static int32_t Control (uint32_t control, uint32_t arg) {
       }
       break;
 
-    default: return ARM_DRIVER_ERROR_UNSUPPORTED;
+    default: return DRIVER_ERROR_UNSUPPORTED;
   }
 
-  return ARM_DRIVER_OK;
+  return DRIVER_OK;
 }
 
 
 /**
-  \fn            ARM_MCI_STATUS GetStatus (void)
+  \fn            MCI_STATUS GetStatus (void)
   \brief         Get MCI status.
-  \return        MCI status \ref ARM_MCI_STATUS
+  \return        MCI status \ref MCI_STATUS
 */
-static ARM_MCI_STATUS GetStatus (void) {
+static MCI_STATUS GetStatus (void) {
   return MCI.status;
 }
 
@@ -771,7 +771,7 @@ void SDIO_IRQHandler (void) {
       if (MCI.flags & MCI_RESP_CRC) {
         MCI.status.command_error = 1U;
 
-        event |= ARM_MCI_EVENT_COMMAND_ERROR;
+        event |= MCI_EVENT_COMMAND_ERROR;
       }
       else {
         /* Ignore CRC error and read the response */
@@ -783,33 +783,33 @@ void SDIO_IRQHandler (void) {
       /* Data block CRC check failed */
       MCI.status.transfer_error = 1U;
 
-      event |= ARM_MCI_EVENT_TRANSFER_ERROR;
+      event |= MCI_EVENT_TRANSFER_ERROR;
     }
     if (sta & SDIO_STA_CTIMEOUT) {
       icr |= SDIO_ICR_CTIMEOUTC;
       /* Command response timeout */
       MCI.status.command_timeout = 1U;
 
-      event |= ARM_MCI_EVENT_COMMAND_TIMEOUT;
+      event |= MCI_EVENT_COMMAND_TIMEOUT;
     }
     if (sta & SDIO_STA_DTIMEOUT) {
       icr |= SDIO_ICR_DTIMEOUTC;
       /* Data timeout */
       MCI.status.transfer_timeout = 1U;
 
-      event |= ARM_MCI_EVENT_TRANSFER_TIMEOUT;
+      event |= MCI_EVENT_TRANSFER_TIMEOUT;
     }
     if (sta & SDIO_STA_STBITERR) {
       icr |= SDIO_ICR_STBITERRC;
       /* Start bit not detected on all data signals */
-      event |= ARM_MCI_EVENT_TRANSFER_ERROR;
+      event |= MCI_EVENT_TRANSFER_ERROR;
     }
   }
 
   if (sta & SDIO_STA_CMDREND) {
     icr |= SDIO_ICR_CMDRENDC;
     /* Command response received */
-    event |= ARM_MCI_EVENT_COMMAND_COMPLETE;
+    event |= MCI_EVENT_COMMAND_COMPLETE;
 
     if (MCI.response) {
       /* Read response registers */
@@ -840,7 +840,7 @@ void SDIO_IRQHandler (void) {
   if (sta & SDIO_STA_CMDSENT) {
     icr |= SDIO_ICR_CMDSENTC;
     /* Command sent (no response required) */
-    event |= ARM_MCI_EVENT_COMMAND_COMPLETE;
+    event |= MCI_EVENT_COMMAND_COMPLETE;
   }
   if (sta & SDIO_STA_DATAEND) {
     icr |= SDIO_ICR_DATAENDC;
@@ -856,7 +856,7 @@ void SDIO_IRQHandler (void) {
     if ((MCI.flags & MCI_DATA_READ) == 0) {
       /* Write transfer */
       if (MCI.xfer.cnt == 0) {
-        event |= ARM_MCI_EVENT_TRANSFER_COMPLETE;
+        event |= MCI_EVENT_TRANSFER_COMPLETE;
       }
     }
     SDIO->MASK &= ~SDIO_MASK_DBCKENDIE;
@@ -866,7 +866,7 @@ void SDIO_IRQHandler (void) {
     /* Disable interrupt (must be re-enabled using Control) */
     SDIO->MASK &= SDIO_MASK_SDIOITIE;
 
-    event |= ARM_MCI_EVENT_SDIO_INTERRUPT;
+    event |= MCI_EVENT_SDIO_INTERRUPT;
   }
 
   /* Clear processed interrupts */
@@ -874,49 +874,49 @@ void SDIO_IRQHandler (void) {
 
   if (event) {
     /* Check for transfer events */
-    mask = ARM_MCI_EVENT_TRANSFER_ERROR   |
-           ARM_MCI_EVENT_TRANSFER_TIMEOUT |
-           ARM_MCI_EVENT_TRANSFER_COMPLETE;
+    mask = MCI_EVENT_TRANSFER_ERROR   |
+           MCI_EVENT_TRANSFER_TIMEOUT |
+           MCI_EVENT_TRANSFER_COMPLETE;
     if (event & mask) {
       MCI.status.transfer_active = 0U;
 
       if (MCI.cb_event) {
-        if (event & ARM_MCI_EVENT_TRANSFER_ERROR) {
-          (MCI.cb_event)(ARM_MCI_EVENT_TRANSFER_ERROR);
+        if (event & MCI_EVENT_TRANSFER_ERROR) {
+          (MCI.cb_event)(MCI_EVENT_TRANSFER_ERROR);
         }
-        else if (event & ARM_MCI_EVENT_TRANSFER_TIMEOUT) {
-          (MCI.cb_event)(ARM_MCI_EVENT_TRANSFER_TIMEOUT);
+        else if (event & MCI_EVENT_TRANSFER_TIMEOUT) {
+          (MCI.cb_event)(MCI_EVENT_TRANSFER_TIMEOUT);
         }
         else {
-          (MCI.cb_event)(ARM_MCI_EVENT_TRANSFER_COMPLETE);
+          (MCI.cb_event)(MCI_EVENT_TRANSFER_COMPLETE);
         }
       }
     }
     /* Check for command events */
-    mask = ARM_MCI_EVENT_COMMAND_ERROR   |
-           ARM_MCI_EVENT_COMMAND_TIMEOUT |
-           ARM_MCI_EVENT_COMMAND_COMPLETE;
+    mask = MCI_EVENT_COMMAND_ERROR   |
+           MCI_EVENT_COMMAND_TIMEOUT |
+           MCI_EVENT_COMMAND_COMPLETE;
     if (event & mask) {
       MCI.status.command_active = 0U;
 
       if (MCI.cb_event) {
-        if (event & ARM_MCI_EVENT_COMMAND_ERROR) {
-          (MCI.cb_event)(ARM_MCI_EVENT_COMMAND_ERROR);
+        if (event & MCI_EVENT_COMMAND_ERROR) {
+          (MCI.cb_event)(MCI_EVENT_COMMAND_ERROR);
         }
-        else if (event & ARM_MCI_EVENT_COMMAND_TIMEOUT) {
-          (MCI.cb_event)(ARM_MCI_EVENT_COMMAND_TIMEOUT);
+        else if (event & MCI_EVENT_COMMAND_TIMEOUT) {
+          (MCI.cb_event)(MCI_EVENT_COMMAND_TIMEOUT);
         }
         else {
-          (MCI.cb_event)(ARM_MCI_EVENT_COMMAND_COMPLETE);
+          (MCI.cb_event)(MCI_EVENT_COMMAND_COMPLETE);
         }
       }
     }
     /* Check for SDIO INT event */
-    if (event & ARM_MCI_EVENT_SDIO_INTERRUPT) {
+    if (event & MCI_EVENT_SDIO_INTERRUPT) {
       MCI.status.sdio_interrupt = 1U;
 
       if (MCI.cb_event) {
-        (MCI.cb_event)(ARM_MCI_EVENT_SDIO_INTERRUPT);
+        (MCI.cb_event)(MCI_EVENT_SDIO_INTERRUPT);
       }
     }
   }
@@ -931,14 +931,14 @@ void SDIO_DMA_Handler (uint32_t event) {
 
   if (event & DMA_TRANSFER_COMPLETE_INTERRUPT) {
     if (MCI.flags & MCI_DATA_READ) {
-      evt = ARM_MCI_EVENT_TRANSFER_COMPLETE;
+      evt = MCI_EVENT_TRANSFER_COMPLETE;
 
       MCI.status.transfer_active = 0U;
     }
   }
 
   if (event & DMA_CHANNEL_TRANSFER_ERROR) {
-    evt = ARM_MCI_EVENT_TRANSFER_COMPLETE;
+    evt = MCI_EVENT_TRANSFER_COMPLETE;
   }
 
   if (evt && MCI.cb_event) {
@@ -948,7 +948,7 @@ void SDIO_DMA_Handler (uint32_t event) {
 
 
 /* MCI Driver Control Block */
-ARM_DRIVER_MCI Driver_MCI0 = {
+DRIVER_MCI Driver_MCI0 = {
   GetVersion,
   GetCapabilities,
   Initialize,

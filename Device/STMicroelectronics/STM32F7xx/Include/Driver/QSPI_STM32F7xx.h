@@ -137,7 +137,7 @@
 #define QSPIx_EXPORT_DRIVER(x)                                                                                                                                             \
 static int32_t     QSPI##x##_Initialize   (QSPI_SignalEvent_t pSignalEvent) { return QSPI_Initialize (pSignalEvent, &QSPI##x##_Resources); } \
 static int32_t     QSPI##x##_Uninitialize (void)                            { return QSPI_Uninitialize (&QSPI##x##_Resources);             } \
-static int32_t     QSPI##x##_PowerControl (ARM_POWER_STATE state)           { return QSPI_PowerControl (state, &QSPI##x##_Resources);      } \
+static int32_t     QSPI##x##_PowerControl (POWER_STATE state)           { return QSPI_PowerControl (state, &QSPI##x##_Resources);      } \
 static int32_t     QSPI##x##_Send         (const void *data, uint32_t num)  { return QSPI_Send (data, num, &QSPI##x##_Resources);          } \
 static int32_t     QSPI##x##_Receive      (void *data, uint32_t num)        { return QSPI_Receive (data, num, &QSPI##x##_Resources);       } \
 static uint32_t    QSPI##x##_GetDataCount (void)                            { return QSPI_GetDataCount (&QSPI##x##_Resources);             } \

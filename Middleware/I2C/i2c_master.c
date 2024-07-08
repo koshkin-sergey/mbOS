@@ -27,11 +27,11 @@
  *  defines and macros (scope: module-local)
  ******************************************************************************/
 
-#define I2C_EVENT_ALL                 (ARM_I2C_EVENT_TRANSFER_DONE       | \
-                                       ARM_I2C_EVENT_TRANSFER_INCOMPLETE | \
-                                       ARM_I2C_EVENT_ADDRESS_NACK        | \
-                                       ARM_I2C_EVENT_ARBITRATION_LOST    | \
-                                       ARM_I2C_EVENT_BUS_ERROR              )
+#define I2C_EVENT_ALL                 (I2C_EVENT_TRANSFER_DONE       | \
+                                       I2C_EVENT_TRANSFER_INCOMPLETE | \
+                                       I2C_EVENT_ADDRESS_NACK        | \
+                                       I2C_EVENT_ARBITRATION_LOST    | \
+                                       I2C_EVENT_BUS_ERROR              )
 
 #define I2C_ADDRESS_7BIT_MASK         (0x7FUL)
 #define I2C_ADDRESS_10BIT_MASK        (0x3FFUL)
@@ -53,8 +53,8 @@ typedef struct I2C_PortInfo {
 } I2C_PortInfo_t;
 
 typedef struct I2C_PortResources {
-    ARM_DRIVER_I2C        *driver;    // CMSIS Driver for I2C
-    ARM_I2C_SignalEvent_t  cb_event;  // Driver Event Callback
+    DRIVER_I2C        *driver;    // CMSIS Driver for I2C
+    I2C_SignalEvent_t  cb_event;  // Driver Event Callback
     I2C_PortInfo_t        *info;      // I2C Port Info
 } const I2C_PortResources_t;
 
@@ -70,11 +70,11 @@ static void I2C0_SignalEvent(uint32_t event);
 static I2C_PortInfo_t I2C0_PortInfo;
 
 /* I2C Driver */
-extern ARM_DRIVER_I2C ARM_Driver_I2C_(0);
+extern DRIVER_I2C Driver_I2C_(0);
 
 /* I2C0 Resources */
 static I2C_PortResources_t I2C0_PortResources = {
-    &ARM_Driver_I2C_(0),
+    &Driver_I2C_(0),
     I2C0_SignalEvent,
     &I2C0_PortInfo,
 };
@@ -89,11 +89,11 @@ static void I2C1_SignalEvent(uint32_t event);
 static I2C_PortInfo_t I2C1_PortInfo;
 
 /* I2C Driver */
-extern ARM_DRIVER_I2C ARM_Driver_I2C_(1);
+extern DRIVER_I2C Driver_I2C_(1);
 
 /* I2C1 Resources */
 static I2C_PortResources_t I2C1_PortResources = {
-    &ARM_Driver_I2C_(1),
+    &Driver_I2C_(1),
     I2C1_SignalEvent,
     &I2C1_PortInfo,
 };
@@ -154,17 +154,17 @@ int32_t WaitOperation(I2C_PortResources_t *port, int32_t err, uint32_t timeout)
   uint32_t flags;
    int32_t rc = I2C_ERROR_RESOURCE;
 
-  if (err == ARM_DRIVER_OK) {
+  if (err == DRIVER_OK) {
     flags = osEventFlagsWait(&port->info->event_flags, I2C_EVENT_ALL,
                              osFlagsWaitAny, timeout);
     if ((flags & osFlagsError) != 0U && flags == osFlagsErrorTimeout) {
         rc = I2C_ERROR_TIMEOUT;
     }
-    else if (flags & ARM_I2C_EVENT_TRANSFER_DONE) {
-      if (flags & ARM_I2C_EVENT_ADDRESS_NACK) {
+    else if (flags & I2C_EVENT_TRANSFER_DONE) {
+      if (flags & I2C_EVENT_ADDRESS_NACK) {
         rc = I2C_ERROR_ADDRESS_NACK;
       }
-      else if (flags & ARM_I2C_EVENT_TRANSFER_INCOMPLETE) {
+      else if (flags & I2C_EVENT_TRANSFER_INCOMPLETE) {
         rc = I2C_ERROR;
       }
       else {
@@ -172,7 +172,7 @@ int32_t WaitOperation(I2C_PortResources_t *port, int32_t err, uint32_t timeout)
       }
     }
   }
-  else if (err == ARM_DRIVER_ERROR_BUSY) {
+  else if (err == DRIVER_ERROR_BUSY) {
     rc = I2C_ERROR_TIMEOUT;
   }
 
@@ -227,7 +227,7 @@ int32_t I2C_PortOpen(uint32_t port_num)
   }
 
   port->driver->Initialize(port->cb_event);
-  port->driver->PowerControl(ARM_POWER_FULL);
+  port->driver->PowerControl(POWER_FULL);
 
   port->info->curr_com    = NULL;
   port->info->status.open = 1U;
@@ -257,7 +257,7 @@ int32_t I2C_PortClose(uint32_t port_num)
     return (I2C_OK);
   }
 
-  port->driver->PowerControl(ARM_POWER_OFF);
+  port->driver->PowerControl(POWER_OFF);
   port->driver->Uninitialize();
 
   osEventFlagsDelete(&port->info->event_flags);
@@ -399,7 +399,7 @@ int32_t I2C_Write(I2C_Com_t *com, const uint8_t *buf, uint32_t buf_size)
 
   if (osSemaphoreAcquire(&port->info->access_sem, osWaitForever) == osOK) {
     if (port->info->curr_com != com) {
-      port->driver->Control(ARM_I2C_BUS_SPEED, com->bus_speed);
+      port->driver->Control(I2C_BUS_SPEED, com->bus_speed);
       port->info->curr_com = com;
     }
 
@@ -417,7 +417,7 @@ int32_t I2C_Write(I2C_Com_t *com, const uint8_t *buf, uint32_t buf_size)
     } while (time_before(osKernelGetTickCount(), timeout));
 
     if (rc == I2C_ERROR_TIMEOUT) {
-      port->driver->Control(ARM_I2C_ABORT_TRANSFER, 0U);
+      port->driver->Control(I2C_ABORT_TRANSFER, 0U);
     }
 
     osSemaphoreRelease(&port->info->access_sem);
@@ -464,7 +464,7 @@ int32_t I2C_Read(I2C_Com_t *com,
 
   if (osSemaphoreAcquire(&port->info->access_sem, osWaitForever) == osOK) {
     if (port->info->curr_com != com) {
-      port->driver->Control(ARM_I2C_BUS_SPEED, com->bus_speed);
+      port->driver->Control(I2C_BUS_SPEED, com->bus_speed);
       port->info->curr_com = com;
     }
 
@@ -496,8 +496,8 @@ int32_t I2C_Read(I2C_Com_t *com,
     } while (time_before(osKernelGetTickCount(), timeout));
 
     if (rc == I2C_ERROR_TIMEOUT) {
-      port->driver->Control(ARM_I2C_ABORT_TRANSFER, 0U);
-      port->driver->Control(ARM_I2C_BUS_CLEAR, 0U);
+      port->driver->Control(I2C_ABORT_TRANSFER, 0U);
+      port->driver->Control(I2C_BUS_CLEAR, 0U);
     }
 
     osSemaphoreRelease(&port->info->access_sem);

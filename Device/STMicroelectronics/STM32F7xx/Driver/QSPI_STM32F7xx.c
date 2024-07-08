@@ -36,7 +36,7 @@
  *  defines and macros (scope: module-local)
  ******************************************************************************/
 
-#define QSPI_DRV_VERSION    ARM_DRIVER_VERSION_MAJOR_MINOR(1, 0) /* driver version */
+#define QSPI_DRV_VERSION    DRIVER_VERSION_MAJOR_MINOR(1, 0) /* driver version */
 
 /*******************************************************************************
  *  typedefs and structures (scope: module-local)
@@ -55,7 +55,7 @@ static void QSPIx_DMA_Callback(uint32_t event, const void *param);
  ******************************************************************************/
 
 /* Driver Version */
-static const ARM_DRIVER_VERSION DriverVersion = {
+static const DRIVER_VERSION DriverVersion = {
   QSPI_API_VERSION,
   QSPI_DRV_VERSION
 };
@@ -306,12 +306,12 @@ int32_t CalcPrescalerValue(QSPI_RESOURCES_t *qspi, uint32_t freq)
 }
 
 /**
- * @fn          ARM_DRIVER_VERSION QSPIx_GetVersion(void)
+ * @fn          DRIVER_VERSION QSPIx_GetVersion(void)
  * @brief       Get driver version.
- * @return      \ref ARM_DRIVER_VERSION
+ * @return      \ref DRIVER_VERSION
  */
 static
-ARM_DRIVER_VERSION QSPIx_GetVersion(void)
+DRIVER_VERSION QSPIx_GetVersion(void)
 {
   return (DriverVersion);
 }
@@ -340,7 +340,7 @@ int32_t QSPI_Initialize(QSPI_SignalEvent_t cb_event, QSPI_RESOURCES_t *qspi)
   QSPI_INFO_t *info = qspi->info;
 
   if (info->state & QSPI_INITIALIZED) {
-    return (ARM_DRIVER_OK);
+    return (DRIVER_OK);
   }
 
   /* Initialize QSPI Run-Time Resources */
@@ -370,7 +370,7 @@ int32_t QSPI_Initialize(QSPI_SignalEvent_t cb_event, QSPI_RESOURCES_t *qspi)
 
   info->state = QSPI_INITIALIZED;
 
-  return (ARM_DRIVER_OK);
+  return (DRIVER_OK);
 }
 
 /**
@@ -401,23 +401,23 @@ int32_t QSPI_Uninitialize(QSPI_RESOURCES_t *qspi)
   /* Clear QSPI state */
   qspi->info->state = 0U;
 
-  return (ARM_DRIVER_OK);
+  return (DRIVER_OK);
 }
 
 /**
- * @fn          int32_t QSPI_PowerControl(ARM_POWER_STATE state, QSPI_RESOURCES *qspi)
+ * @fn          int32_t QSPI_PowerControl(POWER_STATE state, QSPI_RESOURCES *qspi)
  * @brief       Control QSPI Interface Power.
  * @param[in]   state  Power state
  * @param[in]   qspi   Pointer to QSPI resources
  * @return      \ref  execution_status
  */
 static
-int32_t QSPI_PowerControl(ARM_POWER_STATE state, QSPI_RESOURCES_t *qspi)
+int32_t QSPI_PowerControl(POWER_STATE state, QSPI_RESOURCES_t *qspi)
 {
   QSPI_INFO_t *info = qspi->info;
 
   switch (state) {
-    case ARM_POWER_OFF:
+    case POWER_OFF:
       /* QSPI peripheral reset */
       RCC_ResetPeriph(qspi->rcc);
       /* Disable QSPI IRQ */
@@ -441,13 +441,13 @@ int32_t QSPI_PowerControl(ARM_POWER_STATE state, QSPI_RESOURCES_t *qspi)
       info->state &= ~QSPI_POWERED;
       break;
 
-    case ARM_POWER_FULL:
+    case POWER_FULL:
       if ((info->state & QSPI_INITIALIZED) == 0U) {
-        return (ARM_DRIVER_ERROR);
+        return (DRIVER_ERROR);
       }
 
       if ((info->state & QSPI_POWERED) != 0U) {
-        return (ARM_DRIVER_OK);
+        return (DRIVER_OK);
       }
 
       /* Clear status flags */
@@ -484,10 +484,10 @@ int32_t QSPI_PowerControl(ARM_POWER_STATE state, QSPI_RESOURCES_t *qspi)
       break;
 
     default:
-      return ARM_DRIVER_ERROR_UNSUPPORTED;
+      return DRIVER_ERROR_UNSUPPORTED;
   }
 
-  return (ARM_DRIVER_OK);
+  return (DRIVER_OK);
 }
 
 /**
@@ -506,15 +506,15 @@ int32_t QSPI_Send(const void *data, uint32_t num, QSPI_RESOURCES_t *qspi)
   QUADSPI_TypeDef       *reg = qspi->reg;
 
   if ((data == NULL) || (num == 0U)) {
-    return (ARM_DRIVER_ERROR_PARAMETER);
+    return (DRIVER_ERROR_PARAMETER);
   }
 
   if ((info->state & QSPI_CONFIGURED) == 0U) {
-    return (ARM_DRIVER_ERROR);
+    return (DRIVER_ERROR);
   }
 
   if (info->status.busy) {
-    return (ARM_DRIVER_ERROR_BUSY);
+    return (DRIVER_ERROR_BUSY);
   }
 
   /* Update QSPI statuses */
@@ -526,7 +526,7 @@ int32_t QSPI_Send(const void *data, uint32_t num, QSPI_RESOURCES_t *qspi)
   xfer->num = num;
   xfer->cnt = 0U;
 
-  return (ARM_DRIVER_OK);
+  return (DRIVER_OK);
 }
 
 /**
@@ -545,15 +545,15 @@ int32_t QSPI_Receive(void *data, uint32_t num, QSPI_RESOURCES_t *qspi)
   QUADSPI_TypeDef       *reg = qspi->reg;
 
   if ((data == NULL) || (num == 0U)) {
-    return (ARM_DRIVER_ERROR_PARAMETER);
+    return (DRIVER_ERROR_PARAMETER);
   }
 
   if ((info->state & QSPI_CONFIGURED) == 0U) {
-    return (ARM_DRIVER_ERROR);
+    return (DRIVER_ERROR);
   }
 
   if (info->status.busy) {
-    return (ARM_DRIVER_ERROR_BUSY);
+    return (DRIVER_ERROR_BUSY);
   }
 
   /* Update SPI statuses */
@@ -565,7 +565,7 @@ int32_t QSPI_Receive(void *data, uint32_t num, QSPI_RESOURCES_t *qspi)
   xfer->num = num;
   xfer->cnt = 0U;
 
-  return (ARM_DRIVER_OK);
+  return (DRIVER_OK);
 }
 
 /**
@@ -595,10 +595,10 @@ int32_t QSPI_Control(uint32_t control, uint32_t arg, QSPI_RESOURCES_t *qspi)
   QUADSPI_TypeDef *reg  = qspi->reg;
 
   if ((info->state & QSPI_POWERED) == 0U) {
-    return (ARM_DRIVER_ERROR);
+    return (DRIVER_ERROR);
   }
 
-  return (ARM_DRIVER_OK);
+  return (DRIVER_OK);
 }
 
 /**

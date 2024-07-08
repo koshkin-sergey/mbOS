@@ -35,7 +35,7 @@
  *  defines and macros (scope: module-local)
  ******************************************************************************/
 
-#define DAC_DRV_VERSION             ARM_DRIVER_VERSION_MAJOR_MINOR(1,0)
+#define DAC_DRV_VERSION             DRIVER_VERSION_MAJOR_MINOR(1,0)
 
 /*******************************************************************************
  *  typedefs and structures (scope: module-local)
@@ -50,7 +50,7 @@
  ******************************************************************************/
 
 /* Driver Version */
-static const ARM_DRIVER_VERSION DriverVersion = {
+static const DRIVER_VERSION DriverVersion = {
     DAC_API_VERSION,
     DAC_DRV_VERSION
 };
@@ -169,12 +169,12 @@ void PinConfig(const DAC_PIN *io, const GPIO_PIN_CFG_t *pin_cfg)
 }
 
 /**
- * @fn          ARM_DRIVER_VERSION DACx_GetVersion(void)
+ * @fn          DRIVER_VERSION DACx_GetVersion(void)
  * @brief       Get DAC driver version.
- * @return      \ref ARM_DRV_VERSION
+ * @return      \ref DRV_VERSION
  */
 static
-ARM_DRIVER_VERSION DACx_GetVersion(void)
+DRIVER_VERSION DACx_GetVersion(void)
 {
   return DriverVersion;
 }
@@ -193,7 +193,7 @@ DAC_CAPABILITIES DACx_GetCapabilities(void)
 /**
  * @fn          int32_t DAC_Initialize(DAC_SignalEvent_t cb_event, const DAC_RESOURCES *dac)
  * @brief       Initialize DAC Interface.
- * @param[in]   cb_event  Pointer to \ref ARM_SPI_SignalEvent
+ * @param[in]   cb_event  Pointer to \ref SPI_SignalEvent
  * @return      \ref execution_status
  */
 static
@@ -202,7 +202,7 @@ int32_t DAC_Initialize(DAC_SignalEvent_t cb_event, const DAC_RESOURCES *dac)
   DAC_INFO *info = dac->info;
 
   if (info->state & DAC_INITIALIZED)
-    return (ARM_DRIVER_OK);
+    return (DRIVER_OK);
 
   /* Initialize DAC Run-Time Resources */
   info->cb_event          = cb_event;
@@ -228,7 +228,7 @@ int32_t DAC_Initialize(DAC_SignalEvent_t cb_event, const DAC_RESOURCES *dac)
 
   info->state = DAC_INITIALIZED;
 
-  return (ARM_DRIVER_OK);
+  return (DRIVER_OK);
 }
 
 /**
@@ -249,22 +249,22 @@ int32_t DAC_Uninitialize(const DAC_RESOURCES *dac)
   /* Clear DAC state */
   dac->info->state = 0U;
 
-  return (ARM_DRIVER_OK);
+  return (DRIVER_OK);
 }
 
 /**
- * @fn          int32_t DAC_PowerControl(ARM_POWER_STATE state, const DAC_RESOURCES *dac)
+ * @fn          int32_t DAC_PowerControl(POWER_STATE state, const DAC_RESOURCES *dac)
  * @brief       Control DAC Interface Power.
  * @param[in]   state  Power state
  * @return      \ref execution_status
  */
 static
-int32_t DAC_PowerControl(ARM_POWER_STATE state, const DAC_RESOURCES *dac)
+int32_t DAC_PowerControl(POWER_STATE state, const DAC_RESOURCES *dac)
 {
   DAC_INFO *info = dac->info;
 
   switch (state) {
-    case ARM_POWER_OFF:
+    case POWER_OFF:
 #ifdef DAC1_TRG_TIMER_Instance
       /* Disable Timer clock */
       RCC_DisablePeriph(dac->trigger->periph);
@@ -284,12 +284,12 @@ int32_t DAC_PowerControl(ARM_POWER_STATE state, const DAC_RESOURCES *dac)
       info->state &= ~DAC_POWERED;
       break;
 
-    case ARM_POWER_FULL:
+    case POWER_FULL:
       if ((info->state & DAC_INITIALIZED) == 0U)
-        return (ARM_DRIVER_ERROR);
+        return (DRIVER_ERROR);
 
       if ((info->state & DAC_POWERED) != 0U)
-        return (ARM_DRIVER_OK);
+        return (DRIVER_OK);
 
       /* Clear status flags */
       info->status.busy = 0U;
@@ -314,10 +314,10 @@ int32_t DAC_PowerControl(ARM_POWER_STATE state, const DAC_RESOURCES *dac)
       break;
 
     default:
-      return (ARM_DRIVER_ERROR_UNSUPPORTED);
+      return (DRIVER_ERROR_UNSUPPORTED);
   }
 
-  return (ARM_DRIVER_OK);
+  return (DRIVER_OK);
 }
 
 /**
@@ -333,19 +333,19 @@ int32_t DAC_Convert(const void *data, uint32_t num, const DAC_RESOURCES *dac)
   DAC_INFO *info;
 
   if ((data == NULL) || (num == 0U))
-    return (ARM_DRIVER_ERROR_PARAMETER);
+    return (DRIVER_ERROR_PARAMETER);
 
   info = dac->info;
 
   if ((info->state & DAC_CONFIGURED) == 0U || DriverCapabilities.trigger == 0U)
-    return (ARM_DRIVER_ERROR);
+    return (DRIVER_ERROR);
 
   if (info->status.busy)
-    return (ARM_DRIVER_ERROR_BUSY);
+    return (DRIVER_ERROR_BUSY);
 
   /* TODO Implement function */
 
-  return (ARM_DRIVER_OK);
+  return (DRIVER_OK);
 }
 
 /**
@@ -375,15 +375,15 @@ int32_t DAC_Control(uint32_t control, uint32_t arg, const DAC_RESOURCES *dac)
   DAC_INFO *info = dac->info;
 
   if ((info->state & DAC_POWERED) == 0U)
-    return (ARM_DRIVER_ERROR);
+    return (DRIVER_ERROR);
 
   if ((control & DAC_CONTROL_Msk) == DAC_ABORT_CONVERT) {
-    return (ARM_DRIVER_OK);
+    return (DRIVER_OK);
   }
 
   /* Check for busy flag */
   if (info->status.busy)
-    return (ARM_DRIVER_ERROR_BUSY);
+    return (DRIVER_ERROR_BUSY);
 
   dac_cr = 0U;
   mode = 0U;
@@ -420,7 +420,7 @@ int32_t DAC_Control(uint32_t control, uint32_t arg, const DAC_RESOURCES *dac)
 
     case DAC_SET_VALUE:
       if ((info->state & DAC_CONFIGURED) == 0U)
-        return (ARM_DRIVER_ERROR);
+        return (DRIVER_ERROR);
 
       switch (control & DAC_OUTPUT_CHANNEL_Msk) {
         case DAC_OUTPUT_CHANNEL_1:
@@ -465,10 +465,10 @@ int32_t DAC_Control(uint32_t control, uint32_t arg, const DAC_RESOURCES *dac)
         default:
           return (DAC_ERROR_OUTPUT_CHANNEL);
       }
-      return (ARM_DRIVER_OK);
+      return (DRIVER_OK);
 
     default:
-      return (ARM_DRIVER_ERROR_UNSUPPORTED);
+      return (DRIVER_ERROR_UNSUPPORTED);
   }
 
   /* Output Buffer */
@@ -521,7 +521,7 @@ int32_t DAC_Control(uint32_t control, uint32_t arg, const DAC_RESOURCES *dac)
 
   info->state |= DAC_CONFIGURED;
 
-  return (ARM_DRIVER_OK);
+  return (DRIVER_OK);
 }
 
 /**
@@ -554,7 +554,7 @@ int32_t DAC1_Uninitialize(void)
 }
 
 static
-int32_t DAC1_PowerControl(ARM_POWER_STATE state)
+int32_t DAC1_PowerControl(POWER_STATE state)
 {
   return DAC_PowerControl(state, &DAC1_Resources);
 }

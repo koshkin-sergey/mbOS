@@ -28,8 +28,8 @@
   #pragma clang system_header    /* treat file as system include file */
 #endif
 
-#ifndef ARM_CACHEL1_ARMV7_H
-#define ARM_CACHEL1_ARMV7_H
+#ifndef CACHEL1_ARMV7_H
+#define CACHEL1_ARMV7_H
 
 /**
   \ingroup  CMSIS_Core_FunctionInterface
@@ -408,4 +408,4 @@ __STATIC_FORCEINLINE void SCB_CleanInvalidateDCache_by_Addr (uint32_t *addr, int
 
 /*@} end of CMSIS_Core_CacheFunctions */
 
-#endif /* ARM_CACHEL1_ARMV7_H */
+#endif /* CACHEL1_ARMV7_H */

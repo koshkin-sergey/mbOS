@@ -75,24 +75,24 @@
 #endif
 
 #define I2Cx_EXPORT_DRIVER(x)     \
-static int32_t        I2C##x##_Initialize       (ARM_I2C_SignalEvent_t cb_event)                                      { return (I2C_Initialize       (cb_event,                      &I2C##x##_Resources)); } \
+static int32_t        I2C##x##_Initialize       (I2C_SignalEvent_t cb_event)                                      { return (I2C_Initialize       (cb_event,                      &I2C##x##_Resources)); } \
 static int32_t        I2C##x##_Uninitialize     (void)                                                                { return (I2C_Uninitialize     (                               &I2C##x##_Resources)); } \
-static int32_t        I2C##x##_PowerControl     (ARM_POWER_STATE state)                                               { return (I2C_PowerControl     (state,                         &I2C##x##_Resources)); } \
+static int32_t        I2C##x##_PowerControl     (POWER_STATE state)                                               { return (I2C_PowerControl     (state,                         &I2C##x##_Resources)); } \
 static int32_t        I2C##x##_MasterTransmit   (uint32_t addr, const uint8_t *data, uint32_t num, bool xfer_pending) { return (I2C_MasterTransmit   (addr, data, num, xfer_pending, &I2C##x##_Resources)); } \
 static int32_t        I2C##x##_MasterReceive    (uint32_t addr,       uint8_t *data, uint32_t num, bool xfer_pending) { return (I2C_MasterReceive    (addr, data, num, xfer_pending, &I2C##x##_Resources)); } \
 static int32_t        I2C##x##_SlaveTransmit    (               const uint8_t *data, uint32_t num)                    { return (I2C_SlaveTransmit    (      data, num,               &I2C##x##_Resources)); } \
 static int32_t        I2C##x##_SlaveReceive     (                     uint8_t *data, uint32_t num)                    { return (I2C_SlaveReceive     (      data, num,               &I2C##x##_Resources)); } \
 static int32_t        I2C##x##_GetDataCount     (void)                                                                { return (I2C_GetDataCount     (                               &I2C##x##_Resources)); } \
 static int32_t        I2C##x##_Control          (uint32_t control, uint32_t arg)                                      { return (I2C_Control          (control, arg,                  &I2C##x##_Resources)); } \
-static ARM_I2C_STATUS I2C##x##_GetStatus        (void)                                                                { return (I2C_GetStatus        (                               &I2C##x##_Resources)); } \
+static I2C_STATUS I2C##x##_GetStatus        (void)                                                                { return (I2C_GetStatus        (                               &I2C##x##_Resources)); } \
 extern void           I2C##x##_Master_IRQHandler(void);                                                                                                                                                       \
 extern void           I2C##x##_Slave_IRQHandler (void);                                                                                                                                                       \
        void           I2C##x##_Master_IRQHandler(void)                                                                {         I2C_Master_IRQHandler(                               &I2C##x##_Resources);  } \
        void           I2C##x##_Slave_IRQHandler (void)                                                                {         I2C_Slave_IRQHandler (                               &I2C##x##_Resources);  } \
                                   \
 extern                            \
-ARM_DRIVER_I2C Driver_I2C##x;     \
-ARM_DRIVER_I2C Driver_I2C##x = {  \
+DRIVER_I2C Driver_I2C##x;     \
+DRIVER_I2C Driver_I2C##x = {  \
   I2C_GetVersion,                 \
   I2C_GetCapabilities,            \
   I2C##x##_Initialize,            \
@@ -161,7 +161,7 @@ typedef struct I2C_XferInfo {
 
 /* I2C Information (Run-Time) */
 typedef struct I2C_Info {
-  ARM_I2C_SignalEvent_t cb_event;           // Event Callback
+  I2C_SignalEvent_t cb_event;           // Event Callback
   uint32_t              status;             // Status flags
   I2C_XferInfo_t        rx;                 // RX transfer information
   I2C_XferInfo_t        tx;                 // TX transfer information

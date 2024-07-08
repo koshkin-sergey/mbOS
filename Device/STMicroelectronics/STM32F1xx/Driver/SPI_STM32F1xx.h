@@ -290,7 +290,7 @@ typedef struct _SPI_STATUS {
 
 // SPI Information (Run-time)
 typedef struct _SPI_INFO {
-  ARM_SPI_SignalEvent_t cb_event;       // Event Callback
+  SPI_SignalEvent_t cb_event;       // Event Callback
   SPI_STATUS            status;         // Status flags
   uint8_t               state;          // Current SPI state
   uint32_t              mode;           // Current SPI mode

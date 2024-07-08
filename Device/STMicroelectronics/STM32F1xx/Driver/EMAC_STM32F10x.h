@@ -214,7 +214,7 @@ typedef struct _ETH_PIN {
 
 /* EMAC Driver Control Information */
 typedef struct {
-  ARM_ETH_MAC_SignalEvent_t cb_event;   // Event callback
+  ETH_MAC_SignalEvent_t cb_event;   // Event callback
   uint8_t       flags;                  // Control and state flags
   uint8_t       tx_index;               // Transmit descriptor index
   uint8_t       rx_index;               // Receive descriptor index
