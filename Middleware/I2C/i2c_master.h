@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2021-2024 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -56,18 +56,11 @@ extern "C" {
  *  typedefs and structures
  ******************************************************************************/
 
-typedef enum I2C_BusSpeed {
-  I2C_BUS_SPEED_STANDARD  = I2C_BUS_SPEED_STANDARD,
-  I2C_BUS_SPEED_FAST      = I2C_BUS_SPEED_FAST,
-  I2C_BUS_SPEED_FAST_PLUS = I2C_BUS_SPEED_FAST_PLUS,
-  I2C_BUS_SPEED_HIGH      = I2C_BUS_SPEED_HIGH,
-} I2C_BusSpeed_t;
-
 typedef struct i2c_com {
     uint32_t       port_num;
     uint32_t       slave_addr;
     uint32_t       timeout;
-    I2C_BusSpeed_t bus_speed;
+    uint32_t       bus_speed;
     osSemaphore_t  access_sem;
 } I2C_Com_t;
 
@@ -104,11 +97,11 @@ int32_t I2C_PortClose(uint32_t port_num);
  *              I2C_ERROR_RESOURCE  - Resource error
  *              I2C_ERROR_PARAMETER - Parameter error
  */
-int32_t I2C_ComCreate(I2C_Com_t      *com,
-                      uint32_t        port_num,
-                      I2C_BusSpeed_t  bus_speed,
-                      uint32_t        slave_addr,
-                      uint32_t        timeout);
+int32_t I2C_ComCreate(I2C_Com_t *com,
+                      uint32_t   port_num,
+                      uint32_t   bus_speed,
+                      uint32_t   slave_addr,
+                      uint32_t   timeout);
 
 /**
  * @brief       Lock Communication on I2C port
