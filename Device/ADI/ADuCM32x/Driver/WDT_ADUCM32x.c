@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2023-2024 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -21,9 +21,8 @@
  *  includes
  ******************************************************************************/
 
-#include <Driver/WDT_ADUCM32x.h>
+#include <Driver/Driver_WDT.h>
 
-#include <stddef.h>
 #include <asm/aducm32x.h>
 #include <device_config.h>
 
@@ -58,7 +57,7 @@ static int32_t WDT_Setup(uint32_t interval, WDT_SignalEvent_t cb_event)
   uint32_t load;
   uint32_t pre;
   uint32_t con;
-  int32_t ret = WDT_DRIVER_ERROR;
+  int32_t ret = DRIVER_ERROR;
 
   if (interval == 0U || interval > 8000000U) {
     return (DRIVER_ERROR_PARAMETER);
@@ -102,7 +101,7 @@ static int32_t WDT_Setup(uint32_t interval, WDT_SignalEvent_t cb_event)
       }
 
       WDT_Info.cb_event = cb_event;
-      ret = WDT_DRIVER_OK;
+      ret = DRIVER_OK;
     }
   }
 
@@ -115,7 +114,7 @@ static int32_t WDT_Setup(uint32_t interval, WDT_SignalEvent_t cb_event)
  */
 static int32_t WDT_Enable(void)
 {
-  int32_t ret = WDT_DRIVER_ERROR;
+  int32_t ret = DRIVER_ERROR;
 
   if ((MMR_WDT->T3STA & T3STA_LOCK_Msk) == 0U) {
     MMR_WDT->T3CON |= (uint16_t)T3CON_ENABLE;
@@ -125,7 +124,7 @@ static int32_t WDT_Enable(void)
       __NOP();
     }
 
-    ret = WDT_DRIVER_OK;
+    ret = DRIVER_OK;
   }
 
   return (ret);
@@ -137,7 +136,7 @@ static int32_t WDT_Enable(void)
  */
 static int32_t WDT_Disable(void)
 {
-  int32_t ret = WDT_DRIVER_ERROR;
+  int32_t ret = DRIVER_ERROR;
 
   if ((MMR_WDT->T3STA & T3STA_LOCK_Msk) == 0U) {
     MMR_WDT->T3CON &= (uint16_t)~T3CON_ENABLE;
@@ -147,7 +146,7 @@ static int32_t WDT_Disable(void)
       __NOP();
     }
 
-    ret = WDT_DRIVER_OK;
+    ret = DRIVER_OK;
   }
 
   return (ret);
@@ -179,11 +178,11 @@ static uint32_t WDT_GetCount(void)
  */
 static int32_t WDT_Reload(void)
 {
-  int32_t ret = WDT_DRIVER_ERROR;
+  int32_t ret = DRIVER_ERROR;
 
   if ((MMR_WDT->T3STA & T3STA_CLRI_Msk) == T3STA_CLRI_CLR) {
     MMR_WDT->T3CLRI = T3CLRI_CLRWDG_VALUE;
-    ret = WDT_DRIVER_OK;
+    ret = DRIVER_OK;
   }
 
   return (ret);

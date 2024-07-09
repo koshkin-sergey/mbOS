@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2023-2024 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -17,23 +17,25 @@
  * limitations under the License.
  */
 
-#ifndef WDT_ADUCM32X_H_
-#define WDT_ADUCM32X_H_
+#ifndef DRIVER_WDT_H_
+#define DRIVER_WDT_H_
+
+#ifdef  __cplusplus
+extern "C"
+{
+#endif
 
 /*******************************************************************************
  *  includes
  ******************************************************************************/
 
-#include <stdint.h>
+#include <Driver/Driver_Common.h>
 
 /*******************************************************************************
  *  defines and macros
  ******************************************************************************/
 
-/****** WDT error codes *****/
-#define WDT_DRIVER_OK                  0      ///< Operation succeeded
-#define WDT_DRIVER_ERROR              -1      ///< Unspecified error
-#define DRIVER_ERROR_PARAMETER    -2      ///< Parameter error
+#define WDT_API_VERSION       DRIVER_VERSION_MAJOR_MINOR(1,0)  /* API version */
 
 /*******************************************************************************
  *  typedefs and structures
@@ -87,10 +89,8 @@ typedef struct Driver_WDT {
   int32_t   (*Reload)       (void);
 } const Driver_WDT_t;
 
-/*******************************************************************************
- *  external declarations
- ******************************************************************************/
+#ifdef  __cplusplus
+}
+#endif
 
-extern Driver_WDT_t Driver_WDT;
-
-#endif /* WDT_ADUCM32X_H_ */
+#endif /* DRIVER_WDT_H_ */

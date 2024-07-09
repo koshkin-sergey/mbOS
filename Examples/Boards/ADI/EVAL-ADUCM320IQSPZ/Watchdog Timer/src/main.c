@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2023-2024 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -22,7 +22,7 @@
 #include <Kernel/kernel.h>
 #include <asm/system_aducm32x.h>
 #include <Driver/GPIO_ADUCM32x.h>
-#include <Driver/WDT_ADUCM32x.h>
+#include <Driver/Driver_WDT.h>
 
 /*******************************************************************************
  *  defines and macros (scope: module-local)
@@ -51,7 +51,9 @@ static const osThreadAttr_t init_attr = {
 };
 
 static Driver_GPIO_t *gpio = &Driver_GPIO2;
-static Driver_WDT_t  *wdt  = &Driver_WDT;
+
+extern Driver_WDT_t Driver_WDT;
+static Driver_WDT_t *wdt  = &Driver_WDT;
 
 /*******************************************************************************
  *  function implementations (scope: module-local)

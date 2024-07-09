@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2022-2024 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -22,13 +22,15 @@
 #include <asm/system_aducm32x.h>
 
 #include <Driver/CLK_ADUCM32x.h>
-#include <Driver/WDT_ADUCM32x.h>
+#include <Driver/Driver_WDT.h>
 
 /*******************************************************************************
  *  global variable definitions (scope: module-exported)
  ******************************************************************************/
 
 uint32_t SystemCoreClock;           /*!< System Clock Frequency (Core Clock)  */
+
+extern Driver_WDT_t Driver_WDT;
 
 /*******************************************************************************
  *  function implementations (scope: module-exported)
