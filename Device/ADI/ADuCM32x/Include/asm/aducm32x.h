@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015 Analog Devices Inc.
- * Copyright (C) 2022-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2022-2024 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -4621,7 +4621,9 @@ typedef struct MMR_ADC {                    /*!< MMR_ADC Structure              
 #define ADCCON_RVAL                    0x280 
 
 /* ADCCON[SOFT_RESET] - software reset ADC */
-#define ADCCON_SOFT_RESET_MSK          (0x3F  << 10 )
+#define ADCCON_SOFT_RESET_Pos           10
+#define ADCCON_SOFT_RESET_Msk          (0x1 << ADCCON_SOFT_RESET_Pos)
+#define ADCCON_SOFT_RESET              (0x1 << ADCCON_SOFT_RESET_Pos)
 
 /* ADCCON[PUP] - ADC power up */
 #define ADCCON_PUP_BBA                 (*(volatile unsigned long *) 0x43042EA4)
@@ -4649,18 +4651,20 @@ typedef struct MMR_ADC {                    /*!< MMR_ADC Structure              
 #define ADCCON_CNV_DMA                 (0x1   << 3  )
 
 /* ADCCON[C_TYPE] - ADC conversion type */
-#define ADCCON_C_TYPE_MSK              (0x7   << 0  )
-#define ADCCON_C_TYPE_NO               (0x0   << 0  ) /* No conversion            */
-#define ADCCON_C_TYPE_DIO              (0x1   << 0  ) /* DIO pin starts conversion (P2.4) */
-#define ADCCON_C_TYPE_SINGLE           (0x2   << 0  ) /* Single conversion        */
-#define ADCCON_C_TYPE_CONT             (0x3   << 0  ) /* Continuous conversion (use this mode for the sequencer) */
-#define ADCCON_C_TYPE_PLA              (0x4   << 0  ) /* PLA conversion           */
+#define ADCCON_C_TYPE_Pos               0
+#define ADCCON_C_TYPE_Msk              (0x7   << ADCCON_C_TYPE_Pos)
+#define ADCCON_C_TYPE_NO               (0x0   << ADCCON_C_TYPE_Pos)             /* No conversion            */
+#define ADCCON_C_TYPE_DIO              (0x1   << ADCCON_C_TYPE_Pos)             /* DIO pin starts conversion (P2.4) */
+#define ADCCON_C_TYPE_SINGLE           (0x2   << ADCCON_C_TYPE_Pos)             /* Single conversion        */
+#define ADCCON_C_TYPE_CONT             (0x3   << ADCCON_C_TYPE_Pos)             /* Continuous conversion (use this mode for the sequencer) */
+#define ADCCON_C_TYPE_PLA              (0x4   << ADCCON_C_TYPE_Pos)             /* PLA conversion           */
 
 /* Reset Value for ADCDAT*/
 #define ADCDAT_RVAL                    0x0 
 
 /* ADCDAT[DAT] - ADCx data */
-#define ADCDAT_DAT_MSK                 (0xFFFFFFF << 4  )
+#define ADCDAT_DAT_Pos                  12
+#define ADCDAT_DAT_Msk                 (0xFFFFF << ADCDAT_DAT_Pos)
 
 /* ADCDAT[VALID] - Flag indicating if data is valid. */
 #define ADCDAT_VALID_BBA               (*(volatile unsigned long *) 0x430C000C)
@@ -4680,52 +4684,54 @@ typedef struct MMR_ADC {                    /*!< MMR_ADC Structure              
 #define ADCCHA_RVAL                    0x111F 
 
 /* ADCCHA[ADCCN] - Selects channel for ADC negative input */
-#define ADCCHA_ADCCN_MSK               (0x1F  << 8  )
-#define ADCCHA_ADCCN_AIN0              (0x0   << 8  ) /* AIN0                     */
-#define ADCCHA_ADCCN_AIN1              (0x1   << 8  ) /* AIN1                     */
-#define ADCCHA_ADCCN_AIN2              (0x2   << 8  ) /* AIN2                     */
-#define ADCCHA_ADCCN_AIN3              (0x3   << 8  ) /* AIN3                     */
-#define ADCCHA_ADCCN_AIN4              (0x4   << 8  ) /* AIN4                     */
-#define ADCCHA_ADCCN_AIN5              (0x5   << 8  ) /* AIN5                     */
-#define ADCCHA_ADCCN_AIN6              (0x6   << 8  ) /* AIN6                     */
-#define ADCCHA_ADCCN_AIN7              (0x7   << 8  ) /* AIN7                     */
-#define ADCCHA_ADCCN_AIN8              (0x8   << 8  ) /* AIN8                     */
-#define ADCCHA_ADCCN_AIN9              (0x9   << 8  ) /* AIN9                     */
-#define ADCCHA_ADCCN_AIN10             (0xA   << 8  ) /* AIN10                    */
-#define ADCCHA_ADCCN_AIN11             (0xB   << 8  ) /* AIN11                    */
-#define ADCCHA_ADCCN_AIN12             (0xC   << 8  ) /* AIN12                    */
-#define ADCCHA_ADCCN_AIN13             (0xD   << 8  ) /* AIN13                    */
-#define ADCCHA_ADCCN_AIN14             (0xE   << 8  ) /* AIN14                    */
-#define ADCCHA_ADCCN_AIN15             (0xF   << 8  ) /* AIN15                    */
-#define ADCCHA_ADCCN_VREFP_NADC        (0x10  << 8  ) /* VREFP_NADC: Connect ADC_REFP to negative input. */
-#define ADCCHA_ADCCN_VREFN_NADC        (0x11  << 8  ) /* VREFN_NADC: Connect ADC_REFN to negative input. Use This setting for single ended measurements. */
-#define ADCCHA_ADCCN_AGND              (0x12  << 8  ) /* AGND                     */
-#define ADCCHA_ADCCN_PGND              (0x13  << 8  ) /* PGND                     */
+#define ADCCHA_ADCCN_Pos                8
+#define ADCCHA_ADCCN_Msk               (0x1F  << ADCCHA_ADCCN_Pos)
+#define ADCCHA_ADCCN_AIN0              (0x0   << ADCCHA_ADCCN_Pos)              /* AIN0                     */
+#define ADCCHA_ADCCN_AIN1              (0x1   << ADCCHA_ADCCN_Pos)              /* AIN1                     */
+#define ADCCHA_ADCCN_AIN2              (0x2   << ADCCHA_ADCCN_Pos)              /* AIN2                     */
+#define ADCCHA_ADCCN_AIN3              (0x3   << ADCCHA_ADCCN_Pos)              /* AIN3                     */
+#define ADCCHA_ADCCN_AIN4              (0x4   << ADCCHA_ADCCN_Pos)              /* AIN4                     */
+#define ADCCHA_ADCCN_AIN5              (0x5   << ADCCHA_ADCCN_Pos)              /* AIN5                     */
+#define ADCCHA_ADCCN_AIN6              (0x6   << ADCCHA_ADCCN_Pos)              /* AIN6                     */
+#define ADCCHA_ADCCN_AIN7              (0x7   << ADCCHA_ADCCN_Pos)              /* AIN7                     */
+#define ADCCHA_ADCCN_AIN8              (0x8   << ADCCHA_ADCCN_Pos)              /* AIN8                     */
+#define ADCCHA_ADCCN_AIN9              (0x9   << ADCCHA_ADCCN_Pos)              /* AIN9                     */
+#define ADCCHA_ADCCN_AIN10             (0xA   << ADCCHA_ADCCN_Pos)              /* AIN10                    */
+#define ADCCHA_ADCCN_AIN11             (0xB   << ADCCHA_ADCCN_Pos)              /* AIN11                    */
+#define ADCCHA_ADCCN_AIN12             (0xC   << ADCCHA_ADCCN_Pos)              /* AIN12                    */
+#define ADCCHA_ADCCN_AIN13             (0xD   << ADCCHA_ADCCN_Pos)              /* AIN13                    */
+#define ADCCHA_ADCCN_AIN14             (0xE   << ADCCHA_ADCCN_Pos)              /* AIN14                    */
+#define ADCCHA_ADCCN_AIN15             (0xF   << ADCCHA_ADCCN_Pos)              /* AIN15                    */
+#define ADCCHA_ADCCN_VREFP_NADC        (0x10  << ADCCHA_ADCCN_Pos)              /* VREFP_NADC: Connect ADC_REFP to negative input. */
+#define ADCCHA_ADCCN_VREFN_NADC        (0x11  << ADCCHA_ADCCN_Pos)              /* VREFN_NADC: Connect ADC_REFN to negative input. Use This setting for single ended measurements. */
+#define ADCCHA_ADCCN_AGND              (0x12  << ADCCHA_ADCCN_Pos)              /* AGND                     */
+#define ADCCHA_ADCCN_PGND              (0x13  << ADCCHA_ADCCN_Pos)              /* PGND                     */
 
 /* ADCCHA[ADCCP] - Select ADC channel */
-#define ADCCHA_ADCCP_MSK               (0x1F  << 0  )
-#define ADCCHA_ADCCP_AIN0              (0x0   << 0  ) /* AIN0                     */
-#define ADCCHA_ADCCP_AIN1              (0x1   << 0  ) /* AIN1                     */
-#define ADCCHA_ADCCP_AIN2              (0x2   << 0  ) /* AIN2                     */
-#define ADCCHA_ADCCP_AIN3              (0x3   << 0  ) /* AIN3                     */
-#define ADCCHA_ADCCP_AIN4              (0x4   << 0  ) /* AIN4                     */
-#define ADCCHA_ADCCP_AIN5              (0x5   << 0  ) /* AIN5                     */
-#define ADCCHA_ADCCP_AIN6              (0x6   << 0  ) /* AIN6                     */
-#define ADCCHA_ADCCP_AIN7              (0x7   << 0  ) /* AIN7                     */
-#define ADCCHA_ADCCP_AIN8              (0x8   << 0  ) /* AIN8                     */
-#define ADCCHA_ADCCP_AIN9              (0x9   << 0  ) /* AIN9                     */
-#define ADCCHA_ADCCP_AIN10             (0xA   << 0  ) /* AIN10                    */
-#define ADCCHA_ADCCP_AIN11             (0xB   << 0  ) /* AIN11                    */
-#define ADCCHA_ADCCP_AIN12             (0xC   << 0  ) /* AIN12                    */
-#define ADCCHA_ADCCP_AIN13             (0xD   << 0  ) /* AIN13                    */
-#define ADCCHA_ADCCP_AIN14             (0xE   << 0  ) /* AIN14                    */
-#define ADCCHA_ADCCP_AIN15             (0xF   << 0  ) /* AIN15                    */
-#define ADCCHA_ADCCP_TEMP_SENSOR       (0x16  << 0  ) /* TEMP_SENSOR              */
-#define ADCCHA_ADCCP_VREFP_PADC        (0x17  << 0  ) /* VREFP_PADC: Connect ADC_REFP to positive input. Note: This pin should not be measured relative to AGND. This selection is intended for measuring the differential voltage between the negative input and ADC_REFP. */
-#define ADCCHA_ADCCP_PVDD_IDAC2        (0x18  << 0  ) /* PVDD_IDAC2: Use this to measure the PVDD supply voltage for IDAC2 */
-#define ADCCHA_ADCCP_IOVDD_2           (0x19  << 0  ) /* IOVDD_2: Use this to measure half of the IOVDD supply voltage */
-#define ADCCHA_ADCCP_AVDD_2            (0x1A  << 0  ) /* AVDD_2: Use this to measure half of the AVDD supply voltage. */
-#define ADCCHA_ADCCP_VREFN_PADC        (0x1B  << 0  ) /* VREFN_PADC: Connect ADC_REFN to positive input. */
+#define ADCCHA_ADCCP_Pos                0
+#define ADCCHA_ADCCP_Msk               (0x1F  << ADCCHA_ADCCP_Pos)
+#define ADCCHA_ADCCP_AIN0              (0x0   << ADCCHA_ADCCP_Pos)              /* AIN0                     */
+#define ADCCHA_ADCCP_AIN1              (0x1   << ADCCHA_ADCCP_Pos)              /* AIN1                     */
+#define ADCCHA_ADCCP_AIN2              (0x2   << ADCCHA_ADCCP_Pos)              /* AIN2                     */
+#define ADCCHA_ADCCP_AIN3              (0x3   << ADCCHA_ADCCP_Pos)              /* AIN3                     */
+#define ADCCHA_ADCCP_AIN4              (0x4   << ADCCHA_ADCCP_Pos)              /* AIN4                     */
+#define ADCCHA_ADCCP_AIN5              (0x5   << ADCCHA_ADCCP_Pos)              /* AIN5                     */
+#define ADCCHA_ADCCP_AIN6              (0x6   << ADCCHA_ADCCP_Pos)              /* AIN6                     */
+#define ADCCHA_ADCCP_AIN7              (0x7   << ADCCHA_ADCCP_Pos)              /* AIN7                     */
+#define ADCCHA_ADCCP_AIN8              (0x8   << ADCCHA_ADCCP_Pos)              /* AIN8                     */
+#define ADCCHA_ADCCP_AIN9              (0x9   << ADCCHA_ADCCP_Pos)              /* AIN9                     */
+#define ADCCHA_ADCCP_AIN10             (0xA   << ADCCHA_ADCCP_Pos)              /* AIN10                    */
+#define ADCCHA_ADCCP_AIN11             (0xB   << ADCCHA_ADCCP_Pos)              /* AIN11                    */
+#define ADCCHA_ADCCP_AIN12             (0xC   << ADCCHA_ADCCP_Pos)              /* AIN12                    */
+#define ADCCHA_ADCCP_AIN13             (0xD   << ADCCHA_ADCCP_Pos)              /* AIN13                    */
+#define ADCCHA_ADCCP_AIN14             (0xE   << ADCCHA_ADCCP_Pos)              /* AIN14                    */
+#define ADCCHA_ADCCP_AIN15             (0xF   << ADCCHA_ADCCP_Pos)              /* AIN15                    */
+#define ADCCHA_ADCCP_TEMP_SENSOR       (0x16  << ADCCHA_ADCCP_Pos)              /* TEMP_SENSOR              */
+#define ADCCHA_ADCCP_VREFP_PADC        (0x17  << ADCCHA_ADCCP_Pos)              /* VREFP_PADC: Connect ADC_REFP to positive input. Note: This pin should not be measured relative to AGND. This selection is intended for measuring the differential voltage between the negative input and ADC_REFP. */
+#define ADCCHA_ADCCP_PVDD_IDAC2        (0x18  << ADCCHA_ADCCP_Pos)              /* PVDD_IDAC2: Use this to measure the PVDD supply voltage for IDAC2 */
+#define ADCCHA_ADCCP_IOVDD_2           (0x19  << ADCCHA_ADCCP_Pos)              /* IOVDD_2: Use this to measure half of the IOVDD supply voltage */
+#define ADCCHA_ADCCP_AVDD_2            (0x1A  << ADCCHA_ADCCP_Pos)              /* AVDD_2: Use this to measure half of the AVDD supply voltage. */
+#define ADCCHA_ADCCP_VREFN_PADC        (0x1B  << ADCCHA_ADCCP_Pos)              /* VREFN_PADC: Connect ADC_REFN to positive input. */
 
 /* Reset Value for ADCSEQ*/
 #define ADCSEQ_RVAL                    0x0 
@@ -4747,7 +4753,8 @@ typedef struct MMR_ADC {                    /*!< MMR_ADC Structure              
 #define ADCSEQC_RVAL                   0x8C631 
 
 /* ADCSEQC[T] - Define programmable delay of 0 to 254 between sequences. A delay 255 will cause a halt after one sequence. */
-#define ADCSEQC_T_MSK                  (0xFF  << 20 )
+#define ADCSEQC_T_Pos                   20
+#define ADCSEQC_T_Msk                  (0xFF  << ADCSEQC_T_Pos)
 
 /* ADCSEQC[DIF6] - Selects differential mode negative input for AIN6 in the sequence. */
 #define ADCSEQC_DIF6_MSK               (0x1F  << 15 )
@@ -4797,10 +4804,14 @@ typedef struct MMR_ADC {                    /*!< MMR_ADC Structure              
 #define ADCCNVC_RVAL                   0xA00C8 
 
 /* ADCCNVC[CNVD] - Configure ADC Acquisition time and sampling time */
-#define ADCCNVC_CNVD_MSK               (0x3FF << 16 )
+#define ADCCNVC_CNVD_Pos                16
+#define ADCCNVC_CNVD_Msk               (0x3FF << ADCCNVC_CNVD_Pos)
 
 /* ADCCNVC[CNVC] - Configure Conversion frequency */
-#define ADCCNVC_CNVC_MSK               (0x3FF << 0  )
+#define ADCCNVC_CNVC_Pos                0
+#define ADCCNVC_CNVC_Msk               (0x3FF << ADCCNVC_CNVC_Pos)
+
+
 // ------------------------------------------------------------------------------------------------
 // -----                                        VDAC                                        -----
 // ------------------------------------------------------------------------------------------------

@@ -51,6 +51,65 @@ extern uint32_t osKernelGetSysTimerCount(void);
 #define XT_CLK_VALUE                    16000000
 // </h>
 
+// <e> ADC (Analog-To-Digital Converter) [Driver_ADC]
+// <i> Configuration settings for Driver_ADC
+#define DEV_ADC                         1
+
+//   <e> AIN8
+//     <o1> Pin <0=>P4.2
+//   </e>
+#define DEV_ADC_IN8                     0
+#define DEV_ADC_IN8_ID                  0
+
+//   <e> AIN9
+//     <o1> Pin <0=>P4.3
+//   </e>
+#define DEV_ADC_IN9                     0
+#define DEV_ADC_IN9_ID                  0
+
+//   <e> AIN12
+//     <o1> Pin <0=>P4.4
+//   </e>
+#define DEV_ADC_IN12                    0
+#define DEV_ADC_IN12_ID                 0
+
+//   <e> AIN13
+//     <o1> Pin <0=>P4.5
+//   </e>
+#define DEV_ADC_IN13                    0
+#define DEV_ADC_IN13_ID                 0
+
+//   <e> AIN14
+//     <o1> Pin <0=>P4.6
+//   </e>
+#define DEV_ADC_IN14                    0
+#define DEV_ADC_IN14_ID                 0
+
+//   <e> AIN15
+//     <o1> Pin <0=>P4.7
+//   </e>
+#define DEV_ADC_IN15                    0
+#define DEV_ADC_IN15_ID                 0
+
+//   <e> VREF2V5 OUT (AIN11)
+//   <i> Power up 2.5V reference output driving AIN11/BUF_VREF2V5 pin
+//     <o1> Source <0=>Internal <1=>External
+//     <i> Select reference source for output bufer
+//   </e>
+#define DEV_VREF2V5_OUT                 0
+#define DEV_VREF2V5_OUT_SRC             0
+
+//   <o> Interrupt Priority <0=>Realtime <1=>Above High <2=>High <3=>Above Normal <4=>Normal <5=>Below Normal <6=>Above Low <7=>Low
+#define DEV_ADC_INT_PRIO                4
+
+//   <e> DMA
+//     <o1> Priority <0=>Normal <1=>High
+//     <i>  Selects DMA Priority
+//   </e>
+#define DEV_ADC_DMA                     0
+#define DEV_ADC_DMA_PRIORITY            0
+
+// </e>
 
 // <e> EXTI (External Interrupts) [Driver_EXTI]
 // <i> Configuration settings for Driver_EXTI
