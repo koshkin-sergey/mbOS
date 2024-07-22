@@ -100,18 +100,18 @@ static ADC_RESOURCES *adc = &ADC_Resources;
  ******************************************************************************/
 
 static
-void StartSoftwareConversion(uint32_t mode, uint32_t num)
+void StartSoftwareConversion(void)
 {
-  MMR_ADC_t  *reg  = adc->reg;
+  MMR_ADC_t *reg = adc->reg;
 
-  switch (mode & ADC_CONTROL_Msk) {
+  switch (adc->info->mode & ADC_CONTROL_Msk) {
     case ADC_MODE_NONSEQUENCE:
-      reg->ADCCON |= num > 1U ? ADCCON_C_TYPE_CONT : ADCCON_C_TYPE_SINGLE;
+      reg->ADCCON |= adc->info->acq_info.num == 1U ? ADCCON_C_TYPE_SINGLE : ADCCON_C_TYPE_CONT;
       MMR_LV_INT->INTSEL |= INTSEL_SEL_ADC_SOFTCONV_1_EN;
       break;
 
     case ADC_MODE_SEQUENCE:
-      reg->ADCSEQC |= ADCSEQC_T_Msk;
+      reg->ADCSEQC &= ~ADCSEQC_T_Msk;
       reg->ADCCON  |= ADCCON_C_TYPE_CONT;
       reg->ADCSEQ  |= ADCSEQ_EN | ADCSEQ_ST;
       MMR_LV_INT->INTSEL |= INTSEL_SEL_ADC_SEQ_1_EN;
@@ -209,6 +209,7 @@ int32_t ADC_PowerControl(POWER_STATE state)
       /* Initial peripheral setup */
       MMR_AFE->AFEREFC = 0U;
       MMR_InBuf->IBUFCON = 0x000F;
+      MMR_LV_RST->LVRST = 1U;
       MMR_LV_INT->INTSEL &= ~(INTSEL_SEL_ADC_SOFTCONV_1_EN | INTSEL_SEL_ADC_SEQ_1_EN);
 
 #if defined (USE_VREF2V5_OUT) && (USE_VREF2V5_OUT == 1)
@@ -230,7 +231,7 @@ int32_t ADC_PowerControl(POWER_STATE state)
       NVIC_SetPriority(irq->num, irq->priority);
       NVIC_EnableIRQ(irq->num);
 
-      reg->ADCCON |= ADCCON_REFB_PUP | ADCCON_PUP;
+      reg->ADCCON = ADCCON_REFB_PUP | ADCCON_PUP;
 
       /* Ready for operation */
       info->flags |= ADC_FLAG_POWERED;
@@ -267,20 +268,41 @@ int32_t ADC_Control(uint32_t control, uint32_t arg)
 
     if ((arg & 1UL) == 0U) {
       reg->ADCCON &= ~ADCCON_C_TYPE_Msk;
-      MMR_LV_INT->INTSEL &= ~(INTSEL_SEL_ADC_SOFTCONV_1_EN | INTSEL_SEL_ADC_SEQ_1_EN);
-      info->status.busy     = 0U;
-      info->status.overflow = 0U;
+      reg->ADCSEQC |= ADCSEQC_T_Msk;
       info->flags &= ~ADC_FLAG_ENABLE;
     }
     else {
       if ((info->mode & ADC_TRIGGER_Msk) == ADC_TRIGGER_SOFTWARE) {
-        StartSoftwareConversion(info->mode, 1U);
+        StartSoftwareConversion();
       }
       else {
-
+        MMR_LV_INT->INTSEL |= INTSEL_SEL_ADC_SOFTCONV_1_EN;
       }
 
       info->flags |= ADC_FLAG_ENABLE;
+    }
+
+    return (DRIVER_OK);
+  }
+
+  if ((control & ADC_CONTROL_Msk) == ADC_ABORT) {
+    ADC_ACQ_INFO *acq = &info->acq_info;
+
+    /* Disable interrupts */
+    MMR_LV_INT->INTSEL &= ~(INTSEL_SEL_ADC_SOFTCONV_1_EN | INTSEL_SEL_ADC_SEQ_1_EN);
+    /* Clear counters and status */
+    info->status.busy     = 0U;
+    info->status.overflow = 0U;
+    acq->cnt = 0U;
+    acq->num = 0U;
+
+    if ((info->flags & ADC_FLAG_ENABLE) != 0U) {
+      if ((info->mode & ADC_TRIGGER_Msk) == ADC_TRIGGER_SOFTWARE) {
+        StartSoftwareConversion();
+      }
+      else {
+        MMR_LV_INT->INTSEL |= INTSEL_SEL_ADC_SOFTCONV_1_EN;
+      }
     }
 
     return (DRIVER_OK);
@@ -367,10 +389,6 @@ int32_t ADC_Acquire(int32_t *data, uint32_t num)
     return (DRIVER_ERROR_PARAMETER);
   }
 
-  if ((info->mode & ADC_CONTROL_Msk) == ADC_MODE_SEQUENCE && num > ADC_CHANNEL_NUM) {
-    return (DRIVER_ERROR_PARAMETER);
-  }
-
   if (info->status.busy != 0U) {
     return (DRIVER_ERROR_BUSY);
   }
@@ -384,9 +402,13 @@ int32_t ADC_Acquire(int32_t *data, uint32_t num)
   acq->cnt = 0U;
   acq->num = num;
 
-  if ((info->mode  & ADC_TRIGGER_Msk) == ADC_TRIGGER_SOFTWARE &&
-      (info->flags & ADC_FLAG_ENABLE) != 0U) {
-    StartSoftwareConversion(info->mode, num);
+  if ((info->flags & ADC_FLAG_ENABLE) != 0U) {
+    if ((info->mode  & ADC_TRIGGER_Msk) == ADC_TRIGGER_SOFTWARE) {
+      StartSoftwareConversion();
+    }
+    else {
+      MMR_LV_INT->INTSEL |= INTSEL_SEL_ADC_SOFTCONV_1_EN;
+    }
   }
 
   return (DRIVER_OK);
@@ -421,13 +443,15 @@ void LVD1_IRQHandler(void)
   register uint32_t status;
   ADC_INFO   *info = adc->info;
   MMR_ADC_t  *reg  = adc->reg;
+  ADC_ACQ_INFO *acq = &info->acq_info;
 
   event = 0U;
 
   status = (uint16_t)MMR_LV_INT->INTSTA;
 
   if ((status & (INTSTA_ADC_SEQ | INTSTA_ADC_SOFTCONV)) != 0U) {
-    if (info->status.busy == 0U) {
+    if (acq->num == 0U) {
+      MMR_LV_INT->INTSEL &= ~(INTSEL_SEL_ADC_SOFTCONV_1_EN | INTSEL_SEL_ADC_SEQ_1_EN);
       /* Set ADC overflow event and flag */
       info->status.overflow = 1U;
       event |= ADC_EVENT_OVERFLOW;
@@ -435,7 +459,6 @@ void LVD1_IRQHandler(void)
     else {
       uint32_t value;
       uint32_t data_offset = ADCDAT_DAT_Pos + (16 - info->data_bits);
-      ADC_ACQ_INFO *acq = &info->acq_info;
 
       if ((status & INTSTA_ADC_SOFTCONV) != 0U) {
         value = reg->ADCDAT[reg->ADCCHA & ADCCHA_ADCCP_Msk] & ADCDAT_DAT_Msk;
@@ -445,7 +468,7 @@ void LVD1_IRQHandler(void)
         uint32_t i = 0;
         uint32_t mask = reg->ADCSEQ;
 
-        while (mask != 0U) {
+        while (mask != 0U && acq->cnt < acq->num) {
           if ((mask & 1UL) != 0U) {
             value = reg->ADCDAT[i] & ADCDAT_DAT_Msk;
             acq->buf[acq->cnt++] = (int32_t)value >> data_offset;
@@ -457,7 +480,9 @@ void LVD1_IRQHandler(void)
 
       if (acq->cnt == acq->num) {
         reg->ADCCON &= ~ADCCON_C_TYPE_Msk;
+        MMR_LV_INT->INTSEL &= ~(INTSEL_SEL_ADC_SOFTCONV_1_EN | INTSEL_SEL_ADC_SEQ_1_EN);
         info->status.busy = 0U;
+        acq->num = 0U;
         event |= ADC_EVENT_COMPLETE;
       }
     }

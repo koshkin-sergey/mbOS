@@ -58,6 +58,7 @@
 #define ADC_CONTROL                 (0x10UL << ADC_CONTROL_Pos)                 ///< Control ADC conversion; arg: 0=disable (default), 1=enable
 #define ADC_CHANNEL_SELECT          (0x11UL << ADC_CONTROL_Pos)                 ///< Select channel for nonsequence operation; arg provide additional configuration
 #define ADC_CHANNEL_SCAN            (0x12UL << ADC_CONTROL_Pos)                 ///< Select channels for sequence operation; arg = mask (bit: 0=inactive, 1=active); each bit corresponds to an ADC channel
+#define ADC_ABORT                   (0x13UL << ADC_CONTROL_Pos)                 ///< Abort ADC conversion
 
 /****** ADC Channel Select (arg) *****/
 
