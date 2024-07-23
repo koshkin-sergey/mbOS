@@ -22,7 +22,7 @@
  ******************************************************************************/
 
 #include <stddef.h>
-#include <Driver/GPIO_ADUCM32x.h>
+#include <Driver/Driver_GPIO.h>
 
 #include <asm/aducm32x.h>
 

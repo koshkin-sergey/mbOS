@@ -21,8 +21,21 @@
 #define __DEVICE_CONFIG_H
 
 /*******************************************************************************
+ *  includes
+ ******************************************************************************/
+
+#include <Driver/Driver_GPIO.h>
+
+/*******************************************************************************
  *  external declarations
  ******************************************************************************/
+
+extern Driver_GPIO_t Driver_GPIO0;
+extern Driver_GPIO_t Driver_GPIO1;
+extern Driver_GPIO_t Driver_GPIO2;
+extern Driver_GPIO_t Driver_GPIO3;
+extern Driver_GPIO_t Driver_GPIO4;
+extern Driver_GPIO_t Driver_GPIO5;
 
 extern uint32_t osKernelGetSysTimerFreq(void);
 extern uint32_t osKernelGetSysTimerCount(void);

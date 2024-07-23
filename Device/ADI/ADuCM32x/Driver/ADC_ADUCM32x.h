@@ -20,7 +20,7 @@
 
 #include <asm/aducm32x.h>
 #include <device_config.h>
-#include <Driver/GPIO_ADUCM32x.h>
+#include <Driver/Driver_GPIO.h>
 #include <Driver/Driver_ADC.h>
 
 /*******************************************************************************

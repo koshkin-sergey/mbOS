@@ -24,7 +24,7 @@
 #include <stddef.h>
 #include <Kernel/kernel.h>
 #include <asm/system_aducm32x.h>
-#include <Driver/GPIO_ADUCM32x.h>
+#include <Driver/Driver_GPIO.h>
 #include "Driver/Driver_I2C.h"
 
 /*******************************************************************************
@@ -80,6 +80,7 @@ static const osTimerAttr_t timer_attr = {
     .cb_size   = sizeof(timer_cb)
 };
 
+extern Driver_GPIO_t Driver_GPIO2;
 static Driver_GPIO_t *gpio = &Driver_GPIO2;
 
 extern DRIVER_I2C Driver_I2C0;

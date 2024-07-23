@@ -28,7 +28,7 @@
 #include <device_config.h>
 #include <Driver/CLK_ADUCM32x.h>
 #include <Driver/DMA_ADUCM32x.h>
-#include <Driver/GPIO_ADUCM32x.h>
+#include <Driver/Driver_GPIO.h>
 #include <Driver/Driver_USART.h>
 
 /*******************************************************************************

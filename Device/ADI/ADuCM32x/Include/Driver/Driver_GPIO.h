@@ -17,8 +17,8 @@
  * Project: GPIO Driver Definitions for ADI ADuCM32x
  */
 
-#ifndef GPIO_ADUCM32X_H_
-#define GPIO_ADUCM32X_H_
+#ifndef DRIVER_GPIO_H_
+#define DRIVER_GPIO_H_
 
 /*******************************************************************************
  *  includes
@@ -62,9 +62,6 @@ typedef enum {
   GPIO_PULL_Reserved      = 0x7FFFFFFF
 } GPIO_PULL_t;
 
-/**
- * Pin Mode
- */
 typedef enum {
   GPIO_MODE_ANALOG        = 0x00,  //!< Analog Input
   GPIO_MODE_INPUT         = 0x01,  //!< General-purpose Input
@@ -121,15 +118,4 @@ typedef struct Driver_GPIO {
   void      (*PinToggle)  (GPIO_PIN_t pin);
 } const Driver_GPIO_t;
 
-/*******************************************************************************
- *  external declarations
- ******************************************************************************/
-
-extern Driver_GPIO_t Driver_GPIO0;
-extern Driver_GPIO_t Driver_GPIO1;
-extern Driver_GPIO_t Driver_GPIO2;
-extern Driver_GPIO_t Driver_GPIO3;
-extern Driver_GPIO_t Driver_GPIO4;
-extern Driver_GPIO_t Driver_GPIO5;
-
-#endif /* GPIO_ADUCM32X_H_ */
+#endif /* DRIVER_GPIO_H_ */

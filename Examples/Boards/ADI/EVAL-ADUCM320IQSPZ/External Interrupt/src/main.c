@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2023-2024 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -17,11 +17,14 @@
  * limitations under the License.
  */
 
+/*******************************************************************************
+ *  includes
+ ******************************************************************************/
 
 #include <stddef.h>
 #include <Kernel/kernel.h>
 #include <asm/system_aducm32x.h>
-#include <Driver/GPIO_ADUCM32x.h>
+#include <Driver/Driver_GPIO.h>
 #include <Driver/EXTI_ADUCM32x.h>
 
 /*******************************************************************************
@@ -48,6 +51,7 @@ static const osThreadAttr_t init_attr = {
     .priority   = osPriorityNormal,
 };
 
+extern Driver_GPIO_t Driver_GPIO2;
 static Driver_GPIO_t *gpio = &Driver_GPIO2;
 static Driver_EXTI_t *exti = &Driver_EXTI0;
 

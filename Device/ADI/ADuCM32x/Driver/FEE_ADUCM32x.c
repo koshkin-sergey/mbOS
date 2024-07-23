@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2023-2024 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -33,7 +33,6 @@
 
 #define FLASH_DRV_VERSION    DRIVER_VERSION_MAJOR_MINOR(1, 0) /* driver version */
 
-#define FLASH_SECTOR_INFO           NULL
 #define FLASH_SECTOR_COUNT          128U
 #define FLASH_SECTOR_SIZE           2048U
 #define FLASH_PAGE_SIZE             8U
@@ -46,7 +45,7 @@
 
 /* Flash Information */
 static FLASH_INFO FlashInfo = {
-  FLASH_SECTOR_INFO,
+  NULL,
   FLASH_SECTOR_COUNT,
   FLASH_SECTOR_SIZE,
   FLASH_PAGE_SIZE,
