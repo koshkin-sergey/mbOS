@@ -21,11 +21,10 @@
  *  includes
  ******************************************************************************/
 
-#include <Driver/EXTI_ADUCM32x.h>
-
 #include <stddef.h>
 #include <asm/aducm32x.h>
 #include <Driver/Driver_GPIO.h>
+#include <Driver/Driver_EXTI.h>
 #include <device_config.h>
 
 /*******************************************************************************
@@ -335,7 +334,7 @@ static int32_t EXTI_Initialize(EXTI_SignalEvent_t cb_event, EXTI_Resources_t *ex
   struct info *info = exti->info;
 
   if ((info->flags & EXTI_FLAG_INITIALIZED) != 0U) {
-    return (EXTI_DRIVER_OK);
+    return (DRIVER_OK);
   }
 
   /* Configure EXTI Pins */
@@ -354,7 +353,7 @@ static int32_t EXTI_Initialize(EXTI_SignalEvent_t cb_event, EXTI_Resources_t *ex
   info->cb_event = cb_event;
   info->flags    = EXTI_FLAG_INITIALIZED;
 
-  return (EXTI_DRIVER_OK);
+  return (DRIVER_OK);
 }
 
 /**
@@ -384,7 +383,7 @@ static int32_t EXTI_Uninitialize(EXTI_Resources_t *exti)
   info->cb_event = NULL;
   info->flags    = 0U;
 
-  return (EXTI_DRIVER_OK);
+  return (DRIVER_OK);
 }
 
 /**
@@ -400,7 +399,7 @@ static int32_t EXTI_Control(uint32_t control, EXTI_Resources_t *exti)
 
   if ((exti->info->flags & EXTI_FLAG_INITIALIZED) == 0U) {
     /* EXTI not initialized */
-    return (EXTI_DRIVER_ERROR);
+    return (DRIVER_ERROR);
   }
 
   switch (control & EXTI_CONTROL_Msk) {
@@ -418,10 +417,10 @@ static int32_t EXTI_Control(uint32_t control, EXTI_Resources_t *exti)
       break;
 
     default:
-      return (EXTI_DRIVER_ERROR_UNSUPPORTED);
+      return (DRIVER_ERROR_UNSUPPORTED);
   }
 
-  return (EXTI_DRIVER_OK);
+  return (DRIVER_OK);
 }
 
 /**

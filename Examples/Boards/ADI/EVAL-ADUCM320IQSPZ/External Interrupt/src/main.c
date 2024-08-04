@@ -24,8 +24,8 @@
 #include <stddef.h>
 #include <Kernel/kernel.h>
 #include <asm/system_aducm32x.h>
+#include <Driver/Driver_EXTI.h>
 #include <Driver/Driver_GPIO.h>
-#include <Driver/EXTI_ADUCM32x.h>
 
 /*******************************************************************************
  *  defines and macros (scope: module-local)
@@ -53,6 +53,8 @@ static const osThreadAttr_t init_attr = {
 
 extern Driver_GPIO_t Driver_GPIO2;
 static Driver_GPIO_t *gpio = &Driver_GPIO2;
+
+extern Driver_EXTI_t Driver_EXTI0;
 static Driver_EXTI_t *exti = &Driver_EXTI0;
 
 /*******************************************************************************

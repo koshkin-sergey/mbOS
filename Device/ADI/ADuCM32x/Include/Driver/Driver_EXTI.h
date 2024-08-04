@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2023-2024 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -17,14 +17,14 @@
  * limitations under the License.
  */
 
-#ifndef EXTI_ADUCM32X_H_
-#define EXTI_ADUCM32X_H_
+#ifndef DRIVER_EXTI_H_
+#define DRIVER_EXTI_H_
 
 /*******************************************************************************
  *  includes
  ******************************************************************************/
 
-#include <stdint.h>
+#include <Driver/Driver_Common.h>
 
 /*******************************************************************************
  *  defines and macros
@@ -36,11 +36,6 @@
 #define EXTI_EVENT_RISE_OR_FALL_EDGE  (2U)
 #define EXTI_EVENT_HIGH_LEVEL         (3U)
 #define EXTI_EVENT_LOW_LEVEL          (4U)
-
-/****** EXTI error codes *****/
-#define EXTI_DRIVER_OK                 0                                        ///< Operation succeeded
-#define EXTI_DRIVER_ERROR             -1                                        ///< Unspecified error
-#define EXTI_DRIVER_ERROR_UNSUPPORTED -2                                        ///< Operation not supported
 
 /****** EXTI Control Codes *****/
 #define EXTI_CONTROL_Pos               0
@@ -95,16 +90,4 @@ typedef struct Driver_EXTI {
   int32_t       (*Control)      (uint32_t control);
 } const Driver_EXTI_t;
 
-/*******************************************************************************
- *  external declarations
- ******************************************************************************/
-
-extern Driver_EXTI_t Driver_EXTI0;
-extern Driver_EXTI_t Driver_EXTI1;
-extern Driver_EXTI_t Driver_EXTI2;
-extern Driver_EXTI_t Driver_EXTI4;
-extern Driver_EXTI_t Driver_EXTI5;
-extern Driver_EXTI_t Driver_EXTI7;
-extern Driver_EXTI_t Driver_EXTI8;
-
-#endif /* EXTI_ADUCM32X_H_ */
+#endif /* DRIVER_EXTI_H_ */
