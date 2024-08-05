@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2022 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2017-2024 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -26,7 +26,7 @@
 
 #include <asm/aducm32x.h>
 #include <device_config.h>
-#include <Driver/CLK_ADUCM32x.h>
+#include <Driver/Driver_CLK.h>
 #include <Driver/DMA_ADUCM32x.h>
 #include <Driver/Driver_GPIO.h>
 #include <Driver/Driver_USART.h>

@@ -17,14 +17,14 @@
  * Project: Clock Driver Definitions for ADI ADuCM32x
  */
 
-#ifndef CLK_ADUCM32X_H_
-#define CLK_ADUCM32X_H_
+#ifndef DRIVER_CLK_H_
+#define DRIVER_CLK_H_
 
 /*******************************************************************************
  *  includes
  ******************************************************************************/
 
-#include <stdint.h>
+#include <Driver/Driver_Common.h>
 
 /*******************************************************************************
  *  defines and macros (scope: module-local)
@@ -127,10 +127,4 @@ typedef struct Driver_CLK {
   uint32_t (*GetStatePeriph)(CLK_Periph_t periph);
 } const Driver_CLK_t;
 
-/*******************************************************************************
- *  external declarations
- ******************************************************************************/
-
-extern Driver_CLK_t Driver_CLK;
-
-#endif /* CLK_ADUCM32X_H_ */
+#endif /* DRIVER_CLK_H_ */

@@ -21,7 +21,7 @@
 
 #include <asm/system_aducm32x.h>
 
-#include <Driver/CLK_ADUCM32x.h>
+#include <Driver/Driver_CLK.h>
 #include <Driver/Driver_WDT.h>
 
 /*******************************************************************************
@@ -31,6 +31,7 @@
 uint32_t SystemCoreClock;           /*!< System Clock Frequency (Core Clock)  */
 
 extern Driver_WDT_t Driver_WDT;
+extern Driver_CLK_t Driver_CLK;
 
 /*******************************************************************************
  *  function implementations (scope: module-exported)

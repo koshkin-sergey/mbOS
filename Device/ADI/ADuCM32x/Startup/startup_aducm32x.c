@@ -35,8 +35,8 @@ extern             void _exit(int code);
 /*----------------------------------------------------------------------------
   Internal References
  *----------------------------------------------------------------------------*/
-__NO_RETURN void Reset_Handler  (void);
-            void Default_Handler(void);
+void Reset_Handler  (void) __attribute__ ((naked));
+void Default_Handler(void);
 
 /*----------------------------------------------------------------------------
   Exception / Interrupt Handler
@@ -193,12 +193,16 @@ extern const pFunc __VECTOR_TABLE[];
 /*----------------------------------------------------------------------------
   Reset Handler called on controller reset
  *----------------------------------------------------------------------------*/
-__NO_RETURN
 void Reset_Handler(void)
 {
 #if defined(__ARMCC_VERSION)
   __NOP();
 #endif
+  __ASM volatile(
+    "MOVS R0, #0x0    \n"
+    "LDR  SP, [R0]    \n"
+  );
+
   SystemInit();                      /* CMSIS System Initialization           */
   __PROGRAM_START();                 /* Enter PreMain (C library entry point) */
 }
