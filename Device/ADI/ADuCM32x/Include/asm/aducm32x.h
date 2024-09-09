@@ -474,56 +474,6 @@ typedef enum {
 /* SPICNT[COUNT] - Transfer byte count */
 #define SPICNT_COUNT_MSK               (0xFF  << 0  )
 
-
-/* DACCON[PD] - DAC0 power down */
-#define DACCON_PD_MSK                  (0x1   << 8  )
-#define DACCON_PD                      (0x1   << 8  )
-
-/* DACCON[EN] - DAC0 enable */
-#define DACCON_EN_MSK                  (0x1   << 4  )
-#define DACCON_EN                      (0x1   << 4  )
-
-/* DACCON[RN] - DAC0 reference selection */
-#define DACCON_RN_MSK                  (0x3   << 0  )
-
-/* DACDAT[DAT] - DAC0 data */
-#define DACDAT_DAT_MSK                 (0xFFF << 16 )
-
-#if defined(ADUCM320) | defined(ADUCM320I)
-
-/* IDACCON[CLRB] - IDAC0 Clear bit */
-#define IDACCON_CLRB_MSK               (0x1   << 7  )
-#define IDACCON_CLRB                   (0x1   << 7  )
-
-/* IDACCON[SHT_EN] - IDAC0 shutdown enable */
-#define IDACCON_SHT_EN_MSK             (0x1   << 6  )
-#define IDACCON_SHT_EN                 (0x1   << 6  )
-
-/* IDACCON[BW] - IDAC0 bandwidth */
-#define IDACCON_BW_MSK                 (0xF   << 2  )
-
-/* IDACCON[PUL] - IDAC0 pull down */
-#define IDACCON_PUL_MSK                (0x1   << 1  )
-#define IDACCON_PUL                    (0x1   << 1  )
-
-/* IDACCON[PD] - IDAC0 power down */
-#define IDACCON_PD_MSK                 (0x1   << 0  )
-#define IDACCON_PD                     (0x1   << 0  )
-#define IDACCON_PD_ON                  (0x0   << 0  ) /* Powers IDAC0 up          */
-#define IDACCON_PD_OFF                 (0x1   << 0  ) /* Powers IDAC0 down        */
-
-/* IDACDAT[DATH] - IDAC0 high data */
-#define IDACDAT_DATH_MSK               (0x7FF << 17 )
-
-/* IDACDAT[DATL] - IDAC0 low data */
-#define IDACDAT_DATL_MSK               (0x1F  << 12 )
-
-/* IDACDAT[SYNC] - IDAC0 sync bits */
-#define IDACDAT_SYNC_MSK               (0x3F  << 0  )
-
-#endif
-
-
 // -----------------------------------------------------------------------------
 // -----                             TIMER                                 -----
 // -----------------------------------------------------------------------------
@@ -4591,10 +4541,11 @@ typedef struct MMR_SPI {                    /*!< MMR_SPI Structure              
 
 /* SPI1CNT[COUNT] - Transfer byte count */
 #define SPI1CNT_COUNT_MSK              (0xFF  << 0  )
-// ------------------------------------------------------------------------------------------------
-// -----                                        ADC_CORE                                        -----
-// ------------------------------------------------------------------------------------------------
 
+
+/* ========================================================================== */
+/* ================                   ADC                  ================== */
+/* ========================================================================== */
 
 /**
   * @brief ADC (MMR_ADC)
@@ -4812,14 +4763,13 @@ typedef struct MMR_ADC {                    /*!< MMR_ADC Structure              
 #define ADCCNVC_CNVC_Msk               (0x3FF << ADCCNVC_CNVC_Pos)
 
 
-// ------------------------------------------------------------------------------------------------
-// -----                                        VDAC                                        -----
-// ------------------------------------------------------------------------------------------------
-
+/* ========================================================================== */
+/* ================                 VDAC                   ================== */
+/* ========================================================================== */
 
 /**
-  * @brief VDAC (MMR_VDAC)
-  */
+ * @brief VDAC (MMR_VDAC)
+ */
 
 typedef struct MMR_VDAC {                   /*!< MMR_VDAC Structure           */
   __IO uint16_t  DACCON;                    /*!< DAC control register         */
@@ -4827,185 +4777,29 @@ typedef struct MMR_VDAC {                   /*!< MMR_VDAC Structure           */
   __IO uint32_t  DACDAT;                    /*!< DAC data register            */
 } MMR_VDAC_t;
 
-/* Reset Value for DAC0CON*/
-#define DAC0CON_RVAL                   0x100 
+/********************  Bit definition for DACCON register  ********************/
+#define DACCON_RN_Pos                 (0U)
+#define DACCON_RN_Msk                 (0x3U << DACCON_RN_Pos)
+#define DACCON_RN_IREF                (0x0U << DACCON_RN_Pos)
+#define DACCON_RN_AVDD                (0x3U << DACCON_RN_Pos)
 
-/* DAC0CON[PD] - DAC0 power down */
-#define DAC0CON_PD_BBA                 (*(volatile unsigned long *) 0x43048020)
-#define DAC0CON_PD_MSK                 (0x1   << 8  )
-#define DAC0CON_PD                     (0x1   << 8  )
+#define DACCON_EN_Pos                 (4U)
+#define DACCON_EN_Msk                 (0x1U << DACCON_EN_Pos)
+#define DACCON_EN                              DACCON_EN_Msk
 
-/* DAC0CON[EN] - DAC0 enable */
-#define DAC0CON_EN_BBA                 (*(volatile unsigned long *) 0x43048010)
-#define DAC0CON_EN_MSK                 (0x1   << 4  )
-#define DAC0CON_EN                     (0x1   << 4  )
+#define DACCON_PD_Pos                 (8U)
+#define DACCON_PD_Msk                 (0x1U << DACCON_PD_Pos)
+#define DACCON_PD                              DACCON_PD_Msk
 
-/* DAC0CON[RN] - DAC0 reference selection */
-#define DAC0CON_RN_MSK                 (0x3   << 0  )
+/********************  Bit definition for DACDAT register  ********************/
+#define DACDAT_DAT_Pos                (16U)
+#define DACDAT_DAT_Msk                (0xFFFU << DACDAT_DAT_Pos)
+#define DACDAT_DAT(n)                 (((n) << DACDAT_DAT_Pos) & DACDAT_DAT_Msk)
 
-/* Reset Value for DAC0DAT*/
-#define DAC0DAT_RVAL                   0x0 
 
-/* DAC0DAT[DAT] - DAC0 data */
-#define DAC0DAT_DAT_MSK                (0xFFF << 16 )
-
-/* Reset Value for DAC1CON*/
-#define DAC1CON_RVAL                   0x100 
-
-/* DAC1CON[PD] - DAC1 power down */
-#define DAC1CON_PD_BBA                 (*(volatile unsigned long *) 0x430480A0)
-#define DAC1CON_PD_MSK                 (0x1   << 8  )
-#define DAC1CON_PD                     (0x1   << 8  )
-
-/* DAC1CON[EN] - DAC1 enable */
-#define DAC1CON_EN_BBA                 (*(volatile unsigned long *) 0x43048090)
-#define DAC1CON_EN_MSK                 (0x1   << 4  )
-#define DAC1CON_EN                     (0x1   << 4  )
-
-/* DAC1CON[RN] - DAC1 reference selection */
-#define DAC1CON_RN_MSK                 (0x3   << 0  )
-
-/* Reset Value for DAC1DAT*/
-#define DAC1DAT_RVAL                   0x0 
-
-/* DAC1DAT[DAT] - DAC1 data */
-#define DAC1DAT_DAT_MSK                (0xFFF << 16 )
-
-/* Reset Value for DAC2CON*/
-#define DAC2CON_RVAL                   0x100 
-
-/* DAC2CON[PD] - DAC2 power down */
-#define DAC2CON_PD_BBA                 (*(volatile unsigned long *) 0x43048120)
-#define DAC2CON_PD_MSK                 (0x1   << 8  )
-#define DAC2CON_PD                     (0x1   << 8  )
-
-/* DAC2CON[EN] - DAC2 enable */
-#define DAC2CON_EN_BBA                 (*(volatile unsigned long *) 0x43048110)
-#define DAC2CON_EN_MSK                 (0x1   << 4  )
-#define DAC2CON_EN                     (0x1   << 4  )
-
-/* DAC2CON[RN] - DAC2 reference selection */
-#define DAC2CON_RN_MSK                 (0x3   << 0  )
-
-/* Reset Value for DAC2DAT*/
-#define DAC2DAT_RVAL                   0x0 
-
-/* DAC2DAT[DAT] - DAC2 data */
-#define DAC2DAT_DAT_MSK                (0xFFF << 16 )
-
-/* Reset Value for DAC3CON*/
-#define DAC3CON_RVAL                   0x100 
-
-/* DAC3CON[PD] - DAC3 power down */
-#define DAC3CON_PD_BBA                 (*(volatile unsigned long *) 0x430481A0)
-#define DAC3CON_PD_MSK                 (0x1   << 8  )
-#define DAC3CON_PD                     (0x1   << 8  )
-
-/* DAC3CON[EN] - DAC3 enable */
-#define DAC3CON_EN_BBA                 (*(volatile unsigned long *) 0x43048190)
-#define DAC3CON_EN_MSK                 (0x1   << 4  )
-#define DAC3CON_EN                     (0x1   << 4  )
-
-/* DAC3CON[RN] - DAC3 reference selection */
-#define DAC3CON_RN_MSK                 (0x3   << 0  )
-
-/* Reset Value for DAC3DAT*/
-#define DAC3DAT_RVAL                   0x0 
-
-/* DAC3DAT[DAT] - DAC3 data */
-#define DAC3DAT_DAT_MSK                (0xFFF << 16 )
-
-/* Reset Value for DAC4CON*/
-#define DAC4CON_RVAL                   0x100 
-
-/* DAC4CON[PD] - DAC4 power down */
-#define DAC4CON_PD_BBA                 (*(volatile unsigned long *) 0x43048220)
-#define DAC4CON_PD_MSK                 (0x1   << 8  )
-#define DAC4CON_PD                     (0x1   << 8  )
-
-/* DAC4CON[EN] - DAC4 enable */
-#define DAC4CON_EN_BBA                 (*(volatile unsigned long *) 0x43048210)
-#define DAC4CON_EN_MSK                 (0x1   << 4  )
-#define DAC4CON_EN                     (0x1   << 4  )
-
-/* DAC4CON[RN] - DAC4 reference selection */
-#define DAC4CON_RN_MSK                 (0x3   << 0  )
-
-/* Reset Value for DAC4DAT*/
-#define DAC4DAT_RVAL                   0x0 
-
-/* DAC4DAT[DAT] - DAC4 data */
-#define DAC4DAT_DAT_MSK                (0xFFF << 16 )
-
-/* Reset Value for DAC5CON*/
-#define DAC5CON_RVAL                   0x100 
-
-/* DAC5CON[PD] - DAC5 power down */
-#define DAC5CON_PD_BBA                 (*(volatile unsigned long *) 0x430482A0)
-#define DAC5CON_PD_MSK                 (0x1   << 8  )
-#define DAC5CON_PD                     (0x1   << 8  )
-
-/* DAC5CON[EN] - DAC5 enable */
-#define DAC5CON_EN_BBA                 (*(volatile unsigned long *) 0x43048290)
-#define DAC5CON_EN_MSK                 (0x1   << 4  )
-#define DAC5CON_EN                     (0x1   << 4  )
-
-/* DAC5CON[RN] - DAC5 reference selection */
-#define DAC5CON_RN_MSK                 (0x3   << 0  )
-
-/* Reset Value for DAC5DAT*/
-#define DAC5DAT_RVAL                   0x0 
-
-/* DAC5DAT[DAT] - DAC5 data */
-#define DAC5DAT_DAT_MSK                (0xFFF << 16 )
-
-/* Reset Value for DAC6CON*/
-#define DAC6CON_RVAL                   0x100 
-
-/* DAC6CON[PD] - DAC6 power down */
-#define DAC6CON_PD_BBA                 (*(volatile unsigned long *) 0x43048320)
-#define DAC6CON_PD_MSK                 (0x1   << 8  )
-#define DAC6CON_PD                     (0x1   << 8  )
-
-/* DAC6CON[EN] - DAC6 enable */
-#define DAC6CON_EN_BBA                 (*(volatile unsigned long *) 0x43048310)
-#define DAC6CON_EN_MSK                 (0x1   << 4  )
-#define DAC6CON_EN                     (0x1   << 4  )
-
-/* DAC6CON[RN] - DAC6 reference selection */
-#define DAC6CON_RN_MSK                 (0x3   << 0  )
-
-/* Reset Value for DAC6DAT*/
-#define DAC6DAT_RVAL                   0x0 
-
-/* DAC6DAT[DAT] - DAC6 data */
-#define DAC6DAT_DAT_MSK                (0xFFF << 16 )
-
-/* Reset Value for DAC7CON*/
-#define DAC7CON_RVAL                   0x100 
-
-/* DAC7CON[PD] - DAC7 power down */
-#define DAC7CON_PD_BBA                 (*(volatile unsigned long *) 0x430483A0)
-#define DAC7CON_PD_MSK                 (0x1   << 8  )
-#define DAC7CON_PD                     (0x1   << 8  )
-
-/* DAC7CON[EN] - DAC7 enable */
-#define DAC7CON_EN_BBA                 (*(volatile unsigned long *) 0x43048390)
-#define DAC7CON_EN_MSK                 (0x1   << 4  )
-#define DAC7CON_EN                     (0x1   << 4  )
-
-/* DAC7CON[RN] - DAC7 reference selection */
-#define DAC7CON_RN_MSK                 (0x3   << 0  )
-
-/* Reset Value for DAC7DAT*/
-#define DAC7DAT_RVAL                   0x0 
-
-/* DAC7DAT[DAT] - DAC7 data */
-#define DAC7DAT_DAT_MSK                (0xFFF << 16 )
-// ------------------------------------------------------------------------------------------------
-// -----                                        InBuf                                        -----
-// ------------------------------------------------------------------------------------------------
-
+/* ========================================================================== */
+/* ================                 InBuf                  ================== */
+/* ========================================================================== */
 
 /**
   * @brief InBuf (MMR_InBuf)
@@ -5765,6 +5559,5 @@ typedef struct MMR_AFE {                    /*!< MMR_AFE Structure              
 #ifdef __cplusplus
 }
 #endif 
-
 
 #endif  // ADUCM32x_H_
