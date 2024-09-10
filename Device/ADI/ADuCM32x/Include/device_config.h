@@ -124,6 +124,70 @@ extern uint32_t osKernelGetSysTimerCount(void);
 
 // </e>
 
+// <e> DAC0 (Digital-To-Analog Converter) [Driver_DAC0]
+// <i> Configuration settings for Driver_DAC0
+#define DEV_DAC0                        1
+
+//   <o> Output Range <0=>VREF <1=>AVDD
+#define DEV_DAC0_OUTPUT_RANGE           0
+// </e>
+
+// <e> DAC1 (Digital-To-Analog Converter) [Driver_DAC1]
+// <i> Configuration settings for Driver_DAC1
+#define DEV_DAC1                        1
+
+//   <o> Output Range <0=>VREF <1=>AVDD
+#define DEV_DAC1_OUTPUT_RANGE           0
+// </e>
+
+// <e> DAC2 (Digital-To-Analog Converter) [Driver_DAC2]
+// <i> Configuration settings for Driver_DAC2
+#define DEV_DAC2                        1
+
+//   <o> Output Range <0=>VREF <1=>AVDD
+#define DEV_DAC2_OUTPUT_RANGE           0
+// </e>
+
+// <e> DAC3 (Digital-To-Analog Converter) [Driver_DAC3]
+// <i> Configuration settings for Driver_DAC3
+#define DEV_DAC3                        1
+
+//   <o> Output Range <0=>VREF <1=>AVDD
+#define DEV_DAC3_OUTPUT_RANGE           0
+// </e>
+
+// <e> DAC4 (Digital-To-Analog Converter) [Driver_DAC4]
+// <i> Configuration settings for Driver_DAC4
+#define DEV_DAC4                        1
+
+//   <o> Output Range <0=>VREF <1=>AVDD
+#define DEV_DAC4_OUTPUT_RANGE           0
+// </e>
+
+// <e> DAC5 (Digital-To-Analog Converter) [Driver_DAC5]
+// <i> Configuration settings for Driver_DAC5
+#define DEV_DAC5                        1
+
+//   <o> Output Range <0=>VREF <1=>AVDD
+#define DEV_DAC5_OUTPUT_RANGE           0
+// </e>
+
+// <e> DAC6 (Digital-To-Analog Converter) [Driver_DAC6]
+// <i> Configuration settings for Driver_DAC6
+#define DEV_DAC6                        1
+
+//   <o> Output Range <0=>VREF <1=>AVDD
+#define DEV_DAC6_OUTPUT_RANGE           0
+// </e>
+
+// <e> DAC7 (Digital-To-Analog Converter) [Driver_DAC7]
+// <i> Configuration settings for Driver_DAC7
+#define DEV_DAC7                        1
+
+//   <o> Output Range <0=>VREF <1=>AVDD
+#define DEV_DAC7_OUTPUT_RANGE           0
+// </e>
+
 // <e> EXTI (External Interrupts) [Driver_EXTI]
 // <i> Configuration settings for Driver_EXTI
 #define DEV_EXTI                       1
