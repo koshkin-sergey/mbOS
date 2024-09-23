@@ -1474,7 +1474,7 @@ int32_t SPI_Control(uint32_t control, uint32_t arg, SPI_RESOURCES *spi)
       cr1 |= SPI_CR1_CPHA | SPI_CR1_CPOL;
       break;
     case SPI_TI_SSI:
-      cr1 |= SPI_CR2_FRF;
+      cr2 |= SPI_CR2_FRF;
       break;
     default:
       return SPI_ERROR_FRAME_FORMAT;
