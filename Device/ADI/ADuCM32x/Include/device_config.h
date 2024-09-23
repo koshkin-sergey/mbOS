@@ -428,6 +428,20 @@ extern uint32_t osKernelGetSysTimerCount(void);
 //   <o> Interrupt Priority <0=>Realtime <1=>Above High <2=>High <3=>Above Normal <4=>Normal <5=>Below Normal <6=>Above Low <7=>Low
 #define DEV_SPI0_INT_PRIO              4
 
+//   <e> DMA Rx
+//     <o1> Priority <0=>Default <1=>High
+//     <i>  Selects DMA Priority
+//   </e>
+#define DEV_SPI0_RX_DMA                0
+#define DEV_SPI0_RX_DMA_PRIORITY       0
+
+//   <e> DMA Tx
+//     <o1> Priority <0=>Default <1=>High
+//     <i>  Selects DMA Priority
+//   </e>
+#define DEV_SPI0_TX_DMA                0
+#define DEV_SPI0_TX_DMA_PRIORITY       0
+
 // </e>
 
 
@@ -446,7 +460,7 @@ extern uint32_t osKernelGetSysTimerCount(void);
 #endif
 
 //   <o> MISO Pin <0=>Not Used <1=>P1.5
-#define   DEV_SPI1_MISO_PORT_ID        0
+#define   DEV_SPI1_MISO_PORT_ID        1
 #if      (DEV_SPI1_MISO_PORT_ID == 0)
   #define DEV_SPI1_MISO                0
 #elif    (DEV_SPI1_MISO_PORT_ID == 1)
@@ -459,7 +473,7 @@ extern uint32_t osKernelGetSysTimerCount(void);
 #endif
 
 //   <o> MOSI Pin <0=>Not Used <1=>P1.6
-#define   DEV_SPI1_MOSI_PORT_ID        0
+#define   DEV_SPI1_MOSI_PORT_ID        1
 #if      (DEV_SPI1_MOSI_PORT_ID == 0)
   #define DEV_SPI1_MOSI                0
 #elif    (DEV_SPI1_MOSI_PORT_ID == 1)
@@ -486,6 +500,20 @@ extern uint32_t osKernelGetSysTimerCount(void);
 
 //   <o> Interrupt Priority <0=>Realtime <1=>Above High <2=>High <3=>Above Normal <4=>Normal <5=>Below Normal <6=>Above Low <7=>Low
 #define DEV_SPI1_INT_PRIO              4
+
+//   <e> DMA Rx
+//     <o1> Priority <0=>Default <1=>High
+//     <i>  Selects DMA Priority
+//   </e>
+#define DEV_SPI1_RX_DMA                0
+#define DEV_SPI1_RX_DMA_PRIORITY       0
+
+//   <e> DMA Tx
+//     <o1> Priority <0=>Default <1=>High
+//     <i>  Selects DMA Priority
+//   </e>
+#define DEV_SPI1_TX_DMA                0
+#define DEV_SPI1_TX_DMA_PRIORITY       0
 
 // </e>
 
