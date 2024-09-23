@@ -157,18 +157,29 @@ int32_t TestTransfer(uint8_t *wr_buf, uint8_t *rd_buf, uint8_t size)
   int32_t rc = 0;
 
   if (size > 0U) {
+    /* Chip Select active */
+    gpio_cs->PinWrite(CS_PIN, GPIO_PIN_OUT_LOW);
+
     if (wr_buf != NULL && rd_buf != NULL) {
-      /* Chip Select active */
-      gpio_cs->PinWrite(CS_PIN, GPIO_PIN_OUT_LOW);
       /* Transfer */
       rc = spi->Transfer(wr_buf, rd_buf, size);
-      if (rc == DRIVER_OK) {
-        /* Wait until transfer completed */
-        rc = WaitTransfer(size);
-      }
-      /* Chip Select inactive */
-      gpio_cs->PinWrite(CS_PIN, GPIO_PIN_OUT_HIGH);
     }
+    else if (wr_buf != NULL) {
+      /* Send */
+      rc = spi->Send(wr_buf, size);
+    }
+    else if (rd_buf != NULL) {
+      /* Receive */
+      rc = spi->Receive(rd_buf, size);
+    }
+
+    if (rc == DRIVER_OK) {
+      /* Wait until transfer completed */
+      rc = WaitTransfer(size);
+    }
+
+    /* Chip Select inactive */
+    gpio_cs->PinWrite(CS_PIN, GPIO_PIN_OUT_HIGH);
   }
 
   return (rc);
