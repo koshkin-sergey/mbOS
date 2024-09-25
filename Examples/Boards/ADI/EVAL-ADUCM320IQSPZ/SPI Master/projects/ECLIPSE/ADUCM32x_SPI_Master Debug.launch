@@ -12,7 +12,7 @@
     <booleanAttribute key="ilg.gnumcueclipse.debug.gdbjtag.jlink.doGdbServerVerifyDownload" value="true"/>
     <booleanAttribute key="ilg.gnumcueclipse.debug.gdbjtag.jlink.doSecondReset" value="true"/>
     <booleanAttribute key="ilg.gnumcueclipse.debug.gdbjtag.jlink.doStartGdbServer" value="true"/>
-    <booleanAttribute key="ilg.gnumcueclipse.debug.gdbjtag.jlink.enableFlashBreakpoints" value="false"/>
+    <booleanAttribute key="ilg.gnumcueclipse.debug.gdbjtag.jlink.enableFlashBreakpoints" value="true"/>
     <booleanAttribute key="ilg.gnumcueclipse.debug.gdbjtag.jlink.enableSemihosting" value="false"/>
     <booleanAttribute key="ilg.gnumcueclipse.debug.gdbjtag.jlink.enableSemihostingIoclientGdbClient" value="false"/>
     <booleanAttribute key="ilg.gnumcueclipse.debug.gdbjtag.jlink.enableSemihostingIoclientTelnet" value="true"/>

@@ -182,14 +182,15 @@ typedef enum {
 typedef struct DMA_CHNL_CFG {
   uint32_t          periph_addr;
   uint32_t          memory_addr;
-  CFG_DMA_DIR       dir;
   uint32_t          buffer_size;
+  CFG_DMA_DIR       dir;
   CFG_DMA_INC       periph_inc;
   CFG_DMA_INC       memory_inc;
   CFG_DMA_DATA_SIZE periph_data_size;
   CFG_DMA_DATA_SIZE memory_data_size;
   CFG_DMA_MODE      mode;
   CFG_DMA_PRIORITY  priority;
+  uint8_t           reserved;
 } DMA_CHNL_CFG_t;
 
 /* -----------DMA Channel Structure----------- */

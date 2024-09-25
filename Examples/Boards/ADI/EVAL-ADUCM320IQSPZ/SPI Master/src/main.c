@@ -38,7 +38,7 @@
 #define LED_PIN                       (GPIO_PIN_4)
 
 #define SPI_TIMEOUT                   (50U)
-#define SPI_BUS_SPEED                 (1000000U)
+#define SPI_BUS_SPEED                 (10000000U)
 
 /*******************************************************************************
  *  global variable definitions (scope: module-local)
@@ -93,6 +93,10 @@ static bool pooling;
 static
 void SPI_Callback(uint32_t event)
 {
+  if ((event & SPI_EVENT_DATA_LOST) != 0U) {
+    spi->Control(SPI_ABORT_TRANSFER, 0U);
+  }
+
   osEventFlagsSet(evf_spi, event);
 }
 
@@ -152,7 +156,7 @@ int32_t WaitTransfer(uint32_t data_cnt)
 }
 
 static
-int32_t TestTransfer(uint8_t *wr_buf, uint8_t *rd_buf, uint8_t size)
+int32_t TestTransfer(uint8_t *wr_buf, uint8_t *rd_buf, uint32_t size)
 {
   int32_t rc = 0;
 
@@ -162,21 +166,19 @@ int32_t TestTransfer(uint8_t *wr_buf, uint8_t *rd_buf, uint8_t size)
 
     if (wr_buf != NULL && rd_buf != NULL) {
       /* Transfer */
-      rc = spi->Transfer(wr_buf, rd_buf, size);
+      spi->Transfer(wr_buf, rd_buf, size);
     }
     else if (wr_buf != NULL) {
       /* Send */
-      rc = spi->Send(wr_buf, size);
+      spi->Send(wr_buf, size);
     }
     else if (rd_buf != NULL) {
       /* Receive */
-      rc = spi->Receive(rd_buf, size);
+      spi->Receive(rd_buf, size);
     }
 
-    if (rc == DRIVER_OK) {
-      /* Wait until transfer completed */
-      rc = WaitTransfer(size);
-    }
+    /* Wait until transfer completed */
+    rc = WaitTransfer(size);
 
     /* Chip Select inactive */
     gpio_cs->PinWrite(CS_PIN, GPIO_PIN_OUT_HIGH);
@@ -229,12 +231,12 @@ static void main_proc(void *param)
 
   osTimerStart(timer_id, TIMEOUT);
 
-  uint8_t wr_buf[] = {0x90U, 0xFFU, 0xFFU, 0xFFU, 0xFFU, 0xFFU};
-  uint8_t rd_buf[sizeof(wr_buf)] = {0U};
+  static uint8_t wr_buf[6] = {0x90U};
+  static uint8_t rd_buf[sizeof(wr_buf)] = {0U};
 
   for (;;) {
     TestTransfer(&wr_buf[0], &rd_buf[0], sizeof(wr_buf));
-    osDelay(5U);
+    osDelay(1U);
   }
 }
 

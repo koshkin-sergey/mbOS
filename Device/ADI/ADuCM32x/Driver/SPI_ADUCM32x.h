@@ -195,12 +195,11 @@ typedef struct SPI_Info {
 /* SPI Transfer Information (Run-Time) */
 typedef struct _SPI_TRANSFER_INFO {
   uint32_t              num;                // Total number of transfers
-  uint8_t              *rx_buf; // Pointer to in data buffer
-  uint8_t              *tx_buf; // Pointer to out data buffer
+  uint8_t              *rx_buf;             // Pointer to in data buffer
+  uint8_t              *tx_buf;             // Pointer to out data buffer
   uint32_t              rx_cnt;             // Number of data received
   uint32_t              tx_cnt;             // Number of data sent
-  uint32_t              dump_val;           // Variable for dumping DMA data
-  uint16_t              def_val;            // Default transfer value
+  uint32_t              def_val;            // Default transfer value
 } SPI_TRANSFER_INFO;
 
 /* SPI Resource Configuration */
