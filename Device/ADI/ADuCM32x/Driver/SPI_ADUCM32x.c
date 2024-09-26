@@ -716,7 +716,7 @@ int32_t SPI_Receive(void *data, uint32_t num, SPI_Resources_t *spi)
   }
   else {
     mmr->SPICON &= (uint16_t)~SPICON_TIM;
-    mmr->SPITX = (uint8_t)(*xfer->tx_buf++);
+    mmr->SPITX = (uint8_t)xfer->def_val;
     xfer->tx_cnt++;
     (void)mmr->SPIRX;
   }
@@ -886,7 +886,6 @@ static
 void SPI_IRQHandler(SPI_Resources_t *spi)
 {
   register uint8_t  data;
-  register uint32_t num;
   register uint32_t sta;
   register uint32_t event;
 
@@ -903,12 +902,7 @@ void SPI_IRQHandler(SPI_Resources_t *spi)
   }
 
   if ((sta & SPISTA_RX) != 0U) {
-    num = (sta & SPISTA_RXFSTA_MSK) >> 8;
-    if ((xfer->rx_cnt + num) == xfer->num) {
-      mmr->SPICON |= (uint16_t)SPICON_TIM;
-    }
-
-    while (num--) {
+    if (xfer->rx_cnt < (xfer->num - 1U)) {
       if (xfer->tx_cnt < xfer->num) {
         if (xfer->tx_buf != NULL) {
           data = *xfer->tx_buf++;
@@ -919,18 +913,19 @@ void SPI_IRQHandler(SPI_Resources_t *spi)
         mmr->SPITX = data;
         xfer->tx_cnt++;
       }
+    }
+    else {
+      mmr->SPICON |= (uint16_t)SPICON_TIM;
+      info->status.busy = 0U;
+      event |= SPI_EVENT_TRANSFER_COMPLETE;
+    }
 
-      data = (uint8_t)mmr->SPIRX;
-      if (xfer->rx_cnt < xfer->num) {
-        if (xfer->rx_buf != NULL) {
-          *xfer->rx_buf++ = data;
-        }
-        xfer->rx_cnt++;
-        if (xfer->rx_cnt == xfer->num) {
-          info->status.busy = 0U;
-          event |= SPI_EVENT_TRANSFER_COMPLETE;
-        }
+    data = (uint8_t)mmr->SPIRX;
+    if (xfer->rx_cnt < xfer->num) {
+      if (xfer->rx_buf != NULL) {
+        *xfer->rx_buf++ = data;
       }
+      xfer->rx_cnt++;
     }
   }
 
