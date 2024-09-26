@@ -259,220 +259,6 @@ typedef enum {
 #define TSTA_TMOUT_CLR                 (0x0   << 0  ) /* CLR. No timeout event has occurred */
 #define TSTA_TMOUT_SET                 (0x1   << 0  ) /* SET. A timeout event has occurred */
 
-/* SPISTA[CSRSG] - Detected a rising edge on CS, in CONT mode */
-#define SPISTA_CSRSG_MSK               (0x1   << 14 )
-#define SPISTA_CSRSG                   (0x1   << 14 )
-#define SPISTA_CSRSG_CLR               (0x0   << 14 ) /* Cleared to 0 when the Status register is read. */
-#define SPISTA_CSRSG_SET               (0x1   << 14 ) /* Set to 1 when there was a rising edge in CS line, when the device was in master mode, continuous transfer, High Frequency mode and CSIRQ_EN was asserted. */
-
-/* SPISTA[CSFLG] - Detected a falling edge on CS, in CONT mode */
-#define SPISTA_CSFLG_MSK               (0x1   << 13 )
-#define SPISTA_CSFLG                   (0x1   << 13 )
-#define SPISTA_CSFLG_CLR               (0x0   << 13 ) /* Cleared to 0 when the Status register is read. */
-#define SPISTA_CSFLG_SET               (0x1   << 13 ) /* Set to 1 when there was a falling edge in CS line, when the device was in master mode, continuous transfer, High Frequency mode and CSIRQ_EN was asserted */
-
-/* SPISTA[CSERR] - Detected a CS error condition */
-#define SPISTA_CSERR_MSK               (0x1   << 12 )
-#define SPISTA_CSERR                   (0x1   << 12 )
-#define SPISTA_CSERR_CLR               (0x0   << 12 ) /* Cleared to 0 when the Status register is read. */
-#define SPISTA_CSERR_SET               (0x1   << 12 ) /* Set to 1 when the CS line was de-asserted abruptly, even before the full-byte of data was transmitted completely. This bit will cause an interrupt. */
-
-/* SPISTA[RXS] - SPI Rx FIFO excess bytes present */
-#define SPISTA_RXS_MSK                 (0x1   << 11 )
-#define SPISTA_RXS                     (0x1   << 11 )
-#define SPISTA_RXS_CLR                 (0x0   << 11 ) /* This bit is cleared when the number of bytes in the FIFO is equal or less than the number in SPI0CON[15:14]. */
-#define SPISTA_RXS_SET                 (0x1   << 11 ) /* This bit is set when there are more bytes in the Rx FIFO than indicated in the MOD bits in SPI0CON. */
-
-/* SPISTA[RXFSTA] - SPI Rx FIFO status */
-#define SPISTA_RXFSTA_MSK              (0x7   << 8  )
-#define SPISTA_RXFSTA_EMPTY            (0x0   << 8  ) /* Rx FIFO empty            */
-#define SPISTA_RXFSTA_ONEBYTE          (0x1   << 8  ) /* 1 valid byte in FIFO     */
-#define SPISTA_RXFSTA_TWOBYTES         (0x2   << 8  ) /* 2 valid bytes in the FIFO */
-#define SPISTA_RXFSTA_THREEBYTES       (0x3   << 8  ) /* 3 valid bytes in the FIFO */
-#define SPISTA_RXFSTA_FOURBYTES        (0x4   << 8  ) /* 4 valid bytes in the FIFO */
-
-/* SPISTA[RXOF] - SPI Rx FIFO overflow */
-#define SPISTA_RXOF_MSK                (0x1   << 7  )
-#define SPISTA_RXOF                    (0x1   << 7  )
-#define SPISTA_RXOF_CLR                (0x0   << 7  ) /* Cleared when the SPISTA register is read. */
-#define SPISTA_RXOF_SET                (0x1   << 7  ) /* Set when the Rx FIFO was already full when new data was loaded to the FIFO. This bit generates an interrupt except when RFLUSH is set in SPI0CON. */
-
-/* SPISTA[RX] - SPI Rx IRQ */
-#define SPISTA_RX_MSK                  (0x1   << 6  )
-#define SPISTA_RX                      (0x1   << 6  )
-#define SPISTA_RX_CLR                  (0x0   << 6  ) /* Cleared when the SPI0STA register is read. */
-#define SPISTA_RX_SET                  (0x1   << 6  ) /* Set when a receive interrupt occurs. This bit is set when TIM in SPI0CON is cleared and the required number of bytes have been received. */
-
-/* SPISTA[TX] - SPI Tx IRQ */
-#define SPISTA_TX_MSK                  (0x1   << 5  )
-#define SPISTA_TX                      (0x1   << 5  )
-#define SPISTA_TX_CLR                  (0x0   << 5  ) /* CLR. Cleared to 0 when the SPI0STA register is read. */
-#define SPISTA_TX_SET                  (0x1   << 5  ) /* SET. Set to 1 when a transmit interrupt occurs. This bit is set when TIM in SPI0CON is set and the required number of bytes have been transmitted. */
-
-/* SPISTA[TXUR] - SPI Tx FIFO underflow */
-#define SPISTA_TXUR_MSK                (0x1   << 4  )
-#define SPISTA_TXUR                    (0x1   << 4  )
-#define SPISTA_TXUR_CLR                (0x0   << 4  ) /* Cleared to 0 when the SPI0STA register is read. */
-#define SPISTA_TXUR_SET                (0x1   << 4  ) /* Set  to 1 when a transmit is initiated without any valid data in the Tx FIFO. This bit generates an interrupt except when TFLUSH is set in SPI0CON. */
-
-/* SPISTA[TXFSTA] - SPI Tx FIFO status */
-#define SPISTA_TXFSTA_MSK              (0x7   << 1  )
-#define SPISTA_TXFSTA_EMPTY            (0x0   << 1  ) /* Tx FIFO empty            */
-#define SPISTA_TXFSTA_ONEBYTE          (0x1   << 1  ) /* 1 valid byte in FIFO     */
-#define SPISTA_TXFSTA_TWOBYTES         (0x2   << 1  ) /* 2 valid bytes in FIFO    */
-#define SPISTA_TXFSTA_THREEBYTES       (0x3   << 1  ) /* 3 valid bytes in FIFO    */
-#define SPISTA_TXFSTA_FOURBYTES        (0x4   << 1  ) /* 4 valid bytes in FIFO    */
-
-/* SPISTA[IRQ] - SPI Interrupt status */
-#define SPISTA_IRQ_MSK                 (0x1   << 0  )
-#define SPISTA_IRQ                     (0x1   << 0  )
-#define SPISTA_IRQ_CLR                 (0x0   << 0  ) /* Cleared to 0 after reading SPI0STA. */
-#define SPISTA_IRQ_SET                 (0x1   << 0  ) /* Set to 1 when an SPI based interrupt occurs. */
-
-/* SPIRX[DMA_DATA_BYTE_2] - 8-bit receive buffer */
-#define SPIRX_DMA_DATA_BYTE_2_MSK      (0xFF  << 8  )
-
-/* SPIRX[DATA_BYTE_1] - 8-bit receive buffer */
-#define SPIRX_DATA_BYTE_1_MSK          (0xFF  << 0  )
-
-/* SPITX[DMA_DATA_BYTE_2] - 8-bit transmit buffer */
-#define SPITX_DMA_DATA_BYTE_2_MSK      (0xFF  << 8  )
-
-/* SPITX[DATA_BYTE_1] - 8-bit transmit buffer */
-#define SPITX_DATA_BYTE_1_MSK          (0xFF  << 0  )
-
-/* SPIDIV[CSIRQ_EN] - Enable interrupt on every CS edge in CONT mode */
-#define SPIDIV_CSIRQ_EN_MSK            (0x1   << 8  )
-#define SPIDIV_CSIRQ_EN                (0x1   << 8  )
-#define SPIDIV_CSIRQ_EN_DIS            (0x0   << 8  )
-#define SPIDIV_CSIRQ_EN_EN             (0x1   << 8  )
-
-/* SPIDIV[BCRST] - Reset Mode for CSERR */
-#define SPIDIV_BCRST_MSK               (0x1   << 7  )
-#define SPIDIV_BCRST                   (0x1   << 7  )
-#define SPIDIV_BCRST_DIS               (0x0   << 7  )
-#define SPIDIV_BCRST_EN                (0x1   << 7  )
-
-/* SPIDIV[HFM] - High Frequency Mode */
-#define SPIDIV_HFM_MSK                 (0x1   << 6  )
-#define SPIDIV_HFM                     (0x1   << 6  )
-#define SPIDIV_HFM_DIS                 (0x0   << 6  )
-#define SPIDIV_HFM_EN                  (0x1   << 6  )
-
-/* SPIDIV[DIV] - SPI clock divider */
-#define SPIDIV_DIV_MSK                 (0x3F  << 0  )
-
-/* SPICON[MOD] - SPI IRQ mode bits */
-#define SPICON_MOD_MSK                 (0x3   << 14 )
-#define SPICON_MOD_TX1RX1              (0x0   << 14 ) /* Tx interrupt occurs when 1 byte has been transferred. Rx interrupt occurs when 1 or more bytes have been received into the FIFO. */
-#define SPICON_MOD_TX2RX2              (0x1   << 14 ) /* Tx interrupt occurs when 2 bytes has been transferred.  Rx interrupt occurs when 2 or more bytes have been received into the FIFO. */
-#define SPICON_MOD_TX3RX3              (0x2   << 14 ) /* Tx interrupt occurs when 3 bytes has been transferred.  Rx interrupt occurs when 3 or more bytes have been received into the FIFO. */
-#define SPICON_MOD_TX4RX4              (0x3   << 14 ) /* Tx interrupt occurs when 4 bytes has been transferred.  Rx interrupt occurs when the Rx FIFO is full, or 4 bytes present. */
-
-/* SPICON[TFLUSH] - SPI Tx FIFO Flush enable */
-#define SPICON_TFLUSH_MSK              (0x1   << 13 )
-#define SPICON_TFLUSH                  (0x1   << 13 )
-#define SPICON_TFLUSH_DIS              (0x0   << 13 ) /* Clear this bit to disable Tx FIFO flushing. */
-#define SPICON_TFLUSH_EN               (0x1   << 13 ) /* Set this bit to flush the Tx FIFO. This bit does not clear itself and should be toggled if a single flush is required. If this bit is left high, then either the last transmitted value or "0x00" is transmitted depending on the ZEN bit. Any writes to the Tx FIFO are ignored while this bit is set. */
-
-/* SPICON[RFLUSH] - SPI Rx FIFO Flush enable */
-#define SPICON_RFLUSH_MSK              (0x1   << 12 )
-#define SPICON_RFLUSH                  (0x1   << 12 )
-#define SPICON_RFLUSH_DIS              (0x0   << 12 ) /* Clear this bit to disable Rx FIFO flushing. */
-#define SPICON_RFLUSH_EN               (0x1   << 12 ) /* Set this bit to flush the Rx FIFO. This bit does not clear itself and should be toggled if a single flush is required. If this bit is set all incoming data is ignored and no interrupts are generated. If set and TIM = 0, a read of the Rx FIFO will initiate a transfer. */
-
-/* SPICON[CON] - Continuous transfer enable */
-#define SPICON_CON_MSK                 (0x1   << 11 )
-#define SPICON_CON                     (0x1   << 11 )
-#define SPICON_CON_DIS                 (0x0   << 11 ) /* DIS. Cleared by user to disable continuous transfer. Each transfer consists of a single 8-bit serial transfer. If valid data exists in the SPI0TX register, then a new transfer is initiated after a stall period of 1 serial clock cycle. */
-#define SPICON_CON_EN                  (0x1   << 11 ) /* EN. Set by user to enable continuous transfer. In master mode, the transfer continues until no valid data is available in the Tx register. CS is asserted and remains asserted for the duration of each 8-bit serial transfer until Tx is empty. */
-
-/* SPICON[LOOPBACK] - Loopback enable */
-#define SPICON_LOOPBACK_MSK            (0x1   << 10 )
-#define SPICON_LOOPBACK                (0x1   << 10 )
-#define SPICON_LOOPBACK_DIS            (0x0   << 10 ) /* Cleared by user to be in normal mode. */
-#define SPICON_LOOPBACK_EN             (0x1   << 10 ) /* Set by user to connect MISO to MOSI and test software. */
-
-/* SPICON[OEN] - Slave MISO output enable */
-#define SPICON_OEN_MSK                 (0x1   << 9  )
-#define SPICON_OEN                     (0x1   << 9  )
-#define SPICON_OEN_DIS                 (0x0   << 9  ) /* Clear this bit to disable the output driver on the MISO pin. The MISO pin will be Open-Circuit when this bit is clear. */
-#define SPICON_OEN_EN                  (0x1   << 9  ) /* Set this bit for MISO to operate as normal. */
-
-/* SPICON[RXOF] - SPIRX overflow overwrite enable */
-#define SPICON_RXOF_MSK                (0x1   << 8  )
-#define SPICON_RXOF                    (0x1   << 8  )
-#define SPICON_RXOF_DIS                (0x0   << 8  ) /* Cleared by user, the new serial byte received is discarded. */
-#define SPICON_RXOF_EN                 (0x1   << 8  ) /* Set by user, the valid data in the Rx register is overwritten by the new serial byte received. */
-
-/* SPICON[ZEN] - Transmit zeros enable */
-#define SPICON_ZEN_MSK                 (0x1   << 7  )
-#define SPICON_ZEN                     (0x1   << 7  )
-#define SPICON_ZEN_DIS                 (0x0   << 7  ) /* Clear this bit to transmit the last transmitted value when there is no valid data in the Tx FIFO. */
-#define SPICON_ZEN_EN                  (0x1   << 7  ) /* Set this bit to transmit "0x00" when there is no valid data in the Tx FIFO. */
-
-/* SPICON[TIM] - SPI transfer and interrupt mode */
-#define SPICON_TIM_MSK                 (0x1   << 6  )
-#define SPICON_TIM                     (0x1   << 6  )
-#define SPICON_TIM_RXRD                (0x0   << 6  ) /* Cleared by user to initiate transfer with a read of the SPI0RX register. Interrupt only occurs when Rx is full. */
-#define SPICON_TIM_TXWR                (0x1   << 6  ) /* Set by user to initiate transfer with a write to the SPI0TX register. Interrupt only occurs when Tx is empty. */
-
-/* SPICON[LSB] - LSB first transfer enable */
-#define SPICON_LSB_MSK                 (0x1   << 5  )
-#define SPICON_LSB                     (0x1   << 5  )
-#define SPICON_LSB_DIS                 (0x0   << 5  ) /* MSB transmitted first    */
-#define SPICON_LSB_EN                  (0x1   << 5  ) /* LSB transmitted first    */
-
-/* SPICON[WOM] - SPI Wired Or mode */
-#define SPICON_WOM_MSK                 (0x1   << 4  )
-#define SPICON_WOM                     (0x1   << 4  )
-#define SPICON_WOM_EN                  (0x1   << 4  ) /* Enables open circuit data output enable. External pull-ups required on data out pins */
-#define SPICON_WOM_DIS                 (0x0   << 4  ) /* Normal output levels     */
-
-/* SPICON[CPOL] - Serial Clock Polarity */
-#define SPICON_CPOL_MSK                (0x1   << 3  )
-#define SPICON_CPOL                    (0x1   << 3  )
-#define SPICON_CPOL_LOW                (0x0   << 3  ) /* Serial clock idles low   */
-#define SPICON_CPOL_HIGH               (0x1   << 3  ) /* Serial clock idles high  */
-
-/* SPICON[CPHA] - Serial clock phase mode */
-#define SPICON_CPHA_MSK                (0x1   << 2  )
-#define SPICON_CPHA                    (0x1   << 2  )
-#define SPICON_CPHA_SAMPLETRAILING     (0x1   << 2  ) /* Serial clock pulses at the beginning of each serial bit transfer */
-#define SPICON_CPHA_SAMPLELEADING      (0x0   << 2  ) /* Serial clock pulses at the end of each serial bit transfer */
-
-/* SPICON[MASEN] - Master mode enable */
-#define SPICON_MASEN_MSK               (0x1   << 1  )
-#define SPICON_MASEN                   (0x1   << 1  )
-#define SPICON_MASEN_DIS               (0x0   << 1  ) /* Enable slave mode        */
-#define SPICON_MASEN_EN                (0x1   << 1  ) /* Enable master mode       */
-
-/* SPICON[ENABLE] - SPI enable */
-#define SPICON_ENABLE_MSK              (0x1   << 0  )
-#define SPICON_ENABLE                  (0x1   << 0  )
-#define SPICON_ENABLE_DIS              (0x0   << 0  ) /* Disable the SPI          */
-#define SPICON_ENABLE_EN               (0x1   << 0  ) /* Enable the SPI           */
-
-/* SPIDMA[IENRXDMA] - Enable receive DMA request */
-#define SPIDMA_IENRXDMA_MSK            (0x1   << 2  )
-#define SPIDMA_IENRXDMA                (0x1   << 2  )
-#define SPIDMA_IENRXDMA_DIS            (0x0   << 2  ) /* Disable RX DMA Interrupt */
-#define SPIDMA_IENRXDMA_EN             (0x1   << 2  ) /* Enable RX DMA Interrupt  */
-
-/* SPIDMA[IENTXDMA] - Enable transmit DMA request */
-#define SPIDMA_IENTXDMA_MSK            (0x1   << 1  )
-#define SPIDMA_IENTXDMA                (0x1   << 1  )
-#define SPIDMA_IENTXDMA_DIS            (0x0   << 1  ) /* Disable TX DMA Interrupt */
-#define SPIDMA_IENTXDMA_EN             (0x1   << 1  ) /* Enable TX DMA Interrupt  */
-
-/* SPIDMA[ENABLE] - Enable DMA for data transfer */
-#define SPIDMA_ENABLE_MSK              (0x1   << 0  )
-#define SPIDMA_ENABLE                  (0x1   << 0  )
-#define SPIDMA_ENABLE_DIS              (0x0   << 0  )
-#define SPIDMA_ENABLE_EN               (0x1   << 0  )
-
-/* SPICNT[COUNT] - Transfer byte count */
-#define SPICNT_COUNT_MSK               (0xFF  << 0  )
 
 // -----------------------------------------------------------------------------
 // -----                             TIMER                                 -----
@@ -3987,560 +3773,246 @@ typedef struct MMR_DMACTL {                 /*!< MMR_DMACTL Structure           
 #define L1SRAMCTL_L1SRAMCTL            (0x1   << 0  )
 #define L1SRAMCTL_L1SRAMCTL_DIS        (0x0   << 0  )
 #define L1SRAMCTL_L1SRAMCTL_EN         (0x1   << 0  )
-// ------------------------------------------------------------------------------------------------
-// -----                                        SPI                                        -----
-// ------------------------------------------------------------------------------------------------
 
+
+/* ========================================================================== */
+/* ================                   SPI                  ================== */
+/* ========================================================================== */
 
 /**
   * @brief SPI (MMR_SPI)
   */
 
-typedef struct MMR_SPI {                    /*!< MMR_SPI Structure                    */
-  __IO uint16_t  SPISTA;                    /*!< Status register                       */
+typedef struct MMR_SPI {                    /*!< MMR_SPI Structure            */
+  __IO uint16_t  SPISTA;                    /*!< Status register              */
   __I  uint16_t  RESERVED0;
-  __IO uint16_t  SPIRX;                     /*!< Receive register                      */
+  __IO uint16_t  SPIRX;                     /*!< Receive register             */
   __I  uint16_t  RESERVED1;
-  __IO uint16_t  SPITX;                     /*!< Transmit register                     */
+  __IO uint16_t  SPITX;                     /*!< Transmit register            */
   __I  uint16_t  RESERVED2;
-  __IO uint16_t  SPIDIV;                    /*!< Baud rate selection register          */
+  __IO uint16_t  SPIDIV;                    /*!< Baud rate selection register */
   __I  uint16_t  RESERVED3;
-  __IO uint16_t  SPICON;                    /*!< SPI configuration register            */
+  __IO uint16_t  SPICON;                    /*!< SPI configuration register   */
   __I  uint16_t  RESERVED4;
-  __IO uint16_t  SPIDMA;                    /*!< SPI DMA enable register               */
+  __IO uint16_t  SPIDMA;                    /*!< SPI DMA enable register      */
   __I  uint16_t  RESERVED5;
-  __IO uint16_t  SPICNT;                    /*!< Transfer byte count register          */
+  __IO uint16_t  SPICNT;                    /*!< Transfer byte count register */
 } MMR_SPI_t;
 
-/* Reset Value for SPI0STA*/
-#define SPI0STA_RVAL                   0x0 
-
-/* SPI0STA[CSRSG] - Detected a rising edge on CS, in CONT mode */
-#define SPI0STA_CSRSG_BBA              (*(volatile unsigned long *) 0x42580038)
-#define SPI0STA_CSRSG_MSK              (0x1   << 14 )
-#define SPI0STA_CSRSG                  (0x1   << 14 )
-#define SPI0STA_CSRSG_CLR              (0x0   << 14 ) /* Cleared to 0 when the Status register is read. */
-#define SPI0STA_CSRSG_SET              (0x1   << 14 ) /* Set to 1 when there was a rising edge in CS line, when the device was in master mode, continuous transfer, High Frequency mode and CSIRQ_EN was asserted. */
-
-/* SPI0STA[CSFLG] - Detected a falling edge on CS, in CONT mode */
-#define SPI0STA_CSFLG_BBA              (*(volatile unsigned long *) 0x42580034)
-#define SPI0STA_CSFLG_MSK              (0x1   << 13 )
-#define SPI0STA_CSFLG                  (0x1   << 13 )
-#define SPI0STA_CSFLG_CLR              (0x0   << 13 ) /* Cleared to 0 when the Status register is read. */
-#define SPI0STA_CSFLG_SET              (0x1   << 13 ) /* Set to 1 when there was a falling edge in CS line, when the device was in master mode, continuous transfer, High Frequency mode and CSIRQ_EN was asserted */
-
-/* SPI0STA[CSERR] - Detected a CS error condition */
-#define SPI0STA_CSERR_BBA              (*(volatile unsigned long *) 0x42580030)
-#define SPI0STA_CSERR_MSK              (0x1   << 12 )
-#define SPI0STA_CSERR                  (0x1   << 12 )
-#define SPI0STA_CSERR_CLR              (0x0   << 12 ) /* Cleared to 0 when the Status register is read. */
-#define SPI0STA_CSERR_SET              (0x1   << 12 ) /* Set to 1 when the CS line was de-asserted abruptly, even before the full-byte of data was transmitted completely. This bit will cause an interrupt. */
-
-/* SPI0STA[RXS] - SPI Rx FIFO excess bytes present */
-#define SPI0STA_RXS_BBA                (*(volatile unsigned long *) 0x4258002C)
-#define SPI0STA_RXS_MSK                (0x1   << 11 )
-#define SPI0STA_RXS                    (0x1   << 11 )
-#define SPI0STA_RXS_CLR                (0x0   << 11 ) /* This bit is cleared when the number of bytes in the FIFO is equal or less than the number in SPI0CON[15:14]. */
-#define SPI0STA_RXS_SET                (0x1   << 11 ) /* This bit is set when there are more bytes in the Rx FIFO than indicated in the MOD bits in SPI0CON. */
-
-/* SPI0STA[RXFSTA] - SPI Rx FIFO status */
-#define SPI0STA_RXFSTA_MSK             (0x7   << 8  )
-#define SPI0STA_RXFSTA_EMPTY           (0x0   << 8  ) /* Rx FIFO empty            */
-#define SPI0STA_RXFSTA_ONEBYTE         (0x1   << 8  ) /* 1 valid byte in FIFO     */
-#define SPI0STA_RXFSTA_TWOBYTES        (0x2   << 8  ) /* 2 valid bytes in the FIFO */
-#define SPI0STA_RXFSTA_THREEBYTES      (0x3   << 8  ) /* 3 valid bytes in the FIFO */
-#define SPI0STA_RXFSTA_FOURBYTES       (0x4   << 8  ) /* 4 valid bytes in the FIFO */
-
-/* SPI0STA[RXOF] - SPI Rx FIFO overflow */
-#define SPI0STA_RXOF_BBA               (*(volatile unsigned long *) 0x4258001C)
-#define SPI0STA_RXOF_MSK               (0x1   << 7  )
-#define SPI0STA_RXOF                   (0x1   << 7  )
-#define SPI0STA_RXOF_CLR               (0x0   << 7  ) /* Cleared when the SPISTA register is read. */
-#define SPI0STA_RXOF_SET               (0x1   << 7  ) /* Set when the Rx FIFO was already full when new data was loaded to the FIFO. This bit generates an interrupt except when RFLUSH is set in SPI0CON. */
-
-/* SPI0STA[RX] - SPI Rx IRQ */
-#define SPI0STA_RX_BBA                 (*(volatile unsigned long *) 0x42580018)
-#define SPI0STA_RX_MSK                 (0x1   << 6  )
-#define SPI0STA_RX                     (0x1   << 6  )
-#define SPI0STA_RX_CLR                 (0x0   << 6  ) /* Cleared when the SPI0STA register is read. */
-#define SPI0STA_RX_SET                 (0x1   << 6  ) /* Set when a receive interrupt occurs. This bit is set when TIM in SPI0CON is cleared and the required number of bytes have been received. */
-
-/* SPI0STA[TX] - SPI Tx IRQ */
-#define SPI0STA_TX_BBA                 (*(volatile unsigned long *) 0x42580014)
-#define SPI0STA_TX_MSK                 (0x1   << 5  )
-#define SPI0STA_TX                     (0x1   << 5  )
-#define SPI0STA_TX_CLR                 (0x0   << 5  ) /* CLR. Cleared to 0 when the SPI0STA register is read. */
-#define SPI0STA_TX_SET                 (0x1   << 5  ) /* SET. Set to 1 when a transmit interrupt occurs. This bit is set when TIM in SPI0CON is set and the required number of bytes have been transmitted. */
-
-/* SPI0STA[TXUR] - SPI Tx FIFO underflow */
-#define SPI0STA_TXUR_BBA               (*(volatile unsigned long *) 0x42580010)
-#define SPI0STA_TXUR_MSK               (0x1   << 4  )
-#define SPI0STA_TXUR                   (0x1   << 4  )
-#define SPI0STA_TXUR_CLR               (0x0   << 4  ) /* Cleared to 0 when the SPI0STA register is read. */
-#define SPI0STA_TXUR_SET               (0x1   << 4  ) /* Set  to 1 when a transmit is initiated without any valid data in the Tx FIFO. This bit generates an interrupt except when TFLUSH is set in SPI0CON. */
-
-/* SPI0STA[TXFSTA] - SPI Tx FIFO status */
-#define SPI0STA_TXFSTA_MSK             (0x7   << 1  )
-#define SPI0STA_TXFSTA_EMPTY           (0x0   << 1  ) /* Tx FIFO empty            */
-#define SPI0STA_TXFSTA_ONEBYTE         (0x1   << 1  ) /* 1 valid byte in FIFO     */
-#define SPI0STA_TXFSTA_TWOBYTES        (0x2   << 1  ) /* 2 valid bytes in FIFO    */
-#define SPI0STA_TXFSTA_THREEBYTES      (0x3   << 1  ) /* 3 valid bytes in FIFO    */
-#define SPI0STA_TXFSTA_FOURBYTES       (0x4   << 1  ) /* 4 valid bytes in FIFO    */
-
-/* SPI0STA[IRQ] - SPI Interrupt status */
-#define SPI0STA_IRQ_BBA                (*(volatile unsigned long *) 0x42580000)
-#define SPI0STA_IRQ_MSK                (0x1   << 0  )
-#define SPI0STA_IRQ                    (0x1   << 0  )
-#define SPI0STA_IRQ_CLR                (0x0   << 0  ) /* Cleared to 0 after reading SPI0STA. */
-#define SPI0STA_IRQ_SET                (0x1   << 0  ) /* Set to 1 when an SPI based interrupt occurs. */
-
-/* Reset Value for SPI0RX*/
-#define SPI0RX_RVAL                    0x0 
-
-/* SPI0RX[DMA_DATA_BYTE_2] - 8-bit receive buffer */
-#define SPI0RX_DMA_DATA_BYTE_2_MSK     (0xFF  << 8  )
-
-/* SPI0RX[DATA_BYTE_1] - 8-bit receive buffer */
-#define SPI0RX_DATA_BYTE_1_MSK         (0xFF  << 0  )
-
-/* Reset Value for SPI0TX*/
-#define SPI0TX_RVAL                    0x0 
-
-/* SPI0TX[DMA_DATA_BYTE_2] - 8-bit transmit buffer */
-#define SPI0TX_DMA_DATA_BYTE_2_MSK     (0xFF  << 8  )
-
-/* SPI0TX[DATA_BYTE_1] - 8-bit transmit buffer */
-#define SPI0TX_DATA_BYTE_1_MSK         (0xFF  << 0  )
-
-/* Reset Value for SPI0DIV*/
-#define SPI0DIV_RVAL                   0x0 
-
-/* SPI0DIV[CSIRQ_EN] - Enable interrupt on every CS edge in CONT mode */
-#define SPI0DIV_CSIRQ_EN_BBA           (*(volatile unsigned long *) 0x425801A0)
-#define SPI0DIV_CSIRQ_EN_MSK           (0x1   << 8  )
-#define SPI0DIV_CSIRQ_EN               (0x1   << 8  )
-#define SPI0DIV_CSIRQ_EN_DIS           (0x0   << 8  )
-#define SPI0DIV_CSIRQ_EN_EN            (0x1   << 8  )
-
-/* SPI0DIV[BCRST] - Reset Mode for CSERR */
-#define SPI0DIV_BCRST_BBA              (*(volatile unsigned long *) 0x4258019C)
-#define SPI0DIV_BCRST_MSK              (0x1   << 7  )
-#define SPI0DIV_BCRST                  (0x1   << 7  )
-#define SPI0DIV_BCRST_DIS              (0x0   << 7  )
-#define SPI0DIV_BCRST_EN               (0x1   << 7  )
-
-/* SPI0DIV[HFM] - High Frequency Mode */
-#define SPI0DIV_HFM_BBA                (*(volatile unsigned long *) 0x42580198)
-#define SPI0DIV_HFM_MSK                (0x1   << 6  )
-#define SPI0DIV_HFM                    (0x1   << 6  )
-#define SPI0DIV_HFM_DIS                (0x0   << 6  )
-#define SPI0DIV_HFM_EN                 (0x1   << 6  )
-
-/* SPI0DIV[DIV] - SPI clock divider */
-#define SPI0DIV_DIV_MSK                (0x3F  << 0  )
-
-/* Reset Value for SPI0CON*/
-#define SPI0CON_RVAL                   0x0 
-
-/* SPI0CON[MOD] - SPI IRQ mode bits */
-#define SPI0CON_MOD_MSK                (0x3   << 14 )
-#define SPI0CON_MOD_TX1RX1             (0x0   << 14 ) /* Tx interrupt occurs when 1 byte has been transferred. Rx interrupt occurs when 1 or more bytes have been received into the FIFO. */
-#define SPI0CON_MOD_TX2RX2             (0x1   << 14 ) /* Tx interrupt occurs when 2 bytes has been transferred.  Rx interrupt occurs when 2 or more bytes have been received into the FIFO. */
-#define SPI0CON_MOD_TX3RX3             (0x2   << 14 ) /* Tx interrupt occurs when 3 bytes has been transferred.  Rx interrupt occurs when 3 or more bytes have been received into the FIFO. */
-#define SPI0CON_MOD_TX4RX4             (0x3   << 14 ) /* Tx interrupt occurs when 4 bytes has been transferred.  Rx interrupt occurs when the Rx FIFO is full, or 4 bytes present. */
-
-/* SPI0CON[TFLUSH] - SPI Tx FIFO Flush enable */
-#define SPI0CON_TFLUSH_BBA             (*(volatile unsigned long *) 0x42580234)
-#define SPI0CON_TFLUSH_MSK             (0x1   << 13 )
-#define SPI0CON_TFLUSH                 (0x1   << 13 )
-#define SPI0CON_TFLUSH_DIS             (0x0   << 13 ) /* Clear this bit to disable Tx FIFO flushing. */
-#define SPI0CON_TFLUSH_EN              (0x1   << 13 ) /* Set this bit to flush the Tx FIFO. This bit does not clear itself and should be toggled if a single flush is required. If this bit is left high, then either the last transmitted value or "0x00" is transmitted depending on the ZEN bit. Any writes to the Tx FIFO are ignored while this bit is set. */
-
-/* SPI0CON[RFLUSH] - SPI Rx FIFO Flush enable */
-#define SPI0CON_RFLUSH_BBA             (*(volatile unsigned long *) 0x42580230)
-#define SPI0CON_RFLUSH_MSK             (0x1   << 12 )
-#define SPI0CON_RFLUSH                 (0x1   << 12 )
-#define SPI0CON_RFLUSH_DIS             (0x0   << 12 ) /* Clear this bit to disable Rx FIFO flushing. */
-#define SPI0CON_RFLUSH_EN              (0x1   << 12 ) /* Set this bit to flush the Rx FIFO. This bit does not clear itself and should be toggled if a single flush is required. If this bit is set all incoming data is ignored and no interrupts are generated. If set and TIM = 0, a read of the Rx FIFO will initiate a transfer. */
-
-/* SPI0CON[CON] - Continuous transfer enable */
-#define SPI0CON_CON_BBA                (*(volatile unsigned long *) 0x4258022C)
-#define SPI0CON_CON_MSK                (0x1   << 11 )
-#define SPI0CON_CON                    (0x1   << 11 )
-#define SPI0CON_CON_DIS                (0x0   << 11 ) /* DIS. Cleared by user to disable continuous transfer. Each transfer consists of a single 8-bit serial transfer. If valid data exists in the SPI0TX register, then a new transfer is initiated after a stall period of 1 serial clock cycle. */
-#define SPI0CON_CON_EN                 (0x1   << 11 ) /* EN. Set by user to enable continuous transfer. In master mode, the transfer continues until no valid data is available in the Tx register. CS is asserted and remains asserted for the duration of each 8-bit serial transfer until Tx is empty. */
-
-/* SPI0CON[LOOPBACK] - Loopback enable */
-#define SPI0CON_LOOPBACK_BBA           (*(volatile unsigned long *) 0x42580228)
-#define SPI0CON_LOOPBACK_MSK           (0x1   << 10 )
-#define SPI0CON_LOOPBACK               (0x1   << 10 )
-#define SPI0CON_LOOPBACK_DIS           (0x0   << 10 ) /* Cleared by user to be in normal mode. */
-#define SPI0CON_LOOPBACK_EN            (0x1   << 10 ) /* Set by user to connect MISO to MOSI and test software. */
-
-/* SPI0CON[OEN] - Slave MISO output enable */
-#define SPI0CON_OEN_BBA                (*(volatile unsigned long *) 0x42580224)
-#define SPI0CON_OEN_MSK                (0x1   << 9  )
-#define SPI0CON_OEN                    (0x1   << 9  )
-#define SPI0CON_OEN_DIS                (0x0   << 9  ) /* Clear this bit to disable the output driver on the MISO pin. The MISO pin will be Open-Circuit when this bit is clear. */
-#define SPI0CON_OEN_EN                 (0x1   << 9  ) /* Set this bit for MISO to operate as normal. */
-
-/* SPI0CON[RXOF] - SPIRX overflow overwrite enable */
-#define SPI0CON_RXOF_BBA               (*(volatile unsigned long *) 0x42580220)
-#define SPI0CON_RXOF_MSK               (0x1   << 8  )
-#define SPI0CON_RXOF                   (0x1   << 8  )
-#define SPI0CON_RXOF_DIS               (0x0   << 8  ) /* Cleared by user, the new serial byte received is discarded. */
-#define SPI0CON_RXOF_EN                (0x1   << 8  ) /* Set by user, the valid data in the Rx register is overwritten by the new serial byte received. */
-
-/* SPI0CON[ZEN] - Transmit zeros enable */
-#define SPI0CON_ZEN_BBA                (*(volatile unsigned long *) 0x4258021C)
-#define SPI0CON_ZEN_MSK                (0x1   << 7  )
-#define SPI0CON_ZEN                    (0x1   << 7  )
-#define SPI0CON_ZEN_DIS                (0x0   << 7  ) /* Clear this bit to transmit the last transmitted value when there is no valid data in the Tx FIFO. */
-#define SPI0CON_ZEN_EN                 (0x1   << 7  ) /* Set this bit to transmit "0x00" when there is no valid data in the Tx FIFO. */
-
-/* SPI0CON[TIM] - SPI transfer and interrupt mode */
-#define SPI0CON_TIM_BBA                (*(volatile unsigned long *) 0x42580218)
-#define SPI0CON_TIM_MSK                (0x1   << 6  )
-#define SPI0CON_TIM                    (0x1   << 6  )
-#define SPI0CON_TIM_RXRD               (0x0   << 6  ) /* Cleared by user to initiate transfer with a read of the SPI0RX register. Interrupt only occurs when Rx is full. */
-#define SPI0CON_TIM_TXWR               (0x1   << 6  ) /* Set by user to initiate transfer with a write to the SPI0TX register. Interrupt only occurs when Tx is empty. */
-
-/* SPI0CON[LSB] - LSB first transfer enable */
-#define SPI0CON_LSB_BBA                (*(volatile unsigned long *) 0x42580214)
-#define SPI0CON_LSB_MSK                (0x1   << 5  )
-#define SPI0CON_LSB                    (0x1   << 5  )
-#define SPI0CON_LSB_DIS                (0x0   << 5  ) /* MSB transmitted first    */
-#define SPI0CON_LSB_EN                 (0x1   << 5  ) /* LSB transmitted first    */
-
-/* SPI0CON[WOM] - SPI Wired Or mode */
-#define SPI0CON_WOM_BBA                (*(volatile unsigned long *) 0x42580210)
-#define SPI0CON_WOM_MSK                (0x1   << 4  )
-#define SPI0CON_WOM                    (0x1   << 4  )
-#define SPI0CON_WOM_EN                 (0x1   << 4  ) /* Enables open circuit data output enable. External pull-ups required on data out pins */
-#define SPI0CON_WOM_DIS                (0x0   << 4  ) /* Normal output levels     */
-
-/* SPI0CON[CPOL] - Serial Clock Polarity */
-#define SPI0CON_CPOL_BBA               (*(volatile unsigned long *) 0x4258020C)
-#define SPI0CON_CPOL_MSK               (0x1   << 3  )
-#define SPI0CON_CPOL                   (0x1   << 3  )
-#define SPI0CON_CPOL_LOW               (0x0   << 3  ) /* Serial clock idles low   */
-#define SPI0CON_CPOL_HIGH              (0x1   << 3  ) /* Serial clock idles high  */
-
-/* SPI0CON[CPHA] - Serial clock phase mode */
-#define SPI0CON_CPHA_BBA               (*(volatile unsigned long *) 0x42580208)
-#define SPI0CON_CPHA_MSK               (0x1   << 2  )
-#define SPI0CON_CPHA                   (0x1   << 2  )
-#define SPI0CON_CPHA_SAMPLETRAILING    (0x1   << 2  ) /* Serial clock pulses at the beginning of each serial bit transfer */
-#define SPI0CON_CPHA_SAMPLELEADING     (0x0   << 2  ) /* Serial clock pulses at the end of each serial bit transfer */
-
-/* SPI0CON[MASEN] - Master mode enable */
-#define SPI0CON_MASEN_BBA              (*(volatile unsigned long *) 0x42580204)
-#define SPI0CON_MASEN_MSK              (0x1   << 1  )
-#define SPI0CON_MASEN                  (0x1   << 1  )
-#define SPI0CON_MASEN_DIS              (0x0   << 1  ) /* Enable slave mode        */
-#define SPI0CON_MASEN_EN               (0x1   << 1  ) /* Enable master mode       */
-
-/* SPI0CON[ENABLE] - SPI enable */
-#define SPI0CON_ENABLE_BBA             (*(volatile unsigned long *) 0x42580200)
-#define SPI0CON_ENABLE_MSK             (0x1   << 0  )
-#define SPI0CON_ENABLE                 (0x1   << 0  )
-#define SPI0CON_ENABLE_DIS             (0x0   << 0  ) /* Disable the SPI          */
-#define SPI0CON_ENABLE_EN              (0x1   << 0  ) /* Enable the SPI           */
-
-/* Reset Value for SPI0DMA*/
-#define SPI0DMA_RVAL                   0x0 
-
-/* SPI0DMA[IENRXDMA] - Enable receive DMA request */
-#define SPI0DMA_IENRXDMA_BBA           (*(volatile unsigned long *) 0x42580288)
-#define SPI0DMA_IENRXDMA_MSK           (0x1   << 2  )
-#define SPI0DMA_IENRXDMA               (0x1   << 2  )
-#define SPI0DMA_IENRXDMA_DIS           (0x0   << 2  ) /* Disable RX DMA Interrupt */
-#define SPI0DMA_IENRXDMA_EN            (0x1   << 2  ) /* Enable RX DMA Interrupt  */
-
-/* SPI0DMA[IENTXDMA] - Enable transmit DMA request */
-#define SPI0DMA_IENTXDMA_BBA           (*(volatile unsigned long *) 0x42580284)
-#define SPI0DMA_IENTXDMA_MSK           (0x1   << 1  )
-#define SPI0DMA_IENTXDMA               (0x1   << 1  )
-#define SPI0DMA_IENTXDMA_DIS           (0x0   << 1  ) /* Disable TX DMA Interrupt */
-#define SPI0DMA_IENTXDMA_EN            (0x1   << 1  ) /* Enable TX DMA Interrupt  */
-
-/* SPI0DMA[ENABLE] - Enable DMA for data transfer */
-#define SPI0DMA_ENABLE_BBA             (*(volatile unsigned long *) 0x42580280)
-#define SPI0DMA_ENABLE_MSK             (0x1   << 0  )
-#define SPI0DMA_ENABLE                 (0x1   << 0  )
-#define SPI0DMA_ENABLE_DIS             (0x0   << 0  )
-#define SPI0DMA_ENABLE_EN              (0x1   << 0  )
-
-/* Reset Value for SPI0CNT*/
-#define SPI0CNT_RVAL                   0x0 
-
-/* SPI0CNT[COUNT] - Transfer byte count */
-#define SPI0CNT_COUNT_MSK              (0xFF  << 0  )
-
-/* Reset Value for SPI1STA*/
-#define SPI1STA_RVAL                   0x0 
-
-/* SPI1STA[CSRSG] - Detected a rising edge on CS, in CONT mode */
-#define SPI1STA_CSRSG_BBA              (*(volatile unsigned long *) 0x42600038)
-#define SPI1STA_CSRSG_MSK              (0x1   << 14 )
-#define SPI1STA_CSRSG                  (0x1   << 14 )
-#define SPI1STA_CSRSG_CLR              (0x0   << 14 ) /* Cleared to 0 when the Status register is read */
-#define SPI1STA_CSRSG_SET              (0x1   << 14 ) /* Set to 1 when there was a rising edge in CS line, when the device was in master mode, continuous transfer, High Frequency mode and CSIRQ_EN was asserted. */
-
-/* SPI1STA[CSFLG] - Detected a falling edge on CS, in CONT mode */
-#define SPI1STA_CSFLG_BBA              (*(volatile unsigned long *) 0x42600034)
-#define SPI1STA_CSFLG_MSK              (0x1   << 13 )
-#define SPI1STA_CSFLG                  (0x1   << 13 )
-#define SPI1STA_CSFLG_CLR              (0x0   << 13 ) /* Cleared to 0 when the Status register is read. */
-#define SPI1STA_CSFLG_SET              (0x1   << 13 ) /* Set to 1 when there was a falling edge in CS line, when the device was in master mode, continuous transfer, High Frequency mode and CSIRQ_EN was asserted. */
-
-/* SPI1STA[CSERR] - Detected a CS error condition */
-#define SPI1STA_CSERR_BBA              (*(volatile unsigned long *) 0x42600030)
-#define SPI1STA_CSERR_MSK              (0x1   << 12 )
-#define SPI1STA_CSERR                  (0x1   << 12 )
-#define SPI1STA_CSERR_CLR              (0x0   << 12 ) /* Cleared to 0 when the Status register is read. */
-#define SPI1STA_CSERR_SET              (0x1   << 12 ) /* Set to 1 when the CS line was de-asserted abruptly, even before the full-byte of data was transmitted completely. This bit will cause an interrupt. */
-
-/* SPI1STA[RXS] - SPI Rx FIFO excess bytes present */
-#define SPI1STA_RXS_BBA                (*(volatile unsigned long *) 0x4260002C)
-#define SPI1STA_RXS_MSK                (0x1   << 11 )
-#define SPI1STA_RXS                    (0x1   << 11 )
-#define SPI1STA_RXS_CLR                (0x0   << 11 ) /* Cleared to 0 when the number of bytes in the FIFO is equal or less than the number in SPI1CON[15:14]. */
-#define SPI1STA_RXS_SET                (0x1   << 11 ) /* Set to 1 when there are more bytes in the Rx FIFO than indicated in the MOD bits in SPI1CON. */
-
-/* SPI1STA[RXFSTA] - SPI Rx FIFO status */
-#define SPI1STA_RXFSTA_MSK             (0x7   << 8  )
-#define SPI1STA_RXFSTA_EMPTY           (0x0   << 8  ) /* Rx FIFO empty            */
-#define SPI1STA_RXFSTA_ONEBYTE         (0x1   << 8  ) /* 1 valid byte in FIFO     */
-#define SPI1STA_RXFSTA_TWOBYTES        (0x2   << 8  ) /* 2 valid bytes in the FIFO */
-#define SPI1STA_RXFSTA_THREEBYTES      (0x3   << 8  ) /* 3 valid bytes in the FIFO */
-#define SPI1STA_RXFSTA_FOURBYTES       (0x4   << 8  ) /* 4 valid bytes in the FIFO */
-
-/* SPI1STA[RXOF] - SPI Rx FIFO overflow */
-#define SPI1STA_RXOF_BBA               (*(volatile unsigned long *) 0x4260001C)
-#define SPI1STA_RXOF_MSK               (0x1   << 7  )
-#define SPI1STA_RXOF                   (0x1   << 7  )
-#define SPI1STA_RXOF_CLR               (0x0   << 7  ) /* Cleared to 0 when the SPI1STA register is read. */
-#define SPI1STA_RXOF_SET               (0x1   << 7  ) /* Set to 1 when the Rx FIFO was already full when new data was loaded to the FIFO. This bit generates an interrupt except when RFLUSH is set in SPI1CON. */
-
-/* SPI1STA[RX] - SPI Rx IRQ */
-#define SPI1STA_RX_BBA                 (*(volatile unsigned long *) 0x42600018)
-#define SPI1STA_RX_MSK                 (0x1   << 6  )
-#define SPI1STA_RX                     (0x1   << 6  )
-#define SPI1STA_RX_CLR                 (0x0   << 6  ) /* Cleared to 0 when the SPI1STA register is read. */
-#define SPI1STA_RX_SET                 (0x1   << 6  ) /* Set to 1 when TIM in SPI1CON is cleared and the required number of bytes have been received. */
-
-/* SPI1STA[TX] - SPI Tx IRQ */
-#define SPI1STA_TX_BBA                 (*(volatile unsigned long *) 0x42600014)
-#define SPI1STA_TX_MSK                 (0x1   << 5  )
-#define SPI1STA_TX                     (0x1   << 5  )
-#define SPI1STA_TX_CLR                 (0x0   << 5  ) /* CLR. Cleared to 0 when the SPI1STA register is read. */
-#define SPI1STA_TX_SET                 (0x1   << 5  ) /* SET. Set to 1 when a transmit interrupt occurs. This bit is set when TIM in SPI1CON is set and the required number of bytes have been transmitted. */
-
-/* SPI1STA[TXUR] - SPI Tx FIFO underflow */
-#define SPI1STA_TXUR_BBA               (*(volatile unsigned long *) 0x42600010)
-#define SPI1STA_TXUR_MSK               (0x1   << 4  )
-#define SPI1STA_TXUR                   (0x1   << 4  )
-#define SPI1STA_TXUR_CLR               (0x0   << 4  ) /* Cleared to 0 when the SPI1STA register is read. */
-#define SPI1STA_TXUR_SET               (0x1   << 4  ) /* Set to 1 when a transmit is initiated without any valid data in the Tx FIFO. This bit generates an interrupt except when TFLUSH is set in SPI1CON. */
-
-/* SPI1STA[TXFSTA] - SPI Tx FIFO status */
-#define SPI1STA_TXFSTA_MSK             (0x7   << 1  )
-#define SPI1STA_TXFSTA_EMPTY           (0x0   << 1  ) /* Tx FIFO empty            */
-#define SPI1STA_TXFSTA_ONEBYTE         (0x1   << 1  ) /* 1 valid byte in FIFO     */
-#define SPI1STA_TXFSTA_TWOBYTES        (0x2   << 1  ) /* 2 valid bytes in FIFO    */
-#define SPI1STA_TXFSTA_THREEBYTES      (0x3   << 1  ) /* 3 valid bytes in FIFO    */
-#define SPI1STA_TXFSTA_FOURBYTES       (0x4   << 1  ) /* 4 valid bytes in FIFO    */
-
-/* SPI1STA[IRQ] - SPI Interrupt status */
-#define SPI1STA_IRQ_BBA                (*(volatile unsigned long *) 0x42600000)
-#define SPI1STA_IRQ_MSK                (0x1   << 0  )
-#define SPI1STA_IRQ                    (0x1   << 0  )
-#define SPI1STA_IRQ_CLR                (0x0   << 0  ) /* Cleared to 0 after reading SPI1STA. */
-#define SPI1STA_IRQ_SET                (0x1   << 0  ) /* Set to 1 when an SPI based interrupt occurs. */
-
-/* Reset Value for SPI1RX*/
-#define SPI1RX_RVAL                    0x0 
-
-/* SPI1RX[DMA_DATA_BYTE_2] - 8-bit receive buffer */
-#define SPI1RX_DMA_DATA_BYTE_2_MSK     (0xFF  << 8  )
-
-/* SPI1RX[DATA_BYTE_1] - 8-bit receive buffer */
-#define SPI1RX_DATA_BYTE_1_MSK         (0xFF  << 0  )
-
-/* Reset Value for SPI1TX*/
-#define SPI1TX_RVAL                    0x0 
-
-/* SPI1TX[DMA_DATA_BYTE_2] - 8-bit transmit buffer */
-#define SPI1TX_DMA_DATA_BYTE_2_MSK     (0xFF  << 8  )
-
-/* SPI1TX[DATA_BYTE_1] - 8-bit transmit buffer */
-#define SPI1TX_DATA_BYTE_1_MSK         (0xFF  << 0  )
-
-/* Reset Value for SPI1DIV*/
-#define SPI1DIV_RVAL                   0x0 
-
-/* SPI1DIV[CSIRQ_EN] - Enable interrupt on every CS edge in CONT mode */
-#define SPI1DIV_CSIRQ_EN_BBA           (*(volatile unsigned long *) 0x426001A0)
-#define SPI1DIV_CSIRQ_EN_MSK           (0x1   << 8  )
-#define SPI1DIV_CSIRQ_EN               (0x1   << 8  )
-#define SPI1DIV_CSIRQ_EN_DIS           (0x0   << 8  )
-#define SPI1DIV_CSIRQ_EN_EN            (0x1   << 8  )
-
-/* SPI1DIV[BCRST] - Reset Mode for CSERR */
-#define SPI1DIV_BCRST_BBA              (*(volatile unsigned long *) 0x4260019C)
-#define SPI1DIV_BCRST_MSK              (0x1   << 7  )
-#define SPI1DIV_BCRST                  (0x1   << 7  )
-#define SPI1DIV_BCRST_DIS              (0x0   << 7  )
-#define SPI1DIV_BCRST_EN               (0x1   << 7  )
-
-/* SPI1DIV[HFM] - High Frequency Mode */
-#define SPI1DIV_HFM_BBA                (*(volatile unsigned long *) 0x42600198)
-#define SPI1DIV_HFM_MSK                (0x1   << 6  )
-#define SPI1DIV_HFM                    (0x1   << 6  )
-#define SPI1DIV_HFM_DIS                (0x0   << 6  )
-#define SPI1DIV_HFM_EN                 (0x1   << 6  )
-
-/* SPI1DIV[DIV] - SPI clock divider */
-#define SPI1DIV_DIV_MSK                (0x3F  << 0  )
-
-/* Reset Value for SPI1CON*/
-#define SPI1CON_RVAL                   0x0 
-
-/* SPI1CON[MOD] - SPI IRQ mode bits */
-#define SPI1CON_MOD_MSK                (0x3   << 14 )
-#define SPI1CON_MOD_TX1RX1             (0x0   << 14 ) /* Tx interrupt occurs when 1 byte has been transferred. Rx interrupt occurs when 1 or more bytes have been received into the FIFO. */
-#define SPI1CON_MOD_TX2RX2             (0x1   << 14 ) /* Tx interrupt occurs when 2 bytes has been transferred.  Rx interrupt occurs when 2 or more bytes have been received into the FIFO. */
-#define SPI1CON_MOD_TX3RX3             (0x2   << 14 ) /* Tx interrupt occurs when 3 bytes has been transferred.  Rx interrupt occurs when 3 or more bytes have been received into the FIFO. */
-#define SPI1CON_MOD_TX4RX4             (0x3   << 14 ) /* Tx interrupt occurs when 4 bytes has been transferred.  Rx interrupt occurs when the Rx FIFO is full, or 4 bytes present. */
-
-/* SPI1CON[TFLUSH] - SPI Tx FIFO Flush enable */
-#define SPI1CON_TFLUSH_BBA             (*(volatile unsigned long *) 0x42600234)
-#define SPI1CON_TFLUSH_MSK             (0x1   << 13 )
-#define SPI1CON_TFLUSH                 (0x1   << 13 )
-#define SPI1CON_TFLUSH_DIS             (0x0   << 13 ) /* Clear this bit to disable Tx FIFO flushing. */
-#define SPI1CON_TFLUSH_EN              (0x1   << 13 ) /* Set this bit to flush the Tx FIFO. This bit does not clear itself and should be toggled if a single flush is required. If this bit is left high, then either the last transmitted value or "0x00" is transmitted depending on the ZEN bit. Any writes to the Tx FIFO are ignored while this bit is set. */
-
-/* SPI1CON[RFLUSH] - SPI Rx FIFO Flush enable */
-#define SPI1CON_RFLUSH_BBA             (*(volatile unsigned long *) 0x42600230)
-#define SPI1CON_RFLUSH_MSK             (0x1   << 12 )
-#define SPI1CON_RFLUSH                 (0x1   << 12 )
-#define SPI1CON_RFLUSH_DIS             (0x0   << 12 ) /* Clear this bit to disable Rx FIFO flushing. */
-#define SPI1CON_RFLUSH_EN              (0x1   << 12 ) /* Set this bit to flush the Rx FIFO. This bit does not clear itself and should be toggled if a single flush is required. If this bit is set all incoming data is ignored and no interrupts are generated. If set and TIM = 0, a read of the Rx FIFO will initiate a transfer. */
-
-/* SPI1CON[CON] - Continuous transfer enable */
-#define SPI1CON_CON_BBA                (*(volatile unsigned long *) 0x4260022C)
-#define SPI1CON_CON_MSK                (0x1   << 11 )
-#define SPI1CON_CON                    (0x1   << 11 )
-#define SPI1CON_CON_DIS                (0x0   << 11 ) /* DIS. Cleared by user to disable continuous transfer. Each transfer consists of a single 8-bit serial transfer. If valid data exists in the SPI1TX register, then a new transfer is initiated after a stall period of 1 serial clock cycle. */
-#define SPI1CON_CON_EN                 (0x1   << 11 ) /* EN. Set by user to enable continuous transfer. In master mode, the transfer continues until no valid data is available in the Tx register. CS is asserted and remains asserted for the duration of each 8-bit serial transfer until Tx is empty. */
-
-/* SPI1CON[LOOPBACK] - Loopback enable */
-#define SPI1CON_LOOPBACK_BBA           (*(volatile unsigned long *) 0x42600228)
-#define SPI1CON_LOOPBACK_MSK           (0x1   << 10 )
-#define SPI1CON_LOOPBACK               (0x1   << 10 )
-#define SPI1CON_LOOPBACK_DIS           (0x0   << 10 ) /* Cleared by user to be in normal mode. */
-#define SPI1CON_LOOPBACK_EN            (0x1   << 10 ) /* Set by user to connect MISO to MOSI and test software. */
-
-/* SPI1CON[OEN] - Slave MISO output enable */
-#define SPI1CON_OEN_BBA                (*(volatile unsigned long *) 0x42600224)
-#define SPI1CON_OEN_MSK                (0x1   << 9  )
-#define SPI1CON_OEN                    (0x1   << 9  )
-#define SPI1CON_OEN_DIS                (0x0   << 9  ) /* Clear this bit to disable the output driver on the MISO pin. The MISO pin will be Open-Circuit when this bit is clear. */
-#define SPI1CON_OEN_EN                 (0x1   << 9  ) /* Set this bit for MISO to operate as normal. */
-
-/* SPI1CON[RXOF] - SPIRX overflow overwrite enable */
-#define SPI1CON_RXOF_BBA               (*(volatile unsigned long *) 0x42600220)
-#define SPI1CON_RXOF_MSK               (0x1   << 8  )
-#define SPI1CON_RXOF                   (0x1   << 8  )
-#define SPI1CON_RXOF_DIS               (0x0   << 8  ) /* Cleared by user, the new serial byte received is discarded. */
-#define SPI1CON_RXOF_EN                (0x1   << 8  ) /* Set by user, the valid data in the Rx register is overwritten by the new serial byte received. */
-
-/* SPI1CON[ZEN] - Transmit zeros enable */
-#define SPI1CON_ZEN_BBA                (*(volatile unsigned long *) 0x4260021C)
-#define SPI1CON_ZEN_MSK                (0x1   << 7  )
-#define SPI1CON_ZEN                    (0x1   << 7  )
-#define SPI1CON_ZEN_DIS                (0x0   << 7  ) /* Clear this bit to transmit the last transmitted value when there is no valid data in the Tx FIFO. */
-#define SPI1CON_ZEN_EN                 (0x1   << 7  ) /* Set this bit to transmit "0x00" when there is no valid data in the Tx FIFO. */
-
-/* SPI1CON[TIM] - SPI transfer and interrupt mode */
-#define SPI1CON_TIM_BBA                (*(volatile unsigned long *) 0x42600218)
-#define SPI1CON_TIM_MSK                (0x1   << 6  )
-#define SPI1CON_TIM                    (0x1   << 6  )
-#define SPI1CON_TIM_RXRD               (0x0   << 6  ) /* Cleared by user to initiate transfer with a read of the SPIRX register. Interrupt only occurs when Rx is full. */
-#define SPI1CON_TIM_TXWR               (0x1   << 6  ) /* Set by user to initiate transfer with a write to the SPITX register. Interrupt only occurs when Tx is empty. */
-
-/* SPI1CON[LSB] - LSB first transfer enable */
-#define SPI1CON_LSB_BBA                (*(volatile unsigned long *) 0x42600214)
-#define SPI1CON_LSB_MSK                (0x1   << 5  )
-#define SPI1CON_LSB                    (0x1   << 5  )
-#define SPI1CON_LSB_DIS                (0x0   << 5  ) /* MSB transmitted first    */
-#define SPI1CON_LSB_EN                 (0x1   << 5  ) /* LSB transmitted first    */
-
-/* SPI1CON[WOM] - SPI Wired Or mode */
-#define SPI1CON_WOM_BBA                (*(volatile unsigned long *) 0x42600210)
-#define SPI1CON_WOM_MSK                (0x1   << 4  )
-#define SPI1CON_WOM                    (0x1   << 4  )
-#define SPI1CON_WOM_DIS                (0x0   << 4  ) /* Normal output levels     */
-#define SPI1CON_WOM_EN                 (0x1   << 4  ) /* Enables open circuit data output enable. External pull-ups required on data out pins */
-
-/* SPI1CON[CPOL] - Serial Clock Polarity */
-#define SPI1CON_CPOL_BBA               (*(volatile unsigned long *) 0x4260020C)
-#define SPI1CON_CPOL_MSK               (0x1   << 3  )
-#define SPI1CON_CPOL                   (0x1   << 3  )
-#define SPI1CON_CPOL_LOW               (0x0   << 3  ) /* Serial clock idles low   */
-#define SPI1CON_CPOL_HIGH              (0x1   << 3  ) /* Serial clock idles high  */
-
-/* SPI1CON[CPHA] - Serial clock phase mode */
-#define SPI1CON_CPHA_BBA               (*(volatile unsigned long *) 0x42600208)
-#define SPI1CON_CPHA_MSK               (0x1   << 2  )
-#define SPI1CON_CPHA                   (0x1   << 2  )
-#define SPI1CON_CPHA_SAMPLELEADING     (0x0   << 2  ) /* Serial clock pulses at the end of each serial bit transfer */
-#define SPI1CON_CPHA_SAMPLETRAILING    (0x1   << 2  ) /* Serial clock pulses at the beginning of each serial bit transfer */
-
-/* SPI1CON[MASEN] - Master mode enable */
-#define SPI1CON_MASEN_BBA              (*(volatile unsigned long *) 0x42600204)
-#define SPI1CON_MASEN_MSK              (0x1   << 1  )
-#define SPI1CON_MASEN                  (0x1   << 1  )
-#define SPI1CON_MASEN_DIS              (0x0   << 1  ) /* Enable slave mode        */
-#define SPI1CON_MASEN_EN               (0x1   << 1  ) /* Enable master mode       */
-
-/* SPI1CON[ENABLE] - SPI enable */
-#define SPI1CON_ENABLE_BBA             (*(volatile unsigned long *) 0x42600200)
-#define SPI1CON_ENABLE_MSK             (0x1   << 0  )
-#define SPI1CON_ENABLE                 (0x1   << 0  )
-#define SPI1CON_ENABLE_DIS             (0x0   << 0  ) /* Disable the SPI          */
-#define SPI1CON_ENABLE_EN              (0x1   << 0  ) /* Enable the SPI           */
-
-/* Reset Value for SPI1DMA*/
-#define SPI1DMA_RVAL                   0x0 
-
-/* SPI1DMA[IENRXDMA] - Enable receive DMA request */
-#define SPI1DMA_IENRXDMA_BBA           (*(volatile unsigned long *) 0x42600288)
-#define SPI1DMA_IENRXDMA_MSK           (0x1   << 2  )
-#define SPI1DMA_IENRXDMA               (0x1   << 2  )
-#define SPI1DMA_IENRXDMA_DIS           (0x0   << 2  ) /* Disable RX DMA Interrupt */
-#define SPI1DMA_IENRXDMA_EN            (0x1   << 2  ) /* Enable RX DMA Interrupt  */
-
-/* SPI1DMA[IENTXDMA] - Enable transmit DMA request */
-#define SPI1DMA_IENTXDMA_BBA           (*(volatile unsigned long *) 0x42600284)
-#define SPI1DMA_IENTXDMA_MSK           (0x1   << 1  )
-#define SPI1DMA_IENTXDMA               (0x1   << 1  )
-#define SPI1DMA_IENTXDMA_DIS           (0x0   << 1  ) /* Disable TX DMA Interrupt */
-#define SPI1DMA_IENTXDMA_EN            (0x1   << 1  ) /* Enable TX DMA Interrupt  */
-
-/* SPI1DMA[ENABLE] - Enable DMA for data transfer */
-#define SPI1DMA_ENABLE_BBA             (*(volatile unsigned long *) 0x42600280)
-#define SPI1DMA_ENABLE_MSK             (0x1   << 0  )
-#define SPI1DMA_ENABLE                 (0x1   << 0  )
-#define SPI1DMA_ENABLE_DIS             (0x0   << 0  )
-#define SPI1DMA_ENABLE_EN              (0x1   << 0  )
-
-/* Reset Value for SPI1CNT*/
-#define SPI1CNT_RVAL                   0x0 
-
-/* SPI1CNT[COUNT] - Transfer byte count */
-#define SPI1CNT_COUNT_MSK              (0xFF  << 0  )
+/* SPISTA[CSRSG] - Detected a rising edge on CS, in CONT mode */
+#define SPISTA_CSRSG_MSK               (0x1   << 14 )
+#define SPISTA_CSRSG                   (0x1   << 14 )
+#define SPISTA_CSRSG_CLR               (0x0   << 14 ) /* Cleared to 0 when the Status register is read. */
+#define SPISTA_CSRSG_SET               (0x1   << 14 ) /* Set to 1 when there was a rising edge in CS line, when the device was in master mode, continuous transfer, High Frequency mode and CSIRQ_EN was asserted. */
+
+/* SPISTA[CSFLG] - Detected a falling edge on CS, in CONT mode */
+#define SPISTA_CSFLG_MSK               (0x1   << 13 )
+#define SPISTA_CSFLG                   (0x1   << 13 )
+#define SPISTA_CSFLG_CLR               (0x0   << 13 ) /* Cleared to 0 when the Status register is read. */
+#define SPISTA_CSFLG_SET               (0x1   << 13 ) /* Set to 1 when there was a falling edge in CS line, when the device was in master mode, continuous transfer, High Frequency mode and CSIRQ_EN was asserted */
+
+/* SPISTA[CSERR] - Detected a CS error condition */
+#define SPISTA_CSERR_MSK               (0x1   << 12 )
+#define SPISTA_CSERR                   (0x1   << 12 )
+#define SPISTA_CSERR_CLR               (0x0   << 12 ) /* Cleared to 0 when the Status register is read. */
+#define SPISTA_CSERR_SET               (0x1   << 12 ) /* Set to 1 when the CS line was de-asserted abruptly, even before the full-byte of data was transmitted completely. This bit will cause an interrupt. */
+
+/* SPISTA[RXS] - SPI Rx FIFO excess bytes present */
+#define SPISTA_RXS_MSK                 (0x1   << 11 )
+#define SPISTA_RXS                     (0x1   << 11 )
+#define SPISTA_RXS_CLR                 (0x0   << 11 ) /* This bit is cleared when the number of bytes in the FIFO is equal or less than the number in SPI0CON[15:14]. */
+#define SPISTA_RXS_SET                 (0x1   << 11 ) /* This bit is set when there are more bytes in the Rx FIFO than indicated in the MOD bits in SPI0CON. */
+
+/* SPISTA[RXFSTA] - SPI Rx FIFO status */
+#define SPISTA_RXFSTA_MSK              (0x7   << 8  )
+#define SPISTA_RXFSTA_EMPTY            (0x0   << 8  ) /* Rx FIFO empty            */
+#define SPISTA_RXFSTA_ONEBYTE          (0x1   << 8  ) /* 1 valid byte in FIFO     */
+#define SPISTA_RXFSTA_TWOBYTES         (0x2   << 8  ) /* 2 valid bytes in the FIFO */
+#define SPISTA_RXFSTA_THREEBYTES       (0x3   << 8  ) /* 3 valid bytes in the FIFO */
+#define SPISTA_RXFSTA_FOURBYTES        (0x4   << 8  ) /* 4 valid bytes in the FIFO */
+
+/* SPISTA[RXOF] - SPI Rx FIFO overflow */
+#define SPISTA_RXOF_MSK                (0x1   << 7  )
+#define SPISTA_RXOF                    (0x1   << 7  )
+#define SPISTA_RXOF_CLR                (0x0   << 7  ) /* Cleared when the SPISTA register is read. */
+#define SPISTA_RXOF_SET                (0x1   << 7  ) /* Set when the Rx FIFO was already full when new data was loaded to the FIFO. This bit generates an interrupt except when RFLUSH is set in SPI0CON. */
+
+/* SPISTA[RX] - SPI Rx IRQ */
+#define SPISTA_RX_MSK                  (0x1   << 6  )
+#define SPISTA_RX                      (0x1   << 6  )
+#define SPISTA_RX_CLR                  (0x0   << 6  ) /* Cleared when the SPI0STA register is read. */
+#define SPISTA_RX_SET                  (0x1   << 6  ) /* Set when a receive interrupt occurs. This bit is set when TIM in SPI0CON is cleared and the required number of bytes have been received. */
+
+/* SPISTA[TX] - SPI Tx IRQ */
+#define SPISTA_TX_MSK                  (0x1   << 5  )
+#define SPISTA_TX                      (0x1   << 5  )
+#define SPISTA_TX_CLR                  (0x0   << 5  ) /* CLR. Cleared to 0 when the SPI0STA register is read. */
+#define SPISTA_TX_SET                  (0x1   << 5  ) /* SET. Set to 1 when a transmit interrupt occurs. This bit is set when TIM in SPI0CON is set and the required number of bytes have been transmitted. */
+
+/* SPISTA[TXUR] - SPI Tx FIFO underflow */
+#define SPISTA_TXUR_MSK                (0x1   << 4  )
+#define SPISTA_TXUR                    (0x1   << 4  )
+#define SPISTA_TXUR_CLR                (0x0   << 4  ) /* Cleared to 0 when the SPI0STA register is read. */
+#define SPISTA_TXUR_SET                (0x1   << 4  ) /* Set  to 1 when a transmit is initiated without any valid data in the Tx FIFO. This bit generates an interrupt except when TFLUSH is set in SPI0CON. */
+
+/* SPISTA[TXFSTA] - SPI Tx FIFO status */
+#define SPISTA_TXFSTA_MSK              (0x7   << 1  )
+#define SPISTA_TXFSTA_EMPTY            (0x0   << 1  ) /* Tx FIFO empty            */
+#define SPISTA_TXFSTA_ONEBYTE          (0x1   << 1  ) /* 1 valid byte in FIFO     */
+#define SPISTA_TXFSTA_TWOBYTES         (0x2   << 1  ) /* 2 valid bytes in FIFO    */
+#define SPISTA_TXFSTA_THREEBYTES       (0x3   << 1  ) /* 3 valid bytes in FIFO    */
+#define SPISTA_TXFSTA_FOURBYTES        (0x4   << 1  ) /* 4 valid bytes in FIFO    */
+
+/* SPISTA[IRQ] - SPI Interrupt status */
+#define SPISTA_IRQ_MSK                 (0x1   << 0  )
+#define SPISTA_IRQ                     (0x1   << 0  )
+#define SPISTA_IRQ_CLR                 (0x0   << 0  ) /* Cleared to 0 after reading SPI0STA. */
+#define SPISTA_IRQ_SET                 (0x1   << 0  ) /* Set to 1 when an SPI based interrupt occurs. */
+
+/* SPIRX[DMA_DATA_BYTE_2] - 8-bit receive buffer */
+#define SPIRX_DMA_DATA_BYTE_2_MSK      (0xFF  << 8  )
+
+/* SPIRX[DATA_BYTE_1] - 8-bit receive buffer */
+#define SPIRX_DATA_BYTE_1_MSK          (0xFF  << 0  )
+
+/* SPITX[DMA_DATA_BYTE_2] - 8-bit transmit buffer */
+#define SPITX_DMA_DATA_BYTE_2_MSK      (0xFF  << 8  )
+
+/* SPITX[DATA_BYTE_1] - 8-bit transmit buffer */
+#define SPITX_DATA_BYTE_1_MSK          (0xFF  << 0  )
+
+/* SPIDIV[CSIRQ_EN] - Enable interrupt on every CS edge in CONT mode */
+#define SPIDIV_CSIRQ_EN_MSK            (0x1   << 8  )
+#define SPIDIV_CSIRQ_EN                (0x1   << 8  )
+#define SPIDIV_CSIRQ_EN_DIS            (0x0   << 8  )
+#define SPIDIV_CSIRQ_EN_EN             (0x1   << 8  )
+
+/* SPIDIV[BCRST] - Reset Mode for CSERR */
+#define SPIDIV_BCRST_MSK               (0x1   << 7  )
+#define SPIDIV_BCRST                   (0x1   << 7  )
+#define SPIDIV_BCRST_DIS               (0x0   << 7  )
+#define SPIDIV_BCRST_EN                (0x1   << 7  )
+
+/* SPIDIV[HFM] - High Frequency Mode */
+#define SPIDIV_HFM_MSK                 (0x1   << 6  )
+#define SPIDIV_HFM                     (0x1   << 6  )
+#define SPIDIV_HFM_DIS                 (0x0   << 6  )
+#define SPIDIV_HFM_EN                  (0x1   << 6  )
+
+/* SPIDIV[DIV] - SPI clock divider */
+#define SPIDIV_DIV_MSK                 (0x3F  << 0  )
+
+/* SPICON[MOD] - SPI IRQ mode bits */
+#define SPICON_MOD_MSK                 (0x3   << 14 )
+#define SPICON_MOD_TX1RX1              (0x0   << 14 ) /* Tx interrupt occurs when 1 byte has been transferred. Rx interrupt occurs when 1 or more bytes have been received into the FIFO. */
+#define SPICON_MOD_TX2RX2              (0x1   << 14 ) /* Tx interrupt occurs when 2 bytes has been transferred.  Rx interrupt occurs when 2 or more bytes have been received into the FIFO. */
+#define SPICON_MOD_TX3RX3              (0x2   << 14 ) /* Tx interrupt occurs when 3 bytes has been transferred.  Rx interrupt occurs when 3 or more bytes have been received into the FIFO. */
+#define SPICON_MOD_TX4RX4              (0x3   << 14 ) /* Tx interrupt occurs when 4 bytes has been transferred.  Rx interrupt occurs when the Rx FIFO is full, or 4 bytes present. */
+
+/* SPICON[TFLUSH] - SPI Tx FIFO Flush enable */
+#define SPICON_TFLUSH_MSK              (0x1   << 13 )
+#define SPICON_TFLUSH                  (0x1   << 13 )
+#define SPICON_TFLUSH_DIS              (0x0   << 13 ) /* Clear this bit to disable Tx FIFO flushing. */
+#define SPICON_TFLUSH_EN               (0x1   << 13 ) /* Set this bit to flush the Tx FIFO. This bit does not clear itself and should be toggled if a single flush is required. If this bit is left high, then either the last transmitted value or "0x00" is transmitted depending on the ZEN bit. Any writes to the Tx FIFO are ignored while this bit is set. */
+
+/* SPICON[RFLUSH] - SPI Rx FIFO Flush enable */
+#define SPICON_RFLUSH_MSK              (0x1   << 12 )
+#define SPICON_RFLUSH                  (0x1   << 12 )
+#define SPICON_RFLUSH_DIS              (0x0   << 12 ) /* Clear this bit to disable Rx FIFO flushing. */
+#define SPICON_RFLUSH_EN               (0x1   << 12 ) /* Set this bit to flush the Rx FIFO. This bit does not clear itself and should be toggled if a single flush is required. If this bit is set all incoming data is ignored and no interrupts are generated. If set and TIM = 0, a read of the Rx FIFO will initiate a transfer. */
+
+/* SPICON[CON] - Continuous transfer enable */
+#define SPICON_CON_MSK                 (0x1   << 11 )
+#define SPICON_CON                     (0x1   << 11 )
+#define SPICON_CON_DIS                 (0x0   << 11 ) /* DIS. Cleared by user to disable continuous transfer. Each transfer consists of a single 8-bit serial transfer. If valid data exists in the SPI0TX register, then a new transfer is initiated after a stall period of 1 serial clock cycle. */
+#define SPICON_CON_EN                  (0x1   << 11 ) /* EN. Set by user to enable continuous transfer. In master mode, the transfer continues until no valid data is available in the Tx register. CS is asserted and remains asserted for the duration of each 8-bit serial transfer until Tx is empty. */
+
+/* SPICON[LOOPBACK] - Loopback enable */
+#define SPICON_LOOPBACK_MSK            (0x1   << 10 )
+#define SPICON_LOOPBACK                (0x1   << 10 )
+#define SPICON_LOOPBACK_DIS            (0x0   << 10 ) /* Cleared by user to be in normal mode. */
+#define SPICON_LOOPBACK_EN             (0x1   << 10 ) /* Set by user to connect MISO to MOSI and test software. */
+
+/* SPICON[OEN] - Slave MISO output enable */
+#define SPICON_OEN_MSK                 (0x1   << 9  )
+#define SPICON_OEN                     (0x1   << 9  )
+#define SPICON_OEN_DIS                 (0x0   << 9  ) /* Clear this bit to disable the output driver on the MISO pin. The MISO pin will be Open-Circuit when this bit is clear. */
+#define SPICON_OEN_EN                  (0x1   << 9  ) /* Set this bit for MISO to operate as normal. */
+
+/* SPICON[RXOF] - SPIRX overflow overwrite enable */
+#define SPICON_RXOF_MSK                (0x1   << 8  )
+#define SPICON_RXOF                    (0x1   << 8  )
+#define SPICON_RXOF_DIS                (0x0   << 8  ) /* Cleared by user, the new serial byte received is discarded. */
+#define SPICON_RXOF_EN                 (0x1   << 8  ) /* Set by user, the valid data in the Rx register is overwritten by the new serial byte received. */
+
+/* SPICON[ZEN] - Transmit zeros enable */
+#define SPICON_ZEN_MSK                 (0x1   << 7  )
+#define SPICON_ZEN                     (0x1   << 7  )
+#define SPICON_ZEN_DIS                 (0x0   << 7  ) /* Clear this bit to transmit the last transmitted value when there is no valid data in the Tx FIFO. */
+#define SPICON_ZEN_EN                  (0x1   << 7  ) /* Set this bit to transmit "0x00" when there is no valid data in the Tx FIFO. */
+
+/* SPICON[TIM] - SPI transfer and interrupt mode */
+#define SPICON_TIM_MSK                 (0x1   << 6  )
+#define SPICON_TIM                     (0x1   << 6  )
+#define SPICON_TIM_RXRD                (0x0   << 6  ) /* Cleared by user to initiate transfer with a read of the SPI0RX register. Interrupt only occurs when Rx is full. */
+#define SPICON_TIM_TXWR                (0x1   << 6  ) /* Set by user to initiate transfer with a write to the SPI0TX register. Interrupt only occurs when Tx is empty. */
+
+/* SPICON[LSB] - LSB first transfer enable */
+#define SPICON_LSB_MSK                 (0x1   << 5  )
+#define SPICON_LSB                     (0x1   << 5  )
+#define SPICON_LSB_DIS                 (0x0   << 5  ) /* MSB transmitted first    */
+#define SPICON_LSB_EN                  (0x1   << 5  ) /* LSB transmitted first    */
+
+/* SPICON[WOM] - SPI Wired Or mode */
+#define SPICON_WOM_MSK                 (0x1   << 4  )
+#define SPICON_WOM                     (0x1   << 4  )
+#define SPICON_WOM_EN                  (0x1   << 4  ) /* Enables open circuit data output enable. External pull-ups required on data out pins */
+#define SPICON_WOM_DIS                 (0x0   << 4  ) /* Normal output levels     */
+
+/* SPICON[CPOL] - Serial Clock Polarity */
+#define SPICON_CPOL_MSK                (0x1   << 3  )
+#define SPICON_CPOL                    (0x1   << 3  )
+#define SPICON_CPOL_LOW                (0x0   << 3  ) /* Serial clock idles low   */
+#define SPICON_CPOL_HIGH               (0x1   << 3  ) /* Serial clock idles high  */
+
+/* SPICON[CPHA] - Serial clock phase mode */
+#define SPICON_CPHA_MSK                (0x1   << 2  )
+#define SPICON_CPHA                    (0x1   << 2  )
+#define SPICON_CPHA_SAMPLETRAILING     (0x1   << 2  ) /* Serial clock pulses at the beginning of each serial bit transfer */
+#define SPICON_CPHA_SAMPLELEADING      (0x0   << 2  ) /* Serial clock pulses at the end of each serial bit transfer */
+
+/* SPICON[MASEN] - Master mode enable */
+#define SPICON_MASEN_MSK               (0x1   << 1  )
+#define SPICON_MASEN                   (0x1   << 1  )
+#define SPICON_MASEN_DIS               (0x0   << 1  ) /* Enable slave mode        */
+#define SPICON_MASEN_EN                (0x1   << 1  ) /* Enable master mode       */
+
+/* SPICON[ENABLE] - SPI enable */
+#define SPICON_ENABLE_MSK              (0x1   << 0  )
+#define SPICON_ENABLE                  (0x1   << 0  )
+#define SPICON_ENABLE_DIS              (0x0   << 0  ) /* Disable the SPI          */
+#define SPICON_ENABLE_EN               (0x1   << 0  ) /* Enable the SPI           */
+
+/* SPIDMA[IENRXDMA] - Enable receive DMA request */
+#define SPIDMA_IENRXDMA_MSK            (0x1   << 2  )
+#define SPIDMA_IENRXDMA                (0x1   << 2  )
+#define SPIDMA_IENRXDMA_DIS            (0x0   << 2  ) /* Disable RX DMA Interrupt */
+#define SPIDMA_IENRXDMA_EN             (0x1   << 2  ) /* Enable RX DMA Interrupt  */
+
+/* SPIDMA[IENTXDMA] - Enable transmit DMA request */
+#define SPIDMA_IENTXDMA_MSK            (0x1   << 1  )
+#define SPIDMA_IENTXDMA                (0x1   << 1  )
+#define SPIDMA_IENTXDMA_DIS            (0x0   << 1  ) /* Disable TX DMA Interrupt */
+#define SPIDMA_IENTXDMA_EN             (0x1   << 1  ) /* Enable TX DMA Interrupt  */
+
+/* SPIDMA[ENABLE] - Enable DMA for data transfer */
+#define SPIDMA_ENABLE_MSK              (0x1   << 0  )
+#define SPIDMA_ENABLE                  (0x1   << 0  )
+#define SPIDMA_ENABLE_DIS              (0x0   << 0  )
+#define SPIDMA_ENABLE_EN               (0x1   << 0  )
+
+/* SPICNT[COUNT] - Transfer byte count */
+#define SPICNT_COUNT_MSK               (0xFF  << 0  )
 
 
 /* ========================================================================== */

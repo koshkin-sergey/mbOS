@@ -31,8 +31,6 @@
 
 #define SPI_DRV_VERSION  DRIVER_VERSION_MAJOR_MINOR(1,0) /* driver version */
 
-#define SPI_FIFO_SIZE               (4U)
-
 /*******************************************************************************
  *  global variable definitions (scope: module-local)
  ******************************************************************************/
@@ -72,39 +70,38 @@ static const GPIO_PIN_CFG_t pin_cfg_gpio_out_pp = {
 /* SPI0 Information (Run-Time) */
 static SPI_Info_t         SPI0_Info;
 static SPI_TRANSFER_INFO  SPI0_Xfer;
-static SPI_Irq_t          SPI0_Irq = {
+
+/* SPI0 Resources */
+static SPI_Resources_t SPI0_Resources = {
+  MMR_SPI0,
+  CLK_PERIPH_SPI0,
+  {
+#if defined(USE_SPI0_MOSI)
+      &(SPI_Pin_t){SPI0_MOSI_GPIO_PORT, SPI0_MOSI_GPIO_PIN, {SPI0_MOSI_GPIO_FUNC, GPIO_MODE_ANALOG, GPIO_PULL_DISABLE}},
+#else
+      NULL,
+#endif
+#if defined(USE_SPI0_MISO)
+      &(SPI_Pin_t){SPI0_MISO_GPIO_PORT, SPI0_MISO_GPIO_PIN, {SPI0_MISO_GPIO_FUNC, GPIO_MODE_ANALOG, GPIO_PULL_DISABLE}},
+#else
+      NULL,
+#endif
+      &(SPI_Pin_t){SPI0_SCLK_GPIO_PORT, SPI0_SCLK_GPIO_PIN, {SPI0_SCLK_GPIO_FUNC, GPIO_MODE_ANALOG, GPIO_PULL_DISABLE}},
+#if defined(USE_SPI0_CS)
+      &(SPI_Pin_t){SPI0_CS_GPIO_PORT, SPI0_CS_GPIO_PIN, {SPI0_CS_GPIO_FUNC, GPIO_MODE_ANALOG, GPIO_PULL_DISABLE}},
+#else
+      NULL,
+#endif
+  },
+  {
     SPI0_IRQn,
     SPI0_INT_PRIORITY,
     0,
     DMA_SPI0_TX_IRQn,
     DMA_SPI0_RX_IRQn,
-};
-
-/* SPI0 Resources */
-static SPI_Resources_t SPI0_Resources = {
-    MMR_SPI0,
-    {
-#if defined(USE_SPI0_MOSI)
-        &(SPI_Pin_t){SPI0_MOSI_GPIO_PORT, SPI0_MOSI_GPIO_PIN, {SPI0_MOSI_GPIO_FUNC, GPIO_MODE_ANALOG, GPIO_PULL_DISABLE}},
-#else
-        NULL,
-#endif
-#if defined(USE_SPI0_MISO)
-        &(SPI_Pin_t){SPI0_MISO_GPIO_PORT, SPI0_MISO_GPIO_PIN, {SPI0_MISO_GPIO_FUNC, GPIO_MODE_ANALOG, GPIO_PULL_DISABLE}},
-#else
-        NULL,
-#endif
-        &(SPI_Pin_t){SPI0_SCLK_GPIO_PORT, SPI0_SCLK_GPIO_PIN, {SPI0_SCLK_GPIO_FUNC, GPIO_MODE_ANALOG, GPIO_PULL_DISABLE}},
-#if defined(USE_SPI0_CS)
-        &(SPI_Pin_t){SPI0_CS_GPIO_PORT, SPI0_CS_GPIO_PIN, {SPI0_CS_GPIO_FUNC, GPIO_MODE_ANALOG, GPIO_PULL_DISABLE}},
-#else
-        NULL,
-#endif
-    },
-    CLK_PERIPH_SPI0,
-    &SPI0_Info,
-    &SPI0_Xfer,
-    &SPI0_Irq,
+  },
+  &SPI0_Info,
+  &SPI0_Xfer
 };
 #endif /* USE_SPI0 */
 
@@ -113,39 +110,38 @@ static SPI_Resources_t SPI0_Resources = {
 /* SPI1 Information (Run-Time) */
 static SPI_Info_t         SPI1_Info;
 static SPI_TRANSFER_INFO  SPI1_Xfer;
-static SPI_Irq_t          SPI1_Irq = {
+
+/* SPI1 Resources */
+static SPI_Resources_t SPI1_Resources = {
+  MMR_SPI1,
+  CLK_PERIPH_SPI1,
+  {
+#if defined(USE_SPI1_MOSI)
+      &(SPI_Pin_t){SPI1_MOSI_GPIO_PORT, SPI1_MOSI_GPIO_PIN, {SPI1_MOSI_GPIO_FUNC, GPIO_MODE_ANALOG, GPIO_PULL_DISABLE}},
+#else
+      NULL,
+#endif
+#if defined(USE_SPI1_MISO)
+      &(SPI_Pin_t){SPI1_MISO_GPIO_PORT, SPI1_MISO_GPIO_PIN, {SPI1_MISO_GPIO_FUNC, GPIO_MODE_ANALOG, GPIO_PULL_DISABLE}},
+#else
+      NULL,
+#endif
+      &(SPI_Pin_t){SPI1_SCLK_GPIO_PORT, SPI1_SCLK_GPIO_PIN, {SPI1_SCLK_GPIO_FUNC, GPIO_MODE_ANALOG, GPIO_PULL_DISABLE}},
+#if defined(USE_SPI1_CS)
+      &(SPI_Pin_t){SPI1_CS_GPIO_PORT, SPI1_CS_GPIO_PIN, {SPI1_CS_GPIO_FUNC, GPIO_MODE_ANALOG, GPIO_PULL_DISABLE}},
+#else
+      NULL,
+#endif
+  },
+  {
     SPI1_IRQn,
     SPI1_INT_PRIORITY,
     0,
     DMA_SPI1_TX_IRQn,
     DMA_SPI1_RX_IRQn,
-};
-
-/* SPI1 Resources */
-static SPI_Resources_t SPI1_Resources = {
-    MMR_SPI1,
-    {
-#if defined(USE_SPI1_MOSI)
-        &(SPI_Pin_t){SPI1_MOSI_GPIO_PORT, SPI1_MOSI_GPIO_PIN, {SPI1_MOSI_GPIO_FUNC, GPIO_MODE_ANALOG, GPIO_PULL_DISABLE}},
-#else
-        NULL,
-#endif
-#if defined(USE_SPI1_MISO)
-        &(SPI_Pin_t){SPI1_MISO_GPIO_PORT, SPI1_MISO_GPIO_PIN, {SPI1_MISO_GPIO_FUNC, GPIO_MODE_ANALOG, GPIO_PULL_DISABLE}},
-#else
-        NULL,
-#endif
-        &(SPI_Pin_t){SPI1_SCLK_GPIO_PORT, SPI1_SCLK_GPIO_PIN, {SPI1_SCLK_GPIO_FUNC, GPIO_MODE_ANALOG, GPIO_PULL_DISABLE}},
-#if defined(USE_SPI1_CS)
-        &(SPI_Pin_t){SPI1_CS_GPIO_PORT, SPI1_CS_GPIO_PIN, {SPI1_CS_GPIO_FUNC, GPIO_MODE_ANALOG, GPIO_PULL_DISABLE}},
-#else
-        NULL,
-#endif
-    },
-    CLK_PERIPH_SPI1,
-    &SPI1_Info,
-    &SPI1_Xfer,
-    &SPI1_Irq,
+  },
+  &SPI1_Info,
+  &SPI1_Xfer
 };
 #endif /* USE_SPI1 */
 
@@ -255,7 +251,7 @@ static
 int32_t SPI_PowerControl(POWER_STATE state, SPI_Resources_t *spi)
 {
   SPI_Info_t    *info = spi->info;
-  SPI_Irq_t     *irq  = spi->irq;
+  SPI_Irq_t     *irq  = &spi->irq;
   Driver_CLK_t  *clk  = &Driver_CLK;
 
   if ((info->state & SPI_INITIALIZED) == 0U) {
@@ -568,7 +564,7 @@ int32_t SPI_Send(const void *data, uint32_t num, SPI_Resources_t *spi)
   MMR_SPI_t         *mmr  = spi->mmr;
   SPI_Info_t        *info = spi->info;
   SPI_TRANSFER_INFO *xfer = spi->xfer;
-  SPI_Irq_t         *irq  = spi->irq;
+  SPI_Irq_t         *irq  = &spi->irq;
 //  Driver_DMA_t      *dma = &Driver_DMA;
 //  DMA_CHNL_CFG_t     dma_cfg;
 
@@ -642,7 +638,7 @@ int32_t SPI_Receive(void *data, uint32_t num, SPI_Resources_t *spi)
   MMR_SPI_t         *mmr  = spi->mmr;
   SPI_Info_t        *info = spi->info;
   SPI_TRANSFER_INFO *xfer = spi->xfer;
-  SPI_Irq_t         *irq  = spi->irq;
+  SPI_Irq_t         *irq  = &spi->irq;
 //  Driver_DMA_t      *dma = &Driver_DMA;
 //  DMA_CHNL_CFG_t     dma_cfg;
 
@@ -737,7 +733,7 @@ int32_t SPI_Transfer(const void *data_out, void *data_in, uint32_t num, SPI_Reso
   MMR_SPI_t         *mmr  = spi->mmr;
   SPI_Info_t        *info = spi->info;
   SPI_TRANSFER_INFO *xfer = spi->xfer;
-  SPI_Irq_t         *irq  = spi->irq;
+  SPI_Irq_t         *irq  = &spi->irq;
 //  Driver_DMA_t      *dma = &Driver_DMA;
 //  DMA_CHNL_CFG_t     dma_cfg;
 
@@ -849,7 +845,7 @@ void DMA_SPI_TX_IRQHandler(SPI_Resources_t *spi)
   mmr->SPIDMA = 0U;
 
   SPI_Info_t        *info = spi->info;
-  SPI_Irq_t         *irq  = spi->irq;
+  SPI_Irq_t         *irq  = &spi->irq;
 //  Driver_DMA_t      *dma = &Driver_DMA;
 
   uint32_t event = 0;

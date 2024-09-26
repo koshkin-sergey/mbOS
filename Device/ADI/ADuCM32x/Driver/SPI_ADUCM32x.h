@@ -177,13 +177,6 @@ typedef const struct SPI_Irq {
   IRQn_Type             dma_rx_num;  // SPI DMA RX IRQ Number
 } SPI_Irq_t;
 
-/* SPI Transfer Information (Run-Time) */
-typedef struct SPI_XferInfo {
-  uint8_t              *data;        // Data pointer
-  uint32_t              num;         // Number of data to transfer
-  uint32_t              idx;         // Data index
-} SPI_XferInfo_t;
-
 /* SPI Information (Run-Time) */
 typedef struct SPI_Info {
   SPI_SignalEvent_t     cb_event;           // Event Callback
@@ -205,11 +198,11 @@ typedef struct _SPI_TRANSFER_INFO {
 /* SPI Resource Configuration */
 typedef struct {
   MMR_SPI_t            *mmr;                // SPI register interface
-  SPI_IO_t              io;                 // SPI pin configuration
   CLK_Periph_t          clk_periph;         // SPI clock control
+  SPI_IO_t              io;                 // SPI pin configuration
+  SPI_Irq_t             irq;                // SPI interrupt information
   SPI_Info_t           *info;               // Run-Time control information
   SPI_TRANSFER_INFO    *xfer;               // SPI transfer information
-  SPI_Irq_t            *irq;                // SPI interrupt information
 } const SPI_Resources_t;
 
 #endif /* SPI_ADUCM32X_H_ */
