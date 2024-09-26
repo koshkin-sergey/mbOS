@@ -548,7 +548,7 @@ int32_t SPI_Control(uint32_t control, uint32_t arg, SPI_Resources_t *spi)
   }
 
   info->mode  = mode;
-  mmr->SPICON = (uint16_t)(con | SPICON_ENABLE | SPICON_CON | SPICON_TIM);
+  mmr->SPICON = (uint16_t)(con | SPICON_ENABLE | SPICON_CON);
   mmr->SPIDIV = (uint16_t)div;
 
   info->state |= SPI_CONFIGURED;
@@ -621,8 +621,10 @@ int32_t SPI_Send(const void *data, uint32_t num, SPI_Resources_t *spi)
 //    mmr->SPIDMA |=  SPI_DMA_IENTXDMA | SPI_DMA_ENABLE;
   }
   else {
-    xfer->tx_cnt++;
+    mmr->SPICON &= (uint16_t)~SPICON_TIM;
     mmr->SPITX = (uint8_t)(*xfer->tx_buf++);
+    xfer->tx_cnt++;
+    (void)mmr->SPIRX;
   }
 
   return (DRIVER_OK);
@@ -713,8 +715,10 @@ int32_t SPI_Receive(void *data, uint32_t num, SPI_Resources_t *spi)
 //    mmr->SPIDMA |=  SPI_DMA_IENTXDMA | SPI_DMA_ENABLE;
   }
   else {
+    mmr->SPICON &= (uint16_t)~SPICON_TIM;
+    mmr->SPITX = (uint8_t)(*xfer->tx_buf++);
     xfer->tx_cnt++;
-    mmr->SPITX = (uint8_t)xfer->def_val;
+    (void)mmr->SPIRX;
   }
 
   return (DRIVER_OK);
@@ -806,8 +810,10 @@ int32_t SPI_Transfer(const void *data_out, void *data_in, uint32_t num, SPI_Reso
 //    mmr->SPIDMA |=  SPI_DMA_IENRXDMA | SPI_DMA_IENTXDMA | SPI_DMA_ENABLE;
   }
   else {
-    xfer->tx_cnt++;
+    mmr->SPICON &= (uint16_t)~SPICON_TIM;
     mmr->SPITX = (uint8_t)(*xfer->tx_buf++);
+    xfer->tx_cnt++;
+    (void)mmr->SPIRX;
   }
 
   return (DRIVER_OK);
@@ -896,12 +902,14 @@ void SPI_IRQHandler(SPI_Resources_t *spi)
     event |= SPI_EVENT_DATA_LOST;
   }
 
-  if ((sta & (SPISTA_RX | SPISTA_TX)) != 0U) {
-    if ((sta & SPISTA_TX) != 0U) {
-      if (xfer->tx_cnt == xfer->num) {
-        mmr->SPICON &= (uint16_t)~SPICON_TIM;
-      }
-      else {
+  if ((sta & SPISTA_RX) != 0U) {
+    num = (sta & SPISTA_RXFSTA_MSK) >> 8;
+    if ((xfer->rx_cnt + num) == xfer->num) {
+      mmr->SPICON |= (uint16_t)SPICON_TIM;
+    }
+
+    while (num--) {
+      if (xfer->tx_cnt < xfer->num) {
         if (xfer->tx_buf != NULL) {
           data = *xfer->tx_buf++;
         }
@@ -911,20 +919,18 @@ void SPI_IRQHandler(SPI_Resources_t *spi)
         mmr->SPITX = data;
         xfer->tx_cnt++;
       }
-    }
 
-    num = (sta & SPISTA_RXFSTA_MSK) >> 8;
-    while (num--) {
-      if (xfer->rx_cnt == (xfer->num - 1U)) {
-        mmr->SPICON |= (uint16_t)SPICON_TIM;
-        info->status.busy = 0U;
-        event |= SPI_EVENT_TRANSFER_COMPLETE;
-      }
       data = (uint8_t)mmr->SPIRX;
-      if (xfer->rx_buf != NULL) {
-        *xfer->rx_buf++ = data;
+      if (xfer->rx_cnt < xfer->num) {
+        if (xfer->rx_buf != NULL) {
+          *xfer->rx_buf++ = data;
+        }
+        xfer->rx_cnt++;
+        if (xfer->rx_cnt == xfer->num) {
+          info->status.busy = 0U;
+          event |= SPI_EVENT_TRANSFER_COMPLETE;
+        }
       }
-      xfer->rx_cnt++;
     }
   }
 
