@@ -313,6 +313,8 @@ extern uint32_t osKernelGetSysTimerCount(void);
 // </e>
 
 
+#define DEV_I2C_NUMBER                 2
+
 // <e> I2C0 (Inter-integrated Circuit Interface) [Driver_I2C0]
 // <i> Configuration settings for Driver_I2C0 in component ::CMSIS Driver:I2C
 #define DEV_I2C0                       1
@@ -371,6 +373,8 @@ extern uint32_t osKernelGetSysTimerCount(void);
 
 // </e>
 
+
+#define DEV_SPI_NUMBER                 2
 
 // <e> SPI0 (Serial Peripheral Interface 0) [Driver_SPI0]
 // <i> Configuration settings for Driver_SPI0 in component ::CMSIS Driver:SPI
