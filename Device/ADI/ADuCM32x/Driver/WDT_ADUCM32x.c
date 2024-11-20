@@ -208,6 +208,8 @@ void WDT_IRQHandler(void)
  *  global variable definitions  (scope: module-exported)
  ******************************************************************************/
 
+extern
+Driver_WDT_t Driver_WDT;
 Driver_WDT_t Driver_WDT = {
   WDT_Setup,
   WDT_Enable,

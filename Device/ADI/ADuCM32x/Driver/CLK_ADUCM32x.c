@@ -205,6 +205,8 @@ static uint32_t CLK_GetStatePeriph(CLK_Periph_t periph)
  *  global variable definitions  (scope: module-exported)
  ******************************************************************************/
 
+extern
+Driver_CLK_t Driver_CLK;
 Driver_CLK_t Driver_CLK = {
   CLK_ClkReset,
   CLK_ClkConfig,

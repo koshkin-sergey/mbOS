@@ -223,7 +223,7 @@ int32_t DAC_Control(uint32_t control, uint32_t arg, DAC_Resources_t *dac)
 
     case DAC_CONTROL:
       if (arg == 0U) {
-        dac->reg->DACCON &= ~DACCON_EN;
+        dac->reg->DACCON &= (uint16_t)~DACCON_EN;
       }
       else {
         dac->reg->DACCON |=  DACCON_EN;
