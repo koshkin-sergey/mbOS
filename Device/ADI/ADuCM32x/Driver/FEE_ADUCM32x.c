@@ -323,7 +323,7 @@ static FLASH_INFO* Flash_GetInfo(void)
 /**
  * @brief       Interrupt handler
  */
-extern \
+extern
 void FLASH_IRQHandler(void);
 void FLASH_IRQHandler(void)
 {
@@ -367,7 +367,7 @@ void FLASH_IRQHandler(void)
  *  global variable definitions  (scope: module-exported)
  ******************************************************************************/
 
-extern \
+extern
 DRIVER_FLASH Driver_Flash0;
 DRIVER_FLASH Driver_Flash0 = {
   Flash_GetVersion,
