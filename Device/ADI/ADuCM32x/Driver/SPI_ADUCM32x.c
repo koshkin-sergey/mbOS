@@ -312,7 +312,7 @@ int32_t SPI_PowerControl(POWER_STATE state, SPI_Resources_t *spi)
       info->state |= SPI_POWERED;
       break;
 
-    default:
+    case POWER_LOW:
       return (DRIVER_ERROR_UNSUPPORTED);
   }
 
@@ -587,7 +587,7 @@ int32_t SPI_Send(const void *data, uint32_t num, SPI_Resources_t *spi)
 
   /* Save transfer info */
   xfer->rx_buf = NULL;
-  xfer->tx_buf = (uint8_t *)data;
+  xfer->tx_buf = (const uint8_t *)data;
   xfer->num    = num;
   xfer->rx_cnt = 0U;
   xfer->tx_cnt = 0U;
@@ -755,7 +755,7 @@ int32_t SPI_Transfer(const void *data_out, void *data_in, uint32_t num, SPI_Reso
   info->status.mode_fault = 0U;
 
   /* Save transfer info */
-  xfer->tx_buf = (uint8_t *)data_out;
+  xfer->tx_buf = (const uint8_t *)data_out;
   xfer->rx_buf = (uint8_t *)data_in;
   xfer->num    = num;
   xfer->rx_cnt = 0U;

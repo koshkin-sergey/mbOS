@@ -120,8 +120,11 @@ static int32_t        SPI##x##_Transfer      (const void *data_out, void *data_i
 static uint32_t       SPI##x##_GetDataCount  (void)                                               { return (SPI_GetDataCount  (                         &SPI##x##_Resources)); } \
 static int32_t        SPI##x##_Control       (uint32_t control, uint32_t arg)                     { return (SPI_Control       (control, arg,            &SPI##x##_Resources)); } \
 static SPI_STATUS     SPI##x##_GetStatus     (void)                                               { return (SPI_GetStatus     (                         &SPI##x##_Resources)); } \
+extern void           SPI##x##_IRQHandler    (void);                                                                                                                             \
        void           SPI##x##_IRQHandler    (void)                                               {         SPI_IRQHandler    (                         &SPI##x##_Resources);  } \
+extern void       DMA_SPI##x##_TX_IRQHandler (void);                                                                                                                             \
        void       DMA_SPI##x##_TX_IRQHandler (void)                                               {     DMA_SPI_TX_IRQHandler (                         &SPI##x##_Resources);  } \
+extern void       DMA_SPI##x##_RX_IRQHandler (void);                                                                                                                             \
        void       DMA_SPI##x##_RX_IRQHandler (void)                                               {     DMA_SPI_RX_IRQHandler (                         &SPI##x##_Resources);  } \
                                   \
 extern                            \
@@ -189,7 +192,7 @@ typedef struct SPI_Info {
 typedef struct _SPI_TRANSFER_INFO {
   uint32_t              num;                // Total number of transfers
   uint8_t              *rx_buf;             // Pointer to in data buffer
-  uint8_t              *tx_buf;             // Pointer to out data buffer
+  const uint8_t        *tx_buf;             // Pointer to out data buffer
   uint32_t              rx_cnt;             // Number of data received
   uint32_t              tx_cnt;             // Number of data sent
   uint32_t              def_val;            // Default transfer value
