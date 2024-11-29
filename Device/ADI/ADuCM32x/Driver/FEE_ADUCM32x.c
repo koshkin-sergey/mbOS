@@ -38,6 +38,9 @@
 #define FLASH_PAGE_SIZE             8U
 #define FLASH_PROGRAM_UNIT          8U
 #define FLASH_ERASED_VALUE          0xFFU
+#define FLASH_DATA_WIDTH            4U  // Data width in bytes (1, 2 or 4 bytes)
+#define FLASH_DATA_WIDTH_MASK       (FLASH_DATA_WIDTH - 1U)
+#define FLASH_PROGRAM_UNIT_MASK     (FLASH_PROGRAM_UNIT - 1U)
 
 /*******************************************************************************
  *  global variable definitions (scope: module-local)
@@ -63,7 +66,7 @@ static const DRIVER_VERSION DriverVersion = {
 /* Driver Capabilities */
 static const FLASH_CAPABILITIES DriverCapabilities = {
   1U, /* event_ready */
-  2U, /* data_width = 0:8-bit, 1:16-bit, 2:32-bit */
+  FLASH_DATA_WIDTH >> 1,
   0U, /* erase_chip */
   0U  /* reserved (must be zero) */
 };
@@ -168,7 +171,7 @@ static int32_t Flash_PowerControl(POWER_STATE state)
         return (DRIVER_OK);
       }
 
-      mmr->FEECON0 = FEECON0_IENERR | FEECON0_IWRALCOMP | FEECON0_IENCMD;
+      mmr->FEECON0 = 0U;
 
       /* Enable interrupt */
       NVIC_ClearPendingIRQ(FLASH_IRQn);
@@ -198,10 +201,8 @@ static int32_t Flash_ReadData(uint32_t addr, void *data, uint32_t cnt)
   uint32_t *from;
   uint32_t *to;
 
-  if (                   data == NULL ||
-                         cnt  == 0U   ||
-      (          addr & 0x3U) != 0U   ||
-      ((uint32_t)data & 0x3U) != 0U)
+  if (data == NULL || cnt  == 0U || (addr & FLASH_DATA_WIDTH_MASK) != 0U ||
+     ((uint32_t)data & FLASH_DATA_WIDTH_MASK) != 0U)
   {
     return (DRIVER_ERROR_PARAMETER);
   }
@@ -232,10 +233,8 @@ static int32_t Flash_ProgramData(uint32_t addr, const void *data, uint32_t cnt)
   MMR_FEE_t *mmr = MMR_FEE;
   FlashInstance_t *ins = &FlashInstance;
 
-  if (                   data == NULL ||
-                         cnt  == 0U   ||
-      (          addr & 0x7U) != 0U   ||
-      ((uint32_t)data & 0x3U) != 0U)
+  if (data == NULL || cnt  == 0U || (addr & FLASH_PROGRAM_UNIT_MASK) != 0U ||
+     ((uint32_t)data & FLASH_DATA_WIDTH_MASK) != 0U)
   {
     return (DRIVER_ERROR_PARAMETER);
   }
@@ -257,6 +256,8 @@ static int32_t Flash_ProgramData(uint32_t addr, const void *data, uint32_t cnt)
 
   ProgramTwoWord(&ins->xfer);
 
+  mmr->FEECON0 = FEECON0_IENERR | FEECON0_IWRALCOMP;
+
   return (DRIVER_OK);
 }
 
@@ -270,7 +271,7 @@ static int32_t Flash_EraseSector(uint32_t addr)
   MMR_FEE_t *mmr = MMR_FEE;
   FlashInstance_t *ins = &FlashInstance;
 
-  if ((addr & 0x3U) != 0U) {
+  if ((addr & FLASH_DATA_WIDTH_MASK) != 0U) {
     return (DRIVER_ERROR_PARAMETER);
   }
 
@@ -288,6 +289,7 @@ static int32_t Flash_EraseSector(uint32_t addr)
   mmr->FEEKEY  = FEEKEY_KEY;
   mmr->FEEADR0 = addr;
   mmr->FEECMD  = FEECMD_CMD_PAGEERASE;
+  mmr->FEECON0 = FEECON0_IENERR | FEECON0_IENCMD;
 
   return (DRIVER_OK);
 }
@@ -341,20 +343,20 @@ void FLASH_IRQHandler(void)
     event = FLASH_EVENT_READY | FLASH_EVENT_ERROR;
   }
   else {
-    if ((status & FEESTA_CMDDONE) != 0U) {
-      ins->status.busy = 0U;
-      event = FLASH_EVENT_READY;
-    }
-
     if ((status & FEESTA_WRALMOSTDONE) != 0U) {
       ins->xfer.cnt--;
       if (ins->xfer.cnt > 0U) {
         ProgramTwoWord(&ins->xfer);
       }
       else {
-        ins->status.busy = 0U;
-        event = FLASH_EVENT_READY;
+        mmr->FEECON0 |= FEECON0_IENCMD;
       }
+    }
+
+    if ((mmr->FEECON0 & FEECON0_IENCMD) != 0U && (status & FEESTA_CMDDONE) != 0U) {
+      ins->status.busy = 0U;
+      mmr->FEECON0 = 0U;
+      event = FLASH_EVENT_READY;
     }
   }
 
