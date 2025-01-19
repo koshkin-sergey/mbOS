@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021-2024 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2021-2025 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -57,7 +57,8 @@ typedef enum {
   EXT_IRQ3_IRQn     = 19,   /*!< External IRQ3 Interrupt                      */
   PLA_IRQ1_IRQn     = 20,   /*!< PLA IRQ1 Interrupt                           */
   PWM_IRQn          = 21,   /*!< PWM Interrupt                                */
-  IRQ_VECTOR_COUNT  = 22
+  IRQ_VECTOR_COUNT  = 22,
+  IRQn_Reserved     = 0x7FFFFFFF
 } IRQn_t;
 
 /**
@@ -72,6 +73,7 @@ typedef enum {
   IRQ_PriorityBelowNormal = 5,
   IRQ_PriorityAboveLow    = 6,
   IRQ_PriorityLow         = 7,
+  IRQ_Priority_Reserved   = 0x7FFFFFFF
 } IRQ_Priority_t;
 
 /**

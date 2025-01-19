@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2021-2025 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -49,17 +49,19 @@ typedef enum {
  * Pin Pull Up
  */
 typedef enum {
-  GPIO_PULL_UP      = 0,
-  GPIO_PULL_DISABLE = 1,
+  GPIO_PULL_UP        = 0,
+  GPIO_PULL_DISABLE   = 1,
+  GPIO_PULL_Reserved  = 0x7FFFFFFF
 } GPIO_PULL_t;
 
 /*
  * Pin Strength
  */
 typedef enum {
-  GPIO_STRENGTH_MEDIUM  = 0x00,
-  GPIO_STRENGTH_LOW     = 0x02,
-  GPIO_STRENGTH_HIGH    = 0x04,
+  GPIO_STRENGTH_MEDIUM    = 0x00,
+  GPIO_STRENGTH_LOW       = 0x02,
+  GPIO_STRENGTH_HIGH      = 0x04,
+  GPIO_STRENGTH_Reserved  = 0x7FFFFFFF
 } GPIO_STRENGTH_t;
 
 /*
@@ -77,8 +79,9 @@ typedef enum {
  * Pin Mode
  */
 typedef enum {
-  GPIO_MODE_INPUT   = 0x0000,  //!< General-purpose Input
-  GPIO_MODE_OUTPUT  = 0x0001,  //!< General-purpose Output push-pull
+  GPIO_MODE_INPUT     = 0x0000,  //!< General-purpose Input
+  GPIO_MODE_OUTPUT    = 0x0001,  //!< General-purpose Output push-pull
+  GPIO_MODE_Reserved  = 0x7FFFFFFF
 } GPIO_MODE_t;
 
 /*
