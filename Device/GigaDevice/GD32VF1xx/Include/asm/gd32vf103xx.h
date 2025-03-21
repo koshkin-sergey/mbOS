@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2024-2025 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -142,8 +142,8 @@ typedef enum IRQn {
 /*!< Set to 0, 1, or 2, 0 not present, 1 single floating point unit present, 2 double floating point unit present */
 #define __FPU_PRESENT             0
 #define __DSP_PRESENT             0             /*!< Set to 1 if DSP is present */
-#define __PMP_PRESENT             1             /*!< Set to 1 if PMP is present */
-#define __PMP_ENTRY_NUM           8             /*!< Set to 8 or 16, the number of PMP entries */
+#define __PMP_PRESENT             0             /*!< Set to 1 if PMP is present */
+#define __PMP_ENTRY_NUM           0             /*!< Set to 8 or 16, the number of PMP entries */
 #define __ICACHE_PRESENT          0             /*!< Set to 1 if I-Cache is present */
 #define __DCACHE_PRESENT          0             /*!< Set to 1 if D-Cache is present */
 
