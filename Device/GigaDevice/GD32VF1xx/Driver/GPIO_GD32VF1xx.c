@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2024-2025 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -67,31 +67,31 @@ typedef struct GPIO_Resources {
 /* GPIOA Resources */
 static GPIO_Resources_t GPIOA_Resources = {
   GPIOA,
-  APB2EN_PAEN,
+  RCU_APB2EN_PAEN_Msk,
 };
 
 /* GPIOB Resources */
 static GPIO_Resources_t GPIOB_Resources = {
   GPIOB,
-  APB2EN_PBEN,
+  RCU_APB2EN_PBEN_Msk,
 };
 
 /* GPIOC Resources */
 static GPIO_Resources_t GPIOC_Resources = {
   GPIOC,
-  APB2EN_PCEN,
+  RCU_APB2EN_PCEN_Msk,
 };
 
 /* GPIOD Resources */
 static GPIO_Resources_t GPIOD_Resources = {
   GPIOD,
-  APB2EN_PDEN,
+  RCU_APB2EN_PDEN_Msk,
 };
 
 /* GPIOE Resources */
 static GPIO_Resources_t GPIOE_Resources = {
   GPIOE,
-  APB2EN_PEEN,
+  RCU_APB2EN_PEEN_Msk,
 };
 
 /*******************************************************************************
