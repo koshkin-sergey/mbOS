@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2024-2025 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -37,51 +37,127 @@ extern "C" {
 #define RCU       ((RCU_t *) RCU_BASE)        /*!< RCU configuration struct   */
 
 /**
+ * @brief Bit definition for AHBEN register
+ */
+#define RCU_AHBEN_DMA0EN_Pos              (0U)
+#define RCU_AHBEN_DMA0EN_Msk              (0x1UL << RCU_AHBEN_DMA0EN_Pos)
+
+#define RCU_AHBEN_DMA1EN_Pos              (1U)
+#define RCU_AHBEN_DMA1EN_Msk              (0x1UL << RCU_AHBEN_DMA1EN_Pos)
+
+#define RCU_AHBEN_SRAMSPEN_Pos            (2U)
+#define RCU_AHBEN_SRAMSPEN_Msk            (0x1UL << RCU_AHBEN_SRAMSPEN_Pos)
+
+#define RCU_AHBEN_FMCSPEN_Pos             (4U)
+#define RCU_AHBEN_FMCSPEN_Msk             (0x1UL << RCU_AHBEN_FMCSPEN_Pos)
+
+#define RCU_AHBEN_CRCEN_Pos               (6U)
+#define RCU_AHBEN_CRCEN_Msk               (0x1UL << RCU_AHBEN_CRCEN_Pos)
+
+#define RCU_AHBEN_EXMCEN_Pos              (8U)
+#define RCU_AHBEN_EXMCEN_Msk              (0x1UL << RCU_AHBEN_EXMCEN_Pos)
+
+#define RCU_AHBEN_USBFSEN_Pos             (12U)
+#define RCU_AHBEN_USBFSEN_Msk             (0x1UL << RCU_AHBEN_USBFSEN_Pos)
+
+/**
  * @brief Bit definition for APB2EN register
  */
-#define APB2EN_AFEN_Pos               (0U)
-#define APB2EN_AFEN_Msk               (0x1UL << APB2EN_AFEN_Pos)
-#define APB2EN_AFEN                             APB2EN_AFEN_Msk
+#define RCU_APB2EN_AFEN_Pos               (0U)
+#define RCU_APB2EN_AFEN_Msk               (0x1UL << RCU_APB2EN_AFEN_Pos)
 
-#define APB2EN_PAEN_Pos               (2U)
-#define APB2EN_PAEN_Msk               (0x1UL << APB2EN_PAEN_Pos)
-#define APB2EN_PAEN                             APB2EN_PAEN_Msk
+#define RCU_APB2EN_PAEN_Pos               (2U)
+#define RCU_APB2EN_PAEN_Msk               (0x1UL << RCU_APB2EN_PAEN_Pos)
 
-#define APB2EN_PBEN_Pos               (3U)
-#define APB2EN_PBEN_Msk               (0x1UL << APB2EN_PBEN_Pos)
-#define APB2EN_PBEN                             APB2EN_PBEN_Msk
+#define RCU_APB2EN_PBEN_Pos               (3U)
+#define RCU_APB2EN_PBEN_Msk               (0x1UL << RCU_APB2EN_PBEN_Pos)
 
-#define APB2EN_PCEN_Pos               (4U)
-#define APB2EN_PCEN_Msk               (0x1UL << APB2EN_PCEN_Pos)
-#define APB2EN_PCEN                             APB2EN_PCEN_Msk
+#define RCU_APB2EN_PCEN_Pos               (4U)
+#define RCU_APB2EN_PCEN_Msk               (0x1UL << RCU_APB2EN_PCEN_Pos)
 
-#define APB2EN_PDEN_Pos               (5U)
-#define APB2EN_PDEN_Msk               (0x1UL << APB2EN_PDEN_Pos)
-#define APB2EN_PDEN                             APB2EN_PDEN_Msk
+#define RCU_APB2EN_PDEN_Pos               (5U)
+#define RCU_APB2EN_PDEN_Msk               (0x1UL << RCU_APB2EN_PDEN_Pos)
 
-#define APB2EN_PEEN_Pos               (6U)
-#define APB2EN_PEEN_Msk               (0x1UL << APB2EN_PEEN_Pos)
-#define APB2EN_PEEN                             APB2EN_PEEN_Msk
+#define RCU_APB2EN_PEEN_Pos               (6U)
+#define RCU_APB2EN_PEEN_Msk               (0x1UL << RCU_APB2EN_PEEN_Pos)
 
-#define APB2EN_ADC0EN_Pos             (9U)
-#define APB2EN_ADC0EN_Msk             (0x1UL << APB2EN_ADC0EN_Pos)
-#define APB2EN_ADC0EN                           APB2EN_ADC0EN_Msk
+#define RCU_APB2EN_ADC0EN_Pos             (9U)
+#define RCU_APB2EN_ADC0EN_Msk             (0x1UL << RCU_APB2EN_ADC0EN_Pos)
 
-#define APB2EN_ADC1EN_Pos             (10U)
-#define APB2EN_ADC1EN_Msk             (0x1UL << APB2EN_ADC1EN_Pos)
-#define APB2EN_ADC1EN                           APB2EN_ADC1EN_Msk
+#define RCU_APB2EN_ADC1EN_Pos             (10U)
+#define RCU_APB2EN_ADC1EN_Msk             (0x1UL << RCU_APB2EN_ADC1EN_Pos)
 
-#define APB2EN_TIMER0EN_Pos           (11U)
-#define APB2EN_TIMER0EN_Msk           (0x1UL << APB2EN_TIMER0EN_Pos)
-#define APB2EN_TIMER0EN                         APB2EN_TIMER0EN_Msk
+#define RCU_APB2EN_TIMER0EN_Pos           (11U)
+#define RCU_APB2EN_TIMER0EN_Msk           (0x1UL << RCU_APB2EN_TIMER0EN_Pos)
 
-#define APB2EN_SPI0EN_Pos             (12U)
-#define APB2EN_SPI0EN_Msk             (0x1UL << APB2EN_SPI0EN_Pos)
-#define APB2EN_SPI0EN                           APB2EN_SPI0EN_Msk
+#define RCU_APB2EN_SPI0EN_Pos             (12U)
+#define RCU_APB2EN_SPI0EN_Msk             (0x1UL << RCU_APB2EN_SPI0EN_Pos)
 
-#define APB2EN_USART0EN_Pos           (14U)
-#define APB2EN_USART0EN_Msk           (0x1UL << APB2EN_USART0EN_Pos)
-#define APB2EN_USART0EN                         APB2EN_USART0EN_Msk
+#define RCU_APB2EN_USART0EN_Pos           (14U)
+#define RCU_APB2EN_USART0EN_Msk           (0x1UL << RCU_APB2EN_USART0EN_Pos)
+
+/**
+ * @brief Bit definition for APB1EN register
+ */
+#define RCU_APB1EN_TIMER1EN_Pos           (0U)
+#define RCU_APB1EN_TIMER1EN_Msk           (0x1UL << RCU_APB1EN_TIMER1EN_Pos)
+
+#define RCU_APB1EN_TIMER2EN_Pos           (1U)
+#define RCU_APB1EN_TIMER2EN_Msk           (0x1UL << RCU_APB1EN_TIMER2EN_Pos)
+
+#define RCU_APB1EN_TIMER3EN_Pos           (2U)
+#define RCU_APB1EN_TIMER3EN_Msk           (0x1UL << RCU_APB1EN_TIMER3EN_Pos)
+
+#define RCU_APB1EN_TIMER4EN_Pos           (3U)
+#define RCU_APB1EN_TIMER4EN_Msk           (0x1UL << RCU_APB1EN_TIMER4EN_Pos)
+
+#define RCU_APB1EN_TIMER5EN_Pos           (4U)
+#define RCU_APB1EN_TIMER5EN_Msk           (0x1UL << RCU_APB1EN_TIMER5EN_Pos)
+
+#define RCU_APB1EN_TIMER6EN_Pos           (5U)
+#define RCU_APB1EN_TIMER6EN_Msk           (0x1UL << RCU_APB1EN_TIMER6EN_Pos)
+
+#define RCU_APB1EN_WWDGTEN_Pos            (11U)
+#define RCU_APB1EN_WWDGTEN_Msk            (0x1UL << RCU_APB1EN_WWDGTEN_Pos)
+
+#define RCU_APB1EN_SPI1EN_Pos             (14U)
+#define RCU_APB1EN_SPI1EN_Msk             (0x1UL << RCU_APB1EN_SPI1EN_Pos)
+
+#define RCU_APB1EN_SPI2EN_Pos             (15U)
+#define RCU_APB1EN_SPI2EN_Msk             (0x1UL << RCU_APB1EN_SPI2EN_Pos)
+
+#define RCU_APB1EN_USART1EN_Pos           (17U)
+#define RCU_APB1EN_USART1EN_Msk           (0x1UL << RCU_APB1EN_USART1EN_Pos)
+
+#define RCU_APB1EN_USART2EN_Pos           (18U)
+#define RCU_APB1EN_USART2EN_Msk           (0x1UL << RCU_APB1EN_USART2EN_Pos)
+
+#define RCU_APB1EN_USART3EN_Pos           (19U)
+#define RCU_APB1EN_USART3EN_Msk           (0x1UL << RCU_APB1EN_USART3EN_Pos)
+
+#define RCU_APB1EN_USART4EN_Pos           (20U)
+#define RCU_APB1EN_USART4EN_Msk           (0x1UL << RCU_APB1EN_USART4EN_Pos)
+
+#define RCU_APB1EN_I2C0EN_Pos             (21U)
+#define RCU_APB1EN_I2C0EN_Msk             (0x1UL << RCU_APB1EN_I2C0EN_Pos)
+
+#define RCU_APB1EN_I2C1EN_Pos             (22U)
+#define RCU_APB1EN_I2C1EN_Msk             (0x1UL << RCU_APB1EN_I2C1EN_Pos)
+
+#define RCU_APB1EN_CAN0EN_Pos             (25U)
+#define RCU_APB1EN_CAN0EN_Msk             (0x1UL << RCU_APB1EN_CAN0EN_Pos)
+
+#define RCU_APB1EN_CAN1EN_Pos             (26U)
+#define RCU_APB1EN_CAN1EN_Msk             (0x1UL << RCU_APB1EN_CAN1EN_Pos)
+
+#define RCU_APB1EN_BKPIEN_Pos             (27U)
+#define RCU_APB1EN_BKPIEN_Msk             (0x1UL << RCU_APB1EN_BKPIEN_Pos)
+
+#define RCU_APB1EN_PMUEN_Pos              (28U)
+#define RCU_APB1EN_PMUEN_Msk              (0x1UL << RCU_APB1EN_PMUEN_Pos)
+
+#define RCU_APB1EN_DACEN_Pos              (29U)
+#define RCU_APB1EN_DACEN_Msk              (0x1UL << RCU_APB1EN_DACEN_Pos)
 
 /*******************************************************************************
  *  typedefs and structures
