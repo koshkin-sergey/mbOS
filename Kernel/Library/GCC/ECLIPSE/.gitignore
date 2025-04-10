@@ -3,4 +3,5 @@
 /Cortex_M4F/
 /Arm_16/
 /Arm_32/
-/RV32E/
+/RV32I (ILP32)/
+/RV32E (ILP32E)/
