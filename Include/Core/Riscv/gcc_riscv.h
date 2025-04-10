@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2024 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2023-2025 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -470,6 +470,50 @@ uint8_t __CLZ(uint32_t value)
                 : "memory");                                                   \
   __tmp;                                                                       \
 })
+
+/**
+ * @brief       Execute fence instruction, p -> pred, s -> succ
+ * @details     The FENCE instruction ensures that all memory accesses from
+ *              instructions preceding the fence in program order
+ *              (the `predecessor set`) appear earlier in the global memory
+ *              order than memory accesses from instructions appearing after
+ *              the fence in program order (the `successor set`).
+ * @param p     predecessor set, such as iorw, rw, r, w
+ * @param s     successor set, such as iorw, rw, r, w
+ */
+#define __FENCE(p, s) __ASM volatile ("fence " #p "," #s : : : "memory")
+
+/**
+ * \brief   Fence.i Instruction
+ * \details
+ * The FENCE.I instruction is used to synchronize the instruction
+ * and data streams.
+ */
+__STATIC_FORCEINLINE void __FENCE_I(void)
+{
+  __ASM volatile("fence.i");
+}
+
+/** \brief Read & Write Memory barrier */
+#define __RWMB()        __FENCE(iorw,iorw)
+
+/** \brief Read Memory barrier */
+#define __RMB()         __FENCE(ir,ir)
+
+/** \brief Write Memory barrier */
+#define __WMB()         __FENCE(ow,ow)
+
+/** \brief SMP Read & Write Memory barrier */
+#define __SMP_RWMB()    __FENCE(rw,rw)
+
+/** \brief SMP Read Memory barrier */
+#define __SMP_RMB()     __FENCE(r,r)
+
+/** \brief SMP Write Memory barrier */
+#define __SMP_WMB()     __FENCE(w,w)
+
+/** \brief CPU relax for busy loop */
+#define __CPU_RELAX()   __ASM volatile ("" : : : "memory")
 
 #ifdef __cplusplus
 }
