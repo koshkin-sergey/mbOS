@@ -94,8 +94,8 @@ SVC_ContextRestore:
                 lw    s11, 9 * 4(tp)
                 addi  tp, tp, 10 * 4
 #endif /* __riscv_32e */
-SVC_Exit:
                 csrw  mscratch, tp
+SVC_Exit:
                 ret
 
                 .size    SVC_Handler, .-SVC_Handler
