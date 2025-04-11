@@ -115,8 +115,6 @@ int32_t osTickSetup(uint32_t freq, IRQHandler_t handler)
 
   /* Set Timer interrupt priority */
   IRQ_SetPriority(CLIC_INT_TMR, SYSTIMER_IRQ_PRIORITY);
-  /* Set IRQ mode interrupt */
-  IRQ_SetMode(CLIC_INT_TMR, IRQ_MODE_TYPE_IRQ);
   /* Enable corresponding interrupt */
   IRQ_Enable(CLIC_INT_TMR);
 
