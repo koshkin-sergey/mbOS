@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2024-2025 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -42,11 +42,6 @@ typedef int32_t IRQn_ID_t;
 #define IRQ_MODE_TRIG_EDGE_RISING   (0x05UL /*<< IRQ_MODE_TRIG_Pos*/) ///< Trigger: rising edge triggered interrupt
 #define IRQ_MODE_TRIG_EDGE_FALLING  (0x06UL /*<< IRQ_MODE_TRIG_Pos*/) ///< Trigger: falling edge triggered interrupt
 #define IRQ_MODE_TRIG_EDGE_BOTH     (0x07UL /*<< IRQ_MODE_TRIG_Pos*/) ///< Trigger: rising and falling edge triggered interrupt
-
-#define IRQ_MODE_TYPE_Pos           (3U)
-#define IRQ_MODE_TYPE_Msk           (0x01UL << IRQ_MODE_TYPE_Pos)
-#define IRQ_MODE_TYPE_IRQ           (0x00UL << IRQ_MODE_TYPE_Pos)     ///< Type: interrupt source triggers CPU IRQ line
-#define IRQ_MODE_TYPE_FIQ           (0x01UL << IRQ_MODE_TYPE_Pos)     ///< Type: interrupt source triggers CPU FIQ line
 
 #define IRQ_MODE_ERROR              (0x80000000UL)                    ///< Bit indicating mode value error
 

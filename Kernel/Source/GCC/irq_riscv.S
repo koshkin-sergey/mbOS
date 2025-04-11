@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2024-2025 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +17,12 @@
  * Project: mbOS real-time kernel
  */
 
+#ifndef __riscv_32e
+#define STACK_RESERVE       16
+#else
+#define STACK_RESERVE       4
+#endif
+
                 .section ".rodata"
                 .global  irqLib                     // Non weak library reference
 irqLib:
@@ -29,6 +35,9 @@ irqLib:
                 .type    SVC_Handler, %function
                 .global  SVC_Handler
 SVC_Handler:
+                addi  sp, sp, -STACK_RESERVE
+                sw    ra, 0(sp)
+
                 csrr  tp, mscratch
 
                 lw    t0, 10 * 4(tp)
@@ -42,11 +51,7 @@ SVC_FuncCall:
                 lw    a3,  3 * 4(tp)
                 lw    a5,  5 * 4(tp)
 
-                addi  sp, sp, -4
-                sw    ra, 0(sp)
                 jalr  a5
-                lw    ra, 0(sp)
-                addi  sp, sp, +4
 
                 sw    a0,  0 * 4(tp)              // Store function return values
 SVC_ContextCheck:
@@ -96,6 +101,8 @@ SVC_ContextRestore:
 #endif /* __riscv_32e */
                 csrw  mscratch, tp
 SVC_Exit:
+                lw    ra, 0(sp)
+                addi  sp, sp, +STACK_RESERVE
                 ret
 
                 .size    SVC_Handler, .-SVC_Handler
@@ -105,11 +112,9 @@ SVC_Exit:
                 .global  SysTick_Handler
 SysTick_Handler:
 
-                addi  sp, sp, -8
-                sw    ra, 4(sp)
+                addi  sp, sp, -STACK_RESERVE
+                sw    ra, 0(sp)
                 call  osTick_Handler
-                lw    ra, 4(sp)
-                addi  sp, sp, +8
                 j     SVC_ContextCheck
 
                 .size    SysTick_Handler, .-SysTick_Handler
@@ -119,12 +124,10 @@ SysTick_Handler:
                 .global  PendSV_Handler
 PendSV_Handler:
 
-                addi  sp, sp, -8
-                sw    ra, 4(sp)
+                addi  sp, sp, -STACK_RESERVE
+                sw    ra, 0(sp)
                 call  osPendSV_Handler
                 call  IRQ_ClearSWI
-                lw    ra, 4(sp)
-                addi  sp, sp, +8
                 j     SVC_ContextCheck
 
                 .size    PendSV_Handler, .-PendSV_Handler
