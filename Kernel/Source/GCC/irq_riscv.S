@@ -18,9 +18,57 @@
  */
 
 #ifndef __riscv_32e
+
 #define STACK_RESERVE       16
+
+.macro CONTEXT_SAVE
+                addi  tp, tp, -12 * 4
+                sw    s0,   0 * 4(tp)
+                sw    s1,   1 * 4(tp)
+                sw    s2,   2 * 4(tp)
+                sw    s3,   3 * 4(tp)
+                sw    s4,   4 * 4(tp)
+                sw    s5,   5 * 4(tp)
+                sw    s6,   6 * 4(tp)
+                sw    s7,   7 * 4(tp)
+                sw    s8,   8 * 4(tp)
+                sw    s9,   9 * 4(tp)
+                sw    s10, 10 * 4(tp)
+                sw    s11, 11 * 4(tp)
+.endm
+
+.macro CONTEXT_RESTORE
+                lw    s0,   0 * 4(tp)
+                lw    s1,   1 * 4(tp)
+                lw    s2,   2 * 4(tp)
+                lw    s3,   3 * 4(tp)
+                lw    s4,   4 * 4(tp)
+                lw    s5,   5 * 4(tp)
+                lw    s6,   6 * 4(tp)
+                lw    s7,   7 * 4(tp)
+                lw    s8,   8 * 4(tp)
+                lw    s9,   9 * 4(tp)
+                lw    s10, 10 * 4(tp)
+                lw    s11, 11 * 4(tp)
+                addi  tp, tp, 12 * 4
+.endm
+
 #else
+
 #define STACK_RESERVE       4
+
+.macro CONTEXT_SAVE
+                addi  tp, tp, -2 * 4
+                sw    s0, 0 * 4(tp)
+                sw    s1, 1 * 4(tp)
+.endm
+
+.macro CONTEXT_RESTORE
+                lw    s0, 0 * 4(tp)
+                lw    s1, 1 * 4(tp)
+                addi  tp, tp, 2 * 4
+.endm
+
 #endif
 
                 .section ".rodata"
@@ -37,8 +85,6 @@ irqLib:
 SVC_Handler:
                 addi  sp, sp, -STACK_RESERVE
                 sw    ra, 0(sp)
-
-                csrr  tp, mscratch
 
                 lw    t0, 10 * 4(tp)
                 addi  t0, t0, 4
@@ -61,45 +107,13 @@ SVC_ContextCheck:
                 beq   a1, a2, SVC_Exit            // Exit when threads are the same
                 beqz  a1, SVC_ContextSwitch       // Branch if running thread is deleted
 SVC_ContextSave:
-                csrr  tp, mscratch
-#ifndef __riscv_32e
-                addi  tp, tp, -10 * 4
-                sw    s2,  0 * 4(tp)
-                sw    s3,  1 * 4(tp)
-                sw    s4,  2 * 4(tp)
-                sw    s5,  3 * 4(tp)
-                sw    s6,  4 * 4(tp)
-                sw    s7,  5 * 4(tp)
-                sw    s8,  6 * 4(tp)
-                sw    s9,  7 * 4(tp)
-                sw    s10, 8 * 4(tp)
-                sw    s11, 9 * 4(tp)
-#endif /* __riscv_32e */
-                addi  tp, tp, -2 * 4
-                sw    s0, 0 * 4(tp)
-                sw    s1, 1 * 4(tp)
+                CONTEXT_SAVE
                 sw    tp, 0(a1)
 SVC_ContextSwitch:
                 sw    a2, 0(a0)
 SVC_ContextRestore:
                 lw    tp, 0(a2)
-                lw    s0, 0 * 4(tp)
-                lw    s1, 1 * 4(tp)
-                addi  tp, tp, 2 * 4
-#ifndef __riscv_32e
-                lw    s2,  0 * 4(tp)
-                lw    s3,  1 * 4(tp)
-                lw    s4,  2 * 4(tp)
-                lw    s5,  3 * 4(tp)
-                lw    s6,  4 * 4(tp)
-                lw    s7,  5 * 4(tp)
-                lw    s8,  6 * 4(tp)
-                lw    s9,  7 * 4(tp)
-                lw    s10, 8 * 4(tp)
-                lw    s11, 9 * 4(tp)
-                addi  tp, tp, 10 * 4
-#endif /* __riscv_32e */
-                csrw  mscratch, tp
+                CONTEXT_RESTORE
 SVC_Exit:
                 lw    ra, 0(sp)
                 addi  sp, sp, +STACK_RESERVE
