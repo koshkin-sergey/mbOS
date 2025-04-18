@@ -41,7 +41,7 @@ extern const IRQHandler_t exc_vectors[];
  */
 #define SAVE_CONTEXT()                                                         \
   __ASM volatile (                                                             \
-    "addi    sp, sp, -72            \n\t"                                      \
+    "addi    sp, sp, -18 * 4        \n\t"                                      \
     "sw      a0,  0 * 4(sp)         \n\t"                                      \
     "sw      a1,  1 * 4(sp)         \n\t"                                      \
     "sw      a2,  2 * 4(sp)         \n\t"                                      \
@@ -92,7 +92,7 @@ extern const IRQHandler_t exc_vectors[];
     "lw      t4, 15 * 4(sp)         \n\t"                                      \
     "lw      t5, 16 * 4(sp)         \n\t"                                      \
     "lw      t6, 17 * 4(sp)         \n\t"                                      \
-    "addi    sp, sp, 72             \n\t"                                      \
+    "addi    sp, sp, 18 * 4         \n\t"                                      \
     "mret                           \n\t"                                      \
   )
 #else
@@ -104,7 +104,7 @@ extern const IRQHandler_t exc_vectors[];
  */
 #define SAVE_CONTEXT()                                                         \
   __ASM volatile (                                                             \
-    "addi    sp, sp, -48            \n\t"                                      \
+    "addi    sp, sp, -12 * 4        \n\t"                                      \
     "sw      a0,  0 * 4(sp)         \n\t"                                      \
     "sw      a1,  1 * 4(sp)         \n\t"                                      \
     "sw      a2,  2 * 4(sp)         \n\t"                                      \
@@ -143,7 +143,7 @@ extern const IRQHandler_t exc_vectors[];
     "lw      t1,  7 * 4(sp)         \n\t"                                      \
     "lw      t2,  8 * 4(sp)         \n\t"                                      \
     "lw      ra,  9 * 4(sp)         \n\t"                                      \
-    "addi    sp, sp, 48             \n\t"                                      \
+    "addi    sp, sp, 12 * 4         \n\t"                                      \
     "mret                           \n\t"                                      \
   )
 #endif
@@ -169,14 +169,16 @@ void exc_entry(void)
 
   __ASM volatile (
     "  lw    t0, IRQ_NestLevel      \n\t"
-    "  addi  t0, t0, +1             \n\t"   // Increment IRQ nesting level
-    "  sw    t0, IRQ_NestLevel, t1  \n\t"
-    "  csrrw sp, mscratch, sp       \n\t"
-    "  bnez  sp, 1f                 \n\t"
+    "  addi  t1, t0, +1             \n\t"
+    "  sw    t1, IRQ_NestLevel, t2  \n\t"
+    "  bnez  t0, 1f                 \n\t"
+    "  mv    tp, sp                 \n\t"
+    "  la    t0, __StackLimit       \n\t"
+    "  bgeu  sp, t0, 1f             \n\t"
     "  csrr  sp, mscratch           \n\t"
     "1:                             \n\t"
     "  csrr  a0, mcause             \n\t"
-    "  blt   a0, zero, 1f           \n\t"
+    "  blt   a0, zero, 2f           \n\t"
     "  slli  a0, a0, 20             \n\t"
     "  srli  a0, a0, 18             \n\t"
     "  la    a5, exc_vectors        \n\t"
@@ -185,11 +187,14 @@ void exc_entry(void)
     "  csrs  mstatus, 0x8           \n\t"   // Re-enable interrupts
     "  jalr  a0                     \n\t"
     "  csrc  mstatus, 0x8           \n\t"   // Disable interrupts
-    "1:                             \n\t"
-    "  csrrw sp, mscratch, sp       \n\t"
+    "2:                             \n\t"
     "  lw    t0, IRQ_NestLevel      \n\t"
-    "  addi  t0, t0, -1             \n\t"   // Decrement IRQ nesting level
+    "  addi  t0, t0, -1             \n\t"
     "  sw    t0, IRQ_NestLevel, t1  \n\t"
+    "  bnez  t0, 3f                 \n\t"
+    "  csrw  mscratch, sp           \n\t"
+    "  mv    sp, tp                 \n\t"
+    "3:                             \n\t"
   );
 
   RESTORE_CONTEXT();
@@ -206,19 +211,23 @@ void irq_entry(void)
 
   __ASM volatile (
     "  lw    t0, IRQ_NestLevel      \n\t"
+    "  addi  t1, t0, +1             \n\t"
+    "  sw    t1, IRQ_NestLevel, t2  \n\t"
     "  bnez  t0, 1f                 \n\t"
-    "  csrrw sp, mscratch, sp       \n\t"
+    "  mv    tp, sp                 \n\t"
+    "  la    t0, __StackLimit       \n\t"
+    "  bgeu  sp, t0, 1f             \n\t"
+    "  csrr  sp, mscratch           \n\t"
     "1:                             \n\t"
-    "  addi  t0, t0, +1             \n\t"   // Increment IRQ nesting level
-    "  sw    t0, IRQ_NestLevel, t1  \n\t"
     "  csrrw ra, 0x7ED, ra          \n\t"
     "  csrc  mstatus, 0x8           \n\t"   // Disable interrupts
     "  lw    t0, IRQ_NestLevel      \n\t"
-    "  addi  t0, t0, -1             \n\t"   // Decrement IRQ nesting level
+    "  addi  t0, t0, -1             \n\t"
     "  sw    t0, IRQ_NestLevel, t1  \n\t"
-    "  bnez  t0, 1f                 \n\t"
-    "  csrrw sp, mscratch, sp       \n\t"
-    "1:                             \n\t"
+    "  bnez  t0, 2f                 \n\t"
+    "  csrw  mscratch, sp           \n\t"
+    "  mv    sp, tp                 \n\t"
+    "2:                             \n\t"
   );
 
   RESTORE_CONTEXT();
@@ -237,7 +246,6 @@ int32_t IRQ_Initialize(void)
   uint32_t addr;
   extern void irq_vectors(void);
 
-  CSR_WRITE(CSR_MSCRATCH, 0);
   CSR_SET(CSR_MMISC_CTL, 1UL << 9);
 
   addr = ((uint32_t)exc_entry & ~0x3FUL) | 0x3UL;
