@@ -22,6 +22,7 @@
 #include <errno.h>
 #include <sys/unistd.h>
 #include <sys/stat.h>
+#include <sys/time.h>
 #include <sys/times.h>
 
 /*******************************************************************************
