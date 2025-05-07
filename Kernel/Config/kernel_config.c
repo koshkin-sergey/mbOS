@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2021 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2019-2025 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -15,7 +15,8 @@
  * limitations under the License.
  */
 
-#include "Kernel/kernel.h"
+#include <Kernel/kernel.h>
+#include <Core/Riscv/compiler.h>
 
 /* OS Idle Thread */
 __NO_RETURN
@@ -24,6 +25,6 @@ void osIdleThread(void *argument)
   (void) argument;
 
   for (;;) {
-
+    __NOP();
   }
 }

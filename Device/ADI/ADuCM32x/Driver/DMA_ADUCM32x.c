@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2017-2024 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -64,7 +64,7 @@
  */
 int32_t DMA_Initialize(void)
 {
-
+  return (0);
 }
 
 /**
@@ -74,7 +74,7 @@ int32_t DMA_Initialize(void)
  */
 int32_t DMA_Uninitialize(void)
 {
-
+  return (0);
 }
 
 /**
@@ -86,7 +86,7 @@ int32_t DMA_Uninitialize(void)
  */
 int32_t DMA_PeripheralSelect(uint8_t peri, uint8_t sel)
 {
-
+  return (0);
 }
 
 /**
@@ -104,7 +104,7 @@ int32_t DMA_PeripheralSelect(uint8_t peri, uint8_t sel)
 int32_t DMA_ChannelConfigure(uint8_t ch, uint32_t src_addr, uint32_t dest_addr,
     uint32_t size, uint32_t control, uint32_t config, DMA_SignalEvent_t cb_event)
 {
-
+  return (0);
 }
 
 /**
@@ -115,7 +115,7 @@ int32_t DMA_ChannelConfigure(uint8_t ch, uint32_t src_addr, uint32_t dest_addr,
  */
 int32_t DMA_ChannelEnable(uint8_t ch)
 {
-
+  return (0);
 }
 
 /**
@@ -126,7 +126,7 @@ int32_t DMA_ChannelEnable(uint8_t ch)
  */
 int32_t DMA_ChannelDisable(uint8_t ch)
 {
-
+  return (0);
 }
 
 /**
@@ -138,7 +138,7 @@ int32_t DMA_ChannelDisable(uint8_t ch)
  */
 uint32_t DMA_ChannelGetStatus(uint8_t ch)
 {
-
+  return (0U);
 }
 
 /**
@@ -148,7 +148,7 @@ uint32_t DMA_ChannelGetStatus(uint8_t ch)
  */
 uint32_t DMA_ChannelGetCount(uint8_t ch)
 {
-
+  return (0U);
 }
 
 /* ----------------------------- End of file ---------------------------------*/

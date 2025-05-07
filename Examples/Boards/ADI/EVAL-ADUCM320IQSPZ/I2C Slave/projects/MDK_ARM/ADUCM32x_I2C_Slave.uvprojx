@@ -421,7 +421,7 @@
             <File>
               <FileName>I2C_ADUCM32x.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Device\ADI\ADuCM32x\CMSIS\Driver\I2C_ADUCM32x.c</FilePath>
+              <FilePath>..\..\..\..\..\..\..\Device\ADI\ADuCM32x\Driver\I2C_ADUCM32x.c</FilePath>
             </File>
           </Files>
         </Group>

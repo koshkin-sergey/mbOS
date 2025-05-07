@@ -31,7 +31,7 @@
 #include <stdio.h>
 #include "Debug/debug.h"
 #include "Kernel/kernel.h"
-#include "CMSIS/Driver/Driver_USART.h"
+#include "Driver/Driver_USART.h"
 
 #if defined(DEBUG)
 
@@ -44,7 +44,7 @@
 #endif
 
 /* USART Driver */
-extern ARM_DRIVER_USART ARM_Driver_USART_(DRIVER_USART_DEBUG_NUM);
+extern DRIVER_USART Driver_USART_(DRIVER_USART_DEBUG_NUM);
 
 #define EVENT_SEND_COMPLETE           (1U << 0)
 #define DEBUG_MSG_BUF_SIZE            256U
@@ -54,7 +54,7 @@ extern ARM_DRIVER_USART ARM_Driver_USART_(DRIVER_USART_DEBUG_NUM);
  ******************************************************************************/
 
 typedef struct UsartInfo_s {
-  ARM_DRIVER_USART  *driver;
+  DRIVER_USART  *driver;
   uint32_t         baudrate;
   uint32_t          c_cflag;
 } const UsartInfo_t;
@@ -86,13 +86,13 @@ static const osSemaphoreAttr_t sem_attr = {
 };
 
 static UsartInfo_t usart = {
-    .driver   = &ARM_Driver_USART_(DRIVER_USART_DEBUG_NUM),
+    .driver   = &Driver_USART_(DRIVER_USART_DEBUG_NUM),
     .baudrate = DRIVER_USART_DEBUG_BAUDRATE,
-    .c_cflag  = ARM_USART_MODE_ASYNCHRONOUS |
-                ARM_USART_DATA_BITS_8       |
-                ARM_USART_PARITY_NONE       |
-                ARM_USART_STOP_BITS_1       |
-                ARM_USART_FLOW_CONTROL_NONE,
+    .c_cflag  = USART_MODE_ASYNCHRONOUS |
+                USART_DATA_BITS_8       |
+                USART_PARITY_NONE       |
+                USART_STOP_BITS_1       |
+                USART_FLOW_CONTROL_NONE,
 };
 
 static char debug_buf[DEBUG_MSG_BUF_SIZE];
@@ -107,7 +107,7 @@ static char debug_buf[DEBUG_MSG_BUF_SIZE];
 
 static void USART_Callback(uint32_t event)
 {
-  if (event & ARM_USART_EVENT_SEND_COMPLETE) {
+  if (event & USART_EVENT_SEND_COMPLETE) {
     osEventFlagsSet(ef, EVENT_SEND_COMPLETE);
   }
 }
@@ -131,7 +131,7 @@ static int32_t Send(const void *data, uint32_t num)
   int32_t  cnt = 0;
   uint32_t event_flags;
 
-  if (usart.driver->Send(data, num) == ARM_DRIVER_OK) {
+  if (usart.driver->Send(data, num) == DRIVER_OK) {
     do {
       event_flags = osEventFlagsWait(ef, EVENT_SEND_COMPLETE, osFlagsWaitAny, osWaitForever);
     } while(event_flags != EVENT_SEND_COMPLETE);
@@ -144,7 +144,7 @@ static int32_t Send(const void *data, uint32_t num)
 
 static uint32_t Initialize(void)
 {
-  ARM_DRIVER_USART *driver;
+  DRIVER_USART *driver;
 
   ef = osEventFlagsNew(&ef_attr);
   if (ef == NULL) {
@@ -159,18 +159,18 @@ static uint32_t Initialize(void)
   driver = usart.driver;
 
   driver->Initialize(USART_Callback);
-  driver->PowerControl(ARM_POWER_FULL);
+  driver->PowerControl(POWER_FULL);
   driver->Control(usart.c_cflag, usart.baudrate);
-  driver->Control(ARM_USART_CONTROL_TX, 1U);
+  driver->Control(USART_CONTROL_TX, 1U);
 
   return (DEBUG_OK);
 }
 
 static uint32_t Uninitialize(void)
 {
-  ARM_DRIVER_USART *driver = usart.driver;
+  DRIVER_USART *driver = usart.driver;
 
-  driver->PowerControl(ARM_POWER_OFF);
+  driver->PowerControl(POWER_OFF);
   driver->Uninitialize();
 
   osSemaphoreDelete(sem);

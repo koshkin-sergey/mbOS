@@ -73,7 +73,7 @@ __ASM void Reset_Handler(void)
   IMPORT |Image$$SVC_STACK$$ZI$$Limit|
   IMPORT |Image$$ABT_STACK$$ZI$$Limit|
   IMPORT |Image$$UND_STACK$$ZI$$Limit|
-  IMPORT |Image$$ARM_LIB_STACK$$ZI$$Limit|
+  IMPORT |Image$$LIB_STACK$$ZI$$Limit|
   
   // Setup Stack for each exceptional mode
   MSR    CPSR_c, #0xD1
@@ -87,7 +87,7 @@ __ASM void Reset_Handler(void)
   MSR    CPSR_c, #0xDB
   LDR    SP, =|Image$$UND_STACK$$ZI$$Limit|
   MSR    CPSR_c, #0xD0
-  LDR    SP, =|Image$$ARM_LIB_STACK$$ZI$$Limit|
+  LDR    SP, =|Image$$LIB_STACK$$ZI$$Limit|
 
   // Call SystemInit
   IMPORT SystemInit

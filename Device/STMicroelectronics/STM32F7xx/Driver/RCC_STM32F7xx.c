@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2019-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -23,18 +23,10 @@
 
 #include <stddef.h>
 
-#include "asm/stm32f7xx.h"
-#include "asm/RCC_STM32F7xx.h"
+#include <asm/stm32f7xx.h>
+#include <Driver/RCC_STM32F7xx.h>
 
-#include "device_config.h"
-
-/*******************************************************************************
- *  external declarations
- ******************************************************************************/
-
-/*******************************************************************************
- *  defines and macros (scope: module-local)
- ******************************************************************************/
+#include <device_config.h>
 
 /*******************************************************************************
  *  typedefs and structures (scope: module-local)
@@ -46,10 +38,6 @@ typedef struct {
 } Reg_Mask_t;
 
 /*******************************************************************************
- *  global variable definitions  (scope: module-exported)
- ******************************************************************************/
-
-/*******************************************************************************
  *  global variable definitions (scope: module-local)
  ******************************************************************************/
 
@@ -58,10 +46,6 @@ uint8_t AHBPrescTable[16] = {0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 6, 7, 8, 9};
 
 static const
 uint8_t APBPrescTable[8] = {0, 0, 0, 0, 1, 2, 3, 4};
-
-/*******************************************************************************
- *  function prototypes (scope: module-local)
- ******************************************************************************/
 
 /*******************************************************************************
  *  function implementations (scope: module-local)
@@ -263,11 +247,13 @@ void RCC_ClkInit(const RCC_ClkInit_t *init, uint32_t flash_latency)
  */
 uint32_t RCC_GetFreq(RCC_FREQ_t type)
 {
-  if (type == RCC_FREQ_HSI)
-    return HSI_CLK;
+  if (type == RCC_FREQ_HSI) {
+    return (HSI_CLK);
+  }
 
-  if (type == RCC_FREQ_HSE)
-    return HSE_CLK;
+  if (type == RCC_FREQ_HSE) {
+    return (HSE_CLK);
+  }
 
   uint32_t sysclk;
   uint32_t rcc_cfgr = RCC->CFGR;
@@ -286,7 +272,10 @@ uint32_t RCC_GetFreq(RCC_FREQ_t type)
        * PLL_VCO_OUT = (PLL_VCO_IN / PLLM) * PLLN
        * SYSCLK = PLL_VCO_OUT / PLLP
        */
-      uint32_t pllm, plln, pllp, vco_in;
+      uint32_t pllm;
+      uint32_t plln;
+      uint32_t pllp;
+      uint32_t vco_in;
       uint32_t rcc_pllcfgr = RCC->PLLCFGR;
 
       pllm = (rcc_pllcfgr & RCC_PLLCFGR_PLLM);
@@ -306,18 +295,21 @@ uint32_t RCC_GetFreq(RCC_FREQ_t type)
       break;
   }
 
-  if (type == RCC_FREQ_SYSCLK)
-    return sysclk;
+  if (type == RCC_FREQ_SYSCLK) {
+    return (sysclk);
+  }
 
   /* Compute HCLK clock frequency --------------------------------------------*/
   uint32_t hclk = (sysclk >> AHBPrescTable[(rcc_cfgr & RCC_CFGR_HPRE) >> RCC_CFGR_HPRE_Pos]);
 
-  if (type == RCC_FREQ_AHB)
-    return hclk;
+  if (type == RCC_FREQ_AHB) {
+    return (hclk);
+  }
 
   /* Compute PCLK clock frequency --------------------------------------------*/
-  if (type == RCC_FREQ_APB1)
+  if (type == RCC_FREQ_APB1) {
     return (hclk >> APBPrescTable[(rcc_cfgr & RCC_CFGR_PPRE1) >> RCC_CFGR_PPRE1_Pos]);
+  }
 
   return (hclk >> APBPrescTable[(rcc_cfgr & RCC_CFGR_PPRE2) >> RCC_CFGR_PPRE2_Pos]);
 }
@@ -357,7 +349,7 @@ uint32_t RCC_GetPeriphFreq(RCC_Periph_t periph)
     clk = RCC_GetFreq(RCC_FREQ_AHB);
   }
 
-  return clk;
+  return (clk);
 }
 
 /**
@@ -396,7 +388,7 @@ uint32_t RCC_GetStatePeriph(RCC_Periph_t periph)
 
   GetClockEnableReg(periph, &tmp);
 
-  return (uint32_t)(*tmp.reg & tmp.mask);
+  return ((uint32_t)(*tmp.reg & tmp.mask));
 }
 
 /**
@@ -415,5 +407,3 @@ void RCC_ResetPeriph(RCC_Periph_t periph)
   __NOP();__NOP();__NOP();__NOP();
   *tmp.reg &= ~tmp.mask;
 }
-
-/* ----------------------------- End of file ---------------------------------*/

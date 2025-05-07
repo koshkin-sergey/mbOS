@@ -25,7 +25,7 @@
  ******************************************************************************/
 
 #include <stdbool.h>
-#include "CMSIS/Core/Kmx32/cmsis_gcc.h"
+#include "Core/Kmx32/cmsis_gcc.h"
 
 extern uint32_t GetModeCPU(void);
 extern uint32_t DisableIRQ(void);

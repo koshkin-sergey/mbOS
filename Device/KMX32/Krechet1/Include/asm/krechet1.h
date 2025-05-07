@@ -61,7 +61,7 @@ typedef enum {
 } IRQn_t;
 
 #include <stdint.h>
-#include <CMSIS/Core/Kmx32/core_kmx32.h>
+#include <Core/Kmx32/core_kmx32.h>
 #include "system_krechet1.h"
 
 /**

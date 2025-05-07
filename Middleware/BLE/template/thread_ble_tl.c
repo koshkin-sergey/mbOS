@@ -32,7 +32,7 @@
 #include <BLE/ble.h>
 #include <asm/GPIO_STM32F7xx.h>
 #include <asm/EXTI_STM32F7xx.h>
-#include <CMSIS/Driver/Driver_SPI.h>
+#include <Driver/Driver_SPI.h>
 
 /*******************************************************************************
  *  defines and macros (scope: module-local)
@@ -67,7 +67,7 @@
  *  external declarations
  ******************************************************************************/
 
-extern ARM_DRIVER_SPI ARM_Driver_SPI_(DRIVER_SPI_NUM);
+extern DRIVER_SPI Driver_SPI_(DRIVER_SPI_NUM);
 
 /*******************************************************************************
  *  typedefs and structures (scope: module-local)
@@ -114,7 +114,7 @@ static const osEventFlagsAttr_t evt_flags_attr = {
   .cb_size   = sizeof(evt_flags_cb)
 };
 
-static ARM_DRIVER_SPI *driver_spi = &ARM_Driver_SPI_(DRIVER_SPI_NUM);
+static DRIVER_SPI *driver_spi = &Driver_SPI_(DRIVER_SPI_NUM);
 
 /*******************************************************************************
  *  function implementations (scope: module-local)
@@ -122,7 +122,7 @@ static ARM_DRIVER_SPI *driver_spi = &ARM_Driver_SPI_(DRIVER_SPI_NUM);
 
 static void SPI_Callback(uint32_t event)
 {
-  if (event & ARM_SPI_EVENT_TRANSFER_COMPLETE) {
+  if (event & SPI_EVENT_TRANSFER_COMPLETE) {
     osEventFlagsSet(evt_flags, FLAG_TRANSFER_COMPLETE);
   }
 }
@@ -175,7 +175,7 @@ static int32_t TransferHeader(header_t *hdr)
   uint32_t flags;
 
   ret = driver_spi->Transfer(hdr, hdr, sizeof(header_t));
-  if (ret != ARM_DRIVER_OK) {
+  if (ret != DRIVER_OK) {
     return (-1);
   }
 
@@ -191,12 +191,12 @@ static int32_t TransferHeader(header_t *hdr)
 static void CS_Active(void)
 {
   osSemaphoreAcquire(sem_spi, osWaitForever);
-  driver_spi->Control(ARM_SPI_CONTROL_SS, ARM_SPI_SS_ACTIVE);
+  driver_spi->Control(SPI_CONTROL_SS, SPI_SS_ACTIVE);
 }
 
 static void CS_Inactive(void)
 {
-  driver_spi->Control(ARM_SPI_CONTROL_SS, ARM_SPI_SS_INACTIVE);
+  driver_spi->Control(SPI_CONTROL_SS, SPI_SS_INACTIVE);
   osSemaphoreRelease(sem_spi);
 }
 
@@ -217,16 +217,16 @@ void thread_ble_tl(void *param)
   DEBUG_LOG("Created thread for BLE transport layer\r\n");
 
   driver_spi->Initialize(SPI_Callback);
-  driver_spi->PowerControl(ARM_POWER_FULL);
-  ret = driver_spi->Control(ARM_SPI_MODE_MASTER  |
-                            ARM_SPI_CPOL0_CPHA0  |
-                            ARM_SPI_SS_MASTER_SW |
-                            ARM_SPI_DATA_BITS(8), 8000000);
-  if (ret != ARM_DRIVER_OK) {
+  driver_spi->PowerControl(POWER_FULL);
+  ret = driver_spi->Control(SPI_MODE_MASTER  |
+                            SPI_CPOL0_CPHA0  |
+                            SPI_SS_MASTER_SW |
+                            SPI_DATA_BITS(8), 8000000);
+  if (ret != DRIVER_OK) {
     DEBUG_LOG("Error SPI interface configuration %d\r\n", ret);
     osThreadExit();
   }
-  ret = driver_spi->Control(ARM_SPI_GET_BUS_SPEED, 0U);
+  ret = driver_spi->Control(SPI_GET_BUS_SPEED, 0U);
   DEBUG_LOG("BLE module SPI interface clock = %d Hz\r\n", ret);
 
   for(;;) {
@@ -249,18 +249,18 @@ void thread_ble_tl(void *param)
             hdr.rbuf_size = cfg->hci_packet_size;
           }
           ret = driver_spi->Receive(packet, hdr.rbuf_size);
-          if (ret == ARM_DRIVER_OK) {
+          if (ret == DRIVER_OK) {
             osEventFlagsWait(evt_flags, FLAG_TRANSFER_COMPLETE, osFlagsWaitAny,
                 osWaitForever);
           }
         }
         else {
-          ret = ARM_DRIVER_ERROR;
+          ret = DRIVER_ERROR;
         }
         /* Release CS line */
         CS_Inactive();
 
-        if (ret == ARM_DRIVER_OK) {
+        if (ret == DRIVER_OK) {
           cfg->EvtRxCallback(packet);
         }
         else {
@@ -375,7 +375,7 @@ int32_t BLE_Send(const uint8_t* buf, uint16_t size)
     if ((ret == 0) && (hdr.ctrl == BLE_READY)) {
       if (hdr.wbuf_size >= size) {
         ret = driver_spi->Send(buf, size);
-        if (ret == ARM_DRIVER_OK) {
+        if (ret == DRIVER_OK) {
           osEventFlagsWait(evt_flags, FLAG_TRANSFER_COMPLETE, osFlagsWaitAny,
                            osWaitForever);
           sent = driver_spi->GetDataCount();

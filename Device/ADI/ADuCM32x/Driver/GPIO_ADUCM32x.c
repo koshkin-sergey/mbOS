@@ -22,7 +22,7 @@
  ******************************************************************************/
 
 #include <stddef.h>
-#include <Driver/GPIO_ADUCM32x.h>
+#include <Driver/Driver_GPIO.h>
 
 #include <asm/aducm32x.h>
 
@@ -38,6 +38,8 @@ static uint32_t  GPIO##x##_PinRead   (GPIO_PIN_t pin)                           
 static void      GPIO##x##_PinWrite  (GPIO_PIN_t pin, GPIO_PIN_OUT_t value)       {         GPIO_PinWrite  (pin, value, MMR_GPIO##x ); } \
 static void      GPIO##x##_PinToggle (GPIO_PIN_t pin)                             {         GPIO_PinToggle (pin,        MMR_GPIO##x ); } \
 \
+extern                            \
+Driver_GPIO_t Driver_GPIO##x;     \
 Driver_GPIO_t Driver_GPIO##x = {  \
   GPIO##x##_PinConfig,            \
   GPIO##x##_PortRead,             \

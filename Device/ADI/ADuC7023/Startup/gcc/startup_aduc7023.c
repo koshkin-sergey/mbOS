@@ -89,7 +89,7 @@ void Reset_Handler(void)
 __NO_RETURN
 void __do_reset(void)
 {
-  SystemInit();                      /* CMSIS System Initialization           */
+  SystemInit();                      /* System Initialization                 */
   __PROGRAM_START();                 /* Enter PreMain (C library entry point) */
 }
 

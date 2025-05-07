@@ -1,0 +1,279 @@
+/*
+ * Copyright (c) 2013-2020 ARM Limited. All rights reserved.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * Licensed under the Apache License, Version 2.0 (the License); you may
+ * not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an AS IS BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * $Date:        31. March 2020
+ * $Revision:    V2.3
+ *
+ * Project:      USB Device Driver definitions
+ */
+
+/* History:
+ *  Version 2.3
+ *    Removed volatile from USBD_STATE
+ *  Version 2.2
+ *    USBD_STATE made volatile
+ *  Version 2.1
+ *    Added USBD_ReadSetupPacket function
+ *  Version 2.0
+ *    Removed USBD_DeviceConfigure function
+ *    Removed USBD_SET_ADDRESS_STAGE parameter from USBD_DeviceSetAddress function
+ *    Removed USBD_EndpointReadStart function
+ *    Replaced USBD_EndpointRead and USBD_EndpointWrite functions with USBD_EndpointTransfer
+ *    Added USBD_EndpointTransferGetResult function
+ *    Renamed USBD_EndpointAbort function to USBD_EndpointTransferAbort
+ *    Changed prefix DRV -> DRIVER
+ *    Changed return values of some functions to int32_t
+ *  Version 1.10
+ *    Namespace prefix  added
+ *  Version 1.00
+ *    Initial release
+ */
+
+#ifndef DRIVER_USBD_H_
+#define DRIVER_USBD_H_
+
+#ifdef  __cplusplus
+extern "C"
+{
+#endif
+
+#include "Driver_USB.h"
+
+#define USBD_API_VERSION      DRIVER_VERSION_MAJOR_MINOR(2,3)  /* API version */
+
+
+#define _Driver_USBD_(n)      Driver_USBD##n
+#define  Driver_USBD_(n)     _Driver_USBD_(n)
+
+
+/**
+\brief USB Device State
+*/
+typedef struct _USBD_STATE {
+  uint32_t vbus     : 1;                ///< USB Device VBUS flag
+  uint32_t speed    : 2;                ///< USB Device speed setting (USB_SPEED_xxx)
+  uint32_t active   : 1;                ///< USB Device active flag
+  uint32_t reserved : 28;
+} USBD_STATE;
+
+
+/****** USB Device Event *****/
+#define USBD_EVENT_VBUS_ON          (1UL << 0)      ///< USB Device VBUS On
+#define USBD_EVENT_VBUS_OFF         (1UL << 1)      ///< USB Device VBUS Off
+#define USBD_EVENT_RESET            (1UL << 2)      ///< USB Reset occurred
+#define USBD_EVENT_HIGH_SPEED       (1UL << 3)      ///< USB switch to High Speed occurred
+#define USBD_EVENT_SUSPEND          (1UL << 4)      ///< USB Suspend occurred
+#define USBD_EVENT_RESUME           (1UL << 5)      ///< USB Resume occurred
+
+/****** USB Endpoint Event *****/
+#define USBD_EVENT_SETUP            (1UL << 0)      ///< SETUP Packet
+#define USBD_EVENT_OUT              (1UL << 1)      ///< OUT Packet(s)
+#define USBD_EVENT_IN               (1UL << 2)      ///< IN Packet(s)
+
+
+#ifndef __DOXYGEN_MW__                  // exclude from middleware documentation
+
+// Function documentation
+/**
+  \fn          DRIVER_VERSION USBD_GetVersion (void)
+  \brief       Get driver version.
+  \return      \ref DRIVER_VERSION
+*/
+/**
+  \fn          USBD_CAPABILITIES USBD_GetCapabilities (void)
+  \brief       Get driver capabilities.
+  \return      \ref USBD_CAPABILITIES
+*/
+/**
+  \fn          int32_t USBD_Initialize (USBD_SignalDeviceEvent_t   cb_device_event,
+                                            USBD_SignalEndpointEvent_t cb_endpoint_event)
+  \brief       Initialize USB Device Interface.
+  \param[in]   cb_device_event    Pointer to \ref USBD_SignalDeviceEvent
+  \param[in]   cb_endpoint_event  Pointer to \ref USBD_SignalEndpointEvent
+  \return      \ref execution_status
+*/
+/**
+  \fn          int32_t USBD_Uninitialize (void)
+  \brief       De-initialize USB Device Interface.
+  \return      \ref execution_status
+*/
+/**
+  \fn          int32_t USBD_PowerControl (POWER_STATE state)
+  \brief       Control USB Device Interface Power.
+  \param[in]   state  Power state
+  \return      \ref execution_status
+*/
+/**
+  \fn          int32_t USBD_DeviceConnect (void)
+  \brief       Connect USB Device.
+  \return      \ref execution_status
+*/
+/**
+  \fn          int32_t USBD_DeviceDisconnect (void)
+  \brief       Disconnect USB Device.
+  \return      \ref execution_status
+*/
+/**
+  \fn          USBD_STATE USBD_DeviceGetState (void)
+  \brief       Get current USB Device State.
+  \return      Device State \ref USBD_STATE
+*/
+/**
+  \fn          int32_t USBD_DeviceRemoteWakeup (void)
+  \brief       Trigger USB Remote Wakeup.
+  \return      \ref execution_status
+*/
+/**
+  \fn          int32_t USBD_DeviceSetAddress (uint8_t dev_addr)
+  \brief       Set USB Device Address.
+  \param[in]   dev_addr  Device Address
+  \return      \ref execution_status
+*/
+/**
+  \fn          int32_t USBD_ReadSetupPacket (uint8_t *setup)
+  \brief       Read setup packet received over Control Endpoint.
+  \param[out]  setup  Pointer to buffer for setup packet
+  \return      \ref execution_status
+*/
+/**
+  \fn          int32_t USBD_EndpointConfigure (uint8_t  ep_addr,
+                                                   uint8_t  ep_type,
+                                                   uint16_t ep_max_packet_size)
+  \brief       Configure USB Endpoint.
+  \param[in]   ep_addr  Endpoint Address
+                - ep_addr.0..3: Address
+                - ep_addr.7:    Direction
+  \param[in]   ep_type  Endpoint Type (USB_ENDPOINT_xxx)
+  \param[in]   ep_max_packet_size Endpoint Maximum Packet Size
+  \return      \ref execution_status
+*/
+/**
+  \fn          int32_t USBD_EndpointUnconfigure (uint8_t ep_addr)
+  \brief       Unconfigure USB Endpoint.
+  \param[in]   ep_addr  Endpoint Address
+                - ep_addr.0..3: Address
+                - ep_addr.7:    Direction
+  \return      \ref execution_status
+*/
+/**
+  \fn          int32_t USBD_EndpointStall (uint8_t ep_addr, bool stall)
+  \brief       Set/Clear Stall for USB Endpoint.
+  \param[in]   ep_addr  Endpoint Address
+                - ep_addr.0..3: Address
+                - ep_addr.7:    Direction
+  \param[in]   stall  Operation
+                - \b false Clear
+                - \b true Set
+  \return      \ref execution_status
+*/
+/**
+  \fn          int32_t USBD_EndpointTransfer (uint8_t ep_addr, uint8_t *data, uint32_t num)
+  \brief       Read data from or Write data to USB Endpoint.
+  \param[in]   ep_addr  Endpoint Address
+                - ep_addr.0..3: Address
+                - ep_addr.7:    Direction
+  \param[out]  data Pointer to buffer for data to read or with data to write
+  \param[in]   num  Number of data bytes to transfer
+  \return      \ref execution_status
+*/
+/**
+  \fn          uint32_t USBD_EndpointTransferGetResult (uint8_t ep_addr)
+  \brief       Get result of USB Endpoint transfer.
+  \param[in]   ep_addr  Endpoint Address
+                - ep_addr.0..3: Address
+                - ep_addr.7:    Direction
+  \return      number of successfully transferred data bytes
+*/
+/**
+  \fn          int32_t USBD_EndpointTransferAbort (uint8_t ep_addr)
+  \brief       Abort current USB Endpoint transfer.
+  \param[in]   ep_addr  Endpoint Address
+                - ep_addr.0..3: Address
+                - ep_addr.7:    Direction
+  \return      \ref execution_status
+*/
+/**
+  \fn          uint16_t USBD_GetFrameNumber (void)
+  \brief       Get current USB Frame Number.
+  \return      Frame Number
+*/
+
+/**
+  \fn          void USBD_SignalDeviceEvent (uint32_t event)
+  \brief       Signal USB Device Event.
+  \param[in]   event \ref USBD_dev_events
+  \return      none
+*/
+/**
+  \fn          void USBD_SignalEndpointEvent (uint8_t ep_addr, uint32_t event)
+  \brief       Signal USB Endpoint Event.
+  \param[in]   ep_addr  Endpoint Address
+                - ep_addr.0..3: Address
+                - ep_addr.7:    Direction
+  \param[in]   event \ref USBD_ep_events
+  \return      none
+*/
+
+typedef void (*USBD_SignalDeviceEvent_t)   (uint32_t event);                    ///< Pointer to \ref USBD_SignalDeviceEvent : Signal USB Device Event.
+typedef void (*USBD_SignalEndpointEvent_t) (uint8_t ep_addr, uint32_t event);   ///< Pointer to \ref USBD_SignalEndpointEvent : Signal USB Endpoint Event.
+
+
+/**
+\brief USB Device Driver Capabilities.
+*/
+typedef struct _USBD_CAPABILITIES {
+  uint32_t vbus_detection  : 1;         ///< VBUS detection
+  uint32_t event_vbus_on   : 1;         ///< Signal VBUS On event
+  uint32_t event_vbus_off  : 1;         ///< Signal VBUS Off event
+  uint32_t reserved        : 29;        ///< Reserved (must be zero)
+} USBD_CAPABILITIES;
+
+
+/**
+\brief Access structure of the USB Device Driver.
+*/
+typedef struct _DRIVER_USBD {
+  DRIVER_VERSION    (*GetVersion)                (void);                                              ///< Pointer to \ref USBD_GetVersion : Get driver version.
+  USBD_CAPABILITIES (*GetCapabilities)           (void);                                              ///< Pointer to \ref USBD_GetCapabilities : Get driver capabilities.
+  int32_t           (*Initialize)                (USBD_SignalDeviceEvent_t   cb_device_event,
+                                                  USBD_SignalEndpointEvent_t cb_endpoint_event);      ///< Pointer to \ref USBD_Initialize : Initialize USB Device Interface.
+  int32_t           (*Uninitialize)              (void);                                              ///< Pointer to \ref USBD_Uninitialize : De-initialize USB Device Interface.
+  int32_t           (*PowerControl)              (POWER_STATE state);                                 ///< Pointer to \ref USBD_PowerControl : Control USB Device Interface Power.
+  int32_t           (*DeviceConnect)             (void);                                              ///< Pointer to \ref USBD_DeviceConnect : Connect USB Device.
+  int32_t           (*DeviceDisconnect)          (void);                                              ///< Pointer to \ref USBD_DeviceDisconnect : Disconnect USB Device.
+  USBD_STATE        (*DeviceGetState)            (void);                                              ///< Pointer to \ref USBD_DeviceGetState : Get current USB Device State.
+  int32_t           (*DeviceRemoteWakeup)        (void);                                              ///< Pointer to \ref USBD_DeviceRemoteWakeup : Trigger USB Remote Wakeup.
+  int32_t           (*DeviceSetAddress)          (uint8_t dev_addr);                                  ///< Pointer to \ref USBD_DeviceSetAddress : Set USB Device Address.
+  int32_t           (*ReadSetupPacket)           (uint8_t *setup);                                    ///< Pointer to \ref USBD_ReadSetupPacket : Read setup packet received over Control Endpoint.
+  int32_t           (*EndpointConfigure)         (uint8_t ep_addr,
+                                                  uint8_t ep_type,
+                                                  uint16_t ep_max_packet_size);                       ///< Pointer to \ref USBD_EndpointConfigure : Configure USB Endpoint.
+  int32_t           (*EndpointUnconfigure)       (uint8_t ep_addr);                                   ///< Pointer to \ref USBD_EndpointUnconfigure : Unconfigure USB Endpoint.
+  int32_t           (*EndpointStall)             (uint8_t ep_addr, bool stall);                       ///< Pointer to \ref USBD_EndpointStall : Set/Clear Stall for USB Endpoint.
+  int32_t           (*EndpointTransfer)          (uint8_t ep_addr, uint8_t *data, uint32_t num);      ///< Pointer to \ref USBD_EndpointTransfer : Read data from or Write data to USB Endpoint.
+  uint32_t          (*EndpointTransferGetResult) (uint8_t ep_addr);                                   ///< Pointer to \ref USBD_EndpointTransferGetResult : Get result of USB Endpoint transfer.
+  int32_t           (*EndpointTransferAbort)     (uint8_t ep_addr);                                   ///< Pointer to \ref USBD_EndpointTransferAbort : Abort current USB Endpoint transfer.
+  uint16_t          (*GetFrameNumber)            (void);                                              ///< Pointer to \ref USBD_GetFrameNumber : Get current USB Frame Number.
+} const DRIVER_USBD;
+
+#endif /* __DOXYGEN_MW__ */
+
+#ifdef  __cplusplus
+}
+#endif
+
+#endif /* DRIVER_USBD_H_ */

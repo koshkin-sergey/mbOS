@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015 Analog Devices Inc.
- * Copyright (C) 2022-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2022-2024 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -135,7 +135,7 @@ typedef enum {
 /** @} */ /* End of group Configuration_of_CMSIS */
 
 
-#include <CMSIS/Core/Cortex/core_cm3.h>
+#include <Core/Cortex/core_cm3.h>
 #include "system_aducm32x.h"
 #include <stdint.h>
 
@@ -258,270 +258,6 @@ typedef enum {
 #define TSTA_TMOUT                     (0x1   << 0  )
 #define TSTA_TMOUT_CLR                 (0x0   << 0  ) /* CLR. No timeout event has occurred */
 #define TSTA_TMOUT_SET                 (0x1   << 0  ) /* SET. A timeout event has occurred */
-
-/* SPISTA[CSRSG] - Detected a rising edge on CS, in CONT mode */
-#define SPISTA_CSRSG_MSK               (0x1   << 14 )
-#define SPISTA_CSRSG                   (0x1   << 14 )
-#define SPISTA_CSRSG_CLR               (0x0   << 14 ) /* Cleared to 0 when the Status register is read. */
-#define SPISTA_CSRSG_SET               (0x1   << 14 ) /* Set to 1 when there was a rising edge in CS line, when the device was in master mode, continuous transfer, High Frequency mode and CSIRQ_EN was asserted. */
-
-/* SPISTA[CSFLG] - Detected a falling edge on CS, in CONT mode */
-#define SPISTA_CSFLG_MSK               (0x1   << 13 )
-#define SPISTA_CSFLG                   (0x1   << 13 )
-#define SPISTA_CSFLG_CLR               (0x0   << 13 ) /* Cleared to 0 when the Status register is read. */
-#define SPISTA_CSFLG_SET               (0x1   << 13 ) /* Set to 1 when there was a falling edge in CS line, when the device was in master mode, continuous transfer, High Frequency mode and CSIRQ_EN was asserted */
-
-/* SPISTA[CSERR] - Detected a CS error condition */
-#define SPISTA_CSERR_MSK               (0x1   << 12 )
-#define SPISTA_CSERR                   (0x1   << 12 )
-#define SPISTA_CSERR_CLR               (0x0   << 12 ) /* Cleared to 0 when the Status register is read. */
-#define SPISTA_CSERR_SET               (0x1   << 12 ) /* Set to 1 when the CS line was de-asserted abruptly, even before the full-byte of data was transmitted completely. This bit will cause an interrupt. */
-
-/* SPISTA[RXS] - SPI Rx FIFO excess bytes present */
-#define SPISTA_RXS_MSK                 (0x1   << 11 )
-#define SPISTA_RXS                     (0x1   << 11 )
-#define SPISTA_RXS_CLR                 (0x0   << 11 ) /* This bit is cleared when the number of bytes in the FIFO is equal or less than the number in SPI0CON[15:14]. */
-#define SPISTA_RXS_SET                 (0x1   << 11 ) /* This bit is set when there are more bytes in the Rx FIFO than indicated in the MOD bits in SPI0CON. */
-
-/* SPISTA[RXFSTA] - SPI Rx FIFO status */
-#define SPISTA_RXFSTA_MSK              (0x7   << 8  )
-#define SPISTA_RXFSTA_EMPTY            (0x0   << 8  ) /* Rx FIFO empty            */
-#define SPISTA_RXFSTA_ONEBYTE          (0x1   << 8  ) /* 1 valid byte in FIFO     */
-#define SPISTA_RXFSTA_TWOBYTES         (0x2   << 8  ) /* 2 valid bytes in the FIFO */
-#define SPISTA_RXFSTA_THREEBYTES       (0x3   << 8  ) /* 3 valid bytes in the FIFO */
-#define SPISTA_RXFSTA_FOURBYTES        (0x4   << 8  ) /* 4 valid bytes in the FIFO */
-
-/* SPISTA[RXOF] - SPI Rx FIFO overflow */
-#define SPISTA_RXOF_MSK                (0x1   << 7  )
-#define SPISTA_RXOF                    (0x1   << 7  )
-#define SPISTA_RXOF_CLR                (0x0   << 7  ) /* Cleared when the SPISTA register is read. */
-#define SPISTA_RXOF_SET                (0x1   << 7  ) /* Set when the Rx FIFO was already full when new data was loaded to the FIFO. This bit generates an interrupt except when RFLUSH is set in SPI0CON. */
-
-/* SPISTA[RX] - SPI Rx IRQ */
-#define SPISTA_RX_MSK                  (0x1   << 6  )
-#define SPISTA_RX                      (0x1   << 6  )
-#define SPISTA_RX_CLR                  (0x0   << 6  ) /* Cleared when the SPI0STA register is read. */
-#define SPISTA_RX_SET                  (0x1   << 6  ) /* Set when a receive interrupt occurs. This bit is set when TIM in SPI0CON is cleared and the required number of bytes have been received. */
-
-/* SPISTA[TX] - SPI Tx IRQ */
-#define SPISTA_TX_MSK                  (0x1   << 5  )
-#define SPISTA_TX                      (0x1   << 5  )
-#define SPISTA_TX_CLR                  (0x0   << 5  ) /* CLR. Cleared to 0 when the SPI0STA register is read. */
-#define SPISTA_TX_SET                  (0x1   << 5  ) /* SET. Set to 1 when a transmit interrupt occurs. This bit is set when TIM in SPI0CON is set and the required number of bytes have been transmitted. */
-
-/* SPISTA[TXUR] - SPI Tx FIFO underflow */
-#define SPISTA_TXUR_MSK                (0x1   << 4  )
-#define SPISTA_TXUR                    (0x1   << 4  )
-#define SPISTA_TXUR_CLR                (0x0   << 4  ) /* Cleared to 0 when the SPI0STA register is read. */
-#define SPISTA_TXUR_SET                (0x1   << 4  ) /* Set  to 1 when a transmit is initiated without any valid data in the Tx FIFO. This bit generates an interrupt except when TFLUSH is set in SPI0CON. */
-
-/* SPISTA[TXFSTA] - SPI Tx FIFO status */
-#define SPISTA_TXFSTA_MSK              (0x7   << 1  )
-#define SPISTA_TXFSTA_EMPTY            (0x0   << 1  ) /* Tx FIFO empty            */
-#define SPISTA_TXFSTA_ONEBYTE          (0x1   << 1  ) /* 1 valid byte in FIFO     */
-#define SPISTA_TXFSTA_TWOBYTES         (0x2   << 1  ) /* 2 valid bytes in FIFO    */
-#define SPISTA_TXFSTA_THREEBYTES       (0x3   << 1  ) /* 3 valid bytes in FIFO    */
-#define SPISTA_TXFSTA_FOURBYTES        (0x4   << 1  ) /* 4 valid bytes in FIFO    */
-
-/* SPISTA[IRQ] - SPI Interrupt status */
-#define SPISTA_IRQ_MSK                 (0x1   << 0  )
-#define SPISTA_IRQ                     (0x1   << 0  )
-#define SPISTA_IRQ_CLR                 (0x0   << 0  ) /* Cleared to 0 after reading SPI0STA. */
-#define SPISTA_IRQ_SET                 (0x1   << 0  ) /* Set to 1 when an SPI based interrupt occurs. */
-
-/* SPIRX[DMA_DATA_BYTE_2] - 8-bit receive buffer */
-#define SPIRX_DMA_DATA_BYTE_2_MSK      (0xFF  << 8  )
-
-/* SPIRX[DATA_BYTE_1] - 8-bit receive buffer */
-#define SPIRX_DATA_BYTE_1_MSK          (0xFF  << 0  )
-
-/* SPITX[DMA_DATA_BYTE_2] - 8-bit transmit buffer */
-#define SPITX_DMA_DATA_BYTE_2_MSK      (0xFF  << 8  )
-
-/* SPITX[DATA_BYTE_1] - 8-bit transmit buffer */
-#define SPITX_DATA_BYTE_1_MSK          (0xFF  << 0  )
-
-/* SPIDIV[CSIRQ_EN] - Enable interrupt on every CS edge in CONT mode */
-#define SPIDIV_CSIRQ_EN_MSK            (0x1   << 8  )
-#define SPIDIV_CSIRQ_EN                (0x1   << 8  )
-#define SPIDIV_CSIRQ_EN_DIS            (0x0   << 8  )
-#define SPIDIV_CSIRQ_EN_EN             (0x1   << 8  )
-
-/* SPIDIV[BCRST] - Reset Mode for CSERR */
-#define SPIDIV_BCRST_MSK               (0x1   << 7  )
-#define SPIDIV_BCRST                   (0x1   << 7  )
-#define SPIDIV_BCRST_DIS               (0x0   << 7  )
-#define SPIDIV_BCRST_EN                (0x1   << 7  )
-
-/* SPIDIV[HFM] - High Frequency Mode */
-#define SPIDIV_HFM_MSK                 (0x1   << 6  )
-#define SPIDIV_HFM                     (0x1   << 6  )
-#define SPIDIV_HFM_DIS                 (0x0   << 6  )
-#define SPIDIV_HFM_EN                  (0x1   << 6  )
-
-/* SPIDIV[DIV] - SPI clock divider */
-#define SPIDIV_DIV_MSK                 (0x3F  << 0  )
-
-/* SPICON[MOD] - SPI IRQ mode bits */
-#define SPICON_MOD_MSK                 (0x3   << 14 )
-#define SPICON_MOD_TX1RX1              (0x0   << 14 ) /* Tx interrupt occurs when 1 byte has been transferred. Rx interrupt occurs when 1 or more bytes have been received into the FIFO. */
-#define SPICON_MOD_TX2RX2              (0x1   << 14 ) /* Tx interrupt occurs when 2 bytes has been transferred.  Rx interrupt occurs when 2 or more bytes have been received into the FIFO. */
-#define SPICON_MOD_TX3RX3              (0x2   << 14 ) /* Tx interrupt occurs when 3 bytes has been transferred.  Rx interrupt occurs when 3 or more bytes have been received into the FIFO. */
-#define SPICON_MOD_TX4RX4              (0x3   << 14 ) /* Tx interrupt occurs when 4 bytes has been transferred.  Rx interrupt occurs when the Rx FIFO is full, or 4 bytes present. */
-
-/* SPICON[TFLUSH] - SPI Tx FIFO Flush enable */
-#define SPICON_TFLUSH_MSK              (0x1   << 13 )
-#define SPICON_TFLUSH                  (0x1   << 13 )
-#define SPICON_TFLUSH_DIS              (0x0   << 13 ) /* Clear this bit to disable Tx FIFO flushing. */
-#define SPICON_TFLUSH_EN               (0x1   << 13 ) /* Set this bit to flush the Tx FIFO. This bit does not clear itself and should be toggled if a single flush is required. If this bit is left high, then either the last transmitted value or "0x00" is transmitted depending on the ZEN bit. Any writes to the Tx FIFO are ignored while this bit is set. */
-
-/* SPICON[RFLUSH] - SPI Rx FIFO Flush enable */
-#define SPICON_RFLUSH_MSK              (0x1   << 12 )
-#define SPICON_RFLUSH                  (0x1   << 12 )
-#define SPICON_RFLUSH_DIS              (0x0   << 12 ) /* Clear this bit to disable Rx FIFO flushing. */
-#define SPICON_RFLUSH_EN               (0x1   << 12 ) /* Set this bit to flush the Rx FIFO. This bit does not clear itself and should be toggled if a single flush is required. If this bit is set all incoming data is ignored and no interrupts are generated. If set and TIM = 0, a read of the Rx FIFO will initiate a transfer. */
-
-/* SPICON[CON] - Continuous transfer enable */
-#define SPICON_CON_MSK                 (0x1   << 11 )
-#define SPICON_CON                     (0x1   << 11 )
-#define SPICON_CON_DIS                 (0x0   << 11 ) /* DIS. Cleared by user to disable continuous transfer. Each transfer consists of a single 8-bit serial transfer. If valid data exists in the SPI0TX register, then a new transfer is initiated after a stall period of 1 serial clock cycle. */
-#define SPICON_CON_EN                  (0x1   << 11 ) /* EN. Set by user to enable continuous transfer. In master mode, the transfer continues until no valid data is available in the Tx register. CS is asserted and remains asserted for the duration of each 8-bit serial transfer until Tx is empty. */
-
-/* SPICON[LOOPBACK] - Loopback enable */
-#define SPICON_LOOPBACK_MSK            (0x1   << 10 )
-#define SPICON_LOOPBACK                (0x1   << 10 )
-#define SPICON_LOOPBACK_DIS            (0x0   << 10 ) /* Cleared by user to be in normal mode. */
-#define SPICON_LOOPBACK_EN             (0x1   << 10 ) /* Set by user to connect MISO to MOSI and test software. */
-
-/* SPICON[OEN] - Slave MISO output enable */
-#define SPICON_OEN_MSK                 (0x1   << 9  )
-#define SPICON_OEN                     (0x1   << 9  )
-#define SPICON_OEN_DIS                 (0x0   << 9  ) /* Clear this bit to disable the output driver on the MISO pin. The MISO pin will be Open-Circuit when this bit is clear. */
-#define SPICON_OEN_EN                  (0x1   << 9  ) /* Set this bit for MISO to operate as normal. */
-
-/* SPICON[RXOF] - SPIRX overflow overwrite enable */
-#define SPICON_RXOF_MSK                (0x1   << 8  )
-#define SPICON_RXOF                    (0x1   << 8  )
-#define SPICON_RXOF_DIS                (0x0   << 8  ) /* Cleared by user, the new serial byte received is discarded. */
-#define SPICON_RXOF_EN                 (0x1   << 8  ) /* Set by user, the valid data in the Rx register is overwritten by the new serial byte received. */
-
-/* SPICON[ZEN] - Transmit zeros enable */
-#define SPICON_ZEN_MSK                 (0x1   << 7  )
-#define SPICON_ZEN                     (0x1   << 7  )
-#define SPICON_ZEN_DIS                 (0x0   << 7  ) /* Clear this bit to transmit the last transmitted value when there is no valid data in the Tx FIFO. */
-#define SPICON_ZEN_EN                  (0x1   << 7  ) /* Set this bit to transmit "0x00" when there is no valid data in the Tx FIFO. */
-
-/* SPICON[TIM] - SPI transfer and interrupt mode */
-#define SPICON_TIM_MSK                 (0x1   << 6  )
-#define SPICON_TIM                     (0x1   << 6  )
-#define SPICON_TIM_RXRD                (0x0   << 6  ) /* Cleared by user to initiate transfer with a read of the SPI0RX register. Interrupt only occurs when Rx is full. */
-#define SPICON_TIM_TXWR                (0x1   << 6  ) /* Set by user to initiate transfer with a write to the SPI0TX register. Interrupt only occurs when Tx is empty. */
-
-/* SPICON[LSB] - LSB first transfer enable */
-#define SPICON_LSB_MSK                 (0x1   << 5  )
-#define SPICON_LSB                     (0x1   << 5  )
-#define SPICON_LSB_DIS                 (0x0   << 5  ) /* MSB transmitted first    */
-#define SPICON_LSB_EN                  (0x1   << 5  ) /* LSB transmitted first    */
-
-/* SPICON[WOM] - SPI Wired Or mode */
-#define SPICON_WOM_MSK                 (0x1   << 4  )
-#define SPICON_WOM                     (0x1   << 4  )
-#define SPICON_WOM_EN                  (0x1   << 4  ) /* Enables open circuit data output enable. External pull-ups required on data out pins */
-#define SPICON_WOM_DIS                 (0x0   << 4  ) /* Normal output levels     */
-
-/* SPICON[CPOL] - Serial Clock Polarity */
-#define SPICON_CPOL_MSK                (0x1   << 3  )
-#define SPICON_CPOL                    (0x1   << 3  )
-#define SPICON_CPOL_LOW                (0x0   << 3  ) /* Serial clock idles low   */
-#define SPICON_CPOL_HIGH               (0x1   << 3  ) /* Serial clock idles high  */
-
-/* SPICON[CPHA] - Serial clock phase mode */
-#define SPICON_CPHA_MSK                (0x1   << 2  )
-#define SPICON_CPHA                    (0x1   << 2  )
-#define SPICON_CPHA_SAMPLETRAILING     (0x1   << 2  ) /* Serial clock pulses at the beginning of each serial bit transfer */
-#define SPICON_CPHA_SAMPLELEADING      (0x0   << 2  ) /* Serial clock pulses at the end of each serial bit transfer */
-
-/* SPICON[MASEN] - Master mode enable */
-#define SPICON_MASEN_MSK               (0x1   << 1  )
-#define SPICON_MASEN                   (0x1   << 1  )
-#define SPICON_MASEN_DIS               (0x0   << 1  ) /* Enable slave mode        */
-#define SPICON_MASEN_EN                (0x1   << 1  ) /* Enable master mode       */
-
-/* SPICON[ENABLE] - SPI enable */
-#define SPICON_ENABLE_MSK              (0x1   << 0  )
-#define SPICON_ENABLE                  (0x1   << 0  )
-#define SPICON_ENABLE_DIS              (0x0   << 0  ) /* Disable the SPI          */
-#define SPICON_ENABLE_EN               (0x1   << 0  ) /* Enable the SPI           */
-
-/* SPIDMA[IENRXDMA] - Enable receive DMA request */
-#define SPIDMA_IENRXDMA_MSK            (0x1   << 2  )
-#define SPIDMA_IENRXDMA                (0x1   << 2  )
-#define SPIDMA_IENRXDMA_DIS            (0x0   << 2  ) /* Disable RX DMA Interrupt */
-#define SPIDMA_IENRXDMA_EN             (0x1   << 2  ) /* Enable RX DMA Interrupt  */
-
-/* SPIDMA[IENTXDMA] - Enable transmit DMA request */
-#define SPIDMA_IENTXDMA_MSK            (0x1   << 1  )
-#define SPIDMA_IENTXDMA                (0x1   << 1  )
-#define SPIDMA_IENTXDMA_DIS            (0x0   << 1  ) /* Disable TX DMA Interrupt */
-#define SPIDMA_IENTXDMA_EN             (0x1   << 1  ) /* Enable TX DMA Interrupt  */
-
-/* SPIDMA[ENABLE] - Enable DMA for data transfer */
-#define SPIDMA_ENABLE_MSK              (0x1   << 0  )
-#define SPIDMA_ENABLE                  (0x1   << 0  )
-#define SPIDMA_ENABLE_DIS              (0x0   << 0  )
-#define SPIDMA_ENABLE_EN               (0x1   << 0  )
-
-/* SPICNT[COUNT] - Transfer byte count */
-#define SPICNT_COUNT_MSK               (0xFF  << 0  )
-
-
-/* DACCON[PD] - DAC0 power down */
-#define DACCON_PD_MSK                  (0x1   << 8  )
-#define DACCON_PD                      (0x1   << 8  )
-
-/* DACCON[EN] - DAC0 enable */
-#define DACCON_EN_MSK                  (0x1   << 4  )
-#define DACCON_EN                      (0x1   << 4  )
-
-/* DACCON[RN] - DAC0 reference selection */
-#define DACCON_RN_MSK                  (0x3   << 0  )
-
-/* DACDAT[DAT] - DAC0 data */
-#define DACDAT_DAT_MSK                 (0xFFF << 16 )
-
-#if defined(ADUCM320) | defined(ADUCM320I)
-
-/* IDACCON[CLRB] - IDAC0 Clear bit */
-#define IDACCON_CLRB_MSK               (0x1   << 7  )
-#define IDACCON_CLRB                   (0x1   << 7  )
-
-/* IDACCON[SHT_EN] - IDAC0 shutdown enable */
-#define IDACCON_SHT_EN_MSK             (0x1   << 6  )
-#define IDACCON_SHT_EN                 (0x1   << 6  )
-
-/* IDACCON[BW] - IDAC0 bandwidth */
-#define IDACCON_BW_MSK                 (0xF   << 2  )
-
-/* IDACCON[PUL] - IDAC0 pull down */
-#define IDACCON_PUL_MSK                (0x1   << 1  )
-#define IDACCON_PUL                    (0x1   << 1  )
-
-/* IDACCON[PD] - IDAC0 power down */
-#define IDACCON_PD_MSK                 (0x1   << 0  )
-#define IDACCON_PD                     (0x1   << 0  )
-#define IDACCON_PD_ON                  (0x0   << 0  ) /* Powers IDAC0 up          */
-#define IDACCON_PD_OFF                 (0x1   << 0  ) /* Powers IDAC0 down        */
-
-/* IDACDAT[DATH] - IDAC0 high data */
-#define IDACDAT_DATH_MSK               (0x7FF << 17 )
-
-/* IDACDAT[DATL] - IDAC0 low data */
-#define IDACDAT_DATL_MSK               (0x1F  << 12 )
-
-/* IDACDAT[SYNC] - IDAC0 sync bits */
-#define IDACDAT_SYNC_MSK               (0x3F  << 0  )
-
-#endif
 
 
 // -----------------------------------------------------------------------------
@@ -3196,420 +2932,332 @@ typedef struct MMR_DMA {                    /*!< MMR_DMA Structure              
 
 /* DMABSCLR[CHBSWAPCLR] - Disable byte swap */
 #define DMABSCLR_CHBSWAPCLR_MSK        (0x3FFF << 0  )
-// ------------------------------------------------------------------------------------------------
-// -----                                        FEE                                        -----
-// ------------------------------------------------------------------------------------------------
 
+
+/* ========================================================================== */
+/* ================         FLASH CONTROLLER               ================== */
+/* ========================================================================== */
 
 /**
   * @brief FEE (MMR_FEE)
   */
 
-typedef struct MMR_FEE {                    /*!< MMR_FEE Structure                     */
-  __IO uint32_t  FEESTA;                    /*!< Status register                       */
-  __IO uint32_t  FEECON0;                   /*!< Command Control register: interrupt enable register */
-  __IO uint32_t  FEECMD;                    /*!< Command register                      */
-  __IO uint32_t  FEEFLADR;                  /*!< Flash address key - hole register     */
-  __IO uint32_t  FEEFLDATA0;                /*!< Flash Data register: key-hole interface lower 32 bits */
-  __IO uint32_t  FEEFLDATA1;                /*!< Flash Data register: key-hole interface upper 32 bits */
-  __IO uint32_t  FEEADR0;                   /*!< Lower page address register           */
-  __IO uint32_t  FEEADR1;                   /*!< Upper page address register           */
-  __IO uint32_t  FEEKEY;                    /*!< Flash Key register.                   */
+typedef struct MMR_FEE {              // MMR_FEE Structure
+  __I  uint32_t  FEESTA;              // Status register
+  __IO uint32_t  FEECON0;             // Command Control register: interrupt enable register
+  __IO uint32_t  FEECMD;              // Command register
+  __IO uint32_t  FEEFLADR;            // Flash address key - hole register
+  __IO uint32_t  FEEFLDATA0;          // Flash Data register: key-hole interface lower 32 bits
+  __IO uint32_t  FEEFLDATA1;          // Flash Data register: key-hole interface upper 32 bits
+  __IO uint32_t  FEEADR0;             // Lower page address register
+  __IO uint32_t  FEEADR1;             // Upper page address register
+  __O  uint32_t  FEEKEY;              // Flash Key register.
   __I  uint32_t  RESERVED0;
-  __IO uint32_t  FEEPRO0;                   /*!< write protection register for flash0  */
-  __IO uint32_t  FEEPRO1;                   /*!< write protection register for flash1  */
+  __IO uint32_t  FEEPRO0;             // Write protection register for flash0
+  __IO uint32_t  FEEPRO1;             // Write protection register for flash1
   __I  uint32_t  RESERVED1;
-  __IO uint32_t  FEESIG;                    /*!< Flash Signature                       */
-  __IO uint32_t  FEECON1;                   /*!< User Setup register                   */
+  __I  uint32_t  FEESIG;              // Flash Signature
+  __IO uint32_t  FEECON1;             // User Setup register
   __I  uint32_t  RESERVED2;
-  __IO uint32_t  FEEWRADDRA;                /*!< write abort address register          */
+  __I  uint32_t  FEEWRADDRA;          // Write abort address register
   __I  uint32_t  RESERVED3;
-  __IO uint32_t  FEEAEN0;                   /*!< Interrupt abort enable register. Interrupt 31 to Interrupt 0. */
-  __IO uint32_t  FEEAEN1;                   /*!< Interrupt abort enable register. Interrupt 54 to Interrupt 32. */
+  __IO uint32_t  FEEAEN0;             // Interrupt abort enable register. Interrupt 31 to Interrupt 0.
+  __IO uint32_t  FEEAEN1;             // Interrupt abort enable register. Interrupt 54 to Interrupt 32.
   __I  uint32_t  RESERVED4[5];
-  __IO uint32_t  FEEECCCONFIG;              /*!< Configurable ECC enable/disable, error response */
+  __IO uint32_t  FEEECCCONFIG;        // Configurable ECC enable/disable, error response
   __I  uint32_t  RESERVED5[3];
-  __IO uint32_t  FEEECCADDR0;               /*!< Flash 0 ECC Error Address             */
-  __IO uint32_t  FEEECCADDR1;               /*!< Flash 1 ECC Error Address             */
+  __I  uint32_t  FEEECCADDR0;         // Flash 0 ECC Error Address
+  __I  uint32_t  FEEECCADDR1;         // Flash 1 ECC Error Address
   __I  uint32_t  RESERVED6[17];
-  __IO uint32_t  CACHESTAT;                 /*!< Cache Status register                 */
-  __IO uint32_t  CACHESETUP;                /*!< Cache Setup register                  */
-  __IO uint32_t  CACHEKEY;                  /*!< Cache Key register                    */
+  __I  uint32_t  CACHESTAT;           // Cache Status register
+  __IO uint32_t  CACHESETUP;          // Cache Setup register
+  __O  uint32_t  CACHEKEY;            // Cache Key register
 } MMR_FEE_t;
 
-/* Reset Value for FEESTA*/
-#define FEESTA_RVAL                    0x0 
-
-/* FEESTA[INIT] - Initialization upload in progress. */
-#define FEESTA_INIT_BBA                (*(volatile unsigned long *) 0x42300038)
-#define FEESTA_INIT_MSK                (0x1   << 14 )
-#define FEESTA_INIT                    (0x1   << 14 )
-#define FEESTA_INIT_CLR                (0x0   << 14 )
-#define FEESTA_INIT_SET                (0x1   << 14 )
-
 /* FEESTA[SIGNERR] - Information space signature check on reset error. */
-#define FEESTA_SIGNERR_BBA             (*(volatile unsigned long *) 0x42300034)
-#define FEESTA_SIGNERR_MSK             (0x1   << 13 )
-#define FEESTA_SIGNERR                 (0x1   << 13 )
-#define FEESTA_SIGNERR_CLR             (0x0   << 13 )
-#define FEESTA_SIGNERR_SET             (0x1   << 13 )
+#define FEESTA_SIGNERR_Pos             (13U)
+#define FEESTA_SIGNERR_Msk             (0x1U << FEESTA_SIGNERR_Pos)
+#define FEESTA_SIGNERR                          FEESTA_SIGNERR_Msk
 
 /* FEESTA[CMDRES] - These two bits indicate the status of a command on completion or the status of a write. */
-#define FEESTA_CMDRES_MSK              (0x3   << 4  )
-#define FEESTA_CMDRES_SUCCESS          (0x0   << 4  ) /* Successful completion of a command or a write */
-#define FEESTA_CMDRES_IGNORED          (0x1   << 4  ) /* Attempted signcheck, write or erase of a protected location. */
-#define FEESTA_CMDRES_READERROR        (0x2   << 4  ) /* Read verify error. After an erase the controller reads the corresponding word(s) to verify that the transaction completed successfully. If data read is not all 'F's this is the resulting status.If the Sign command is executed and the resulting signature does not match the data in the upper 4 bytes of the upper page in a block then this is the resulting status. */
-#define FEESTA_CMDRES_ABORTED          (0x3   << 4  ) /* Indicates that a command or a write was aborted by an abort command or a system interrupt has caused an abort */
+#define FEESTA_CMDRES_Pos              (4U)
+#define FEESTA_CMDRES_Msk              (0x3U << FEESTA_CMDRES_Pos)
+#define FEESTA_CMDRES_SUCCESS          (0x0U << FEESTA_CMDRES_Pos)              /* Successful completion of a command or a write */
+#define FEESTA_CMDRES_IGNORED          (0x1U << FEESTA_CMDRES_Pos)              /* Attempted signcheck, write or erase of a protected location. */
+#define FEESTA_CMDRES_READERROR        (0x2U << FEESTA_CMDRES_Pos)              /* Read verify error. After an erase the controller reads the corresponding word(s) to verify that the transaction completed successfully. If data read is not all 'F's this is the resulting status.If the Sign command is executed and the resulting signature does not match the data in the upper 4 bytes of the upper page in a block then this is the resulting status. */
+#define FEESTA_CMDRES_ABORTED          (0x3U << FEESTA_CMDRES_Pos)              /* Indicates that a command or a write was aborted by an abort command or a system interrupt has caused an abort */
 
 /* FEESTA[WRALMOSTDONE] - Write almost Complete - key-hole registers open for access. This bit flags the earliest point at which the flash controller data and address may be updated for the next command without affecting an active flash command operation. */
-#define FEESTA_WRALMOSTDONE_BBA        (*(volatile unsigned long *) 0x4230000C)
-#define FEESTA_WRALMOSTDONE_MSK        (0x1   << 3  )
-#define FEESTA_WRALMOSTDONE            (0x1   << 3  )
-#define FEESTA_WRALMOSTDONE_CLR        (0x0   << 3  ) /* Cleared to 0 when read   */
-#define FEESTA_WRALMOSTDONE_SET        (0x1   << 3  ) /* Set to 1 when a write completes */
+#define FEESTA_WRALMOSTDONE_Pos        (3U)
+#define FEESTA_WRALMOSTDONE_Msk        (0x1U << FEESTA_WRALMOSTDONE_Pos)
+#define FEESTA_WRALMOSTDONE                     FEESTA_WRALMOSTDONE_Msk
 
 /* FEESTA[CMDDONE] - This bit asserts when a command completes. */
-#define FEESTA_CMDDONE_BBA             (*(volatile unsigned long *) 0x42300008)
-#define FEESTA_CMDDONE_MSK             (0x1   << 2  )
-#define FEESTA_CMDDONE                 (0x1   << 2  )
-#define FEESTA_CMDDONE_CLR             (0x0   << 2  ) /* Cleared to 0 when read   */
-#define FEESTA_CMDDONE_SET             (0x1   << 2  ) /* Set to 1 when a command completes */
+#define FEESTA_CMDDONE_Pos             (2U)
+#define FEESTA_CMDDONE_Msk             (0x1U << FEESTA_CMDDONE_Pos)
+#define FEESTA_CMDDONE                          FEESTA_CMDDONE_Msk
 
 /* FEESTA[WRCLOSE] - This bit is asserted when the user has written all key-hole registers for flash write and the controller has started the write. */
-#define FEESTA_WRCLOSE_BBA             (*(volatile unsigned long *) 0x42300004)
-#define FEESTA_WRCLOSE_MSK             (0x1   << 1  )
-#define FEESTA_WRCLOSE                 (0x1   << 1  )
-#define FEESTA_WRCLOSE_CLR             (0x0   << 1  )
-#define FEESTA_WRCLOSE_SET             (0x1   << 1  )
+#define FEESTA_WRCLOSE_Pos             (1U)
+#define FEESTA_WRCLOSE_Msk             (0x1U << FEESTA_WRCLOSE_Pos)
+#define FEESTA_WRCLOSE                          FEESTA_WRCLOSE_Msk
 
 /* FEESTA[CMDBUSY] - Command busy. */
-#define FEESTA_CMDBUSY_BBA             (*(volatile unsigned long *) 0x42300000)
-#define FEESTA_CMDBUSY_MSK             (0x1   << 0  )
-#define FEESTA_CMDBUSY                 (0x1   << 0  )
-#define FEESTA_CMDBUSY_CLR             (0x0   << 0  )
-#define FEESTA_CMDBUSY_SET             (0x1   << 0  )
+#define FEESTA_CMDBUSY_Pos             (0U)
+#define FEESTA_CMDBUSY_Msk             (0x1U << FEESTA_CMDBUSY_Pos)
+#define FEESTA_CMDBUSY                          FEESTA_CMDBUSY_Msk
 
-/* Reset Value for FEECON0*/
-#define FEECON0_RVAL                   0x0 
 
 /* FEECON0[IENERR] - Command fail interrupt enable */
-#define FEECON0_IENERR_BBA             (*(volatile unsigned long *) 0x42300088)
-#define FEECON0_IENERR_MSK             (0x1   << 2  )
-#define FEECON0_IENERR                 (0x1   << 2  )
-#define FEECON0_IENERR_DIS             (0x0   << 2  ) /* Disable                  */
-#define FEECON0_IENERR_EN              (0x1   << 2  ) /* Enable                   */
+#define FEECON0_IENERR_Pos             (2U)
+#define FEECON0_IENERR_Msk             (0x1U << FEECON0_IENERR_Pos)
+#define FEECON0_IENERR                          FEECON0_IENERR_Msk
 
 /* FEECON0[IWRALCOMP] - Write almost complete interrupt enable */
-#define FEECON0_IWRALCOMP_BBA          (*(volatile unsigned long *) 0x42300084)
-#define FEECON0_IWRALCOMP_MSK          (0x1   << 1  )
-#define FEECON0_IWRALCOMP              (0x1   << 1  )
-#define FEECON0_IWRALCOMP_DIS          (0x0   << 1  ) /* Disable                  */
-#define FEECON0_IWRALCOMP_EN           (0x1   << 1  ) /* Enable                   */
+#define FEECON0_IWRALCOMP_Pos          (1U)
+#define FEECON0_IWRALCOMP_Msk          (0x1U << FEECON0_IWRALCOMP_Pos)
+#define FEECON0_IWRALCOMP                       FEECON0_IWRALCOMP_Msk
 
 /* FEECON0[IENCMD] - Command complete interrupt enable */
-#define FEECON0_IENCMD_BBA             (*(volatile unsigned long *) 0x42300080)
-#define FEECON0_IENCMD_MSK             (0x1   << 0  )
-#define FEECON0_IENCMD                 (0x1   << 0  )
-#define FEECON0_IENCMD_DIS             (0x0   << 0  ) /* Disable                  */
-#define FEECON0_IENCMD_EN              (0x1   << 0  ) /* Enable                   */
+#define FEECON0_IENCMD_Pos             (0U)
+#define FEECON0_IENCMD_Msk             (0x1U << FEECON0_IENCMD_Pos)
+#define FEECON0_IENCMD                          FEECON0_IENCMD_Msk
 
-/* Reset Value for FEECMD*/
-#define FEECMD_RVAL                    0x0 
 
 /* FEECMD[CMD] - Commands */
-#define FEECMD_CMD_MSK                 (0x1F  << 0  )
-#define FEECMD_CMD_IDLE                (0x0   << 0  ) /* IDLE. No command executed. */
-#define FEECMD_CMD_PAGEERASE           (0x1   << 0  ) /* PAGEERASE. Write the address of the page to be erased to the FEEADR0 register, then write this code to the FEECMD and the flash will erase the page. When the erase has completed the flash will read every location in the page to verify all words in the page are erased.  If there is a read verify error this will be indicated in the Status register.  To erase multiple pages wait until a previous page erase has completed - check the status then issue a command to start the next page erase.  Before entering this command  0xF123F456 must first be written to the FEEKEY register. */
-#define FEECMD_CMD_SIGN                (0x2   << 0  ) /* SIGN. Use this command to generate a signature for a block of data.  The signature is generated on a page by page basis.  To generate a signature the address of the first page of the block is entered in the FEEADR0 register, the address of the last page is written to the FEEADR1 register, then write this code to the FEECMD register.  When the command has completed the signature is available for reading in the Sign register.  The last 4 bytes of the last page in a block is reserved for storing the signature. Before entering this command 0xF123F456 must first be written to the FEEKEY register. */
-#define FEECMD_CMD_WRITE               (0x4   << 0  ) /* WRITE. Use this command to write to flash locations. This command needs a UserKey for writing into write protection location and userfaakey location. No key is required for other flash locations. This command takes the address, data from FEEADR, FEEFLDATA key-hole registers. */
-#define FEECMD_CMD_MASSERASE0          (0x5   << 0  ) /* MASSERASE0. Erase all of flash0 user space. To enable this operation 0xF123F456 must first be written to the FEEKEY register (this is to prevent accidental erases).  When the mass erase has completed the controller will read every location to verify that all locations are 0xFFFFFFFFFFFFFFFF.  If there is a read verify error this will be indicated in the Status register. */
-#define FEECMD_CMD_MASSERASE1          (0x6   << 0  ) /* MASSERASE1. Erase all of flash1 user space. To enable this operation 0xF123F456 must first be written to the FEEKEY register (this is to prevent accidental erases).  When the mass erase has completed the controller will read every location to verify that all locations are 0xFFFFFFFFFFFFFFFF.  If there is a read verify error this will be indicated in the Status register. */
-#define FEECMD_CMD_ABORT               (0x8   << 0  ) /* ABORT. If this command is issued then any command currently in progress will be stopped.  The status will indicate command completed with an error status (FEESTA[5:4] = 0x3).  Note that this is the only command that can be issued while another command is already in progress.  This command can also be used to stop a write that may be in progress. If a write or erase is aborted then the flash timing will be violated and it is not possible to determine if the write or erase completed successfully.  To enable this operation 0xF123F456 must first be written to the FEEKEY register (this is to prevent accidental aborts). */
+#define FEECMD_CMD_Pos                 (0U)
+#define FEECMD_CMD_Msk                 (0x1FU << FEECMD_CMD_Pos)
+#define FEECMD_CMD_IDLE                (0x00U << FEECMD_CMD_Pos)                /* IDLE. No command executed. */
+#define FEECMD_CMD_PAGEERASE           (0x01U << FEECMD_CMD_Pos)                /* PAGEERASE. Write the address of the page to be erased to the FEEADR0 register, then write this code to the FEECMD and the flash will erase the page. When the erase has completed the flash will read every location in the page to verify all words in the page are erased.  If there is a read verify error this will be indicated in the Status register.  To erase multiple pages wait until a previous page erase has completed - check the status then issue a command to start the next page erase.  Before entering this command  0xF123F456 must first be written to the FEEKEY register. */
+#define FEECMD_CMD_SIGN                (0x02U << FEECMD_CMD_Pos)                /* SIGN. Use this command to generate a signature for a block of data.  The signature is generated on a page by page basis.  To generate a signature the address of the first page of the block is entered in the FEEADR0 register, the address of the last page is written to the FEEADR1 register, then write this code to the FEECMD register.  When the command has completed the signature is available for reading in the Sign register.  The last 4 bytes of the last page in a block is reserved for storing the signature. Before entering this command 0xF123F456 must first be written to the FEEKEY register. */
+#define FEECMD_CMD_WRITE               (0x04U << FEECMD_CMD_Pos)                /* WRITE. Use this command to write to flash locations. This command needs a UserKey for writing into write protection location and userfaakey location. No key is required for other flash locations. This command takes the address, data from FEEADR, FEEFLDATA key-hole registers. */
+#define FEECMD_CMD_MASSERASE0          (0x05U << FEECMD_CMD_Pos)                /* MASSERASE0. Erase all of flash0 user space. To enable this operation 0xF123F456 must first be written to the FEEKEY register (this is to prevent accidental erases).  When the mass erase has completed the controller will read every location to verify that all locations are 0xFFFFFFFFFFFFFFFF.  If there is a read verify error this will be indicated in the Status register. */
+#define FEECMD_CMD_MASSERASE1          (0x06U << FEECMD_CMD_Pos)                /* MASSERASE1. Erase all of flash1 user space. To enable this operation 0xF123F456 must first be written to the FEEKEY register (this is to prevent accidental erases).  When the mass erase has completed the controller will read every location to verify that all locations are 0xFFFFFFFFFFFFFFFF.  If there is a read verify error this will be indicated in the Status register. */
+#define FEECMD_CMD_ABORT               (0x08U << FEECMD_CMD_Pos)                /* ABORT. If this command is issued then any command currently in progress will be stopped.  The status will indicate command completed with an error status (FEESTA[5:4] = 0x3).  Note that this is the only command that can be issued while another command is already in progress.  This command can also be used to stop a write that may be in progress. If a write or erase is aborted then the flash timing will be violated and it is not possible to determine if the write or erase completed successfully.  To enable this operation 0xF123F456 must first be written to the FEEKEY register (this is to prevent accidental aborts). */
 
-/* Reset Value for FEEFLADR*/
-#define FEEFLADR_RVAL                  0x0 
 
-/* FEEFLADR[FLAddr] - Memory mapped address for the flash location */
-#define FEEFLADR_FLAddr_MSK            (0xFFFF << 3  )
+/* FEEFLADR[FLADDR] - Memory mapped address for the flash location */
+#define FEEFLADR_FLADDR_Pos            (3U)
+#define FEEFLADR_FLADDR_Msk            (0xFFFFU << FEEFLADR_FLADDR_Pos)
 
-/* Reset Value for FEEFLDATA0*/
-#define FEEFLDATA0_RVAL                0x0 
 
 /* FEEFLDATA0[FLDATA0] - FLDATA0 forms the lower 32 bit of 64 bit data to be written to flash */
-#define FEEFLDATA0_FLDATA0_MSK         (0xFFFFFFFF << 0  )
+#define FEEFLDATA0_FLDATA0_Pos         (0U)
+#define FEEFLDATA0_FLDATA0_Msk         (0xFFFFFFFFU << FEEFLDATA0_FLDATA0_Pos)
 
-/* Reset Value for FEEFLDATA1*/
-#define FEEFLDATA1_RVAL                0x0 
 
 /* FEEFLDATA1[FLDATA1] - FLDATA1 forms the upper 32 bit of 64 bit data to be written to flash */
-#define FEEFLDATA1_FLDATA1_MSK         (0xFFFFFFFF << 0  )
+#define FEEFLDATA0_FLDATA1_Pos         (0U)
+#define FEEFLDATA0_FLDATA1_Msk         (0xFFFFFFFFU << FEEFLDATA0_FLDATA1_Pos)
 
-/* Reset Value for FEEADR0*/
-#define FEEADR0_RVAL                   0x0 
 
-/* FEEADR0[PageAddr0] - Used by SIGN and PAGEERASE commands for specifying page address. See the description of these commands in FEECMD */
-#define FEEADR0_PageAddr0_MSK          (0xFF  << 11 )
+/* FEEADR0[PAGEADDR0] - Used by SIGN and PAGEERASE commands for specifying page address. See the description of these commands in FEECMD */
+#define FEEADR0_PAGEADDR0_Pos          (11U)
+#define FEEADR0_PAGEADDR0_Msk          (0xFFU << FEEADR0_PAGEADDR0_Pos)
 
-/* Reset Value for FEEADR1*/
-#define FEEADR1_RVAL                   0x0 
 
-/* FEEADR1[PageAddr1] - Used by SIGN command for specifying the end page address. See description of this command in FEECMD */
-#define FEEADR1_PageAddr1_MSK          (0xFF  << 11 )
+/* FEEADR1[PAGEADDR1] - Used by SIGN command for specifying the end page address. See description of this command in FEECMD */
+#define FEEADR0_PAGEADDR1_Pos          (11U)
+#define FEEADR0_PAGEADDR1_Msk          (0xFFU << FEEADR0_PAGEADDR1_Pos)
 
-/* Reset Value for FEEKEY*/
-#define FEEKEY_RVAL                    0x0 
 
 /* FEEKEY[KEY] - Enter 0xF123F456 to allow key protected operations. Returns 0x0 if read. */
-#define FEEKEY_KEY_MSK                 (0xFFFFFFFF << 0  )
+#define FEEKEY_KEY_Pos                 (0U)
+#define FEEKEY_KEY_Msk                 (0xFFFFFFFFU << FEEKEY_KEY_Pos)
+#define FEEKEY_KEY                     (0xF123F456U << FEEKEY_KEY_Pos)
 
-/* Reset Value for FEEPRO0*/
-#define FEEPRO0_RVAL                   0xFFFFFFFF 
 
-/* FEEPRO0[WrProt0] - Write protection for flash0 - 32 bits. */
-#define FEEPRO0_WrProt0_MSK            (0xFFFFFFFF << 0  )
+/* FEEPRO0[WRPROT0] - Write protection for flash0 - 32 bits. */
+#define FEEPRO0_WRPROT0_Pos            (0U)
+#define FEEPRO0_WRPROT0_Msk            (0xFFFFFFFFU << FEEPRO0_WRPROT0_Pos)
 
-/* Reset Value for FEEPRO1*/
-#define FEEPRO1_RVAL                   0xFFFFFFFF 
 
-/* FEEPRO1[WrProt1] - Write protection for flash1 - 32 bits. */
-#define FEEPRO1_WrProt1_MSK            (0xFFFFFFFF << 0  )
+/* FEEPRO1[WRPROT1] - Write protection for flash1 - 32 bits. */
+#define FEEPRO1_WRPROT1_Pos            (0U)
+#define FEEPRO1_WRPROT1_Msk            (0xFFFFFFFFU << FEEPRO1_WRPROT1_Pos)
 
-/* Reset Value for FEESIG*/
-#define FEESIG_RVAL                    0x0 
 
 /* FEESIG[SIGN] - 24 bit signature. */
-#define FEESIG_SIGN_MSK                (0xFFFFFF << 0  )
+#define FEESIG_SIGN_Pos                (0U)
+#define FEESIG_SIGN_Msk                (0xFFFFFFU << FEESIG_SIGN_Pos)
 
-/* Reset Value for FEECON1*/
-#define FEECON1_RVAL                   0x1 
 
 /* FEECON1[MDIO] - MDIO mode */
-#define FEECON1_MDIO_BBA               (*(volatile unsigned long *) 0x42300710)
-#define FEECON1_MDIO_MSK               (0x1   << 4  )
-#define FEECON1_MDIO                   (0x1   << 4  )
-#define FEECON1_MDIO_DIS               (0x0   << 4  )
-#define FEECON1_MDIO_EN                (0x1   << 4  )
+#define FEECON1_MDIO_Pos               (4U)
+#define FEECON1_MDIO_Msk               (0x1U << FEECON1_MDIO_Pos)
+#define FEECON1_MDIO                            FEECON1_MDIO_Msk
 
 /* FEECON1[SWAP] - Swap program code for MDIO mode. */
-#define FEECON1_SWAP_BBA               (*(volatile unsigned long *) 0x4230070C)
-#define FEECON1_SWAP_MSK               (0x1   << 3  )
-#define FEECON1_SWAP                   (0x1   << 3  )
-#define FEECON1_SWAP_DIS               (0x0   << 3  )
-#define FEECON1_SWAP_EN                (0x1   << 3  )
+#define FEECON1_SWAP_Pos               (3U)
+#define FEECON1_SWAP_Msk               (0x1U << FEECON1_SWAP_Pos)
+#define FEECON1_SWAP                            FEECON1_SWAP_Msk
 
 /* FEECON1[INCR] - Auto increment FEEFLAADR for non DMA operation. */
-#define FEECON1_INCR_BBA               (*(volatile unsigned long *) 0x42300708)
-#define FEECON1_INCR_MSK               (0x1   << 2  )
-#define FEECON1_INCR                   (0x1   << 2  )
-#define FEECON1_INCR_DIS               (0x0   << 2  ) /* Disable auto address increment */
-#define FEECON1_INCR_EN                (0x1   << 2  ) /* Enable auto address increment */
+#define FEECON1_INCR_Pos               (2U)
+#define FEECON1_INCR_Msk               (0x1U << FEECON1_INCR_Pos)
+#define FEECON1_INCR                            FEECON1_INCR_Msk
 
 /* FEECON1[KHDMA] - Key-hole DMA enable. */
-#define FEECON1_KHDMA_BBA              (*(volatile unsigned long *) 0x42300704)
-#define FEECON1_KHDMA_MSK              (0x1   << 1  )
-#define FEECON1_KHDMA                  (0x1   << 1  )
-#define FEECON1_KHDMA_DIS              (0x0   << 1  ) /* Disable DMA mode         */
-#define FEECON1_KHDMA_EN               (0x1   << 1  ) /* Enable DMA mode          */
+#define FEECON1_KHDMA_Pos              (1U)
+#define FEECON1_KHDMA_Msk              (0x1U << FEECON1_KHDMA_Pos)
+#define FEECON1_KHDMA                           FEECON1_KHDMA_Msk
 
 /* FEECON1[DBG] - JTAG debug enable */
-#define FEECON1_DBG_BBA                (*(volatile unsigned long *) 0x42300700)
-#define FEECON1_DBG_MSK                (0x1   << 0  )
-#define FEECON1_DBG                    (0x1   << 0  )
-#define FEECON1_DBG_DIS                (0x0   << 0  ) /* Disable JTAG access      */
-#define FEECON1_DBG_EN                 (0x1   << 0  ) /* Enable JTAG access       */
+#define FEECON1_DBG_Pos                (0U)
+#define FEECON1_DBG_Msk                (0x1U << FEECON1_DBG_Pos)
+#define FEECON1_DBG                             FEECON1_DBG_Msk
 
-/* Reset Value for FEEWRADDRA*/
-#define FEEWRADDRA_RVAL                0x0 
 
-/* FEEWRADDRA[WrAbortAddr] - If a write is aborted then this will contain the address of the location been written when the write was aborted. This register has appropriate value if command abort happened. This has to be read after the command is aborted. And this has to be read before any other command is given. After reset the value will be random. */
-#define FEEWRADDRA_WrAbortAddr_MSK     (0xFFFFFFFF << 0  )
+/* FEEWRADDRA[WRABORTADDR] - If a write is aborted then this will contain the address of the location been written when the write was aborted. This register has appropriate value if command abort happened. This has to be read after the command is aborted. And this has to be read before any other command is given. After reset the value will be random. */
+#define FEEWRADDRA_WRABORTADDR_Pos     (0U)
+#define FEEWRADDRA_WRABORTADDR_Msk     (0xFFFFFFFFU << FEEWRADDRA_WRABORTADDR_Pos)
 
-/* Reset Value for FEEAEN0*/
-#define FEEAEN0_RVAL                   0x0 
 
-/* FEEAEN0[SysIrqAbortEn] - Lower 32 bits of System Interrupt Abort Enable. To allow a system interrupt to abort a command (write, erase, sign or mass verify) then write a '1' to the appropriate bit in this register. */
-#define FEEAEN0_SysIrqAbortEn_MSK      (0xFFFFFFFF << 0  )
+/* FEEAEN0[SYSIRQABORTEN] - Lower 32 bits of System Interrupt Abort Enable. To allow a system interrupt to abort a command (write, erase, sign or mass verify) then write a '1' to the appropriate bit in this register. */
+#define FEEAEN0_SYSIRQABORTEN_Pos      (0U)
+#define FEEAEN0_SYSIRQABORTEN_Msk      (0xFFFFFFFFU << FEEAEN0_SYSIRQABORTEN_Pos)
 
-/* Reset Value for FEEAEN1*/
-#define FEEAEN1_RVAL                   0x0 
 
-/* FEEAEN1[SysIrqAbortEn] - Upper 23 bits of System Interrupt Abort Enable. To allow a system interrupt to abort a command (write, erase, sign or mass verify) then write a '1' to the appropriate bit in this register. */
-#define FEEAEN1_SysIrqAbortEn_MSK      (0x7FFFFF << 0  )
+/* FEEAEN1[SYSIRQABORTEN] - Upper 23 bits of System Interrupt Abort Enable. To allow a system interrupt to abort a command (write, erase, sign or mass verify) then write a '1' to the appropriate bit in this register. */
+#define FEEAEN1_SYSIRQABORTEN_Pos      (0U)
+#define FEEAEN1_SYSIRQABORTEN_Msk      (0x7FFFFFU << FEEAEN1_SYSIRQABORTEN_Pos)
 
-/* Reset Value for FEEECCCONFIG*/
-#define FEEECCCONFIG_RVAL              0x0 
 
 /* FEEECCCONFIG[INT] - Interrupt enable when a ECC error happens during an AHB read from program or data flash. */
-#define FEEECCCONFIG_INT_MSK           (0x3   << 3  )
+#define FEEECCCONFIG_INT_Pos           (3U)
+#define FEEECCCONFIG_INT_Msk           (0x3U << FEEECCCONFIG_INT_Pos)
 
 /* FEEECCCONFIG[FAULT] - Signifies when to generate AHB error (HRESP = 1) when an ECC error happens - 1 bit error or 2 bit error. */
-#define FEEECCCONFIG_FAULT_MSK         (0x3   << 1  )
+#define FEEECCCONFIG_FAULT_Pos         (1U)
+#define FEEECCCONFIG_FAULT_Msk         (0x3U << FEEECCCONFIG_FAULT_Pos)
 
 /* FEEECCCONFIG[DIS] - ECC Disable bit. */
-#define FEEECCCONFIG_DIS_BBA           (*(volatile unsigned long *) 0x42300C80)
-#define FEEECCCONFIG_DIS_MSK           (0x1   << 0  )
-#define FEEECCCONFIG_DIS               (0x1   << 0  )
-#define FEEECCCONFIG_DIS_DIS           (0x0   << 0  )
-#define FEEECCCONFIG_DIS_EN            (0x1   << 0  )
+#define FEEECCCONFIG_DIS_Pos           (0U)
+#define FEEECCCONFIG_DIS_Msk           (0x1U << FEEECCCONFIG_DIS_Pos)
+#define FEEECCCONFIG_DIS                        FEEECCCONFIG_DIS_Msk
 
-/* Reset Value for FEEECCADDR0*/
-#define FEEECCADDR0_RVAL               0x0 
 
-/* FEEECCADDR0[ADDR0] - This register has the address of flash0 for which ECC error is detected. */
-#define FEEECCADDR0_ADDR0_MSK          (0x7FFFF << 0  )
+/* FEEECCADDR0[VALUE] - This register has the address of flash0 for which ECC error is detected. */
+#define FEEECCADDR0_VALUE_Pos          (0U)
+#define FEEECCADDR0_VALUE_Msk          (0x7FFFFU << FEEECCADDR0_VALUE_Msk)
 
-/* Reset Value for FEEECCADDR1*/
-#define FEEECCADDR1_RVAL               0x0 
 
-/* FEEECCADDR1[ADDR1] - This register has the address of flash1 for which ECC error is detected. */
-#define FEEECCADDR1_ADDR1_MSK          (0x7FFFF << 0  )
+/* FEEECCADDR1[VALUE] - This register has the address of flash1 for which ECC error is detected. */
+#define FEEECCADDR1_VALUE_Pos          (0U)
+#define FEEECCADDR1_VALUE_Msk          (0x7FFFFU << FEEECCADDR1_VALUE_Msk)
 
-/* Reset Value for CACHESTAT*/
-#define CACHESTAT_RVAL                 0x2 
 
 /* CACHESTAT[DLOCK] - This bit is set when D-Cache is locked and cleared when D-cache is unlocked. */
-#define CACHESTAT_DLOCK_BBA            (*(volatile unsigned long *) 0x42301848)
-#define CACHESTAT_DLOCK_MSK            (0x1   << 18 )
-#define CACHESTAT_DLOCK                (0x1   << 18 )
-#define CACHESTAT_DLOCK_CLR            (0x0   << 18 )
-#define CACHESTAT_DLOCK_SET            (0x1   << 18 )
+#define CACHESTAT_DLOCK_Pos            (18U)
+#define CACHESTAT_DLOCK_Msk            (0x1U << CACHESTAT_DLOCK_Pos)
+#define CACHESTAT_DLOCK                         CACHESTAT_DLOCK_Msk
 
 /* CACHESTAT[DEN] - If this bit is set then D-Cache is enabled and when cleared D-Cache is disabled. This is also cleared when CACHESTAT[16] is set. */
-#define CACHESTAT_DEN_BBA              (*(volatile unsigned long *) 0x42301844)
-#define CACHESTAT_DEN_MSK              (0x1   << 17 )
-#define CACHESTAT_DEN                  (0x1   << 17 )
-#define CACHESTAT_DEN_CLR              (0x0   << 17 )
-#define CACHESTAT_DEN_SET              (0x1   << 17 )
+#define CACHESTAT_DEN_Pos              (17U)
+#define CACHESTAT_DEN_Msk              (0x1U << CACHESTAT_DEN_Pos)
+#define CACHESTAT_DEN                           CACHESTAT_DEN_Msk
 
 /* CACHESTAT[DINIT] - It is set when D-cache memory initialization starts and clears when initialization is done. D-Cache is disabled when this bit is set. */
-#define CACHESTAT_DINIT_BBA            (*(volatile unsigned long *) 0x42301840)
-#define CACHESTAT_DINIT_MSK            (0x1   << 16 )
-#define CACHESTAT_DINIT                (0x1   << 16 )
-#define CACHESTAT_DINIT_CLR            (0x0   << 16 )
-#define CACHESTAT_DINIT_SET            (0x1   << 16 )
+#define CACHESTAT_DINIT_Pos            (16U)
+#define CACHESTAT_DINIT_Msk            (0x1U << CACHESTAT_DINIT_Pos)
+#define CACHESTAT_DINIT                         CACHESTAT_DINIT_Msk
 
 /* CACHESTAT[ILOCK] - This bit is set when I-Cache is locked and cleared when I-cache is unlocked. */
-#define CACHESTAT_ILOCK_BBA            (*(volatile unsigned long *) 0x42301808)
-#define CACHESTAT_ILOCK_MSK            (0x1   << 2  )
-#define CACHESTAT_ILOCK                (0x1   << 2  )
-#define CACHESTAT_ILOCK_CLR            (0x0   << 2  )
-#define CACHESTAT_ILOCK_SET            (0x1   << 2  )
+#define CACHESTAT_ILOCK_Pos            (2U)
+#define CACHESTAT_ILOCK_Msk            (0x1U << CACHESTAT_ILOCK_Pos)
+#define CACHESTAT_ILOCK                         CACHESTAT_ILOCK_Msk
 
 /* CACHESTAT[IEN] - If this bit is set then I-Cache is enabled and when cleared I-Cache is disabled. This is also cleared when CACHESTAT[0] is set. */
-#define CACHESTAT_IEN_BBA              (*(volatile unsigned long *) 0x42301804)
-#define CACHESTAT_IEN_MSK              (0x1   << 1  )
-#define CACHESTAT_IEN                  (0x1   << 1  )
-#define CACHESTAT_IEN_CLR              (0x0   << 1  )
-#define CACHESTAT_IEN_SET              (0x1   << 1  )
+#define CACHESTAT_IEN_Pos              (1U)
+#define CACHESTAT_IEN_Msk              (0x1U << CACHESTAT_IEN_Pos)
+#define CACHESTAT_IEN                           CACHESTAT_IEN_Msk
 
 /* CACHESTAT[IINIT] - It is set when I-cache memory initialization starts and clears when initialization is done. I-Cache is disabled when this bit is set. */
-#define CACHESTAT_IINIT_BBA            (*(volatile unsigned long *) 0x42301800)
-#define CACHESTAT_IINIT_MSK            (0x1   << 0  )
-#define CACHESTAT_IINIT                (0x1   << 0  )
-#define CACHESTAT_IINIT_CLR            (0x0   << 0  )
-#define CACHESTAT_IINIT_SET            (0x1   << 0  )
+#define CACHESTAT_IINIT_Pos            (0U)
+#define CACHESTAT_IINIT_Msk            (0x1U << CACHESTAT_IINIT_Pos)
+#define CACHESTAT_IINIT                         CACHESTAT_IINIT_Msk
 
-/* Reset Value for CACHESETUP*/
-#define CACHESETUP_RVAL                0x2 
 
 /* CACHESETUP[DWRBUF] - If this bit is set, then for every AHB access, hit from WrBuffer is not checked. */
-#define CACHESETUP_DWRBUF_BBA          (*(volatile unsigned long *) 0x423018CC)
-#define CACHESETUP_DWRBUF_MSK          (0x1   << 19 )
-#define CACHESETUP_DWRBUF              (0x1   << 19 )
-#define CACHESETUP_DWRBUF_EN           (0x0   << 19 )
-#define CACHESETUP_DWRBUF_DIS          (0x1   << 19 )
+#define CACHESETUP_DWRBUF_Pos          (19U)
+#define CACHESETUP_DWRBUF_Msk          (0x1U << CACHESETUP_DWRBUF_Pos)
+#define CACHESETUP_DWRBUF                       CACHESETUP_DWRBUF_Msk
 
 /* CACHESETUP[DLOCK] - If this bit is set, then D-cache contents are locked. Any new misses will not be replaced in D-Cache. This bit is cleared when CACHESETUP[16] is set. */
-#define CACHESETUP_DLOCK_BBA           (*(volatile unsigned long *) 0x423018C8)
-#define CACHESETUP_DLOCK_MSK           (0x1   << 18 )
-#define CACHESETUP_DLOCK               (0x1   << 18 )
-#define CACHESETUP_DLOCK_DIS           (0x0   << 18 )
-#define CACHESETUP_DLOCK_EN            (0x1   << 18 )
+#define CACHESETUP_DLOCK_Pos           (18U)
+#define CACHESETUP_DLOCK_Msk           (0x1U << CACHESETUP_DLOCK_Pos)
+#define CACHESETUP_DLOCK                        CACHESETUP_DLOCK_Msk
 
 /* CACHESETUP[DEN] - If this bit set, then D-Cache is enabled for AHB accesses. If 0, then D-cache is disabled, and all AHB accesses will be via Flash memory. This bit is cleared when CACHESETUP[16] is set. */
-#define CACHESETUP_DEN_BBA             (*(volatile unsigned long *) 0x423018C4)
-#define CACHESETUP_DEN_MSK             (0x1   << 17 )
-#define CACHESETUP_DEN                 (0x1   << 17 )
-#define CACHESETUP_DEN_DIS             (0x0   << 17 )
-#define CACHESETUP_DEN_EN              (0x1   << 17 )
+#define CACHESETUP_DEN_Pos             (17U)
+#define CACHESETUP_DEN_Msk             (0x1U << CACHESETUP_DEN_Pos)
+#define CACHESETUP_DEN                          CACHESETUP_DEN_Msk
 
 /* CACHESETUP[DINIT] - If this bit is set then the D-cache contents are initialized to all zeros. This bit will be cleared once the initialization starts. */
-#define CACHESETUP_DINIT_BBA           (*(volatile unsigned long *) 0x423018C0)
-#define CACHESETUP_DINIT_MSK           (0x1   << 16 )
-#define CACHESETUP_DINIT               (0x1   << 16 )
-#define CACHESETUP_DINIT_DIS           (0x0   << 16 )
-#define CACHESETUP_DINIT_EN            (0x1   << 16 )
+#define CACHESETUP_DINIT_Pos           (16U)
+#define CACHESETUP_DINIT_Msk           (0x1U << CACHESETUP_DINIT_Pos)
+#define CACHESETUP_DINIT                        CACHESETUP_DINIT_Msk
 
 /* CACHESETUP[IRDBUF] - If this bit is set, then for every AHB access, hit from Read Buffer is not checked. */
-#define CACHESETUP_IRDBUF_BBA          (*(volatile unsigned long *) 0x42301890)
-#define CACHESETUP_IRDBUF_MSK          (0x1   << 4  )
-#define CACHESETUP_IRDBUF              (0x1   << 4  )
-#define CACHESETUP_IRDBUF_EN           (0x0   << 4  )
-#define CACHESETUP_IRDBUF_DIS          (0x1   << 4  )
+#define CACHESETUP_IRDBUF_Pos          (4U)
+#define CACHESETUP_IRDBUF_Msk          (0x1U << CACHESETUP_IRDBUF_Pos)
+#define CACHESETUP_IRDBUF                       CACHESETUP_IRDBUF_Msk
 
 /* CACHESETUP[IWRBUF] - If this bit is set, then for every AHB access, hit from Write Buffer is not checked. */
-#define CACHESETUP_IWRBUF_BBA          (*(volatile unsigned long *) 0x4230188C)
-#define CACHESETUP_IWRBUF_MSK          (0x1   << 3  )
-#define CACHESETUP_IWRBUF              (0x1   << 3  )
-#define CACHESETUP_IWRBUF_EN           (0x0   << 3  )
-#define CACHESETUP_IWRBUF_DIS          (0x1   << 3  )
+#define CACHESETUP_IWRBUF_Pos          (3U)
+#define CACHESETUP_IWRBUF_Msk          (0x1U << CACHESETUP_IWRBUF_Pos)
+#define CACHESETUP_IWRBUF                       CACHESETUP_IWRBUF_Msk
 
 /* CACHESETUP[ILOCK] - If this bit is set, then I-cache contents are locked. Any new misses won�t be replaced in I-Cache. This bit is cleared when CACHESETUP[0] is set. */
-#define CACHESETUP_ILOCK_BBA           (*(volatile unsigned long *) 0x42301888)
-#define CACHESETUP_ILOCK_MSK           (0x1   << 2  )
-#define CACHESETUP_ILOCK               (0x1   << 2  )
-#define CACHESETUP_ILOCK_DIS           (0x0   << 2  )
-#define CACHESETUP_ILOCK_EN            (0x1   << 2  )
+#define CACHESETUP_ILOCK_Pos           (2U)
+#define CACHESETUP_ILOCK_Msk           (0x1U << CACHESETUP_ILOCK_Pos)
+#define CACHESETUP_ILOCK                        CACHESETUP_ILOCK_Msk
 
 /* CACHESETUP[IEN] - If this bit set, then I-Cache is enabled for AHB accesses. If 0, then I-cache is disabled, and all AHB accesses will be via Flash memory. This bit is cleared when CACHESETUP[0] is set. */
-#define CACHESETUP_IEN_BBA             (*(volatile unsigned long *) 0x42301884)
-#define CACHESETUP_IEN_MSK             (0x1   << 1  )
-#define CACHESETUP_IEN                 (0x1   << 1  )
-#define CACHESETUP_IEN_DIS             (0x0   << 1  )
-#define CACHESETUP_IEN_EN              (0x1   << 1  )
+#define CACHESETUP_IEN_Pos             (1U)
+#define CACHESETUP_IEN_Msk             (0x1U << CACHESETUP_IEN_Pos)
+#define CACHESETUP_IEN                          CACHESETUP_IEN_Msk
 
 /* CACHESETUP[IINIT] - If this bit is set then the I-cache contents are initialized to all zeros. This bit will be cleared once the initialization starts. */
-#define CACHESETUP_IINIT_BBA           (*(volatile unsigned long *) 0x42301880)
-#define CACHESETUP_IINIT_MSK           (0x1   << 0  )
-#define CACHESETUP_IINIT               (0x1   << 0  )
-#define CACHESETUP_IINIT_DIS           (0x0   << 0  )
-#define CACHESETUP_IINIT_EN            (0x1   << 0  )
-
-/* Reset Value for CACHEKEY*/
-#define CACHEKEY_RVAL                  0x0 
-
-/* CACHEKEY[Key] - Cache Key register */
-#define CACHEKEY_Key_MSK               (0xFFFFFFFF << 0  )
+#define CACHESETUP_IINIT_Pos           (0U)
+#define CACHESETUP_IINIT_Msk           (0x1U << CACHESETUP_IINIT_Pos)
+#define CACHESETUP_IINIT                        CACHESETUP_IINIT_Msk
 
 
-/*------------------------------------------------------------------------------
- *                                  GPIO
- *----------------------------------------------------------------------------*/
+/* CACHEKEY[KEY] - Cache Key register */
+#define CACHEKEY_KEY_Pos               (0U)
+#define CACHEKEY_KEY_Msk               (0xFFFFFFFFU << CACHEKEY_KEY_Pos)
+#define CACHEKEY_KEY                   (0xF123F456U << CACHEKEY_KEY_Pos)
+
+
+/* ========================================================================== */
+/* ================                 GPIO                   ================== */
+/* ========================================================================== */
 
 /**
  * @brief GPIO (MMR_GPIO)
  */
 
-typedef struct {                            /*!< MMR_GPIO Structure                     */
-  __IOM uint16_t  GPCON;                    /*!< GPIO Port configuration             */
+typedef struct {                            // MMR_GPIO Structure
+  __IOM uint16_t  GPCON;                    // GPIO Port configuration
   __IM  uint16_t  RESERVED0;
-  __IOM uint8_t   GPOE;                     /*!< GPIO Port output enable             */
+  __IOM uint8_t   GPOE;                     // GPIO Port output enable
   __IM  uint8_t   RESERVED1[3];
-  __IOM uint8_t   GPPUL;                    /*!< GPIO Port pullup enable             */
+  __IOM uint8_t   GPPUL;                    // GPIO Port pullup enable
   __IM  uint8_t   RESERVED2[3];
-  __IOM uint8_t   GPIE;                     /*!< GPIO Port input path enable         */
+  __IOM uint8_t   GPIE;                     // GPIO Port input path enable
   __IM  uint8_t   RESERVED3[3];
-  __IOM uint8_t   GPIN;                     /*!< GPIO Port registered data input     */
+  __IOM uint8_t   GPIN;                     // GPIO Port registered data input
   __IM  uint8_t   RESERVED4[3];
-  __IOM uint8_t   GPOUT;                    /*!< GPIO Port data output               */
+  __IOM uint8_t   GPOUT;                    // GPIO Port data output
   __IM  uint8_t   RESERVED5[3];
-  __IOM uint8_t   GPSET;                    /*!< GPIO Port data out set              */
+  __IOM uint8_t   GPSET;                    // GPIO Port data out set
   __IM  uint8_t   RESERVED6[3];
-  __IOM uint8_t   GPCLR;                    /*!< GPIO Port data out clear            */
+  __IOM uint8_t   GPCLR;                    // GPIO Port data out clear
   __IM  uint8_t   RESERVED7[3];
-  __IOM uint8_t   GPTGL;                    /*!< GPIO Port pin toggle                */
+  __IOM uint8_t   GPTGL;                    // GPIO Port pin toggle
   __IM  uint8_t   RESERVED8[3];
-  __IOM uint8_t   GPODE;                    /*!< GPIO Port open drain enable         */
+  __IOM uint8_t   GPODE;                    // GPIO Port open drain enable
   __IM  uint8_t   RESERVED9[3];
 } MMR_GPIO_t;
 
@@ -4125,564 +3773,251 @@ typedef struct MMR_DMACTL {                 /*!< MMR_DMACTL Structure           
 #define L1SRAMCTL_L1SRAMCTL            (0x1   << 0  )
 #define L1SRAMCTL_L1SRAMCTL_DIS        (0x0   << 0  )
 #define L1SRAMCTL_L1SRAMCTL_EN         (0x1   << 0  )
-// ------------------------------------------------------------------------------------------------
-// -----                                        SPI                                        -----
-// ------------------------------------------------------------------------------------------------
 
+
+/* ========================================================================== */
+/* ================                   SPI                  ================== */
+/* ========================================================================== */
 
 /**
   * @brief SPI (MMR_SPI)
   */
 
-typedef struct MMR_SPI {                    /*!< MMR_SPI Structure                    */
-  __IO uint16_t  SPISTA;                    /*!< Status register                       */
+typedef struct MMR_SPI {                    /*!< MMR_SPI Structure            */
+  __IO uint16_t  SPISTA;                    /*!< Status register              */
   __I  uint16_t  RESERVED0;
-  __IO uint16_t  SPIRX;                     /*!< Receive register                      */
+  __IO uint16_t  SPIRX;                     /*!< Receive register             */
   __I  uint16_t  RESERVED1;
-  __IO uint16_t  SPITX;                     /*!< Transmit register                     */
+  __IO uint16_t  SPITX;                     /*!< Transmit register            */
   __I  uint16_t  RESERVED2;
-  __IO uint16_t  SPIDIV;                    /*!< Baud rate selection register          */
+  __IO uint16_t  SPIDIV;                    /*!< Baud rate selection register */
   __I  uint16_t  RESERVED3;
-  __IO uint16_t  SPICON;                    /*!< SPI configuration register            */
+  __IO uint16_t  SPICON;                    /*!< SPI configuration register   */
   __I  uint16_t  RESERVED4;
-  __IO uint16_t  SPIDMA;                    /*!< SPI DMA enable register               */
+  __IO uint16_t  SPIDMA;                    /*!< SPI DMA enable register      */
   __I  uint16_t  RESERVED5;
-  __IO uint16_t  SPICNT;                    /*!< Transfer byte count register          */
+  __IO uint16_t  SPICNT;                    /*!< Transfer byte count register */
 } MMR_SPI_t;
 
-/* Reset Value for SPI0STA*/
-#define SPI0STA_RVAL                   0x0 
-
-/* SPI0STA[CSRSG] - Detected a rising edge on CS, in CONT mode */
-#define SPI0STA_CSRSG_BBA              (*(volatile unsigned long *) 0x42580038)
-#define SPI0STA_CSRSG_MSK              (0x1   << 14 )
-#define SPI0STA_CSRSG                  (0x1   << 14 )
-#define SPI0STA_CSRSG_CLR              (0x0   << 14 ) /* Cleared to 0 when the Status register is read. */
-#define SPI0STA_CSRSG_SET              (0x1   << 14 ) /* Set to 1 when there was a rising edge in CS line, when the device was in master mode, continuous transfer, High Frequency mode and CSIRQ_EN was asserted. */
-
-/* SPI0STA[CSFLG] - Detected a falling edge on CS, in CONT mode */
-#define SPI0STA_CSFLG_BBA              (*(volatile unsigned long *) 0x42580034)
-#define SPI0STA_CSFLG_MSK              (0x1   << 13 )
-#define SPI0STA_CSFLG                  (0x1   << 13 )
-#define SPI0STA_CSFLG_CLR              (0x0   << 13 ) /* Cleared to 0 when the Status register is read. */
-#define SPI0STA_CSFLG_SET              (0x1   << 13 ) /* Set to 1 when there was a falling edge in CS line, when the device was in master mode, continuous transfer, High Frequency mode and CSIRQ_EN was asserted */
-
-/* SPI0STA[CSERR] - Detected a CS error condition */
-#define SPI0STA_CSERR_BBA              (*(volatile unsigned long *) 0x42580030)
-#define SPI0STA_CSERR_MSK              (0x1   << 12 )
-#define SPI0STA_CSERR                  (0x1   << 12 )
-#define SPI0STA_CSERR_CLR              (0x0   << 12 ) /* Cleared to 0 when the Status register is read. */
-#define SPI0STA_CSERR_SET              (0x1   << 12 ) /* Set to 1 when the CS line was de-asserted abruptly, even before the full-byte of data was transmitted completely. This bit will cause an interrupt. */
-
-/* SPI0STA[RXS] - SPI Rx FIFO excess bytes present */
-#define SPI0STA_RXS_BBA                (*(volatile unsigned long *) 0x4258002C)
-#define SPI0STA_RXS_MSK                (0x1   << 11 )
-#define SPI0STA_RXS                    (0x1   << 11 )
-#define SPI0STA_RXS_CLR                (0x0   << 11 ) /* This bit is cleared when the number of bytes in the FIFO is equal or less than the number in SPI0CON[15:14]. */
-#define SPI0STA_RXS_SET                (0x1   << 11 ) /* This bit is set when there are more bytes in the Rx FIFO than indicated in the MOD bits in SPI0CON. */
-
-/* SPI0STA[RXFSTA] - SPI Rx FIFO status */
-#define SPI0STA_RXFSTA_MSK             (0x7   << 8  )
-#define SPI0STA_RXFSTA_EMPTY           (0x0   << 8  ) /* Rx FIFO empty            */
-#define SPI0STA_RXFSTA_ONEBYTE         (0x1   << 8  ) /* 1 valid byte in FIFO     */
-#define SPI0STA_RXFSTA_TWOBYTES        (0x2   << 8  ) /* 2 valid bytes in the FIFO */
-#define SPI0STA_RXFSTA_THREEBYTES      (0x3   << 8  ) /* 3 valid bytes in the FIFO */
-#define SPI0STA_RXFSTA_FOURBYTES       (0x4   << 8  ) /* 4 valid bytes in the FIFO */
-
-/* SPI0STA[RXOF] - SPI Rx FIFO overflow */
-#define SPI0STA_RXOF_BBA               (*(volatile unsigned long *) 0x4258001C)
-#define SPI0STA_RXOF_MSK               (0x1   << 7  )
-#define SPI0STA_RXOF                   (0x1   << 7  )
-#define SPI0STA_RXOF_CLR               (0x0   << 7  ) /* Cleared when the SPISTA register is read. */
-#define SPI0STA_RXOF_SET               (0x1   << 7  ) /* Set when the Rx FIFO was already full when new data was loaded to the FIFO. This bit generates an interrupt except when RFLUSH is set in SPI0CON. */
-
-/* SPI0STA[RX] - SPI Rx IRQ */
-#define SPI0STA_RX_BBA                 (*(volatile unsigned long *) 0x42580018)
-#define SPI0STA_RX_MSK                 (0x1   << 6  )
-#define SPI0STA_RX                     (0x1   << 6  )
-#define SPI0STA_RX_CLR                 (0x0   << 6  ) /* Cleared when the SPI0STA register is read. */
-#define SPI0STA_RX_SET                 (0x1   << 6  ) /* Set when a receive interrupt occurs. This bit is set when TIM in SPI0CON is cleared and the required number of bytes have been received. */
-
-/* SPI0STA[TX] - SPI Tx IRQ */
-#define SPI0STA_TX_BBA                 (*(volatile unsigned long *) 0x42580014)
-#define SPI0STA_TX_MSK                 (0x1   << 5  )
-#define SPI0STA_TX                     (0x1   << 5  )
-#define SPI0STA_TX_CLR                 (0x0   << 5  ) /* CLR. Cleared to 0 when the SPI0STA register is read. */
-#define SPI0STA_TX_SET                 (0x1   << 5  ) /* SET. Set to 1 when a transmit interrupt occurs. This bit is set when TIM in SPI0CON is set and the required number of bytes have been transmitted. */
-
-/* SPI0STA[TXUR] - SPI Tx FIFO underflow */
-#define SPI0STA_TXUR_BBA               (*(volatile unsigned long *) 0x42580010)
-#define SPI0STA_TXUR_MSK               (0x1   << 4  )
-#define SPI0STA_TXUR                   (0x1   << 4  )
-#define SPI0STA_TXUR_CLR               (0x0   << 4  ) /* Cleared to 0 when the SPI0STA register is read. */
-#define SPI0STA_TXUR_SET               (0x1   << 4  ) /* Set  to 1 when a transmit is initiated without any valid data in the Tx FIFO. This bit generates an interrupt except when TFLUSH is set in SPI0CON. */
-
-/* SPI0STA[TXFSTA] - SPI Tx FIFO status */
-#define SPI0STA_TXFSTA_MSK             (0x7   << 1  )
-#define SPI0STA_TXFSTA_EMPTY           (0x0   << 1  ) /* Tx FIFO empty            */
-#define SPI0STA_TXFSTA_ONEBYTE         (0x1   << 1  ) /* 1 valid byte in FIFO     */
-#define SPI0STA_TXFSTA_TWOBYTES        (0x2   << 1  ) /* 2 valid bytes in FIFO    */
-#define SPI0STA_TXFSTA_THREEBYTES      (0x3   << 1  ) /* 3 valid bytes in FIFO    */
-#define SPI0STA_TXFSTA_FOURBYTES       (0x4   << 1  ) /* 4 valid bytes in FIFO    */
-
-/* SPI0STA[IRQ] - SPI Interrupt status */
-#define SPI0STA_IRQ_BBA                (*(volatile unsigned long *) 0x42580000)
-#define SPI0STA_IRQ_MSK                (0x1   << 0  )
-#define SPI0STA_IRQ                    (0x1   << 0  )
-#define SPI0STA_IRQ_CLR                (0x0   << 0  ) /* Cleared to 0 after reading SPI0STA. */
-#define SPI0STA_IRQ_SET                (0x1   << 0  ) /* Set to 1 when an SPI based interrupt occurs. */
-
-/* Reset Value for SPI0RX*/
-#define SPI0RX_RVAL                    0x0 
-
-/* SPI0RX[DMA_DATA_BYTE_2] - 8-bit receive buffer */
-#define SPI0RX_DMA_DATA_BYTE_2_MSK     (0xFF  << 8  )
-
-/* SPI0RX[DATA_BYTE_1] - 8-bit receive buffer */
-#define SPI0RX_DATA_BYTE_1_MSK         (0xFF  << 0  )
-
-/* Reset Value for SPI0TX*/
-#define SPI0TX_RVAL                    0x0 
-
-/* SPI0TX[DMA_DATA_BYTE_2] - 8-bit transmit buffer */
-#define SPI0TX_DMA_DATA_BYTE_2_MSK     (0xFF  << 8  )
-
-/* SPI0TX[DATA_BYTE_1] - 8-bit transmit buffer */
-#define SPI0TX_DATA_BYTE_1_MSK         (0xFF  << 0  )
-
-/* Reset Value for SPI0DIV*/
-#define SPI0DIV_RVAL                   0x0 
-
-/* SPI0DIV[CSIRQ_EN] - Enable interrupt on every CS edge in CONT mode */
-#define SPI0DIV_CSIRQ_EN_BBA           (*(volatile unsigned long *) 0x425801A0)
-#define SPI0DIV_CSIRQ_EN_MSK           (0x1   << 8  )
-#define SPI0DIV_CSIRQ_EN               (0x1   << 8  )
-#define SPI0DIV_CSIRQ_EN_DIS           (0x0   << 8  )
-#define SPI0DIV_CSIRQ_EN_EN            (0x1   << 8  )
-
-/* SPI0DIV[BCRST] - Reset Mode for CSERR */
-#define SPI0DIV_BCRST_BBA              (*(volatile unsigned long *) 0x4258019C)
-#define SPI0DIV_BCRST_MSK              (0x1   << 7  )
-#define SPI0DIV_BCRST                  (0x1   << 7  )
-#define SPI0DIV_BCRST_DIS              (0x0   << 7  )
-#define SPI0DIV_BCRST_EN               (0x1   << 7  )
-
-/* SPI0DIV[HFM] - High Frequency Mode */
-#define SPI0DIV_HFM_BBA                (*(volatile unsigned long *) 0x42580198)
-#define SPI0DIV_HFM_MSK                (0x1   << 6  )
-#define SPI0DIV_HFM                    (0x1   << 6  )
-#define SPI0DIV_HFM_DIS                (0x0   << 6  )
-#define SPI0DIV_HFM_EN                 (0x1   << 6  )
-
-/* SPI0DIV[DIV] - SPI clock divider */
-#define SPI0DIV_DIV_MSK                (0x3F  << 0  )
-
-/* Reset Value for SPI0CON*/
-#define SPI0CON_RVAL                   0x0 
-
-/* SPI0CON[MOD] - SPI IRQ mode bits */
-#define SPI0CON_MOD_MSK                (0x3   << 14 )
-#define SPI0CON_MOD_TX1RX1             (0x0   << 14 ) /* Tx interrupt occurs when 1 byte has been transferred. Rx interrupt occurs when 1 or more bytes have been received into the FIFO. */
-#define SPI0CON_MOD_TX2RX2             (0x1   << 14 ) /* Tx interrupt occurs when 2 bytes has been transferred.  Rx interrupt occurs when 2 or more bytes have been received into the FIFO. */
-#define SPI0CON_MOD_TX3RX3             (0x2   << 14 ) /* Tx interrupt occurs when 3 bytes has been transferred.  Rx interrupt occurs when 3 or more bytes have been received into the FIFO. */
-#define SPI0CON_MOD_TX4RX4             (0x3   << 14 ) /* Tx interrupt occurs when 4 bytes has been transferred.  Rx interrupt occurs when the Rx FIFO is full, or 4 bytes present. */
-
-/* SPI0CON[TFLUSH] - SPI Tx FIFO Flush enable */
-#define SPI0CON_TFLUSH_BBA             (*(volatile unsigned long *) 0x42580234)
-#define SPI0CON_TFLUSH_MSK             (0x1   << 13 )
-#define SPI0CON_TFLUSH                 (0x1   << 13 )
-#define SPI0CON_TFLUSH_DIS             (0x0   << 13 ) /* Clear this bit to disable Tx FIFO flushing. */
-#define SPI0CON_TFLUSH_EN              (0x1   << 13 ) /* Set this bit to flush the Tx FIFO. This bit does not clear itself and should be toggled if a single flush is required. If this bit is left high, then either the last transmitted value or "0x00" is transmitted depending on the ZEN bit. Any writes to the Tx FIFO are ignored while this bit is set. */
-
-/* SPI0CON[RFLUSH] - SPI Rx FIFO Flush enable */
-#define SPI0CON_RFLUSH_BBA             (*(volatile unsigned long *) 0x42580230)
-#define SPI0CON_RFLUSH_MSK             (0x1   << 12 )
-#define SPI0CON_RFLUSH                 (0x1   << 12 )
-#define SPI0CON_RFLUSH_DIS             (0x0   << 12 ) /* Clear this bit to disable Rx FIFO flushing. */
-#define SPI0CON_RFLUSH_EN              (0x1   << 12 ) /* Set this bit to flush the Rx FIFO. This bit does not clear itself and should be toggled if a single flush is required. If this bit is set all incoming data is ignored and no interrupts are generated. If set and TIM = 0, a read of the Rx FIFO will initiate a transfer. */
-
-/* SPI0CON[CON] - Continuous transfer enable */
-#define SPI0CON_CON_BBA                (*(volatile unsigned long *) 0x4258022C)
-#define SPI0CON_CON_MSK                (0x1   << 11 )
-#define SPI0CON_CON                    (0x1   << 11 )
-#define SPI0CON_CON_DIS                (0x0   << 11 ) /* DIS. Cleared by user to disable continuous transfer. Each transfer consists of a single 8-bit serial transfer. If valid data exists in the SPI0TX register, then a new transfer is initiated after a stall period of 1 serial clock cycle. */
-#define SPI0CON_CON_EN                 (0x1   << 11 ) /* EN. Set by user to enable continuous transfer. In master mode, the transfer continues until no valid data is available in the Tx register. CS is asserted and remains asserted for the duration of each 8-bit serial transfer until Tx is empty. */
-
-/* SPI0CON[LOOPBACK] - Loopback enable */
-#define SPI0CON_LOOPBACK_BBA           (*(volatile unsigned long *) 0x42580228)
-#define SPI0CON_LOOPBACK_MSK           (0x1   << 10 )
-#define SPI0CON_LOOPBACK               (0x1   << 10 )
-#define SPI0CON_LOOPBACK_DIS           (0x0   << 10 ) /* Cleared by user to be in normal mode. */
-#define SPI0CON_LOOPBACK_EN            (0x1   << 10 ) /* Set by user to connect MISO to MOSI and test software. */
-
-/* SPI0CON[OEN] - Slave MISO output enable */
-#define SPI0CON_OEN_BBA                (*(volatile unsigned long *) 0x42580224)
-#define SPI0CON_OEN_MSK                (0x1   << 9  )
-#define SPI0CON_OEN                    (0x1   << 9  )
-#define SPI0CON_OEN_DIS                (0x0   << 9  ) /* Clear this bit to disable the output driver on the MISO pin. The MISO pin will be Open-Circuit when this bit is clear. */
-#define SPI0CON_OEN_EN                 (0x1   << 9  ) /* Set this bit for MISO to operate as normal. */
-
-/* SPI0CON[RXOF] - SPIRX overflow overwrite enable */
-#define SPI0CON_RXOF_BBA               (*(volatile unsigned long *) 0x42580220)
-#define SPI0CON_RXOF_MSK               (0x1   << 8  )
-#define SPI0CON_RXOF                   (0x1   << 8  )
-#define SPI0CON_RXOF_DIS               (0x0   << 8  ) /* Cleared by user, the new serial byte received is discarded. */
-#define SPI0CON_RXOF_EN                (0x1   << 8  ) /* Set by user, the valid data in the Rx register is overwritten by the new serial byte received. */
-
-/* SPI0CON[ZEN] - Transmit zeros enable */
-#define SPI0CON_ZEN_BBA                (*(volatile unsigned long *) 0x4258021C)
-#define SPI0CON_ZEN_MSK                (0x1   << 7  )
-#define SPI0CON_ZEN                    (0x1   << 7  )
-#define SPI0CON_ZEN_DIS                (0x0   << 7  ) /* Clear this bit to transmit the last transmitted value when there is no valid data in the Tx FIFO. */
-#define SPI0CON_ZEN_EN                 (0x1   << 7  ) /* Set this bit to transmit "0x00" when there is no valid data in the Tx FIFO. */
-
-/* SPI0CON[TIM] - SPI transfer and interrupt mode */
-#define SPI0CON_TIM_BBA                (*(volatile unsigned long *) 0x42580218)
-#define SPI0CON_TIM_MSK                (0x1   << 6  )
-#define SPI0CON_TIM                    (0x1   << 6  )
-#define SPI0CON_TIM_RXRD               (0x0   << 6  ) /* Cleared by user to initiate transfer with a read of the SPI0RX register. Interrupt only occurs when Rx is full. */
-#define SPI0CON_TIM_TXWR               (0x1   << 6  ) /* Set by user to initiate transfer with a write to the SPI0TX register. Interrupt only occurs when Tx is empty. */
-
-/* SPI0CON[LSB] - LSB first transfer enable */
-#define SPI0CON_LSB_BBA                (*(volatile unsigned long *) 0x42580214)
-#define SPI0CON_LSB_MSK                (0x1   << 5  )
-#define SPI0CON_LSB                    (0x1   << 5  )
-#define SPI0CON_LSB_DIS                (0x0   << 5  ) /* MSB transmitted first    */
-#define SPI0CON_LSB_EN                 (0x1   << 5  ) /* LSB transmitted first    */
-
-/* SPI0CON[WOM] - SPI Wired Or mode */
-#define SPI0CON_WOM_BBA                (*(volatile unsigned long *) 0x42580210)
-#define SPI0CON_WOM_MSK                (0x1   << 4  )
-#define SPI0CON_WOM                    (0x1   << 4  )
-#define SPI0CON_WOM_EN                 (0x1   << 4  ) /* Enables open circuit data output enable. External pull-ups required on data out pins */
-#define SPI0CON_WOM_DIS                (0x0   << 4  ) /* Normal output levels     */
-
-/* SPI0CON[CPOL] - Serial Clock Polarity */
-#define SPI0CON_CPOL_BBA               (*(volatile unsigned long *) 0x4258020C)
-#define SPI0CON_CPOL_MSK               (0x1   << 3  )
-#define SPI0CON_CPOL                   (0x1   << 3  )
-#define SPI0CON_CPOL_LOW               (0x0   << 3  ) /* Serial clock idles low   */
-#define SPI0CON_CPOL_HIGH              (0x1   << 3  ) /* Serial clock idles high  */
-
-/* SPI0CON[CPHA] - Serial clock phase mode */
-#define SPI0CON_CPHA_BBA               (*(volatile unsigned long *) 0x42580208)
-#define SPI0CON_CPHA_MSK               (0x1   << 2  )
-#define SPI0CON_CPHA                   (0x1   << 2  )
-#define SPI0CON_CPHA_SAMPLETRAILING    (0x1   << 2  ) /* Serial clock pulses at the beginning of each serial bit transfer */
-#define SPI0CON_CPHA_SAMPLELEADING     (0x0   << 2  ) /* Serial clock pulses at the end of each serial bit transfer */
-
-/* SPI0CON[MASEN] - Master mode enable */
-#define SPI0CON_MASEN_BBA              (*(volatile unsigned long *) 0x42580204)
-#define SPI0CON_MASEN_MSK              (0x1   << 1  )
-#define SPI0CON_MASEN                  (0x1   << 1  )
-#define SPI0CON_MASEN_DIS              (0x0   << 1  ) /* Enable slave mode        */
-#define SPI0CON_MASEN_EN               (0x1   << 1  ) /* Enable master mode       */
-
-/* SPI0CON[ENABLE] - SPI enable */
-#define SPI0CON_ENABLE_BBA             (*(volatile unsigned long *) 0x42580200)
-#define SPI0CON_ENABLE_MSK             (0x1   << 0  )
-#define SPI0CON_ENABLE                 (0x1   << 0  )
-#define SPI0CON_ENABLE_DIS             (0x0   << 0  ) /* Disable the SPI          */
-#define SPI0CON_ENABLE_EN              (0x1   << 0  ) /* Enable the SPI           */
-
-/* Reset Value for SPI0DMA*/
-#define SPI0DMA_RVAL                   0x0 
-
-/* SPI0DMA[IENRXDMA] - Enable receive DMA request */
-#define SPI0DMA_IENRXDMA_BBA           (*(volatile unsigned long *) 0x42580288)
-#define SPI0DMA_IENRXDMA_MSK           (0x1   << 2  )
-#define SPI0DMA_IENRXDMA               (0x1   << 2  )
-#define SPI0DMA_IENRXDMA_DIS           (0x0   << 2  ) /* Disable RX DMA Interrupt */
-#define SPI0DMA_IENRXDMA_EN            (0x1   << 2  ) /* Enable RX DMA Interrupt  */
-
-/* SPI0DMA[IENTXDMA] - Enable transmit DMA request */
-#define SPI0DMA_IENTXDMA_BBA           (*(volatile unsigned long *) 0x42580284)
-#define SPI0DMA_IENTXDMA_MSK           (0x1   << 1  )
-#define SPI0DMA_IENTXDMA               (0x1   << 1  )
-#define SPI0DMA_IENTXDMA_DIS           (0x0   << 1  ) /* Disable TX DMA Interrupt */
-#define SPI0DMA_IENTXDMA_EN            (0x1   << 1  ) /* Enable TX DMA Interrupt  */
-
-/* SPI0DMA[ENABLE] - Enable DMA for data transfer */
-#define SPI0DMA_ENABLE_BBA             (*(volatile unsigned long *) 0x42580280)
-#define SPI0DMA_ENABLE_MSK             (0x1   << 0  )
-#define SPI0DMA_ENABLE                 (0x1   << 0  )
-#define SPI0DMA_ENABLE_DIS             (0x0   << 0  )
-#define SPI0DMA_ENABLE_EN              (0x1   << 0  )
-
-/* Reset Value for SPI0CNT*/
-#define SPI0CNT_RVAL                   0x0 
-
-/* SPI0CNT[COUNT] - Transfer byte count */
-#define SPI0CNT_COUNT_MSK              (0xFF  << 0  )
-
-/* Reset Value for SPI1STA*/
-#define SPI1STA_RVAL                   0x0 
-
-/* SPI1STA[CSRSG] - Detected a rising edge on CS, in CONT mode */
-#define SPI1STA_CSRSG_BBA              (*(volatile unsigned long *) 0x42600038)
-#define SPI1STA_CSRSG_MSK              (0x1   << 14 )
-#define SPI1STA_CSRSG                  (0x1   << 14 )
-#define SPI1STA_CSRSG_CLR              (0x0   << 14 ) /* Cleared to 0 when the Status register is read */
-#define SPI1STA_CSRSG_SET              (0x1   << 14 ) /* Set to 1 when there was a rising edge in CS line, when the device was in master mode, continuous transfer, High Frequency mode and CSIRQ_EN was asserted. */
-
-/* SPI1STA[CSFLG] - Detected a falling edge on CS, in CONT mode */
-#define SPI1STA_CSFLG_BBA              (*(volatile unsigned long *) 0x42600034)
-#define SPI1STA_CSFLG_MSK              (0x1   << 13 )
-#define SPI1STA_CSFLG                  (0x1   << 13 )
-#define SPI1STA_CSFLG_CLR              (0x0   << 13 ) /* Cleared to 0 when the Status register is read. */
-#define SPI1STA_CSFLG_SET              (0x1   << 13 ) /* Set to 1 when there was a falling edge in CS line, when the device was in master mode, continuous transfer, High Frequency mode and CSIRQ_EN was asserted. */
-
-/* SPI1STA[CSERR] - Detected a CS error condition */
-#define SPI1STA_CSERR_BBA              (*(volatile unsigned long *) 0x42600030)
-#define SPI1STA_CSERR_MSK              (0x1   << 12 )
-#define SPI1STA_CSERR                  (0x1   << 12 )
-#define SPI1STA_CSERR_CLR              (0x0   << 12 ) /* Cleared to 0 when the Status register is read. */
-#define SPI1STA_CSERR_SET              (0x1   << 12 ) /* Set to 1 when the CS line was de-asserted abruptly, even before the full-byte of data was transmitted completely. This bit will cause an interrupt. */
-
-/* SPI1STA[RXS] - SPI Rx FIFO excess bytes present */
-#define SPI1STA_RXS_BBA                (*(volatile unsigned long *) 0x4260002C)
-#define SPI1STA_RXS_MSK                (0x1   << 11 )
-#define SPI1STA_RXS                    (0x1   << 11 )
-#define SPI1STA_RXS_CLR                (0x0   << 11 ) /* Cleared to 0 when the number of bytes in the FIFO is equal or less than the number in SPI1CON[15:14]. */
-#define SPI1STA_RXS_SET                (0x1   << 11 ) /* Set to 1 when there are more bytes in the Rx FIFO than indicated in the MOD bits in SPI1CON. */
-
-/* SPI1STA[RXFSTA] - SPI Rx FIFO status */
-#define SPI1STA_RXFSTA_MSK             (0x7   << 8  )
-#define SPI1STA_RXFSTA_EMPTY           (0x0   << 8  ) /* Rx FIFO empty            */
-#define SPI1STA_RXFSTA_ONEBYTE         (0x1   << 8  ) /* 1 valid byte in FIFO     */
-#define SPI1STA_RXFSTA_TWOBYTES        (0x2   << 8  ) /* 2 valid bytes in the FIFO */
-#define SPI1STA_RXFSTA_THREEBYTES      (0x3   << 8  ) /* 3 valid bytes in the FIFO */
-#define SPI1STA_RXFSTA_FOURBYTES       (0x4   << 8  ) /* 4 valid bytes in the FIFO */
-
-/* SPI1STA[RXOF] - SPI Rx FIFO overflow */
-#define SPI1STA_RXOF_BBA               (*(volatile unsigned long *) 0x4260001C)
-#define SPI1STA_RXOF_MSK               (0x1   << 7  )
-#define SPI1STA_RXOF                   (0x1   << 7  )
-#define SPI1STA_RXOF_CLR               (0x0   << 7  ) /* Cleared to 0 when the SPI1STA register is read. */
-#define SPI1STA_RXOF_SET               (0x1   << 7  ) /* Set to 1 when the Rx FIFO was already full when new data was loaded to the FIFO. This bit generates an interrupt except when RFLUSH is set in SPI1CON. */
-
-/* SPI1STA[RX] - SPI Rx IRQ */
-#define SPI1STA_RX_BBA                 (*(volatile unsigned long *) 0x42600018)
-#define SPI1STA_RX_MSK                 (0x1   << 6  )
-#define SPI1STA_RX                     (0x1   << 6  )
-#define SPI1STA_RX_CLR                 (0x0   << 6  ) /* Cleared to 0 when the SPI1STA register is read. */
-#define SPI1STA_RX_SET                 (0x1   << 6  ) /* Set to 1 when TIM in SPI1CON is cleared and the required number of bytes have been received. */
-
-/* SPI1STA[TX] - SPI Tx IRQ */
-#define SPI1STA_TX_BBA                 (*(volatile unsigned long *) 0x42600014)
-#define SPI1STA_TX_MSK                 (0x1   << 5  )
-#define SPI1STA_TX                     (0x1   << 5  )
-#define SPI1STA_TX_CLR                 (0x0   << 5  ) /* CLR. Cleared to 0 when the SPI1STA register is read. */
-#define SPI1STA_TX_SET                 (0x1   << 5  ) /* SET. Set to 1 when a transmit interrupt occurs. This bit is set when TIM in SPI1CON is set and the required number of bytes have been transmitted. */
-
-/* SPI1STA[TXUR] - SPI Tx FIFO underflow */
-#define SPI1STA_TXUR_BBA               (*(volatile unsigned long *) 0x42600010)
-#define SPI1STA_TXUR_MSK               (0x1   << 4  )
-#define SPI1STA_TXUR                   (0x1   << 4  )
-#define SPI1STA_TXUR_CLR               (0x0   << 4  ) /* Cleared to 0 when the SPI1STA register is read. */
-#define SPI1STA_TXUR_SET               (0x1   << 4  ) /* Set to 1 when a transmit is initiated without any valid data in the Tx FIFO. This bit generates an interrupt except when TFLUSH is set in SPI1CON. */
-
-/* SPI1STA[TXFSTA] - SPI Tx FIFO status */
-#define SPI1STA_TXFSTA_MSK             (0x7   << 1  )
-#define SPI1STA_TXFSTA_EMPTY           (0x0   << 1  ) /* Tx FIFO empty            */
-#define SPI1STA_TXFSTA_ONEBYTE         (0x1   << 1  ) /* 1 valid byte in FIFO     */
-#define SPI1STA_TXFSTA_TWOBYTES        (0x2   << 1  ) /* 2 valid bytes in FIFO    */
-#define SPI1STA_TXFSTA_THREEBYTES      (0x3   << 1  ) /* 3 valid bytes in FIFO    */
-#define SPI1STA_TXFSTA_FOURBYTES       (0x4   << 1  ) /* 4 valid bytes in FIFO    */
-
-/* SPI1STA[IRQ] - SPI Interrupt status */
-#define SPI1STA_IRQ_BBA                (*(volatile unsigned long *) 0x42600000)
-#define SPI1STA_IRQ_MSK                (0x1   << 0  )
-#define SPI1STA_IRQ                    (0x1   << 0  )
-#define SPI1STA_IRQ_CLR                (0x0   << 0  ) /* Cleared to 0 after reading SPI1STA. */
-#define SPI1STA_IRQ_SET                (0x1   << 0  ) /* Set to 1 when an SPI based interrupt occurs. */
-
-/* Reset Value for SPI1RX*/
-#define SPI1RX_RVAL                    0x0 
-
-/* SPI1RX[DMA_DATA_BYTE_2] - 8-bit receive buffer */
-#define SPI1RX_DMA_DATA_BYTE_2_MSK     (0xFF  << 8  )
-
-/* SPI1RX[DATA_BYTE_1] - 8-bit receive buffer */
-#define SPI1RX_DATA_BYTE_1_MSK         (0xFF  << 0  )
-
-/* Reset Value for SPI1TX*/
-#define SPI1TX_RVAL                    0x0 
-
-/* SPI1TX[DMA_DATA_BYTE_2] - 8-bit transmit buffer */
-#define SPI1TX_DMA_DATA_BYTE_2_MSK     (0xFF  << 8  )
-
-/* SPI1TX[DATA_BYTE_1] - 8-bit transmit buffer */
-#define SPI1TX_DATA_BYTE_1_MSK         (0xFF  << 0  )
-
-/* Reset Value for SPI1DIV*/
-#define SPI1DIV_RVAL                   0x0 
-
-/* SPI1DIV[CSIRQ_EN] - Enable interrupt on every CS edge in CONT mode */
-#define SPI1DIV_CSIRQ_EN_BBA           (*(volatile unsigned long *) 0x426001A0)
-#define SPI1DIV_CSIRQ_EN_MSK           (0x1   << 8  )
-#define SPI1DIV_CSIRQ_EN               (0x1   << 8  )
-#define SPI1DIV_CSIRQ_EN_DIS           (0x0   << 8  )
-#define SPI1DIV_CSIRQ_EN_EN            (0x1   << 8  )
-
-/* SPI1DIV[BCRST] - Reset Mode for CSERR */
-#define SPI1DIV_BCRST_BBA              (*(volatile unsigned long *) 0x4260019C)
-#define SPI1DIV_BCRST_MSK              (0x1   << 7  )
-#define SPI1DIV_BCRST                  (0x1   << 7  )
-#define SPI1DIV_BCRST_DIS              (0x0   << 7  )
-#define SPI1DIV_BCRST_EN               (0x1   << 7  )
-
-/* SPI1DIV[HFM] - High Frequency Mode */
-#define SPI1DIV_HFM_BBA                (*(volatile unsigned long *) 0x42600198)
-#define SPI1DIV_HFM_MSK                (0x1   << 6  )
-#define SPI1DIV_HFM                    (0x1   << 6  )
-#define SPI1DIV_HFM_DIS                (0x0   << 6  )
-#define SPI1DIV_HFM_EN                 (0x1   << 6  )
-
-/* SPI1DIV[DIV] - SPI clock divider */
-#define SPI1DIV_DIV_MSK                (0x3F  << 0  )
-
-/* Reset Value for SPI1CON*/
-#define SPI1CON_RVAL                   0x0 
-
-/* SPI1CON[MOD] - SPI IRQ mode bits */
-#define SPI1CON_MOD_MSK                (0x3   << 14 )
-#define SPI1CON_MOD_TX1RX1             (0x0   << 14 ) /* Tx interrupt occurs when 1 byte has been transferred. Rx interrupt occurs when 1 or more bytes have been received into the FIFO. */
-#define SPI1CON_MOD_TX2RX2             (0x1   << 14 ) /* Tx interrupt occurs when 2 bytes has been transferred.  Rx interrupt occurs when 2 or more bytes have been received into the FIFO. */
-#define SPI1CON_MOD_TX3RX3             (0x2   << 14 ) /* Tx interrupt occurs when 3 bytes has been transferred.  Rx interrupt occurs when 3 or more bytes have been received into the FIFO. */
-#define SPI1CON_MOD_TX4RX4             (0x3   << 14 ) /* Tx interrupt occurs when 4 bytes has been transferred.  Rx interrupt occurs when the Rx FIFO is full, or 4 bytes present. */
-
-/* SPI1CON[TFLUSH] - SPI Tx FIFO Flush enable */
-#define SPI1CON_TFLUSH_BBA             (*(volatile unsigned long *) 0x42600234)
-#define SPI1CON_TFLUSH_MSK             (0x1   << 13 )
-#define SPI1CON_TFLUSH                 (0x1   << 13 )
-#define SPI1CON_TFLUSH_DIS             (0x0   << 13 ) /* Clear this bit to disable Tx FIFO flushing. */
-#define SPI1CON_TFLUSH_EN              (0x1   << 13 ) /* Set this bit to flush the Tx FIFO. This bit does not clear itself and should be toggled if a single flush is required. If this bit is left high, then either the last transmitted value or "0x00" is transmitted depending on the ZEN bit. Any writes to the Tx FIFO are ignored while this bit is set. */
-
-/* SPI1CON[RFLUSH] - SPI Rx FIFO Flush enable */
-#define SPI1CON_RFLUSH_BBA             (*(volatile unsigned long *) 0x42600230)
-#define SPI1CON_RFLUSH_MSK             (0x1   << 12 )
-#define SPI1CON_RFLUSH                 (0x1   << 12 )
-#define SPI1CON_RFLUSH_DIS             (0x0   << 12 ) /* Clear this bit to disable Rx FIFO flushing. */
-#define SPI1CON_RFLUSH_EN              (0x1   << 12 ) /* Set this bit to flush the Rx FIFO. This bit does not clear itself and should be toggled if a single flush is required. If this bit is set all incoming data is ignored and no interrupts are generated. If set and TIM = 0, a read of the Rx FIFO will initiate a transfer. */
-
-/* SPI1CON[CON] - Continuous transfer enable */
-#define SPI1CON_CON_BBA                (*(volatile unsigned long *) 0x4260022C)
-#define SPI1CON_CON_MSK                (0x1   << 11 )
-#define SPI1CON_CON                    (0x1   << 11 )
-#define SPI1CON_CON_DIS                (0x0   << 11 ) /* DIS. Cleared by user to disable continuous transfer. Each transfer consists of a single 8-bit serial transfer. If valid data exists in the SPI1TX register, then a new transfer is initiated after a stall period of 1 serial clock cycle. */
-#define SPI1CON_CON_EN                 (0x1   << 11 ) /* EN. Set by user to enable continuous transfer. In master mode, the transfer continues until no valid data is available in the Tx register. CS is asserted and remains asserted for the duration of each 8-bit serial transfer until Tx is empty. */
-
-/* SPI1CON[LOOPBACK] - Loopback enable */
-#define SPI1CON_LOOPBACK_BBA           (*(volatile unsigned long *) 0x42600228)
-#define SPI1CON_LOOPBACK_MSK           (0x1   << 10 )
-#define SPI1CON_LOOPBACK               (0x1   << 10 )
-#define SPI1CON_LOOPBACK_DIS           (0x0   << 10 ) /* Cleared by user to be in normal mode. */
-#define SPI1CON_LOOPBACK_EN            (0x1   << 10 ) /* Set by user to connect MISO to MOSI and test software. */
-
-/* SPI1CON[OEN] - Slave MISO output enable */
-#define SPI1CON_OEN_BBA                (*(volatile unsigned long *) 0x42600224)
-#define SPI1CON_OEN_MSK                (0x1   << 9  )
-#define SPI1CON_OEN                    (0x1   << 9  )
-#define SPI1CON_OEN_DIS                (0x0   << 9  ) /* Clear this bit to disable the output driver on the MISO pin. The MISO pin will be Open-Circuit when this bit is clear. */
-#define SPI1CON_OEN_EN                 (0x1   << 9  ) /* Set this bit for MISO to operate as normal. */
-
-/* SPI1CON[RXOF] - SPIRX overflow overwrite enable */
-#define SPI1CON_RXOF_BBA               (*(volatile unsigned long *) 0x42600220)
-#define SPI1CON_RXOF_MSK               (0x1   << 8  )
-#define SPI1CON_RXOF                   (0x1   << 8  )
-#define SPI1CON_RXOF_DIS               (0x0   << 8  ) /* Cleared by user, the new serial byte received is discarded. */
-#define SPI1CON_RXOF_EN                (0x1   << 8  ) /* Set by user, the valid data in the Rx register is overwritten by the new serial byte received. */
-
-/* SPI1CON[ZEN] - Transmit zeros enable */
-#define SPI1CON_ZEN_BBA                (*(volatile unsigned long *) 0x4260021C)
-#define SPI1CON_ZEN_MSK                (0x1   << 7  )
-#define SPI1CON_ZEN                    (0x1   << 7  )
-#define SPI1CON_ZEN_DIS                (0x0   << 7  ) /* Clear this bit to transmit the last transmitted value when there is no valid data in the Tx FIFO. */
-#define SPI1CON_ZEN_EN                 (0x1   << 7  ) /* Set this bit to transmit "0x00" when there is no valid data in the Tx FIFO. */
-
-/* SPI1CON[TIM] - SPI transfer and interrupt mode */
-#define SPI1CON_TIM_BBA                (*(volatile unsigned long *) 0x42600218)
-#define SPI1CON_TIM_MSK                (0x1   << 6  )
-#define SPI1CON_TIM                    (0x1   << 6  )
-#define SPI1CON_TIM_RXRD               (0x0   << 6  ) /* Cleared by user to initiate transfer with a read of the SPIRX register. Interrupt only occurs when Rx is full. */
-#define SPI1CON_TIM_TXWR               (0x1   << 6  ) /* Set by user to initiate transfer with a write to the SPITX register. Interrupt only occurs when Tx is empty. */
-
-/* SPI1CON[LSB] - LSB first transfer enable */
-#define SPI1CON_LSB_BBA                (*(volatile unsigned long *) 0x42600214)
-#define SPI1CON_LSB_MSK                (0x1   << 5  )
-#define SPI1CON_LSB                    (0x1   << 5  )
-#define SPI1CON_LSB_DIS                (0x0   << 5  ) /* MSB transmitted first    */
-#define SPI1CON_LSB_EN                 (0x1   << 5  ) /* LSB transmitted first    */
-
-/* SPI1CON[WOM] - SPI Wired Or mode */
-#define SPI1CON_WOM_BBA                (*(volatile unsigned long *) 0x42600210)
-#define SPI1CON_WOM_MSK                (0x1   << 4  )
-#define SPI1CON_WOM                    (0x1   << 4  )
-#define SPI1CON_WOM_DIS                (0x0   << 4  ) /* Normal output levels     */
-#define SPI1CON_WOM_EN                 (0x1   << 4  ) /* Enables open circuit data output enable. External pull-ups required on data out pins */
-
-/* SPI1CON[CPOL] - Serial Clock Polarity */
-#define SPI1CON_CPOL_BBA               (*(volatile unsigned long *) 0x4260020C)
-#define SPI1CON_CPOL_MSK               (0x1   << 3  )
-#define SPI1CON_CPOL                   (0x1   << 3  )
-#define SPI1CON_CPOL_LOW               (0x0   << 3  ) /* Serial clock idles low   */
-#define SPI1CON_CPOL_HIGH              (0x1   << 3  ) /* Serial clock idles high  */
-
-/* SPI1CON[CPHA] - Serial clock phase mode */
-#define SPI1CON_CPHA_BBA               (*(volatile unsigned long *) 0x42600208)
-#define SPI1CON_CPHA_MSK               (0x1   << 2  )
-#define SPI1CON_CPHA                   (0x1   << 2  )
-#define SPI1CON_CPHA_SAMPLELEADING     (0x0   << 2  ) /* Serial clock pulses at the end of each serial bit transfer */
-#define SPI1CON_CPHA_SAMPLETRAILING    (0x1   << 2  ) /* Serial clock pulses at the beginning of each serial bit transfer */
-
-/* SPI1CON[MASEN] - Master mode enable */
-#define SPI1CON_MASEN_BBA              (*(volatile unsigned long *) 0x42600204)
-#define SPI1CON_MASEN_MSK              (0x1   << 1  )
-#define SPI1CON_MASEN                  (0x1   << 1  )
-#define SPI1CON_MASEN_DIS              (0x0   << 1  ) /* Enable slave mode        */
-#define SPI1CON_MASEN_EN               (0x1   << 1  ) /* Enable master mode       */
-
-/* SPI1CON[ENABLE] - SPI enable */
-#define SPI1CON_ENABLE_BBA             (*(volatile unsigned long *) 0x42600200)
-#define SPI1CON_ENABLE_MSK             (0x1   << 0  )
-#define SPI1CON_ENABLE                 (0x1   << 0  )
-#define SPI1CON_ENABLE_DIS             (0x0   << 0  ) /* Disable the SPI          */
-#define SPI1CON_ENABLE_EN              (0x1   << 0  ) /* Enable the SPI           */
-
-/* Reset Value for SPI1DMA*/
-#define SPI1DMA_RVAL                   0x0 
-
-/* SPI1DMA[IENRXDMA] - Enable receive DMA request */
-#define SPI1DMA_IENRXDMA_BBA           (*(volatile unsigned long *) 0x42600288)
-#define SPI1DMA_IENRXDMA_MSK           (0x1   << 2  )
-#define SPI1DMA_IENRXDMA               (0x1   << 2  )
-#define SPI1DMA_IENRXDMA_DIS           (0x0   << 2  ) /* Disable RX DMA Interrupt */
-#define SPI1DMA_IENRXDMA_EN            (0x1   << 2  ) /* Enable RX DMA Interrupt  */
-
-/* SPI1DMA[IENTXDMA] - Enable transmit DMA request */
-#define SPI1DMA_IENTXDMA_BBA           (*(volatile unsigned long *) 0x42600284)
-#define SPI1DMA_IENTXDMA_MSK           (0x1   << 1  )
-#define SPI1DMA_IENTXDMA               (0x1   << 1  )
-#define SPI1DMA_IENTXDMA_DIS           (0x0   << 1  ) /* Disable TX DMA Interrupt */
-#define SPI1DMA_IENTXDMA_EN            (0x1   << 1  ) /* Enable TX DMA Interrupt  */
-
-/* SPI1DMA[ENABLE] - Enable DMA for data transfer */
-#define SPI1DMA_ENABLE_BBA             (*(volatile unsigned long *) 0x42600280)
-#define SPI1DMA_ENABLE_MSK             (0x1   << 0  )
-#define SPI1DMA_ENABLE                 (0x1   << 0  )
-#define SPI1DMA_ENABLE_DIS             (0x0   << 0  )
-#define SPI1DMA_ENABLE_EN              (0x1   << 0  )
-
-/* Reset Value for SPI1CNT*/
-#define SPI1CNT_RVAL                   0x0 
-
-/* SPI1CNT[COUNT] - Transfer byte count */
-#define SPI1CNT_COUNT_MSK              (0xFF  << 0  )
-// ------------------------------------------------------------------------------------------------
-// -----                                        ADC_CORE                                        -----
-// ------------------------------------------------------------------------------------------------
-
+/* SPISTA[CSRSG] - Detected a rising edge on CS, in CONT mode */
+#define SPISTA_CSRSG_MSK               (0x1   << 14 )
+#define SPISTA_CSRSG                   (0x1   << 14 )
+#define SPISTA_CSRSG_CLR               (0x0   << 14 ) /* Cleared to 0 when the Status register is read. */
+#define SPISTA_CSRSG_SET               (0x1   << 14 ) /* Set to 1 when there was a rising edge in CS line, when the device was in master mode, continuous transfer, High Frequency mode and CSIRQ_EN was asserted. */
+
+/* SPISTA[CSFLG] - Detected a falling edge on CS, in CONT mode */
+#define SPISTA_CSFLG_MSK               (0x1   << 13 )
+#define SPISTA_CSFLG                   (0x1   << 13 )
+#define SPISTA_CSFLG_CLR               (0x0   << 13 ) /* Cleared to 0 when the Status register is read. */
+#define SPISTA_CSFLG_SET               (0x1   << 13 ) /* Set to 1 when there was a falling edge in CS line, when the device was in master mode, continuous transfer, High Frequency mode and CSIRQ_EN was asserted */
+
+/* SPISTA[CSERR] - Detected a CS error condition */
+#define SPISTA_CSERR_MSK               (0x1   << 12 )
+#define SPISTA_CSERR                   (0x1   << 12 )
+#define SPISTA_CSERR_CLR               (0x0   << 12 ) /* Cleared to 0 when the Status register is read. */
+#define SPISTA_CSERR_SET               (0x1   << 12 ) /* Set to 1 when the CS line was de-asserted abruptly, even before the full-byte of data was transmitted completely. This bit will cause an interrupt. */
+
+/* SPISTA[RXS] - SPI Rx FIFO excess bytes present */
+#define SPISTA_RXS_MSK                 (0x1   << 11 )
+#define SPISTA_RXS                     (0x1   << 11 )
+#define SPISTA_RXS_CLR                 (0x0   << 11 ) /* This bit is cleared when the number of bytes in the FIFO is equal or less than the number in SPI0CON[15:14]. */
+#define SPISTA_RXS_SET                 (0x1   << 11 ) /* This bit is set when there are more bytes in the Rx FIFO than indicated in the MOD bits in SPI0CON. */
+
+/* SPISTA[RXFSTA] - SPI Rx FIFO status */
+#define SPISTA_RXFSTA_MSK              (0x7   << 8  )
+#define SPISTA_RXFSTA_EMPTY            (0x0   << 8  ) /* Rx FIFO empty            */
+#define SPISTA_RXFSTA_ONEBYTE          (0x1   << 8  ) /* 1 valid byte in FIFO     */
+#define SPISTA_RXFSTA_TWOBYTES         (0x2   << 8  ) /* 2 valid bytes in the FIFO */
+#define SPISTA_RXFSTA_THREEBYTES       (0x3   << 8  ) /* 3 valid bytes in the FIFO */
+#define SPISTA_RXFSTA_FOURBYTES        (0x4   << 8  ) /* 4 valid bytes in the FIFO */
+
+/* SPISTA[RXOF] - SPI Rx FIFO overflow */
+#define SPISTA_RXOF_MSK                (0x1   << 7  )
+#define SPISTA_RXOF                    (0x1   << 7  )
+#define SPISTA_RXOF_CLR                (0x0   << 7  ) /* Cleared when the SPISTA register is read. */
+#define SPISTA_RXOF_SET                (0x1   << 7  ) /* Set when the Rx FIFO was already full when new data was loaded to the FIFO. This bit generates an interrupt except when RFLUSH is set in SPI0CON. */
+
+/* SPISTA[RX] - SPI Rx IRQ */
+#define SPISTA_RX_MSK                  (0x1   << 6  )
+#define SPISTA_RX                      (0x1   << 6  )
+#define SPISTA_RX_CLR                  (0x0   << 6  ) /* Cleared when the SPI0STA register is read. */
+#define SPISTA_RX_SET                  (0x1   << 6  ) /* Set when a receive interrupt occurs. This bit is set when TIM in SPI0CON is cleared and the required number of bytes have been received. */
+
+/* SPISTA[TX] - SPI Tx IRQ */
+#define SPISTA_TX_MSK                  (0x1   << 5  )
+#define SPISTA_TX                      (0x1   << 5  )
+#define SPISTA_TX_CLR                  (0x0   << 5  ) /* CLR. Cleared to 0 when the SPI0STA register is read. */
+#define SPISTA_TX_SET                  (0x1   << 5  ) /* SET. Set to 1 when a transmit interrupt occurs. This bit is set when TIM in SPI0CON is set and the required number of bytes have been transmitted. */
+
+/* SPISTA[TXUR] - SPI Tx FIFO underflow */
+#define SPISTA_TXUR_MSK                (0x1   << 4  )
+#define SPISTA_TXUR                    (0x1   << 4  )
+#define SPISTA_TXUR_CLR                (0x0   << 4  ) /* Cleared to 0 when the SPI0STA register is read. */
+#define SPISTA_TXUR_SET                (0x1   << 4  ) /* Set  to 1 when a transmit is initiated without any valid data in the Tx FIFO. This bit generates an interrupt except when TFLUSH is set in SPI0CON. */
+
+/* SPISTA[TXFSTA] - SPI Tx FIFO status */
+#define SPISTA_TXFSTA_MSK              (0x7   << 1  )
+#define SPISTA_TXFSTA_EMPTY            (0x0   << 1  ) /* Tx FIFO empty            */
+#define SPISTA_TXFSTA_ONEBYTE          (0x1   << 1  ) /* 1 valid byte in FIFO     */
+#define SPISTA_TXFSTA_TWOBYTES         (0x2   << 1  ) /* 2 valid bytes in FIFO    */
+#define SPISTA_TXFSTA_THREEBYTES       (0x3   << 1  ) /* 3 valid bytes in FIFO    */
+#define SPISTA_TXFSTA_FOURBYTES        (0x4   << 1  ) /* 4 valid bytes in FIFO    */
+
+/* SPISTA[IRQ] - SPI Interrupt status */
+#define SPISTA_IRQ_MSK                 (0x1   << 0  )
+#define SPISTA_IRQ                     (0x1   << 0  )
+#define SPISTA_IRQ_CLR                 (0x0   << 0  ) /* Cleared to 0 after reading SPI0STA. */
+#define SPISTA_IRQ_SET                 (0x1   << 0  ) /* Set to 1 when an SPI based interrupt occurs. */
+
+/* SPIRX[DMA_DATA_BYTE_2] - 8-bit receive buffer */
+#define SPIRX_DMA_DATA_BYTE_2_MSK      (0xFF  << 8  )
+
+/* SPIRX[DATA_BYTE_1] - 8-bit receive buffer */
+#define SPIRX_DATA_BYTE_1_MSK          (0xFF  << 0  )
+
+/* SPITX[DMA_DATA_BYTE_2] - 8-bit transmit buffer */
+#define SPITX_DMA_DATA_BYTE_2_MSK      (0xFF  << 8  )
+
+/* SPITX[DATA_BYTE_1] - 8-bit transmit buffer */
+#define SPITX_DATA_BYTE_1_MSK          (0xFF  << 0  )
+
+/* SPIDIV[CSIRQ_EN] - Enable interrupt on every CS edge in CONT mode */
+#define SPIDIV_CSIRQ_EN_MSK            (0x1   << 8  )
+#define SPIDIV_CSIRQ_EN                (0x1   << 8  )
+#define SPIDIV_CSIRQ_EN_DIS            (0x0   << 8  )
+#define SPIDIV_CSIRQ_EN_EN             (0x1   << 8  )
+
+/* SPIDIV[BCRST] - Reset Mode for CSERR */
+#define SPIDIV_BCRST_MSK               (0x1   << 7  )
+#define SPIDIV_BCRST                   (0x1   << 7  )
+#define SPIDIV_BCRST_DIS               (0x0   << 7  )
+#define SPIDIV_BCRST_EN                (0x1   << 7  )
+
+/* SPIDIV[HFM] - High Frequency Mode */
+#define SPIDIV_HFM_MSK                 (0x1   << 6  )
+#define SPIDIV_HFM                     (0x1   << 6  )
+#define SPIDIV_HFM_DIS                 (0x0   << 6  )
+#define SPIDIV_HFM_EN                  (0x1   << 6  )
+
+/* SPIDIV[DIV] - SPI clock divider */
+#define SPIDIV_DIV_MSK                 (0x3F  << 0  )
+
+/* SPICON[MOD] - SPI IRQ mode bits */
+#define SPICON_MOD_MSK                 (0x3   << 14 )
+#define SPICON_MOD_TX1RX1              (0x0   << 14 ) /* Tx interrupt occurs when 1 byte has been transferred. Rx interrupt occurs when 1 or more bytes have been received into the FIFO. */
+#define SPICON_MOD_TX2RX2              (0x1   << 14 ) /* Tx interrupt occurs when 2 bytes has been transferred.  Rx interrupt occurs when 2 or more bytes have been received into the FIFO. */
+#define SPICON_MOD_TX3RX3              (0x2   << 14 ) /* Tx interrupt occurs when 3 bytes has been transferred.  Rx interrupt occurs when 3 or more bytes have been received into the FIFO. */
+#define SPICON_MOD_TX4RX4              (0x3   << 14 ) /* Tx interrupt occurs when 4 bytes has been transferred.  Rx interrupt occurs when the Rx FIFO is full, or 4 bytes present. */
+
+/* SPICON[TFLUSH] - SPI Tx FIFO Flush enable */
+#define SPICON_TFLUSH_MSK              (0x1   << 13 )
+#define SPICON_TFLUSH                  (0x1   << 13 )
+#define SPICON_TFLUSH_DIS              (0x0   << 13 ) /* Clear this bit to disable Tx FIFO flushing. */
+#define SPICON_TFLUSH_EN               (0x1   << 13 ) /* Set this bit to flush the Tx FIFO. This bit does not clear itself and should be toggled if a single flush is required. If this bit is left high, then either the last transmitted value or "0x00" is transmitted depending on the ZEN bit. Any writes to the Tx FIFO are ignored while this bit is set. */
+
+/* SPICON[RFLUSH] - SPI Rx FIFO Flush enable */
+#define SPICON_RFLUSH_MSK              (0x1   << 12 )
+#define SPICON_RFLUSH                  (0x1   << 12 )
+#define SPICON_RFLUSH_DIS              (0x0   << 12 ) /* Clear this bit to disable Rx FIFO flushing. */
+#define SPICON_RFLUSH_EN               (0x1   << 12 ) /* Set this bit to flush the Rx FIFO. This bit does not clear itself and should be toggled if a single flush is required. If this bit is set all incoming data is ignored and no interrupts are generated. If set and TIM = 0, a read of the Rx FIFO will initiate a transfer. */
+
+/* SPICON[CON] - Continuous transfer enable */
+#define SPICON_CON_MSK                 (0x1   << 11 )
+#define SPICON_CON                     (0x1   << 11 )
+#define SPICON_CON_DIS                 (0x0   << 11 ) /* DIS. Cleared by user to disable continuous transfer. Each transfer consists of a single 8-bit serial transfer. If valid data exists in the SPI0TX register, then a new transfer is initiated after a stall period of 1 serial clock cycle. */
+#define SPICON_CON_EN                  (0x1   << 11 ) /* EN. Set by user to enable continuous transfer. In master mode, the transfer continues until no valid data is available in the Tx register. CS is asserted and remains asserted for the duration of each 8-bit serial transfer until Tx is empty. */
+
+/* SPICON[LOOPBACK] - Loopback enable */
+#define SPICON_LOOPBACK_MSK            (0x1   << 10 )
+#define SPICON_LOOPBACK                (0x1   << 10 )
+#define SPICON_LOOPBACK_DIS            (0x0   << 10 ) /* Cleared by user to be in normal mode. */
+#define SPICON_LOOPBACK_EN             (0x1   << 10 ) /* Set by user to connect MISO to MOSI and test software. */
+
+/* SPICON[OEN] - Slave MISO output enable */
+#define SPICON_OEN_MSK                 (0x1   << 9  )
+#define SPICON_OEN                     (0x1   << 9  )
+#define SPICON_OEN_DIS                 (0x0   << 9  ) /* Clear this bit to disable the output driver on the MISO pin. The MISO pin will be Open-Circuit when this bit is clear. */
+#define SPICON_OEN_EN                  (0x1   << 9  ) /* Set this bit for MISO to operate as normal. */
+
+/* SPICON[RXOF] - SPIRX overflow overwrite enable */
+#define SPICON_RXOF_MSK                (0x1   << 8  )
+#define SPICON_RXOF                    (0x1   << 8  )
+#define SPICON_RXOF_DIS                (0x0   << 8  ) /* Cleared by user, the new serial byte received is discarded. */
+#define SPICON_RXOF_EN                 (0x1   << 8  ) /* Set by user, the valid data in the Rx register is overwritten by the new serial byte received. */
+
+/* SPICON[ZEN] - Transmit zeros enable */
+#define SPICON_ZEN_MSK                 (0x1   << 7  )
+#define SPICON_ZEN                     (0x1   << 7  )
+#define SPICON_ZEN_DIS                 (0x0   << 7  ) /* Clear this bit to transmit the last transmitted value when there is no valid data in the Tx FIFO. */
+#define SPICON_ZEN_EN                  (0x1   << 7  ) /* Set this bit to transmit "0x00" when there is no valid data in the Tx FIFO. */
+
+/* SPICON[TIM] - SPI transfer and interrupt mode */
+#define SPICON_TIM_MSK                 (0x1   << 6  )
+#define SPICON_TIM                     (0x1   << 6  )
+#define SPICON_TIM_RXRD                (0x0   << 6  ) /* Cleared by user to initiate transfer with a read of the SPI0RX register. Interrupt only occurs when Rx is full. */
+#define SPICON_TIM_TXWR                (0x1   << 6  ) /* Set by user to initiate transfer with a write to the SPI0TX register. Interrupt only occurs when Tx is empty. */
+
+/* SPICON[LSB] - LSB first transfer enable */
+#define SPICON_LSB_MSK                 (0x1   << 5  )
+#define SPICON_LSB                     (0x1   << 5  )
+#define SPICON_LSB_DIS                 (0x0   << 5  ) /* MSB transmitted first    */
+#define SPICON_LSB_EN                  (0x1   << 5  ) /* LSB transmitted first    */
+
+/* SPICON[WOM] - SPI Wired Or mode */
+#define SPICON_WOM_MSK                 (0x1   << 4  )
+#define SPICON_WOM                     (0x1   << 4  )
+#define SPICON_WOM_EN                  (0x1   << 4  ) /* Enables open circuit data output enable. External pull-ups required on data out pins */
+#define SPICON_WOM_DIS                 (0x0   << 4  ) /* Normal output levels     */
+
+/* SPICON[CPOL] - Serial Clock Polarity */
+#define SPICON_CPOL_MSK                (0x1   << 3  )
+#define SPICON_CPOL                    (0x1   << 3  )
+#define SPICON_CPOL_LOW                (0x0   << 3  ) /* Serial clock idles low   */
+#define SPICON_CPOL_HIGH               (0x1   << 3  ) /* Serial clock idles high  */
+
+/* SPICON[CPHA] - Serial clock phase mode */
+#define SPICON_CPHA_MSK                (0x1   << 2  )
+#define SPICON_CPHA                    (0x1   << 2  )
+#define SPICON_CPHA_SAMPLETRAILING     (0x1   << 2  ) /* Serial clock pulses at the beginning of each serial bit transfer */
+#define SPICON_CPHA_SAMPLELEADING      (0x0   << 2  ) /* Serial clock pulses at the end of each serial bit transfer */
+
+/* SPICON[MASEN] - Master mode enable */
+#define SPICON_MASEN_MSK               (0x1   << 1  )
+#define SPICON_MASEN                   (0x1   << 1  )
+#define SPICON_MASEN_DIS               (0x0   << 1  ) /* Enable slave mode        */
+#define SPICON_MASEN_EN                (0x1   << 1  ) /* Enable master mode       */
+
+/* SPICON[ENABLE] - SPI enable */
+#define SPICON_ENABLE_MSK              (0x1   << 0  )
+#define SPICON_ENABLE                  (0x1   << 0  )
+#define SPICON_ENABLE_DIS              (0x0   << 0  ) /* Disable the SPI          */
+#define SPICON_ENABLE_EN               (0x1   << 0  ) /* Enable the SPI           */
+
+/* SPIDMA[IENRXDMA] - Enable receive DMA request */
+#define SPIDMA_IENRXDMA_MSK            (0x1   << 2  )
+#define SPIDMA_IENRXDMA                (0x1   << 2  )
+#define SPIDMA_IENRXDMA_DIS            (0x0   << 2  ) /* Disable RX DMA Interrupt */
+#define SPIDMA_IENRXDMA_EN             (0x1   << 2  ) /* Enable RX DMA Interrupt  */
+
+/* SPIDMA[IENTXDMA] - Enable transmit DMA request */
+#define SPIDMA_IENTXDMA_MSK            (0x1   << 1  )
+#define SPIDMA_IENTXDMA                (0x1   << 1  )
+#define SPIDMA_IENTXDMA_DIS            (0x0   << 1  ) /* Disable TX DMA Interrupt */
+#define SPIDMA_IENTXDMA_EN             (0x1   << 1  ) /* Enable TX DMA Interrupt  */
+
+/* SPIDMA[ENABLE] - Enable DMA for data transfer */
+#define SPIDMA_ENABLE_MSK              (0x1   << 0  )
+#define SPIDMA_ENABLE                  (0x1   << 0  )
+#define SPIDMA_ENABLE_DIS              (0x0   << 0  )
+#define SPIDMA_ENABLE_EN               (0x1   << 0  )
+
+/* SPICNT[COUNT] - Transfer byte count */
+#define SPICNT_COUNT_MSK               (0xFF  << 0  )
+
+
+/* ========================================================================== */
+/* ================                   ADC                  ================== */
+/* ========================================================================== */
 
 /**
   * @brief ADC (MMR_ADC)
@@ -4709,7 +4044,9 @@ typedef struct MMR_ADC {                    /*!< MMR_ADC Structure              
 #define ADCCON_RVAL                    0x280 
 
 /* ADCCON[SOFT_RESET] - software reset ADC */
-#define ADCCON_SOFT_RESET_MSK          (0x3F  << 10 )
+#define ADCCON_SOFT_RESET_Pos           10
+#define ADCCON_SOFT_RESET_Msk          (0x1 << ADCCON_SOFT_RESET_Pos)
+#define ADCCON_SOFT_RESET              (0x1 << ADCCON_SOFT_RESET_Pos)
 
 /* ADCCON[PUP] - ADC power up */
 #define ADCCON_PUP_BBA                 (*(volatile unsigned long *) 0x43042EA4)
@@ -4737,18 +4074,20 @@ typedef struct MMR_ADC {                    /*!< MMR_ADC Structure              
 #define ADCCON_CNV_DMA                 (0x1   << 3  )
 
 /* ADCCON[C_TYPE] - ADC conversion type */
-#define ADCCON_C_TYPE_MSK              (0x7   << 0  )
-#define ADCCON_C_TYPE_NO               (0x0   << 0  ) /* No conversion            */
-#define ADCCON_C_TYPE_DIO              (0x1   << 0  ) /* DIO pin starts conversion (P2.4) */
-#define ADCCON_C_TYPE_SINGLE           (0x2   << 0  ) /* Single conversion        */
-#define ADCCON_C_TYPE_CONT             (0x3   << 0  ) /* Continuous conversion (use this mode for the sequencer) */
-#define ADCCON_C_TYPE_PLA              (0x4   << 0  ) /* PLA conversion           */
+#define ADCCON_C_TYPE_Pos               0
+#define ADCCON_C_TYPE_Msk              (0x7   << ADCCON_C_TYPE_Pos)
+#define ADCCON_C_TYPE_NO               (0x0   << ADCCON_C_TYPE_Pos)             /* No conversion            */
+#define ADCCON_C_TYPE_DIO              (0x1   << ADCCON_C_TYPE_Pos)             /* DIO pin starts conversion (P2.4) */
+#define ADCCON_C_TYPE_SINGLE           (0x2   << ADCCON_C_TYPE_Pos)             /* Single conversion        */
+#define ADCCON_C_TYPE_CONT             (0x3   << ADCCON_C_TYPE_Pos)             /* Continuous conversion (use this mode for the sequencer) */
+#define ADCCON_C_TYPE_PLA              (0x4   << ADCCON_C_TYPE_Pos)             /* PLA conversion           */
 
 /* Reset Value for ADCDAT*/
 #define ADCDAT_RVAL                    0x0 
 
 /* ADCDAT[DAT] - ADCx data */
-#define ADCDAT_DAT_MSK                 (0xFFFFFFF << 4  )
+#define ADCDAT_DAT_Pos                  12
+#define ADCDAT_DAT_Msk                 (0xFFFFF << ADCDAT_DAT_Pos)
 
 /* ADCDAT[VALID] - Flag indicating if data is valid. */
 #define ADCDAT_VALID_BBA               (*(volatile unsigned long *) 0x430C000C)
@@ -4768,52 +4107,54 @@ typedef struct MMR_ADC {                    /*!< MMR_ADC Structure              
 #define ADCCHA_RVAL                    0x111F 
 
 /* ADCCHA[ADCCN] - Selects channel for ADC negative input */
-#define ADCCHA_ADCCN_MSK               (0x1F  << 8  )
-#define ADCCHA_ADCCN_AIN0              (0x0   << 8  ) /* AIN0                     */
-#define ADCCHA_ADCCN_AIN1              (0x1   << 8  ) /* AIN1                     */
-#define ADCCHA_ADCCN_AIN2              (0x2   << 8  ) /* AIN2                     */
-#define ADCCHA_ADCCN_AIN3              (0x3   << 8  ) /* AIN3                     */
-#define ADCCHA_ADCCN_AIN4              (0x4   << 8  ) /* AIN4                     */
-#define ADCCHA_ADCCN_AIN5              (0x5   << 8  ) /* AIN5                     */
-#define ADCCHA_ADCCN_AIN6              (0x6   << 8  ) /* AIN6                     */
-#define ADCCHA_ADCCN_AIN7              (0x7   << 8  ) /* AIN7                     */
-#define ADCCHA_ADCCN_AIN8              (0x8   << 8  ) /* AIN8                     */
-#define ADCCHA_ADCCN_AIN9              (0x9   << 8  ) /* AIN9                     */
-#define ADCCHA_ADCCN_AIN10             (0xA   << 8  ) /* AIN10                    */
-#define ADCCHA_ADCCN_AIN11             (0xB   << 8  ) /* AIN11                    */
-#define ADCCHA_ADCCN_AIN12             (0xC   << 8  ) /* AIN12                    */
-#define ADCCHA_ADCCN_AIN13             (0xD   << 8  ) /* AIN13                    */
-#define ADCCHA_ADCCN_AIN14             (0xE   << 8  ) /* AIN14                    */
-#define ADCCHA_ADCCN_AIN15             (0xF   << 8  ) /* AIN15                    */
-#define ADCCHA_ADCCN_VREFP_NADC        (0x10  << 8  ) /* VREFP_NADC: Connect ADC_REFP to negative input. */
-#define ADCCHA_ADCCN_VREFN_NADC        (0x11  << 8  ) /* VREFN_NADC: Connect ADC_REFN to negative input. Use This setting for single ended measurements. */
-#define ADCCHA_ADCCN_AGND              (0x12  << 8  ) /* AGND                     */
-#define ADCCHA_ADCCN_PGND              (0x13  << 8  ) /* PGND                     */
+#define ADCCHA_ADCCN_Pos                8
+#define ADCCHA_ADCCN_Msk               (0x1F  << ADCCHA_ADCCN_Pos)
+#define ADCCHA_ADCCN_AIN0              (0x0   << ADCCHA_ADCCN_Pos)              /* AIN0                     */
+#define ADCCHA_ADCCN_AIN1              (0x1   << ADCCHA_ADCCN_Pos)              /* AIN1                     */
+#define ADCCHA_ADCCN_AIN2              (0x2   << ADCCHA_ADCCN_Pos)              /* AIN2                     */
+#define ADCCHA_ADCCN_AIN3              (0x3   << ADCCHA_ADCCN_Pos)              /* AIN3                     */
+#define ADCCHA_ADCCN_AIN4              (0x4   << ADCCHA_ADCCN_Pos)              /* AIN4                     */
+#define ADCCHA_ADCCN_AIN5              (0x5   << ADCCHA_ADCCN_Pos)              /* AIN5                     */
+#define ADCCHA_ADCCN_AIN6              (0x6   << ADCCHA_ADCCN_Pos)              /* AIN6                     */
+#define ADCCHA_ADCCN_AIN7              (0x7   << ADCCHA_ADCCN_Pos)              /* AIN7                     */
+#define ADCCHA_ADCCN_AIN8              (0x8   << ADCCHA_ADCCN_Pos)              /* AIN8                     */
+#define ADCCHA_ADCCN_AIN9              (0x9   << ADCCHA_ADCCN_Pos)              /* AIN9                     */
+#define ADCCHA_ADCCN_AIN10             (0xA   << ADCCHA_ADCCN_Pos)              /* AIN10                    */
+#define ADCCHA_ADCCN_AIN11             (0xB   << ADCCHA_ADCCN_Pos)              /* AIN11                    */
+#define ADCCHA_ADCCN_AIN12             (0xC   << ADCCHA_ADCCN_Pos)              /* AIN12                    */
+#define ADCCHA_ADCCN_AIN13             (0xD   << ADCCHA_ADCCN_Pos)              /* AIN13                    */
+#define ADCCHA_ADCCN_AIN14             (0xE   << ADCCHA_ADCCN_Pos)              /* AIN14                    */
+#define ADCCHA_ADCCN_AIN15             (0xF   << ADCCHA_ADCCN_Pos)              /* AIN15                    */
+#define ADCCHA_ADCCN_VREFP_NADC        (0x10  << ADCCHA_ADCCN_Pos)              /* VREFP_NADC: Connect ADC_REFP to negative input. */
+#define ADCCHA_ADCCN_VREFN_NADC        (0x11  << ADCCHA_ADCCN_Pos)              /* VREFN_NADC: Connect ADC_REFN to negative input. Use This setting for single ended measurements. */
+#define ADCCHA_ADCCN_AGND              (0x12  << ADCCHA_ADCCN_Pos)              /* AGND                     */
+#define ADCCHA_ADCCN_PGND              (0x13  << ADCCHA_ADCCN_Pos)              /* PGND                     */
 
 /* ADCCHA[ADCCP] - Select ADC channel */
-#define ADCCHA_ADCCP_MSK               (0x1F  << 0  )
-#define ADCCHA_ADCCP_AIN0              (0x0   << 0  ) /* AIN0                     */
-#define ADCCHA_ADCCP_AIN1              (0x1   << 0  ) /* AIN1                     */
-#define ADCCHA_ADCCP_AIN2              (0x2   << 0  ) /* AIN2                     */
-#define ADCCHA_ADCCP_AIN3              (0x3   << 0  ) /* AIN3                     */
-#define ADCCHA_ADCCP_AIN4              (0x4   << 0  ) /* AIN4                     */
-#define ADCCHA_ADCCP_AIN5              (0x5   << 0  ) /* AIN5                     */
-#define ADCCHA_ADCCP_AIN6              (0x6   << 0  ) /* AIN6                     */
-#define ADCCHA_ADCCP_AIN7              (0x7   << 0  ) /* AIN7                     */
-#define ADCCHA_ADCCP_AIN8              (0x8   << 0  ) /* AIN8                     */
-#define ADCCHA_ADCCP_AIN9              (0x9   << 0  ) /* AIN9                     */
-#define ADCCHA_ADCCP_AIN10             (0xA   << 0  ) /* AIN10                    */
-#define ADCCHA_ADCCP_AIN11             (0xB   << 0  ) /* AIN11                    */
-#define ADCCHA_ADCCP_AIN12             (0xC   << 0  ) /* AIN12                    */
-#define ADCCHA_ADCCP_AIN13             (0xD   << 0  ) /* AIN13                    */
-#define ADCCHA_ADCCP_AIN14             (0xE   << 0  ) /* AIN14                    */
-#define ADCCHA_ADCCP_AIN15             (0xF   << 0  ) /* AIN15                    */
-#define ADCCHA_ADCCP_TEMP_SENSOR       (0x16  << 0  ) /* TEMP_SENSOR              */
-#define ADCCHA_ADCCP_VREFP_PADC        (0x17  << 0  ) /* VREFP_PADC: Connect ADC_REFP to positive input. Note: This pin should not be measured relative to AGND. This selection is intended for measuring the differential voltage between the negative input and ADC_REFP. */
-#define ADCCHA_ADCCP_PVDD_IDAC2        (0x18  << 0  ) /* PVDD_IDAC2: Use this to measure the PVDD supply voltage for IDAC2 */
-#define ADCCHA_ADCCP_IOVDD_2           (0x19  << 0  ) /* IOVDD_2: Use this to measure half of the IOVDD supply voltage */
-#define ADCCHA_ADCCP_AVDD_2            (0x1A  << 0  ) /* AVDD_2: Use this to measure half of the AVDD supply voltage. */
-#define ADCCHA_ADCCP_VREFN_PADC        (0x1B  << 0  ) /* VREFN_PADC: Connect ADC_REFN to positive input. */
+#define ADCCHA_ADCCP_Pos                0
+#define ADCCHA_ADCCP_Msk               (0x1F  << ADCCHA_ADCCP_Pos)
+#define ADCCHA_ADCCP_AIN0              (0x0   << ADCCHA_ADCCP_Pos)              /* AIN0                     */
+#define ADCCHA_ADCCP_AIN1              (0x1   << ADCCHA_ADCCP_Pos)              /* AIN1                     */
+#define ADCCHA_ADCCP_AIN2              (0x2   << ADCCHA_ADCCP_Pos)              /* AIN2                     */
+#define ADCCHA_ADCCP_AIN3              (0x3   << ADCCHA_ADCCP_Pos)              /* AIN3                     */
+#define ADCCHA_ADCCP_AIN4              (0x4   << ADCCHA_ADCCP_Pos)              /* AIN4                     */
+#define ADCCHA_ADCCP_AIN5              (0x5   << ADCCHA_ADCCP_Pos)              /* AIN5                     */
+#define ADCCHA_ADCCP_AIN6              (0x6   << ADCCHA_ADCCP_Pos)              /* AIN6                     */
+#define ADCCHA_ADCCP_AIN7              (0x7   << ADCCHA_ADCCP_Pos)              /* AIN7                     */
+#define ADCCHA_ADCCP_AIN8              (0x8   << ADCCHA_ADCCP_Pos)              /* AIN8                     */
+#define ADCCHA_ADCCP_AIN9              (0x9   << ADCCHA_ADCCP_Pos)              /* AIN9                     */
+#define ADCCHA_ADCCP_AIN10             (0xA   << ADCCHA_ADCCP_Pos)              /* AIN10                    */
+#define ADCCHA_ADCCP_AIN11             (0xB   << ADCCHA_ADCCP_Pos)              /* AIN11                    */
+#define ADCCHA_ADCCP_AIN12             (0xC   << ADCCHA_ADCCP_Pos)              /* AIN12                    */
+#define ADCCHA_ADCCP_AIN13             (0xD   << ADCCHA_ADCCP_Pos)              /* AIN13                    */
+#define ADCCHA_ADCCP_AIN14             (0xE   << ADCCHA_ADCCP_Pos)              /* AIN14                    */
+#define ADCCHA_ADCCP_AIN15             (0xF   << ADCCHA_ADCCP_Pos)              /* AIN15                    */
+#define ADCCHA_ADCCP_TEMP_SENSOR       (0x16  << ADCCHA_ADCCP_Pos)              /* TEMP_SENSOR              */
+#define ADCCHA_ADCCP_VREFP_PADC        (0x17  << ADCCHA_ADCCP_Pos)              /* VREFP_PADC: Connect ADC_REFP to positive input. Note: This pin should not be measured relative to AGND. This selection is intended for measuring the differential voltage between the negative input and ADC_REFP. */
+#define ADCCHA_ADCCP_PVDD_IDAC2        (0x18  << ADCCHA_ADCCP_Pos)              /* PVDD_IDAC2: Use this to measure the PVDD supply voltage for IDAC2 */
+#define ADCCHA_ADCCP_IOVDD_2           (0x19  << ADCCHA_ADCCP_Pos)              /* IOVDD_2: Use this to measure half of the IOVDD supply voltage */
+#define ADCCHA_ADCCP_AVDD_2            (0x1A  << ADCCHA_ADCCP_Pos)              /* AVDD_2: Use this to measure half of the AVDD supply voltage. */
+#define ADCCHA_ADCCP_VREFN_PADC        (0x1B  << ADCCHA_ADCCP_Pos)              /* VREFN_PADC: Connect ADC_REFN to positive input. */
 
 /* Reset Value for ADCSEQ*/
 #define ADCSEQ_RVAL                    0x0 
@@ -4835,7 +4176,8 @@ typedef struct MMR_ADC {                    /*!< MMR_ADC Structure              
 #define ADCSEQC_RVAL                   0x8C631 
 
 /* ADCSEQC[T] - Define programmable delay of 0 to 254 between sequences. A delay 255 will cause a halt after one sequence. */
-#define ADCSEQC_T_MSK                  (0xFF  << 20 )
+#define ADCSEQC_T_Pos                   20
+#define ADCSEQC_T_Msk                  (0xFF  << ADCSEQC_T_Pos)
 
 /* ADCSEQC[DIF6] - Selects differential mode negative input for AIN6 in the sequence. */
 #define ADCSEQC_DIF6_MSK               (0x1F  << 15 )
@@ -4885,18 +4227,21 @@ typedef struct MMR_ADC {                    /*!< MMR_ADC Structure              
 #define ADCCNVC_RVAL                   0xA00C8 
 
 /* ADCCNVC[CNVD] - Configure ADC Acquisition time and sampling time */
-#define ADCCNVC_CNVD_MSK               (0x3FF << 16 )
+#define ADCCNVC_CNVD_Pos                16
+#define ADCCNVC_CNVD_Msk               (0x3FF << ADCCNVC_CNVD_Pos)
 
 /* ADCCNVC[CNVC] - Configure Conversion frequency */
-#define ADCCNVC_CNVC_MSK               (0x3FF << 0  )
-// ------------------------------------------------------------------------------------------------
-// -----                                        VDAC                                        -----
-// ------------------------------------------------------------------------------------------------
+#define ADCCNVC_CNVC_Pos                0
+#define ADCCNVC_CNVC_Msk               (0x3FF << ADCCNVC_CNVC_Pos)
 
+
+/* ========================================================================== */
+/* ================                 VDAC                   ================== */
+/* ========================================================================== */
 
 /**
-  * @brief VDAC (MMR_VDAC)
-  */
+ * @brief VDAC (MMR_VDAC)
+ */
 
 typedef struct MMR_VDAC {                   /*!< MMR_VDAC Structure           */
   __IO uint16_t  DACCON;                    /*!< DAC control register         */
@@ -4904,185 +4249,29 @@ typedef struct MMR_VDAC {                   /*!< MMR_VDAC Structure           */
   __IO uint32_t  DACDAT;                    /*!< DAC data register            */
 } MMR_VDAC_t;
 
-/* Reset Value for DAC0CON*/
-#define DAC0CON_RVAL                   0x100 
+/********************  Bit definition for DACCON register  ********************/
+#define DACCON_RN_Pos                 (0U)
+#define DACCON_RN_Msk                 (0x3U << DACCON_RN_Pos)
+#define DACCON_RN_IREF                (0x0U << DACCON_RN_Pos)
+#define DACCON_RN_AVDD                (0x3U << DACCON_RN_Pos)
 
-/* DAC0CON[PD] - DAC0 power down */
-#define DAC0CON_PD_BBA                 (*(volatile unsigned long *) 0x43048020)
-#define DAC0CON_PD_MSK                 (0x1   << 8  )
-#define DAC0CON_PD                     (0x1   << 8  )
+#define DACCON_EN_Pos                 (4U)
+#define DACCON_EN_Msk                 (0x1U << DACCON_EN_Pos)
+#define DACCON_EN                              DACCON_EN_Msk
 
-/* DAC0CON[EN] - DAC0 enable */
-#define DAC0CON_EN_BBA                 (*(volatile unsigned long *) 0x43048010)
-#define DAC0CON_EN_MSK                 (0x1   << 4  )
-#define DAC0CON_EN                     (0x1   << 4  )
+#define DACCON_PD_Pos                 (8U)
+#define DACCON_PD_Msk                 (0x1U << DACCON_PD_Pos)
+#define DACCON_PD                              DACCON_PD_Msk
 
-/* DAC0CON[RN] - DAC0 reference selection */
-#define DAC0CON_RN_MSK                 (0x3   << 0  )
+/********************  Bit definition for DACDAT register  ********************/
+#define DACDAT_DAT_Pos                (16U)
+#define DACDAT_DAT_Msk                (0xFFFU << DACDAT_DAT_Pos)
+#define DACDAT_DAT(n)                 (((n) << DACDAT_DAT_Pos) & DACDAT_DAT_Msk)
 
-/* Reset Value for DAC0DAT*/
-#define DAC0DAT_RVAL                   0x0 
 
-/* DAC0DAT[DAT] - DAC0 data */
-#define DAC0DAT_DAT_MSK                (0xFFF << 16 )
-
-/* Reset Value for DAC1CON*/
-#define DAC1CON_RVAL                   0x100 
-
-/* DAC1CON[PD] - DAC1 power down */
-#define DAC1CON_PD_BBA                 (*(volatile unsigned long *) 0x430480A0)
-#define DAC1CON_PD_MSK                 (0x1   << 8  )
-#define DAC1CON_PD                     (0x1   << 8  )
-
-/* DAC1CON[EN] - DAC1 enable */
-#define DAC1CON_EN_BBA                 (*(volatile unsigned long *) 0x43048090)
-#define DAC1CON_EN_MSK                 (0x1   << 4  )
-#define DAC1CON_EN                     (0x1   << 4  )
-
-/* DAC1CON[RN] - DAC1 reference selection */
-#define DAC1CON_RN_MSK                 (0x3   << 0  )
-
-/* Reset Value for DAC1DAT*/
-#define DAC1DAT_RVAL                   0x0 
-
-/* DAC1DAT[DAT] - DAC1 data */
-#define DAC1DAT_DAT_MSK                (0xFFF << 16 )
-
-/* Reset Value for DAC2CON*/
-#define DAC2CON_RVAL                   0x100 
-
-/* DAC2CON[PD] - DAC2 power down */
-#define DAC2CON_PD_BBA                 (*(volatile unsigned long *) 0x43048120)
-#define DAC2CON_PD_MSK                 (0x1   << 8  )
-#define DAC2CON_PD                     (0x1   << 8  )
-
-/* DAC2CON[EN] - DAC2 enable */
-#define DAC2CON_EN_BBA                 (*(volatile unsigned long *) 0x43048110)
-#define DAC2CON_EN_MSK                 (0x1   << 4  )
-#define DAC2CON_EN                     (0x1   << 4  )
-
-/* DAC2CON[RN] - DAC2 reference selection */
-#define DAC2CON_RN_MSK                 (0x3   << 0  )
-
-/* Reset Value for DAC2DAT*/
-#define DAC2DAT_RVAL                   0x0 
-
-/* DAC2DAT[DAT] - DAC2 data */
-#define DAC2DAT_DAT_MSK                (0xFFF << 16 )
-
-/* Reset Value for DAC3CON*/
-#define DAC3CON_RVAL                   0x100 
-
-/* DAC3CON[PD] - DAC3 power down */
-#define DAC3CON_PD_BBA                 (*(volatile unsigned long *) 0x430481A0)
-#define DAC3CON_PD_MSK                 (0x1   << 8  )
-#define DAC3CON_PD                     (0x1   << 8  )
-
-/* DAC3CON[EN] - DAC3 enable */
-#define DAC3CON_EN_BBA                 (*(volatile unsigned long *) 0x43048190)
-#define DAC3CON_EN_MSK                 (0x1   << 4  )
-#define DAC3CON_EN                     (0x1   << 4  )
-
-/* DAC3CON[RN] - DAC3 reference selection */
-#define DAC3CON_RN_MSK                 (0x3   << 0  )
-
-/* Reset Value for DAC3DAT*/
-#define DAC3DAT_RVAL                   0x0 
-
-/* DAC3DAT[DAT] - DAC3 data */
-#define DAC3DAT_DAT_MSK                (0xFFF << 16 )
-
-/* Reset Value for DAC4CON*/
-#define DAC4CON_RVAL                   0x100 
-
-/* DAC4CON[PD] - DAC4 power down */
-#define DAC4CON_PD_BBA                 (*(volatile unsigned long *) 0x43048220)
-#define DAC4CON_PD_MSK                 (0x1   << 8  )
-#define DAC4CON_PD                     (0x1   << 8  )
-
-/* DAC4CON[EN] - DAC4 enable */
-#define DAC4CON_EN_BBA                 (*(volatile unsigned long *) 0x43048210)
-#define DAC4CON_EN_MSK                 (0x1   << 4  )
-#define DAC4CON_EN                     (0x1   << 4  )
-
-/* DAC4CON[RN] - DAC4 reference selection */
-#define DAC4CON_RN_MSK                 (0x3   << 0  )
-
-/* Reset Value for DAC4DAT*/
-#define DAC4DAT_RVAL                   0x0 
-
-/* DAC4DAT[DAT] - DAC4 data */
-#define DAC4DAT_DAT_MSK                (0xFFF << 16 )
-
-/* Reset Value for DAC5CON*/
-#define DAC5CON_RVAL                   0x100 
-
-/* DAC5CON[PD] - DAC5 power down */
-#define DAC5CON_PD_BBA                 (*(volatile unsigned long *) 0x430482A0)
-#define DAC5CON_PD_MSK                 (0x1   << 8  )
-#define DAC5CON_PD                     (0x1   << 8  )
-
-/* DAC5CON[EN] - DAC5 enable */
-#define DAC5CON_EN_BBA                 (*(volatile unsigned long *) 0x43048290)
-#define DAC5CON_EN_MSK                 (0x1   << 4  )
-#define DAC5CON_EN                     (0x1   << 4  )
-
-/* DAC5CON[RN] - DAC5 reference selection */
-#define DAC5CON_RN_MSK                 (0x3   << 0  )
-
-/* Reset Value for DAC5DAT*/
-#define DAC5DAT_RVAL                   0x0 
-
-/* DAC5DAT[DAT] - DAC5 data */
-#define DAC5DAT_DAT_MSK                (0xFFF << 16 )
-
-/* Reset Value for DAC6CON*/
-#define DAC6CON_RVAL                   0x100 
-
-/* DAC6CON[PD] - DAC6 power down */
-#define DAC6CON_PD_BBA                 (*(volatile unsigned long *) 0x43048320)
-#define DAC6CON_PD_MSK                 (0x1   << 8  )
-#define DAC6CON_PD                     (0x1   << 8  )
-
-/* DAC6CON[EN] - DAC6 enable */
-#define DAC6CON_EN_BBA                 (*(volatile unsigned long *) 0x43048310)
-#define DAC6CON_EN_MSK                 (0x1   << 4  )
-#define DAC6CON_EN                     (0x1   << 4  )
-
-/* DAC6CON[RN] - DAC6 reference selection */
-#define DAC6CON_RN_MSK                 (0x3   << 0  )
-
-/* Reset Value for DAC6DAT*/
-#define DAC6DAT_RVAL                   0x0 
-
-/* DAC6DAT[DAT] - DAC6 data */
-#define DAC6DAT_DAT_MSK                (0xFFF << 16 )
-
-/* Reset Value for DAC7CON*/
-#define DAC7CON_RVAL                   0x100 
-
-/* DAC7CON[PD] - DAC7 power down */
-#define DAC7CON_PD_BBA                 (*(volatile unsigned long *) 0x430483A0)
-#define DAC7CON_PD_MSK                 (0x1   << 8  )
-#define DAC7CON_PD                     (0x1   << 8  )
-
-/* DAC7CON[EN] - DAC7 enable */
-#define DAC7CON_EN_BBA                 (*(volatile unsigned long *) 0x43048390)
-#define DAC7CON_EN_MSK                 (0x1   << 4  )
-#define DAC7CON_EN                     (0x1   << 4  )
-
-/* DAC7CON[RN] - DAC7 reference selection */
-#define DAC7CON_RN_MSK                 (0x3   << 0  )
-
-/* Reset Value for DAC7DAT*/
-#define DAC7DAT_RVAL                   0x0 
-
-/* DAC7DAT[DAT] - DAC7 data */
-#define DAC7DAT_DAT_MSK                (0xFFF << 16 )
-// ------------------------------------------------------------------------------------------------
-// -----                                        InBuf                                        -----
-// ------------------------------------------------------------------------------------------------
-
+/* ========================================================================== */
+/* ================                 InBuf                  ================== */
+/* ========================================================================== */
 
 /**
   * @brief InBuf (MMR_InBuf)
@@ -5842,6 +5031,5 @@ typedef struct MMR_AFE {                    /*!< MMR_AFE Structure              
 #ifdef __cplusplus
 }
 #endif 
-
 
 #endif  // ADUCM32x_H_

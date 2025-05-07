@@ -25,7 +25,7 @@
  ******************************************************************************/
 
 #include <stdbool.h>
-#include "CMSIS/Core/Cortex/cmsis_compiler.h"
+#include "Core/Cortex/cmsis_compiler.h"
 
 /*******************************************************************************
  *  defines and macros

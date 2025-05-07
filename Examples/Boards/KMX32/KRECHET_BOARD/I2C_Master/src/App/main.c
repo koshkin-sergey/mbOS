@@ -23,7 +23,7 @@
 
 #include <asm/krechet1.h>
 #include <Kernel/kernel.h>
-#include <CMSIS/Driver/Driver_I2C.h>
+#include <Driver/Driver_I2C.h>
 #include <Driver/ADSU_KRECHET1.h>
 
 /*******************************************************************************
@@ -49,8 +49,8 @@
 extern Driver_ADSU_t Driver_ADSU;
 static Driver_ADSU_t *adsu = &Driver_ADSU;
 
-extern ARM_DRIVER_I2C Driver_I2C0;
-static ARM_DRIVER_I2C *i2c = &Driver_I2C0;
+extern DRIVER_I2C Driver_I2C0;
+static DRIVER_I2C *i2c = &Driver_I2C0;
 
 static osThreadId_t init_id;
 static osThread_t   init_cb;
@@ -102,24 +102,24 @@ int32_t TestTransferEvent(uint8_t *wr_buf, uint8_t wr_size,
   i2c->MasterTransmit(SLAVE_ADDR, wr_buf, wr_size, true);
   /* Wait until transfer completed */
   flags = osEventFlagsWait(evf_i2c,
-                           ARM_I2C_EVENT_TRANSFER_DONE |
-                           ARM_I2C_EVENT_TRANSFER_INCOMPLETE,
+                           I2C_EVENT_TRANSFER_DONE |
+                           I2C_EVENT_TRANSFER_INCOMPLETE,
                            osFlagsWaitAny,
                            I2C_TIMEOUT);
   /* Check if all data transferred */
-  if ((flags & (ARM_I2C_EVENT_TRANSFER_INCOMPLETE | osFlagsError)) != 0U) {
+  if ((flags & (I2C_EVENT_TRANSFER_INCOMPLETE | osFlagsError)) != 0U) {
     return (-1);
   }
 
   i2c->MasterReceive(SLAVE_ADDR, rd_buf, rd_size, false);
   /* Wait until transfer completed */
   flags = osEventFlagsWait(evf_i2c,
-                           ARM_I2C_EVENT_TRANSFER_DONE |
-                           ARM_I2C_EVENT_TRANSFER_INCOMPLETE,
+                           I2C_EVENT_TRANSFER_DONE |
+                           I2C_EVENT_TRANSFER_INCOMPLETE,
                            osFlagsWaitAny,
                            I2C_TIMEOUT);
   /* Check if all data transferred */
-  if ((flags & (ARM_I2C_EVENT_TRANSFER_INCOMPLETE | osFlagsError)) != 0U) {
+  if ((flags & (I2C_EVENT_TRANSFER_INCOMPLETE | osFlagsError)) != 0U) {
     return (-1);
   }
 
@@ -175,8 +175,8 @@ static void main_proc(void *param)
     i2c->Initialize(NULL);
   }
   /* Configure I2C Driver */
-  i2c->PowerControl(ARM_POWER_FULL);
-  i2c->Control(ARM_I2C_BUS_SPEED, ARM_I2C_BUS_SPEED_STANDARD);
+  i2c->PowerControl(POWER_FULL);
+  i2c->Control(I2C_BUS_SPEED, I2C_BUS_SPEED_STANDARD);
 
   uint8_t wr_buf[] = {0U};
   uint8_t rd_buf[16];

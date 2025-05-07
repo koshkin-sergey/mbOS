@@ -230,7 +230,7 @@ SECTIONS
     __bss_end__ = .;
   } > RAM AT > RAM
 
-  .heap (COPY) :
+  .heap (NOLOAD) :
   {
     . = ALIGN(8);
     __end__ = .;
@@ -240,7 +240,7 @@ SECTIONS
     __HeapLimit = .;
   } > RAM
 
-  .stack (COPY):
+  .stack (NOLOAD):
   {
     . = ORIGIN(RAM) + LENGTH(RAM) - __STACK_SIZE - __FIQ_STACK_SIZE - __IRQ_STACK_SIZE - __SVC_STACK_SIZE - __ABT_STACK_SIZE - __UND_STACK_SIZE;
     . = ALIGN(8);

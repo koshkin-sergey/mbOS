@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2021-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -17,10 +17,26 @@
  * Project: Device Configuration for ADI ADUC7023
  */
 
-//-------- <<< Use Configuration Wizard in Context Menu >>> --------------------
 
 #ifndef __DEVICE_CONFIG_H
 #define __DEVICE_CONFIG_H
+
+/*******************************************************************************
+ *  external declarations
+ ******************************************************************************/
+
+extern uint32_t osKernelGetSysTimerFreq(void);
+extern uint32_t osKernelGetSysTimerCount(void);
+
+/*******************************************************************************
+ *  defines and macros
+ ******************************************************************************/
+
+#define GetSysTimerFreq()               osKernelGetSysTimerFreq()
+#define GetSysTimerCount()              osKernelGetSysTimerCount()
+
+
+//-------- <<< Use Configuration Wizard in Context Menu >>> --------------------
 
 // <e> ADC (Analog-To-Digital Converter) [Driver_ADC]
 // <i> Configuration settings for Driver_ADC

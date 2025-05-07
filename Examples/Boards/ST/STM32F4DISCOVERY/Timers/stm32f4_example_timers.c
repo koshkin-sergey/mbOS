@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2019-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * File Name  :	stm32f4_example_timers.c
@@ -10,9 +10,9 @@
  *  includes
  ******************************************************************************/
 
-#include "asm/GPIO_STM32F4xx.h"
-#include "asm/system_stm32f4xx.h"
-#include "Kernel/kernel.h"
+#include <Driver/GPIO_STM32F4xx.h>
+#include <asm/system_stm32f4xx.h>
+#include <Kernel/kernel.h>
 
 /*******************************************************************************
  *  external declarations

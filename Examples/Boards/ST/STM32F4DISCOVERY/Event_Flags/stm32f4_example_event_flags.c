@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2019-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * File Name  :	stm32f4_example_event_flags.c
@@ -10,13 +10,9 @@
  *  includes
  ******************************************************************************/
 
-#include "asm/GPIO_STM32F4xx.h"
-#include "asm/system_stm32f4xx.h"
-#include "Kernel/kernel.h"
-
-/*******************************************************************************
- *  external declarations
- ******************************************************************************/
+#include <Driver/GPIO_STM32F4xx.h>
+#include <asm/system_stm32f4xx.h>
+#include <Kernel/kernel.h>
 
 /*******************************************************************************
  *  defines and macros (scope: module-local)
@@ -31,14 +27,6 @@
 #define LED_ORANGE                    GPIO_PIN_13
 #define LED_RED                       GPIO_PIN_14
 #define LED_BLUE                      GPIO_PIN_15
-
-/*******************************************************************************
- *  typedefs and structures (scope: module-local)
- ******************************************************************************/
-
-/*******************************************************************************
- *  global variable definitions  (scope: module-exported)
- ******************************************************************************/
 
 /*******************************************************************************
  *  global variable definitions (scope: module-local)
@@ -84,10 +72,6 @@ static const GPIO_PIN_CFG_t LED_cfg = {
     GPIO_PULL_DISABLE,
     GPIO_SPEED_LOW
 };
-
-/*******************************************************************************
- *  function prototypes (scope: module-local)
- ******************************************************************************/
 
 /*******************************************************************************
  *  function implementations (scope: module-local)
@@ -172,5 +156,3 @@ int main(void)
 error:
   return (-1);
 }
-
-/* ----------------------------- End of file ---------------------------------*/

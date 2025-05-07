@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2023-2024 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -24,8 +24,8 @@
 #include <stddef.h>
 #include <Kernel/kernel.h>
 #include <asm/system_aducm32x.h>
-#include <Driver/GPIO_ADUCM32x.h>
-#include "CMSIS/Driver/Driver_I2C.h"
+#include <Driver/Driver_GPIO.h>
+#include "Driver/Driver_I2C.h"
 
 /*******************************************************************************
  *  defines and macros (scope: module-local)
@@ -80,10 +80,11 @@ static const osTimerAttr_t timer_attr = {
     .cb_size   = sizeof(timer_cb)
 };
 
+extern Driver_GPIO_t Driver_GPIO2;
 static Driver_GPIO_t *gpio = &Driver_GPIO2;
 
-extern ARM_DRIVER_I2C Driver_I2C0;
-static ARM_DRIVER_I2C *i2c = &Driver_I2C0;
+extern DRIVER_I2C Driver_I2C0;
+static DRIVER_I2C *i2c = &Driver_I2C0;
 
 static uint8_t offset = 0U;
 static uint8_t mem_page[128] = {0U};
@@ -98,8 +99,10 @@ void I2C_Callback(uint32_t event)
   static XferMode_t xfer_mode = XferModeNone;
   static uint8_t rd_buf[RX_BUF_SIZE] = {0U};
 
-  if ((event & ARM_I2C_EVENT_SLAVE_RECEIVE) != 0U) {
+  if ((event & I2C_EVENT_SLAVE_RECEIVE) != 0U) {
     uint32_t size;
+
+    i2c->Control(I2C_ABORT_TRANSFER, 0U);
 
     if (xfer_mode == XferModeNone) {
       size = sizeof(rd_buf[0]);
@@ -111,9 +114,9 @@ void I2C_Callback(uint32_t event)
     }
     i2c->SlaveReceive(&rd_buf[0], size);
   }
-  else if ((event & ARM_I2C_EVENT_TRANSFER_DONE) != 0U) {
+  else if ((event & I2C_EVENT_TRANSFER_DONE) != 0U) {
     int32_t count = i2c->GetDataCount();
-    ARM_I2C_STATUS status = i2c->GetStatus();
+    I2C_STATUS status = i2c->GetStatus();
 
     if (count > 0) {
       if (status.direction == I2C_XFER_RECEIVE) {
@@ -162,8 +165,8 @@ void main_proc(void *param)
   /* Initialize I2C Driver */
   i2c->Initialize(I2C_Callback);
   /* Configure I2C Driver */
-  i2c->PowerControl(ARM_POWER_FULL);
-  i2c->Control(ARM_I2C_OWN_ADDRESS, SLAVE_ADDR);
+  i2c->PowerControl(POWER_FULL);
+  i2c->Control(I2C_OWN_ADDRESS, SLAVE_ADDR);
 
   i2c->SlaveTransmit(&mem_page[offset], sizeof(mem_page));
 }

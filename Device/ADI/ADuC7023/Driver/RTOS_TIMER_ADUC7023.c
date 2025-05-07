@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021-2022 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2021-2024 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 
-#include "Kernel/tick.h"
-#include "Kernel/irq.h"
-#include "asm/aduc7023.h"
+#include <Kernel/tick.h>
+#include <Core/Arm/irq_ctrl.h>
+#include <asm/aduc7023.h>
 
 #define RTIM_IRQ_PRIORITY           (uint32_t)IRQ_PriorityLow
 
@@ -42,8 +42,8 @@ int32_t osTickSetup(uint32_t freq, IRQHandler_t handler)
     return (-1);
   }
 
-  /* Set periodic mode, UCLK and disable Timer */
-  RTOS_TIMER->CON = RTOS_TIMER_CON_MODE | RTOS_TIMER_CON_CLK_0;
+  /* Set periodic mode, HCLK and disable Timer */
+  RTOS_TIMER->CON = RTOS_TIMER_CON_MODE;
   /* Set load value */
   RTOS_TIMER->LD = (uint16_t)load;
 
@@ -68,7 +68,7 @@ int32_t osTickSetup(uint32_t freq, IRQHandler_t handler)
  */
 void osTickEnable(void)
 {
-  RTOS_TIMER->CON |= RTOS_TIMER_CON_EN;
+  RTOS_TIMER->CON |= (uint16_t)RTOS_TIMER_CON_EN;
 }
 
 /**
@@ -76,7 +76,7 @@ void osTickEnable(void)
  */
 void osTickDisable(void)
 {
-  RTOS_TIMER->CON &= ~RTOS_TIMER_CON_EN;
+  RTOS_TIMER->CON &= (uint16_t)~RTOS_TIMER_CON_EN;
 }
 
 /**
@@ -129,7 +129,8 @@ uint32_t osTickGetInterval(void)
  */
 uint32_t osTickGetCount(void)
 {
-  return (RTOS_TIMER->VAL);
+  uint32_t load = RTOS_TIMER->LD;
+  return (load - RTOS_TIMER->VAL);
 }
 
 /**
@@ -138,5 +139,5 @@ uint32_t osTickGetCount(void)
  */
 uint32_t osTickGetOverflow(void)
 {
-  return (0U);
+  return (IRQ_GetPending(RTOS_TIMER_IRQn));
 }

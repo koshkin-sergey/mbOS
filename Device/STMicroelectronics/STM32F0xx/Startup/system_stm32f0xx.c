@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2021 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2019-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -19,8 +19,12 @@
  *  includes
  ******************************************************************************/
 
-#include "asm/system_stm32f0xx.h"
-#include "asm/RCC_STM32F0xx.h"
+#include <asm/system_stm32f0xx.h>
+#include <Driver/RCC_STM32F0xx.h>
+
+/*******************************************************************************
+ *  global variable definitions  (scope: module-exported)
+ ******************************************************************************/
 
 uint32_t SystemCoreClock;           /*!< System Clock Frequency (Core Clock)  */
 

@@ -155,7 +155,7 @@ typedef enum
   * @}
   */
 
-#include "CMSIS/Core/Cortex/core_cm3.h"
+#include "Core/Cortex/core_cm3.h"
 #include <asm/system_stm32f1xx.h>    /* STM32F1xx System Header */
 #include <stdint.h>
 

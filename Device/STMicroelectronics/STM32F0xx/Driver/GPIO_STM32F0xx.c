@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2017-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -23,25 +23,9 @@
 
 #include <stddef.h>
 
-#include "asm/stm32f0xx.h"
-#include "asm/GPIO_STM32F0xx.h"
-#include "asm/RCC_STM32F0xx.h"
-
-/*******************************************************************************
- *  external declarations
- ******************************************************************************/
-
-/*******************************************************************************
- *  defines and macros (scope: module-local)
- ******************************************************************************/
-
-/*******************************************************************************
- *  typedefs and structures (scope: module-local)
- ******************************************************************************/
-
-/*******************************************************************************
- *  global variable definitions  (scope: module-exported)
- ******************************************************************************/
+#include <asm/stm32f0xx.h>
+#include <Driver/GPIO_STM32F0xx.h>
+#include <Driver/RCC_STM32F0xx.h>
 
 /*******************************************************************************
  *  global variable definitions (scope: module-local)
@@ -80,14 +64,6 @@ static const RCC_Periph_t periph_ports[] = {
 #endif
     RCC_PERIPH_GPIOF,
 };
-
-/*******************************************************************************
- *  function prototypes (scope: module-local)
- ******************************************************************************/
-
-/*******************************************************************************
- *  function implementations (scope: module-local)
- ******************************************************************************/
 
 /*******************************************************************************
  *  function implementations (scope: module-exported)
@@ -194,7 +170,7 @@ uint16_t GPIO_PortRead(GPIO_PORT_t port)
 {
   GPIO_TypeDef *gpio = ports[port];
 
-  return (uint16_t)gpio->IDR;
+  return ((uint16_t)gpio->IDR);
 }
 
 /**
@@ -209,7 +185,10 @@ void GPIO_PinConfig(GPIO_PORT_t port, GPIO_PIN_t pin, const GPIO_PIN_CFG_t *cfg)
 {
   GPIO_TypeDef *gpio;
   uint32_t shift;
-  uint32_t moder, otyper, ospeedr, pupdr;
+  uint32_t moder;
+  uint32_t otyper;
+  uint32_t ospeedr;
+  uint32_t pupdr;
 
   if (cfg == NULL)
     return;

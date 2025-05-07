@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2022 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2018-2024 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,9 +34,11 @@ irqLib:
                 .byte    0
 
                 .section ".data"
-                .global  IRQ_PendSV
+                .global  IRQ_NestLevel
 IRQ_NestLevel:
                 .word    0                          // IRQ nesting level counter
+
+                .global  IRQ_PendSV
 IRQ_PendSV:
                 .byte    0                          // Pending SVC flag
 
@@ -180,7 +182,6 @@ IRQ_End:
 
 
                 .type    ContextSwitch, %function
-                .global  ContextSwitch
                 .fnstart
                 .cantunwind
 ContextSwitch:
@@ -299,19 +300,6 @@ ContextExit:
 
                 .arm
                 .section ".text"
-
-                .type    GetModeCPU, %function
-                .global  GetModeCPU
-                .fnstart
-                .cantunwind
-GetModeCPU:
-
-                MRS     R0, CPSR
-                AND     R0, R0, #0x1F
-                BX      LR
-
-                .fnend
-                .size    GetModeCPU, .-GetModeCPU
 
 
                 .type    DisableIRQ, %function

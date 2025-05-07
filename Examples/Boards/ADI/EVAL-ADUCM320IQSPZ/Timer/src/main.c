@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2022-2024 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -17,11 +17,14 @@
  * limitations under the License.
  */
 
+/*******************************************************************************
+ *  includes
+ ******************************************************************************/
 
 #include <stddef.h>
 #include <Kernel/kernel.h>
 #include <asm/system_aducm32x.h>
-#include <Driver/GPIO_ADUCM32x.h>
+#include <Driver/Driver_GPIO.h>
 
 /*******************************************************************************
  *  defines and macros (scope: module-local)

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021-2022 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2021-2025 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -25,7 +25,7 @@
 #endif /* __cplusplus */
 
 #include <stdint.h>
-#include "CMSIS/Core/Arm/core_arm.h"
+#include <Core/Arm/core_arm.h>
 #include "system_aduc7023.h"
 
 /*------------------------------------------------------------------------------
@@ -57,7 +57,8 @@ typedef enum {
   EXT_IRQ3_IRQn     = 19,   /*!< External IRQ3 Interrupt                      */
   PLA_IRQ1_IRQn     = 20,   /*!< PLA IRQ1 Interrupt                           */
   PWM_IRQn          = 21,   /*!< PWM Interrupt                                */
-  IRQ_VECTOR_COUNT  = 22
+  IRQ_VECTOR_COUNT  = 22,
+  IRQn_Reserved     = 0x7FFFFFFF
 } IRQn_t;
 
 /**
@@ -72,6 +73,7 @@ typedef enum {
   IRQ_PriorityBelowNormal = 5,
   IRQ_PriorityAboveLow    = 6,
   IRQ_PriorityLow         = 7,
+  IRQ_Priority_Reserved   = 0x7FFFFFFF
 } IRQ_Priority_t;
 
 /**
@@ -206,8 +208,8 @@ typedef struct FIQ_s {
 #define FIQ_VEC_BASE              FIQ_VEC_BASE_Msk
 
 #define IRQ_PRIORITY_BIT_Msk      (7U)
-#define IRQ_PRIORITY_IDX(irqn)    (irqn >> 3U)
-#define IRQ_PRIORITY_OFS(irqn)    ((irqn & IRQ_PRIORITY_BIT_Msk) << 2U)
+#define IRQ_PRIORITY_IDX(irqn)    ((uint32_t)irqn >> 3U)
+#define IRQ_PRIORITY_OFS(irqn)    (((uint32_t)irqn & IRQ_PRIORITY_BIT_Msk) << 2U)
 
 #define IRQ_CLR_DEF_VALUE         (0xFFFFFFFFUL)
 #define FIQ_CLR_DEF_VALUE         (0xFFFFFFFFUL)
@@ -440,6 +442,7 @@ typedef struct RTOS_TIMER_s {
   __IOM uint16_t CON;     /*!< Timer control register                         */
   RESERVED(2, uint16_t);
   __OM  uint8_t  CLRI;    /*!< Timer interrupt clear register                 */
+  RESERVED(3, uint8_t);
 } RTOS_TIMER_t;
 
 #define RTOS_TIMER_LD_Pos         (0U)
@@ -835,53 +838,81 @@ typedef struct DACB {
  * @brief I2C
  */
 typedef struct I2C_s {
-  __IOM uint32_t MCON;
-  __IM  uint32_t MSTA;
-  __IM  uint32_t MRX;
-  __OM  uint32_t MTX;
-  __IOM uint32_t MCNT0;
-  __IM  uint32_t MCNT1;
-  __IOM uint32_t ADR0;
-  __IOM uint32_t ADR1;
-  RESERVED(0, uint32_t);
-  __IOM uint32_t DIV;
-  __IOM uint32_t SCON;
-  __IOM uint32_t SSTA;
-  __IM  uint32_t SRX;
-  __OM  uint32_t STX;
-  __IOM uint32_t ALT;
-  __IOM uint32_t ID0;
-  __IOM uint32_t ID1;
-  __IOM uint32_t ID2;
-  __IOM uint32_t ID3;
-  __IOM uint32_t FSTA;
+  __IOM uint16_t MCON;
+  RESERVED(0, uint16_t);
+  __IM  uint16_t MSTA;
+  RESERVED(1, uint16_t);
+  __IM  uint8_t  MRX;
+  RESERVED(2[3], uint8_t );
+  __OM  uint8_t  MTX;
+  RESERVED(3[3], uint8_t );
+  __IOM uint16_t MCNT0;
+  RESERVED(4, uint16_t);
+  __IM  uint8_t  MCNT1;
+  RESERVED(5[3], uint8_t );
+  __IOM uint8_t  ADR0;
+  RESERVED(6[3], uint8_t );
+  __IOM uint8_t  ADR1;
+  RESERVED(7[7], uint8_t );
+  __IOM uint16_t DIV;
+  RESERVED(8, uint16_t);
+  __IOM uint16_t SCON;
+  RESERVED(9, uint16_t);
+  __IOM uint16_t SSTA;
+  RESERVED(10, uint16_t);
+  __IM  uint8_t SRX;
+  RESERVED(11[3], uint8_t );
+  __OM  uint8_t STX;
+  RESERVED(12[3], uint8_t );
+  __IOM uint8_t ALT;
+  RESERVED(13[3], uint8_t );
+  __IOM uint8_t ID0;
+  RESERVED(14[3], uint8_t );
+  __IOM uint8_t ID1;
+  RESERVED(15[3], uint8_t );
+  __IOM uint8_t ID2;
+  RESERVED(16[3], uint8_t );
+  __IOM uint8_t ID3;
+  RESERVED(17[3], uint8_t );
+  __IOM uint16_t FSTA;
 } I2C_t;
 
 /*******************  Bit definition for I2CMCON register  ********************/
 #define I2CMCON_MEN_Pos           (0U)
 #define I2CMCON_MEN_Msk           (0x1UL << I2CMCON_MEN_Pos)
-#define I2CMCON_MEN               I2CMCON_MEN_Msk
+#define I2CMCON_MEN                         I2CMCON_MEN_Msk
+
 #define I2CMCON_BD_Pos            (1U)
 #define I2CMCON_BD_Msk            (0x1UL << I2CMCON_BD_Pos)
-#define I2CMCON_BD                I2CMCON_BD_Msk
+#define I2CMCON_BD                          I2CMCON_BD_Msk
+
 #define I2CMCON_ILEN_Pos          (2U)
 #define I2CMCON_ILEN_Msk          (0x1UL << I2CMCON_ILEN_Pos)
-#define I2CMCON_ILEN              I2CMCON_ILEN_Msk
+#define I2CMCON_ILEN                        I2CMCON_ILEN_Msk
+
+#define I2CMCON_STRETCH_Pos       (3U)
+#define I2CMCON_STRETCH_Msk       (0x1UL << I2CMCON_STRETCH_Pos)
+#define I2CMCON_STRETCH                     I2CMCON_STRETCH_Msk
+
 #define I2CMCON_MRENI_Pos         (4U)
 #define I2CMCON_MRENI_Msk         (0x1UL << I2CMCON_MRENI_Pos)
-#define I2CMCON_MRENI             I2CMCON_MRENI_Msk
+#define I2CMCON_MRENI                       I2CMCON_MRENI_Msk
+
 #define I2CMCON_MTENI_Pos         (5U)
 #define I2CMCON_MTENI_Msk         (0x1UL << I2CMCON_MTENI_Pos)
-#define I2CMCON_MTENI             I2CMCON_MTENI_Msk
+#define I2CMCON_MTENI                       I2CMCON_MTENI_Msk
+
 #define I2CMCON_ALENI_Pos         (6U)
 #define I2CMCON_ALENI_Msk         (0x1UL << I2CMCON_ALENI_Pos)
-#define I2CMCON_ALENI             I2CMCON_ALENI_Msk
+#define I2CMCON_ALENI                       I2CMCON_ALENI_Msk
+
 #define I2CMCON_NACKENI_Pos       (7U)
 #define I2CMCON_NACKENI_Msk       (0x1UL << I2CMCON_NACKENI_Pos)
-#define I2CMCON_NACKENI           I2CMCON_NACKENI_Msk
+#define I2CMCON_NACKENI                     I2CMCON_NACKENI_Msk
+
 #define I2CMCON_MCENI_Pos         (8U)
 #define I2CMCON_MCENI_Msk         (0x1UL << I2CMCON_MCENI_Pos)
-#define I2CMCON_MCENI             I2CMCON_MCENI_Msk
+#define I2CMCON_MCENI                       I2CMCON_MCENI_Msk
 
 /*******************  Bit definition for I2CMSTA register  ********************/
 #define I2CMSTA_TFSTA_Pos         (0U)
@@ -962,34 +993,47 @@ typedef struct I2C_s {
 /*******************  Bit definition for I2CSCON register  ********************/
 #define I2CSCON_SEN_Pos           (0U)
 #define I2CSCON_SEN_Msk           (0x1UL << I2CSCON_SEN_Pos)
-#define I2CSCON_SEN               I2CSCON_SEN_Msk
+#define I2CSCON_SEN                         I2CSCON_SEN_Msk
+
 #define I2CSCON_ADR10EN_Pos       (1U)
 #define I2CSCON_ADR10EN_Msk       (0x1UL << I2CSCON_ADR10EN_Pos)
-#define I2CSCON_ADR10EN           I2CSCON_ADR10EN_Msk
+#define I2CSCON_ADR10EN                     I2CSCON_ADR10EN_Msk
+
 #define I2CSCON_GCEN_Pos          (2U)
 #define I2CSCON_GCEN_Msk          (0x1UL << I2CSCON_GCEN_Pos)
-#define I2CSCON_GCEN              I2CSCON_GCEN_Msk
+#define I2CSCON_GCEN                        I2CSCON_GCEN_Msk
+
 #define I2CSCON_HGCEN_Pos         (3U)
 #define I2CSCON_HGCEN_Msk         (0x1UL << I2CSCON_HGCEN_Pos)
-#define I2CSCON_HGCEN             I2CSCON_HGCEN_Msk
+#define I2CSCON_HGCEN                       I2CSCON_HGCEN_Msk
+
 #define I2CSCON_GCCLR_Pos         (4U)
 #define I2CSCON_GCCLR_Msk         (0x1UL << I2CSCON_GCCLR_Pos)
-#define I2CSCON_GCCLR             I2CSCON_GCCLR_Msk
+#define I2CSCON_GCCLR                       I2CSCON_GCCLR_Msk
+
 #define I2CSCON_SETEN_Pos         (5U)
 #define I2CSCON_SETEN_Msk         (0x1UL << I2CSCON_SETEN_Pos)
-#define I2CSCON_SETEN             I2CSCON_SETEN_Msk
+#define I2CSCON_SETEN                       I2CSCON_SETEN_Msk
+
+#define I2CSCON_STRETCHSCL_Pos    (6U)
+#define I2CSCON_STRETCHSCL_Msk    (0x1U << I2CSCON_STRETCHSCL_Pos)
+#define I2CSCON_STRETCHSCL                 I2CSCON_STRETCHSCL_Msk
+
 #define I2CSCON_NACKEN_Pos        (7U)
 #define I2CSCON_NACKEN_Msk        (0x1UL << I2CSCON_NACKEN_Pos)
-#define I2CSCON_NACKEN            I2CSCON_NACKEN_Msk
+#define I2CSCON_NACKEN                      I2CSCON_NACKEN_Msk
+
 #define I2CSCON_SSENI_Pos         (8U)
 #define I2CSCON_SSENI_Msk         (0x1UL << I2CSCON_SSENI_Pos)
-#define I2CSCON_SSENI             I2CSCON_SSENI_Msk
+#define I2CSCON_SSENI                       I2CSCON_SSENI_Msk
+
 #define I2CSCON_SRXENI_Pos        (9U)
 #define I2CSCON_SRXENI_Msk        (0x1UL << I2CSCON_SRXENI_Pos)
-#define I2CSCON_SRXENI            I2CSCON_SRXENI_Msk
+#define I2CSCON_SRXENI                      I2CSCON_SRXENI_Msk
+
 #define I2CSCON_STXENI_Pos        (10U)
 #define I2CSCON_STXENI_Msk        (0x1UL << I2CSCON_STXENI_Pos)
-#define I2CSCON_STXENI            I2CSCON_STXENI_Msk
+#define I2CSCON_STXENI                      I2CSCON_STXENI_Msk
 
 /*******************  Bit definition for I2CSSTA register  ********************/
 #define I2CSSTA_ETSTA_Pos         (0U)
@@ -1074,19 +1118,32 @@ typedef struct I2C_s {
 /*******************  Bit definition for I2CFSTA register  ********************/
 #define I2CFSTA_STXSTA_Pos        (0U)
 #define I2CFSTA_STXSTA_Msk        (0x3UL << I2CFSTA_STXSTA_Pos)
-#define I2CFSTA_STXSTA            I2CFSTA_STXSTA_Msk
+#define I2CFSTA_STXSTA_EMPTY      (0x0UL << I2CFSTA_STXSTA_Pos)
+#define I2CFSTA_STXSTA_ONEBYTE    (0x2UL << I2CFSTA_STXSTA_Pos)
+#define I2CFSTA_STXSTA_TWOBYTES   (0x3UL << I2CFSTA_STXSTA_Pos)
+
 #define I2CFSTA_SRXSTA_Pos        (2U)
 #define I2CFSTA_SRXSTA_Msk        (0x3UL << I2CFSTA_SRXSTA_Pos)
-#define I2CFSTA_SRXSTA            I2CFSTA_SRXSTA_Msk
+#define I2CFSTA_SRXSTA_EMPTY      (0x0UL << I2CFSTA_SRXSTA_Pos)
+#define I2CFSTA_SRXSTA_ONEBYTE    (0x2UL << I2CFSTA_SRXSTA_Pos)
+#define I2CFSTA_SRXSTA_TWOBYTES   (0x3UL << I2CFSTA_SRXSTA_Pos)
+
 #define I2CFSTA_MTXSTA_Pos        (4U)
 #define I2CFSTA_MTXSTA_Msk        (0x3UL << I2CFSTA_MTXSTA_Pos)
-#define I2CFSTA_MTXSTA            I2CFSTA_MTXSTA_Msk
+#define I2CFSTA_MTXSTA_EMPTY      (0x0UL << I2CFSTA_MTXSTA_Pos)
+#define I2CFSTA_MTXSTA_ONEBYTE    (0x2UL << I2CFSTA_MTXSTA_Pos)
+#define I2CFSTA_MTXSTA_TWOBYTES   (0x3UL << I2CFSTA_MTXSTA_Pos)
+
 #define I2CFSTA_MRXSTA_Pos        (6U)
 #define I2CFSTA_MRXSTA_Msk        (0x3UL << I2CFSTA_MRXSTA_Pos)
-#define I2CFSTA_MRXSTA            I2CFSTA_MRXSTA_Msk
+#define I2CFSTA_MRXSTA_EMPTY      (0x0UL << I2CFSTA_MRXSTA_Pos)
+#define I2CFSTA_MRXSTA_ONEBYTE    (0x2UL << I2CFSTA_MRXSTA_Pos)
+#define I2CFSTA_MRXSTA_TWOBYTES   (0x3UL << I2CFSTA_MRXSTA_Pos)
+
 #define I2CFSTA_FSTX_Pos          (8U)
 #define I2CFSTA_FSTX_Msk          (0x1UL << I2CFSTA_FSTX_Pos)
 #define I2CFSTA_FSTX              I2CFSTA_FSTX_Msk
+
 #define I2CFSTA_FMTX_Pos          (9U)
 #define I2CFSTA_FMTX_Msk          (0x1UL << I2CFSTA_FMTX_Pos)
 #define I2CFSTA_FMTX              I2CFSTA_FMTX_Msk

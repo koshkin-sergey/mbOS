@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2021-2023 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -29,7 +29,7 @@
 
 #include <asm/aduc7023.h>
 #include <device_config.h>
-#include <Kernel/irq.h>
+#include <Core/Arm/irq_ctrl.h>
 #include <Driver/GPIO_ADUC7023.h>
 
 /*******************************************************************************

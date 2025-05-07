@@ -1,9 +1,9 @@
 *.o
 *.d
-*.launch
 *.axf
 *.bin
 *.elf
+.settings/
 
 # MDK-ARM Project Files
 *.uvgui.*
@@ -21,8 +21,3 @@ settings/
 *.dep
 *.ewt
 *.ewd
-
-# SW4STM32 Project Files
-.settings/
-*.cfg
-*.xml
