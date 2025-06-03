@@ -32,13 +32,13 @@
  ******************************************************************************/
 
 #define TIMEOUT                       (500UL)
-#define THREAD_STACK_SIZE             (384U)
+#define THREAD_STACK_SIZE             (256U)
 
 #define CS_PIN                        (GPIO_PIN_3)
 #define LED_PIN                       (GPIO_PIN_4)
 
-#define SPI_TIMEOUT                   (50U)
-#define SPI_BUS_SPEED                 (10000000U)
+#define SPI_TIMEOUT                   (10U)
+#define SPI_BUS_SPEED                 (8000000U)
 
 /*******************************************************************************
  *  global variable definitions (scope: module-local)
@@ -231,7 +231,7 @@ static void main_proc(void *param)
 
   osTimerStart(timer_id, TIMEOUT);
 
-  static uint8_t wr_buf[6] = {0x90U};
+  static uint8_t wr_buf[4] = {0x9FU};
   static uint8_t rd_buf[sizeof(wr_buf)] = {0U};
 
   for (;;) {
