@@ -31,6 +31,8 @@
 
 #define SPI_DRV_VERSION  DRIVER_VERSION_MAJOR_MINOR(1,0) /* driver version */
 
+#define SPI_FIFO_SIZE               (4U)
+
 /*******************************************************************************
  *  global variable definitions (scope: module-local)
  ******************************************************************************/
@@ -295,17 +297,16 @@ int32_t SPI_PowerControl(POWER_STATE state, SPI_Resources_t *spi)
 
       /* Enable SPI interrupts */
       if (irq->dma_en) {
-        NVIC_ClearPendingIRQ(irq->dma_tx_num);
-        NVIC_ClearPendingIRQ(irq->dma_rx_num);
-        NVIC_SetPriority(irq->dma_tx_num, irq->priority);
-        NVIC_SetPriority(irq->dma_rx_num, irq->priority);
-        NVIC_EnableIRQ(irq->dma_tx_num);
-        NVIC_EnableIRQ(irq->dma_rx_num);
+//        NVIC_ClearPendingIRQ(irq->dma_tx_num);
+//        NVIC_ClearPendingIRQ(irq->dma_rx_num);
+//        NVIC_SetPriority(irq->dma_tx_num, irq->priority);
+//        NVIC_SetPriority(irq->dma_rx_num, irq->priority);
+//        NVIC_EnableIRQ(irq->dma_tx_num);
+//        NVIC_EnableIRQ(irq->dma_rx_num);
       }
       else {
         NVIC_ClearPendingIRQ(irq->num);
         NVIC_SetPriority(irq->num, irq->priority);
-        NVIC_EnableIRQ(irq->num);
       }
 
       /* Ready for operation - set powered flag */
@@ -389,7 +390,7 @@ int32_t SPI_Control(uint32_t control, uint32_t arg, SPI_Resources_t *spi)
       if (div > SPIDIV_DIV_MSK) {
         div = SPIDIV_DIV_MSK;
       }
-      mmr->SPIDIV = (mmr->SPIDIV & (uint16_t)~SPIDIV_DIV_MSK) | (uint16_t)div;
+      mmr->SPIDIV = (mmr->SPIDIV & (uint16_t)~SPIDIV_DIV_MSK) | (uint16_t)(div);
       return (DRIVER_OK);
 
     case SPI_GET_BUS_SPEED:             // Get Bus Speed in bps
@@ -450,6 +451,18 @@ int32_t SPI_Control(uint32_t control, uint32_t arg, SPI_Resources_t *spi)
   /* Bit order */
   if ((control & SPI_BIT_ORDER_Msk) == SPI_LSB_MSB) {
     con |= SPICON_LSB;
+  }
+
+  /* Set SPI Bus Speed */
+  if ((mode & SPI_CONTROL_Msk) == SPI_MODE_MASTER) {
+    if (arg == 0U) {
+      return (DRIVER_ERROR);
+    }
+    spi_clk = clk->GetFrequency(CLK_FREQ_HCLK);
+    div = (spi_clk / (2 * arg)) - 1;
+    if (div > SPIDIV_DIV_MSK) {
+      div = SPIDIV_DIV_MSK;
+    }
   }
 
   /* Slave select master modes */
@@ -531,21 +544,9 @@ int32_t SPI_Control(uint32_t control, uint32_t arg, SPI_Resources_t *spi)
     }
   }
 
-  /* Set SPI Bus Speed */
-  if ((mode & SPI_CONTROL_Msk) == SPI_MODE_MASTER) {
-    if (arg == 0U) {
-      return (DRIVER_ERROR);
-    }
-    spi_clk = clk->GetFrequency(CLK_FREQ_HCLK);
-    div = (spi_clk / (2 * arg)) - 1;
-    if (div > SPIDIV_DIV_MSK) {
-      div = SPIDIV_DIV_MSK;
-    }
-  }
-
   info->mode  = mode;
-  mmr->SPICON = (uint16_t)(con | SPICON_ENABLE | SPICON_CON);
-  mmr->SPIDIV = (uint16_t)div;
+  mmr->SPICON = (uint16_t)(con | SPICON_ENABLE | SPICON_CON | SPICON_TIM);
+  mmr->SPIDIV = (uint16_t)(div);
 
   info->state |= SPI_CONFIGURED;
 
@@ -561,6 +562,7 @@ int32_t SPI_Control(uint32_t control, uint32_t arg, SPI_Resources_t *spi)
 static
 int32_t SPI_Send(const void *data, uint32_t num, SPI_Resources_t *spi)
 {
+  uint32_t size;
   MMR_SPI_t         *mmr  = spi->mmr;
   SPI_Info_t        *info = spi->info;
   SPI_TRANSFER_INFO *xfer = spi->xfer;
@@ -617,10 +619,17 @@ int32_t SPI_Send(const void *data, uint32_t num, SPI_Resources_t *spi)
 //    mmr->SPIDMA |=  SPI_DMA_IENTXDMA | SPI_DMA_ENABLE;
   }
   else {
-    mmr->SPICON &= (uint16_t)~SPICON_TIM;
-    mmr->SPITX = (uint8_t)(*xfer->tx_buf++);
-    xfer->tx_cnt++;
-    (void)mmr->SPIRX;
+    size = xfer->num - xfer->tx_cnt;
+    if (size > SPI_FIFO_SIZE) {
+      size = SPI_FIFO_SIZE;
+    }
+
+    while (size--) {
+      mmr->SPITX = *xfer->tx_buf++;
+      ++xfer->tx_cnt;
+    }
+
+    NVIC_EnableIRQ(irq->num);
   }
 
   return (DRIVER_OK);
@@ -635,6 +644,7 @@ int32_t SPI_Send(const void *data, uint32_t num, SPI_Resources_t *spi)
 static
 int32_t SPI_Receive(void *data, uint32_t num, SPI_Resources_t *spi)
 {
+  uint32_t size;
   MMR_SPI_t         *mmr  = spi->mmr;
   SPI_Info_t        *info = spi->info;
   SPI_TRANSFER_INFO *xfer = spi->xfer;
@@ -711,10 +721,17 @@ int32_t SPI_Receive(void *data, uint32_t num, SPI_Resources_t *spi)
 //    mmr->SPIDMA |=  SPI_DMA_IENTXDMA | SPI_DMA_ENABLE;
   }
   else {
-    mmr->SPICON &= (uint16_t)~SPICON_TIM;
-    mmr->SPITX = (uint8_t)xfer->def_val;
-    xfer->tx_cnt++;
-    (void)mmr->SPIRX;
+    size = xfer->num - xfer->tx_cnt;
+    if (size > SPI_FIFO_SIZE) {
+      size = SPI_FIFO_SIZE;
+    }
+
+    while (size--) {
+      mmr->SPITX = (uint8_t)xfer->def_val;
+      ++xfer->tx_cnt;
+    }
+
+    NVIC_EnableIRQ(irq->num);
   }
 
   return (DRIVER_OK);
@@ -730,6 +747,7 @@ int32_t SPI_Receive(void *data, uint32_t num, SPI_Resources_t *spi)
 static
 int32_t SPI_Transfer(const void *data_out, void *data_in, uint32_t num, SPI_Resources_t *spi)
 {
+  uint32_t size;
   MMR_SPI_t         *mmr  = spi->mmr;
   SPI_Info_t        *info = spi->info;
   SPI_TRANSFER_INFO *xfer = spi->xfer;
@@ -806,10 +824,17 @@ int32_t SPI_Transfer(const void *data_out, void *data_in, uint32_t num, SPI_Reso
 //    mmr->SPIDMA |=  SPI_DMA_IENRXDMA | SPI_DMA_IENTXDMA | SPI_DMA_ENABLE;
   }
   else {
-    mmr->SPICON &= (uint16_t)~SPICON_TIM;
-    mmr->SPITX = (uint8_t)(*xfer->tx_buf++);
-    xfer->tx_cnt++;
-    (void)mmr->SPIRX;
+    size = xfer->num - xfer->tx_cnt;
+    if (size > SPI_FIFO_SIZE) {
+      size = SPI_FIFO_SIZE;
+    }
+
+    while (size--) {
+      mmr->SPITX = *xfer->tx_buf++;
+      ++xfer->tx_cnt;
+    }
+
+    NVIC_EnableIRQ(irq->num);
   }
 
   return (DRIVER_OK);
@@ -884,45 +909,85 @@ void SPI_IRQHandler(SPI_Resources_t *spi)
   register uint8_t  data;
   register uint32_t sta;
   register uint32_t event;
+  register uint32_t tx_num;
+  register uint32_t rx_num;
 
   MMR_SPI_t         *mmr  = spi->mmr;
   SPI_Info_t        *info = spi->info;
   SPI_TRANSFER_INFO *xfer = spi->xfer;
 
-  event = 0;
+  event = 0U;
   sta = mmr->SPISTA;
 
-  if ((sta & SPISTA_RXOF) != 0U) {
-    info->status.data_lost = 1U;
-    event |= SPI_EVENT_DATA_LOST;
+  if ((sta & (SPISTA_TXUR | SPISTA_TX | SPISTA_RX | SPISTA_RXOF)) == 0U) {
+    return;
   }
 
-  if ((sta & SPISTA_RX) != 0U) {
-    if (xfer->rx_cnt < (xfer->num - 1U)) {
-      if (xfer->tx_cnt < xfer->num) {
-        if (xfer->tx_buf != NULL) {
-          data = *xfer->tx_buf++;
-        }
-        else {
-          data = (uint8_t)xfer->def_val;
-        }
-        mmr->SPITX = data;
-        xfer->tx_cnt++;
-      }
-    }
-    else {
-      mmr->SPICON |= (uint16_t)SPICON_TIM;
-      info->status.busy = 0U;
-      event |= SPI_EVENT_TRANSFER_COMPLETE;
-    }
-
+  if ((sta & SPISTA_RXOF) != 0U) {
     data = (uint8_t)mmr->SPIRX;
     if (xfer->rx_cnt < xfer->num) {
       if (xfer->rx_buf != NULL) {
         *xfer->rx_buf++ = data;
       }
-      xfer->rx_cnt++;
+      ++xfer->rx_cnt;
     }
+    info->status.data_lost = 1U;
+    event |= SPI_EVENT_DATA_LOST;
+  }
+
+  rx_num = _FLD2VAL(SPISTA_RXFSTA, sta);
+  tx_num = SPI_FIFO_SIZE - _FLD2VAL(SPISTA_TXFSTA, sta);
+
+  if (tx_num == SPI_FIFO_SIZE && xfer->tx_cnt == xfer->num) {
+    while (xfer->rx_cnt < xfer->num) {
+      if ((mmr->SPISTA & SPISTA_RXFSTA_Msk) != 0U) {
+        data = (uint8_t)mmr->SPIRX;
+        if (xfer->rx_buf != NULL) {
+          *xfer->rx_buf++ = data;
+        }
+        ++xfer->rx_cnt;
+      }
+    }
+
+    NVIC_DisableIRQ(spi->irq.num);
+    info->status.busy = 0U;
+    event |= SPI_EVENT_TRANSFER_COMPLETE;
+  }
+  else {
+    do {
+      if (rx_num != 0U) {
+        data = (uint8_t)mmr->SPIRX;
+        if (xfer->rx_cnt < xfer->num) {
+          if (xfer->rx_buf != NULL) {
+            *xfer->rx_buf++ = data;
+          }
+          ++xfer->rx_cnt;
+          --rx_num;
+        }
+        else {
+          /* Unexpected transfer, data lost */
+          event |= SPI_EVENT_DATA_LOST;
+          rx_num = 0U;
+        }
+      }
+
+      if (tx_num != 0U) {
+        if (xfer->tx_cnt < xfer->num) {
+          if (xfer->tx_buf != NULL) {
+            data = *xfer->tx_buf++;
+          }
+          else {
+            data = (uint8_t)xfer->def_val;
+          }
+          mmr->SPITX = data;
+          ++xfer->tx_cnt;
+          --tx_num;
+        }
+        else {
+          tx_num = 0U;
+        }
+      }
+    } while (tx_num != 0U && rx_num != 0U);
   }
 
   /* Send event */

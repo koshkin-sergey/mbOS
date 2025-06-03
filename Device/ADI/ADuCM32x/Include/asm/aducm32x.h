@@ -3824,12 +3824,13 @@ typedef struct MMR_SPI {                    /*!< MMR_SPI Structure            */
 #define SPISTA_RXS_SET                 (0x1   << 11 ) /* This bit is set when there are more bytes in the Rx FIFO than indicated in the MOD bits in SPI0CON. */
 
 /* SPISTA[RXFSTA] - SPI Rx FIFO status */
-#define SPISTA_RXFSTA_MSK              (0x7   << 8  )
-#define SPISTA_RXFSTA_EMPTY            (0x0   << 8  ) /* Rx FIFO empty            */
-#define SPISTA_RXFSTA_ONEBYTE          (0x1   << 8  ) /* 1 valid byte in FIFO     */
-#define SPISTA_RXFSTA_TWOBYTES         (0x2   << 8  ) /* 2 valid bytes in the FIFO */
-#define SPISTA_RXFSTA_THREEBYTES       (0x3   << 8  ) /* 3 valid bytes in the FIFO */
-#define SPISTA_RXFSTA_FOURBYTES        (0x4   << 8  ) /* 4 valid bytes in the FIFO */
+#define SPISTA_RXFSTA_Pos              (8U)
+#define SPISTA_RXFSTA_Msk              (0x7U << SPISTA_RXFSTA_Pos)
+#define SPISTA_RXFSTA_EMPTY            (0x0U << SPISTA_RXFSTA_Pos) /* Rx FIFO empty            */
+#define SPISTA_RXFSTA_ONEBYTE          (0x1U << SPISTA_RXFSTA_Pos) /* 1 valid byte in FIFO     */
+#define SPISTA_RXFSTA_TWOBYTES         (0x2U << SPISTA_RXFSTA_Pos) /* 2 valid bytes in the FIFO */
+#define SPISTA_RXFSTA_THREEBYTES       (0x3U << SPISTA_RXFSTA_Pos) /* 3 valid bytes in the FIFO */
+#define SPISTA_RXFSTA_FOURBYTES        (0x4U << SPISTA_RXFSTA_Pos) /* 4 valid bytes in the FIFO */
 
 /* SPISTA[RXOF] - SPI Rx FIFO overflow */
 #define SPISTA_RXOF_MSK                (0x1   << 7  )
@@ -3856,12 +3857,13 @@ typedef struct MMR_SPI {                    /*!< MMR_SPI Structure            */
 #define SPISTA_TXUR_SET                (0x1   << 4  ) /* Set  to 1 when a transmit is initiated without any valid data in the Tx FIFO. This bit generates an interrupt except when TFLUSH is set in SPI0CON. */
 
 /* SPISTA[TXFSTA] - SPI Tx FIFO status */
-#define SPISTA_TXFSTA_MSK              (0x7   << 1  )
-#define SPISTA_TXFSTA_EMPTY            (0x0   << 1  ) /* Tx FIFO empty            */
-#define SPISTA_TXFSTA_ONEBYTE          (0x1   << 1  ) /* 1 valid byte in FIFO     */
-#define SPISTA_TXFSTA_TWOBYTES         (0x2   << 1  ) /* 2 valid bytes in FIFO    */
-#define SPISTA_TXFSTA_THREEBYTES       (0x3   << 1  ) /* 3 valid bytes in FIFO    */
-#define SPISTA_TXFSTA_FOURBYTES        (0x4   << 1  ) /* 4 valid bytes in FIFO    */
+#define SPISTA_TXFSTA_Pos              (1U)
+#define SPISTA_TXFSTA_Msk              (0x7U << SPISTA_TXFSTA_Pos)
+#define SPISTA_TXFSTA_EMPTY            (0x0U << SPISTA_TXFSTA_Pos) /* Tx FIFO empty            */
+#define SPISTA_TXFSTA_ONEBYTE          (0x1U << SPISTA_TXFSTA_Pos) /* 1 valid byte in FIFO     */
+#define SPISTA_TXFSTA_TWOBYTES         (0x2U << SPISTA_TXFSTA_Pos) /* 2 valid bytes in FIFO    */
+#define SPISTA_TXFSTA_THREEBYTES       (0x3U << SPISTA_TXFSTA_Pos) /* 3 valid bytes in FIFO    */
+#define SPISTA_TXFSTA_FOURBYTES        (0x4U << SPISTA_TXFSTA_Pos) /* 4 valid bytes in FIFO    */
 
 /* SPISTA[IRQ] - SPI Interrupt status */
 #define SPISTA_IRQ_MSK                 (0x1   << 0  )
@@ -3903,11 +3905,8 @@ typedef struct MMR_SPI {                    /*!< MMR_SPI Structure            */
 #define SPIDIV_DIV_MSK                 (0x3F  << 0  )
 
 /* SPICON[MOD] - SPI IRQ mode bits */
-#define SPICON_MOD_MSK                 (0x3   << 14 )
-#define SPICON_MOD_TX1RX1              (0x0   << 14 ) /* Tx interrupt occurs when 1 byte has been transferred. Rx interrupt occurs when 1 or more bytes have been received into the FIFO. */
-#define SPICON_MOD_TX2RX2              (0x1   << 14 ) /* Tx interrupt occurs when 2 bytes has been transferred.  Rx interrupt occurs when 2 or more bytes have been received into the FIFO. */
-#define SPICON_MOD_TX3RX3              (0x2   << 14 ) /* Tx interrupt occurs when 3 bytes has been transferred.  Rx interrupt occurs when 3 or more bytes have been received into the FIFO. */
-#define SPICON_MOD_TX4RX4              (0x3   << 14 ) /* Tx interrupt occurs when 4 bytes has been transferred.  Rx interrupt occurs when the Rx FIFO is full, or 4 bytes present. */
+#define SPICON_MOD_Pos                 (14U)
+#define SPICON_MOD_Msk                 (0x3U << SPICON_MOD_Pos)
 
 /* SPICON[TFLUSH] - SPI Tx FIFO Flush enable */
 #define SPICON_TFLUSH_MSK              (0x1   << 13 )
