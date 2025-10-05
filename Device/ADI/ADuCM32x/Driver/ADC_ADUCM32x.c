@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2024-2025 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -120,9 +120,9 @@ void StartSoftwareConversion(void)
       break;
 
     case ADC_MODE_SEQUENCE:
-      reg->ADCSEQC &= ~ADCSEQC_T_Msk;
+      reg->ADCSEQC &= (uint32_t)~ADCSEQC_T_Msk;
       reg->ADCCON  |= ADCCON_C_TYPE_CONT;
-      reg->ADCSEQ  |= ADCSEQ_EN | ADCSEQ_ST;
+      reg->ADCSEQ  |= (uint32_t)(ADCSEQ_EN | ADCSEQ_ST);
       MMR_LV_INT->INTSEL |= INTSEL_SEL_ADC_SEQ_1_EN;
       break;
   }
@@ -195,7 +195,7 @@ int32_t ADC_PowerControl(POWER_STATE state)
     case POWER_OFF:
       /* Disable peripheral */
       reg->ADCCON        = 0U;
-      MMR_AFE->AFETEMPC &= ~AFETEMPC_PD;
+      MMR_AFE->AFETEMPC &= (uint8_t)~AFETEMPC_PD;
       MMR_AFE->AFEREFC   =  0x03;
 
       /* Disable ADC IRQ */
@@ -219,7 +219,7 @@ int32_t ADC_PowerControl(POWER_STATE state)
       MMR_AFE->AFEREFC = 0U;
       MMR_InBuf->IBUFCON = 0x000F;
       MMR_LV_RST->LVRST = 1U;
-      MMR_LV_INT->INTSEL &= ~(INTSEL_SEL_ADC_SOFTCONV_1_EN | INTSEL_SEL_ADC_SEQ_1_EN);
+      MMR_LV_INT->INTSEL &= (uint16_t)~(INTSEL_SEL_ADC_SOFTCONV_1_EN | INTSEL_SEL_ADC_SEQ_1_EN);
 
 #if defined (USE_VREF2V5_OUT) && (USE_VREF2V5_OUT == 1)
       MMR_AFE->AFEREFC |=  AFEREFC_B2MA_PDB;
@@ -276,7 +276,7 @@ int32_t ADC_Control(uint32_t control, uint32_t arg)
     }
 
     if ((arg & 1UL) == 0U) {
-      reg->ADCCON &= ~ADCCON_C_TYPE_Msk;
+      reg->ADCCON &= (uint16_t)~ADCCON_C_TYPE_Msk;
       reg->ADCSEQC |= ADCSEQC_T_Msk;
       info->flags &= ~ADC_FLAG_ENABLE;
     }
@@ -298,7 +298,7 @@ int32_t ADC_Control(uint32_t control, uint32_t arg)
     ADC_ACQ_INFO *acq = &info->acq_info;
 
     /* Disable interrupts */
-    MMR_LV_INT->INTSEL &= ~(INTSEL_SEL_ADC_SOFTCONV_1_EN | INTSEL_SEL_ADC_SEQ_1_EN);
+    MMR_LV_INT->INTSEL &= (uint16_t)~(INTSEL_SEL_ADC_SOFTCONV_1_EN | INTSEL_SEL_ADC_SEQ_1_EN);
     /* Clear counters and status */
     info->status.busy     = 0U;
     info->status.overflow = 0U;
@@ -342,10 +342,10 @@ int32_t ADC_Control(uint32_t control, uint32_t arg)
         channel = ADCCHA_ADCCN_VREFN_NADC;
       }
       else {
-        channel = (channel - 1U) << ADCCHA_ADCCN_Pos;
+        channel = (uint16_t)((channel - 1U) << ADCCHA_ADCCN_Pos);
       }
 
-      channel |= (arg & ADC_POSITIVE_CHANNEL_Msk) - 1U;
+      channel |= (uint16_t)((arg & ADC_POSITIVE_CHANNEL_Msk) - 1U);
 
       reg->ADCCHA = channel;
       return (DRIVER_OK);
@@ -460,7 +460,7 @@ void LVD1_IRQHandler(void)
 
   if ((status & (INTSTA_ADC_SEQ | INTSTA_ADC_SOFTCONV)) != 0U) {
     if (acq->num == 0U) {
-      MMR_LV_INT->INTSEL &= ~(INTSEL_SEL_ADC_SOFTCONV_1_EN | INTSEL_SEL_ADC_SEQ_1_EN);
+      MMR_LV_INT->INTSEL &= (uint16_t)~(INTSEL_SEL_ADC_SOFTCONV_1_EN | INTSEL_SEL_ADC_SEQ_1_EN);
       /* Set ADC overflow event and flag */
       info->status.overflow = 1U;
       event |= ADC_EVENT_OVERFLOW;
@@ -470,7 +470,7 @@ void LVD1_IRQHandler(void)
       uint32_t data_offset = ADCDAT_DAT_Pos + (16 - info->data_bits);
 
       if ((status & INTSTA_ADC_SOFTCONV) != 0U) {
-        value = reg->ADCDAT[reg->ADCCHA & ADCCHA_ADCCP_Msk] & ADCDAT_DAT_Msk;
+        value = reg->ADCDAT[reg->ADCCHA & ADCCHA_ADCCP_Msk] & (uint32_t)ADCDAT_DAT_Msk;
         acq->buf[acq->cnt++] = (int32_t)value >> data_offset;
       }
       else {
@@ -479,7 +479,7 @@ void LVD1_IRQHandler(void)
 
         while (mask != 0U && acq->cnt < acq->num) {
           if ((mask & 1UL) != 0U) {
-            value = reg->ADCDAT[i] & ADCDAT_DAT_Msk;
+            value = reg->ADCDAT[i] & (uint32_t)ADCDAT_DAT_Msk;
             acq->buf[acq->cnt++] = (int32_t)value >> data_offset;
           }
           mask >>= 1;
@@ -488,8 +488,8 @@ void LVD1_IRQHandler(void)
       }
 
       if (acq->cnt == acq->num) {
-        reg->ADCCON &= ~ADCCON_C_TYPE_Msk;
-        MMR_LV_INT->INTSEL &= ~(INTSEL_SEL_ADC_SOFTCONV_1_EN | INTSEL_SEL_ADC_SEQ_1_EN);
+        reg->ADCCON &= (uint16_t)~ADCCON_C_TYPE_Msk;
+        MMR_LV_INT->INTSEL &= (uint16_t)~(INTSEL_SEL_ADC_SOFTCONV_1_EN | INTSEL_SEL_ADC_SEQ_1_EN);
         info->status.busy = 0U;
         acq->num = 0U;
         event |= ADC_EVENT_COMPLETE;
@@ -508,6 +508,8 @@ void LVD1_IRQHandler(void)
  *  global variable definitions (scope: module-exported)
  ******************************************************************************/
 
+extern
+Driver_ADC_t Driver_ADC;
 Driver_ADC_t Driver_ADC = {
   ADC_Initialize,
   ADC_Uninitialize,

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2024 Sergey Koshkin <koshkin.sergey@gmail.com>
+ * Copyright (C) 2017-2025 Sergey Koshkin <koshkin.sergey@gmail.com>
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the License); you may
@@ -108,25 +108,27 @@ DRIVER_I2C Driver_I2C##x = {      \
 }
 
 /* I2C Driver state flags */
-#define I2C_FLAG_INIT                 (1UL << 0)    // Driver initialized
-#define I2C_FLAG_POWER                (1UL << 1)    // Driver power on
-#define I2C_FLAG_SETUP                (1UL << 2)    // Master configured, clock set
+#define I2C_FLAG_INIT                 (1U << 0) // Driver initialized
+#define I2C_FLAG_POWER                (1U << 1) // Driver power on
+#define I2C_FLAG_SETUP                (1U << 2) // Master configured, clock set
 
 /* I2C status flags definitions */
-#define I2C_STATUS_BUSY               (1UL << 0)
-#define I2C_STATUS_MASTER             (1UL << 1)
-#define I2C_STATUS_RECEIVER           (1UL << 2)
-#define I2C_STATUS_GENERAL_CALL       (1UL << 3)
-#define I2C_STATUS_ARBITRATION_LOST   (1UL << 4)
-#define I2C_STATUS_BUS_ERROR          (1UL << 5)
+#define I2C_STATUS_BUSY               (1U << 0)
+#define I2C_STATUS_MASTER             (1U << 1)
+#define I2C_STATUS_RECEIVER           (1U << 2)
+#define I2C_STATUS_GENERAL_CALL       (1U << 3)
+#define I2C_STATUS_ARBITRATION_LOST   (1U << 4)
+#define I2C_STATUS_BUS_ERROR          (1U << 5)
 
 /* Transfer status flags definitions */
 #define XFER_PENDING                  (uint16_t)(1U << 0) // Transfer pending
 #define XFER_MASTER_NADDR             (uint16_t)(1U << 1) // Master nack address
 #define XFER_MASTER_NDATA             (uint16_t)(1U << 2) // Master nack data
-#define XFER_SLAVE_TX                 (uint16_t)(1U << 3) // Slave addressed on transmit
-#define XFER_SLAVE_RX                 (uint16_t)(1U << 4) // Slave addressed on receive
-#define XFER_SLAVE_ADDR               (uint16_t)(1U << 5) // Slave addressed
+#define XFER_SLAVE_RX                 (uint16_t)(1U << 3) // Slave addressed on receive
+#define XFER_SLAVE_ADDR               (uint16_t)(1U << 4) // Slave addressed
+
+/****** I2C Event *****/
+#define I2C_EVENT_FIRST_RX            (1UL << 9)
 
 /*******************************************************************************
  *  typedefs and structures
@@ -156,12 +158,13 @@ typedef const struct I2C_Irq {
 typedef struct I2C_XferInfo {
   uint8_t              *data;               // Data pointer
   uint32_t              num;                // Number of data to transfer
-  uint32_t              cnt;                // Data transfer counter
+  uint32_t              fcnt;               // FIFO counter
+  int32_t               cnt;                // Data transfer counter
 } I2C_XferInfo_t;
 
 /* I2C Information (Run-Time) */
 typedef struct I2C_Info {
-  I2C_SignalEvent_t cb_event;           // Event Callback
+  I2C_SignalEvent_t     cb_event;           // Event Callback
   uint32_t              status;             // Status flags
   I2C_XferInfo_t        rx;                 // RX transfer information
   I2C_XferInfo_t        tx;                 // TX transfer information
