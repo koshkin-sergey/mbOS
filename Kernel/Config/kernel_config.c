@@ -16,7 +16,8 @@
  */
 
 #include <Kernel/kernel.h>
-#include <Core/Riscv/compiler.h>
+
+extern void __NOP(void);
 
 /* OS Idle Thread */
 __NO_RETURN
