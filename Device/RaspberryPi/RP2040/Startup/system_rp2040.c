@@ -20,3 +20,29 @@
  ******************************************************************************/
 
 #include <asm/system_rp2040.h>
+
+/*******************************************************************************
+ *  global variable definitions (scope: module-exported)
+ ******************************************************************************/
+
+uint32_t SystemCoreClock;           /*!< System Clock Frequency (Core Clock)  */
+
+/*******************************************************************************
+ *  function implementations (scope: module-exported)
+ ******************************************************************************/
+
+/**
+ * @brief       Update SystemCoreClock variable.
+ */
+void SystemCoreClockUpdate(void)
+{
+  SystemCoreClock = 6800000U;
+}
+
+/**
+ * @brief       Initialize the System.
+ */
+void SystemInit(void)
+{
+
+}

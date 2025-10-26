@@ -29,7 +29,7 @@ MEMORY
     SCRATCH_Y(rwx) : ORIGIN = 0x20041000, LENGTH = 4k
 }
 
-ENTRY(_entry_point)
+ENTRY(Reset_Handler)
 
 SECTIONS
 {
@@ -66,12 +66,15 @@ SECTIONS
         KEEP (*(.embedded_block))
         __embedded_block_end = .;
         KEEP (*(.reset))
+        
         /* TODO revisit this now memset/memcpy/float in ROM */
         /* bit of a hack right now to exclude all floating point and time critical (e.g. memset, memcpy) code from
          * FLASH ... we will include any thing excluded here in .data below by default */
-        *(.init)
         *(EXCLUDE_FILE(*libgcc.a: *libc.a:*lib_a-mem*.o *libm.a:) .text*)
-        *(.fini)
+        
+        KEEP(*(.init))
+        KEEP(*(.fini))
+        
         /* Pull all c'tors into .text */
         *crtbegin.o(.ctors)
         *crtbegin?.o(.ctors)
@@ -107,6 +110,30 @@ SECTIONS
         PROVIDE_HIDDEN (__fini_array_end = .);
 
         *(.eh_frame*)
+            
+        /* copy.table */
+        . = ALIGN(4);
+        __copy_table_start__ = .;
+        LONG (LOADADDR(.data))
+        LONG (ADDR(.data))
+        LONG (SIZEOF(.data) / 4)
+        /* Add each additional data section here */
+    /*
+        LONG (LOADADDR(.data2))
+        LONG (ADDR(.data2))
+        LONG (SIZEOF(.data2) / 4)
+    */
+        __copy_table_end__ = .;
+
+        /* zero.table */
+        . = ALIGN(4);
+        __zero_table_start__ = .;
+        /* Add each additional bss section here */
+    /*
+        LONG (__bss2_start__)
+        LONG ((__bss2_end__ - __bss2_start__) / 4)
+    */
+        __zero_table_end__ = .;
         . = ALIGN(4);
     } > FLASH
 
