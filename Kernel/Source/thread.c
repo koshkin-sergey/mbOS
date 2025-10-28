@@ -97,7 +97,7 @@ void osIdleThread(void *argument)
   (void) argument;
 
   for (;;) {
-
+    __NOP();
   }
 }
 

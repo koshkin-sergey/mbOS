@@ -17,8 +17,6 @@
 
 #include <Kernel/kernel.h>
 
-extern void __NOP(void);
-
 /* OS Idle Thread */
 __NO_RETURN
 void osIdleThread(void *argument)
@@ -26,6 +24,6 @@ void osIdleThread(void *argument)
   (void) argument;
 
   for (;;) {
-    __NOP();
+
   }
 }
