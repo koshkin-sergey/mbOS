@@ -112,28 +112,6 @@ typedef enum {
   */
 
 
-
-/* =========================================================================================================================== */
-/* ================                                          RESETS                                           ================ */
-/* =========================================================================================================================== */
-
-
-/**
-  * @brief RESETS (RESETS)
-  */
-
-typedef struct {                                /*!< RESETS Structure                                                          */
-  __IOM uint32_t  RESET;                        /*!< Reset control. If a bit is set it means the peripheral is in
-                                                     reset. 0 means the peripheral's reset is deasserted.                      */
-  __IOM uint32_t  WDSEL;                        /*!< Watchdog select. If a bit is set then the watchdog will reset
-                                                     this peripheral when the watchdog fires.                                  */
-  __IOM uint32_t  RESET_DONE;                   /*!< Reset done. If a bit is set then a reset done signal has been
-                                                     returned by the peripheral. This indicates that the peripheral's
-                                                     registers are ready to be accessed.                                       */
-} RESETS_Type;                                  /*!< Size = 12 (0xc)                                                           */
-
-
-
 /* =========================================================================================================================== */
 /* ================                                            PSM                                            ================ */
 /* =========================================================================================================================== */
@@ -2616,7 +2594,6 @@ typedef struct {                                /*!< RTC Structure              
   * @{
   */
 
-#define RESETS                      ((RESETS_Type*)            RESETS_BASE)
 #define PSM                         ((PSM_Type*)               PSM_BASE)
 #define CLOCKS                      ((CLOCKS_Type*)            CLOCKS_BASE)
 #define PADS_BANK0                  ((PADS_BANK0_Type*)        PADS_BANK0_BASE)
