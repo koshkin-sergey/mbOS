@@ -210,75 +210,6 @@ typedef struct {                                /*!< CLOCKS Structure           
 } CLOCKS_Type;                                  /*!< Size = 200 (0xc8)                                                         */
 
 
-
-/* =========================================================================================================================== */
-/* ================                                        PADS_BANK0                                         ================ */
-/* =========================================================================================================================== */
-
-
-/**
-  * @brief PADS_BANK0 (PADS_BANK0)
-  */
-
-typedef struct {                                /*!< PADS_BANK0 Structure                                                      */
-  __IOM uint32_t  VOLTAGE_SELECT;               /*!< Voltage select. Per bank control                                          */
-  __IOM uint32_t  GPIO0;                        /*!< Pad control register                                                      */
-  __IOM uint32_t  GPIO1;                        /*!< Pad control register                                                      */
-  __IOM uint32_t  GPIO2;                        /*!< Pad control register                                                      */
-  __IOM uint32_t  GPIO3;                        /*!< Pad control register                                                      */
-  __IOM uint32_t  GPIO4;                        /*!< Pad control register                                                      */
-  __IOM uint32_t  GPIO5;                        /*!< Pad control register                                                      */
-  __IOM uint32_t  GPIO6;                        /*!< Pad control register                                                      */
-  __IOM uint32_t  GPIO7;                        /*!< Pad control register                                                      */
-  __IOM uint32_t  GPIO8;                        /*!< Pad control register                                                      */
-  __IOM uint32_t  GPIO9;                        /*!< Pad control register                                                      */
-  __IOM uint32_t  GPIO10;                       /*!< Pad control register                                                      */
-  __IOM uint32_t  GPIO11;                       /*!< Pad control register                                                      */
-  __IOM uint32_t  GPIO12;                       /*!< Pad control register                                                      */
-  __IOM uint32_t  GPIO13;                       /*!< Pad control register                                                      */
-  __IOM uint32_t  GPIO14;                       /*!< Pad control register                                                      */
-  __IOM uint32_t  GPIO15;                       /*!< Pad control register                                                      */
-  __IOM uint32_t  GPIO16;                       /*!< Pad control register                                                      */
-  __IOM uint32_t  GPIO17;                       /*!< Pad control register                                                      */
-  __IOM uint32_t  GPIO18;                       /*!< Pad control register                                                      */
-  __IOM uint32_t  GPIO19;                       /*!< Pad control register                                                      */
-  __IOM uint32_t  GPIO20;                       /*!< Pad control register                                                      */
-  __IOM uint32_t  GPIO21;                       /*!< Pad control register                                                      */
-  __IOM uint32_t  GPIO22;                       /*!< Pad control register                                                      */
-  __IOM uint32_t  GPIO23;                       /*!< Pad control register                                                      */
-  __IOM uint32_t  GPIO24;                       /*!< Pad control register                                                      */
-  __IOM uint32_t  GPIO25;                       /*!< Pad control register                                                      */
-  __IOM uint32_t  GPIO26;                       /*!< Pad control register                                                      */
-  __IOM uint32_t  GPIO27;                       /*!< Pad control register                                                      */
-  __IOM uint32_t  GPIO28;                       /*!< Pad control register                                                      */
-  __IOM uint32_t  GPIO29;                       /*!< Pad control register                                                      */
-  __IOM uint32_t  SWCLK;                        /*!< Pad control register                                                      */
-  __IOM uint32_t  SWD;                          /*!< Pad control register                                                      */
-} PADS_BANK0_Type;                              /*!< Size = 132 (0x84)                                                         */
-
-
-
-/* =========================================================================================================================== */
-/* ================                                         PADS_QSPI                                         ================ */
-/* =========================================================================================================================== */
-
-
-/**
-  * @brief PADS_QSPI (PADS_QSPI)
-  */
-
-typedef struct {                                /*!< PADS_QSPI Structure                                                       */
-  __IOM uint32_t  VOLTAGE_SELECT;               /*!< Voltage select. Per bank control                                          */
-  __IOM uint32_t  GPIO_QSPI_SCLK;               /*!< Pad control register                                                      */
-  __IOM uint32_t  GPIO_QSPI_SD0;                /*!< Pad control register                                                      */
-  __IOM uint32_t  GPIO_QSPI_SD1;                /*!< Pad control register                                                      */
-  __IOM uint32_t  GPIO_QSPI_SD2;                /*!< Pad control register                                                      */
-  __IOM uint32_t  GPIO_QSPI_SD3;                /*!< Pad control register                                                      */
-  __IOM uint32_t  GPIO_QSPI_SS;                 /*!< Pad control register                                                      */
-} PADS_QSPI_Type;                               /*!< Size = 28 (0x1c)                                                          */
-
-
-
 /* =========================================================================================================================== */
 /* ================                                          IO_QSPI                                          ================ */
 /* =========================================================================================================================== */
@@ -2279,8 +2210,6 @@ typedef struct {                                /*!< RTC Structure              
 
 #define PSM                         ((PSM_Type*)               PSM_BASE)
 #define CLOCKS                      ((CLOCKS_Type*)            CLOCKS_BASE)
-#define PADS_BANK0                  ((PADS_BANK0_Type*)        PADS_BANK0_BASE)
-#define PADS_QSPI                   ((PADS_QSPI_Type*)         PADS_QSPI_BASE)
 #define IO_QSPI                     ((IO_QSPI_Type*)           IO_QSPI_BASE)
 #define IO_BANK0                    ((IO_BANK0_Type*)          IO_BANK0_BASE)
 #define SYSINFO                     ((SYSINFO_Type*)           SYSINFO_BASE)
