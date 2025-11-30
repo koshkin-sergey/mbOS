@@ -245,121 +245,6 @@ typedef struct {                                /*!< IO_QSPI Structure          
 } IO_QSPI_Type;                                 /*!< Size = 88 (0x58)                                                          */
 
 
-
-/* =========================================================================================================================== */
-/* ================                                         IO_BANK0                                          ================ */
-/* =========================================================================================================================== */
-
-
-/**
-  * @brief IO_BANK0 (IO_BANK0)
-  */
-
-typedef struct {                                /*!< IO_BANK0 Structure                                                        */
-  __IOM uint32_t  GPIO0_STATUS;                 /*!< GPIO status                                                               */
-  __IOM uint32_t  GPIO0_CTRL;                   /*!< GPIO control including function select and overrides.                     */
-  __IOM uint32_t  GPIO1_STATUS;                 /*!< GPIO status                                                               */
-  __IOM uint32_t  GPIO1_CTRL;                   /*!< GPIO control including function select and overrides.                     */
-  __IOM uint32_t  GPIO2_STATUS;                 /*!< GPIO status                                                               */
-  __IOM uint32_t  GPIO2_CTRL;                   /*!< GPIO control including function select and overrides.                     */
-  __IOM uint32_t  GPIO3_STATUS;                 /*!< GPIO status                                                               */
-  __IOM uint32_t  GPIO3_CTRL;                   /*!< GPIO control including function select and overrides.                     */
-  __IOM uint32_t  GPIO4_STATUS;                 /*!< GPIO status                                                               */
-  __IOM uint32_t  GPIO4_CTRL;                   /*!< GPIO control including function select and overrides.                     */
-  __IOM uint32_t  GPIO5_STATUS;                 /*!< GPIO status                                                               */
-  __IOM uint32_t  GPIO5_CTRL;                   /*!< GPIO control including function select and overrides.                     */
-  __IOM uint32_t  GPIO6_STATUS;                 /*!< GPIO status                                                               */
-  __IOM uint32_t  GPIO6_CTRL;                   /*!< GPIO control including function select and overrides.                     */
-  __IOM uint32_t  GPIO7_STATUS;                 /*!< GPIO status                                                               */
-  __IOM uint32_t  GPIO7_CTRL;                   /*!< GPIO control including function select and overrides.                     */
-  __IOM uint32_t  GPIO8_STATUS;                 /*!< GPIO status                                                               */
-  __IOM uint32_t  GPIO8_CTRL;                   /*!< GPIO control including function select and overrides.                     */
-  __IOM uint32_t  GPIO9_STATUS;                 /*!< GPIO status                                                               */
-  __IOM uint32_t  GPIO9_CTRL;                   /*!< GPIO control including function select and overrides.                     */
-  __IOM uint32_t  GPIO10_STATUS;                /*!< GPIO status                                                               */
-  __IOM uint32_t  GPIO10_CTRL;                  /*!< GPIO control including function select and overrides.                     */
-  __IOM uint32_t  GPIO11_STATUS;                /*!< GPIO status                                                               */
-  __IOM uint32_t  GPIO11_CTRL;                  /*!< GPIO control including function select and overrides.                     */
-  __IOM uint32_t  GPIO12_STATUS;                /*!< GPIO status                                                               */
-  __IOM uint32_t  GPIO12_CTRL;                  /*!< GPIO control including function select and overrides.                     */
-  __IOM uint32_t  GPIO13_STATUS;                /*!< GPIO status                                                               */
-  __IOM uint32_t  GPIO13_CTRL;                  /*!< GPIO control including function select and overrides.                     */
-  __IOM uint32_t  GPIO14_STATUS;                /*!< GPIO status                                                               */
-  __IOM uint32_t  GPIO14_CTRL;                  /*!< GPIO control including function select and overrides.                     */
-  __IOM uint32_t  GPIO15_STATUS;                /*!< GPIO status                                                               */
-  __IOM uint32_t  GPIO15_CTRL;                  /*!< GPIO control including function select and overrides.                     */
-  __IOM uint32_t  GPIO16_STATUS;                /*!< GPIO status                                                               */
-  __IOM uint32_t  GPIO16_CTRL;                  /*!< GPIO control including function select and overrides.                     */
-  __IOM uint32_t  GPIO17_STATUS;                /*!< GPIO status                                                               */
-  __IOM uint32_t  GPIO17_CTRL;                  /*!< GPIO control including function select and overrides.                     */
-  __IOM uint32_t  GPIO18_STATUS;                /*!< GPIO status                                                               */
-  __IOM uint32_t  GPIO18_CTRL;                  /*!< GPIO control including function select and overrides.                     */
-  __IOM uint32_t  GPIO19_STATUS;                /*!< GPIO status                                                               */
-  __IOM uint32_t  GPIO19_CTRL;                  /*!< GPIO control including function select and overrides.                     */
-  __IOM uint32_t  GPIO20_STATUS;                /*!< GPIO status                                                               */
-  __IOM uint32_t  GPIO20_CTRL;                  /*!< GPIO control including function select and overrides.                     */
-  __IOM uint32_t  GPIO21_STATUS;                /*!< GPIO status                                                               */
-  __IOM uint32_t  GPIO21_CTRL;                  /*!< GPIO control including function select and overrides.                     */
-  __IOM uint32_t  GPIO22_STATUS;                /*!< GPIO status                                                               */
-  __IOM uint32_t  GPIO22_CTRL;                  /*!< GPIO control including function select and overrides.                     */
-  __IOM uint32_t  GPIO23_STATUS;                /*!< GPIO status                                                               */
-  __IOM uint32_t  GPIO23_CTRL;                  /*!< GPIO control including function select and overrides.                     */
-  __IOM uint32_t  GPIO24_STATUS;                /*!< GPIO status                                                               */
-  __IOM uint32_t  GPIO24_CTRL;                  /*!< GPIO control including function select and overrides.                     */
-  __IOM uint32_t  GPIO25_STATUS;                /*!< GPIO status                                                               */
-  __IOM uint32_t  GPIO25_CTRL;                  /*!< GPIO control including function select and overrides.                     */
-  __IOM uint32_t  GPIO26_STATUS;                /*!< GPIO status                                                               */
-  __IOM uint32_t  GPIO26_CTRL;                  /*!< GPIO control including function select and overrides.                     */
-  __IOM uint32_t  GPIO27_STATUS;                /*!< GPIO status                                                               */
-  __IOM uint32_t  GPIO27_CTRL;                  /*!< GPIO control including function select and overrides.                     */
-  __IOM uint32_t  GPIO28_STATUS;                /*!< GPIO status                                                               */
-  __IOM uint32_t  GPIO28_CTRL;                  /*!< GPIO control including function select and overrides.                     */
-  __IOM uint32_t  GPIO29_STATUS;                /*!< GPIO status                                                               */
-  __IOM uint32_t  GPIO29_CTRL;                  /*!< GPIO control including function select and overrides.                     */
-  __IOM uint32_t  INTR0;                        /*!< Raw Interrupts                                                            */
-  __IOM uint32_t  INTR1;                        /*!< Raw Interrupts                                                            */
-  __IOM uint32_t  INTR2;                        /*!< Raw Interrupts                                                            */
-  __IOM uint32_t  INTR3;                        /*!< Raw Interrupts                                                            */
-  __IOM uint32_t  PROC0_INTE0;                  /*!< Interrupt Enable for proc0                                                */
-  __IOM uint32_t  PROC0_INTE1;                  /*!< Interrupt Enable for proc0                                                */
-  __IOM uint32_t  PROC0_INTE2;                  /*!< Interrupt Enable for proc0                                                */
-  __IOM uint32_t  PROC0_INTE3;                  /*!< Interrupt Enable for proc0                                                */
-  __IOM uint32_t  PROC0_INTF0;                  /*!< Interrupt Force for proc0                                                 */
-  __IOM uint32_t  PROC0_INTF1;                  /*!< Interrupt Force for proc0                                                 */
-  __IOM uint32_t  PROC0_INTF2;                  /*!< Interrupt Force for proc0                                                 */
-  __IOM uint32_t  PROC0_INTF3;                  /*!< Interrupt Force for proc0                                                 */
-  __IOM uint32_t  PROC0_INTS0;                  /*!< Interrupt status after masking & forcing for proc0                        */
-  __IOM uint32_t  PROC0_INTS1;                  /*!< Interrupt status after masking & forcing for proc0                        */
-  __IOM uint32_t  PROC0_INTS2;                  /*!< Interrupt status after masking & forcing for proc0                        */
-  __IOM uint32_t  PROC0_INTS3;                  /*!< Interrupt status after masking & forcing for proc0                        */
-  __IOM uint32_t  PROC1_INTE0;                  /*!< Interrupt Enable for proc1                                                */
-  __IOM uint32_t  PROC1_INTE1;                  /*!< Interrupt Enable for proc1                                                */
-  __IOM uint32_t  PROC1_INTE2;                  /*!< Interrupt Enable for proc1                                                */
-  __IOM uint32_t  PROC1_INTE3;                  /*!< Interrupt Enable for proc1                                                */
-  __IOM uint32_t  PROC1_INTF0;                  /*!< Interrupt Force for proc1                                                 */
-  __IOM uint32_t  PROC1_INTF1;                  /*!< Interrupt Force for proc1                                                 */
-  __IOM uint32_t  PROC1_INTF2;                  /*!< Interrupt Force for proc1                                                 */
-  __IOM uint32_t  PROC1_INTF3;                  /*!< Interrupt Force for proc1                                                 */
-  __IOM uint32_t  PROC1_INTS0;                  /*!< Interrupt status after masking & forcing for proc1                        */
-  __IOM uint32_t  PROC1_INTS1;                  /*!< Interrupt status after masking & forcing for proc1                        */
-  __IOM uint32_t  PROC1_INTS2;                  /*!< Interrupt status after masking & forcing for proc1                        */
-  __IOM uint32_t  PROC1_INTS3;                  /*!< Interrupt status after masking & forcing for proc1                        */
-  __IOM uint32_t  DORMANT_WAKE_INTE0;           /*!< Interrupt Enable for dormant_wake                                         */
-  __IOM uint32_t  DORMANT_WAKE_INTE1;           /*!< Interrupt Enable for dormant_wake                                         */
-  __IOM uint32_t  DORMANT_WAKE_INTE2;           /*!< Interrupt Enable for dormant_wake                                         */
-  __IOM uint32_t  DORMANT_WAKE_INTE3;           /*!< Interrupt Enable for dormant_wake                                         */
-  __IOM uint32_t  DORMANT_WAKE_INTF0;           /*!< Interrupt Force for dormant_wake                                          */
-  __IOM uint32_t  DORMANT_WAKE_INTF1;           /*!< Interrupt Force for dormant_wake                                          */
-  __IOM uint32_t  DORMANT_WAKE_INTF2;           /*!< Interrupt Force for dormant_wake                                          */
-  __IOM uint32_t  DORMANT_WAKE_INTF3;           /*!< Interrupt Force for dormant_wake                                          */
-  __IOM uint32_t  DORMANT_WAKE_INTS0;           /*!< Interrupt status after masking & forcing for dormant_wake                 */
-  __IOM uint32_t  DORMANT_WAKE_INTS1;           /*!< Interrupt status after masking & forcing for dormant_wake                 */
-  __IOM uint32_t  DORMANT_WAKE_INTS2;           /*!< Interrupt status after masking & forcing for dormant_wake                 */
-  __IOM uint32_t  DORMANT_WAKE_INTS3;           /*!< Interrupt status after masking & forcing for dormant_wake                 */
-} IO_BANK0_Type;                                /*!< Size = 400 (0x190)                                                        */
-
-
-
 /* =========================================================================================================================== */
 /* ================                                          SYSINFO                                          ================ */
 /* =========================================================================================================================== */
@@ -2211,7 +2096,6 @@ typedef struct {                                /*!< RTC Structure              
 #define PSM                         ((PSM_Type*)               PSM_BASE)
 #define CLOCKS                      ((CLOCKS_Type*)            CLOCKS_BASE)
 #define IO_QSPI                     ((IO_QSPI_Type*)           IO_QSPI_BASE)
-#define IO_BANK0                    ((IO_BANK0_Type*)          IO_BANK0_BASE)
 #define SYSINFO                     ((SYSINFO_Type*)           SYSINFO_BASE)
 #define PPB                         ((PPB_Type*)               PPB_BASE)
 #define SSI                         ((SSI_Type*)               SSI_BASE)
