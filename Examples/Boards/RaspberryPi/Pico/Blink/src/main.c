@@ -24,13 +24,15 @@
 #include <stddef.h>
 #include <asm/system_rp2040.h>
 #include <Kernel/kernel.h>
-#include "BSP.h"
+#include <Driver/Driver_GPIO.h>
 
 /*******************************************************************************
  *  defines and macros (scope: module-local)
  ******************************************************************************/
 
 #define TIMEOUT                       (500UL)
+#define LED_PIN                       (25U)
+
 #define THREAD_STACK_SIZE             (256U)
 #define THREAD_PRIORITY               osPriorityNormal
 
@@ -60,6 +62,9 @@ static const osTimerAttr_t timer_attr = {
     .cb_size   = sizeof(timer_cb)
 };
 
+extern DRIVER_GPIO Driver_GPIO;
+static DRIVER_GPIO *gpio = &Driver_GPIO;
+
 /*******************************************************************************
  *  function implementations (scope: module-local)
  ******************************************************************************/
@@ -68,7 +73,8 @@ static void init_proc(void *param)
 {
   (void) param;
 
-  BSP_Init();
+  gpio->Setup(LED_PIN, NULL);
+  gpio->SetDirection(LED_PIN, GPIO_OUTPUT);
 
   osTimerStart(timer_id, TIMEOUT);
 }
@@ -77,7 +83,8 @@ static void timer_func(void *argument)
 {
   (void) argument;
 
-  BSP_ToggleLED(0);  // Toggles LED Pin
+  /* Toggles LED Pin */
+  gpio->SetOutput(LED_PIN, gpio->GetInput(LED_PIN) ^ 1U);
 }
 
 /*******************************************************************************

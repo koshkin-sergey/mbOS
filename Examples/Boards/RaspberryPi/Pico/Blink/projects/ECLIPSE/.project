@@ -55,6 +55,11 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
+			<name>src/Include/Driver</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
 			<name>src/Include/Kernel</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
@@ -66,6 +71,11 @@
 		</link>
 		<link>
 			<name>src/Kernel/Library</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>src/Device/RP2040/Driver</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
@@ -83,6 +93,101 @@
 			<name>src/Include/Core/Cortex</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>src/Include/Driver/Driver_CAN.h</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Include/Driver/Driver_CAN.h</locationURI>
+		</link>
+		<link>
+			<name>src/Include/Driver/Driver_Common.h</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Include/Driver/Driver_Common.h</locationURI>
+		</link>
+		<link>
+			<name>src/Include/Driver/Driver_ETH.h</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Include/Driver/Driver_ETH.h</locationURI>
+		</link>
+		<link>
+			<name>src/Include/Driver/Driver_ETH_MAC.h</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Include/Driver/Driver_ETH_MAC.h</locationURI>
+		</link>
+		<link>
+			<name>src/Include/Driver/Driver_ETH_PHY.h</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Include/Driver/Driver_ETH_PHY.h</locationURI>
+		</link>
+		<link>
+			<name>src/Include/Driver/Driver_Flash.h</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Include/Driver/Driver_Flash.h</locationURI>
+		</link>
+		<link>
+			<name>src/Include/Driver/Driver_GPIO.h</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Include/Driver/Driver_GPIO.h</locationURI>
+		</link>
+		<link>
+			<name>src/Include/Driver/Driver_I2C.h</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Include/Driver/Driver_I2C.h</locationURI>
+		</link>
+		<link>
+			<name>src/Include/Driver/Driver_MCI.h</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Include/Driver/Driver_MCI.h</locationURI>
+		</link>
+		<link>
+			<name>src/Include/Driver/Driver_NAND.h</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Include/Driver/Driver_NAND.h</locationURI>
+		</link>
+		<link>
+			<name>src/Include/Driver/Driver_QSPI.h</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Include/Driver/Driver_QSPI.h</locationURI>
+		</link>
+		<link>
+			<name>src/Include/Driver/Driver_SAI.h</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Include/Driver/Driver_SAI.h</locationURI>
+		</link>
+		<link>
+			<name>src/Include/Driver/Driver_SPI.h</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Include/Driver/Driver_SPI.h</locationURI>
+		</link>
+		<link>
+			<name>src/Include/Driver/Driver_Storage.h</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Include/Driver/Driver_Storage.h</locationURI>
+		</link>
+		<link>
+			<name>src/Include/Driver/Driver_USART.h</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Include/Driver/Driver_USART.h</locationURI>
+		</link>
+		<link>
+			<name>src/Include/Driver/Driver_USB.h</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Include/Driver/Driver_USB.h</locationURI>
+		</link>
+		<link>
+			<name>src/Include/Driver/Driver_USBD.h</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Include/Driver/Driver_USBD.h</locationURI>
+		</link>
+		<link>
+			<name>src/Include/Driver/Driver_USBH.h</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Include/Driver/Driver_USBH.h</locationURI>
+		</link>
+		<link>
+			<name>src/Include/Driver/Driver_WiFi.h</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Include/Driver/Driver_WiFi.h</locationURI>
 		</link>
 		<link>
 			<name>src/Include/Kernel/kernel.h</name>
@@ -108,6 +213,11 @@
 			<name>src/Kernel/Library/GCC</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>src/Device/RP2040/Driver/GPIO_RP2040.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Device/RaspberryPi/RP2040/Driver/GPIO_RP2040.c</locationURI>
 		</link>
 		<link>
 			<name>src/Device/RP2040/Include/asm</name>
@@ -278,6 +388,31 @@
 			<name>src/Device/RP2040/Include/asm/rp2040.h</name>
 			<type>1</type>
 			<locationURI>PARENT-7-PROJECT_LOC/Device/RaspberryPi/RP2040/Include/asm/rp2040.h</locationURI>
+		</link>
+		<link>
+			<name>src/Device/RP2040/Include/asm/rp2040_io_bank0.h</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Device/RaspberryPi/RP2040/Include/asm/rp2040_io_bank0.h</locationURI>
+		</link>
+		<link>
+			<name>src/Device/RP2040/Include/asm/rp2040_pads_bank0.h</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Device/RaspberryPi/RP2040/Include/asm/rp2040_pads_bank0.h</locationURI>
+		</link>
+		<link>
+			<name>src/Device/RP2040/Include/asm/rp2040_pads_qspi.h</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Device/RaspberryPi/RP2040/Include/asm/rp2040_pads_qspi.h</locationURI>
+		</link>
+		<link>
+			<name>src/Device/RP2040/Include/asm/rp2040_reset.h</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Device/RaspberryPi/RP2040/Include/asm/rp2040_reset.h</locationURI>
+		</link>
+		<link>
+			<name>src/Device/RP2040/Include/asm/rp2040_sio.h</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Device/RaspberryPi/RP2040/Include/asm/rp2040_sio.h</locationURI>
 		</link>
 		<link>
 			<name>src/Device/RP2040/Include/asm/system_rp2040.h</name>
