@@ -127,46 +127,17 @@ typedef struct {                                /*!< IO_BANK0 Structure         
     __IOM uint32_t  STATUS;                     /*!< GPIO status                                                               */
     __IOM uint32_t  CTRL;                       /*!< GPIO control including function select and overrides.                     */
   } GPIO[30];
-  __IOM uint32_t  INTR0;                        /*!< Raw Interrupts                                                            */
-  __IOM uint32_t  INTR1;                        /*!< Raw Interrupts                                                            */
-  __IOM uint32_t  INTR2;                        /*!< Raw Interrupts                                                            */
-  __IOM uint32_t  INTR3;                        /*!< Raw Interrupts                                                            */
-  __IOM uint32_t  PROC0_INTE0;                  /*!< Interrupt Enable for proc0                                                */
-  __IOM uint32_t  PROC0_INTE1;                  /*!< Interrupt Enable for proc0                                                */
-  __IOM uint32_t  PROC0_INTE2;                  /*!< Interrupt Enable for proc0                                                */
-  __IOM uint32_t  PROC0_INTE3;                  /*!< Interrupt Enable for proc0                                                */
-  __IOM uint32_t  PROC0_INTF0;                  /*!< Interrupt Force for proc0                                                 */
-  __IOM uint32_t  PROC0_INTF1;                  /*!< Interrupt Force for proc0                                                 */
-  __IOM uint32_t  PROC0_INTF2;                  /*!< Interrupt Force for proc0                                                 */
-  __IOM uint32_t  PROC0_INTF3;                  /*!< Interrupt Force for proc0                                                 */
-  __IOM uint32_t  PROC0_INTS0;                  /*!< Interrupt status after masking & forcing for proc0                        */
-  __IOM uint32_t  PROC0_INTS1;                  /*!< Interrupt status after masking & forcing for proc0                        */
-  __IOM uint32_t  PROC0_INTS2;                  /*!< Interrupt status after masking & forcing for proc0                        */
-  __IOM uint32_t  PROC0_INTS3;                  /*!< Interrupt status after masking & forcing for proc0                        */
-  __IOM uint32_t  PROC1_INTE0;                  /*!< Interrupt Enable for proc1                                                */
-  __IOM uint32_t  PROC1_INTE1;                  /*!< Interrupt Enable for proc1                                                */
-  __IOM uint32_t  PROC1_INTE2;                  /*!< Interrupt Enable for proc1                                                */
-  __IOM uint32_t  PROC1_INTE3;                  /*!< Interrupt Enable for proc1                                                */
-  __IOM uint32_t  PROC1_INTF0;                  /*!< Interrupt Force for proc1                                                 */
-  __IOM uint32_t  PROC1_INTF1;                  /*!< Interrupt Force for proc1                                                 */
-  __IOM uint32_t  PROC1_INTF2;                  /*!< Interrupt Force for proc1                                                 */
-  __IOM uint32_t  PROC1_INTF3;                  /*!< Interrupt Force for proc1                                                 */
-  __IOM uint32_t  PROC1_INTS0;                  /*!< Interrupt status after masking & forcing for proc1                        */
-  __IOM uint32_t  PROC1_INTS1;                  /*!< Interrupt status after masking & forcing for proc1                        */
-  __IOM uint32_t  PROC1_INTS2;                  /*!< Interrupt status after masking & forcing for proc1                        */
-  __IOM uint32_t  PROC1_INTS3;                  /*!< Interrupt status after masking & forcing for proc1                        */
-  __IOM uint32_t  DORMANT_WAKE_INTE0;           /*!< Interrupt Enable for dormant_wake                                         */
-  __IOM uint32_t  DORMANT_WAKE_INTE1;           /*!< Interrupt Enable for dormant_wake                                         */
-  __IOM uint32_t  DORMANT_WAKE_INTE2;           /*!< Interrupt Enable for dormant_wake                                         */
-  __IOM uint32_t  DORMANT_WAKE_INTE3;           /*!< Interrupt Enable for dormant_wake                                         */
-  __IOM uint32_t  DORMANT_WAKE_INTF0;           /*!< Interrupt Force for dormant_wake                                          */
-  __IOM uint32_t  DORMANT_WAKE_INTF1;           /*!< Interrupt Force for dormant_wake                                          */
-  __IOM uint32_t  DORMANT_WAKE_INTF2;           /*!< Interrupt Force for dormant_wake                                          */
-  __IOM uint32_t  DORMANT_WAKE_INTF3;           /*!< Interrupt Force for dormant_wake                                          */
-  __IOM uint32_t  DORMANT_WAKE_INTS0;           /*!< Interrupt status after masking & forcing for dormant_wake                 */
-  __IOM uint32_t  DORMANT_WAKE_INTS1;           /*!< Interrupt status after masking & forcing for dormant_wake                 */
-  __IOM uint32_t  DORMANT_WAKE_INTS2;           /*!< Interrupt status after masking & forcing for dormant_wake                 */
-  __IOM uint32_t  DORMANT_WAKE_INTS3;           /*!< Interrupt status after masking & forcing for dormant_wake                 */
+  __IOM uint32_t    INT_RAW[4];                 /*!< Raw Interrupts                                                            */
+  struct {
+    __IOM uint32_t  INT_ENABLE[4];              /*!< Interrupt Enable for proc0                                                */
+    __IOM uint32_t  INT_FORCE[4];               /*!< Interrupt Force for proc0                                                 */
+    __IOM uint32_t  INT_STATUS[4];              /*!< Interrupt status after masking & forcing for proc0                        */
+  } PROC[2];
+  struct {
+    __IOM uint32_t  INT_ENABLE[4];              /*!< Interrupt Enable for dormant_wake                                         */
+    __IOM uint32_t  INT_FORCE[4];               /*!< Interrupt Force for dormant_wake                                          */
+    __IOM uint32_t  INT_STATUS[4];              /*!< Interrupt status after masking & forcing for dormant_wake                 */
+  } DORMANT_WAKE;
 } IO_BANK0_t;                                   /*!< Size = 400 (0x190)                                                        */
 
 #ifdef __cplusplus
