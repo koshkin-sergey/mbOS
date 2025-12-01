@@ -104,23 +104,10 @@ int32_t GPIO_SetDirection(GPIO_Pin_t pin, GPIO_DIRECTION direction)
 static
 int32_t GPIO_SetOutputMode(GPIO_Pin_t pin, GPIO_OUTPUT_MODE mode)
 {
-  int32_t result = DRIVER_OK;
+  (void) pin;
+  (void) mode;
 
-  if (PIN_IS_AVAILABLE(pin)) {
-    switch (mode) {
-      case GPIO_PUSH_PULL:
-        break;
-      case GPIO_OPEN_DRAIN:
-        break;
-      default:
-        result = DRIVER_ERROR_PARAMETER;
-        break;
-    }
-  } else {
-    result = GPIO_ERROR_PIN;
-  }
-
-  return (result);
+  return (DRIVER_ERROR_UNSUPPORTED);
 }
 
 // Set GPIO Pull Resistor
