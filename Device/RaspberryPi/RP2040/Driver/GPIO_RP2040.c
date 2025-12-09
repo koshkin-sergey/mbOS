@@ -36,6 +36,12 @@
 #define PIN_IS_AVAILABLE(n)         ((n) < GPIO_MAX_PINS)
 
 /*******************************************************************************
+ *  global variable definitions (scope: module-local)
+ ******************************************************************************/
+
+static GPIO_SignalEvent_t gpio_callback[GPIO_MAX_PINS];
+
+/*******************************************************************************
  *  function implementations (scope: module-local)
  ******************************************************************************/
 
@@ -43,10 +49,11 @@
 static
 int32_t GPIO_Setup(GPIO_Pin_t pin, GPIO_SignalEvent_t cb_event)
 {
-  (void) cb_event;
   int32_t result = DRIVER_OK;
 
   if (PIN_IS_AVAILABLE(pin)) {
+    uint32_t ofs;
+
     /* Get pads and GPIO out of reset */
     uint32_t reset = RESETS->RESET;
     if ((reset & (RESETS_RESET_IO_BANK0 | RESETS_RESET_PADS_BANK0)) != 0U) {
@@ -66,6 +73,16 @@ int32_t GPIO_Setup(GPIO_Pin_t pin, GPIO_SignalEvent_t cb_event)
 
     /* Set GPIO Control to alt func SIO */
     IO_BANK0->GPIO[pin].CTRL = IO_BANK0_GPIO_CTRL_FUNCSEL_SIO;
+
+    ofs = 4U * (pin % 8U);
+    IO_BANK0->PROC[SIO->CPUID].INT_ENABLE[pin / 8U] &= ~(0xFUL << ofs);
+    IO_BANK0->PROC[SIO->CPUID].INT_FORCE[pin / 8U] &= ~(0xFUL << ofs);
+
+    gpio_callback[pin] = cb_event;
+    if (cb_event != NULL) {
+      NVIC_ClearPendingIRQ(IO_IRQ_BANK0_IRQn);
+      NVIC_EnableIRQ(IO_IRQ_BANK0_IRQn);
+    }
   } else {
     result = GPIO_ERROR_PIN;
   }
@@ -152,19 +169,44 @@ int32_t GPIO_SetEventTrigger(GPIO_Pin_t pin, GPIO_EVENT_TRIGGER trigger)
   int32_t result = DRIVER_OK;
 
   if (PIN_IS_AVAILABLE(pin)) {
+    uint32_t ofs;
+    uint32_t val;
+
+    ofs = 4U * (pin % 8U);
+    val = IO_BANK0->PROC[SIO->CPUID].INT_ENABLE[pin / 8U];
+    val &= ~(0xFUL << ofs);
+    IO_BANK0->INT_RAW[pin / 8U] |= 0xFUL << ofs;
+
     switch (trigger) {
       case GPIO_TRIGGER_NONE:
         break;
+
       case GPIO_TRIGGER_RISING_EDGE:
+        val |= IO_BANK0_GPIO_INT_EDGE_HIGH << ofs;
         break;
+
       case GPIO_TRIGGER_FALLING_EDGE:
+        val |= IO_BANK0_GPIO_INT_EDGE_LOW << ofs;
         break;
+
       case GPIO_TRIGGER_EITHER_EDGE:
+        val |= (IO_BANK0_GPIO_INT_EDGE_HIGH | IO_BANK0_GPIO_INT_EDGE_LOW) << ofs;
         break;
+
+      case GPIO_TRIGGER_HIGH_LEVEL:
+        val |= IO_BANK0_GPIO_INT_LEVEL_HIGH << ofs;
+        break;
+
+      case GPIO_TRIGGER_LOW_LEVEL:
+        val |= IO_BANK0_GPIO_INT_LEVEL_LOW << ofs;
+        break;
+
       default:
         result = DRIVER_ERROR_PARAMETER;
         break;
     }
+
+    IO_BANK0->PROC[SIO->CPUID].INT_ENABLE[pin / 8U] = val;
   } else {
     result = GPIO_ERROR_PIN;
   }
@@ -197,6 +239,45 @@ uint32_t GPIO_GetInput(GPIO_Pin_t pin)
   }
 
   return (val);
+}
+
+extern
+void IO_BANK0_IRQHandler(void);
+void IO_BANK0_IRQHandler(void)
+{
+  for (uint32_t pin = 0U; pin < GPIO_MAX_PINS; pin += 8U) {
+    uint32_t int_stat = IO_BANK0->PROC[SIO->CPUID].INT_STATUS[pin / 8U];
+    uint32_t mask = 0x0000000FUL;
+    for (uint32_t i = pin; int_stat != 0U && i < pin+8U; ++i) {
+      uint32_t stat = int_stat & 0xFUL;
+      if (stat != 0U) {
+        IO_BANK0->INT_RAW[pin / 8U] |= mask;
+        if (gpio_callback[i] != NULL) {
+          uint32_t event = 0U;
+
+          if (stat & IO_BANK0_GPIO_INT_LEVEL_LOW) {
+            event |= GPIO_EVENT_LOW_LEVEL;
+          }
+
+          if (stat & IO_BANK0_GPIO_INT_LEVEL_HIGH) {
+            event |= GPIO_EVENT_HIGH_LEVEL;
+          }
+
+          if (stat & IO_BANK0_GPIO_INT_EDGE_LOW) {
+            event |= GPIO_EVENT_FALLING_EDGE;
+          }
+
+          if (stat & IO_BANK0_GPIO_INT_EDGE_HIGH) {
+            event |= GPIO_EVENT_RISING_EDGE;
+          }
+
+          gpio_callback[i](i, event);
+        }
+      }
+      int_stat >>= 4U;
+      mask     <<= 4U;
+    }
+  }
 }
 
 /*******************************************************************************

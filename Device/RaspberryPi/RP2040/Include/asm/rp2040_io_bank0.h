@@ -115,6 +115,25 @@ extern "C" {
 #define IO_BANK0_GPIO_CTRL_IRQOVER_LOW      (2UL << IO_BANK0_GPIO_CTRL_IRQOVER_Pos)
 #define IO_BANK0_GPIO_CTRL_IRQOVER_HIGH     (3UL << IO_BANK0_GPIO_CTRL_IRQOVER_Pos)
 
+/**
+ * @brief Bit definition for GPIO_INT register
+ */
+#define IO_BANK0_GPIO_INT_LEVEL_LOW_Pos     (0U)
+#define IO_BANK0_GPIO_INT_LEVEL_LOW_Msk     (1UL << IO_BANK0_GPIO_INT_LEVEL_LOW_Pos)
+#define IO_BANK0_GPIO_INT_LEVEL_LOW                 IO_BANK0_GPIO_INT_LEVEL_LOW_Msk
+
+#define IO_BANK0_GPIO_INT_LEVEL_HIGH_Pos    (1U)
+#define IO_BANK0_GPIO_INT_LEVEL_HIGH_Msk    (1UL << IO_BANK0_GPIO_INT_LEVEL_HIGH_Pos)
+#define IO_BANK0_GPIO_INT_LEVEL_HIGH                IO_BANK0_GPIO_INT_LEVEL_HIGH_Msk
+
+#define IO_BANK0_GPIO_INT_EDGE_LOW_Pos      (2U)
+#define IO_BANK0_GPIO_INT_EDGE_LOW_Msk      (1UL << IO_BANK0_GPIO_INT_EDGE_LOW_Pos)
+#define IO_BANK0_GPIO_INT_EDGE_LOW                  IO_BANK0_GPIO_INT_EDGE_LOW_Msk
+
+#define IO_BANK0_GPIO_INT_EDGE_HIGH_Pos     (3U)
+#define IO_BANK0_GPIO_INT_EDGE_HIGH_Msk     (1UL << IO_BANK0_GPIO_INT_EDGE_HIGH_Pos)
+#define IO_BANK0_GPIO_INT_EDGE_HIGH                 IO_BANK0_GPIO_INT_EDGE_HIGH_Msk
+
 /*******************************************************************************
  *  typedefs and structures
  ******************************************************************************/
@@ -129,9 +148,9 @@ typedef struct {                                /*!< IO_BANK0 Structure         
   } GPIO[30];
   __IOM uint32_t    INT_RAW[4];                 /*!< Raw Interrupts                                                            */
   struct {
-    __IOM uint32_t  INT_ENABLE[4];              /*!< Interrupt Enable for proc0                                                */
-    __IOM uint32_t  INT_FORCE[4];               /*!< Interrupt Force for proc0                                                 */
-    __IOM uint32_t  INT_STATUS[4];              /*!< Interrupt status after masking & forcing for proc0                        */
+    __IOM uint32_t  INT_ENABLE[4];              /*!< Interrupt Enable                                                          */
+    __IOM uint32_t  INT_FORCE[4];               /*!< Interrupt Force                                                           */
+    __IOM uint32_t  INT_STATUS[4];              /*!< Interrupt status after masking & forcing                                  */
   } PROC[2];
   struct {
     __IOM uint32_t  INT_ENABLE[4];              /*!< Interrupt Enable for dormant_wake                                         */

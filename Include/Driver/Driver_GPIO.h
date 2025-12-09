@@ -71,7 +71,9 @@ typedef enum {
   GPIO_TRIGGER_NONE,                ///< None (default)
   GPIO_TRIGGER_RISING_EDGE,         ///< Rising-edge
   GPIO_TRIGGER_FALLING_EDGE,        ///< Falling-edge
-  GPIO_TRIGGER_EITHER_EDGE          ///< Either edge (rising and falling)
+  GPIO_TRIGGER_EITHER_EDGE,         ///< Either edge (rising and falling)
+  GPIO_TRIGGER_HIGH_LEVEL,          ///< High level
+  GPIO_TRIGGER_LOW_LEVEL            ///< Low level
 } GPIO_EVENT_TRIGGER;
 
 
@@ -79,6 +81,8 @@ typedef enum {
 #define GPIO_EVENT_RISING_EDGE      (1UL << 0)  ///< Rising-edge detected
 #define GPIO_EVENT_FALLING_EDGE     (1UL << 1)  ///< Falling-edge detected
 #define GPIO_EVENT_EITHER_EDGE      (1UL << 2)  ///< Either edge detected (only when hardware cannot distinguish between rising and falling edge)
+#define GPIO_EVENT_HIGH_LEVEL       (1UL << 3)  ///< High level detected
+#define GPIO_EVENT_LOW_LEVEL        (1UL << 4)  ///< Low level detected
 
 
 /****** GPIO specific error codes *****/
