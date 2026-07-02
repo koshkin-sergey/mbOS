@@ -803,6 +803,22 @@ __NO_RETURN void osThreadExit(void);
 osStatus_t osThreadTerminate(osThreadId_t thread_id);
 
 /**
+ * @fn          osStatus_t osThreadSetAffinityMask(osThread_t thread_id, uint32_t affinity_mask)
+ * @brief       Set processor affinity mask of a thread.
+ * @param[in]   thread_id   thread ID obtained by \ref osThreadNew or \ref osThreadGetId.
+ * @param[in]   affinity_mask  affinity mask of a thread.
+ */
+osStatus_t osThreadSetAffinityMask(osThread_t thread_id, uint32_t affinity_mask);
+
+/**
+ * @fn          uint32_t osThreadGetAffinityMask(osThread_t thread_id)
+ * @brief       Get current processor affinity mask of a thread.
+ * @param[in]   thread_id   thread ID obtained by \ref osThreadNew or \ref osThreadGetId.
+ * @return      current processor affinity mask of a thread.
+ */
+uint32_t osThreadGetAffinityMask(osThread_t thread_id);
+
+/**
  * @fn          uint32_t osThreadGetCount(void)
  * @brief       Get number of active threads.
  * @return      number of active threads or 0 in case of an error.
