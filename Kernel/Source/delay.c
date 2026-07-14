@@ -36,26 +36,40 @@
 
 static osStatus_t Delay(uint32_t ticks)
 {
-  if (ticks != 0U) {
-    krnThreadWaitEnter(ThreadWaitingDelay, NULL, ticks);
+  osStatus_t status;
+
+  if (ticks == 0U) {
+    return (osErrorParameter);
   }
 
-  return (osOK);
+  if (krnThreadWaitEnter(ThreadWaitingDelay, NULL, ticks) != osErrorTimeout) {
+    status = osOK;
+  }
+  else {
+    status = osError;
+  }
+
+  return (status);
 }
 
 static osStatus_t DelayUntil(uint32_t ticks)
 {
+  osStatus_t status;
+
   ticks -= osInfo.kernel.tick;
 
   if ((ticks == 0U) || (ticks > 0x7FFFFFFFU)) {
     return (osErrorParameter);
   }
 
-  if (ticks != 0U) {
-    krnThreadWaitEnter(ThreadWaitingDelay, NULL, ticks);
+  if (krnThreadWaitEnter(ThreadWaitingDelay, NULL, ticks) != osErrorTimeout) {
+    status = osOK;
+  }
+  else {
+    status = osError;
   }
 
-  return (osOK);
+  return (status);
 }
 
 /*******************************************************************************
