@@ -32,8 +32,8 @@
 
 /* Kernel Information */
 #define osVersionAPI         020010003        ///< API version (2.1.3)
-#define osVersionKernel      010030000        ///< Kernel version (1.3.1)
-#define osKernelId           "Kernel V1.3.1"  ///< Kernel identification string
+#define osVersionKernel      010040001        ///< Kernel version (1.4.1)
+#define osKernelId           "Kernel V1.4.1"  ///< Kernel identification string
 
 /* Object Identifier definitions */
 #define ID_INVALID                  (uint8_t)0x00
@@ -103,6 +103,7 @@ typedef struct KernelInfo_s {
   queue_t             ready_list[NUM_PRIORITY];   ///< all ready to run(RUNNABLE) tasks
   queue_t                          timer_queue;
   queue_t                          delay_queue;
+  queue_t                           wait_queue;
   queue_t                           post_queue;   ///< ISR Post Processing queue
 } KernelInfo_t;
 

@@ -334,10 +334,12 @@ osStatus_t svcThreadSuspend(osThreadId_t thread_id)
       break;
 
     case ThreadBlocked:
-      /* Remove the thread from delay queue */
-      QueueRemoveEntry(&thread->delay_que);
       /* Remove the thread from wait queue */
       QueueRemoveEntry(&thread->thread_que);
+      /* Remove the thread from delay queue */
+      QueueRemoveEntry(&thread->delay_que);
+      /* Put the thread into delay queue */
+      QueueAppend(&osInfo.wait_queue, &thread->delay_que);
       break;
 
     case ThreadTerminated:
@@ -445,9 +447,19 @@ static osStatus_t svcThreadTerminate(osThreadId_t thread_id)
   return (status);
 }
 
+/// Get number of active threads.
+/// \note API identical to osThreadGetCount
 static uint32_t svcThreadGetCount(void)
 {
-  return (0U);
+  uint32_t count;
+
+  /* Running Thread */
+  count = 1U;
+
+  /* Ready List */
+
+
+  return (count);
 }
 
 static uint32_t svcThreadEnumerate(osThreadId_t *thread_array, uint32_t array_items)
@@ -679,7 +691,10 @@ osStatus_t krnThreadWaitEnter(uint8_t state, queue_t *wait_que, uint32_t timeout
   }
 
   /* Add to the delay queue */
-  if (timeout != osWaitForever) {
+  if (timeout == osWaitForever) {
+    que = &osInfo.wait_queue;
+  }
+  else {
     thread->delay = osInfo.kernel.tick + timeout;
     delay_queue = &osInfo.delay_queue;
     for (que = delay_queue->next; que != delay_queue; que = que->next) {
@@ -687,9 +702,9 @@ osStatus_t krnThreadWaitEnter(uint8_t state, queue_t *wait_que, uint32_t timeout
         break;
       }
     }
-
-    QueueAppend(que, &thread->delay_que);
   }
+
+  QueueAppend(que, &thread->delay_que);
 
   SchedDispatch(NULL);
 
