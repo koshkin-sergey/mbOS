@@ -452,22 +452,81 @@ static osStatus_t svcThreadTerminate(osThreadId_t thread_id)
 static uint32_t svcThreadGetCount(void)
 {
   uint32_t count;
+  queue_t *que;
+  queue_t *queue;
 
   /* Running Thread */
   count = 1U;
 
   /* Ready List */
+  for (uint32_t i = 0U; i < NUM_PRIORITY; i++) {
+    if ((osInfo.ready_to_run_bmp & (1UL << i)) != 0U) {
+      queue = &osInfo.ready_list[i];
+      for (que = queue->next; que != queue; que = que->next) {
+        count++;
+      }
+    }
+  }
 
+  /* Delay List */
+  queue = &osInfo.delay_queue;
+  for (que = queue->next; que != queue; que = que->next) {
+    count++;
+  }
+
+  /* Wait List */
+  queue = &osInfo.wait_queue;
+  for (que = queue->next; que != queue; que = que->next) {
+    count++;
+  }
 
   return (count);
 }
 
 static uint32_t svcThreadEnumerate(osThreadId_t *thread_array, uint32_t array_items)
 {
-  (void)thread_array;
-  (void)array_items;
+  uint32_t count;
+  queue_t *que;
+  queue_t *queue;
 
-  return (0U);
+  if ((thread_array == NULL) || (array_items == 0U)) {
+    return (0U);
+  }
+
+  /* Running Thread */
+  *thread_array = ThreadGetRunning();
+  thread_array++;
+  count = 1U;
+
+  /* Ready List */
+  for (uint32_t i = 0U; i < NUM_PRIORITY; i++) {
+    if ((osInfo.ready_to_run_bmp & (1UL << i)) != 0U) {
+      queue = &osInfo.ready_list[i];
+      for (que = queue->next; que != queue && count < array_items; que = que->next) {
+        *thread_array = GetThreadByQueue(que);
+        thread_array++;
+        count++;
+      }
+    }
+  }
+
+  /* Delay List */
+  queue = &osInfo.delay_queue;
+  for (que = queue->next; que != queue && count < array_items; que = que->next) {
+    *thread_array = GetThreadByDelayQueue(que);
+    thread_array++;
+    count++;
+  }
+
+  /* Wait List */
+  queue = &osInfo.wait_queue;
+  for (que = queue->next; que != queue && count < array_items; que = que->next) {
+    *thread_array = GetThreadByDelayQueue(que);
+    thread_array++;
+    count++;
+  }
+
+  return (count);
 }
 
 static uint32_t svcThreadFlagsSet(osThreadId_t thread_id, uint32_t flags)
